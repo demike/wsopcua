@@ -1,0 +1,38 @@
+{
+ "name": "opcua-schema-parser",
+ "version": "0.1.0-00",
+ "description": "nodejs opcua schema parser",
+ "scripts": {},
+ "main": "index.ts",
+ "dependencies": {
+  "@types/jsdom": "^11.0.4",
+  "@types/parse5": "^3.0.0",
+  "jsdom": ""
+ },
+ "devDependencies": {
+  "dequeue": "^1.0.5",
+  "node-opcua-leak-detector": "^0.1.0-11",
+  "should": "13.1.3",
+  "sinon": "^4.1.1"
+ },
+ "eslintConfig": {
+  "env": {
+   "node": true
+  }
+ },
+ "author": "Michael Derfler",
+ "license": "my licence",
+ "repository": {
+  "type": "git",
+  "url": "git://github.com/node-opcua/node-opcua.git"
+ },
+ "keywords": [
+  "OPCUA",
+  "opcua",
+  "m2m",
+  "iot",
+  "opc ua",
+  "internet of things"
+ ],
+ "homepage": ""
+}
