@@ -9,6 +9,7 @@ export class SchemaParser {
     public static readonly TAG_ENUM_TYPE = "opc:EnumeratedType";
     public static readonly TAG_STRUCT_TYPE = "opc:StructuredType";
 
+    public static readonly OUTPUT_PATH = "../../baseTypes/"
     protected curCls : ClassFile;
 
     constructor() {
@@ -19,7 +20,7 @@ export class SchemaParser {
         
         fs.readFile(path, 'utf8', (err, data) => {
             if (err) throw err;
-            console.log(data);
+            //console.log(data);
             let doc = new JSDOM(data);
             for (let i=0; i < doc.window.document.childNodes.length; i++) {
                 let el : HTMLElement = <HTMLElement>(doc.window.document.childNodes.item(i));
@@ -48,14 +49,15 @@ export class SchemaParser {
 
     public parseStruct(el : HTMLElement) : void {
         let file = new StructTypeFile(el);
-        file.parse;
+        file.parse();
+        this.writeToFile(SchemaParser.OUTPUT_PATH + "/" + file.name + ".ts",file);
 
     }
 
     public parseEnum(el : HTMLElement) : void {
         let file = new EnumTypeFile(el);
         file.parse();
-        
+        this.writeToFile(SchemaParser.OUTPUT_PATH + "/" + file.name + ".ts",file);   
     }
 
     public writeToFile(path : string,cls : ClassFile) {
