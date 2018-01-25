@@ -1,6 +1,9 @@
 import {BSDSchemaParser} from "./BSDSchemaParser";
 import {XSDSchemaParser} from "./XsdSchemaParser";
 import {PathGenUtil} from "./PathGenUtil"; 
+import {TypeRegistry} from "./TypeRegistry";
+
+TypeRegistry.init();
 
 PathGenUtil.ProjRoot = "../../";
 let xsdparser : XSDSchemaParser = new XSDSchemaParser();
