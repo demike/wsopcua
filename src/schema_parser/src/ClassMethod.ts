@@ -37,7 +37,15 @@ export class ClassMethod {
 
     public get ReturnType() : ClassFile|null {
         return this.returnType;
-    } 
+    }
+    
+    public get Documentation() : string {
+        return this.documentation || "";
+    }
+
+    public set Documentation(doc : string) {
+        this.documentation = doc;
+    }
 
     public toString() : string {
 

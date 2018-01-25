@@ -13,7 +13,7 @@ export class XSDComplexTypeFile extends XSDClassFile {
 
     private createDeSerializerPlaceHolder() : void {
         let method : ClassMethod = new ClassMethod();
-        method.documentation = ClassMethod.DE_SERIALIZER_METHOD_PLACEHOLDER;
+        method.Documentation = ClassMethod.DE_SERIALIZER_METHOD_PLACEHOLDER;
         this.methods.push(method);
     }
 }

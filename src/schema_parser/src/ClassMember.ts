@@ -47,4 +47,6 @@ export class ClassMember {
         return "\t" + this._visibility + this._name + ": " + this._type.Name +";\n";
     }
 
+    
+
 }

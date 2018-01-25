@@ -17,9 +17,9 @@ export class SimpleType extends ClassFile {
         this._jsType = jsType;
     }
     protected createDecodeMethod() : void {
-        let enc = new ClassMethod(null,null,"decode" + this.name,
+        let enc = new ClassMethod(null,new ClassFile(this.name),"decode" + this.name,
         [   new ClassMember("in",ClassFile.IO_TYPE)], 
-        new ClassFile(this.name),
+        null,
         "return in.get" + this.name + "(data);"
             );
         

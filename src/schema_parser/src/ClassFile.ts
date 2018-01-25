@@ -60,6 +60,14 @@ export class ClassFile {
         this.baseClass = TypeRegistry.getType(cls);
     }
 
+    public get Documentation() : string {
+        return this.documentation;
+    }
+
+    public set Documentation(doc : string) {
+        this.documentation = doc;
+    }
+
     constructor(name? : string, baseClass? : string|ClassFile , members? : ClassFile[], methods? : ClassMethod[]) {
         this.imports = new Set();
         this.members = [];
