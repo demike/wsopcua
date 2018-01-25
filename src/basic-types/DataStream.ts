@@ -258,6 +258,15 @@ export class DataStream {
 
       };
 
+      writeString(str : string) : void {
+        
+          let enc = encodeURIComponent(str)
+          
+          
+
+          return this.writeByteStream(enc);
+      };
+
 }
 
 /**

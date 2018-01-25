@@ -1,5 +1,6 @@
 "use strict";
 import {getRandomInt} from './utils';
+import {DataStream} from './DataStream';
 
 export function isValidString(value) {
     return typeof value === "string";
@@ -13,9 +14,9 @@ export function randomString() {
     return cars.join("");
 };
 
-exports.decodeString = function (stream) {
+export function decodeString(stream : DataStream) {
     return stream.readString();
 };
-exports.encodeString = function (value, stream) {
+export function encodeString(value : string, stream : DataStream) {
     stream.writeString(value);
 };

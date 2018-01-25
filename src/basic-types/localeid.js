@@ -1,10 +1,11 @@
 "use strict";
+import {encodeString,decodeString} from './string';
 
-exports.validateLocaleId = function (/*value*/) {
+export function validateLocaleId(/*value*/) {
     // TODO : check that localeID is well-formed
     // see part 3 $8.4 page 63
     return true;
 };
 
-exports.encodeLocaleId = require("./string").encodeString;
-exports.decodeLocaleId = require("./string").decodeString;
+export var encodeLocaleId = encodeString;
+export var decodeLocaleId = decodeString;

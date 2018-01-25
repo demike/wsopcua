@@ -22,7 +22,7 @@
     "problemMatcher": "$tsc",
 
     "compilerOptions": {
-        "target": "ES5",
+        "target": "ES6",
         "module": "commonjs",
         "outDir": "bin",
         "declaration": true,
