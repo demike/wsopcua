@@ -1,5 +1,5 @@
 import {BSDSchemaParser} from "./BSDSchemaParser";
-import {XSDSchemaParser} from "./XsdSchemaParser";
+import {XSDSchemaParser} from "./XSDSchemaParser";
 import {PathGenUtil} from "./PathGenUtil"; 
 import {TypeRegistry} from "./TypeRegistry";
 

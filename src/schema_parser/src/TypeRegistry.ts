@@ -1,5 +1,8 @@
+/*
 import { ClassFile } from "./ClassFile";
 import { SimpleType } from "./SimpleType";
+*/
+import {ClassFile,SimpleType} from './SchemaParser.module';
 
 export class TypeRegistry {
 

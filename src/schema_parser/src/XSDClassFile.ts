@@ -1,4 +1,4 @@
-import {ClassMethod} from './ClassMethod';
+import {ClassMethod} from './SchemaParser.module';
 
 export abstract class XSDClassFile {
     name : string;

@@ -1,5 +1,7 @@
-import { ClassFile } from "./ClassFile";
+/*import { ClassFile } from "./ClassFile";
 import { TypeRegistry } from "./TypeRegistry";
+*/
+import {ClassFile, TypeRegistry} from './SchemaParser.module';
 
 export class ClassMember {
     protected _name : string;

@@ -1,6 +1,8 @@
-import {ClassMethod} from './ClassMethod';
+/*import {ClassMethod} from './ClassMethod';
 import {ClassMember} from './ClassMember';
 import {TypeRegistry} from './TypeRegistry';
+*/
+import {ClassMember, ClassMethod, TypeRegistry} from './SchemaParser.module';
 
 export declare class Set< Value > {
 	add( value : Value ) : Set< Value >

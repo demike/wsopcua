@@ -1,6 +1,8 @@
-import { ClassFile } from "./ClassFile";
+/*import { ClassFile } from "./ClassFile";
 import { ClassMethod } from "./ClassMethod";
 import { ClassMember } from "./ClassMember";
+*/
+import {ClassFile, ClassMethod, ClassMember} from './SchemaParser.module';
 
 export class SimpleType extends ClassFile {
 

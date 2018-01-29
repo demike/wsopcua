@@ -1,5 +1,7 @@
-import {ClassFile} from './ClassFile'
+/*import {ClassFile} from './ClassFile'
 import { ClassMember } from './ClassMember';
+*/
+import {ClassMember, ClassFile} from './SchemaParser.module';
 
 export class ClassMethod {
     public static readonly DE_SERIALIZER_METHOD_PLACEHOLDER = "//<DeSerializerMethods>";

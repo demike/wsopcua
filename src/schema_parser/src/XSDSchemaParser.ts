@@ -1,4 +1,4 @@
-import {JSDOM} from 'JSDOM';
+import {JSDOM} from 'jsdom';
 import {XSDClassFile} from './XSDClassFile';
 import {XSDComplexTypeFile} from './XSDComplexTypeFile';
 import * as fs from 'fs';

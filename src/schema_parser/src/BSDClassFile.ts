@@ -1,8 +1,9 @@
 
-import {ClassMethod} from './ClassMethod';
+//import {ClassMethod} from './ClassMethod';
 import {PathGenUtil} from './PathGenUtil';
-import {ClassFile} from './ClassFile';
-import { TypeRegistry } from './TypeRegistry';
+//import {ClassFile} from './ClassFile';
+//import { TypeRegistry } from './TypeRegistry';
+import {ClassMethod, TypeRegistry, ClassFile} from './SchemaParser.module';
 
 export abstract class BSDClassFile extends ClassFile {
 

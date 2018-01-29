@@ -1,9 +1,9 @@
-import {BSDClassFile} from './BSDClassFile';
-import { ClassMethod } from './ClassMethod';
+//import {BSDClassFile} from './BSDClassFile';
+//import { ClassMethod } from './ClassMethod';
 import { PathGenUtil } from './PathGenUtil';
-import { XSDClassFile } from './XSDClassFile';
-import { EnumItem } from './EnumItem';
-import { ClassMember } from './ClassMember';
+//import { EnumItem } from './EnumItem';
+//import { ClassMember } from './ClassMember';
+import {ClassMember, ClassMethod, BSDClassFile, EnumItem} from './SchemaParser.module';
 
 export class BSDEnumTypeFile extends BSDClassFile {
     public static readonly ATTR_LENGTH = "LengthInBits";

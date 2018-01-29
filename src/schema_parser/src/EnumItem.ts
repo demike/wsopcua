@@ -1,4 +1,5 @@
-import { ClassMember } from "./ClassMember";
+//import { ClassMember } from "./ClassMember";
+import {ClassMember} from './SchemaParser.module';
 
 export class EnumItem extends ClassMember {
     

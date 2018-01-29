@@ -1,5 +1,7 @@
-import {BSDClassFile} from './BSDClassFile';
+/*import {BSDClassFile} from './BSDClassFile';
 import { ClassMember } from './ClassMember';
+*/
+import {ClassMember, BSDClassFile} from './SchemaParser.module';
 
 export class BSDStructTypeFile extends BSDClassFile {
 

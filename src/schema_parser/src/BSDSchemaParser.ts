@@ -1,10 +1,12 @@
-import {JSDOM} from 'JSDOM';
-import {BSDClassFile} from './BSDClassFile';
-import {BSDEnumTypeFile} from './BSDEnumTypeFile';
-import {BSDStructTypeFile} from './BSDStructTypeFile';
+import {JSDOM} from 'jsdom';
+
+//import {BSDClassFile} from './BSDClassFile';
+//import {BSDEnumTypeFile} from './BSDEnumTypeFile';
+//import {BSDStructTypeFile} from './BSDStructTypeFile';
 import * as fs from 'fs';
 import { XSDClassFile } from './XSDClassFile';
-import { ClassMethod } from './ClassMethod';
+//import { ClassMethod } from './ClassMethod';
+import { ClassMethod, BSDClassFile, BSDEnumTypeFile, BSDStructTypeFile} from './SchemaParser.module';
 
 export class BSDSchemaParser {
     public static readonly TAG_TYPE_DICT = "opc:TypeDictionary";
