@@ -39,7 +39,7 @@ export class ClassMember {
     }
 
     public setTypeByName(typeName : string) {
-        ClassFile.getTypeByName(typeName);
+        this._type = ClassFile.getTypeByName(typeName);
     }
 
     public toString() : string {

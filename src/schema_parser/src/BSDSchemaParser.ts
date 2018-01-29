@@ -4,7 +4,6 @@ import {JSDOM} from 'jsdom';
 //import {BSDEnumTypeFile} from './BSDEnumTypeFile';
 //import {BSDStructTypeFile} from './BSDStructTypeFile';
 import * as fs from 'fs';
-import { XSDClassFile } from './XSDClassFile';
 //import { ClassMethod } from './ClassMethod';
 import { ClassMethod, BSDClassFile, BSDEnumTypeFile, BSDStructTypeFile} from './SchemaParser.module';
 
@@ -28,7 +27,7 @@ export class BSDSchemaParser {
         fs.readFile(inpath, 'utf8', (err, data) => {
             if (err) throw err;
             //console.log(data);
-            let doc = new JSDOM(data);
+            let doc = new JSDOM(data,{ contentType : "text/xml"});
             for (let i=0; i < doc.window.document.childNodes.length; i++) {
                 let el : HTMLElement = <HTMLElement>(doc.window.document.childNodes.item(i));
                 this.parseBSDElement(el);
@@ -43,8 +42,15 @@ export class BSDSchemaParser {
                 break;
             case BSDSchemaParser.TAG_STRUCT_TYPE:
                 this.parseBSDStruct(el);
+                break;
             case BSDSchemaParser.TAG_TYPE_DICT:
                 this.parseBSDTypeDict(el);
+                break;
+            default:
+                for (let i=0; i < el.childNodes.length; i++) {
+                    let child : HTMLElement = <HTMLElement>(el.childNodes.item(i));
+                    this.parseBSDElement(child);
+                }
                 break;
         }
     }

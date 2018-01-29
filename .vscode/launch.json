@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Schema Parser",
-            "program": "${workspaceFolder}/src\\schema_parser\\src\\index.ts",
+            "program": "${workspaceFolder}/src/schema_parser/src/index.ts",
         //    "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
                 "${workspaceFolder}/src/schema_parser/bin/**/*.js"

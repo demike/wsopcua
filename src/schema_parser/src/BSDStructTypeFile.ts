@@ -14,7 +14,13 @@ export class BSDStructTypeFile extends BSDClassFile {
             return true;
         }
 
-        let mem = new ClassMember(BSDClassFile.ATTR_NAME,BSDClassFile.ATTR_TYPE_NAME);
+        if (el.tagName != BSDClassFile.TAG_FIELD) {
+            return false;
+        }
+
+        let mem = new ClassMember(
+            el.attributes.getNamedItem(BSDClassFile.ATTR_NAME).value,
+            el.attributes.getNamedItem(BSDClassFile.ATTR_TYPE_NAME).value);
         this.members.push(mem);
         return true;
     }

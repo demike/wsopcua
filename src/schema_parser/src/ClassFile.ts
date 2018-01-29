@@ -27,8 +27,8 @@ export class ClassFile {
     protected path : string;
     protected importAs? : string;
 
-    public static readonly ATTR_NAME = "name";
-    public static readonly ATTR_VALUE = "value";
+    public static readonly ATTR_NAME = "Name";
+    public static readonly ATTR_VALUE = "Value";
     public static readonly ATTR_BASE_CLASS = "BaseType";
     public static readonly IO_TYPE = "DataStream";
 
@@ -71,11 +71,12 @@ export class ClassFile {
         this.documentation = doc;
     }
 
-    constructor(name? : string, baseClass? : string|ClassFile , members? : ClassFile[], methods? : ClassMethod[]) {
+    constructor(name? : string, baseClass? : string|ClassFile , members? : ClassMember[], methods? : ClassMethod[]) {
         this.imports = new Set();
-        this.members = [];
-        this.methods = [];
-        this.name = "";
+        this.members = (members)?members:[];
+        this.methods = (methods)?methods:[];
+        
+        this.name = (name)?name:"";
         this.fileHeader = "";
         this.documentation = "";
         this.classHeader = "";
