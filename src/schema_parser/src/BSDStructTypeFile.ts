@@ -1,7 +1,8 @@
 /*import {BSDClassFile} from './BSDClassFile';
 import { ClassMember } from './ClassMember';
 */
-import {ClassMember, BSDClassFile} from './SchemaParser.module';
+import {ClassMember, ClassMethod, BSDClassFile, BSDEnumTypeFile} from './SchemaParser.module';
+import { SimpleType } from './SimpleType';
 
 export class BSDStructTypeFile extends BSDClassFile {
 
@@ -26,9 +27,34 @@ export class BSDStructTypeFile extends BSDClassFile {
     }
 
     protected createEncodeMethod(): void {
-        throw new Error("Method not implemented.");
+        let body : string = "";
+        for (let mem of this.members) {
+            if (mem instanceof SimpleType) {
+                "\t\tout.set" + mem.Type.Name + "(data);"
+            } else {
+                body += "\t\tthis." + mem.Name + ".encode(out);\n"
+            }
+        } 
+
+        let dec = new ClassMethod("",null,"encode" + this.name,
+        [new ClassMember("out",BSDEnumTypeFile.IO_TYPE)],  
+        null,
+        body);
     }
     protected createDecodeMethod(): void {
-        throw new Error("Method not implemented.");
+        let body : string = "";
+        for (let mem of this.members) {
+            if (mem instanceof SimpleType) {
+                "\t\tthis." + mem.Name + " = in.get" + mem.Type.Name + "();"
+            } else {
+                body += "\t\tthis." + mem.Name + ".decode(in);\n"
+            }
+        } 
+
+        let dec = new ClassMethod("",null,"decode" + this.name,
+        [new ClassMember("in",BSDEnumTypeFile.IO_TYPE)],  
+        null,
+        body);
+
     }
 }
