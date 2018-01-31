@@ -82,15 +82,22 @@ export class BSDEnumTypeFile extends BSDClassFile {
         let str : string = "";
         str += this.fileHeader;
         str += "\n\n";
-        for (let im in this.imports) {
+        this.imports.forEach( (im) => {
+            str += im;
+            str += "\n\n";
+        })
+
+        /*
+        for (let im of this.imports) {
             str += im;
             str += "\n\n";
         }
+        */
         str += this.documentation;
         str += "\n\n";
         str += this.classHeader;
         str += " {\n ";
-        for (let mem in this.members) {
+        for (let mem of this.members) {
             str += "\t" + mem + "\n";
         }
         str += "\n";

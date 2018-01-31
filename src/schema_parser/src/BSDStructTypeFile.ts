@@ -36,11 +36,13 @@ export class BSDStructTypeFile extends BSDClassFile {
             }
         } 
 
-        let dec = new ClassMethod("",null,"encode" + this.name,
+        let enc = new ClassMethod("",null,"encode" + this.name,
         [new ClassMember("out",BSDEnumTypeFile.IO_TYPE)],  
         null,
         body);
+        this.addMethod(enc);
     }
+    
     protected createDecodeMethod(): void {
         let body : string = "";
         for (let mem of this.members) {
@@ -55,6 +57,6 @@ export class BSDStructTypeFile extends BSDClassFile {
         [new ClassMember("in",BSDEnumTypeFile.IO_TYPE)],  
         null,
         body);
-
+        this.addMethod(dec);
     }
 }

@@ -87,24 +87,30 @@ export class ClassFile {
         let str : string = "";
         str += this.fileHeader;
         str += "\n\n";
+        this.imports.forEach((im) => {
+            str += im;
+            str += "\n\n";            
+        })
+        /*
         for (let im in this.imports) {
             str += im;
             str += "\n\n";
         }
+        */
         str += this.documentation;
         str += "\n\n";
         str += this.classHeader;
         str += " {\n ";
-        for (let mem in this.members) {
+        for (let mem of this.members) {
             str += "\t" + mem.toString() + "\n";
         }
         str += "\n";
-        for (let met in this.methods) {
+        for (let met of this.methods) {
             str += "\t" + met.toString() + "\n\n";
         }
         str += "}"
 
-        for(let uf in this.utilityFunctions) {
+        for(let uf of this.utilityFunctions) {
             str += "\n\n" + uf.toString();
         }
         return str;

@@ -18,7 +18,7 @@ export class BSDSchemaParser {
     protected inPath : string;
 
     constructor() {
-
+        this.clFileMap = {};
     }
 
     public parse(inpath : string, outpath : string) {
