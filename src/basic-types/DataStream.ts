@@ -1,3 +1,5 @@
+import {assert} from '../assert';
+
 export class DataStream {
     
     protected view : DataView;
