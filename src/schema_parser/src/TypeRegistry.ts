@@ -25,21 +25,50 @@ export class TypeRegistry {
         type.Path = this.BASIC_TYPES_PATH + "DataStream";
         this.addType(type.Name,type);
 
-        //basic built in types
-       // Boolean:      1 , 
+
+        //OPC-UA Standard Data Types - OPC-UA Specification Part 3: 8.*
+        //NodeId 8.2
+
+        //QualifiedName 8.3
+
+       // LocaleId 8.4
+       type = new SimpleType("LocaleId");
+       type.Path = this.BASIC_TYPES_PATH + "localeid";
+       type.JsType = "string";
+       this.addType(type.Name,type);
+        //LocalizedText 8.5
+            //TODO
+        //Argument 8.6
+            //TODO
+        //BaseDataType 8.7
+            //TODO
+        
+       // Boolean 8.8
        type = new SimpleType("Boolean");
        type.Path = this.BASIC_TYPES_PATH + "boolean";
        type.JsType = "boolean";
        this.addType(type.Name,type);
-       // SByte:      2 , 
+
+        //Byte  8.9
+        type = new SimpleType("Byte");
+        type.Path = this.BASIC_TYPES_PATH + "integer";
+        this.addType(type.Name,type);
+
+       //ByteString 8.10
+            //TODO
+
+       //DateTime 8.11
+            //TODO
+        //Double: 8.12
+        type = new SimpleType("Double");
+        type.Path = this.BASIC_TYPES_PATH + "float";
+        this.addType(type.Name,type); 
+
+       // SByte 
        type = new SimpleType("SByte");
        type.Path = this.BASIC_TYPES_PATH + "integer";
        this.addType(type.Name,type);
 
-        //Byte:      3 ,
-        type = new SimpleType("Byte");
-        type.Path = this.BASIC_TYPES_PATH + "integer";
-        this.addType(type.Name,type);
 
         //Int16:      4 , 
         type = new SimpleType("Int16");
@@ -75,10 +104,6 @@ export class TypeRegistry {
         type.Path = this.BASIC_TYPES_PATH + "float";
         this.addType(type.Name,type); 
         
-        //Double:     11 ,
-        type = new SimpleType("Double");
-        type.Path = this.BASIC_TYPES_PATH + "float";
-        this.addType(type.Name,type); 
         
         //String:     12 ,
         type = new SimpleType("String");
