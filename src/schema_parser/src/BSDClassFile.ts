@@ -4,6 +4,8 @@ import {PathGenUtil} from './PathGenUtil';
 //import {ClassFile} from './ClassFile';
 //import { TypeRegistry } from './TypeRegistry';
 import {ClassMethod, TypeRegistry, ClassFile} from './SchemaParser.module';
+import { IncompleteTypeDefException } from './IncompleteTypeDefException';
+import { ClassMember } from './ClassMember';
 
 export abstract class BSDClassFile extends ClassFile {
 
@@ -35,12 +37,25 @@ export abstract class BSDClassFile extends ClassFile {
 
         TypeRegistry.addType(this.name,this)
 
-        for (let i=0; i <  this.el.childNodes.length; i++) {
-            this.createChildElement(<HTMLElement>this.el.childNodes.item(i));
+        try {
+            for (let i=0; i <  this.el.childNodes.length; i++) {
+                this.createChildElement(<HTMLElement>this.el.childNodes.item(i));
+            }
+        } catch (e) {
+            if (e instanceof IncompleteTypeDefException) {
+                this.complete = false;
+                this.removeAllMembers();
+                return;
+            } else {
+                throw e;
+            }
+        } finally {
+            ClassMember.resetBitCounter();
         }
 
         this.createMethods();
         this.createImports();
+        this.complete = true;
     }
 
     /**

@@ -42,9 +42,9 @@ import * as _ from 'underscore';
  * @constructor
  */
 export class ExpandedNodeId extends NodeId {
-    public namespaceUri : String;
+    public namespaceUri : string;
     public serverIndex : number;
-    constructor(identifierType : NodeIdType, value, namespace : number = 0, namespaceUri? : String, serverIndex? : number) {
+    constructor(identifierType : NodeIdType, value, namespace : number = 0, namespaceUri? : string, serverIndex? : number) {
         super(identifierType,value,namespace);
         this.namespaceUri = namespaceUri || null;
         this.serverIndex = serverIndex || 0;

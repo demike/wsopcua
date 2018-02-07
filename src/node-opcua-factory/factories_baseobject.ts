@@ -5,7 +5,7 @@
 import {assert} from "../assert";
 import * as _ from "underscore";
 
-import {BinaryStreamSizeCalculator} from '../basic-types/DataStream';
+import {BinaryStreamSizeCalculator, DataStream} from '../basic-types/DataStream';
 var hexDump = require("node-opcua-debug").hexDump;
 var utils = require("node-opcua-utils");
 
@@ -32,7 +32,7 @@ constructor() {
  * @param stream {BinaryStream}
  * @param options {BinaryStream}
  */
-encode(/*stream,options*/) {
+encode(stream : DataStream|BinaryStreamSizeCalculator, options : any/*stream,options*/) {
 
 };
 
@@ -43,7 +43,7 @@ encode(/*stream,options*/) {
  * @param stream {BinaryStream}
  * @param options {Object}
  */
-decode(/*stream,options*/) {
+decode(stream : DataStream, options : any/*stream,options*/) {
 
 };
 
@@ -128,7 +128,7 @@ function _decode_member_(value, field, stream, options) {
  * @method decode_debug
  *
  */
-decode_debug(stream, options) {
+function decode_debug(stream, options) {
 
     var tracer = options.tracer;
     var schema = this._schema;

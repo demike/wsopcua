@@ -50,11 +50,11 @@ export class ClassMethod {
     }
 
     public toString() : string {
-
-        let str: string = this.documentation || "";
-        if (str) {
-            str += "\n\n";
+        let str = "";
+        if(this.documentation) {
+            str += "/**\n" + this.documentation + "\n*/\n\n"
         }
+      
         let header = this.getHeader();
         str += header;
         if (this.body) {
@@ -80,7 +80,7 @@ export class ClassMethod {
         }
         header += ")";
         if (this.returnType) {
-            header += " : " + this.returnType;
+            header += " : " + this.returnType.Name;
         }
         return header;
     }

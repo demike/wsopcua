@@ -1,11 +1,10 @@
 import {JSDOM} from 'jsdom';
 
-//import {BSDClassFile} from './BSDClassFile';
-//import {BSDEnumTypeFile} from './BSDEnumTypeFile';
-//import {BSDStructTypeFile} from './BSDStructTypeFile';
+
 import * as fs from 'fs';
-//import { ClassMethod } from './ClassMethod';
 import { ClassMethod, BSDClassFile, BSDEnumTypeFile, BSDStructTypeFile} from './SchemaParser.module';
+import { TypeRegistry } from './TypeRegistry';
+import { ClassFile } from './ClassFile';
 
 export class BSDSchemaParser {
     public static readonly TAG_TYPE_DICT = "opc:TypeDictionary";
@@ -24,6 +23,9 @@ export class BSDSchemaParser {
     public parse(inpath : string, outpath : string) {
         this.inPath = inpath;
         this.outPath = outpath;
+        if (!fs.existsSync(outpath)) {
+            fs.mkdirSync(outpath);
+        } 
         fs.readFile(inpath, 'utf8', (err, data) => {
             if (err) throw err;
             //console.log(data);
@@ -32,6 +34,9 @@ export class BSDSchemaParser {
                 let el : HTMLElement = <HTMLElement>(doc.window.document.childNodes.item(i));
                 this.parseBSDElement(el);
             } 
+            //second pass for incomplete types
+            this.parseSecondPass();
+            this.writeFiles();
         });
     }
 
@@ -63,21 +68,30 @@ export class BSDSchemaParser {
 
     public parseBSDStruct(el : HTMLElement) : void {
         let file = new BSDStructTypeFile(el);
+        let at = el.attributes.getNamedItem(BSDClassFile.ATTR_NAME);
+        if (at && TypeRegistry.getType(at.value)) {
+            //this type already exists
+            return;
+        }
         file.parse();
         this.clFileMap[file.Name] = file;
-        this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
+        //this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
 
     }
 
     public parseBSDEnum(el : HTMLElement) : void {
         let file = new BSDEnumTypeFile(el);
         file.parse();
-        this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);   
+        //this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);   
     }
 
     public writeToFile(path : string,cls : BSDClassFile) {
         fs.writeFile(path,cls.toString(),"utf8", (err) => {
-            console.log(err);
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log("file written: " + path);
+            }
         });
     }
 
@@ -87,9 +101,44 @@ export class BSDSchemaParser {
             data += data.replace(ClassMethod.DE_SERIALIZER_METHOD_PLACEHOLDER,cls.toString());
             //write the modified class file
             fs.writeFile(path,data,"utf8", (err) => {
-                console.log(err);
+                if (err) {
+                    console.log(err.message);
+                } else {
+                    console.log("file written: " + path);
+                }
             });
         });
+    }
+
+    protected parseSecondPass() {
+        let incomplete = 0;
+        let ar : ClassFile[];
+        ar = TypeRegistry.getTypes();
+
+        for (let iterations=0; iterations < 10; iterations++) {
+            for (let f of ar) {
+                if (f instanceof BSDStructTypeFile && !f.Complete) {
+                    f.parse();
+                    if (!f.Complete) {
+                        incomplete++;
+                    }
+                }
+            }
+
+            if (incomplete == 0) {
+                return;
+            }
+        }
+    }
+
+    protected writeFiles() {
+        let ar : ClassFile[];
+        ar = TypeRegistry.getTypes();
+        for (let file of ar) {
+            if (file instanceof BSDClassFile) {
+                this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
+            }
+        }
     }
  
     public parseComplexType() {

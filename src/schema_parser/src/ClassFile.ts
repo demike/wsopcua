@@ -27,8 +27,11 @@ export class ClassFile {
     protected path : string;
     protected importAs? : string;
 
+    protected complete : boolean = false;
+
     public static readonly ATTR_NAME = "Name";
     public static readonly ATTR_VALUE = "Value";
+    public static readonly ATTR_ARRAY_LENGTH = "Length"
     public static readonly ATTR_BASE_CLASS = "BaseType";
     public static readonly IO_TYPE = "DataStream";
 
@@ -71,6 +74,10 @@ export class ClassFile {
         this.documentation = doc;
     }
 
+    public get Complete() {
+        return this.complete;
+    }
+
     constructor(name? : string, baseClass? : string|ClassFile , members? : ClassMember[], methods? : ClassMethod[]) {
         this.imports = new Set();
         this.members = (members)?members:[];
@@ -83,13 +90,21 @@ export class ClassFile {
         this.utilityFunctions = [];
     }
 
+    protected getClassHeader() : string {
+        let str = "export class " + this.name;
+        if (this.baseClass) {
+            str += " extends " + this.baseClass.Name;
+        }
+        return str;
+    }
+
     public toString() : string {
         let str : string = "";
         str += this.fileHeader;
         str += "\n\n";
         this.imports.forEach((im) => {
             str += im;
-            str += "\n\n";            
+            str += "\n";            
         })
         /*
         for (let im in this.imports) {
@@ -97,12 +112,12 @@ export class ClassFile {
             str += "\n\n";
         }
         */
-        str += this.documentation;
+        str += "/**\n" + this.documentation + "\n*/";
         str += "\n\n";
-        str += this.classHeader;
+        str += this.getClassHeader();
         str += " {\n ";
         for (let mem of this.members) {
-            str += "\t" + mem.toString() + "\n";
+            str += "\t" + mem.toString() + ";\n";
         }
         str += "\n";
         for (let met of this.methods) {
@@ -165,6 +180,11 @@ export class ClassFile {
             }
             this.createImport(fn.ReturnType);
         }
+
+        //add the base class to the imports
+        if( this.baseClass) {
+            this.createImport(this.baseClass)
+        }
     }
 
     protected createImport( cls : ClassFile|null) {
@@ -192,5 +212,9 @@ export class ClassFile {
 
     protected  createEncodeMethod() : void {};
     protected  createDecodeMethod() : void {};
+
+    protected removeAllMembers() : void {
+        this.members = [];
+    }
 
 }

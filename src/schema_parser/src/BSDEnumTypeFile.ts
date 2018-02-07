@@ -27,9 +27,14 @@ export class BSDEnumTypeFile extends BSDClassFile {
             return true;
         }
         if (el.tagName == BSDEnumTypeFile.TAG_ENUM_VALUE) {
+            let name = el.getAttribute(BSDClassFile.ATTR_NAME);
+            let value = el.getAttribute(BSDClassFile.ATTR_VALUE);
+            if (!value || !name) {
+                throw Error(this.Name + ": Incomplete Enumeration Item");
+            }
             this.members.push(new EnumItem(
-                el.getAttribute(BSDClassFile.ATTR_NAME),
-                el.getAttribute(BSDClassFile.ATTR_VALUE)));
+                name,
+                parseInt(value)));
             return true;
         }
         return false;
@@ -103,7 +108,7 @@ export class BSDEnumTypeFile extends BSDClassFile {
         str += "\n";
         str += "}"
         str += "\n\n";
-        for (let met in this.methods) {
+        for (let met in this.utilityFunctions) {
             str += "\t" + met.toString() + "\n";
         }
         
