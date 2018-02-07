@@ -1,8 +1,20 @@
 "use strict";
 
-import {assert} from 'better-assert/better-assert-browser';
+import {assert} from '../assert';
 import * as _ from 'underscore';
 import { DataStream } from './DataStream';
+
+
+export type Int8 = number;
+export type Int16 = number;
+export type Int32 = number;
+export type Int64 = number;
+
+export type UInt8 = number;
+export type UInt16 = number;
+export type UInt32 = number;
+export type UInt64 = number;
+
 
 function getRandomInt(min : number, max : number) {
     return Math.floor(Math.random() * (max - min + 1)) + min

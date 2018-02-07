@@ -9,7 +9,17 @@ import {resolveNodeId,NodeId} from '../nodeid/nodeid';
 import {OPCUAClientBase} from './client_base';
 import { Variant } from '../opcua-client';
 import { OPCUAClientOptions } from '../common/client_options';
-import {StatusCodes} from '../constants/raw_status_codes'
+import {StatusCodes} from '../constants/raw_status_codes';
+
+import {CreateMonitoredItemsRequest} from '../generated/CreateMonitoredItemsRequest';
+import {CreateMonitoredItemsResponse} from '../generated/CreateMonitoredItemsResponse';
+import {CreateSubscriptionRequest} from '../generated/CreateSubscriptionRequest';
+import {CreateSubscriptionResponse} from '../generated/CreateSubscriptionResponse';
+import { PublishResponse } from '../generated/PublishResponse';
+import { PublishRequest } from '../generated/PublishRequest';
+import { RepublishRequest } from '../generated/RepublishRequest';
+import { RepublishResponse } from '../generated/RepublishResponse';
+import { DeleteMonitoredItemsRequest } from '../generated/DeleteMonitoredItemsRequest';
 var util = require("util");
 
 
@@ -261,9 +271,6 @@ browse(nodes, callback) {
  *
 */
 readVariableValue(nodes, callback) {
-
-    var self = this;
-
     assert(_.isFunction(callback));
 
 
@@ -300,7 +307,7 @@ readVariableValue(nodes, callback) {
 
     assert(nodes.length === request.nodesToRead.length);
 
-    self.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction(request, function (err, response) {
 
         /* istanbul ignore next */
         if (err) {
@@ -694,7 +701,7 @@ deleteSubscriptions(options : DeleteSubscriptionsRequest, callback) {
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {TransferSubscriptionsResponse} - the response
  */
-ClientSession.prototype.transferSubscriptions = function(options,callback) {
+transferSubscriptions(options : TransferSubscriptionsRequest,callback : FunctionConstructor) {
     this._defaultRequest(
         subscription_service.TransferSubscriptionsRequest,
         subscription_service.TransferSubscriptionsResponse,
@@ -710,7 +717,7 @@ ClientSession.prototype.transferSubscriptions = function(options,callback) {
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {CreateMonitoredItemsResponse} - the response
  */
-ClientSession.prototype.createMonitoredItems = function (options, callback) {
+createMonitoredItems(options : CreateMonitoredItemsRequest, callback : callback : (err : Error|null,response : CreateMonitoredItemsResponse)=>void) {
     this._defaultRequest(
         subscription_service.CreateMonitoredItemsRequest,
         subscription_service.CreateMonitoredItemsResponse,
@@ -726,7 +733,7 @@ ClientSession.prototype.createMonitoredItems = function (options, callback) {
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {ModifyMonitoredItemsResponse} - the response
  */
-ClientSession.prototype.modifyMonitoredItems = function (options, callback) {
+modifyMonitoredItems(options : ModifyMonitoredItemsRequest, callback : (err : Error|null,response : ModifyMonitoredItemsResponse)=>void ) {
     this._defaultRequest(
         subscription_service.ModifyMonitoredItemsRequest,
         subscription_service.ModifyMonitoredItemsResponse,
@@ -765,7 +772,7 @@ ClientSession.prototype.setMonitoringMode = function (options, callback) {
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {PublishResponse} - the response
  */
-ClientSession.prototype.publish = function (options, callback) {
+publish(options : PublishRequest, callback : (err : Error|null, response : PublishResponse) => void) {
     this._defaultRequest(
         subscription_service.PublishRequest,
         subscription_service.PublishResponse,
@@ -781,7 +788,7 @@ ClientSession.prototype.publish = function (options, callback) {
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {RepublishResponse} - the response
  */
-ClientSession.prototype.republish = function (options, callback) {
+republish(options : RepublishRequest, callback : (err : Error|null,response : RepublishResponse )=>void ) {
     this._defaultRequest(
         subscription_service.RepublishRequest,
         subscription_service.RepublishResponse,
@@ -796,7 +803,7 @@ ClientSession.prototype.republish = function (options, callback) {
  * @param callback {Function}
  * @param callback.err {Error|null}   - the Error if the async method has failed
  */
-ClientSession.prototype.deleteMonitoredItems = function (options, callback) {
+deleteMonitoredItems(options : DeleteMonitoredItemsRequest, callback : (err : Error|null)=>void ) {
     this._defaultRequest(
         subscription_service.DeleteMonitoredItemsRequest,
         subscription_service.DeleteMonitoredItemsResponse,

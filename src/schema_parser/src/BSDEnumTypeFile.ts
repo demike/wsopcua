@@ -41,7 +41,7 @@ export class BSDEnumTypeFile extends BSDClassFile {
     }
 
     protected createEncodeMethod() : void {
-        let enc = new ClassMethod(null,null,"encode" + this.name,
+        let enc = new ClassMethod("",null,"encode" + this.name,
         [   new ClassMember("out",BSDEnumTypeFile.IO_TYPE),
             new ClassMember("data", this.name)], 
         null,
@@ -81,6 +81,9 @@ export class BSDEnumTypeFile extends BSDClassFile {
     }
 
 
+    protected getEnumHeader() {
+        return "export enum " + this.name;
+    }
 
     //@Override
     public toString() : string {
@@ -98,9 +101,10 @@ export class BSDEnumTypeFile extends BSDClassFile {
             str += "\n\n";
         }
         */
-        str += this.documentation;
-        str += "\n\n";
-        str += this.classHeader;
+        if (this.documentation) {
+            str +=  "/**\n" + this.documentation + "*/\n";
+        }
+        str += this.getEnumHeader();
         str += " {\n ";
         for (let mem of this.members) {
             str += "\t" + mem + "\n";

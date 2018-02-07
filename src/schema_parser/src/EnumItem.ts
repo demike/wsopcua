@@ -16,6 +16,6 @@ export class EnumItem extends ClassMember{
     }
     
     toString() {
-        return "\t"+this._name + " = " + this._value + ",\n";
+        return "\t"+this._name + " = " + this._value + ",";
     }
 }

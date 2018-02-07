@@ -77,7 +77,7 @@ export class TypeRegistry {
 
         //Byte  8.9
         type = new SimpleType("Byte");
-        type.Path = this.BASIC_TYPES_PATH + "integer";
+        type.Path = this.BASIC_TYPES_PATH + "integers";
         this.addType(type.Name,type);
         //UInt8
         this.addType("Uint8",type);
@@ -109,7 +109,7 @@ export class TypeRegistry {
     
         //Double: 8.12
         type = new SimpleType("Double");
-        type.Path = this.BASIC_TYPES_PATH + "float";
+        type.Path = this.BASIC_TYPES_PATH + "floats";
         this.addType(type.Name,type); 
         //Duration 8.13
         this.addType("Duration",type);
@@ -118,7 +118,7 @@ export class TypeRegistry {
             //TODO
        //Float 8.15: 
        type = new SimpleType("Float");
-       type.Path = this.BASIC_TYPES_PATH + "float";
+       type.Path = this.BASIC_TYPES_PATH + "floats";
        this.addType(type.Name,type); 
 
         //Guid: 8.16
@@ -128,7 +128,7 @@ export class TypeRegistry {
 
        //SByte: 8.17 
        type = new SimpleType("SByte");
-       type.Path = this.BASIC_TYPES_PATH + "integer";
+       type.Path = this.BASIC_TYPES_PATH + "integers";
        this.addType(type.Name,type);
        //Int8
        this.addType("Uint8",type);
