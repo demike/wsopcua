@@ -12,9 +12,9 @@ var codeMap : {[key : string] : number} = {};
 var code_list : {name : string, value : number, description : string}[] = [];
 
 
-var datafolder = path.join(__dirname,"1.03");
+var datafolder = path.join(__dirname,"../schemas");
 
-fs.readFile(path.join(datafolder,'/NodeIds.csv'),"utf8",(err : Error|null,data : string)=>{
+fs.readFile(path.join(datafolder,'/StatusCodes.csv'),"utf8",(err : Error|null,data : string)=>{
     if (err) {
         console.log(err);
     } else {
