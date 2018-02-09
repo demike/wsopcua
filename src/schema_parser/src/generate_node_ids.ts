@@ -27,6 +27,9 @@ function convert(data : string)
 
     lines.forEach(function(line) {
         let row = line.split(',');
+        if (!row || row.length < 3) {
+            return;
+        }
         let codeName : string = row[0];
         let value : string    = row[1];
         let type : string = row[2];
@@ -40,12 +43,12 @@ function convert(data : string)
 
 
     });
-    var outFile = fs.createWriteStream(path.join("../../constants","opcua_node_ids.ts"));
+    var outFile = fs.createWriteStream(path.join(__dirname + "/../../constants","opcua_node_ids.ts"));
     outFile.write("// this file has been automatically generated\n");
     outFile.write("// using schema_parser/generate_node_ids.ts\n");
 
     var e;
-    if (false) {
+/*    if (false) {
         outFile.write(" export var NodeIds : {[key:string]:{name : string, value : number}} = { \n");
         for(name in codeMap) {
             if (codeMap.hasOwnProperty(name)) {
@@ -60,7 +63,7 @@ function convert(data : string)
         outFile.write("};\n");
 
     }
-
+*/
     var typeMap;
     for(typeName in metaMap) {
         if (metaMap.hasOwnProperty(typeName)) {
