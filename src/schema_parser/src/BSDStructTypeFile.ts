@@ -29,15 +29,42 @@ export class BSDStructTypeFile extends BSDClassFile {
             length
         );
             
-        if (mem.Name.startsWith("Reserved")) {
+        if (mem.Name.indexOf("Reserved") == 0) {
             return true;
         }
         this.members.push(mem);
         return true;
     }
 
+    protected createConstructor() {
+        if (this.members.length == 0) {
+            return;
+        }
+
+        let body : string = "";
+        if (this.baseClass) {
+            body += "\t\tsuper(options);\n";
+        }
+            
+        for (let mem of this.members) {
+            if (mem.Type.Name != "Bit") {
+                body += "\t\tthis." + mem.Name + "= (options." + mem.Name + ") ? options." + mem.Name +  ":null;\n";
+            }
+        }
+        
+
+        let met : ClassMethod = new ClassMethod(null,null,"constructor",[
+            new ClassMember("options",new SimpleType("I"+ this.name)),
+        ],null,body);
+
+        this.methods.push(met);
+    }
+
     protected createEncodeMethod(): void {
         let body : string = "";
+
+        //if ()
+
         for (let mem of this.members) {
             if (mem instanceof SimpleType) {
                 "\t\tout.set" + mem.Type.Name + "(data);"
@@ -68,5 +95,20 @@ export class BSDStructTypeFile extends BSDClassFile {
         null,
         body);
         this.addMethod(dec);
+    }
+
+    protected createDefines() {
+        //header
+        let str = "export interface I" + this.name;
+        if (this.baseClass) {
+            str += " extends I" + this.baseClass.Name;
+        }
+        str += " {\n";
+
+        for (let mem of this.members) {
+            str += "\t" + mem.toString() + ";\n";
+        }
+        str += "}\n";
+        this.defines = str;
     }
 }

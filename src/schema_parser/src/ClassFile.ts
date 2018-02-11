@@ -16,15 +16,16 @@ export declare class Set< Value > {
 
 export class ClassFile {
     protected name : string;
-    protected baseClass : ClassFile;
+    protected baseClass? : ClassFile|null = null;
     protected fileHeader : string;
     protected imports : Set<string>;
+    protected defines : String;
     protected documentation : string;
     protected classHeader : string;
     protected members : ClassMember[];
     protected methods : ClassMethod[];
     protected utilityFunctions : ClassMethod[];
-    protected path : string;
+    protected path? : string;
     protected importAs? : string;
 
     protected complete : boolean = false;
@@ -54,11 +55,11 @@ export class ClassFile {
         this.path = p;
     }
 
-    public get BaseClass() : ClassFile {
+    public get BaseClass() : ClassFile |null | undefined {
         return this.baseClass;
     }
 
-    public set BaseClass(cls : ClassFile) {
+    public set BaseClass(cls : ClassFile|null|undefined) {
            this.baseClass = cls;
     }
 
@@ -88,6 +89,7 @@ export class ClassFile {
         this.documentation = "";
         this.classHeader = "";
         this.utilityFunctions = [];
+        this.defines = "";
     }
 
     protected getClassHeader() : string {
@@ -112,6 +114,10 @@ export class ClassFile {
             str += "\n\n";
         }
         */
+        if(this.defines) {
+            str += "\n" + this.defines + "\n";
+        }
+
         str += "/**\n" + this.documentation + "\n*/";
         str += "\n\n";
         str += this.getClassHeader();
@@ -121,7 +127,7 @@ export class ClassFile {
         }
         str += "\n";
         for (let met of this.methods) {
-            str += "\t" + met.toString() + "\n\n";
+            str += "\t" + met.toString() + "\n";
         }
         str += "}"
 
@@ -166,6 +172,9 @@ export class ClassFile {
         }
         //iterate over methods, ignore self
         for(let met of this.methods) {
+            if (met.Name == "constructor") {
+                continue;
+            }
             let args = met.Arguments || [];
             for (let arg of args) {
                 this.createImport(arg.Type);
@@ -183,17 +192,22 @@ export class ClassFile {
 
         //add the base class to the imports
         if( this.baseClass) {
-            this.createImport(this.baseClass)
+            this.createImport(this.baseClass,true)
         }
     }
 
-    protected createImport( cls : ClassFile|null) {
+    protected createImport( cls : ClassFile|null,importInterface:boolean = false) {
         if (!cls) {
             return;
         }
         if (cls.Path != this.Path ) {
 
+            let importNames = cls.Name;
             this.imports.add("import {" + cls.Name + "} from '" + cls.Path + "';")
+            if (importInterface) {
+                this.imports.add("import {I" + cls.Name + "} from '" + cls.Path + "';")
+            }
+            
         }
     }
 
@@ -206,10 +220,12 @@ export class ClassFile {
     }
 
     public createMethods(): void {
+        this.createConstructor();
         this.createEncodeMethod();
         this.createDecodeMethod();
     }
 
+    protected  createConstructor() : void {};
     protected  createEncodeMethod() : void {};
     protected  createDecodeMethod() : void {};
 

@@ -13,8 +13,8 @@ export class BSDSchemaParser {
 
     public clFileMap : { [key : string] : BSDClassFile };
 
-    protected outPath : string;
-    protected inPath : string;
+    protected outPath? : string;
+    protected inPath? : string;
 
     constructor() {
         this.clFileMap = {};

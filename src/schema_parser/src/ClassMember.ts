@@ -1,7 +1,7 @@
 /*import { ClassFile } from "./ClassFile";
 import { TypeRegistry } from "./TypeRegistry";
 */
-import {ClassFile, TypeRegistry} from './SchemaParser.module';
+import {ClassFile, TypeRegistry, SimpleType} from './SchemaParser.module';
 import { IncompleteTypeDefException } from './IncompleteTypeDefException';
 
 export class ClassMember {
@@ -68,11 +68,28 @@ export class ClassMember {
         if (this._name.indexOf("Reserved") == 0) {
             return "";
         }
+        let blnCommentOut : boolean = this._type.Name == "Bit";
+
         let str = "\t";
+
+        if (blnCommentOut) {
+            str += "/*";
+        }
         if (this._visibility) {
             str += this._visibility + " ";
         }
-        str += this._name + ": " + this._type.Name;
+
+        //find the type name
+        let typeName = this._type.Name;
+        if (this._type instanceof SimpleType && this._type.JsType) {
+            typeName = this._type.JsType;
+        }
+
+        str += this._name + ": " + typeName;
+
+        if (blnCommentOut) {
+            str += "*/";
+        }
         return str;
     }
 

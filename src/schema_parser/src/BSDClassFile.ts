@@ -55,6 +55,7 @@ export abstract class BSDClassFile extends ClassFile {
 
         this.createMethods();
         this.createImports();
+        this.createDefines();
         this.complete = true;
     }
 
@@ -73,6 +74,10 @@ export abstract class BSDClassFile extends ClassFile {
             return true;
         }
         return false;
+    }
+
+    protected createDefines() {
+        
     }
 
 }
