@@ -83,6 +83,8 @@ export class ClassMember {
         let typeName = this._type.Name;
         if (this._type instanceof SimpleType && this._type.JsType) {
             typeName = this._type.JsType;
+        } else if (this._type.ImportAs) {
+            typeName = this._type.ImportAs + "." + typeName;
         }
 
         str += this._name + ": " + typeName;

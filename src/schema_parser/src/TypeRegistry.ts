@@ -6,7 +6,7 @@ import {ClassFile,SimpleType} from './SchemaParser.module';
 
 export class TypeRegistry {
 
-    protected static readonly BASIC_TYPES_PATH : string = "../basic-types/";
+    protected static readonly BASIC_TYPES_PATH : string = "../basic-types";
 
     public static typeMap : { [key:string]:ClassFile} = {}
 
@@ -34,26 +34,35 @@ export class TypeRegistry {
         let type : SimpleType;
 
         type = new SimpleType("DataStream");
-        type.Path = this.BASIC_TYPES_PATH + "DataStream";
+        type.Path = this.BASIC_TYPES_PATH + "/DataStream";
         this.addType(type.Name,type);
 
 
         //OPC-UA Standard Data Types - OPC-UA Specification Part 3: 8.*
         //NodeId 8.2
         type = new SimpleType("NodeId");
-        type.Path = this.BASIC_TYPES_PATH + "nodeid";
-        this.addType(type.Name,type); 
+        //type.Path = this.BASIC_TYPES_PATH + "nodeid";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
+        this.addType(type.Name,type);
+         
         //ExpandedNodeId: 
         type = new SimpleType("ExpandedNodeId");
-        type.Path = this.BASIC_TYPES_PATH + "nodeid";
+//        type.Path = this.BASIC_TYPES_PATH + "nodeid";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         this.addType(type.Name,type);
 
         //QualifiedName 8.3
             //TODO
 
-       // LocaleId 8.4
-       type = new SimpleType("LocaleId");
-       type.Path = this.BASIC_TYPES_PATH + "localeid";
+        // LocaleId 8.4
+        type = new SimpleType("LocaleId");
+//      type.Path = this.BASIC_TYPES_PATH + "localeid";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
+
+
        type.JsType = "string";
        this.addType(type.Name,type);
         //LocalizedText 8.5
@@ -65,26 +74,33 @@ export class TypeRegistry {
 
        //Bit
        type = new SimpleType("Bit");
-       type.Path = this.BASIC_TYPES_PATH + "boolean";
+       type.Path = this.BASIC_TYPES_PATH + "/boolean";
        type.JsType = "boolean";
        this.addType(type.Name,type);
         
        // Boolean 8.8
        type = new SimpleType("Boolean");
-       type.Path = this.BASIC_TYPES_PATH + "boolean";
+//       type.Path = this.BASIC_TYPES_PATH + "boolean";
+       type.Path = this.BASIC_TYPES_PATH;
+       type.ImportAs = "ec";
        type.JsType = "boolean";
        this.addType(type.Name,type);
 
         //Byte  8.9
         type = new SimpleType("Byte");
-        type.Path = this.BASIC_TYPES_PATH + "integers";
+//        type.Path = this.BASIC_TYPES_PATH + "integers";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
+
         this.addType(type.Name,type);
         //UInt8
         this.addType("Uint8",type);
 
         //ByteString 8.10
         type = new SimpleType("ByteString");
-        type.Path = this.BASIC_TYPES_PATH + "byte_string";
+//        type.Path = this.BASIC_TYPES_PATH + "byte_string";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         this.addType(type.Name,type); 
         type.JsType = "Uint8Array";
         //Image: 8.19
@@ -101,7 +117,9 @@ export class TypeRegistry {
 
         //DateTime 8.11
         type = new SimpleType("DateTime");
-        type.Path = this.BASIC_TYPES_PATH + "date_time";
+//        type.Path = this.BASIC_TYPES_PATH + "date_time";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         this.addType(type.Name,type);
         type.JsType = "Date";
         //UtcTime: 8.38
@@ -109,7 +127,9 @@ export class TypeRegistry {
     
         //Double: 8.12
         type = new SimpleType("Double");
-        type.Path = this.BASIC_TYPES_PATH + "floats";
+//        type.Path = this.BASIC_TYPES_PATH + "floats";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         this.addType(type.Name,type); 
         //Duration 8.13
         this.addType("Duration",type);
@@ -118,18 +138,24 @@ export class TypeRegistry {
             //TODO
        //Float 8.15: 
        type = new SimpleType("Float");
-       type.Path = this.BASIC_TYPES_PATH + "floats";
-       this.addType(type.Name,type); 
+//       type.Path = this.BASIC_TYPES_PATH + "floats";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
+        this.addType(type.Name,type); 
 
         //Guid: 8.16
         type = new SimpleType("Guid");
-        type.Path = this.BASIC_TYPES_PATH + "guid";
+//        type.Path = this.BASIC_TYPES_PATH + "guid";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         this.addType(type.Name,type);
 
        //SByte: 8.17 
        type = new SimpleType("SByte");
-       type.Path = this.BASIC_TYPES_PATH + "integers";
-       this.addType(type.Name,type);
+//       type.Path = this.BASIC_TYPES_PATH + "integers";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
+        this.addType(type.Name,type);
        //Int8
        this.addType("Uint8",type);
 
@@ -141,17 +167,23 @@ export class TypeRegistry {
             //TODO
         //Int16: 8.25
         type = new SimpleType("Int16");
-        type.Path = this.BASIC_TYPES_PATH + "integers";
+//        type.Path = this.BASIC_TYPES_PATH + "integers";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         this.addType(type.Name,type);
 
         //Int32: 8.26
         type = new SimpleType("Int32");
-        type.Path = this.BASIC_TYPES_PATH + "integers";
+//        type.Path = this.BASIC_TYPES_PATH + "integers";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         this.addType(type.Name,type);
 
         //Int64: 8.27
         type = new SimpleType("Int64");
-        type.Path = this.BASIC_TYPES_PATH + "integers";
+//        type.Path = this.BASIC_TYPES_PATH + "integers";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         this.addType(type.Name,type); 
 
         //TimeZoneDataType: 8.28
@@ -164,7 +196,9 @@ export class TypeRegistry {
             //TODO
         //String: 8.32
         type = new SimpleType("String");
-        type.Path = this.BASIC_TYPES_PATH + "string";
+//        type.Path = this.BASIC_TYPES_PATH + "string";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         type._jsType = "string";
         this.addType(type.Name,type); 
         //Time
@@ -178,22 +212,28 @@ export class TypeRegistry {
         
         //UInt16: 8.35 
         type = new SimpleType("UInt16");
-        type.Path = this.BASIC_TYPES_PATH + "integers";
+//        type.Path = this.BASIC_TYPES_PATH + "integers";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         this.addType(type.Name,type); 
 
         //UInt32: 8.36
         type = new SimpleType("UInt32");
-        type.Path = this.BASIC_TYPES_PATH + "integers";
+//        type.Path = this.BASIC_TYPES_PATH + "integers";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         this.addType(type.Name,type);
 
         //UInt64: 8.37
         type = new SimpleType("UInt64");
-        type.Path = this.BASIC_TYPES_PATH + "integers";
+ //       type.Path = this.BASIC_TYPES_PATH + "integers";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         this.addType(type.Name,type);
 
         //XmlElement: 8.39
         type = new SimpleType("XmlElement");
-        type.Path = this.BASIC_TYPES_PATH + "xml_element";
+        type.Path = this.BASIC_TYPES_PATH + "/xml_element";
         this.addType(type.Name,type); 
 
         //EnumValueType: 8.40
@@ -237,7 +277,9 @@ export class TypeRegistry {
 
         //StatusCode:
         type = new SimpleType("StatusCode");
-        type.Path = this.BASIC_TYPES_PATH + "status_code";
+//        type.Path = this.BASIC_TYPES_PATH + "/status_code";
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
         this.addType(type.Name,type);
         
         /*

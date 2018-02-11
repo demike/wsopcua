@@ -75,8 +75,16 @@ export class ClassFile {
         this.documentation = doc;
     }
 
-    public get Complete() {
+    public get Complete() : boolean {
         return this.complete;
+    }
+
+    public get ImportAs() : string|undefined{
+        return this.importAs;
+    }
+
+    public set ImportAs(name : string|undefined) {
+        this.importAs = name;
     }
 
     constructor(name? : string, baseClass? : string|ClassFile , members? : ClassMember[], methods? : ClassMethod[]) {
@@ -201,13 +209,15 @@ export class ClassFile {
             return;
         }
         if (cls.Path != this.Path ) {
-
-            let importNames = cls.Name;
-            this.imports.add("import {" + cls.Name + "} from '" + cls.Path + "';")
-            if (importInterface) {
-                this.imports.add("import {I" + cls.Name + "} from '" + cls.Path + "';")
+            if (cls.importAs) {
+                this.imports.add("import * as " + cls.importAs + " from '" + cls.Path + "';");
+                return;
             }
-            
+            let importNames = cls.Name;
+            this.imports.add("import {" + cls.Name + "} from '" + cls.Path + "';");
+            if (importInterface) {
+                this.imports.add("import {I" + cls.Name + "} from '" + cls.Path + "';");
+            }
         }
     }
 

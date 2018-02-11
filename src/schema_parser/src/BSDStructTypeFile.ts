@@ -66,8 +66,12 @@ export class BSDStructTypeFile extends BSDClassFile {
         //if ()
 
         for (let mem of this.members) {
-            if (mem instanceof SimpleType) {
-                "\t\tout.set" + mem.Type.Name + "(data);"
+            if (mem.Type instanceof SimpleType) {
+                body += "\t\t";
+                if (mem.Type.ImportAs) {
+                    body += mem.Type.ImportAs + "."  
+                } 
+                body += "encode" + mem.Type.Name + "(this." + mem.Name + ",out);\n";
             } else {
                 body += "\t\tthis." + mem.Name + ".encode(out);\n"
             }
@@ -83,10 +87,15 @@ export class BSDStructTypeFile extends BSDClassFile {
     protected createDecodeMethod(): void {
         let body : string = "";
         for (let mem of this.members) {
-            if (mem instanceof SimpleType) {
-                "\t\tthis." + mem.Name + " = inp.get" + mem.Type.Name + "();"
+            body += "\t\tthis." + mem.Name;
+            if (mem.Type instanceof SimpleType) {
+                if (mem.Type.ImportAs) {
+                    body += " = " + mem.Type.ImportAs + ".decode" + mem.Type.Name + "(inp);\n";
+                } else {
+                    body += " = decode" + mem.Type.Name + "(inp);\n";
+                }
             } else {
-                body += "\t\tthis." + mem.Name + ".decode(inp);\n"
+                body += ".decode(inp);\n"
             }
         } 
 
