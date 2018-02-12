@@ -26,7 +26,7 @@ export class BSDStructTypeFile extends BSDClassFile {
         let mem = new ClassMember(
             el.attributes.getNamedItem(BSDClassFile.ATTR_NAME).value,
             el.attributes.getNamedItem(BSDClassFile.ATTR_TYPE_NAME).value,
-            length
+            true,null,length
         );
             
         if (mem.Name.indexOf("Reserved") == 0) {
@@ -41,7 +41,7 @@ export class BSDStructTypeFile extends BSDClassFile {
             return;
         }
 
-        let body : string = "";
+        let body : string = "\t\toptions = options || {};\n";
         if (this.baseClass) {
             body += "\t\tsuper(options);\n";
         }
@@ -54,7 +54,7 @@ export class BSDStructTypeFile extends BSDClassFile {
         
 
         let met : ClassMethod = new ClassMethod(null,null,"constructor",[
-            new ClassMember("options",new SimpleType("I"+ this.name)),
+            new ClassMember("options",new SimpleType("I"+ this.name),false),
         ],null,body);
 
         this.methods.push(met);
@@ -106,6 +106,25 @@ export class BSDStructTypeFile extends BSDClassFile {
         this.addMethod(dec);
     }
 
+    protected createCloneMethod() : void {
+        let body : string = "\t\tif(!target) {\n\t\ttarget = new " + this.name + "();\n\t\t} ";
+
+        if (this.baseClass == null) {
+            body += "\t\tsuper(target);\n";
+        }
+
+        for (let mem of this.members) {
+            body += "\t\ttarget." + mem.Name + " = this." + mem.Name;
+        } 
+
+        let cl = new ClassMethod("",null,"clone",
+        [new ClassMember("target",this,false)],  
+        null,
+        body);
+        this.addMethod(cl);
+        
+    }
+
     protected createDefines() {
         //header
         let str = "export interface I" + this.name;
@@ -115,7 +134,7 @@ export class BSDStructTypeFile extends BSDClassFile {
         str += " {\n";
 
         for (let mem of this.members) {
-            str += "\t" + mem.toString() + ";\n";
+            str += "\t" + mem.toString({required:false}) + ";\n";
         }
         str += "}\n";
         this.defines = str;

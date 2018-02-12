@@ -66,6 +66,10 @@ export class BSDEnumTypeFile extends BSDClassFile {
         this.imports.add("import {" + BSDClassFile.IO_TYPE + "} from '" + PathGenUtil.SimpleTypes + BSDClassFile.IO_TYPE + "';");
     }
 
+    protected createCloneMethod() : void {
+        
+    }
+
 
     protected getSerializationType() : string {
         if (this.lengthInBits <= 8) {

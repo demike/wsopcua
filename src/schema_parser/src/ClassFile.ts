@@ -233,11 +233,13 @@ export class ClassFile {
         this.createConstructor();
         this.createEncodeMethod();
         this.createDecodeMethod();
+        this.createCloneMethod();
     }
 
     protected  createConstructor() : void {};
     protected  createEncodeMethod() : void {};
     protected  createDecodeMethod() : void {};
+    protected  createCloneMethod() : void {};
 
     protected removeAllMembers() : void {
         this.members = [];

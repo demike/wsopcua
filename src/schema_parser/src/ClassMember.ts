@@ -9,6 +9,7 @@ export class ClassMember {
     protected _type : ClassFile;
     protected _length : number; //for array types
     protected _visibility? : string|null; //public protected ""
+    protected _required? : boolean = true;
     protected _bitPos = 0; //only used by bit types
 
     /**
@@ -20,7 +21,7 @@ export class ClassMember {
         this.bitCounter = 0;
     }
 
-    constructor(name? : string|null,type?: string|ClassFile|null,length:number=1,visibility?: string|null) {
+    constructor(name? : string|null,type?: string|ClassFile|null,required:boolean=true,visibility?: string|null,length:number=1) {
         if (name) {
             this._name = name;
         }
@@ -42,6 +43,8 @@ export class ClassMember {
         if (visibility) {
             this._visibility = visibility;
         }
+
+        this._required = required;
     }
 
     public set Name(name : string) {
@@ -64,7 +67,12 @@ export class ClassMember {
         this._type = ClassFile.getTypeByName(typeName);
     }
 
-    public toString() : string {
+    /**
+     * 
+     * @param option {required?}
+     */
+    public toString(option?:any) : string {
+        let required = (!option || option.required === undefined) ? this._required : option.required;
         if (this._name.indexOf("Reserved") == 0) {
             return "";
         }
@@ -73,7 +81,7 @@ export class ClassMember {
         let str = "\t";
 
         if (blnCommentOut) {
-            str += "/*";
+            str += "//";
         }
         if (this._visibility) {
             str += this._visibility + " ";
@@ -87,11 +95,12 @@ export class ClassMember {
             typeName = this._type.ImportAs + "." + typeName;
         }
 
-        str += this._name + ": " + typeName;
-
-        if (blnCommentOut) {
-            str += "*/";
+        str += this._name;
+        if (!required) {
+            str += "?";
         }
+        str += " : " + typeName;
+
         return str;
     }
 
