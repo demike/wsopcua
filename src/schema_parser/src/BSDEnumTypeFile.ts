@@ -112,8 +112,8 @@ export class BSDEnumTypeFile extends BSDClassFile {
         str += "\n";
         str += "}"
         str += "\n\n";
-        for (let met in this.utilityFunctions) {
-            str += "\t" + met.toString() + "\n";
+        for (let met of this.utilityFunctions) {
+            str += "export function " + met.toString() + "\n";
         }
         
         return str;
