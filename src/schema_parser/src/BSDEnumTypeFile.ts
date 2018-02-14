@@ -10,7 +10,7 @@ export class BSDEnumTypeFile extends BSDClassFile {
     public static readonly TAG_ENUM_VALUE = "opc:EnumeratedValue";
 
 
-    lengthInBits : number;
+    lengthInBits : number = 0;
     public parse() : void {
         let attr = this.el.getAttributeNode(BSDEnumTypeFile.ATTR_LENGTH);
         if (attr != null) {
@@ -42,8 +42,8 @@ export class BSDEnumTypeFile extends BSDClassFile {
 
     protected createEncodeMethod() : void {
         let enc = new ClassMethod("",null,"encode" + this.name,
-        [   new ClassMember("out",BSDEnumTypeFile.IO_TYPE),
-            new ClassMember("data", this.name)], 
+        [   new ClassMember("data", this.name),
+            new ClassMember("out",BSDEnumTypeFile.IO_TYPE)], 
         null,
         "out.set" + this.getSerializationType() + "(data);"
             );
@@ -53,10 +53,9 @@ export class BSDEnumTypeFile extends BSDClassFile {
 
     protected createDecodeMethod() : void {
         let dec = new ClassMethod("",null,"decode" + this.name,
-        [   new ClassMember("in",BSDEnumTypeFile.IO_TYPE),
-            new ClassMember("data", this.name)],  
+        [ new ClassMember("inp",BSDEnumTypeFile.IO_TYPE)],  
         null,
-        "out.set" + this.getSerializationType() + "(data);"
+        "return inp.get" + this.getSerializationType() + "(data);"
             );
         
         this.utilityFunctions.push(dec);
@@ -76,9 +75,9 @@ export class BSDEnumTypeFile extends BSDClassFile {
             return "Byte";
 
         } else if (this.lengthInBits <= 16) {
-            return "UInt16";
+            return "Uint16";
         } else if (this.lengthInBits <= 32) {
-            return "UInt32";
+            return "Uint32";
         }
 
         return "";
@@ -122,4 +121,18 @@ export class BSDEnumTypeFile extends BSDClassFile {
         
         return str;
     }
+
+    public getImportSrc() : string {
+        if (this.importAs) {
+            return "import * as " + this.importAs + " from '" + this.Path + "';";
+                
+        }
+        return "import {" + this.Name + ", encode" + this.Name + ", decode" + this.Name + "} from '" + this.Path + "';";
+    }
+    
+
+    public getInterfaceImportSrc() : string|null {
+        return null;
+    }
+   
 }

@@ -72,6 +72,8 @@ export class BSDStructTypeFile extends BSDClassFile {
                     body += mem.Type.ImportAs + "."  
                 } 
                 body += "encode" + mem.Type.Name + "(this." + mem.Name + ",out);\n";
+            } else if (mem.Type instanceof BSDEnumTypeFile) {
+                body += "\t\tencode" + mem.Type.Name + "(this." + mem.Name + ",out);\n";
             } else {
                 body += "\t\tthis." + mem.Name + ".encode(out);\n"
             }
@@ -94,6 +96,8 @@ export class BSDStructTypeFile extends BSDClassFile {
                 } else {
                     body += " = decode" + mem.Type.Name + "(inp);\n";
                 }
+            } else if (mem.Type instanceof BSDEnumTypeFile) {
+                body += " = decode" + mem.Type.Name + "(inp);\n";
             } else {
                 body += ".decode(inp);\n"
             }
@@ -107,17 +111,23 @@ export class BSDStructTypeFile extends BSDClassFile {
     }
 
     protected createCloneMethod() : void {
-        let body : string = "\t\tif(!target) {\n\t\ttarget = new " + this.name + "();\n\t\t} ";
+        let body : string = "\t\tif(!target) {\n\t\t\ttarget = new " + this.name + "();\n\t\t}\n";
 
-        if (this.baseClass == null) {
-            body += "\t\tsuper(target);\n";
+        if (this.baseClass != null) {
+            body += "\t\tsuper.clone(target);\n";
         }
 
         for (let mem of this.members) {
-            body += "\t\ttarget." + mem.Name + " = this." + mem.Name;
+            if (mem.Type instanceof BSDStructTypeFile) {
+                body += "\t\ttarget." + mem.Name + " = this." + mem.Name + ".clone();\n";
+            } else {
+                body += "\t\ttarget." + mem.Name + " = this." + mem.Name + ";\n";
+            }
         } 
 
-        let cl = new ClassMethod("",null,"clone",
+        body += "\t\treturn target;"
+
+        let cl = new ClassMethod("",this,"clone",
         [new ClassMember("target",this,false)],  
         null,
         body);

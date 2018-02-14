@@ -3,10 +3,12 @@ import { TypeRegistry } from "./TypeRegistry";
 */
 import {ClassFile, TypeRegistry, SimpleType} from './SchemaParser.module';
 import { IncompleteTypeDefException } from './IncompleteTypeDefException';
+import { Z_UNKNOWN } from 'zlib';
 
 export class ClassMember {
-    protected _name : string;
-    protected _type : ClassFile;
+    public static readonly UNKNOWN_TYPE : ClassFile = new ClassFile("UnknownType");
+    protected _name : string = "";
+    protected _type : ClassFile = ClassMember.UNKNOWN_TYPE;
     protected _length : number; //for array types
     protected _visibility? : string|null; //public protected ""
     protected _required? : boolean = true;

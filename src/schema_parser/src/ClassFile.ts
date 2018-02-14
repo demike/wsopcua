@@ -142,6 +142,8 @@ export class ClassFile {
         for(let uf of this.utilityFunctions) {
             str += "\n\n" + uf.toString();
         }
+
+        str += "\n" + this.getFactoryCode();
         return str;
     }
 
@@ -209,14 +211,12 @@ export class ClassFile {
             return;
         }
         if (cls.Path != this.Path ) {
-            if (cls.importAs) {
-                this.imports.add("import * as " + cls.importAs + " from '" + cls.Path + "';");
-                return;
-            }
-            let importNames = cls.Name;
-            this.imports.add("import {" + cls.Name + "} from '" + cls.Path + "';");
+            this.imports.add(cls.getImportSrc());
             if (importInterface) {
-                this.imports.add("import {I" + cls.Name + "} from '" + cls.Path + "';");
+                let str = cls.getInterfaceImportSrc();
+                if (str) {
+                    this.imports.add(str);
+                }
             }
         }
     }
@@ -241,8 +241,34 @@ export class ClassFile {
     protected  createDecodeMethod() : void {};
     protected  createCloneMethod() : void {};
 
+    protected getFactoryCode() : string {
+        let str = "import {register_class_definition} from \"../factory/factories_factories\";\n";
+        str += "register_class_definition(\"" + this.name + "\"," + this.name + ");";
+        return str;
+    }
+
     protected removeAllMembers() : void {
         this.members = [];
     }
+
+    /**
+     * return the code to import this class
+     */
+    public getImportSrc() : string {
+        if (this.importAs) {
+            return "import * as " + this.importAs + " from '" + this.Path + "';";
+                
+        }
+        return "import {" + this.Name + "} from '" + this.Path + "';";
+    }
+    
+
+    public getInterfaceImportSrc() : string|null {
+        if (this.importAs) {
+            return null;
+        }
+        return "import {I" + this.Name + "} from '" + this.Path + "';"
+    }
+
 
 }

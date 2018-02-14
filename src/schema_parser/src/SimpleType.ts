@@ -9,18 +9,18 @@ export class SimpleType extends ClassFile {
     /**
      * the type used in javascript (i.e.: UInt32 --> number )
      */
-    _jsType :  string;
+    _jsType? :  string;
 
     constructor(name? : string, baseClass? : string|ClassFile , members? : ClassMember[], methods? : ClassMethod[]) {
         super(name,baseClass,members,methods);
         this.complete = true;
     }
 
-    public get JsType () {
+    public get JsType () : string | undefined {
         return this._jsType;
     }
 
-    public set JsType (jsType : string) {
+    public set JsType (jsType : string | undefined) {
         this._jsType = jsType;
     }
     protected createDecodeMethod() : void {
@@ -47,4 +47,5 @@ export class SimpleType extends ClassFile {
 
     public getDecodeMethod() : ClassMethod|null { return this.getMethodByName('decode' + this.name)}
     public getEncodeMethod() : ClassMethod|null { return this.getMethodByName('encode' + this.name)}
+
 } 
