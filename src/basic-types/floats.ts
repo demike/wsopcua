@@ -5,6 +5,8 @@ import {DataStream} from './DataStream'
 var minFloat = -3.40 * Math.pow(10, 38);
 var maxFloat = 3.40 * Math.pow(10, 38);
 
+export type Float = number;
+export type Double = number;
 
 /**
  * return a random float value in the range of  min inclusive and  max exclusive

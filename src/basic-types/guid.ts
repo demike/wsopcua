@@ -2,6 +2,8 @@ import { DataStream } from "./DataStream";
 
 "use strict";
 
+export type Guid = string;
+
 function toHex(i, nb) {
     return ("000000000000000" + i.toString(16)).substr(-nb);
 }
