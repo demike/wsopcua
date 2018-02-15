@@ -119,7 +119,7 @@ export class BSDStructTypeFile extends BSDClassFile {
 
         for (let mem of this.members) {
             if (mem.Type instanceof BSDStructTypeFile) {
-                body += "\t\ttarget." + mem.Name + " = this." + mem.Name + ".clone();\n";
+                body += "\t\tif (this." + mem.Name + ") { target." + mem.Name + " = this." + mem.Name + ".clone();}\n";
             } else {
                 body += "\t\ttarget." + mem.Name + " = this." + mem.Name + ";\n";
             }
