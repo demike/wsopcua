@@ -68,6 +68,10 @@ export class ClassMember {
         this._type = ClassFile.getTypeByName(typeName);
     }
 
+    public get BitPos() {
+        return this._bitPos;
+    }
+
     /**
      * 
      * @param option {required?}
@@ -105,6 +109,20 @@ export class ClassMember {
         return str;
     }
 
-    
+    writeToEncodingByteSrc(value : number|boolean,encodingByteName : string) : string {
+        let encodingByte;
+        if(length < 2) {
+            let mask = 1 << this._bitPos;
+            if (value) {
+                return encodingByteName + "|= 1 << " + this._bitPos + ";";
+            } else {
+                return encodingByteName + "&= ~(1 << " + this._bitPos + ");";
+            }
+        } else {
+
+        }
+
+        return "";
+    }
 
 }

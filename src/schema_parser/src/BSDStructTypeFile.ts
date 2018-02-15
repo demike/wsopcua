@@ -5,6 +5,7 @@ import {ClassMember, ClassMethod, BSDClassFile, BSDEnumTypeFile} from './SchemaP
 import { SimpleType } from './SimpleType';
 
 export class BSDStructTypeFile extends BSDClassFile {
+    protected encodingByteMap? : {[key : string] : ClassMember};
     /**
      * 
      * @returns element found
@@ -28,11 +29,15 @@ export class BSDStructTypeFile extends BSDClassFile {
             el.attributes.getNamedItem(BSDClassFile.ATTR_TYPE_NAME).value,
             true,null,length
         );
-            
-        if (mem.Name.indexOf("Reserved") == 0) {
-            return true;
+
+        if (mem.Type.Name == "Bit") {
+            if (!this.encodingByteMap) {
+                this.encodingByteMap = {};
+            }
+            this.encodingByteMap[mem.Name] = mem;
+        } else {
+            this.members.push(mem);
         }
-        this.members.push(mem);
         return true;
     }
 
@@ -63,7 +68,9 @@ export class BSDStructTypeFile extends BSDClassFile {
     protected createEncodeMethod(): void {
         let body : string = "";
 
-        //if ()
+        if (this.baseClass) {
+            body += "\t\tsuper.encode(out);\n";
+        }
 
         for (let mem of this.members) {
             if (mem.Type instanceof SimpleType) {
@@ -88,7 +95,20 @@ export class BSDStructTypeFile extends BSDClassFile {
     
     protected createDecodeMethod(): void {
         let body : string = "";
+        
+        if (this.baseClass) {
+            body += "\t\tsuper.decode(inp);\n";
+        }
+        
+        body += this.createDecodeEncodingByteCode();
+
         for (let mem of this.members) {
+            let addIf= false;
+            if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + "Specified")) {
+                addIf = true;
+                body += "\t\tif(" + mem.Name + "Specified) {\n\t";
+            }
+
             body += "\t\tthis." + mem.Name;
             if (mem.Type instanceof SimpleType) {
                 if (mem.Type.ImportAs) {
@@ -101,6 +121,10 @@ export class BSDStructTypeFile extends BSDClassFile {
             } else {
                 body += ".decode(inp);\n"
             }
+
+            if (addIf) {
+                body += "\t\t}\n";
+            }
         } 
 
         let dec = new ClassMethod("",null,"decode",
@@ -108,6 +132,34 @@ export class BSDStructTypeFile extends BSDClassFile {
         null,
         body);
         this.addMethod(dec);
+    }
+
+    protected createDecodeEncodingByteCode() {
+        if (!this.encodingByteMap) {
+            return "";
+        }
+        let str = "\t\tlet encodingByte = inp.getUint8();\n";
+        for (let name in this.encodingByteMap) {
+            if (!name.includes("Reserved")) {
+                str += "\t\tlet " + name + " = (encodingByte & " + (1 << this.encodingByteMap[name].BitPos) + ") != 0;\n";  
+            }
+        }
+
+        return str;
+    }
+
+    protected createEncodeEncodingByteCode() {
+        if (!this.encodingByteMap) {
+            return "";
+        }
+        let str = "\t\tlet encodingByte = 0;\n";
+        for (let name in this.encodingByteMap) {
+            if (!name.includes("Reserved")) {
+             //TODO: go on
+            }
+        }
+
+        return str;        
     }
 
     protected createCloneMethod() : void {

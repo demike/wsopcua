@@ -45,7 +45,7 @@ export class BSDEnumTypeFile extends BSDClassFile {
         [   new ClassMember("data", this.name),
             new ClassMember("out",BSDEnumTypeFile.IO_TYPE)], 
         null,
-        "out.set" + this.getSerializationType() + "(data);"
+        "\tout.set" + this.getSerializationType() + "(data);"
             );
         
         this.utilityFunctions.push(enc);
@@ -55,7 +55,7 @@ export class BSDEnumTypeFile extends BSDClassFile {
         let dec = new ClassMethod("",null,"decode" + this.name,
         [ new ClassMember("inp",BSDEnumTypeFile.IO_TYPE)],  
         null,
-        "return inp.get" + this.getSerializationType() + "(data);"
+        "\treturn inp.get" + this.getSerializationType() + "();"
             );
         
         this.utilityFunctions.push(dec);
