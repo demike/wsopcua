@@ -4,7 +4,7 @@ import {DataStream} from './DataStream';
 import {assert} from '../assert';
 import * as _ from 'underscore';
 import  '../nodeid/nodeid';
-import {NodeId,NodeIdType} from '../nodeid/nodeid';
+import {NodeId,NodeIdType,makeNodeId} from '../nodeid/nodeid';
 import {ExpandedNodeId} from '../nodeid/expanded_nodeid';
 import {isValidGuid,decodeGuid,encodeGuid} from './guid'
 import {decodeString,encodeString} from './string';
