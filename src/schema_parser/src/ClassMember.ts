@@ -3,7 +3,6 @@ import { TypeRegistry } from "./TypeRegistry";
 */
 import {ClassFile, TypeRegistry, SimpleType} from './SchemaParser.module';
 import { IncompleteTypeDefException } from './IncompleteTypeDefException';
-import { Z_UNKNOWN } from 'zlib';
 
 export class ClassMember {
     public static readonly UNKNOWN_TYPE : ClassFile = new ClassFile("UnknownType");

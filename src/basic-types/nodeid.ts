@@ -12,6 +12,8 @@ import {decodeUInt32,encodeUInt32} from './integers';
 import {encodeByteString,decodeByteString} from './byte_string'
 import {getRandomInt} from './utils';
 
+export {NodeId} from '../nodeid/nodeid';
+export {ExpandedNodeId} from '../nodeid/expanded_nodeid';
 
 
 var set_flag = require("node-opcua-utils").set_flag;

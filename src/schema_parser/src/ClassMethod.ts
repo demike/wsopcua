@@ -18,6 +18,8 @@ export class ClassMethod {
         this.visibility = visibility;
         if (name) {
             this.name = name;
+        } else {
+            this.name = "undefined";
         }
         if (returnType) {
             this.returnType = (returnType instanceof ClassFile) ? returnType : ClassFile.getTypeByName(returnType);

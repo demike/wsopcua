@@ -2,7 +2,7 @@
 import {ClassMember} from './SchemaParser.module';
 
 export class EnumItem extends ClassMember{
-    _name : string;
+    _name : string = "";
     _value : number;
     _description? : string;
 

@@ -11,6 +11,8 @@ export type Int32 = number;
 export type Int64 = number;
 
 export type UInt8 = number;
+export type Byte = number;
+
 export type UInt16 = number;
 export type UInt32 = number;
 export type UInt64 = number;
