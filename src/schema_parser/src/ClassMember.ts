@@ -126,7 +126,7 @@ export class ClassMember {
         }
         str += " : " + typeName;
 
-        if (this._length > 1) {
+        if (this._length > 1 || this._isArray) {
             str += "[]";
         }
 

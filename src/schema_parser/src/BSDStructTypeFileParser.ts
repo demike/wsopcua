@@ -30,10 +30,11 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
             lengthField = lengthFieldNode.value;
         }
 
+        let isArr = !!lengthField;
         let mem = new ClassMember(
             el.attributes.getNamedItem(ClassFile.ATTR_NAME).value,
             el.attributes.getNamedItem(BSDClassFileParser.ATTR_TYPE_NAME).value,
-            true,null,bitLength,lengthField==null
+            true,null,bitLength,isArr
         );
 
         if (this.cls.BaseClass && this.cls.BaseClass.getMemberByName(mem.Name) != null) {
@@ -102,11 +103,15 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
 
 
             if (mem.IsArray) {
-                body += "ec.encodeArray(this." + mem.Name + ",out,"
-                if (mem.Type.ImportAs) {
-                    body += mem.Type.ImportAs + ".";
-                }
-                body += "encode"+ mem.Type.Name + ");"
+                body += "ec.encodeArray(this." + mem.Name + ",out";
+                if (mem.Type instanceof SimpleType || mem.Type instanceof EnumTypeFile) {
+                    body += ","; 
+                    if (mem.Type.ImportAs) {
+                        body += mem.Type.ImportAs + ".";
+                    }
+                    body += "encode"+ mem.Type.Name;
+                } 
+                body += ");";
             } else {
                 if (mem.Type instanceof SimpleType || mem.Type instanceof EnumTypeFile) {
                     
@@ -153,14 +158,11 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
             body += "\t\tthis." + mem.Name;
             if (mem.Type instanceof SimpleType || mem.Type instanceof EnumTypeFile || mem.IsArray) {
                 body += " = ";
-                if (mem.Type.ImportAs) {
-                    body += mem.Type.ImportAs + ".";
-                } 
-
+                
                 if (mem.IsArray) {
-                    body += "ec.decodeArray(inp,decode + " + mem.Type.Name + ");\n"
+                    body += "ec.decodeArray(inp," + ((mem.Type.ImportAs) ? (mem.Type.ImportAs + ".") : "") + "decode" +  mem.Type.Name + ");\n"
                 } else {
-                    body += "decode" + mem.Type.Name + "(inp);\n";
+                    body += ((mem.Type.ImportAs) ? (mem.Type.ImportAs + ".") : "") +  "decode" + mem.Type.Name + "(inp);\n";
                 }
             } else {
                 body += ".decode(inp);\n"
@@ -232,9 +234,17 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
 
         for (let mem of this.cls.Members) {
             if (mem.Type instanceof StructTypeFile) {
-                body += "\t\tif (this." + mem.Name + ") { target." + mem.Name + " = this." + mem.Name + ".clone();}\n";
+                if (mem.IsArray) {
+                    body += "\t\tif (this." + mem.Name + ") { target." + mem.Name + " = ec.cloneComplexArray(this." + mem.Name + ");}\n"; 
+                } else {
+                    body += "\t\tif (this." + mem.Name + ") { target." + mem.Name + " = this." + mem.Name + ".clone();}\n";
+                }
             } else {
-                body += "\t\ttarget." + mem.Name + " = this." + mem.Name + ";\n";
+                if (mem.IsArray) {
+                    body += "\t\ttarget." + mem.Name + " = ec.cloneArray(this." + mem.Name + ");\n"; 
+                } else {
+                    body += "\t\ttarget." + mem.Name + " = this." + mem.Name + ";\n";
+                }
             }
         } 
 

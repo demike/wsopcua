@@ -34,7 +34,6 @@ export function encodeArray (arr : Array<any>, stream : DataStream, encode_eleme
  * @param stream {DataStream}  the stream.
  * @param decode_element_func {Function}  The  function to decode a single array element. This function returns the element decoded from the stream
  * @param decode_element_func.stream {DataStream}  the stream.
- * @return {Array}
  */
 export function decodeArray (stream : DataStream, decode_element_func?: (stream : DataStream) => void ) {
 
@@ -53,3 +52,28 @@ export function decodeArray (stream : DataStream, decode_element_func?: (stream 
 };
 
 
+
+export function cloneArray (arr : any[]) {
+    let out = [];
+
+    if (arr && arr.length > 0) {
+        for (let item  of arr) {
+            out.push(item);
+        }
+    }
+
+    return out;
+}
+
+export function cloneComplexArray(arr : any[]) {
+    let out = [];
+
+    if (arr && arr.length > 0) {
+        for (let item  of arr) {
+            out.push(item.clone());
+        }
+    }
+
+    return out;
+
+}

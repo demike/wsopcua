@@ -113,9 +113,16 @@ export abstract class BSDClassFileParser {
         }
         this.cls.removeAllImports(); //.imports.clear();
         //iterate over members, ignore self
+        let blnHasArrayMember = false;
         for(let mem of this.cls.Members) {
-            this.createImport(mem.Type);
+            blnHasArrayMember = blnHasArrayMember || mem.IsArray;            
+            this.createImport(mem.Type,false,mem.IsArray);
         }
+
+        if (blnHasArrayMember) {
+            this.cls.addImport("import * as ec from '../basic-types';");
+        }
+
         //iterate over methods, ignore self
         for(let met of this.cls.Methods) {
             if (met.Name == "constructor") {
@@ -142,7 +149,7 @@ export abstract class BSDClassFileParser {
         }
     }
 
-    protected createImport( cls : ClassFile|null,importInterface:boolean = false) {
+    protected createImport( cls : ClassFile|null,importInterface:boolean = false,importDecodeMethod:boolean = false) {
         if (!this.cls || !cls) {
             return;
         }
@@ -150,6 +157,13 @@ export abstract class BSDClassFileParser {
             this.cls.addImport(cls.getImportSrc());
             if (importInterface) {
                 let str = cls.getInterfaceImportSrc();
+                if (str) {
+                    this.cls.addImport(str);
+                }
+            }
+
+            if (importDecodeMethod) {
+                let str = cls.getDecodeFnImportSrc();
                 if (str) {
                     this.cls.addImport(str);
                 }

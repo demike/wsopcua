@@ -264,8 +264,7 @@ export class ClassFile {
      */
     public getImportSrc() : string {
         if (this.importAs) {
-            return "import * as " + this.importAs + " from '" + this.Path + "';";
-                
+            return "import * as " + this.importAs + " from '" + this.Path + "';";       
         }
         return "import {" + this.Name + "} from '" + this.Path + "';";
     }
@@ -276,6 +275,14 @@ export class ClassFile {
             return null;
         }
         return "import {I" + this.Name + "} from '" + this.Path + "';"
+    }
+
+    public getDecodeFnImportSrc() : string|null {
+        if (this.importAs) {
+            return null;
+        }
+
+        return "import {decode" + this.Name + "} from '" + this.Path + "';"
     }
 
     public addImport(imp : string) {
