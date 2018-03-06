@@ -80,6 +80,13 @@ export class DataStream {
             return val;
           }
       
+          getByte(): number {
+            var val = this.view.getUint8(this.pos);
+            this.pos++;
+            return val;
+          }
+
+
           /**
             * Gets the Uint16 value at the specified byte offset from the start of the view. There is
             * no alignment constraint; multi-byte values may be fetched from any offset.
@@ -135,6 +142,7 @@ export class DataStream {
             this.view.setInt8(this.pos,value);
             this.pos++; 
          }
+
       
           /**
             * Stores an Int16 value at the specified byte offset from the start of the view.
@@ -168,6 +176,10 @@ export class DataStream {
           setUint8(value: number): void {
             this.view.setUint8(this.pos,value);
             this.pos++; 
+         }
+         setByte(value : number): void {
+            this.view.setUint8(this.pos,value);
+            this.pos++;
          }
       
           /**

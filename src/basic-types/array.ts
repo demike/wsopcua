@@ -10,7 +10,7 @@ import {DataStream} from './DataStream';
  * @param encode_element_func.element {object}
  * @param encode_element_func.stream  {DataStream}  the stream.
  */
-export function encodeArray (arr : Array<any>, stream : DataStream, encode_element_func) : void {
+export function encodeArray (arr : Array<any>, stream : DataStream, encode_element_func?: (obj : object,stream : DataStream) => void ) : void {
 
     if (arr === null) {
         stream.setUint32(0xFFFFFFFF);
@@ -19,8 +19,14 @@ export function encodeArray (arr : Array<any>, stream : DataStream, encode_eleme
     assert(_.isArray(arr));
     stream.setUint32(arr.length);
 
-    for (var i = 0; i < arr.length; i++) {
-        encode_element_func(arr[i], stream);
+    if (encode_element_func) {
+        for (var i = 0; i < arr.length; ++i) {
+            encode_element_func(arr[i], stream);
+        }
+    } else {
+        for (var i = 0; i <arr.length; ++i) {
+            arr[i].encode(stream);
+        }
     }
 };
 /**
@@ -30,7 +36,7 @@ export function encodeArray (arr : Array<any>, stream : DataStream, encode_eleme
  * @param decode_element_func.stream {DataStream}  the stream.
  * @return {Array}
  */
-export function decodeArray (stream : DataStream, decode_element_func) {
+export function decodeArray (stream : DataStream, decode_element_func?: (stream : DataStream) => void ) {
 
     
     var length = stream.getUint32();
