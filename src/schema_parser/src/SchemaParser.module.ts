@@ -1,7 +1,13 @@
 export {ClassFile} from './ClassFile';
-export {BSDClassFile} from './BSDClassFile';
+export {EnumTypeFile} from './EnumTypeFile';
+export {StructTypeFile} from './StructTypeFile';
+
 export {BSDSchemaParser} from './BSDSchemaParser';
-export {BSDStructTypeFile} from './BSDStructTypeFile';
+export {BSDClassFileParser} from './BSDClassFileParser';
+export {BSDStructTypeFileParser} from './BSDStructTypeFileParser';
+export {BSDEnumTypeFileParser} from './BSDEnumTypeFileParser';
+
+
 
 export {ClassMember} from './ClassMember';
 export {ClassMethod} from './ClassMethod';
@@ -10,5 +16,3 @@ export {SimpleType} from './SimpleType';
 export {TypeRegistry} from './TypeRegistry';
 export {XSDClassFile} from './XSDClassFile';
 export {XSDComplexTypeFile} from './XSDComplexTypeFile'; 
-
-export {BSDEnumTypeFile} from './BSDEnumTypeFile';

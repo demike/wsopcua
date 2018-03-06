@@ -1,7 +1,7 @@
 /*import { ClassFile } from "./ClassFile";
 import { TypeRegistry } from "./TypeRegistry";
 */
-import {ClassFile, TypeRegistry, SimpleType} from './SchemaParser.module';
+import {ClassFile, TypeRegistry, SimpleType, EnumTypeFile} from './SchemaParser.module';
 import { IncompleteTypeDefException } from './IncompleteTypeDefException';
 
 export class ClassMember {
@@ -12,6 +12,12 @@ export class ClassMember {
     protected _visibility? : string|null; //public protected ""
     protected _required? : boolean = true;
     protected _bitPos = 0; //only used by bit types
+    protected _isArray = false;
+
+
+    public get Length() : number {
+        return this._length;
+    }
 
     /**
      * utility counter for bit fields
@@ -22,12 +28,13 @@ export class ClassMember {
         this.bitCounter = 0;
     }
 
-    constructor(name? : string|null,type?: string|ClassFile|null,required:boolean=true,visibility?: string|null,length:number=1) {
+    constructor(name? : string|null,type?: string|ClassFile|null,required:boolean=true,visibility?: string|null,length:number=1,isArray:boolean=false) {
         if (name) {
             this._name = name;
         }
 
         this._length = length;
+        this._isArray = isArray;
 
         if (type) {
             this._type = (type instanceof ClassFile) ? type : ClassFile.getTypeByName(type);
@@ -37,6 +44,11 @@ export class ClassMember {
             if (this._type.Name == "Bit") {
                 this._bitPos = ClassMember.bitCounter;
                 ClassMember.bitCounter++;
+            } else if(this._type instanceof EnumTypeFile) {
+                let bitCnt = this._type.LengthInBits;
+                if (bitCnt % 8 != 0 || ClassMember.bitCounter != 0) {
+                    ClassMember.bitCounter += bitCnt;
+                }
             }
         }
 
@@ -72,6 +84,14 @@ export class ClassMember {
         return this._bitPos;
     }
 
+    public set BitPos(pos : number) {
+        this._bitPos = pos;
+    }
+
+    public get IsArray() : boolean {
+        return this._isArray
+    }
+
     /**
      * 
      * @param option {required?}
@@ -105,6 +125,10 @@ export class ClassMember {
             str += "?";
         }
         str += " : " + typeName;
+
+        if (this._length > 1) {
+            str += "[]";
+        }
 
         return str;
     }

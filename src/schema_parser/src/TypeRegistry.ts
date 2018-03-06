@@ -234,11 +234,12 @@ export class TypeRegistry {
         //XmlElement: 8.39
         type = new SimpleType("XmlElement");
         type.Path = this.BASIC_TYPES_PATH + "/xml_element";
+        type.ImportAs = "ec";
         this.addType(type.Name,type); 
 
         //EnumValueType: 8.40
-        type = new SimpleType("EnumValueType");
-        this.addType(type.Name,type);
+//        type = new SimpleType("EnumValueType");
+//        this.addType(type.Name,type);
             //TODO
 
         //OptionSet: 8.41
