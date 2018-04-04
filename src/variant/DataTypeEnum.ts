@@ -1,4 +1,5 @@
 import * as factories from '../factory';
+import {encodeInt32,decodeInt32} from '../basic-types';
 export enum DataType {
     Null =              0,
     Boolean =           1,
@@ -28,8 +29,4 @@ export enum DataType {
     DiagnosticInfo =   25
 }
 
-
-
-
-
-exports.DataType = factories.registerEnumeration();
+factories.registerEnumeration("DataType",DataType,encodeInt32,decodeInt32);
