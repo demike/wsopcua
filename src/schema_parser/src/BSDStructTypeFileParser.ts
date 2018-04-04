@@ -270,7 +270,15 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
         str += " {\n";
 
         for (let mem of this.cls.Members) {
-            str += "\t" + mem.toString({required:false}) + ";\n";
+            let option : any = {};
+            option["required"] = false;
+          /*
+            if (!(mem.Type instanceof SimpleType)) {
+                option["typePrefix"] = "I";
+                this.createImport(mem.Type,true);
+            }
+            */
+            str += "\t" + mem.toString(option) + ";\n";
         }
         str += "}\n";
         this.cls.Defines = str;

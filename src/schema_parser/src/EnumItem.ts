@@ -17,4 +17,11 @@ export class EnumItem extends ClassMember{
     toString() {
         return "\t"+this._name + " = " + this._value + ",";
     }
+
+    protected nameToLowerCase() : void{
+        //do nothing, we want upper case EnumItems
+    }
+
+
+
 }

@@ -43,6 +43,7 @@ export {ModifyMonitoredItemsResponse} from '../../generated/ModifyMonitoredItems
 export {SetMonitoringModeRequest} from '../../generated/SetMonitoringModeRequest';
 export {SetMonitoringModeResponse} from '../../generated/SetMonitoringModeResponse';
 
+export {EventFilter} from '../../generated/EventFilter';
 export {EventFilterResult} from '../../generated/EventFilterResult';
 export {ContentFilterResult} from '../../generated/ContentFilterResult';
 export {ContentFilterElementResult} from '../../generated/ContentFilterElementResult';

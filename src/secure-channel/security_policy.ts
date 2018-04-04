@@ -3,7 +3,7 @@
  * @module opcua.miscellaneous
  */
 
-import {assert} from 'better-assert/better-assert-browser';
+import {assert} from '../assert';
 import * as _ from 'underscore';
 
 /**
@@ -87,7 +87,7 @@ export function fromURI(uri : String) : SecurityPolicy {
     return v || SecurityPolicy.Invalid;
 };
 
-export  function toUri(value : any) : String {
+export  function toUri(value : any) : SecurityPolicy {
     var securityPolicy = SecurityPolicy[value] || SecurityPolicy.Invalid;
     if (securityPolicy === SecurityPolicy.Invalid) {
         throw new Error("trying to convert an invalid Security Policy into a URI: " + value);

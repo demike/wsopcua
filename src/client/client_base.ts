@@ -73,7 +73,7 @@ export interface OPCUAClientOptions {
         connectionStrategy?: ConnectionStrategy,
         // {MessageSecurityMode} the default security mode.
         securityMode?: MessageSecurityMode, //  MessageSecurityMode, // [ =  MessageSecurityMode.None]
-        securityPolicy?: number | string, // : SecurityPolicy,//  =SecurityPolicy.NONE] {SecurityPolicy} the security mode.
+        securityPolicy?: SecurityPolicy, // : SecurityPolicy,//  =SecurityPolicy.NONE] {SecurityPolicy} the security mode.
         requestedSessionTimeout?: number, //= 60000]            {Number} the requested session time out in CreateSession
         applicationName?: string,// ="NodeOPCUA-Client"]        {string} the client application name
         endpoint_must_exist?: boolean, // true] {Boolean} set to false if the client should accept server endpoint mismatch
@@ -144,13 +144,13 @@ export class OPCUAClientBase extends EventEmitter {
 
         protected _isReconnecting : boolean;
         /**
- * total number of bytes read by the client
- * @property bytesRead
- * @type {Number}
- */
-get bytesRead() {
-    return this._byteRead + (this._secureChannel ? this._secureChannel.bytesRead : 0);
-};
+         * total number of bytes read by the client
+         * @property bytesRead
+         * @type {Number}
+         */
+        get bytesRead() {
+            return this._byteRead + (this._secureChannel ? this._secureChannel.bytesRead : 0);
+        };
 
     /**
      * total number of bytes written by the client
@@ -184,23 +184,25 @@ get bytesRead() {
     };
 
     /**
- * @property isReconnecting
- * @type {Boolean} true if the client is trying to reconnect to the server after a connection break.
- */
-  get isReconnecting() {
-
-    return !!(this._secureChannel && this._secureChannel.isConnecting);
+     * @property isReconnecting
+     * @type {Boolean} true if the client is trying to reconnect to the server after a connection break.
+     */
+    get isReconnecting() {
+        return !!(this._secureChannel && this._secureChannel.isConnecting);
     };
 
     /**
- * true if the connection strategy is set to automatically try to reconnect in case of failure
- * @property reconnectOnFailure
- * @type {Boolean}
- */
- get reconnectOnFailure() {
-    return  this.connectionStrategy.maxRetry >0;
-};
+     * true if the connection strategy is set to automatically try to reconnect in case of failure
+     * @property reconnectOnFailure
+     * @type {Boolean}
+     */
+    get reconnectOnFailure() {
+        return  this.connectionStrategy.maxRetry >0;
+    };
 
+    get secureChannel() {
+        return this._secureChannel;
+    }
 
     constructor(options ?: OPCUAClientOptions) {
         super();
@@ -208,7 +210,6 @@ get bytesRead() {
         options = options || {};
         options.certificateFile = options.certificateFile;
         options.privateKeyFile = options.privateKeyFile;
-
 
  //       OPCUASecureObject.call(this, options);
 
@@ -229,7 +230,7 @@ get bytesRead() {
      * @property securityPolicy
      * @type {SecurityPolicy}
      */
-    this.securityPolicy = options.securityPolicy || toURI("None");
+    this.securityPolicy = options.securityPolicy || toUri("None");
     this.securityPolicy = SecurityPolicy[this.securityPolicy];
 
     /**

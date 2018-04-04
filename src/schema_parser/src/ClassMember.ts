@@ -28,9 +28,15 @@ export class ClassMember {
         this.bitCounter = 0;
     }
 
+
+    protected nameToLowerCase() : void{
+        this._name = this._name.charAt(0).toLowerCase() + this._name.slice(1);
+    }
+
     constructor(name? : string|null,type?: string|ClassFile|null,required:boolean=true,visibility?: string|null,length:number=1,isArray:boolean=false) {
         if (name) {
             this._name = name;
+            this.nameToLowerCase();
         }
 
         this._length = length;
@@ -62,6 +68,7 @@ export class ClassMember {
 
     public set Name(name : string) {
         this._name = name;
+        this.nameToLowerCase();
     }
 
     public get Name() : string {
@@ -94,11 +101,11 @@ export class ClassMember {
 
     /**
      * 
-     * @param option {required?}
+     * @param option {required : boolean, typePrefix : string}
      */
     public toString(option?:any) : string {
         let required = (!option || option.required === undefined) ? this._required : option.required;
-        if (this._name.indexOf("Reserved") == 0) {
+        if (this._name.toLowerCase().indexOf("reserved") == 0) {
             return "";
         }
         let blnCommentOut : boolean = this._type.Name == "Bit";
@@ -114,6 +121,10 @@ export class ClassMember {
 
         //find the type name
         let typeName = this._type.Name;
+        if ((option && option.typePrefix !== undefined)) {
+            typeName = option.typePrefix + typeName;
+        }
+
         if (this._type instanceof SimpleType && this._type.JsType) {
             typeName = this._type.JsType;
         } else if (this._type.ImportAs) {

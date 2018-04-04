@@ -5,9 +5,8 @@
 import {EventEmitter} from 'eventemitter3';
 import * as _ from 'underscore';
 import {assert} from '../assert';
-import {resolveNodeId,NodeId} from '../nodeid/nodeid';
+import {resolveNodeId,coerceNodeId,makeNodeId,NodeId} from '../nodeid/nodeid';
 import {OPCUAClientBase} from './client_base';
-import { Variant } from '../opcua-client';
 import { OPCUAClientOptions } from '../common/client_options';
 import {StatusCodes} from '../constants/raw_status_codes';
 
@@ -19,7 +18,27 @@ import { PublishResponse } from '../generated/PublishResponse';
 import { PublishRequest } from '../generated/PublishRequest';
 import { RepublishRequest } from '../generated/RepublishRequest';
 import { RepublishResponse } from '../generated/RepublishResponse';
-import { DeleteMonitoredItemsRequest } from '../generated/DeleteMonitoredItemsRequest';
+import { IDeleteMonitoredItemsRequest } from '../generated/DeleteMonitoredItemsRequest';
+import { ModifyMonitoredItemsRequest} from '../generated/ModifyMonitoredItemsRequest';
+import { ModifyMonitoredItemsResponse} from '../generated/ModifyMonitoredItemsResponse';
+import { IDeleteSubscriptionsRequest} from '../generated/DeleteSubscriptionsRequest';
+import {TransferSubscriptionsRequest} from '../generated/TransferSubscriptionsRequest';
+
+import { ClientSidePublishEngine} from './client_publish_engine';
+import { ClientSessionKeepAliveManager} from './client_session_keepalive_manager';
+
+import { UInt32} from '../basic-types';
+import { CallMethodRequest } from '../generated/CallMethodRequest';
+import { CallMethodResult } from '../generated/CallMethodResult';
+import { Argument } from '../generated/Argument';
+
+import {AttributeIds,ReferenceTypeIds} from '../constants/';
+import { DataType } from '../variant/DataTypeEnum';
+
+
+var query_service = require("node-opcua-service-query");
+
+
 var util = require("util");
 
 
@@ -44,6 +63,10 @@ var call_service = require("node-opcua-service-call");
 var utils = require("node-opcua-utils");
 var debugLog = require("node-opcua-debug").make_debugLog(__filename);
 var doDebug = require("node-opcua-debug").checkDebugFlag(__filename);
+
+
+var resultMask = makeResultMask("ReferenceType");
+
 
 export enum BrowseDirection {
     Invalid =-1, //
@@ -76,14 +99,31 @@ export class ClientSession extends EventEmitter {
     protected _client : OPCUAClientBase;
     protected _publishEngine : ClientSidePublishEngine;
     protected _closed : boolean;
-    protected requestedMaxReferencesPerNode : number;
-constructor (client: OPCUAClientBase) {
-    super();
-    this._closeEventHasBeenEmmitted = false;
-    this._client = client;
-    this._publishEngine = null;
-    this._closed = false;
-};
+    protected _requestedMaxReferencesPerNode : number;
+    protected _keepAliveManager : ClientSessionKeepAliveManager;
+
+    protected lastRequestSentTime : number;
+    protected lastResponseReceivedTime : number;
+    protected timeout : number
+
+    protected static emptyUint32Array = new Uint32Array(0);
+
+    constructor (client: OPCUAClientBase) {
+        super();
+        this._closeEventHasBeenEmmitted = false;
+        this._client = client;
+        this._publishEngine = null;
+        this._closed = false;
+    };
+
+    /**
+ * the endpoint on which this session is operating
+ * @property endpoint
+ * @type {EndpointDescription}
+ */
+public get endpoint() {
+    return this._client.endpoint;
+});
 
 /**
  * @method getPublishEngine
@@ -92,8 +132,6 @@ constructor (client: OPCUAClientBase) {
 getPublishEngine() : ClientSidePublishEngine {
 
     if (!this._publishEngine) {
-
-        var ClientSidePublishEngine = require("../src/client_publish_engine").ClientSidePublishEngine;
         this._publishEngine = new ClientSidePublishEngine(this);
     }
 
@@ -175,8 +213,8 @@ public static coerceBrowseDescription(data) {
  */
 browse(nodes, callback) {
 
-    this.requestedMaxReferencesPerNode = this.requestedMaxReferencesPerNode || 10000;
-    assert(_.isFinite(this.requestedMaxReferencesPerNode));
+    this._requestedMaxReferencesPerNode = this._requestedMaxReferencesPerNode || 10000;
+    assert(_.isFinite(this._requestedMaxReferencesPerNode));
     assert(_.isFunction(callback));
 
     if (!_.isArray(nodes)) {
@@ -187,10 +225,10 @@ browse(nodes, callback) {
 
     var request = new browse_service.BrowseRequest({
         nodesToBrowse: nodesToBrowse,
-        requestedMaxReferencesPerNode: this.requestedMaxReferencesPerNode
+        requestedMaxReferencesPerNode: this._requestedMaxReferencesPerNode
     });
 
-    this.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction(request, (err, response) => {
 
         var i, r;
 
@@ -201,15 +239,15 @@ browse(nodes, callback) {
 
         assert(response instanceof browse_service.BrowseResponse);
 
-        if (this.requestedMaxReferencesPerNode > 0) {
+        if (this._requestedMaxReferencesPerNode > 0) {
 
             for (i = 0; i < response.results.length; i++) {
                 r = response.results[i];
 
                 /* istanbul ignore next */
-                if (r.references && r.references.length > this.requestedMaxReferencesPerNode) {
+                if (r.references && r.references.length > this._requestedMaxReferencesPerNode) {
                     console.log("warning BrowseResponse : server didn't take into account our requestedMaxReferencesPerNode ");
-                    console.log("        self.requestedMaxReferencesPerNode= " + this.requestedMaxReferencesPerNode);
+                    console.log("        self.requestedMaxReferencesPerNode= " + this._requestedMaxReferencesPerNode);
                     console.log("        got " + r.references.length + "for " + nodesToBrowse[i].nodeId.toString());
                     console.log("        continuationPoint ", r.continuationPoint);
                 }
@@ -226,7 +264,7 @@ browse(nodes, callback) {
 
             if (r.continuationPoint !== null) {
                 console.log(" warning: BrowseResponse : server didn't send all references and has provided a continuationPoint. Unfortunately we do not support this yet");
-                console.log("           self.requestedMaxReferencesPerNode = ", this.requestedMaxReferencesPerNode);
+                console.log("           self.requestedMaxReferencesPerNode = ", this._requestedMaxReferencesPerNode);
                 console.log("           continuationPoint ", r.continuationPoint);
             }
         }
@@ -307,7 +345,7 @@ readVariableValue(nodes, callback) {
 
     assert(nodes.length === request.nodesToRead.length);
 
-    this.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction(request, (err, response) => {
 
         /* istanbul ignore next */
         if (err) {
@@ -378,7 +416,7 @@ readHistoryValue(nodes, start, end, callback) {
     });
 
     assert(nodes.length === request.nodesToRead.length);
-    this.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction(request, (err, response) => {
 
         if (err) {
             return callback(err, response);
@@ -413,7 +451,7 @@ write(nodesToWrite, callback) {
 
     var request = new write_service.WriteRequest({nodesToWrite: nodesToWrite});
 
-    this.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction(request, (err, response) => {
 
         /* istanbul ignore next */
         if (err) {
@@ -547,8 +585,6 @@ readAllAttributes(nodes : NodeId[], callback) {
  */
 read(nodesToRead, maxAge?, callback?) {
 
-    var self = this;
-
     if (!callback) {
         callback = maxAge;
         maxAge = 0;
@@ -568,7 +604,7 @@ read(nodesToRead, maxAge?, callback?) {
         timestampsToReturn: read_service.TimestampsToReturn.Both
     });
 
-    self.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction(request, (err, response) => {
 
         /* istanbul ignore next */
         if (err) {
@@ -602,7 +638,7 @@ protected _defaultRequest(SomeRequest, SomeResponse, options, callback) {
         request.trace = new Error().stack;
     }
 
-    this.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction(request, (err, response) => {
 
         /* istanbul ignore next */
         if (err) {
@@ -614,8 +650,8 @@ protected _defaultRequest(SomeRequest, SomeResponse, options, callback) {
                 var now = new Date();
                 debugLog( " server send BadSessionClosed !");
                 debugLog( " timeout.................. ",this.timeout);
-                debugLog( " lastRequestSentTime...... ",new Date(this.lastRequestSentTime).toISOString(), now - this.lastRequestSentTime);
-                debugLog( " lastResponseReceivedTime. ",new Date(this.lastResponseReceivedTime).toISOString(), now - this.lastResponseReceivedTime);
+                debugLog( " lastRequestSentTime...... ",new Date(this.lastRequestSentTime).toISOString(), <any>now - this.lastRequestSentTime);
+                debugLog( " lastResponseReceivedTime. ",new Date(this.lastResponseReceivedTime).toISOString(), <any>now - this.lastResponseReceivedTime);
 
                 this._terminatePublishEngine();
                 /**
@@ -685,7 +721,7 @@ createSubscription(options : CreateSubscriptionRequest, callback) {
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {DeleteSubscriptionsResponse} - the response
  */
-deleteSubscriptions(options : DeleteSubscriptionsRequest, callback) {
+deleteSubscriptions(options : IDeleteSubscriptionsRequest, callback) {
     this._defaultRequest(
         subscription_service.DeleteSubscriptionsRequest,
         subscription_service.DeleteSubscriptionsResponse,
@@ -717,7 +753,7 @@ transferSubscriptions(options : TransferSubscriptionsRequest,callback : Function
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {CreateMonitoredItemsResponse} - the response
  */
-createMonitoredItems(options : CreateMonitoredItemsRequest, callback : callback : (err : Error|null,response : CreateMonitoredItemsResponse)=>void) {
+public createMonitoredItems(options : CreateMonitoredItemsRequest, callback : (err : Error|null,response : CreateMonitoredItemsResponse)=>void) {
     this._defaultRequest(
         subscription_service.CreateMonitoredItemsRequest,
         subscription_service.CreateMonitoredItemsResponse,
@@ -733,7 +769,7 @@ createMonitoredItems(options : CreateMonitoredItemsRequest, callback : callback 
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {ModifyMonitoredItemsResponse} - the response
  */
-modifyMonitoredItems(options : ModifyMonitoredItemsRequest, callback : (err : Error|null,response : ModifyMonitoredItemsResponse)=>void ) {
+public modifyMonitoredItems(options : ModifyMonitoredItemsRequest, callback : (err : Error|null,response : ModifyMonitoredItemsResponse)=>void ) {
     this._defaultRequest(
         subscription_service.ModifyMonitoredItemsRequest,
         subscription_service.ModifyMonitoredItemsResponse,
@@ -749,14 +785,14 @@ modifyMonitoredItems(options : ModifyMonitoredItemsRequest, callback : (err : Er
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {ModifySubscriptionResponse} - the response
  */
-ClientSession.prototype.modifySubscription = function (options, callback) {
+public modifySubscription(options, callback) {
     this._defaultRequest(
         subscription_service.ModifySubscriptionRequest,
         subscription_service.ModifySubscriptionResponse,
         options, callback);
 };
 
-ClientSession.prototype.setMonitoringMode = function (options, callback) {
+public setMonitoringMode(options, callback) {
     this._defaultRequest(
         subscription_service.SetMonitoringModeRequest,
         subscription_service.SetMonitoringModeResponse,
@@ -772,7 +808,7 @@ ClientSession.prototype.setMonitoringMode = function (options, callback) {
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {PublishResponse} - the response
  */
-publish(options : PublishRequest, callback : (err : Error|null, response : PublishResponse) => void) {
+public publish(options : PublishRequest, callback : (err : Error|null, response : PublishResponse) => void) {
     this._defaultRequest(
         subscription_service.PublishRequest,
         subscription_service.PublishResponse,
@@ -788,7 +824,7 @@ publish(options : PublishRequest, callback : (err : Error|null, response : Publi
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {RepublishResponse} - the response
  */
-republish(options : RepublishRequest, callback : (err : Error|null,response : RepublishResponse )=>void ) {
+public republish(options : RepublishRequest, callback : (err : Error|null,response : RepublishResponse )=>void ) {
     this._defaultRequest(
         subscription_service.RepublishRequest,
         subscription_service.RepublishResponse,
@@ -803,7 +839,7 @@ republish(options : RepublishRequest, callback : (err : Error|null,response : Re
  * @param callback {Function}
  * @param callback.err {Error|null}   - the Error if the async method has failed
  */
-deleteMonitoredItems(options : DeleteMonitoredItemsRequest, callback : (err : Error|null)=>void ) {
+public deleteMonitoredItems(options : IDeleteMonitoredItemsRequest, callback : (err : Error|null)=>void ) {
     this._defaultRequest(
         subscription_service.DeleteMonitoredItemsRequest,
         subscription_service.DeleteMonitoredItemsResponse,
@@ -819,9 +855,7 @@ deleteMonitoredItems(options : DeleteMonitoredItemsRequest, callback : (err : Er
  * @param callback {Function}
  * @param callback.err {Error|null}   - the Error if the async method has failed
  */
-ClientSession.prototype.setPublishingMode = function (publishingEnabled, subscriptionIds, callback) {
-
-    var self = this;
+public setPublishingMode(publishingEnabled : boolean, subscriptionIds : number[]|number, callback) {
     assert(_.isFunction(callback));
     assert(publishingEnabled === true || publishingEnabled === false);
     if (!_.isArray(subscriptionIds)) {
@@ -834,7 +868,7 @@ ClientSession.prototype.setPublishingMode = function (publishingEnabled, subscri
         subscriptionIds: subscriptionIds
     });
 
-    self.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction(request, function (err, response) {
 
         /* istanbul ignore next */
         if (err) {
@@ -858,9 +892,8 @@ ClientSession.prototype.setPublishingMode = function (publishingEnabled, subscri
  *
  *
  */
-ClientSession.prototype.translateBrowsePath = function (browsePath, callback) {
+public translateBrowsePath(browsePath, callback) {
     assert(_.isFunction(callback));
-    var self = this;
 
     var translate_service = require("node-opcua-service-translate-browse-path");
 
@@ -871,7 +904,7 @@ ClientSession.prototype.translateBrowsePath = function (browsePath, callback) {
         browsePath: browsePath
     });
 
-    self.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction(request, (err, response) => {
 
         /* istanbul ignore next */
         if (err) {
@@ -884,31 +917,28 @@ ClientSession.prototype.translateBrowsePath = function (browsePath, callback) {
 
 };
 
-ClientSession.prototype.isChannelValid = function () {
-    var self = this;
-    assert(self._client);
-    return self._client._secureChannel && self._client._secureChannel.isOpened();
+public isChannelValid() : boolean {
+    assert(this._client);
+    return this._client.secureChannel && this._client.secureChannel.isOpened();
 };
 
-ClientSession.prototype.performMessageTransaction = function (request, callback) {
-
-    var self = this;
+public performMessageTransaction(request, callback) {
 
     assert(_.isFunction(callback));
-    assert(self._client);
+    assert(this._client);
 
-    if (!self.isChannelValid()) {
+    if (!this.isChannelValid()) {
         // we need to queue this transaction,as a secure token may be being reprocessed
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ".bgWhite.red);
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ");
         return callback(new Error("Invalid Channel "));
     }
     request.requestHeader.authenticationToken = this.authenticationToken;
 
-    self.lastRequestSentTime = Date.now();
+    this.lastRequestSentTime = Date.now();
 
-    self._client.performMessageTransaction(request, function (err, response) {
+    this._client.performMessageTransaction(request, function (err, response) {
 
-        self.lastResponseReceivedTime = Date.now();
+        this.lastResponseReceivedTime = Date.now();
 
         /* istanbul ignore next */
         if (err) {
@@ -922,7 +952,7 @@ ClientSession.prototype.performMessageTransaction = function (request, callback)
     });
 };
 
-ClientSession.prototype._terminatePublishEngine = function () {
+protected _terminatePublishEngine = function () {
     if (this._publishEngine) {
         this._publishEngine.terminate();
         this._publishEngine = null;
@@ -936,7 +966,7 @@ ClientSession.prototype._terminatePublishEngine = function () {
  * @param [deleteSubscription=true] {Boolean}
  * @param callback {Function}
  */
-ClientSession.prototype.close = function (deleteSubscription,callback) {
+public close(deleteSubscription : boolean = true,callback) {
 
     if (arguments.length === 1) {
         callback = deleteSubscription;
@@ -955,7 +985,7 @@ ClientSession.prototype.close = function (deleteSubscription,callback) {
  *
  * @returns {Boolean}
  */
-ClientSession.prototype.hasBeenClosed = function() {
+public hasBeenClosed() : boolean {
     return utils.isNullOrUndefined(this._client) || this._closed;
 };
 
@@ -989,9 +1019,7 @@ ClientSession.prototype.hasBeenClosed = function() {
  *    }
  * });
  */
-ClientSession.prototype.call = function (methodsToCall, callback) {
-
-    var self = this;
+public call(methodsToCall : CallMethodRequest[], callback : (err : Error|null, response?: CallMethodResult[], diagnosticInfo? : any) => void ) {
 
     assert(_.isArray(methodsToCall));
 
@@ -1003,7 +1031,7 @@ ClientSession.prototype.call = function (methodsToCall, callback) {
     // var request = self._client.factory.constructObjectId("CallRequest",{ methodsToCall: methodsToCall});
     var request = new call_service.CallRequest({methodsToCall: methodsToCall});
 
-    self.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction(request, (err, response) => {
 
         /* istanbul ignore next */
         if (err) {
@@ -1017,7 +1045,7 @@ ClientSession.prototype.call = function (methodsToCall, callback) {
 
 };
 
-var emptyUint32Array = new Uint32Array(0);
+
 
 /**
  * @method getMonitoredItems
@@ -1027,50 +1055,50 @@ var emptyUint32Array = new Uint32Array(0);
  * @param callback.monitoredItems the monitored Items
  * @param callback.monitoredItems the monitored Items
  */
-ClientSession.prototype.getMonitoredItems = function (subscriptionId, callback) {
+public getMonitoredItems(subscriptionId : UInt32, callback) {
 
     // <UAObject NodeId="i=2253"  BrowseName="Server">
     // <UAMethod NodeId="i=11492" BrowseName="GetMonitoredItems" ParentNodeId="i=2253" MethodDeclarationId="i=11489">
     // <UAMethod NodeId="i=11489" BrowseName="GetMonitoredItems" ParentNodeId="i=2004">
     var self = this;
     var methodsToCall =
-        new call_service.CallMethodRequest({
-            objectId: NodeId.coerceNodeId("ns=0;i=2253"),  // ObjectId.Server
-            methodId: NodeId.coerceNodeId("ns=0;i=11492"), // MethodIds.Server_GetMonitoredItems;
-            inputArguments: [
+        new CallMethodRequest({
+            ObjectId: coerceNodeId("ns=0;i=2253"),  // ObjectId.Server
+            MethodId: coerceNodeId("ns=0;i=11492"), // MethodIds.Server_GetMonitoredItems;
+            InputArguments: [
                 // BaseDataType
-                {dataType: DataType.UInt32, value: subscriptionId}
+                {DataType: DataType.UInt32, Value: subscriptionId}
             ]
         });
 
-    self.call([methodsToCall], function (err, result, diagnosticInfo) {
+    self.call([methodsToCall], (err, result, diagnosticInfo) => {
 
             /* istanbul ignore next */
             if (err) {
                 return callback(err);
             }
 
-            result = result[0];
+            var res = result[0];
             diagnosticInfo = diagnosticInfo ? diagnosticInfo[0] : null;
             //xx console.log(" xxxxxxxxxxxxxxxxxx RRR err",err);
             //xx console.log(" xxxxxxxxxxxxxxxxxx RRR result ".red.bold,result.toString());
             //xx console.log(" xxxxxxxxxxxxxxxxxx RRR err",diagnosticInfo);
-            if (result.statusCode !== StatusCodes.Good) {
+            if (res.StatusCode !== StatusCodes.Good) {
 
-                callback(new Error(result.statusCode.toString()), result, diagnosticInfo);
+                callback(new Error(res.StatusCode.toString()), result, diagnosticInfo);
 
             } else {
 
-                assert(result.outputArguments.length === 2);
+                assert(res.OutputArguments.length === 2);
                 var data = {
-                    serverHandles: result.outputArguments[0].value, //
-                    clientHandles: result.outputArguments[1].value
+                    serverHandles: res.OutputArguments[0].value, //
+                    clientHandles: res.OutputArguments[1].value
                 };
 
                 // Note some server might return null array
                 // let make sure we have Uint32Array and not a null pointer
-                data.serverHandles = data.serverHandles || emptyUint32Array;
-                data.clientHandles = data.clientHandles || emptyUint32Array;
+                data.serverHandles = data.serverHandles || ClientSession.emptyUint32Array;
+                data.clientHandles = data.clientHandles || ClientSession.emptyUint32Array;
 
                 assert(data.serverHandles instanceof Uint32Array);
                 assert(data.clientHandles instanceof Uint32Array);
@@ -1090,11 +1118,10 @@ ClientSession.prototype.getMonitoredItems = function (subscriptionId, callback) 
  * @param {Argument<>} callback.inputArguments
  * @param {Argument<>} callback.outputArguments
  */
-ClientSession.prototype.getArgumentDefinition = function (methodId, callback) {
+public getArgumentDefinition(methodId : NodeId, callback : (err : Error|null,inputArguments?:Argument[],outputarguments?:Argument[]) => void ) {
 
     assert(_.isFunction(callback));
     assert(methodId instanceof NodeId);
-    var self = this;
 
     var browseDescription = [{
         nodeId: methodId,
@@ -1106,7 +1133,7 @@ ClientSession.prototype.getArgumentDefinition = function (methodId, callback) {
     }];
 
     //Xx console.log("xxxx browseDescription", util.inspect(browseDescription, {colors: true, depth: 10}));
-    self.browse(browseDescription, function (err, results) {
+    this.browse(browseDescription, (err, results) => {
 
         /* istanbul ignore next */
         if (err) {
@@ -1156,7 +1183,7 @@ ClientSession.prototype.getArgumentDefinition = function (methodId, callback) {
             return callback(null, inputArguments, outputArguments);
         }
         // now read the variable
-        self.read(nodesToRead, function (err, unused_nodesToRead, results) {
+        this.read(nodesToRead,(err, unused_nodesToRead, results) => {
 
             /* istanbul ignore next */
             if (err) {
@@ -1174,17 +1201,6 @@ ClientSession.prototype.getArgumentDefinition = function (methodId, callback) {
 };
 
 /**
- * the endpoint on which this session is operating
- * @property endpoint
- * @type {EndpointDescription}
- */
-ClientSession.prototype.__defineGetter__("endpoint", function () {
-    return this._client.endpoint;
-});
-
-
-var query_service = require("node-opcua-service-query");
-/**
  * @method queryFirst
  * @param queryFirstRequest {queryFirstRequest}
  * @param callback {Function}
@@ -1192,13 +1208,12 @@ var query_service = require("node-opcua-service-query");
  * @param callback.response {queryFirstResponse}
  *
  */
-ClientSession.prototype.queryFirst = function(queryFirstRequest,callback) {
-    var self = this;
+public queryFirst(queryFirstRequest,callback) {
     assert(_.isFunction(callback));
 
     var request = new query_service.QueryFirstRequest(queryFirstRequest);
 
-    self.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction(request, (err, response) => {
         /* istanbul ignore next */
         if (err) {
             return callback(err);
@@ -1208,48 +1223,44 @@ ClientSession.prototype.queryFirst = function(queryFirstRequest,callback) {
     });
 };
 
-var ClientSessionKeepAliveManager = require("./client_session_keepalive_manager").ClientSessionKeepAliveManager;
-
-ClientSession.prototype.startKeepAliveManager = function() {
-    var self = this;
-    assert(!self._keepAliveManager,"keepAliveManger already started");
-    self._keepAliveManager = new ClientSessionKeepAliveManager(this);
+public startKeepAliveManager() {
+    assert(!this._keepAliveManager,"keepAliveManger already started");
+    this._keepAliveManager = new ClientSessionKeepAliveManager(this);
 
 
-    self._keepAliveManager.on("failure",function() {
-        self.stopKeepAliveManager();
+    this._keepAliveManager.on("failure",() => {
+        this.stopKeepAliveManager();
         /**
          * raised when a keep-alive request has failed on the session, may be the session has timeout
          * unexpectidaly on the server side, may be the connection is broken.
          * @event keepalive_failure
          */
-        self.emit("keepalive_failure");
+        this.emit("keepalive_failure");
     });
-    self._keepAliveManager.on("keepalive",function(state) {
+    this._keepAliveManager.on("keepalive",function(state) {
         /**
          * @event keepalive
          */
-        self.emit("keepalive",state);
+        this.emit("keepalive",state);
     });
-    self._keepAliveManager.start();
+    this._keepAliveManager.start();
 };
 
-ClientSession.prototype.stopKeepAliveManager = function() {
-    var self = this;
-    if (self._keepAliveManager) {
-        self._keepAliveManager.stop();
-        self._keepAliveManager = null;
+public stopKeepAliveManager() {
+    if (this._keepAliveManager) {
+        this._keepAliveManager.stop();
+        this._keepAliveManager = null;
     }
 };
 
-ClientSession.prototype.dispose = function() {
+public dispose() {
     assert(this._closeEventHasBeenEmmitted);
     this._terminatePublishEngine();
     this.stopKeepAliveManager();
     this.removeAllListeners();
 };
 
-ClientSession.prototype.toString = function() {
+public toString() : string {
 
     var now = Date.now();
     var session = this;
@@ -1264,14 +1275,7 @@ ClientSession.prototype.toString = function() {
     console.log( " lastResponseReceivedTime. ",new Date(session.lastResponseReceivedTime).toISOString(), now - session.lastResponseReceivedTime);
 };
 
-
-
-var AttributeIds = require("node-opcua-data-model").AttributeIds;
-var ReferenceTypeIds = require("node-opcua-constants").ReferenceTypeIds;
-var makeNodeId = require("node-opcua-nodeid").makeNodeId;
-var resultMask = makeResultMask("ReferenceType");
-
-function __findBasicDataType(session,dataTypeId,callback) {
+protected __findBasicDataType(session,dataTypeId,callback) {
 
     assert(dataTypeId instanceof NodeId);
 
@@ -1294,7 +1298,7 @@ function __findBasicDataType(session,dataTypeId,callback) {
             var result = results[0];
             if (err) return callback(err);
             var baseDataType = result.references[0].nodeId;
-            return __findBasicDataType(session,baseDataType,callback);
+            return this.__findBasicDataType(session,baseDataType,callback);
         });
     }
 }
@@ -1321,7 +1325,7 @@ function __findBasicDataType(session,dataTypeId,callback) {
  *     });
  *
  */
-ClientSession.prototype.getBuiltInDataType = function(nodeId,callback){
+public getBuiltInDataType(nodeId,callback : (err : Error|null,result: DataType)){
 
     var dataTypeId = null;
     var dataType;
@@ -1339,7 +1343,7 @@ ClientSession.prototype.getBuiltInDataType = function(nodeId,callback){
         }
         dataTypeId = dataValues[0].value.value;
         assert(dataTypeId instanceof NodeId);
-        __findBasicDataType(session,dataTypeId,callback);
+        this.__findBasicDataType(session,dataTypeId,callback);
     });
 
 };

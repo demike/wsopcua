@@ -4,11 +4,11 @@
  */
 import * as _ from 'underscore';
 import {assert} from '../assert';
-import {makeNodeId,NodeId} from '../nodeid/nodeid';
+import {makeNodeId,coerceNodeId,NodeId} from '../nodeid/nodeid';
 import { ExpandedNodeId,makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 import * as ec from '../basic-types';
-import * as sc from "../StatusCode";
-
+import {StatusCodes} from '../constants/raw_status_codes';
+ 
 
 var emptyGuid = ec.emptyGuid;
 
@@ -99,7 +99,7 @@ var _defaultType = [
                 return value;
             }
             assert(value instanceof ArrayBuffer);
-            return btoa(String.fromCharCode(...new Uint8Array(value)));
+            return btoa(String.fromCharCode.apply(String,new Uint8Array(value)));
         }
     },
     {name: "XmlElement", encode: ec.encodeString, decode: ec.decodeString, defaultValue: defaultXmlElement},
@@ -109,7 +109,7 @@ var _defaultType = [
         name: "NodeId",
         encode: ec.encodeNodeId, decode: ec.decodeNodeId,
         defaultValue: makeNodeId,
-        coerce: NodeId.coerceNodeId
+        coerce: coerceNodeId
     },
 
     {
@@ -146,7 +146,7 @@ var _defaultType = [
         name: "StatusCode",
         encode: ec.encodeStatusCode,
         decode: ec.decodeStatusCode,
-        defaultValue: sc.StatusCodes.Good,
+        defaultValue: StatusCodes.Good,
         coerce: ec.coerceStatusCode,
     }
 
