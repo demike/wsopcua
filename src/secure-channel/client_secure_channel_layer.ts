@@ -207,7 +207,7 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
     protected _clientNonce : Uint8Array;
     protected protocolVersion : number;
     protected messageChunker : MessageChunker;
-    protected securityMode : MessageSecurityMode;
+    protected _securityMode : MessageSecurityMode;
     protected securityPolicy : SecurityPolicy;
     protected defaultSecureTokenLifetime : number;
     protected serverCertificate : string;
@@ -257,6 +257,10 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
     get bytesWritten() {
         return this._transport ? this._transport.bytesWritten : 0;
     }
+
+    get securityMode() : MessageSecurityMode{
+        return this._securityMode;
+    }
     
     get transactionsPerformed() {
         return this._lastRequestId;
@@ -286,20 +290,20 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
 
     this.defaultSecureTokenLifetime = options.defaultSecureTokenLifeTime || 30000;
 
-    this.securityMode = options.securityMode || MessageSecurityMode.None;
+    this._securityMode = options.securityMode || MessageSecurityMode.None;
 
     this.securityPolicy = options.securityPolicy || SecurityPolicy.None;
 
     this.serverCertificate = options.serverCertificate;
 
-    assert(this.securityMode !== MessageSecurityMode.Invalid, "invalid security Mode");
-    if (this.securityMode !== MessageSecurityMode.None) {
+    assert(this._securityMode !== MessageSecurityMode.Invalid, "invalid security Mode");
+    if (this._securityMode !== MessageSecurityMode.None) {
         assert(this.serverCertificate,"Expecting a valid certificate when security mode is not None");
         assert(this.securityPolicy !== SecurityPolicy.None, "Security Policy None is not a valid choice");
     }
 
     this.messageBuilder = new MessageBuilder();
-    this.messageBuilder.securityMode = this.securityMode;
+    this.messageBuilder.securityMode = this._securityMode;
     this.messageBuilder.privateKey = this.getPrivateKey();
 
     this._request_data = {};
@@ -485,7 +489,7 @@ protected _install_security_token_watchdog() {
 
 protected _build_client_nonce() {
 
-    if (this.securityMode === MessageSecurityMode.None) {
+    if (this._securityMode === MessageSecurityMode.None) {
         return null;
     }
     // create a client Nonce if secure mode is requested
@@ -509,7 +513,7 @@ protected _build_client_nonce() {
 
 protected _open_secure_channel_request(is_initial, callback) {
 
-    assert(this.securityMode !== MessageSecurityMode.Invalid, "invalid security mode");
+    assert(this._securityMode !== MessageSecurityMode.Invalid, "invalid security mode");
     // from the specs:
     // The OpenSecureChannel Messages are not signed or encrypted if the SecurityMode is None. The
     // Nonces are ignored and should be set to null. The SecureChannelId and the TokenId are still
@@ -527,7 +531,7 @@ protected _open_secure_channel_request(is_initial, callback) {
     var msg = new OpenSecureChannelRequest({
         clientProtocolVersion: this.protocolVersion,
         requestType: requestType,
-        securityMode: this.securityMode,
+        securityMode: this._securityMode,
         requestHeader: new secure_channel_service.RequestHeader({
             auditEntryId: null
         }),
@@ -559,7 +563,7 @@ protected _open_secure_channel_request(is_initial, callback) {
 
             this._serverNonce = response.serverNonce;
 
-            if (this.securityMode !== MessageSecurityMode.None) {
+            if (this._securityMode !== MessageSecurityMode.None) {
                 // verify that server nonce if provided is at least 32 bytes long
 
                 /* istanbul ignore next */
@@ -674,7 +678,7 @@ public create(endpoint_url : string , callback) {
     assert(_.isFunction(callback));
     
 
-    if (this.securityMode !== MessageSecurityMode.None) {
+    if (this._securityMode !== MessageSecurityMode.None) {
 
 
         if (!this.serverCertificate) {
@@ -1126,12 +1130,12 @@ protected _send_chunk(requestId, messageChunk) {
         this.emit("send_chunk", messageChunk);
 
         /* istanbul ignore next */
-        if (doDebug && false) {
-            verify_message_chunk(messageChunk);
-            debugLog("CLIENT SEND chunk ");
-            debugLog(messageHeaderToString(messageChunk));
-            debugLog(hexDump(messageChunk));
-        }
+        // if (doDebug && false) {
+        //     verify_message_chunk(messageChunk);
+        //     debugLog("CLIENT SEND chunk ");
+        //     debugLog(messageHeaderToString(messageChunk));
+        //     debugLog(hexDump(messageChunk));
+        // }
         assert(this._transport);
         this._transport.write(messageChunk);
         request_data.chunk_count += 1;
@@ -1160,7 +1164,7 @@ protected _construct_security_header() {
     this._receiverCertificate = this.serverCertificate;
 
     var securityHeader = null;
-    switch (this.securityMode) {
+    switch (this._securityMode) {
         case MessageSecurityMode.Sign:
         case MessageSecurityMode.SignAndEncrypt:
             assert(this.securityPolicy !== SecurityPolicy.None);
@@ -1184,7 +1188,7 @@ protected _construct_security_header() {
 protected _get_security_options_for_OPN() {
 
     
-    if (this.securityMode === MessageSecurityMode.None) {
+    if (this._securityMode === MessageSecurityMode.None) {
         return null;
     }
 
@@ -1229,13 +1233,13 @@ protected _get_security_options_for_OPN() {
 
 protected _get_security_options_for_MSG() {
 
-    if (this.securityMode === MessageSecurityMode.None) {
+    if (this._securityMode === MessageSecurityMode.None) {
         return null;
     }
 
     var derivedClientKeys = this._derivedKeys.derivedClientKeys;
     assert(derivedClientKeys, "expecting valid derivedClientKeys");
-    return getOptionsForSymmetricSignAndEncrypt(this.securityMode, derivedClientKeys);
+    return getOptionsForSymmetricSignAndEncrypt(this._securityMode, derivedClientKeys);
 
 };
 

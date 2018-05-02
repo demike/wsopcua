@@ -8,8 +8,6 @@ import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert';
 import * as _ from 'underscore';
 
-var util = require("util");
-
 // opcua requires
 var PacketAssembler = require("node-opcua-packet-assembler").PacketAssembler;
 
@@ -59,6 +57,8 @@ function record(data,extra) {
 export class TCP_transport extends EventEmitter{
 
 
+    packetAssembler: any;
+    name: string;
     _timerId: any;
     protected _socket: any;
     timeout : number;
@@ -130,19 +130,19 @@ constructor() {
  * @param msg_type
  * @param chunk_type {String} chunk type. should be 'F' 'C' or 'A'
  * @param length
- * @return {Buffer} a buffer object with the required length representing the chunk.
+ * @return {ArrayBuffer} a buffer object with the required length representing the chunk.
  *
  * Note:
  *  - only one chunk can be created at a time.
  *  - a created chunk should be committed using the ```write``` method before an other one is created.
  */
-public createChunk(msg_type, chunk_type, length) {
+public createChunk(msg_type, chunk_type: string, length): ArrayBuffer {
 
     assert(msg_type === "MSG");
     assert(this._pending_buffer === undefined, "createChunk has already been called ( use write first)");
 
-    var total_length = length + this.headerSize;
-    var buffer = createFastUninitializedBuffer(total_length);
+    let total_length = length + this.headerSize;
+    let buffer = new ArrayBuffer(total_length);
     writeTCPMessageHeader("MSG", chunk_type, total_length, buffer);
 
     this._pending_buffer = buffer;
@@ -165,19 +165,19 @@ protected _write_chunk(message_chunk) {
 /**
  * write the message_chunk on the socket.
  * @method write
- * @param message_chunk {Buffer}
+ * @param message_chunk {ArrayBuffer}
  *
  * Notes:
  *  - the message chunk must have been created by ```createChunk```.
  *  - once a message chunk has been written, it is possible to call ```createChunk``` again.
  *
  */
-public write(message_chunk) {
+public write(message_chunk : ArrayBuffer) {
 
     assert((this._pending_buffer === undefined) || this._pending_buffer === message_chunk, " write should be used with buffer created by createChunk");
 
     var header = readRawMessageHeader(message_chunk);
-    assert(header.length === message_chunk.length);
+    assert(header.length === message_chunk.byteLength);
     assert(["F", "C", "A"].indexOf(header.messageHeader.isFinal) !== -1);
 
     this._write_chunk(message_chunk);
@@ -291,7 +291,7 @@ protected _on_socket_ended_message =  function(err) {
  * @param socket {Socket}
  * @protected
  */
-protected _install_socket = function (socket) {
+protected _install_socket(socket) {
 
     assert(socket);
  

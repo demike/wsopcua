@@ -44,7 +44,7 @@ export class ObjectRegistry {
             var str = " className :" + className +  " found => " + this.count() +  " object leaking\n";
         
             _.forEach(this._cache,function(obj/*,key*/) {
-                str += obj.constructor.name + " " + obj.toString()+ "\n";
+                str += (<any>obj.constructor).name + " " + obj.toString()+ "\n";
             });
         
       
