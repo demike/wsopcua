@@ -129,6 +129,10 @@ public get timeout() : number {
     return this._timeout;
 }
 
+public set timeout(t : number) {
+    this._timeout = t;
+}
+
 /**
  * @method getPublishEngine
  * @return {ClientSidePublishEngine}

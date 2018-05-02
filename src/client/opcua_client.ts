@@ -241,7 +241,7 @@ protected __createSession_step2(session : ClientSession, callback) {
 
                 debugLog("revised session timeout = " + session.timeout);
 
-                self._server_endpoints = response.serverEndpoints;
+                this._server_endpoints = response.serverEndpoints;
                 session.serverEndpoints = response.serverEndpoints;
 
             } else {
