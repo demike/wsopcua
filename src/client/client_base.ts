@@ -15,7 +15,7 @@ import {delayed} from 'delayed';
 import {ObjectRegistry} from '../object-registry/objectRegistry'
 //import {OPCUASecureObject} from '../common/secure_object'
 import {doDebug} from '../common/debug';
-var endpoints_service = require("node-opcua-service-endpoints");
+import * as endpoints_service from "../service-endpoints";
 
 var GetEndpointsRequest = endpoints_service.GetEndpointsRequest;
 var GetEndpointsResponse = endpoints_service.GetEndpointsResponse;
@@ -41,7 +41,8 @@ function debugLog(s : String) {
 
 
 
-var ClientSecureChannelLayer = require("node-opcua-secure-channel/src/client/client_secure_channel_layer").ClientSecureChannelLayer;
+import {ClientSecureChannelLayer} from '../secure-channel/client_secure_channel_layer';
+import { OPCUASecureObject } from '../common/secure_object';
 
 var defaultConnectionStrategy = {
     maxRetry:     100,
@@ -99,6 +100,8 @@ export interface OPCUAClientOptions {
  */
 export class OPCUAClientBase extends EventEmitter {
 
+    endpoint: any;
+    secureObject : OPCUASecureObject;
     /**
      * @property securityMode
      * @type MessageSecurityMode
@@ -208,10 +211,21 @@ export class OPCUAClientBase extends EventEmitter {
         super();
         
         options = options || {};
-        options.certificateFile = options.certificateFile;
-        options.privateKeyFile = options.privateKeyFile;
+        
+        // options.certificateFile = options.certificateFile || path.join(__dirname, "../certificates/client_selfsigned_cert_1024.pem");
+        // options.privateKeyFile = options.privateKeyFile || path.join(__dirname, "../certificates/PKI/own/private/private_key.pem");    
+    //          // istanbul ignore next
+    // if (!fs.existsSync(options.certificateFile)) {
+    //     throw new Error(" cannot locate certificate file " + options.certificateFile);
+    // }
+
+    // // istanbul ignore next
+    // if (!fs.existsSync(options.privateKeyFile)) {
+    //     throw new Error(" cannot locate private key file " + options.privateKeyFile);
+    // } 
 
  //       OPCUASecureObject.call(this, options);
+        this.secureObject = new OPCUASecureObject(options);
 
         this.registry = new ObjectRegistry();
     // must be ZERO with Spec 1.0.2
@@ -260,14 +274,17 @@ export class OPCUAClientBase extends EventEmitter {
     this.connectionStrategy= options.connectionStrategy || defaultConnectionStrategy;
     }
 
+    closeSession(arg0: any, arg1: any, arg2: any): any {
+        throw new Error("Method not implemented.");
+    }
+
            /**
          *
          * connect the OPC-UA client to a server end point.
          * @param options
          * @param callback
          */
-        connect(endpointUrl: string,
-            callback: ErrorCallback): void {
+        connect(endpointUrl: string, callback: ErrorCallback): void {
                 assert(_.isFunction(callback), "expecting a callback");
                             
                 this.endpointUrl = endpointUrl;
@@ -312,7 +329,7 @@ export class OPCUAClientBase extends EventEmitter {
                 // make sure callback will only be call once regardless of outcome, and will be also deferred.
                 var callback_od = once(delayed.deferred(callback)); callback = null;
             
-                this.registry.register(self);
+                this.registry.register(this);
             
                 this._internal_create_secure_channel((err,secureChannel) => {
                     callback_od(err);
@@ -346,7 +363,7 @@ export class OPCUAClientBase extends EventEmitter {
     
         assert(this._sessions.length === 0, " attempt to disconnect a client with live sessions ");
     
-        this.registry.unregister(self);
+        this.registry.unregister(this);
     
         if (this._secureChannel) {
     
@@ -427,12 +444,11 @@ public findServers(options, callback) {
     protected _close_pending_sessions(callback) {
     
         assert(_.isFunction(callback));
-        var self = this;
     
-        var sessions = _.clone(self._sessions);
+        var sessions = _.clone(this._sessions);
         async.map(sessions, function (session, next) {
     
-            assert(session._client === self);
+            assert(session._client === this);
             session.close(function(err){
                 // We should not bother if we have an error here
                 // Session may fail to close , if they haven't been activate and forcefully closed by server
@@ -446,11 +462,11 @@ public findServers(options, callback) {
         }, function (err) {
     
             // istanbul ignore next
-            if (self._sessions.length>0) {
-                console.log(self._sessions.map(function(s){ return s.authenticationToken.toString()}).join(" "));
+            if (this._sessions.length>0) {
+                console.log(this._sessions.map(function(s){ return s.authenticationToken.toString()}).join(" "));
             }
     
-            assert(self._sessions.length === 0, " failed to disconnect exiting sessions ");
+            assert(this._sessions.length === 0, " failed to disconnect exiting sessions ");
             callback(err);
         });
     
@@ -757,7 +773,7 @@ protected _internal_create_secure_channel (callback : Function) {
     ], (err) => {
 
         if (err) {
-            //xx self.disconnect(function () {
+            //xx this.disconnect(function () {
             //xx });
             this._secureChannel = null;
             callback(err);
@@ -844,7 +860,7 @@ private static _install_secure_channel_event_handlers(client : OPCUAClientBase,s
 
                 debugLog("secureChannel#on(close) => _recreate_secure_channel returns " + err ? err.message : "OK");
                 if (err) {
-                    //xx assert(!self._secureChannel);
+                    //xx assert(!this._secureChannel);
                     client.emit("close",err);
                     return;
                 } else {
@@ -891,7 +907,18 @@ public getClientNonce() {
     return this._secureChannel.clientNonce;
 };
 
+public getPrivateKey() {
+    return this.secureObject.getPrivateKey();
+};
 
+
+public getCertificate(){
+    return this.secureObject.getCertificate();
+}
+
+public getCertificateChain(){
+    return this.secureObject.getCertificateChain();
+}
 
 
 /**

@@ -295,9 +295,8 @@ public registerSubscription(subscription : ClientSubscription) {
     this.replenish_publish_request_queue();
 };
 
-protected replenish_publish_request_queue = function() {
+public replenish_publish_request_queue() {
 
-    var self = this;
     // Spec 1.03 part 4 5.13.5 Publish
     // [..] in high latency networks, the Client may wish to pipeline Publish requests
     // to ensure cyclic reporting from the Server. Pipelining involves sending more than one Publish
@@ -305,10 +304,10 @@ protected replenish_publish_request_queue = function() {
     // delay between the Client and the Server of 5 seconds and the publishing interval for a Subscription
     // is one second, then the Client will have to issue Publish requests every second instead of waiting for
     // a response to be received before sending the next request.
-    self.send_publish_request();
+    this.send_publish_request();
     // send more than one publish request to server to cope with latency
     for (var i = 0; i < ClientSidePublishEngine.publishRequestCountInPipeline - 1; i++) {
-        self.send_publish_request();
+        this.send_publish_request();
     }
 };
 

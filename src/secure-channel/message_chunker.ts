@@ -8,6 +8,7 @@ import * as _ from 'underscore';
 import {DataStream} from '../basic-types/DataStream'
 import * as ec from '../basic-types'
 import {SequenceNumberGenerator} from "./sequence_number_generator";
+import { SignatureData } from '../generated/SignatureData';
 
 
 
@@ -23,12 +24,27 @@ var SecureMessageChunkManager = require("./secure_message_chunk_manager").Secure
  * @param [options.derivedKeys] {Object} derivedKeys
  * @constructor
  */
-function MessageChunker(options) {
+export class MessageChunker {
 
-    this.sequenceNumberGenerator = new SequenceNumberGenerator();
-    this.update(options);
+    protected _sequenceNumberGenerator : SequenceNumberGenerator;
+    protected _securityHeader;
+    protected _derivedKeys;
+    protected _stream : DataStream;
 
-}
+    get securityHeader() {
+        return this._securityHeader;
+    }
+
+    set securityHeader(header ) {
+        this._securityHeader = header;
+    }
+
+    constructor(options) {
+
+        this._sequenceNumberGenerator = new SequenceNumberGenerator();
+        this.update(options);
+
+    }
 /** update security information
  * @method update
  * @param options {Object}
@@ -36,7 +52,7 @@ function MessageChunker(options) {
  * @param [options.derivedKeys] {Object} derivedKeys
  *
  */
-MessageChunker.prototype.update = function(options) {
+public update(options) {
 
     options = options || {};
     options.securityHeader = options.securityHeader ||
@@ -45,8 +61,9 @@ MessageChunker.prototype.update = function(options) {
     assert(_.isObject(options));
     assert(_.isObject(options.securityHeader));
 
-    this.securityHeader = options.securityHeader;
-    this.derivedKeys = options.derivedKeys || null;
+    this._securityHeader = options.securityHeader;
+    this._derivedKeys = options.derivedKeys || null;
+
 };
 
 /**
@@ -62,7 +79,7 @@ MessageChunker.prototype.update = function(options) {
  * @param message {Object}
  * @param messageChunkCallback   {Function}
  */
-MessageChunker.prototype.chunkSecureMessage = function (msgType, options, message, messageChunkCallback) {
+public chunkSecureMessage(msgType, options, message, messageChunkCallback) {
 
     assert(_.isFunction(messageChunkCallback));
 
@@ -77,13 +94,13 @@ MessageChunker.prototype.chunkSecureMessage = function (msgType, options, messag
 
     var securityHeader;
     if (msgType === "OPN") {
-        securityHeader = this.securityHeader;
+        securityHeader = this._securityHeader;
     } else {
         securityHeader = new SymmetricAlgorithmSecurityHeader({tokenId: options.tokenId});
     }
 
     var secure_chunker = new SecureMessageChunkManager(
-        msgType, options, securityHeader, this.sequenceNumberGenerator
+        msgType, options, securityHeader, this._sequenceNumberGenerator
     )
         .on("chunk", function (messageChunk) {
             messageChunkCallback(messageChunk);
@@ -92,8 +109,7 @@ MessageChunker.prototype.chunkSecureMessage = function (msgType, options, messag
             messageChunkCallback(null);
         });
 
-    secure_chunker.write(stream._buffer, stream._buffer.length);
+    secure_chunker.write(stream.buffer, stream.buffer.byteLength);
     secure_chunker.end();
 };
-
-exports.MessageChunker = MessageChunker;
+}

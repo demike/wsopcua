@@ -10,7 +10,7 @@ import {DataStream} from './DataStream';
  * @param encode_element_func.element {object}
  * @param encode_element_func.stream  {DataStream}  the stream.
  */
-export function encodeArray (arr : Array<any>, stream : DataStream, encode_element_func?: (obj : object,stream : DataStream) => void ) : void {
+export function encodeArray (arr : Array<any>, stream : DataStream, encode_element_func?: (obj : any,stream : DataStream) => void ) : void {
 
     if (arr === null) {
         stream.setUint32(0xFFFFFFFF);

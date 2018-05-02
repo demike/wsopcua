@@ -3,57 +3,35 @@ import {assert} from '../assert';
 import * as _ from 'underscore';
 
 
-
-var DataValue = exports.DataValue = require("../_generated_/_auto_generated_DataValue").DataValue;
-
-var DataType = require("node-opcua-variant").DataType;
-var VariantArrayType = require("node-opcua-variant").VariantArrayType;
+import {DataValue} from '../generated/DataValue';
+import {DataType} from '../variant/DataTypeEnum';
 
 
-var TimestampsToReturn = require("../schemas/TimestampsToReturn_enum").TimestampsToReturn;
+import {TimestampsToReturn} from '../generated/TimestampsToReturn';
+
+import {registerSpecialVariantEncoder} from '../factory';
+
+registerSpecialVariantEncoder(DataValue);
+
+import {getCurrentClock,coerceClock} from '../date-time/date_time';
+
+import {Variant,sameVariant,VariantArrayType} from '../variant';
 
 
-var registerSpecialVariantEncoder = require("node-opcua-factory").registerSpecialVariantEncoder;
-registerSpecialVariantEncoder(exports.DataValue);
+// DataValue.prototype.toString = function () {
+//     var str = "DataValue:";
+//     if (this.value) {
+//         str += "\n   value:           " + Variant.prototype.toString.apply(this.value);//this.value.toString();
+//     } else {
+//         str += "\n   value:            <null>";
+//     }
+//     str += "\n   statusCode:      " + (this.statusCode ? this.statusCode.toString() : "null");
+//     str += "\n   serverTimestamp: " + (this.serverTimestamp ? this.serverTimestamp.toISOString() + " $ " + this.serverPicoseconds : "null");//+ "  " + (this.serverTimestamp ? this.serverTimestamp.getTime() :"-");
+//     str += "\n   sourceTimestamp: " + (this.sourceTimestamp ? this.sourceTimestamp.toISOString() + " $ " + this.sourcePicoseconds : "null");// + "  " + (this.sourceTimestamp ? this.sourceTimestamp.getTime() :"-");
+//     return str;
+// };
 
-var getCurrentClock = require("node-opcua-date-time").getCurrentClock;
-var coerceClock = require("node-opcua-date-time").coerceClock;
-
-var Variant = require("node-opcua-variant").Variant;
-var sameVariant = require("node-opcua-variant/src/variant_tools").sameVariant;
-
-DataValue.prototype.toString = function () {
-    var str = "DataValue:";
-    if (this.value) {
-        str += "\n   value:           " + Variant.prototype.toString.apply(this.value);//this.value.toString();
-    } else {
-        str += "\n   value:            <null>";
-    }
-    str += "\n   statusCode:      " + (this.statusCode ? this.statusCode.toString() : "null");
-    str += "\n   serverTimestamp: " + (this.serverTimestamp ? this.serverTimestamp.toISOString() + " $ " + this.serverPicoseconds : "null");//+ "  " + (this.serverTimestamp ? this.serverTimestamp.getTime() :"-");
-    str += "\n   sourceTimestamp: " + (this.sourceTimestamp ? this.sourceTimestamp.toISOString() + " $ " + this.sourcePicoseconds : "null");// + "  " + (this.sourceTimestamp ? this.sourceTimestamp.getTime() :"-");
-    return str;
-};
-
-DataValue.prototype.clone = function () {
-    var self = this;
-    var tmp = new DataValue({
-        serverTimestamp: self.serverTimestamp,
-        sourceTimestamp: self.sourceTimestamp,
-        serverPicoseconds: self.serverPicoseconds,
-        sourcePicoseconds: self.sourcePicoseconds,
-        statusCode: self.statusCode,
-        value: {
-            dataType: self.value.dataType,
-            arrayType: self.value.arrayType,
-            value: self.value.value
-        }
-    });
-
-    return tmp;
-};
-
-function apply_timestamps(dataValue, timestampsToReturn, attributeId) {
+export function apply_timestamps(dataValue, timestampsToReturn, attributeId) {
 
     assert(attributeId > 0);
     assert(timestampsToReturn.hasOwnProperty("key"));
@@ -109,7 +87,7 @@ exports.apply_timestamps = apply_timestamps;
  * @private
  * @static
  */
-function _clone_with_array_replacement(dataValue, result) {
+function _clone_with_array_replacement(dataValue : DataValue, result) {
 
     return new DataValue({
         statusCode: result.statusCode,
@@ -117,12 +95,12 @@ function _clone_with_array_replacement(dataValue, result) {
         serverPicoseconds: dataValue.serverPicoseconds,
         sourceTimestamp: dataValue.sourceTimestamp,
         sourcePicoseconds: dataValue.sourcePicoseconds,
-        value: {
+        value: new Variant({
             dataType: dataValue.value.dataType,
             arrayType: dataValue.value.arrayType,
             value: result.array,
             dimensions: dataValue.value.dimensions
-        }
+        })
     });
 }
 
@@ -133,7 +111,7 @@ function canRange(dataValue) {
 }
 
 
-function extractRange(dataValue, indexRange) {
+export function extractRange(dataValue, indexRange) {
 
     //xx console.log("xxxxxxx indexRange =".yellow,indexRange ? indexRange.toString():"<null>") ;
     //xx console.log("         dataValue =",dataValue.toString());
@@ -149,8 +127,6 @@ function extractRange(dataValue, indexRange) {
     }
     return dataValue;
 }
-exports.extractRange = extractRange;
-
 
 function sameDate(date1,date2) {
 
@@ -166,7 +142,7 @@ function sameDate(date1,date2) {
     return date1.getTime() === date2.getTime();
 }
 
-function sourceTimestampHasChanged(dataValue1, dataValue2) {
+export function sourceTimestampHasChanged(dataValue1, dataValue2) {
 
     assert(dataValue1,"expecting valid dataValue1");
     assert(dataValue2,"expecting valid dataValue2");
@@ -175,9 +151,8 @@ function sourceTimestampHasChanged(dataValue1, dataValue2) {
         (dataValue1.sourcePicoseconds !== dataValue2.sourcePicoseconds);
     return hasChanged;
 }
-exports.sourceTimestampHasChanged = sourceTimestampHasChanged;
 
-function serverTimestampHasChanged(dataValue1, dataValue2) {
+export function serverTimestampHasChanged(dataValue1, dataValue2) {
     assert(dataValue1,"expecting valid dataValue1");
     assert(dataValue2,"expecting valid dataValue2");
     var hasChanged =
@@ -185,9 +160,8 @@ function serverTimestampHasChanged(dataValue1, dataValue2) {
         (dataValue1.serverPicoseconds !== dataValue2.serverPicoseconds);
     return hasChanged;
 }
-exports.serverTimestampHasChanged = serverTimestampHasChanged;
 
-function timestampHasChanged(dataValue1, dataValue2,timestampsToReturn) {
+export function timestampHasChanged(dataValue1, dataValue2,timestampsToReturn) {
 
 //TODO:    timestampsToReturn = timestampsToReturn || { key: "Neither"};
     if (!timestampsToReturn) {
@@ -206,8 +180,6 @@ function timestampHasChanged(dataValue1, dataValue2,timestampsToReturn) {
     }
 //    return sourceTimestampHasChanged(dataValue1,dataValue2) || serverTimestampHasChanged(dataValue1,dataValue2);
 }
-exports.timestampHasChanged = timestampHasChanged;
-
 
 /**
  *
@@ -216,7 +188,7 @@ exports.timestampHasChanged = timestampHasChanged;
  * @param [timestampsToReturn {TimestampsToReturn}]
  * @return {boolean} true if data values are identical
  */
-function sameDataValue(v1, v2,timestampsToReturn) {
+export function sameDataValue(v1: DataValue, v2: DataValue,timestampsToReturn: TimestampsToReturn): boolean {
 
     if (v1 === v2) {
         return true;
@@ -247,4 +219,3 @@ function sameDataValue(v1, v2,timestampsToReturn) {
 
     return sameVariant(v1.value, v2.value);
 }
-exports.sameDataValue = sameDataValue;

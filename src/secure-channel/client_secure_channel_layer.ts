@@ -4,23 +4,21 @@ import {assert} from '../assert';
 import * as _ from 'underscore';
 import {EventEmitter} from 'eventemitter3';
 import {DataStream} from '../basic-types/DataStream'
-import { OPCUAClientBase, MessageSecurityMode } from '../opcua-client';
-import { SecurityPolicy } from './security_policy';
+import { MessageSecurityMode } from '../service-secure-channel';
+import { SecurityPolicy, getCryptoFactory, toUri, getOptionsForSymmetricSignAndEncrypt, ICryptoFactory } from './security_policy';
 import { MessageBuilder } from './message_builder';
-import { OPCUAClientOptions } from '../client/client_base';
-import { StatusCodes} from '../StatusCode';
+import { OPCUAClientOptions,OPCUAClientBase } from '../client/client_base';
+
 import * as log from 'loglevel';
-import {doDebug} from '../common/debug'
+import {doDebug,debugLog,hexDump} from '../common/debug'
+import {StatusCodes} from '../constants/raw_status_codes';
 /* global Buffer*/
 /**
  * @module opcua.client
  */
 var crypto : Crypto = window.crypto || (<any>window).msCrypto;
-var util = require("util");
 
-
-
-var utils = require("node-opcua-utils");
+import * as utils from '../utils';
 
 var ClientTCP_transport = require("node-opcua-transport").ClientTCP_transport;
 
@@ -31,13 +29,14 @@ var verify_message_chunk = require("node-opcua-chunkmanager").verify_message_chu
 var backoff = require("backoff");
 
 
-var get_clock_tick = require("node-opcua-utils").get_clock_tick;
+var get_clock_tick = utils.get_clock_tick;
 
 var readMessageHeader = require("node-opcua-chunkmanager").readMessageHeader;
 
 var messageHeaderToString = require("../message_header_to_string").messageHeaderToString;
-var MessageChunker = require("../message_chunker").MessageChunker;
-var secure_channel_service = require("../services");
+import {MessageChunker} from "./message_chunker";
+import * as secure_channel_service from "../service-secure-channel";
+import { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
 
 var OpenSecureChannelRequest = secure_channel_service.OpenSecureChannelRequest;
 var CloseSecureChannelRequest = secure_channel_service.CloseSecureChannelRequest;
@@ -77,7 +76,7 @@ function process_request_callback(request_data, err, response) {
 function _on_message_received(response, msgType, requestId) {
 
     /* jshint validthis: true */
-    var self = this;
+    
     assert(msgType !== "ERR");
 
     /* istanbul ignore next */
@@ -85,14 +84,14 @@ function _on_message_received(response, msgType, requestId) {
         console.log("xxxxx  <<<<<< _on_message_received ", requestId, response._schema.name);
     }
 
-    var request_data = self._request_data[requestId];
+    var request_data = this._request_data[requestId];
     if (!request_data) {
         console.log("xxxxx  <<<<<< _on_message_received ", requestId, response._schema.name);
         throw new Error(" =>  invalid requestId =" + requestId);
     }
 
-    log.debug(" Deleting self._request_data", requestId);
-    delete self._request_data[requestId];
+    log.debug(" Deleting this._request_data", requestId);
+    delete this._request_data[requestId];
 
     /* istanbul ignore next */
     if (response.responseHeader.requestHandle !== request_data.request.requestHeader.requestHandle) {
@@ -112,8 +111,8 @@ function _on_message_received(response, msgType, requestId) {
         log.debug(response.toString());
     }
     // record tick2 : after response message has been received, before message processing
-    request_data._tick2 = self.messageBuilder._tick1;
-    request_data.bytesRead = self.messageBuilder.total_message_size;
+    request_data._tick2 = this.messageBuilder._tick1;
+    request_data.bytesRead = this.messageBuilder.total_message_size;
 
     // record tick3 : after response message has been received, before message processing
     request_data._tick3 = get_clock_tick();
@@ -123,14 +122,51 @@ function _on_message_received(response, msgType, requestId) {
     // record tick4 after callback
     request_data._tick4 = get_clock_tick();
     // store some statistics
-    self._record_transaction_statistics(request_data);
+    this._record_transaction_statistics(request_data);
 
     // notify that transaction is completed
-    self.on_transaction_completed(self.last_transaction_stats);
+    this.on_transaction_completed(this.last_transaction_stats);
 
 }
 
 var g_channelId = 0;
+var defaultTransactionTimeout = 60 * 1000; // 1 minute
+
+export interface ITransactionStats {
+    request: any;
+    response: any;
+    bytesWritten: number;
+    bytesRead: number;
+    lap_sending_request: number;
+    lap_waiting_response: number;
+    lap_receiving_response: number;
+    lap_processing_response: number;
+    lap_transaction: number;
+}
+
+export function dump_transaction_statistics(stats : ITransactionStats ) {
+  
+
+    function w(str) {
+        return ("                  " + str).substr(-12);
+    }
+
+    console.log("--------------------------------------------------------------------->> Stats");
+    console.log("   request                   : ",
+      stats.request._schema.name.toString().yellow, " / ",
+      stats.response._schema.name.toString().yellow, " - ",
+      stats.response.responseHeader.serviceResult.toString());
+    console.log("   Bytes Read                : ", w(stats.bytesRead), " bytes");
+    console.log("   Bytes Written             : ", w(stats.bytesWritten), " bytes");
+    console.log("   transaction duration      : ", w(stats.lap_transaction.toFixed(3)), " milliseconds");
+    console.log("   time to send request      : ", w((stats.lap_sending_request).toFixed(3)), " milliseconds");
+    console.log("   time waiting for response : ", w((stats.lap_waiting_response).toFixed(3)), " milliseconds");
+    console.log("   time to receive response  : ", w((stats.lap_receiving_response).toFixed(3)), " milliseconds");
+    console.log("   time processing response  : ", w((stats.lap_processing_response).toFixed(3)), " milliseconds");
+
+    console.log("---------------------------------------------------------------------<< Stats");
+
+}
 
 
 /**
@@ -153,11 +189,22 @@ var g_channelId = 0;
  * @param [options.connectionStrategy.maxDelay      = 10000]
  * @constructor
  */
-class ClientSecureChannelLayer extends EventEmitter{
+export class ClientSecureChannelLayer extends EventEmitter implements ITransactionStats{
 
+    
+    _securityHeader: any;
+    _derivedKeys: any;
+    _receiverCertificate: string;
+    _serverNonce: any;
+    _receiverPublicKey(arg0: any): any {
+        throw new Error("Method not implemented.");
+    }
+    _transport: any;
+    _isOpened: boolean;
+    _securityToken: ChannelSecurityToken;
     protected _lastRequestId : number;
     protected parent : OPCUAClientBase
-    protected clientNonce : string;
+    protected _clientNonce : Uint8Array;
     protected protocolVersion : number;
     protected messageChunker : MessageChunker;
     protected securityMode : MessageSecurityMode;
@@ -165,14 +212,73 @@ class ClientSecureChannelLayer extends EventEmitter{
     protected defaultSecureTokenLifetime : number;
     protected serverCertificate : string;
     protected messageBuilder : MessageBuilder;
-   constructor(options : any) {
+
+    protected _request_data : any;
+    protected __in_normal_close_operation : boolean = false;
+    protected _renew_security_token_requested : number = 0;
+    protected _timedout_request_count : number = 0;
+    protected _securityTokenTimeoutId = null;
+
+   // protected _transport : 
+    protected transportTimeout : number;
+    protected channelId;
+    protected connectionStrategy : any;
+
+    protected __call : any;
+    
+    public static defaultTransportTimeout : number = 10 * 1000; // 1 minute
+
+    //transaction stats
+    request: any;
+    response: any;
+    lap_sending_request: number;
+    lap_waiting_response: number;
+    lap_receiving_response: number;
+    lap_processing_response: number;
+    lap_transaction: number;
+
+    last_transaction_stats : ITransactionStats;
+    /**
+     * true if the secure channel is trying to establish the connection with the server. In this case, the client
+     * may be in the middle of the b ackoff connection process.
+     *
+     * @property isConnecting
+     * @type {Boolean}
+     *
+     */
+    public get isConnecting() {
+        return (!!this.__call);
+    };
+
+    get bytesRead() {
+        return this._transport ? this._transport.bytesRead : 0;
+    }
+    
+    get bytesWritten() {
+        return this._transport ? this._transport.bytesWritten : 0;
+    }
+    
+    get transactionsPerformed() {
+        return this._lastRequestId;
+    }
+    
+    get timedOutRequestCount() {
+        return this._timedout_request_count;
+    }
+
+    get clientNonce() {
+        return this._clientNonce;
+    }
+
+    constructor(options : any) {
     super();
     options = options || {};
 
     this._lastRequestId = 0;
     this.parent = options.parent;
-    this.clientNonce = null; // will be created when needed
+    this._clientNonce = null; // will be created when needed
     this.protocolVersion = 0;
+
 
     this.messageChunker = new MessageChunker({
         derivedKeys: null
@@ -180,122 +286,87 @@ class ClientSecureChannelLayer extends EventEmitter{
 
     this.defaultSecureTokenLifetime = options.defaultSecureTokenLifeTime || 30000;
 
-    this.securityMode = options.securityMode || MessageSecurityMode.NONE;
+    this.securityMode = options.securityMode || MessageSecurityMode.None;
 
     this.securityPolicy = options.securityPolicy || SecurityPolicy.None;
 
     this.serverCertificate = options.serverCertificate;
 
-    assert(this.securityMode !== MessageSecurityMode.INVALID, "invalid security Mode");
-    if (this.securityMode !== MessageSecurityMode.NONE) {
-        assert(this.serverCertificate instanceof Buffer, "Expecting a valid certificate when security mode is not None");
+    assert(this.securityMode !== MessageSecurityMode.Invalid, "invalid security Mode");
+    if (this.securityMode !== MessageSecurityMode.None) {
+        assert(this.serverCertificate,"Expecting a valid certificate when security mode is not None");
         assert(this.securityPolicy !== SecurityPolicy.None, "Security Policy None is not a valid choice");
     }
 
-    self.messageBuilder = new MessageBuilder();
-    self.messageBuilder.securityMode = self.securityMode;
-    self.messageBuilder.privateKey = self.getPrivateKey();
+    this.messageBuilder = new MessageBuilder();
+    this.messageBuilder.securityMode = this.securityMode;
+    this.messageBuilder.privateKey = this.getPrivateKey();
 
-    self._request_data = {};
+    this._request_data = {};
 
-    self.messageBuilder
+    this.messageBuilder
     .on("message", _on_message_received.bind(this))
     .on("start_chunk", function () {
         // record tick2: when the first response chunk is received
         // request_data._tick2 = get_clock_tick();
-    }).on("error", function (err, requestId) {
+    }).on("error", (err, requestId) => {
         //
-        debugLog("request id = ", requestId, err);
-        var request_data = self._request_data[requestId];
+        debugLog("request id = " + requestId + err);
+        var request_data = this._request_data[requestId];
         console.log(" message was ");
         console.log(request_data);
         if (!request_data) {
-            request_data = self._request_data[requestId + 1];
+            request_data = this._request_data[requestId + 1];
             console.log(" message was 2:", request_data ? request_data.request.toString() : "<null>");
         }
         // xx console.log(request_data.request.toString());
 
     });
 
-    self.__in_normal_close_operation = false;
-
-    self._renew_security_token_requested = 0;
-
-    self._timedout_request_count = 0;
-
-    self._securityTokenTimeoutId = null;
-
-    self.transportTimeout = options.transportTimeout || ClientSecureChannelLayer.defaultTransportTimeout;
-
-    self.channelId = g_channelId;
+    this.__in_normal_close_operation = false;
+    this._renew_security_token_requested = 0;
+    this._timedout_request_count = 0;
+    this._securityTokenTimeoutId = null;
+    this.transportTimeout = options.transportTimeout || ClientSecureChannelLayer.defaultTransportTimeout;
+    this.channelId = g_channelId;
     g_channelId += 1;
 
 
     options.connectionStrategy = options.connectionStrategy || {};
-    self.connectionStrategy = {};
-    self.connectionStrategy.maxRetry = utils.isNullOrUndefined(options.connectionStrategy.maxRetry) ? 10 : options.connectionStrategy.maxRetry;
-    self.connectionStrategy.initialDelay = options.connectionStrategy.initialDelay || 10;
-    self.connectionStrategy.maxDelay = options.connectionStrategy.maxDelay || 10000;
+    this.connectionStrategy = {};
+    this.connectionStrategy.maxRetry = utils.isNullOrUndefined(options.connectionStrategy.maxRetry) ? 10 : options.connectionStrategy.maxRetry;
+    this.connectionStrategy.initialDelay = options.connectionStrategy.initialDelay || 10;
+    this.connectionStrategy.maxDelay = options.connectionStrategy.maxDelay || 10000;
 
     var r = options.connectionStrategy.randomisationFactor;
-    self.connectionStrategy.randomisationFactor = (r === undefined) ? 0 : r;
+    this.connectionStrategy.randomisationFactor = (r === undefined) ? 0 : r;
 
-    }
+    
 }
-
-ClientSecureChannelLayer.defaultTransportTimeout = 10 * 1000; // 1 minute
 
 /**
  * @method getPrivateKey
  * @return {Buffer} the privateKey
  */
-ClientSecureChannelLayer.prototype.getPrivateKey = function () {
+public getPrivateKey() {
     return this.parent ? this.parent.getPrivateKey() : null;
 };
 
-ClientSecureChannelLayer.prototype.getCertificateChain = function () {
+public getCertificateChain() {
     return this.parent ? this.parent.getCertificateChain() : null;
 };
 
 
-function _dump_transaction_statistics() {
-    /* jshint validthis: true */
-    var transaction_stats = this;
-
-    function w(str) {
-        return ("                  " + str).substr(-12);
-    }
-
-    console.log("--------------------------------------------------------------------->> Stats".green.bold);
-    console.log("   request                   : ",
-      transaction_stats.request._schema.name.toString().yellow, " / ",
-      transaction_stats.response._schema.name.toString().yellow, " - ",
-      transaction_stats.response.responseHeader.serviceResult.toString());
-    console.log("   Bytes Read                : ", w(transaction_stats.bytesRead), " bytes");
-    console.log("   Bytes Written             : ", w(transaction_stats.bytesWritten), " bytes");
-    console.log("   transaction duration      : ", w(transaction_stats.lap_transaction.toFixed(3)), " milliseconds");
-    console.log("   time to send request      : ", w((transaction_stats.lap_sending_request).toFixed(3)), " milliseconds");
-    console.log("   time waiting for response : ", w((transaction_stats.lap_waiting_response).toFixed(3)), " milliseconds");
-    console.log("   time to receive response  : ", w((transaction_stats.lap_receiving_response).toFixed(3)), " milliseconds");
-    console.log("   time processing response  : ", w((transaction_stats.lap_processing_response).toFixed(3)), " milliseconds");
-
-    console.log("---------------------------------------------------------------------<< Stats".green.bold);
-
-}
-
-ClientSecureChannelLayer.prototype.on_transaction_completed = function (transaction_stats) {
-    var self = this;
+protected on_transaction_completed(transaction_stats : ITransactionStats) {
     /* istanbul ignore next */
     if (doDebug) {
         // dump some statistics about transaction ( time and sizes )
-        transaction_stats.dump();
+        dump_transaction_statistics(transaction_stats);
     }
-    self.emit("end_transaction", transaction_stats);
+    this.emit("end_transaction", transaction_stats);
 };
 
-ClientSecureChannelLayer.prototype._record_transaction_statistics = function (request_data) {
-
-    var self = this;
+protected _record_transaction_statistics(request_data) {
 
     //---------------------------------------------------------------------------------------------------------|-
     //      _tick0                _tick1                         _tick2                       _tick3          _tick4
@@ -304,7 +375,7 @@ ClientSecureChannelLayer.prototype._record_transaction_statistics = function (re
     //                              |------------------------------|      receiving response
     //                                                             |---------------------------| process.resp
     //                                                                                         |---------------|
-    self.last_transaction_stats = {
+    this.last_transaction_stats = {
         request: request_data.request,
         response: request_data.response,
         bytesWritten: request_data.bytesWritten_after - request_data.bytesWritten_before,
@@ -315,44 +386,42 @@ ClientSecureChannelLayer.prototype._record_transaction_statistics = function (re
         lap_processing_response: request_data._tick4 - request_data._tick3,
         lap_transaction: request_data._tick4 - request_data._tick0
     };
-    self.last_transaction_stats.dump = _dump_transaction_statistics;
+
 
     if (do_trace_statistics) {
-        self.last_transaction_stats.dump();
+        dump_transaction_statistics(this.last_transaction_stats);
     }
 
 };
 
 
-ClientSecureChannelLayer.prototype.isTransactionInProgress = function () {
-    var self = this;
-    return Object.keys(self._request_data).length > 0;
+public isTransactionInProgress() {
+    
+    return Object.keys(this._request_data).length > 0;
 };
 
-function _cancel_pending_transactions(err) {
+protected _cancel_pending_transactions(err) {
     /* jshint validthis: true */
-    var self = this;
-
-    debugLog("_cancel_pending_transactions  ", Object.keys(self._request_data), self._transport ? self._transport.name : "no transport");
+ 
+    debugLog("_cancel_pending_transactions  " + Object.keys(this._request_data) +  (this._transport ? this._transport.name : "no transport"));
 
     assert(err === null || _.isObject(err), "expecting valid error");
-    Object.keys(self._request_data).forEach(function (key) {
-        var request_data = self._request_data[key];
-        debugLog("xxxx Cancelling pending transaction ", request_data.key, request_data.msgType, request_data.request._schema.name);
+    Object.keys(this._request_data).forEach(function (key) {
+        var request_data = this._request_data[key];
+        debugLog("xxxx Cancelling pending transaction " + request_data.key + request_data.msgType + request_data.request._schema.name);
         process_request_callback(request_data, err, null);
     });
 
-    self._request_data = {};
+    this._request_data = {};
 
 }
 
-function _on_transport_closed(error) {
+protected _on_transport_closed(error) {
 
     debugLog(" =>ClientSecureChannelLayer#_on_transport_closed");
     /* jshint validthis: true */
-    var self = this;
-
-    if (self.__in_normal_close_operation) {
+    
+    if (this.__in_normal_close_operation) {
         error = null;
     }
     /**
@@ -363,20 +432,16 @@ function _on_transport_closed(error) {
      * @event close
      * @param error {Error}
      */
-    self.emit("close", error);
+    this.emit("close", error);
+    this._cancel_pending_transactions(error);
 
-    _cancel_pending_transactions.call(this, error);
-
-    self._transport = null;
+    this._transport = null;
 
 }
 
-function _on_security_token_about_to_expire() {
+protected _on_security_token_about_to_expire() {
 
-    /* jshint validthis: true */
-    var self = this;
-
-    debugLog(" client: Security Token ", self.securityToken.tokenId, " is about to expired, let's raise lifetime_75 event ");
+    debugLog(" client: Security Token " + this._securityToken.tokenId + " is about to expired, let's raise lifetime_75 event ");
 
     /**
      * notify the observer that the secure channel has now reach 75% of its allowed live time and
@@ -385,52 +450,42 @@ function _on_security_token_about_to_expire() {
      * @param  securityToken {Object} : the security token that is about to expire.
      *
      */
-    self.emit("lifetime_75", self.securityToken);
+    this.emit("lifetime_75", this._securityToken);
 
-    self._renew_security_token();
+    this._renew_security_token();
 
 }
 
+protected _cancel_security_token_watchdog() {
 
-function _cancel_security_token_watchdog() {
-
-    /* jshint validthis: true */
-    var self = this;
-
-    if (self._securityTokenTimeoutId) {
-        clearTimeout(self._securityTokenTimeoutId);
-        self._securityTokenTimeoutId = null;
+    if (this._securityTokenTimeoutId) {
+        clearTimeout(this._securityTokenTimeoutId);
+        this._securityTokenTimeoutId = null;
     }
 }
 
 
-function _install_security_token_watchdog() {
-
-    /* jshint validthis: true */
-    var self = this;
+protected _install_security_token_watchdog() {
 
     //
     // install timer event to raise a 'lifetime_75' when security token is about to expired
     // so that client can request for a new security token
     //
-    var liveTime = self.securityToken.revisedLifeTime;
+    var liveTime = this._securityToken.revisedLifetime;
     assert(liveTime && liveTime > 20);
-    debugLog(" revisedLifeTime = ".red.bold, liveTime);
+    debugLog(" revisedLifeTime = " + liveTime);
 
-    assert(self._securityTokenTimeoutId === null);
-    self._securityTokenTimeoutId = setTimeout(function () {
-        self._securityTokenTimeoutId = null;
-        _on_security_token_about_to_expire.call(self);
+    assert(this._securityTokenTimeoutId === null);
+    this._securityTokenTimeoutId = setTimeout(function () {
+        this._securityTokenTimeoutId = null;
+        this._on_security_token_about_to_expire();
 
     }, liveTime * 75 / 100);
 }
 
-function _build_client_nonce() {
+protected _build_client_nonce() {
 
-    /* jshint validthis: true */
-    var self = this;
-
-    if (self.securityMode === MessageSecurityMode.NONE) {
+    if (this.securityMode === MessageSecurityMode.None) {
         return null;
     }
     // create a client Nonce if secure mode is requested
@@ -439,24 +494,22 @@ function _build_client_nonce() {
     // "This parameter shall have a length equal to key size used for the symmetric
     //  encryption algorithm that is identified by the securityPolicyUri"
 
-    var cryptoFactory = securityPolicy_m.getCryptoFactory(self.securityPolicy);
+    var cryptoFactory : ICryptoFactory = getCryptoFactory(this.securityPolicy);
     if (!cryptoFactory) {
         // this securityPolicy may not be support yet ... let's return null
         return null;
     }
     assert(_.isObject(cryptoFactory));
-
-    return crypto.randomBytes(cryptoFactory.symmetricKeyLength);
+    let arr = new Uint8Array(cryptoFactory.symmetricKeyLength);
+    crypto.getRandomValues(arr);
+    return arr;
 
 }
 
 
-function _open_secure_channel_request(is_initial, callback) {
+protected _open_secure_channel_request(is_initial, callback) {
 
-    /* jshint validthis: true */
-    var self = this;
-
-    assert(self.securityMode !== MessageSecurityMode.INVALID, "invalid security mode");
+    assert(this.securityMode !== MessageSecurityMode.Invalid, "invalid security mode");
     // from the specs:
     // The OpenSecureChannel Messages are not signed or encrypted if the SecurityMode is None. The
     // Nonces are ignored and should be set to null. The SecureChannelId and the TokenId are still
@@ -464,25 +517,25 @@ function _open_secure_channel_request(is_initial, callback) {
 
 
     var msgType = "OPN";
-    var requestType = (is_initial) ? SecurityTokenRequestType.ISSUE : SecurityTokenRequestType.RENEW;
+    var requestType = (is_initial) ? SecurityTokenRequestType.Issue : SecurityTokenRequestType.Renew;
 
-    self.clientNonce = _build_client_nonce.call(self);
+    this._clientNonce = this._build_client_nonce();
 
-    self._isOpened = !is_initial;
+    this._isOpened = !is_initial;
 
     // OpenSecureChannel
     var msg = new OpenSecureChannelRequest({
-        clientProtocolVersion: self.protocolVersion,
+        clientProtocolVersion: this.protocolVersion,
         requestType: requestType,
-        securityMode: self.securityMode,
-        requestHeader: {
+        securityMode: this.securityMode,
+        requestHeader: new secure_channel_service.RequestHeader({
             auditEntryId: null
-        },
-        clientNonce: self.clientNonce, //
-        requestedLifetime: self.defaultSecureTokenLifetime
+        }),
+        clientNonce: this._clientNonce, //
+        requestedLifetime: this.defaultSecureTokenLifetime
     });
 
-    self._performMessageTransaction(msgType, msg, function (error, response) {
+    this._performMessageTransaction(msgType, msg, (error, response) =>{
 
         if (response && response.responseHeader.serviceResult !== StatusCodes.Good) {
             error = new Error(response.responseHeader.serviceResult.toString());
@@ -494,93 +547,92 @@ function _open_secure_channel_request(is_initial, callback) {
                 debugLog(response.toString());
             }
             assert(response instanceof OpenSecureChannelResponse);
-            //xx assert(!is_initial || self.securityToken.secureChannelId === response.securityToken.secureChannelId);
+            //xx assert(!is_initial || this._securityToken.secureChannelId === response._securityToken.secureChannelId);
 
             // todo : verify that server certificate is  valid
             // A self-signed application instance certificate does not need to be verified with a CA.
             // todo : verify that Certificate URI matches the ApplicationURI of the server
 
-            self.securityToken = response.securityToken;
-            assert(self.securityToken.tokenId > 0 || msgType === "OPN", "_sendSecureOpcUARequest: invalid token Id ");
+            this._securityToken = response._securityToken;
+            assert(this._securityToken.tokenId > 0 || msgType === "OPN", "_sendSecureOpcUARequest: invalid token Id ");
             assert(response.hasOwnProperty("serverNonce"));
 
-            self.serverNonce = response.serverNonce;
+            this._serverNonce = response.serverNonce;
 
-            if (self.securityMode !== MessageSecurityMode.NONE) {
+            if (this.securityMode !== MessageSecurityMode.None) {
                 // verify that server nonce if provided is at least 32 bytes long
 
                 /* istanbul ignore next */
-                if (!self.serverNonce) {
+                if (!this._serverNonce) {
                     console.log(" client : server nonce is invalid !");
                     return callback(new Error(" Invalid server nonce"));
                 }
                 // This parameter shall have a length equal to key size used for the symmetric
                 // encryption algorithm that is identified by the securityPolicyUri.
-                if (self.serverNonce.length !== self.clientNonce.length) {
+                if (this._serverNonce.length !== this._clientNonce.length) {
                     console.log(" client : server nonce is invalid !");
                     return callback(new Error(" Invalid server nonce length"));
                 }
             }
 
 
-            var cryptoFactory = self.messageBuilder.cryptoFactory;
+            var cryptoFactory = this.messageBuilder.cryptoFactory;
             if (cryptoFactory) {
-                assert(self.serverNonce instanceof Buffer);
-                self.derivedKeys = cryptoFactory.compute_derived_keys(self.serverNonce, self.clientNonce);
+                assert(this._serverNonce instanceof Buffer);
+                this._derivedKeys = cryptoFactory.compute_derived_keys(this._serverNonce, this._clientNonce);
             }
 
-            var derivedServerKeys = self.derivedKeys ? self.derivedKeys.derivedServerKeys : null;
-            self.messageBuilder.pushNewToken(self.securityToken, derivedServerKeys);
+            var derivedServerKeys = this._derivedKeys ? this._derivedKeys.derivedServerKeys : null;
+            this.messageBuilder.pushNewToken(this._securityToken, derivedServerKeys);
 
-            _install_security_token_watchdog.call(self);
-
-            self._isOpened = true;
+            this._install_security_token_watchdog();
+            this._isOpened = true;
 
         }
         callback(error);
     });
 }
 
-function _on_connection(transport, callback, err) {
+protected _on_connection(transport, callback, err?) {
 
     /* jshint validthis: true */
-    var self = this;
+    
 
     /* istanbul ignore next */
     if (err) {
 
-        debugLog("cannot connect to server".red);
+        debugLog("cannot connect to server");
         callback(err);
 
     } else {
 
-        self._transport = transport;
+        this._transport = transport;
 
-        self._transport.on("message", function (message_chunk) {
+        this._transport.on("message", function (message_chunk) {
             /**
              * notify the observers that ClientSecureChannelLayer has received a message chunk
              * @event receive_chunk
              * @param message_chunk {Buffer}
              */
-            self.emit("receive_chunk", message_chunk);
-            self._on_receive_message_chunk(message_chunk);
+            this.emit("receive_chunk", message_chunk);
+            this._on_receive_message_chunk(message_chunk);
         });
 
 
-        self._transport.on("close", _on_transport_closed.bind(this));
+        this._transport.on("close", ()=>this._on_transport_closed);
 
-        self._transport.on("connection_break", function () {
-            debugLog("Client => CONNECTION BREAK  <=".red);
-            _on_transport_closed.call(self, new Error("Connection Break"));
+        this._transport.on("connection_break", ()=> {
+            debugLog("Client => CONNECTION BREAK  <=");
+            this._on_transport_closed(new Error("Connection Break"));
         });
 
-        self._transport.on("error", function () {
+        this._transport.on("error", function () {
             debugLog(" ERROR");
         });
 
 
         var is_initial = true;
-        _open_secure_channel_request.call(self, is_initial, callback);
+        this._open_secure_channel_request(is_initial, callback);
     }
 
 }
@@ -617,40 +669,38 @@ function _on_connection(transport, callback, err) {
  *
  *    ```
  */
-ClientSecureChannelLayer.prototype.create = function (endpoint_url, callback) {
+public create(endpoint_url : string , callback) {
 
     assert(_.isFunction(callback));
-    var self = this;
+    
 
-    if (self.securityMode !== MessageSecurityMode.NONE) {
+    if (this.securityMode !== MessageSecurityMode.None) {
 
 
-        if (!self.serverCertificate) {
+        if (!this.serverCertificate) {
             return callback(new Error("ClientSecureChannelLayer#create : expecting a  server certificate when securityMode is not NONE"));
         }
 
         // take the opportunity of this async method to perform some async pre-processing
-        if (_.isUndefined(self.receiverPublicKey)) {
+        if (_.isUndefined(this._receiverPublicKey)) {
 
-            crypto_utils.extractPublicKeyFromCertificate(self.serverCertificate, function (err, publicKey) {
+            crypto_utils.extractPublicKeyFromCertificate(this.serverCertificate, function (err, publicKey) {
                 /* istanbul ignore next */
                 if (err) {
                     return callback(err);
                 }
-                self.receiverPublicKey = publicKey;
-                assert(!_.isUndefined(self.receiverPublicKey)); // make sure we wont go into infinite recursion calling create again.
-                self.create(endpoint_url, callback);
+                this._receiverPublicKey = publicKey;
+                assert(!_.isUndefined(this._receiverPublicKey)); // make sure we wont go into infinite recursion calling create again.
+                this.create(endpoint_url, callback);
             });
             return undefined;
         }
-        assert(typeof self.receiverPublicKey === "string");
+        assert(typeof this._receiverPublicKey === "string");
     }
 
-
-    self.endpoint_url = endpoint_url;
     var transport = new ClientTCP_transport();
-    transport.timeout = self.transportTimeout;
-    transport.protocolVersion = self.protocolVersion;
+    transport.timeout = this.transportTimeout;
+    transport.protocolVersion = this.protocolVersion;
 
 
     // -------------------------------------------------------------------------
@@ -663,7 +713,7 @@ ClientSecureChannelLayer.prototype.create = function (endpoint_url, callback) {
 
         function _connect(_i_callback) {
 
-            if (self.__call && self.__call._cancelBackoff) {
+            if (this.__call && this.__call._cancelBackoff) {
                 return;
             }
 
@@ -689,13 +739,13 @@ ClientSecureChannelLayer.prototype.create = function (endpoint_url, callback) {
                     }
                     last_err = err;
 
-                    if (self.__call) {
+                    if (this.__call) {
                         // connection cannot be establish ? if not, abort the backoff process
                         if (should_abort) {
-                            debugLog(" Aborting backoff process prematurally - err = ", err.message);
-                            self.__call.abort();
+                            debugLog(" Aborting backoff process prematurally - err = " + err.message);
+                            this.__call.abort();
                         } else {
-                            debugLog(" backoff - keep trying - err = ", err.message);
+                            debugLog(" backoff - keep trying - err = " + err.message);
                         }
                     }
                 }
@@ -704,20 +754,20 @@ ClientSecureChannelLayer.prototype.create = function (endpoint_url, callback) {
         }
 
         // No backoff required -> call the _connect function directly
-        if (self.connectionStrategy.maxRetry <= 0) {
-            self.__call = 0;
+        if (this.connectionStrategy.maxRetry <= 0) {
+            this.__call = 0;
             return _connect(callback);
         }
 
 
         function _backoff_completion(err) {
 
-            if (self.__call) {
+            if (this.__call) {
                 // console log =
                 transport.numberOfRetry = transport.numberOfRetry || 0;
-                transport.numberOfRetry += self.__call.getNumRetries();
-                self.__call.removeAllListeners();
-                self.__call = null;
+                transport.numberOfRetry += this.__call.getNumRetries();
+                this.__call.removeAllListeners();
+                this.__call = null;
 
                 if (err) {
                     callback(last_err);
@@ -727,79 +777,66 @@ ClientSecureChannelLayer.prototype.create = function (endpoint_url, callback) {
             }
         }
 
-        self.__call = backoff.call(_connect, _backoff_completion);
+        this.__call = backoff.call(_connect, _backoff_completion);
 
-        //xx self.__call._cancelBackoff = self.connectionStrategy.maxRetry <=0 ? true : false;
-        self.__call.failAfter(Math.max(self.connectionStrategy.maxRetry, 1));
+        //xx this.__call._cancelBackoff = this.connectionStrategy.maxRetry <=0 ? true : false;
+        this.__call.failAfter(Math.max(this.connectionStrategy.maxRetry, 1));
 
 
-        self.__call.on("backoff", function (number, delay) {
+        this.__call.on("backoff", function (number, delay) {
 
-            debugLog(" Backoff #".bgWhite.cyan, number, "delay = ", delay, self.__call.maxNumberOfRetry_);
+            debugLog(" Backoff #" + number + "delay = " + delay + this.__call.maxNumberOfRetry_);
             // Do something when backoff starts, e.g. show to the
             // user the delay before next reconnection attempt.
             /**
              * @event backoff
              */
-            self.emit("backoff", number, delay);
+            this.emit("backoff", number, delay);
         });
 
-        self.__call.on("abort", function () {
-            debugLog(" abort #".bgWhite.cyan, " after ", self.__call.getNumRetries(), " retries");
+        this.__call.on("abort", function () {
+            debugLog(" abort # after " + this.__call.getNumRetries() + " retries");
             // Do something when backoff starts, e.g. show to the
             // user the delay before next reconnection attempt.
             /**
              * @event backoff
              */
-            self.emit("abort");
+            this.emit("abort");
 
             setImmediate(function () {
-                _backoff_completion(null, new Error("Connection abandoned"));
+                _backoff_completion(new Error("Connection abandoned"));
             });
 
         });
 
-        self.__call.setStrategy(new backoff.ExponentialStrategy(self.connectionStrategy));
-        self.__call.start();
+        this.__call.setStrategy(new backoff.ExponentialStrategy(this.connectionStrategy));
+        this.__call.start();
 
     };
 
-    _establish_connection(transport, endpoint_url, _on_connection.bind(this, transport, callback));
+    _establish_connection(transport, endpoint_url, ()=>this._on_connection(transport, callback));
 
 };
 
-/**
- * true if the secure channel is trying to establish the connection with the server. In this case, the client
- * may be in the middle of the b ackoff connection process.
- *
- * @property isConnecting
- * @type {Boolean}
- *
- */
-ClientSecureChannelLayer.prototype.__defineGetter__("isConnecting", function () {
-    return (!!this.__call);
-});
-
-
-ClientSecureChannelLayer.prototype.dispose = function () {
-    var self = this;
-    _cancel_security_token_watchdog.call(self);
-    if (self.__call) {
-        self.__call.abort();
+public dispose() {
+    
+    this._cancel_security_token_watchdog();
+    if (this.__call) {
+        this.__call.abort();
     }
 
 };
 
-ClientSecureChannelLayer.prototype.abortConnection = function (callback) {
+public abortConnection(callback) {
     assert(_.isFunction(callback));
-    var self = this;
-    if (self.__call) {
-        self.__call.once("abort", function () {
+    
+    if (this.__call) {
+        this.__call.once("abort", function () {
             setTimeout(callback, 20);
         });
         //xx console.log("_cancelBackoff !!!");
-        self.__call._cancelBackoff = true;
-        self.__call.abort();
+        this.__call._cancelBackoff = true;
+        this.__call.abort();
 
     } else {
         callback();
@@ -807,19 +844,19 @@ ClientSecureChannelLayer.prototype.abortConnection = function (callback) {
 };
 
 
-ClientSecureChannelLayer.prototype._renew_security_token = function () {
+protected _renew_security_token() {
 
-    var self = this;
+    
     debugLog("ClientSecureChannelLayer#_renew_security_token");
 
     /* istanbul ignore if */
-    if (0 && self.isTransactionInProgress()) {
+    if (0 && this.isTransactionInProgress()) {
 
-        self._renew_security_token_requested += 1;
+        this._renew_security_token_requested += 1;
 
     } else {
         var is_initial = false;
-        _open_secure_channel_request.call(self, is_initial, function (err) {
+        this._open_secure_channel_request(is_initial, (err) => {
 
             /* istanbul ignore else */
             if (!err) {
@@ -828,29 +865,29 @@ ClientSecureChannelLayer.prototype._renew_security_token = function () {
                  * notify the observers that the security has been renewed
                  * @event security_token_renewed
                  */
-                self.emit("security_token_renewed");
+                this.emit("security_token_renewed");
 
             } else {
                 console.error("ClientSecureChannelLayer: Warning: securityToken hasn't been renewed");
             }
         });
-        self._renew_security_token_requested = 0;
+        this._renew_security_token_requested = 0;
     }
 };
 
-ClientSecureChannelLayer.prototype._on_receive_message_chunk = function (message_chunk) {
+protected _on_receive_message_chunk(message_chunk) {
 
-    var self = this;
+    
 
     /* istanbul ignore next */
     if (doDebug) {
-        var _stream = new BinaryStream(message_chunk);
+        var _stream = new DataStream(message_chunk);
         var messageHeader = readMessageHeader(_stream);
-        debugLog("CLIENT RECEIVED " + (JSON.stringify(messageHeader) + "").yellow);
-        debugLog("\n" + hexDump(message_chunk).blue);
+        debugLog("CLIENT RECEIVED " + (JSON.stringify(messageHeader) + ""));
+        debugLog("\n" + hexDump(message_chunk));
         debugLog(messageHeaderToString(message_chunk));
     }
-    self.messageBuilder.feed(message_chunk);
+    this.messageBuilder.feed(message_chunk);
 };
 
 /**
@@ -858,7 +895,7 @@ ClientSecureChannelLayer.prototype._on_receive_message_chunk = function (message
  * @return {Number} a newly generated request id
  * @private
  */
-ClientSecureChannelLayer.prototype.makeRequestId = function () {
+public makeRequestId() {
     this._lastRequestId += 1;
     return this._lastRequestId;
 };
@@ -893,20 +930,20 @@ ClientSecureChannelLayer.prototype.makeRequestId = function () {
  *
 
  */
-ClientSecureChannelLayer.prototype.performMessageTransaction = function (requestMessage, callback) {
+public performMessageTransaction(requestMessage, callback) {
     assert(_.isFunction(callback));
     this._performMessageTransaction("MSG", requestMessage, callback);
 };
 
-ClientSecureChannelLayer.prototype.isValid = function () {
-    var self = this;
-    return self._transport && self._transport.isValid();
+public isValid() {
+   
+    return this._transport && this._transport.isValid();
 };
-ClientSecureChannelLayer.prototype.isOpened = function () {
-    var self = this;
-    return self.isValid() && self._isOpened;
+public isOpened() {
+    
+    return this.isValid() && this._isOpened;
 };
-var defaultTransactionTimeout = 60 * 1000; // 1 minute
+
 /**
  * internal version of _performMessageTransaction.
  *
@@ -926,14 +963,14 @@ var defaultTransactionTimeout = 60 * 1000; // 1 minute
  *
  *
  */
-ClientSecureChannelLayer.prototype._performMessageTransaction = function (msgType, requestMessage, callback) {
+protected _performMessageTransaction(msgType, requestMessage, callback) {
 
     /* jshint validthis: true */
 
     assert(_.isFunction(callback));
-    var self = this;
+  
 
-    if (!self.isValid()) {
+    if (!this.isValid()) {
         return callback(new Error("ClientSecureChannelLayer => Socket is closed !"));
     }
 
@@ -950,7 +987,7 @@ ClientSecureChannelLayer.prototype._performMessageTransaction = function (msgTyp
 
         /* istanbul ignore next */
         if (doDebug) {
-            debugLog("------------------- client receiving response".cyan, err);
+            debugLog("------------------- client receiving response");
             if (response) {
                 debugLog(response.toString());
             }
@@ -972,7 +1009,7 @@ ClientSecureChannelLayer.prototype._performMessageTransaction = function (msgTyp
              * @event  receive_response
              * @param response {Object} the response object
              */
-            self.emit("receive_response", response);
+            this.emit("receive_response", response);
         }
         assert(!err || (err instanceof Error));
 
@@ -997,22 +1034,22 @@ ClientSecureChannelLayer.prototype._performMessageTransaction = function (msgTyp
         hasTimedOut = true;
         modified_callback(new Error("Transaction has timed out"), null);
 
-        self._timedout_request_count += 1;
+        this._timedout_request_count += 1;
         /**
          * @event timed_out_request
          * notify the observer that the response from the request has not been
          * received within the timeoutHint specified
          * @param message_chunk {Object}  the message chunk
          */
-        self.emit("timed_out_request", requestMessage);
+        this.emit("timed_out_request", requestMessage);
 
     }, timeout);
 
     var transaction_data = {msgType: msgType, request: requestMessage, callback: modified_callback};
 
-//xx    self._pending_callback = callback;
+//xx    this._pending_callback = callback;
 
-    self._internal_perform_transaction(transaction_data);
+    this._internal_perform_transaction(transaction_data);
 };
 
 /**
@@ -1023,19 +1060,19 @@ ClientSecureChannelLayer.prototype._performMessageTransaction = function (msgTyp
  * @param transaction_data.callback {Function}
  * @private
  */
-ClientSecureChannelLayer.prototype._internal_perform_transaction = function (transaction_data) {
+protected _internal_perform_transaction(transaction_data) {
 
-    var self = this;
+    
 
     assert(_.isFunction(transaction_data.callback));
 
-    if (!self._transport) {
+    if (!this._transport) {
         setTimeout(function () {
             transaction_data.callback(new Error("Client not connected"));
         }, 1000);
         return;
     }
-    assert(self._transport, " must have a valid transport");
+    assert(this._transport, " must have a valid transport");
 
     var msgType = transaction_data.msgType;
     var requestMessage = transaction_data.request;
@@ -1044,18 +1081,18 @@ ClientSecureChannelLayer.prototype._internal_perform_transaction = function (tra
     assert(requestMessage instanceof Object);
 
     // get a new requestId
-    var requestId = self.makeRequestId();
+    var requestId = this.makeRequestId();
 
     /* istanbul ignore next */
     if (do_trace_message) {
-        console.log("xxxxx   >>>>>>                     ".cyan, requestId, requestMessage._schema.name);
+        console.log("xxxxx   >>>>>>                     " + requestId + requestMessage._schema.name);
     }
-    self._request_data[requestId] = {
+    this._request_data[requestId] = {
         request: requestMessage,
         msgType: msgType,
         callback: transaction_data.callback,
 
-        bytesWritten_before: self.bytesWritten,
+        bytesWritten_before: this.bytesWritten,
         bytesWritten_after: 0,
 
         //record tick0 : before request is being sent to server
@@ -1071,14 +1108,13 @@ ClientSecureChannelLayer.prototype._internal_perform_transaction = function (tra
         chunk_count: 0
     };
 
-    self._sendSecureOpcUARequest(msgType, requestMessage, requestId);
+    this._sendSecureOpcUARequest(msgType, requestMessage, requestId);
 
 };
 
-ClientSecureChannelLayer.prototype._send_chunk = function (requestId, messageChunk) {
+protected _send_chunk(requestId, messageChunk) {
 
-    var self = this;
-    var request_data = self._request_data[requestId];
+    var request_data = this._request_data[requestId];
 
     if (messageChunk) {
 
@@ -1087,17 +1123,17 @@ ClientSecureChannelLayer.prototype._send_chunk = function (requestId, messageChu
          * @event send_chunk
          * @param message_chunk {Object}  the message chunk
          */
-        self.emit("send_chunk", messageChunk);
+        this.emit("send_chunk", messageChunk);
 
         /* istanbul ignore next */
         if (doDebug && false) {
             verify_message_chunk(messageChunk);
-            debugLog("CLIENT SEND chunk ".yellow);
-            debugLog(messageHeaderToString(messageChunk).yellow);
-            debugLog(hexDump(messageChunk).red);
+            debugLog("CLIENT SEND chunk ");
+            debugLog(messageHeaderToString(messageChunk));
+            debugLog(hexDump(messageChunk));
         }
-        assert(self._transport);
-        self._transport.write(messageChunk);
+        assert(this._transport);
+        this._transport.write(messageChunk);
         request_data.chunk_count += 1;
 
     } else {
@@ -1105,35 +1141,34 @@ ClientSecureChannelLayer.prototype._send_chunk = function (requestId, messageChu
 
         /* istanbul ignore next */
         if (doDebug) {
-            debugLog("CLIENT SEND done.".yellow.bold);
+            debugLog("CLIENT SEND done.");
         }
         if (request_data) {
             //record tick1: when request has been sent to server
             request_data._tick1 = get_clock_tick();
-            request_data.bytesWritten_after = self.bytesWritten;
+            request_data.bytesWritten_after = this.bytesWritten;
         }
     }
 };
 
-ClientSecureChannelLayer.prototype._construct_security_header = function () {
+protected _construct_security_header() {
 
-    var self = this;
-    assert(self.hasOwnProperty("securityMode"));
-    assert(self.hasOwnProperty("securityPolicy"));
+    assert(this.hasOwnProperty("securityMode"));
+    assert(this.hasOwnProperty("securityPolicy"));
 
 
-    self.receiverCertificate = self.serverCertificate;
+    this._receiverCertificate = this.serverCertificate;
 
     var securityHeader = null;
-    switch (self.securityMode.value) {
-        case MessageSecurityMode.SIGN.value:
-        case MessageSecurityMode.SIGNANDENCRYPT.value:
-            assert(self.securityPolicy !== SecurityPolicy.None);
+    switch (this.securityMode) {
+        case MessageSecurityMode.Sign:
+        case MessageSecurityMode.SignAndEncrypt:
+            assert(this.securityPolicy !== SecurityPolicy.None);
             // get the thumbprint of the client certificate
-            var thumbprint = self.receiverCertificate ? crypto_utils.makeSHA1Thumbprint(self.receiverCertificate) : null;
+            var thumbprint = this._receiverCertificate ? crypto_utils.makeSHA1Thumbprint(this._receiverCertificate) : null;
             securityHeader = new AsymmetricAlgorithmSecurityHeader({
-                securityPolicyUri: securityPolicy_m.toURI(self.securityPolicy),
-                senderCertificate: self.getCertificateChain(),  // certificate of the private key used to sign the message
+                securityPolicyUri: toUri(this.securityPolicy),
+                senderCertificate: this.getCertificateChain(),  // certificate of the private key used to sign the message
                 receiverCertificateThumbprint: thumbprint       // thumbprint of the public key used to encrypt the message
             });
             break;
@@ -1142,27 +1177,27 @@ ClientSecureChannelLayer.prototype._construct_security_header = function () {
             assert(false, "invalid security mode");
     }
     //xx console.log("xxxx security Header",securityHeader.toJSON());
-    //xx console.log("xxxx receiverCertificate",self.receiverCertificate.toString("base64").cyan);
-    self.securityHeader = securityHeader;
+    //xx console.log("xxxx receiverCertificate",this._receiverCertificate.toString("base64").cyan);
+    this._securityHeader = securityHeader;
 };
 
-ClientSecureChannelLayer.prototype._get_security_options_for_OPN = function () {
+protected _get_security_options_for_OPN() {
 
-    var self = this;
-    if (self.securityMode === MessageSecurityMode.NONE) {
+    
+    if (this.securityMode === MessageSecurityMode.None) {
         return null;
     }
 
-    self._construct_security_header();
-    this.messageChunker.securityHeader = self.securityHeader;
+    this._construct_security_header();
+    this.messageChunker.securityHeader = this._securityHeader;
 
-    var senderPrivateKey = self.getPrivateKey();
+    var senderPrivateKey = this.getPrivateKey();
 
 
-    assert(self.receiverPublicKey);
-    assert(typeof self.receiverPublicKey === "string", "expecting a valid public key");
+    assert(this._receiverPublicKey);
+    assert(typeof this._receiverPublicKey === "string", "expecting a valid public key");
 
-    var cryptoFactory = securityPolicy_m.getCryptoFactory(self.securityPolicy);
+    var cryptoFactory = getCryptoFactory(this.securityPolicy);
 
     if (!cryptoFactory) {
         return null; // may be a not yet supported security Policy
@@ -1171,7 +1206,7 @@ ClientSecureChannelLayer.prototype._get_security_options_for_OPN = function () {
     assert(cryptoFactory, "expecting a cryptoFactory");
     assert(_.isFunction(cryptoFactory.asymmetricSign));
 
-    var options = {};
+    var options : any = {};
 
     options.signatureLength = crypto_utils.rsa_length(senderPrivateKey);
     options.signingFunc = function (chunk) {
@@ -1180,44 +1215,43 @@ ClientSecureChannelLayer.prototype._get_security_options_for_OPN = function () {
         return s;
     };
 
-    assert(self.receiverPublicKey);
-    var keyLength = crypto_utils.rsa_length(self.receiverPublicKey);
+    assert(this._receiverPublicKey);
+    var keyLength = crypto_utils.rsa_length(this._receiverPublicKey);
     options.plainBlockSize = keyLength - cryptoFactory.blockPaddingSize;
     options.cipherBlockSize = keyLength;
 
     options.encrypt_buffer = function (chunk) {
-        return cryptoFactory.asymmetricEncrypt(chunk, self.receiverPublicKey);
+        return cryptoFactory.asymmetricEncrypt(chunk, this._receiverPublicKey);
     };
 
     return options;
 };
 
-ClientSecureChannelLayer.prototype._get_security_options_for_MSG = function () {
+protected _get_security_options_for_MSG() {
 
-    var self = this;
-    if (self.securityMode === MessageSecurityMode.NONE) {
+    if (this.securityMode === MessageSecurityMode.None) {
         return null;
     }
 
-    var derivedClientKeys = self.derivedKeys.derivedClientKeys;
+    var derivedClientKeys = this._derivedKeys.derivedClientKeys;
     assert(derivedClientKeys, "expecting valid derivedClientKeys");
-    return securityPolicy_m.getOptionsForSymmetricSignAndEncrypt(self.securityMode, derivedClientKeys);
+    return getOptionsForSymmetricSignAndEncrypt(this.securityMode, derivedClientKeys);
 
 };
 
-ClientSecureChannelLayer.prototype._sendSecureOpcUARequest = function (msgType, requestMessage, requestId) {
+protected _sendSecureOpcUARequest(msgType, requestMessage, requestId) {
 
-    var self = this;
+    
 
-    var options = {
+    var options : any= {
         requestId: requestId,
-        secureChannelId: self.securityToken ? self.securityToken.secureChannelId : 0,
-        tokenId: self.securityToken ? self.securityToken.tokenId : 0,
+        secureChannelId: this._securityToken ? this._securityToken.channelId/*.secureChannelId*/ : 0,
+        tokenId: this._securityToken ? this._securityToken.tokenId : 0,
     };
 
     // use chunk size that has been negotiated by the transport layer
-    if (self._transport.parameters && self._transport.parameters.sendBufferSize) {
-        options.chunkSize = self._transport.parameters.sendBufferSize;
+    if (this._transport.parameters && this._transport.parameters.sendBufferSize) {
+        options.chunkSize = this._transport.parameters.sendBufferSize;
     }
 
     requestMessage.requestHeader.requestHandle = options.requestId;
@@ -1226,13 +1260,13 @@ ClientSecureChannelLayer.prototype._sendSecureOpcUARequest = function (msgType, 
 
     /* istanbul ignore next */
     if (doDebug) {
-        debugLog("------------------------------------- Client Sending a request".yellow.bold);
-        debugLog(" CHANNEL ID ", options.secureChannelId);
+        debugLog("------------------------------------- Client Sending a request");
+        debugLog(" CHANNEL ID " + options.secureChannelId);
         debugLog(requestMessage.toString());
     }
 
 
-    var security_options = (msgType === "OPN") ? self._get_security_options_for_OPN() : self._get_security_options_for_MSG();
+    var security_options = (msgType === "OPN") ? this._get_security_options_for_OPN() : this._get_security_options_for_MSG();
     _.extend(options, security_options);
 
     /**
@@ -1240,9 +1274,9 @@ ClientSecureChannelLayer.prototype._sendSecureOpcUARequest = function (msgType, 
      * @event send_request
      * @param requestMessage {Object}
      */
-    self.emit("send_request", requestMessage);
+    this.emit("send_request", requestMessage);
 
-    self.messageChunker.chunkSecureMessage(msgType, options, requestMessage, self._send_chunk.bind(self, requestId));
+    this.messageChunker.chunkSecureMessage(msgType, options, requestMessage, this._send_chunk.bind(self, requestId));
 
 };
 
@@ -1256,7 +1290,7 @@ ClientSecureChannelLayer.prototype._sendSecureOpcUARequest = function (msgType, 
  * @async
  * @param callback {Function}
  */
-ClientSecureChannelLayer.prototype.close = function (callback) {
+public close(callback : any) {
 
 
     // what the specs says:
@@ -1266,47 +1300,28 @@ ClientSecureChannelLayer.prototype.close = function (callback) {
     //   allocated for the channel. The server does not send a CloseSecureChannel response
     //
     // ( Note : some servers do  send a CloseSecureChannel though !)
-    var self = this;
+    
     assert(_.isFunction(callback), "expecting a callback function, but got " + callback);
 
     // there is no need for the security token expiration event to trigger anymore
-    _cancel_security_token_watchdog.call(self);
+    this._cancel_security_token_watchdog();
 
     debugLog("Sending CloseSecureChannelRequest to server");
     //xx console.log("xxxx Sending CloseSecureChannelRequest to server");
     var request = new CloseSecureChannelRequest();
 
-    self.__in_normal_close_operation = true;
+    this.__in_normal_close_operation = true;
 
-    if (!self._transport || self._transport.__disconnecting__) {
+    if (!this._transport || this._transport.__disconnecting__) {
         return callback(new Error("Transport disconnected"));
     }
 
-    self._performMessageTransaction("CLO", request, function () {
-        ///xx self._transport.disconnect(function() {
+    this._performMessageTransaction("CLO", request, function () {
+        ///xx this._transport.disconnect(function() {
         callback();
         //xxx });
     });
 };
 
-ClientSecureChannelLayer.prototype.__defineGetter__("bytesRead", function () {
-    var self = this;
-    return self._transport ? self._transport.bytesRead : 0;
-});
 
-ClientSecureChannelLayer.prototype.__defineGetter__("bytesWritten", function () {
-    var self = this;
-    return self._transport ? self._transport.bytesWritten : 0;
-});
-
-ClientSecureChannelLayer.prototype.__defineGetter__("transactionsPerformed", function () {
-    var self = this;
-    return self._lastRequestId;
-});
-
-ClientSecureChannelLayer.prototype.__defineGetter__("timedOutRequestCount", function () {
-    var self = this;
-    return self._timedout_request_count;
-});
-
-exports.ClientSecureChannelLayer = ClientSecureChannelLayer;
+}

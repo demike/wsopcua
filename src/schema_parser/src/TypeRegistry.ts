@@ -2,7 +2,7 @@
 import { ClassFile } from "./ClassFile";
 import { SimpleType } from "./SimpleType";
 */
-import {ClassFile,SimpleType} from './SchemaParser.module';
+import {ClassFile,SimpleType,StructTypeFile} from './SchemaParser.module';
 
 export class TypeRegistry {
 
@@ -37,6 +37,11 @@ export class TypeRegistry {
         type.Path = this.BASIC_TYPES_PATH + "/DataStream";
         this.addType(type.Name,type);
 
+        let structtype = new StructTypeFile("Variant");
+        structtype.Path = "../variant";
+        structtype.Complete = true;
+        structtype.Written = true;
+        this.addType(structtype.Name,structtype);
 
         //OPC-UA Standard Data Types - OPC-UA Specification Part 3: 8.*
         //NodeId 8.2

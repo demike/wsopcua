@@ -29,6 +29,7 @@ export class ClassFile {
     protected importAs? : string;
 
     protected complete : boolean = false;
+    protected written : boolean = false;
 
     public static readonly ATTR_NAME = "Name";
     public static readonly ATTR_VALUE = "Value";
@@ -56,6 +57,14 @@ export class ClassFile {
 
     public set Path(p : string ) {
         this.path = p;
+    }
+
+    public get Written() {
+        return this.written;
+    }
+
+    public set Written(w : boolean) {
+        this.written = w;
     }
 
     public get BaseClass() : ClassFile |null | undefined {

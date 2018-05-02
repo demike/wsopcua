@@ -138,8 +138,9 @@ export class BSDSchemaParser {
         let ar : ClassFile[];
         ar = TypeRegistry.getTypes();
         for (let file of ar) {
-            if (! (file instanceof SimpleType)) {
+            if (!file.Written) {
                 this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
+                file.Written = true;
             }
         }
     }

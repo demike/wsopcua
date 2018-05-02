@@ -46,7 +46,7 @@ export class MonitoredItemBase extends EventEmitter{
 constructor(subscription, itemToMonitor, monitoringParameters : IMonitoringParameters) {
     super();
     assert(subscription.constructor.name === "ClientSubscription");
-    var self = this;
+
     this._itemToMonitor = new read_service.ReadValueId(itemToMonitor);
     this._monitoringParameters = new MonitoringParameters(monitoringParameters);
     this._subscription = subscription;

@@ -153,6 +153,13 @@ var _defaultType = [
 ];
 
 
+export interface ITypeSchema {
+    name : string;
+    encode : Function,
+    decode : Function,
+    coerce? : Function
+} 
+
 /**
  * @class TypeSchema
  * @param options {Object}
@@ -161,7 +168,7 @@ var _defaultType = [
  */
 export class TypeSchema {
     protected defaultValue : any;
-constructor(options) {
+constructor(options : ITypeSchema) {
 
     for (var prop in options) {
         if (options.hasOwnProperty(prop)) {

@@ -5,7 +5,8 @@
 
 import {assert} from '../assert';
 import * as _ from 'underscore';
-
+import {MessageSecurityMode} from './MessageSecurityMode';
+import {SignatureData} from '../generated/SignatureData';
 /**
  * @class SecurityPolicy
  * @static
@@ -88,7 +89,7 @@ export function fromURI(uri : String) : SecurityPolicy {
 };
 
 export  function toUri(value : any) : SecurityPolicy {
-    var securityPolicy = SecurityPolicy[value] || SecurityPolicy.Invalid;
+    var securityPolicy : SecurityPolicy = <SecurityPolicy>SecurityPolicy[value] || SecurityPolicy.Invalid;
     if (securityPolicy === SecurityPolicy.Invalid) {
         throw new Error("trying to convert an invalid Security Policy into a URI: " + value);
     }
@@ -188,7 +189,7 @@ function RSAOAEP_Encrypt(buffer, publicKey) {
 
 
 
-function compute_derived_keys(serverNonce, clientNonce) {
+export function compute_derived_keys(serverNonce, clientNonce) {
 
     var self = this;
 
@@ -214,8 +215,36 @@ function compute_derived_keys(serverNonce, clientNonce) {
     return derivedKeys;
 }
 
+export interface ICryptoFactory {
+    securityPolicy : SecurityPolicy;
 
-exports.compute_derived_keys = compute_derived_keys;
+    symmetricKeyLength : number;
+    derivedEncryptionKeyLength : number;
+    derivedSignatureKeyLength : number;
+    encryptingBlockSize: number;
+    signatureLength: number;
+
+    minimumAsymmetricKeyLength: number,
+    maximumAsymmetricKeyLength: number,
+
+    /* asymmetric signature algorithm */
+    asymmetricVerifyChunk: Function;
+    asymmetricSign: Function;
+    asymmetricVerify: Function;
+    asymmetricSignatureAlgorithm: string;
+
+    /* asymmetric encryption algorithm */
+    asymmetricEncrypt: Function,
+    asymmetricDecrypt: Function,
+    asymmetricEncryptionAlgorithm: string;
+    blockPaddingSize: number;
+    symmetricEncryptionAlgorithm: string;
+    sha1or256: string;
+    compute_derived_keys: Function;
+
+
+} 
+
 
 var _Basic128Rsa15 = {
     securityPolicy: SecurityPolicy.Basic128Rsa15,
@@ -309,29 +338,23 @@ var _Basic256Sha256 = {
     compute_derived_keys: compute_derived_keys
 };
 
-function getCryptoFactory(securityPolicy) {
+export function getCryptoFactory(securityPolicy : SecurityPolicy) : ICryptoFactory {
 
-    assert(typeof securityPolicy.key === "string");
-
-    switch (securityPolicy.key) {
-        case SecurityPolicy.None.key:
+    switch (securityPolicy) {
+        case SecurityPolicy.None:
             return null;
-        case SecurityPolicy.Basic128Rsa15.key:
+        case SecurityPolicy.Basic128Rsa15:
             return _Basic128Rsa15;
-        case SecurityPolicy.Basic256.key:
+        case SecurityPolicy.Basic256:
             return _Basic256;
-        case SecurityPolicy.Basic256Sha256.key:
+        case SecurityPolicy.Basic256Sha256:
             return _Basic256Sha256;
         default:
             return null;
     }
 }
-exports.getCryptoFactory = getCryptoFactory;
 
-var MessageSecurityMode = require("node-opcua-service-secure-channel").MessageSecurityMode;
-var SignatureData = require("node-opcua-service-secure-channel").SignatureData;
-
-function computeSignature(senderCertificate, senderNonce, receiverPrivatekey, securityPolicy) {
+export function computeSignature(senderCertificate, senderNonce, receiverPrivatekey, securityPolicy) {
 
     if (!senderNonce || !senderCertificate) {
         return null;
@@ -358,9 +381,7 @@ function computeSignature(senderCertificate, senderNonce, receiverPrivatekey, se
     });
 }
 
-exports.computeSignature = computeSignature;
-
-function verifySignature(receiverCertificate, receiverNonce, signature, senderCertificate, securityPolicy) {
+export function verifySignature(receiverCertificate, receiverNonce, signature, senderCertificate, securityPolicy) {
 
     if (securityPolicy === SecurityPolicy.None) {
         return true;
@@ -387,10 +408,7 @@ function verifySignature(receiverCertificate, receiverNonce, signature, senderCe
     return crypto_factory.asymmetricVerify(buffer, signature.signature, senderCertificate);
 }
 
-
-exports.verifySignature = verifySignature;
-
-function getOptionsForSymmetricSignAndEncrypt(securityMode, derivedKeys) {
+export function getOptionsForSymmetricSignAndEncrypt(securityMode, derivedKeys) {
     assert(derivedKeys.hasOwnProperty("signatureLength"));
     assert(securityMode !== MessageSecurityMode.NONE && securityMode !== MessageSecurityMode.INVALID);
 
@@ -412,4 +430,3 @@ function getOptionsForSymmetricSignAndEncrypt(securityMode, derivedKeys) {
     }
     return options;
 }
-exports.getOptionsForSymmetricSignAndEncrypt = getOptionsForSymmetricSignAndEncrypt;

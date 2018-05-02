@@ -3,51 +3,44 @@
 
 import {assert} from '../assert';
 import * as _ from 'underscore';
-import {SecurityPolicy} from '../secure-channel/security_policy';
+import {SecurityPolicy,ICryptoFactory} from '../secure-channel/security_policy';
 import * as ec from '../basic-types';
-var MessageBuilderBase = require("node-opcua-transport/src/message_builder_base").MessageBuilderBase;
+import * as securityPolicy_m from './security_policy';
+
+import {MessageBuilderBase} from '../transport/message_builder_base';
+import { MessageSecurityMode } from './MessageSecurityMode';
+
 
 var chooseSecurityHeader = require("./secure_channel_service").chooseSecurityHeader;
 
-var SymmetricAlgorithmSecurityHeader = require("./secure_channel_service").SymmetricAlgorithmSecurityHeader;
-var SequenceHeader = require("./secure_channel_service").SequenceHeader;
-
+import {SymmetricAlgorithmSecurityHeader} from '../service-secure-channel';
+import {SequenceHeader} from '../service-secure-channel';
 
 var decodeString = ec.decodeString;
 
 var packet_analyzer = require("node-opcua-packet-analyzer").packet_analyzer;
-var hexDump = require("node-opcua-debug").hexDump;
 
+
+import {doDebug,debugLog,hexDump} from '../common/debug';
+import { DataStream } from '../basic-types/DataStream';
 //xx require("./utils").setDebugFlag(__filename,true);
-var debugLog = function(...args){};
-var doDebug = false;
 
-
-var MessageSecurityMode = require("node-opcua-service-secure-channel").MessageSecurityMode;
 
 var crypto_utils = require("node-opcua-crypto").crypto_utils;
 
-var decodeStatusCode = require("node-opcua-status-code").decodeStatusCode;
+var decodeStatusCode = ec.decodeStatusCode;
 
 
 export class MessageBuilder extends MessageBuilderBase {
-    constructor(options : any) {
-        options = options || {};
-        super(options);
-
-        this.securityPolicy = SecurityPolicy.Invalid; // not known yet
-        this.securityMode = options.securityMode || MessageSecurityMode.INVALID; // not known yet
-
-        this.objectFactory = options.objectFactory || require("node-opcua-factory");
-
-        assert(_.isFunction(this.objectFactory.constructObject), " the objectFactory must provide a constructObject method");
-
-        this.previous_sequenceNumber = -1; // means unknown
-        assert(_.isFinite(this.previous_sequenceNumber));
-    }
-}
-
-/**
+    protected _tokenStack: any;
+    protected _privateKey: any;
+    protected _cryptoFactory?: ICryptoFactory;
+    protected _securityHeader: any;
+    protected _previous_sequenceNumber: number;
+    protected _objectFactory: any;
+    public securityMode: any;
+    protected _securityPolicy: SecurityPolicy;
+    /**
  * @class MessageBuilder
  * @extends MessageBuilderBase
  * @constructor
@@ -56,48 +49,56 @@ export class MessageBuilder extends MessageBuilderBase {
  * @param options.securityMode {MessageSecurityMode} the security Mode
  * @param [options.objectFactory=factories] a object that provides a constructObject(id) method
  */
-var MessageBuilder = function (options) {
+    constructor(options? : any) {
+        super(options);
+        options = options || {};
+        super(options);
 
-    options = options || {};
-    MessageBuilderBase.call(this, options);
+        this._securityPolicy = SecurityPolicy.Invalid; // not known yet
+        this.securityMode = options.securityMode || MessageSecurityMode.INVALID; // not known yet
 
-    this.securityPolicy = SecurityPolicy.Invalid; // not known yet
-    this.securityMode = options.securityMode || MessageSecurityMode.INVALID; // not known yet
+        this._objectFactory = options.objectFactory || require("node-opcua-factory");
 
-    this.objectFactory = options.objectFactory || require("node-opcua-factory");
+        assert(_.isFunction(this._objectFactory.constructObject), " the objectFactory must provide a constructObject method");
 
-    assert(_.isFunction(this.objectFactory.constructObject), " the objectFactory must provide a constructObject method");
+        this._previous_sequenceNumber = -1; // means unknown
+        assert(_.isFinite(this._previous_sequenceNumber));
+    }
 
-    this.previous_sequenceNumber = -1; // means unknown
-    assert(_.isFinite(this.previous_sequenceNumber));
-};
-util.inherits(MessageBuilder, MessageBuilderBase);
+    set privateKey(key : string) {
+        this._privateKey = key;
+    }
 
-MessageBuilder.prototype.setSecurity = function (securityMode, securityPolicy) {
+    get cryptoFactory() {
+        return this._cryptoFactory;
+    }
+
+
+public setSecurity(securityMode : MessageSecurityMode, securityPolicy : SecurityPolicy) {
     assert(this.securityMode === MessageSecurityMode.INVALID, "security already set");
-    this.securityPolicy = SecurityPolicy.get(securityPolicy);
-    this.securityMode = MessageSecurityMode.get(securityMode);
-    assert(this.securityPolicy !== undefined, "invalid security policy " + securityPolicy);
+    this._securityPolicy = securityPolicy;
+    this.securityMode = securityMode;
+    assert(this._securityPolicy !== undefined, "invalid security policy " + securityPolicy);
     assert(this.securityMode !== undefined, "invalid security mode " + securityMode);
-    assert(this.securityPolicy !== SecurityPolicy.Invalid);
+    assert(this._securityPolicy !== SecurityPolicy.Invalid);
     assert(this.securityMode !== MessageSecurityMode.INVALID);
 };
 
 
-MessageBuilder.prototype._validateSequenceNumber = function (sequenceNumber) {
+protected _validateSequenceNumber(sequenceNumber : number) {
 
     // checking that sequenceNumber is increasing
-    assert(_.isFinite(this.previous_sequenceNumber));
+    assert(_.isFinite(this._previous_sequenceNumber));
     assert(_.isFinite(sequenceNumber) && sequenceNumber >= 0);
 
     var expectedSequenceNumber;
-    if (this.previous_sequenceNumber !== -1) {
+    if (this._previous_sequenceNumber !== -1) {
 
-        expectedSequenceNumber = this.previous_sequenceNumber + 1;
+        expectedSequenceNumber = this._previous_sequenceNumber + 1;
 
         if (expectedSequenceNumber !== sequenceNumber) {
             var errMessage = "Invalid Sequence Number found ( expected " + expectedSequenceNumber + ", got " + sequenceNumber + ")";
-            debugLog(errMessage.red.bold);
+            debugLog(errMessage);
             /**
              * notify the observers that a message with an invalid sequence number has been received.
              * @event invalid_sequence_number
@@ -110,21 +111,21 @@ MessageBuilder.prototype._validateSequenceNumber = function (sequenceNumber) {
     }
     /* istanbul ignore next */
     if (doDebug) {
-        debugLog(" Sequence Number = ".yellow.bold, sequenceNumber);
+        debugLog(" Sequence Number = " + sequenceNumber);
     }
-    this.previous_sequenceNumber = sequenceNumber;
+    this._previous_sequenceNumber = sequenceNumber;
 };
 
-MessageBuilder.prototype._decrypt_OPN = function (binaryStream) {
+protected _decrypt_OPN(binaryStream : DataStream) {
 
-    assert(this.securityPolicy !== SecurityPolicy.None);
-    assert(this.securityPolicy !== SecurityPolicy.Invalid);
+    assert(this._securityPolicy !== SecurityPolicy.None);
+    assert(this._securityPolicy !== SecurityPolicy.Invalid);
     assert(this.securityMode !== MessageSecurityMode.NONE);
     //xx assert(this.securityMode !== MessageSecurityMode.INVALID);
 
     /* istanbul ignore next */
     if (doDebug) {
-        debugLog("securityHeader", JSON.stringify(this.securityHeader, null, " "));
+        debugLog("securityHeader", JSON.stringify(this._securityHeader, null, " "));
     }
 
     // OpcUA part 2 V 1.02 page 15
@@ -140,70 +141,70 @@ MessageBuilder.prototype._decrypt_OPN = function (binaryStream) {
 
     /* istanbul ignore next */
     if (doDebug) {
-        debugLog("EN------------------------------".cyan);
-        debugLog(hexDump(binaryStream._buffer));
+        debugLog("EN------------------------------");
+        debugLog(hexDump(binaryStream.buffer));
         debugLog("---------------------- SENDER CERTIFICATE");
-        debugLog(hexDump(this.securityHeader.senderCertificate));
+        debugLog(hexDump(this._securityHeader.senderCertificate));
     }
 
 
-    if (!this.cryptoFactory) {
-        this._report_error(" Security Policy " + this.securityPolicy.key + " is not implemented yet");
+    if (!this._cryptoFactory) {
+        this._report_error(" Security Policy " + this._securityPolicy + " is not implemented yet");
         return false;
     }
 
     // The message has been signed  with sender private key and has been encrypted with receiver public key.
     // We shall decrypt it with the receiver private key.
-    var buf = binaryStream._buffer.slice(binaryStream.length);
+    var buf = binaryStream.buffer.slice(binaryStream.pos);
 
-    if (this.securityHeader.receiverCertificateThumbprint) { // this mean that the message has been encrypted ....
+    if (this._securityHeader.receiverCertificateThumbprint) { // this mean that the message has been encrypted ....
 
-        assert(typeof this.privateKey === "string", "expecting valid key");
+        assert(typeof this._privateKey === "string", "expecting valid key");
 
-        var decryptedBuffer = this.cryptoFactory.asymmetricDecrypt(buf, this.privateKey);
+        var decryptedBuffer = this._cryptoFactory.asymmetricDecrypt(buf, this._privateKey);
 
         // replace decrypted buffer in initial buffer
-        decryptedBuffer.copy(binaryStream._buffer, binaryStream.length);
+        decryptedBuffer.copy(binaryStream.buffer, binaryStream.pos);
 
         // adjust length
-        binaryStream._buffer = binaryStream._buffer.slice(0, binaryStream.length + decryptedBuffer.length);
+        binaryStream.buffer = binaryStream.buffer.slice(0, binaryStream.pos + decryptedBuffer.length);
 
         /* istanbul ignore next */
         if (doDebug) {
-            debugLog("DE-----------------------------".cyan);
-            debugLog(hexDump(binaryStream._buffer));
-            debugLog("-------------------------------".cyan);
-            debugLog("Certificate :", hexDump(this.securityHeader.senderCertificate));
+            debugLog("DE-----------------------------");
+            debugLog(hexDump(binaryStream.buffer));
+            debugLog("-------------------------------");
+            debugLog("Certificate :", hexDump(this._securityHeader.senderCertificate));
         }
     }
 
-    var cert = crypto_utils.exploreCertificate(this.securityHeader.senderCertificate);
+    var cert = crypto_utils.exploreCertificate(this._securityHeader.senderCertificate);
     // then verify the signature
     var signatureLength = cert.publicKeyLength; // 1024 bits = 128Bytes or 2048=256Bytes
     assert(signatureLength === 128 || signatureLength === 256);
 
-    var chunk = binaryStream._buffer;
+    var chunk = binaryStream.buffer;
 
-    var signatureIsOK = this.cryptoFactory.asymmetricVerifyChunk(chunk, this.securityHeader.senderCertificate);
+    var signatureIsOK = this._cryptoFactory.asymmetricVerifyChunk(chunk, this._securityHeader.senderCertificate);
 
     if (!signatureIsOK) {
-        console.log(hexDump(binaryStream._buffer));
+        console.log(hexDump(binaryStream.buffer));
         this._report_error("SIGN and ENCRYPT asymmetricVerify : Invalid packet signature");
         return false;
     }
 
     // remove signature
-    binaryStream._buffer = crypto_utils.reduceLength(binaryStream._buffer, signatureLength);
+    binaryStream.buffer = crypto_utils.reduceLength(binaryStream.buffer, signatureLength);
 
     // remove padding
-    if (this.securityHeader.receiverCertificateThumbprint) {
-        binaryStream._buffer = crypto_utils.removePadding(binaryStream._buffer);
+    if (this._securityHeader.receiverCertificateThumbprint) {
+        binaryStream.buffer = crypto_utils.removePadding(binaryStream.buffer);
     }
 
     return true; // success
 };
 
-MessageBuilder.prototype.pushNewToken = function (securityToken, derivedKeys) {
+public pushNewToken(securityToken, derivedKeys) {
 
     assert(securityToken.hasOwnProperty("tokenId"));
     //xx assert(derivedKeys ); in fact, can be null
@@ -214,7 +215,7 @@ MessageBuilder.prototype.pushNewToken = function (securityToken, derivedKeys) {
 
 };
 
-MessageBuilder.prototype._select_matching_token = function (tokenId) {
+protected _select_matching_token(tokenId) {
 
     var got_new_token = false;
     this._tokenStack = this._tokenStack || [];
@@ -236,19 +237,19 @@ MessageBuilder.prototype._select_matching_token = function (tokenId) {
 };
 
 
-MessageBuilder.prototype._decrypt_MSG = function (binaryStream) {
+protected _decrypt_MSG(binaryStream) {
 
-    assert(this.securityHeader instanceof SymmetricAlgorithmSecurityHeader);
+    assert(this._securityHeader instanceof SymmetricAlgorithmSecurityHeader);
     assert(this.securityMode !== MessageSecurityMode.NONE);
     assert(this.securityMode !== MessageSecurityMode.INVALID);
-    assert(this.securityPolicy !== SecurityPolicy.None);
-    assert(this.securityPolicy !== SecurityPolicy.Invalid);
+    assert(this._securityPolicy !== SecurityPolicy.None);
+    assert(this._securityPolicy !== SecurityPolicy.Invalid);
 
     // Check  security token
     // securityToken may have been renewed
-    var securityTokenData = this._select_matching_token(this.securityHeader.tokenId);
+    var securityTokenData = this._select_matching_token(this._securityHeader.tokenId);
     if (!securityTokenData) {
-        this._report_error("Security token data for token " + this.securityHeader.tokenId + " doesn't exist");
+        this._report_error("Security token data for token " + this._securityHeader.tokenId + " doesn't exist");
         return false;
     }
 
@@ -280,9 +281,9 @@ MessageBuilder.prototype._decrypt_MSG = function (binaryStream) {
 
         /* istanbul ignore next */
         if (doDebug) {
-            debugLog("DE-----------------------------".cyan);
+            debugLog("DE-----------------------------");
             debugLog(hexDump(binaryStream._buffer));
-            debugLog("-------------------------------".cyan);
+            debugLog("-------------------------------");
         }
     }
 
@@ -306,7 +307,7 @@ MessageBuilder.prototype._decrypt_MSG = function (binaryStream) {
     return true;
 };
 
-MessageBuilder.prototype._decrypt = function (binaryStream) {
+protected _decrypt = function (binaryStream) {
 
     if (this.securityPolicy === SecurityPolicy.Invalid) {
         // this._report_error("SecurityPolicy");
@@ -340,16 +341,16 @@ MessageBuilder.prototype._decrypt = function (binaryStream) {
  * @return {Boolean}
  * @private
  */
-MessageBuilder.prototype._read_headers = function (binaryStream) {
+protected _read_headers(binaryStream) {
 
-    MessageBuilderBase.prototype._read_headers.apply(this, arguments);
+    super._read_headers(arguments);
     assert(binaryStream.length === 12);
 
     var msgType = this.messageHeader.msgType;
 
     if (msgType === "HEL" || msgType === "ACK") {
 
-        this.securityPolicy = SecurityPolicy.None;
+        this._securityPolicy = SecurityPolicy.None;
     } else if (msgType === "ERR") {
 
         // extract Error StatusCode and additional message
@@ -357,18 +358,18 @@ MessageBuilder.prototype._read_headers = function (binaryStream) {
         var errorCode = decodeStatusCode(binaryStream);
         var message = decodeString(binaryStream);
 
-        console.log(" ERROR RECEIVED FROM SENDER".red.bold, errorCode.toString().cyan, message);
+        console.log(" ERROR RECEIVED FROM SENDER", errorCode.toString().cyan, message);
         console.log(hexDump(binaryStream._buffer));
         return true;
 
     } else {
 
-        this.securityHeader = chooseSecurityHeader(msgType);
-        this.securityHeader.decode(binaryStream);
+        this._securityHeader = chooseSecurityHeader(msgType);
+        this._securityHeader.decode(binaryStream);
 
         if (msgType === "OPN") {
-            this.securityPolicy = securityPolicy_m.fromURI(this.securityHeader.securityPolicyUri);
-            this.cryptoFactory = securityPolicy_m.getCryptoFactory(this.securityPolicy);
+            this._securityPolicy = securityPolicy_m.fromURI(this._securityHeader.securityPolicyUri);
+            this._cryptoFactory = securityPolicy_m.getCryptoFactory(this._securityPolicy);
         }
 
         if (!this._decrypt(binaryStream)) {
@@ -389,10 +390,10 @@ MessageBuilder.prototype._read_headers = function (binaryStream) {
 };
 
 
-MessageBuilder.prototype._safe_decode_message_body = function (full_message_body, objMessage, binaryStream) {
+protected _safe_decode_message_body(full_message_body, objMessage, binaryStream) {
     try {
         // de-serialize the object from the binary stream
-        var options = this.objectFactory;
+        var options = this._objectFactory;
         objMessage.decode(binaryStream, options);
     }
     catch (err) {
@@ -410,9 +411,9 @@ MessageBuilder.prototype._safe_decode_message_body = function (full_message_body
     return true;
 };
 
-MessageBuilder.prototype._decode_message_body = function (full_message_body) {
+protected _decode_message_body(full_message_body) {
 
-    var binaryStream = new BinaryStream(full_message_body);
+    var binaryStream = new DataStream(full_message_body);
     var msgType = this.messageHeader.msgType;
 
     if (msgType === "ERR") {
@@ -430,7 +431,7 @@ MessageBuilder.prototype._decode_message_body = function (full_message_body) {
     var id = ec.decodeExpandedNodeId(binaryStream);
 
     // construct the object
-    var objMessage = this.objectFactory.constructObject(id);
+    var objMessage = this._objectFactory.constructObject(id);
 
     if (!objMessage) {
         this._report_error("cannot construct object with nodeID " + id);
@@ -455,7 +456,7 @@ MessageBuilder.prototype._decode_message_body = function (full_message_body) {
                 // this code catches a uncaught exception somewhere in one of the event handler
                 // this indicates a bug in the code that uses this class
                 // please check the stack trace to find the problem
-                console.log("MessageBuilder : ERROR DETECTED IN event handler".red);
+                console.log("MessageBuilder : ERROR DETECTED IN event handler");
                 console.log(err);
                 console.log(err.stack);
             }
@@ -469,4 +470,4 @@ MessageBuilder.prototype._decode_message_body = function (full_message_body) {
     return true;
 };
 
-exports.MessageBuilder = MessageBuilder;
+}

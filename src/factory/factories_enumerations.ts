@@ -6,7 +6,7 @@
  import {assert} from '../assert'
 import * as _ from 'underscore';
 
-var _enumerations = {};
+export var _enumerations = {};
 
 import {TypeSchema} from './factories_builtin_types';
 

@@ -39,16 +39,10 @@ import { DataType } from '../variant/DataTypeEnum';
 var query_service = require("node-opcua-service-query");
 
 
-var util = require("util");
 
+import {DataValue} from '../data-value';
+import {Variant} from '../variant';
 
-
-
-var DataValue =  require("node-opcua-data-value").DataValue;
-
-
-var Variant = require("node-opcua-variant").Variant;
-var DataType = require("node-opcua-variant").DataType;
 
 var makeResultMask = require("node-opcua-data-model").makeResultMask;
 var makeNodeClassMask = require("node-opcua-data-model").makeNodeClassMask;
@@ -60,9 +54,8 @@ var browse_service = require("node-opcua-service-browse");
 var write_service = require("node-opcua-service-write");
 var call_service = require("node-opcua-service-call");
 
-var utils = require("node-opcua-utils");
-var debugLog = require("node-opcua-debug").make_debugLog(__filename);
-var doDebug = require("node-opcua-debug").checkDebugFlag(__filename);
+import * as utils from '../utils';
+import {doDebug,debugLog} from '../common/debug';
 
 
 var resultMask = makeResultMask("ReferenceType");
@@ -95,6 +88,13 @@ type CoercibleToBrowseDescription = string | BrowseDescription;
  * @constructor
  */
 export class ClientSession extends EventEmitter {
+    
+    serverCertificate: any;
+    serverNonce: any;
+    serverSignature: any;
+    authenticationToken: any;
+    sessionId: any;
+    name: any;
     protected _closeEventHasBeenEmmitted : boolean;
     protected _client : OPCUAClientBase;
     protected _publishEngine : ClientSidePublishEngine;
@@ -123,7 +123,7 @@ export class ClientSession extends EventEmitter {
  */
 public get endpoint() {
     return this._client.endpoint;
-});
+};
 
 /**
  * @method getPublishEngine
@@ -649,9 +649,9 @@ protected _defaultRequest(SomeRequest, SomeResponse, options, callback) {
                 // let's print some statistics
                 var now = new Date();
                 debugLog( " server send BadSessionClosed !");
-                debugLog( " timeout.................. ",this.timeout);
-                debugLog( " lastRequestSentTime...... ",new Date(this.lastRequestSentTime).toISOString(), <any>now - this.lastRequestSentTime);
-                debugLog( " lastResponseReceivedTime. ",new Date(this.lastResponseReceivedTime).toISOString(), <any>now - this.lastResponseReceivedTime);
+                debugLog( " timeout.................. " + this.timeout);
+                debugLog( " lastRequestSentTime...... " + new Date(this.lastRequestSentTime).toISOString() + (<any>now - this.lastRequestSentTime));
+                debugLog( " lastResponseReceivedTime. " + new Date(this.lastResponseReceivedTime).toISOString() + (<any>now - this.lastResponseReceivedTime));
 
                 this._terminatePublishEngine();
                 /**
@@ -1063,11 +1063,11 @@ public getMonitoredItems(subscriptionId : UInt32, callback) {
     var self = this;
     var methodsToCall =
         new CallMethodRequest({
-            ObjectId: coerceNodeId("ns=0;i=2253"),  // ObjectId.Server
-            MethodId: coerceNodeId("ns=0;i=11492"), // MethodIds.Server_GetMonitoredItems;
-            InputArguments: [
+            objectId: coerceNodeId("ns=0;i=2253"),  // ObjectId.Server
+            methodId: coerceNodeId("ns=0;i=11492"), // MethodIds.Server_GetMonitoredItems;
+            inputArguments: [
                 // BaseDataType
-                {DataType: DataType.UInt32, Value: subscriptionId}
+                {dataType: DataType.UInt32, value: subscriptionId}
             ]
         });
 
@@ -1089,10 +1089,10 @@ public getMonitoredItems(subscriptionId : UInt32, callback) {
 
             } else {
 
-                assert(res.OutputArguments.length === 2);
+                assert(res.outputArguments.length === 2);
                 var data = {
-                    serverHandles: res.OutputArguments[0].value, //
-                    clientHandles: res.OutputArguments[1].value
+                    serverHandles: res.outputArguments[0].value, //
+                    clientHandles: res.outputArguments[1].value
                 };
 
                 // Note some server might return null array
@@ -1260,19 +1260,19 @@ public dispose() {
     this.removeAllListeners();
 };
 
-public toString() : string {
+public toString() : void {
 
     var now = Date.now();
-    var session = this;
-    console.log( " name..................... ",session.name);
-    console.log( " sessionId................ ",session.sessionId);
-    console.log( " authenticationToken...... ",session.authenticationToken);
-    console.log( " timeout.................. ",session.timeout);
-    console.log( " serverNonce.............. ",session.serverNonce.toString("hex"));
-    console.log( " serverCertificate........ ",session.serverCertificate.toString("base64"));
-    console.log( " serverSignature.......... ",session.serverSignature);
-    console.log( " lastRequestSentTime...... ",new Date(session.lastRequestSentTime).toISOString(), now - session.lastRequestSentTime);
-    console.log( " lastResponseReceivedTime. ",new Date(session.lastResponseReceivedTime).toISOString(), now - session.lastResponseReceivedTime);
+
+    console.log( " name..................... ",this.name);
+    console.log( " sessionId................ ",this.sessionId);
+    console.log( " authenticationToken...... ",this.authenticationToken);
+    console.log( " timeout.................. ",this.timeout);
+    console.log( " serverNonce.............. ",this.serverNonce.toString("hex"));
+    console.log( " serverCertificate........ ",this.serverCertificate.toString("base64"));
+    console.log( " serverSignature.......... ",this.serverSignature);
+    console.log( " lastRequestSentTime...... ",new Date(this.lastRequestSentTime).toISOString(), now - this.lastRequestSentTime);
+    console.log( " lastResponseReceivedTime. ",new Date(this.lastResponseReceivedTime).toISOString(), now - this.lastResponseReceivedTime);
 };
 
 protected __findBasicDataType(session,dataTypeId,callback) {
@@ -1281,7 +1281,7 @@ protected __findBasicDataType(session,dataTypeId,callback) {
 
     if (dataTypeId.value <=25) {
         // we have a well-known DataType
-        var dataType = DataType.get(dataTypeId.value);
+        var dataType = DataType[dataTypeId.value];
         callback(null,dataType);
     } else {
 
@@ -1325,7 +1325,7 @@ protected __findBasicDataType(session,dataTypeId,callback) {
  *     });
  *
  */
-public getBuiltInDataType(nodeId,callback : (err : Error|null,result: DataType)){
+public getBuiltInDataType(nodeId,callback : (err : Error|null,result?: DataType)=>void){
 
     var dataTypeId = null;
     var dataType;
@@ -1336,7 +1336,7 @@ public getBuiltInDataType(nodeId,callback : (err : Error|null,result: DataType))
             attributeId: AttributeIds.DataType
         }
     ];
-    session.read(nodes_to_read, 0, function(err,nodes_to_read,dataValues) {
+    session.read(nodes_to_read, 0, (err,nodes_to_read,dataValues?) => {
         if (err) return callback(err);
         if (dataValues[0].statusCode !== StatusCodes.Good) {
             return callback(new Error("cannot read DataType Attribute "+  dataValues[0].statusCode.toString()));
@@ -1348,11 +1348,10 @@ public getBuiltInDataType(nodeId,callback : (err : Error|null,result: DataType))
 
 };
 
-ClientSession.prototype.resumePublishEngine = function() {
-    var self =this;
-
-    if (self._publishEngine.subscriptionCount>0) {
-        self._publishEngine.replenish_publish_request_queue();
+public resumePublishEngine() {
+  
+    if (this._publishEngine.subscriptionCount>0) {
+        this._publishEngine.replenish_publish_request_queue();
     }
 };
 }

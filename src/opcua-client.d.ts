@@ -13,6 +13,7 @@ export interface ErrorCallback {
 export interface ResponseCallback<T> {
     (err?: Error | null, response?: T): void;
 }
+
 export declare enum MessageSecurityMode {
     INVALID,        // The MessageSecurityMode is invalid
     NONE,           // No security is applied.

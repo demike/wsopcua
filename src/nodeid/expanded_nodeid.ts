@@ -3,7 +3,7 @@
 /**
  * @module opcua.datamodel
  */
-import {NodeId,NodeIdType} from  './nodeid';
+import {NodeId,NodeIdType, coerceNodeId} from  './nodeid';
 import * as _ from 'underscore';
 
 /**
@@ -76,7 +76,7 @@ export class ExpandedNodeId extends NodeId {
     };
 
     static coerceExpandedNodeId(value) : ExpandedNodeId {
-        var n = NodeId.coerceNodeId(value);
+        var n = coerceNodeId(value);
         return new ExpandedNodeId(n.identifierType, n.value, n.namespace, /*namespaceUri*/null, /*serverIndex*/0)
     
     }
@@ -89,7 +89,7 @@ export class ExpandedNodeId extends NodeId {
  * @param [namespace=0] {Integer} the namespace
  * @return {ExpandedNodeId}
  */
-export function makeExpandedNodeId(value : any, namespace : number) {
+export function makeExpandedNodeId(value : any, namespace? : number) {
 
     if (value === undefined && namespace === undefined) {
         return new ExpandedNodeId(NodeIdType.NUMERIC, 0, 0, null, 0);
