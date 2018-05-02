@@ -15,9 +15,7 @@ import {getRandomInt} from './utils';
 export {NodeId} from '../nodeid/nodeid';
 export {ExpandedNodeId} from '../nodeid/expanded_nodeid';
 
-
-var set_flag = require("node-opcua-utils").set_flag;
-var check_flag = require("node-opcua-utils").check_flag;
+import {set_flag,check_flag} from '../utils';
 
 enum EnumNodeIdEncoding {
     TwoBytes = 0x00, // A numeric value that fits into the two byte representation.

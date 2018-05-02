@@ -1,16 +1,15 @@
 "use strict";
 
 
-var assert = require("node-opcua-assert");
-var _ = require("underscore");
+import {assert} from  "../assert";
+import * as _ from "underscore";
 
-var resolveNodeId = require("node-opcua-nodeid").resolveNodeId;
+import {resolveNodeId} from '../nodeid/nodeid';
 
 var translate_browse_paths_to_node_ids_service = require("node-opcua-service-translate-browse-path");
 var BrowsePath = translate_browse_paths_to_node_ids_service.BrowsePath;
 
-var StatusCodes = require("node-opcua-status-code").StatusCodes;
-var AttributeIds = require("node-opcua-data-model").AttributeIds;
+import {StatusCodes,AttributeIds} from '../constants';
 
 var hasPropertyRefId = resolveNodeId("HasProperty");
 /* NodeId  ns=0;i=46*/

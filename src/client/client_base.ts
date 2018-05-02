@@ -43,6 +43,7 @@ function debugLog(s : String) {
 
 import {ClientSecureChannelLayer} from '../secure-channel/client_secure_channel_layer';
 import { OPCUASecureObject } from '../common/secure_object';
+import { RequestHeader } from '../service-secure-channel';
 
 var defaultConnectionStrategy = {
     maxRetry:     100,
@@ -127,7 +128,7 @@ export class OPCUAClientBase extends EventEmitter {
         protected _sessions : any[];
         protected defaultSecureTokenLifetime : number;
 
-        protected endpointUrl : string;
+        protected _endpointUrl : string;
         protected connectionStrategy : ConnectionStrategy;
 
         /**
@@ -205,6 +206,10 @@ export class OPCUAClientBase extends EventEmitter {
 
     get secureChannel() {
         return this._secureChannel;
+    }
+
+    get endpointUrl() {
+        return this._endpointUrl;
     }
 
     constructor(options ?: OPCUAClientOptions) {
@@ -287,7 +292,7 @@ export class OPCUAClientBase extends EventEmitter {
         connect(endpointUrl: string, callback: ErrorCallback): void {
                 assert(_.isFunction(callback), "expecting a callback");
                             
-                this.endpointUrl = endpointUrl;
+                this._endpointUrl = endpointUrl;
             
                 // prevent illegal call to connect
                 if (this._secureChannel !== null) {
@@ -425,7 +430,7 @@ public findServers(options, callback) {
         }
     
         var request = new FindServersRequest({
-            endpointUrl: options.endpointUrl || this.endpointUrl,
+            endpointUrl: options.endpointUrl || this._endpointUrl,
             localeIds: options.localeIds || [],
             serverUris: options.serverUris || []
         });
@@ -492,7 +497,7 @@ public getEndpointsRequest(options, callback?) : void {
         }
         assert(_.isFunction(callback));
     
-        options.endpointUrl = options.endpointUrl || this.endpointUrl;
+        options.endpointUrl = options.endpointUrl || this._endpointUrl;
         options.localeIds = options.localeIds || [];
         options.profileUris = options.profileUris || [];
     
@@ -500,9 +505,9 @@ public getEndpointsRequest(options, callback?) : void {
             endpointUrl: options.endpointUrl,
             localeIds:   options.localeIds,
             profileUris: options.profileUris,
-            requestHeader: {
+            requestHeader: new RequestHeader({
                 auditEntryId: null
-            }
+            })
         });
     
         this.performMessageTransaction(request, (err, response) => {
@@ -715,7 +720,7 @@ protected _internal_create_secure_channel (callback : Function) {
 
     let secureChannel;
     assert(this._secureChannel === null);
-    assert(_.isString(this.endpointUrl));
+    assert(_.isString(this._endpointUrl));
 
     async.series([
 
@@ -736,7 +741,7 @@ protected _internal_create_secure_channel (callback : Function) {
 
             secureChannel.protocolVersion = this.protocolVersion;
 
-            secureChannel.create(this.endpointUrl, (err) => {
+            secureChannel.create(this._endpointUrl, (err) => {
                 if (err) {
                     debugLog("Cannot create secureChannel");
                     this._destroy_secure_channel();

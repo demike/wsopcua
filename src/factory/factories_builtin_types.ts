@@ -168,7 +168,7 @@ export interface ITypeSchema {
  */
 export class TypeSchema {
     protected defaultValue : any;
-constructor(options : ITypeSchema) {
+constructor(options :  ITypeSchema| any) {
 
     for (var prop in options) {
         if (options.hasOwnProperty(prop)) {

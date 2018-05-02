@@ -104,7 +104,7 @@ export class ClientSession extends EventEmitter {
 
     protected lastRequestSentTime : number;
     protected lastResponseReceivedTime : number;
-    protected timeout : number
+    protected _timeout : number
 
     protected static emptyUint32Array = new Uint32Array(0);
 
@@ -124,6 +124,10 @@ export class ClientSession extends EventEmitter {
 public get endpoint() {
     return this._client.endpoint;
 };
+
+public get timeout() : number {
+    return this._timeout;
+}
 
 /**
  * @method getPublishEngine
@@ -649,7 +653,7 @@ protected _defaultRequest(SomeRequest, SomeResponse, options, callback) {
                 // let's print some statistics
                 var now = new Date();
                 debugLog( " server send BadSessionClosed !");
-                debugLog( " timeout.................. " + this.timeout);
+                debugLog( " timeout.................. " + this._timeout);
                 debugLog( " lastRequestSentTime...... " + new Date(this.lastRequestSentTime).toISOString() + (<any>now - this.lastRequestSentTime));
                 debugLog( " lastResponseReceivedTime. " + new Date(this.lastResponseReceivedTime).toISOString() + (<any>now - this.lastResponseReceivedTime));
 
@@ -1267,7 +1271,7 @@ public toString() : void {
     console.log( " name..................... ",this.name);
     console.log( " sessionId................ ",this.sessionId);
     console.log( " authenticationToken...... ",this.authenticationToken);
-    console.log( " timeout.................. ",this.timeout);
+    console.log( " timeout.................. ",this._timeout);
     console.log( " serverNonce.............. ",this.serverNonce.toString("hex"));
     console.log( " serverCertificate........ ",this.serverCertificate.toString("base64"));
     console.log( " serverSignature.......... ",this.serverSignature);

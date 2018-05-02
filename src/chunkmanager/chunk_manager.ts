@@ -11,13 +11,11 @@ import * as _ from 'underscore';
 import {readMessageHeader} from './read_message_header';
 import {DataStream} from '../basic-types/DataStream';
 
-var buffer_utils = require("node-opcua-buffer-utils");
-var createFastUninitializedBuffer = buffer_utils.createFastUninitializedBuffer;
 
 
 var do_debug = false;
 
-function verify_message_chunk(message_chunk) {
+export function verify_message_chunk(message_chunk) {
     assert(message_chunk);
     assert(message_chunk instanceof Buffer);
     var header = readMessageHeader(new DataStream(message_chunk));
@@ -25,8 +23,6 @@ function verify_message_chunk(message_chunk) {
         throw new Error(" chunk length = " + message_chunk.length + " message  length " + header.length);
     }
 }
-
-exports.verify_message_chunk = verify_message_chunk;
 
 // see https://github.com/substack/_buffer-handbook
 //     http://blog.nodejs.org/2012/12/20/streams2/
@@ -103,7 +99,7 @@ var ChunkManager_options = [
  * @extends EventEmitter
  * @constructor
  */
-class ChunkManager extends EventEmitter {
+export class ChunkManager extends EventEmitter {
     chunkSize: any;
     headerSize: any;
     writeHeaderFunc: any;
@@ -117,9 +113,10 @@ class ChunkManager extends EventEmitter {
     encrypt_buffer: any;
     maxBlock: number;
     dataOffset: number;
-    chunk: any;
+    chunk: ArrayBuffer;
+    chunkArray: Uint8Array;
     cursor: number;
-    pending_chunk: any;
+    pending_chunk: ArrayBuffer;
     dataEnd: any;
     emit(arg0: any, arg1: any, arg2: any,arg3?: any): any {
         throw new Error("Method not implemented.");
@@ -168,6 +165,7 @@ class ChunkManager extends EventEmitter {
         // where the data starts in the block
         this.dataOffset = this.headerSize + this.sequenceHeaderSize;
         this.chunk = null;
+        this.chunkArray = null;
         this.cursor = 0;
         this.pending_chunk = null;
     }
@@ -207,7 +205,7 @@ class ChunkManager extends EventEmitter {
     }
     _push_pending_chunk(isLast) {
         if (this.pending_chunk) {
-            var expected_length = this.pending_chunk.length;
+            var expected_length = this.pending_chunk.byteLength;
             if (this.headerSize > 0) {
                 // Release 1.02  39  OPC Unified Architecture, Part 6:
                 // The sequence header ensures that the first  encrypted block of every  Message  sent over
@@ -233,12 +231,15 @@ class ChunkManager extends EventEmitter {
      * @param buffer {Buffer}
      * @param length {Number}
      */
-    write(buffer, length) {
-        length = length || buffer.length;
-        assert(buffer instanceof Buffer || (buffer === null));
+    write(buffer : ArrayBuffer, length : number) {
+        length = length || buffer.byteLength;
+        assert(buffer instanceof ArrayBuffer || (buffer === null));
         assert(length > 0);
         var l = length;
         var input_cursor = 0;
+        this.chunk = this.chunk || new ArrayBuffer(this.chunkSize);
+        this.chunkArray = this.chunkArray || new Uint8Array(this.chunk);
+
         while (l > 0) {
             assert(length - input_cursor !== 0);
             if (this.cursor === 0) {
@@ -247,9 +248,11 @@ class ChunkManager extends EventEmitter {
             // space left in current chunk
             var space_left = this.maxBodySize - this.cursor;
             var nb_to_write = Math.min(length - input_cursor, space_left);
-            this.chunk = this.chunk || createFastUninitializedBuffer(this.chunkSize);
             if (buffer) {
-                buffer.copy(this.chunk, this.cursor + this.dataOffset, input_cursor, input_cursor + nb_to_write);
+            
+                let arrBuffer = new Uint8Array(buffer,input_cursor,input_cursor + nb_to_write)
+                this.chunkArray.set(arrBuffer,this.cursor + this.dataOffset);
+                //buffer.copy(this.chunk, this.cursor + this.dataOffset, input_cursor, input_cursor + nb_to_write);
             }
             input_cursor += nb_to_write;
             this.cursor += nb_to_write;
@@ -264,14 +267,15 @@ class ChunkManager extends EventEmitter {
         var extraNbPaddingByte = Math.floor(nbPaddingByteTotal / 256);
         assert(extraNbPaddingByte === 0 || this.plainBlockSize > 256, "extraNbPaddingByte only requested when key size > 2048");
         // write the padding byte
-        this.chunk.writeUInt8(nbPaddingByte, this.cursor + this.dataOffset);
+        this.chunk[this.cursor + this.dataOffset]=nbPaddingByte;
+        //this.chunk.writeUInt8(nbPaddingByte, this.cursor + this.dataOffset);
         this.cursor += 1;
         for (var i = 0; i < nbPaddingByteTotal; i++) {
-            this.chunk.writeUInt8(nbPaddingByte, this.cursor + this.dataOffset + i);
+            this.chunk[this.cursor + this.dataOffset + i] = nbPaddingByte;
         }
         this.cursor += nbPaddingByteTotal;
         if (this.plainBlockSize > 256) {
-            this.chunk.writeUInt8(extraNbPaddingByte, this.cursor + this.dataOffset);
+            this.chunk[this.cursor + this.dataOffset] =extraNbPaddingByte;
             this.cursor += 1;
         }
     }
@@ -309,6 +313,7 @@ class ChunkManager extends EventEmitter {
         //    as we don't know what to write in the header yet
         //  - as a result,
         this.chunk = null;
+        this.chunkArray = null;
         this.cursor = 0;
     }
     /**
@@ -321,21 +326,3 @@ class ChunkManager extends EventEmitter {
         this._push_pending_chunk(true);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-exports.ChunkManager = ChunkManager;
-
