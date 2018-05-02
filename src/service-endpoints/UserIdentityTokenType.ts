@@ -9,16 +9,6 @@
 //  A tokenType of ANONYMOUS indicates that the Server does not require any
 //  user identification. In this case the Client application instance Certificate is used
 //  as the user identification.
-var EnumUserIdentityTokenType_Schema = {
-    name: "EnumUserIdentityTokenType",
-    enumValues: {
-        ANONYMOUS: 0,
-        USERNAME: 1,
-        CERTIFICATE: 2,
-        ISSUEDTOKEN: 3
-    }
-};
-
 export enum UserIdentityTokenType {
     ANONYMOUS = 0,
     USERNAME = 1,

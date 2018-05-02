@@ -31,6 +31,10 @@ export class DataStream {
       return this._pos;
     }
 
+    get length() : number {
+      return this._pos;
+    }
+
     /**
       * Gets the Float32 value at the specified byte offset from the start of the view. There is
       * no alignment constraint; multi-byte values may be fetched from any offset.

@@ -1067,7 +1067,7 @@ public getMonitoredItems(subscriptionId : UInt32, callback) {
             methodId: coerceNodeId("ns=0;i=11492"), // MethodIds.Server_GetMonitoredItems;
             inputArguments: [
                 // BaseDataType
-                {dataType: DataType.UInt32, value: subscriptionId}
+                new Variant({dataType: DataType.UInt32, value: subscriptionId})
             ]
         });
 
@@ -1083,9 +1083,9 @@ public getMonitoredItems(subscriptionId : UInt32, callback) {
             //xx console.log(" xxxxxxxxxxxxxxxxxx RRR err",err);
             //xx console.log(" xxxxxxxxxxxxxxxxxx RRR result ".red.bold,result.toString());
             //xx console.log(" xxxxxxxxxxxxxxxxxx RRR err",diagnosticInfo);
-            if (res.StatusCode !== StatusCodes.Good) {
+            if (res.statusCode !== StatusCodes.Good) {
 
-                callback(new Error(res.StatusCode.toString()), result, diagnosticInfo);
+                callback(new Error(res.statusCode.toString()), result, diagnosticInfo);
 
             } else {
 

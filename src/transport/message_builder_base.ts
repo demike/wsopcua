@@ -115,7 +115,7 @@ export abstract class MessageBuilderBase extends EventEmitter{
         // the start of the message body block
         var offsetBodyStart = binaryStream.length;
         // the end of the message body block
-        var offsetBodyEnd = binaryStream.buffer.length;
+        var offsetBodyEnd = binaryStream.buffer.byteLength;
         this.total_body_size += (offsetBodyEnd - offsetBodyStart);
         this.offsetBodyStart = offsetBodyStart;
         // add message body to a queue
