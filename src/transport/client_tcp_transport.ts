@@ -5,60 +5,53 @@
 
 
 // system requires
-var assert = require("node-opcua-assert");
-
-var net = require("net");
-var _ = require("underscore");
-var util = require("util");
-
+import {assert} from '../assert';
+import * as _ from 'underscore';
 
 // opcua requires
-var BinaryStream = require("node-opcua-binary-stream").BinaryStream;
+import {DataStream} from '../basic-types/DataStream';
 
 // this modules
-var TCP_transport = require("./tcp_transport").TCP_transport;
+import {TCP_transport,getFakeTransport} from './tcp_transport';
 
-var getFakeTransport = require("./tcp_transport").getFakeTransport;
-
-var packTcpMessage = require("./tools").packTcpMessage;
-var parseEndpointUrl = require("./tools").parseEndpointUrl;
-
-var HelloMessage = require("../_generated_/_auto_generated_HelloMessage").HelloMessage;
-var TCPErrorMessage = require("../_generated_/_auto_generated_TCPErrorMessage").TCPErrorMessage;
-var AcknowledgeMessage = require("../_generated_/_auto_generated_AcknowledgeMessage").AcknowledgeMessage;
-
-var debugLog = require("node-opcua-debug").make_debugLog(__filename);
+import {packTcpMessage,parseEndpointUrl} from './tools';
 
 
-var readMessageHeader = require("node-opcua-chunkmanager").readMessageHeader;
 
-var decodeMessage = require("./tools").decodeMessage;
+import {HelloMessage} from "./HelloMessage";
+import {TCPErrorMessage} from "./TCPErrorMessage";
+import {AcknowledgeMessage} from "./AcknowledgeMessage";
 
-function createClientSocket(endpointUrl) {
+import {debugLog} from '../common/debug';
+import {readMessageHeader} from '../chunkmanager';
+
+
+import {decodeMessage} from "./tools";
+
+function createClientSocket(endpointUrl : string) {
     // create a socket based on Url
     var ep = parseEndpointUrl(endpointUrl);
     var port = ep.port;
     var hostname = ep.hostname;
     switch (ep.protocol) {
-        case "opc.tcp":
-            var socket = net.connect({host: hostname, port: port});
-            socket.setNoDelay(true);
-
-            return socket;
+        case "websocket":
+            //TODO: that's it --> implement me
         case "fake":
             var fakeSocket = getFakeTransport();
             assert(ep.protocol === "fake", " Unsupported transport protocol");
             process.nextTick(function () {
-                fakeSocket.emit("connect");
+                (<any>fakeSocket).emit("connect");
             });
             return fakeSocket;
-        case "websocket":
         case "http":
         case "https":
+        case "opc.tcp":
+            // var socket = net.connect({host: hostname, port: port});
+            // socket.setNoDelay(true);
+
+            //  return socket;
         default:
             throw new Error("this transport protocol is currently not supported :" + ep.protocol);
-            return null;
-
     }
 }
 
@@ -103,18 +96,36 @@ function createClientSocket(endpointUrl) {
  *
  *
  */
-var ClientTCP_transport = function () {
-    TCP_transport.call(this);
-    var self = this;
-    self.connected = false;
+export class ClientTCP_transport extends TCP_transport{
+    numberOfRetry: number;
+    _connected: boolean;
+    serverUri: string;
+    endpointUrl: string;
+    _protocolVersion: number;
+    _parameters : any;
+
+    get protocolVersion() {
+        return this._protocolVersion;
+    }
+
+    set protocolVersion(v : number) {
+        this._protocolVersion = v;
+    }
+
+    get connected() {
+        return this._connected;
+    }
+
+
+constructor() {
+    super();
+   
+    this._connected = false;
 };
-util.inherits(ClientTCP_transport, TCP_transport);
 
-ClientTCP_transport.prototype.on_socket_ended = function(err) {
-
-    var self = this;
-    if (self.connected) {
-        TCP_transport.prototype.on_socket_ended.call(self,err);
+public on_socket_ended(err) {
+    if (this._connected) {
+        super.on_socket_ended(err);
     }
 };
 
@@ -125,36 +136,34 @@ ClientTCP_transport.prototype.on_socket_ended = function(err) {
  * @param callback {Function} the callback function
  * @param [options={}]
  */
-ClientTCP_transport.prototype.connect = function (endpointUrl, callback, options) {
+public connect(endpointUrl : string, callback : Function, options?) {
 
     assert(_.isFunction(callback));
 
     options = options || {};
 
-    var self = this;
-
-    self.protocolVersion = (options.protocolVersion !== undefined) ? options.protocolVersion : self.protocolVersion;
-    assert(_.isFinite(self.protocolVersion));
+    this._protocolVersion = (options.protocolVersion !== undefined) ? options.protocolVersion : this._protocolVersion;
+    assert(_.isFinite(this._protocolVersion));
 
     var ep = parseEndpointUrl(endpointUrl);
 
     var hostname = require("os").hostname();
 
-    self.endpointUrl = endpointUrl;
+    this.endpointUrl = endpointUrl;
 
-    self.serverUri = "urn:" + hostname + ":Sample";
+    this.serverUri = "urn:" + hostname + ":Sample";
 
     debugLog("endpointUrl =", endpointUrl, "ep", ep);
 
 
     try {
-        self._socket = createClientSocket(endpointUrl);
+        this._socket = createClientSocket(endpointUrl);
     }
     catch (err) {
         return callback(err);
     }
-    self._socket.name = "CLIENT";
-    self._install_socket(self._socket);
+    this._socket.name = "CLIENT";
+    this._install_socket(this._socket);
 
     function _on_socket_error_for_connect(err) {
         // this handler will catch attempt to connect to an inaccessible address.
@@ -167,8 +176,8 @@ ClientTCP_transport.prototype.connect = function (endpointUrl, callback, options
     }
 
     function _remove_connect_listeners() {
-        self._socket.removeListener("error", _on_socket_error_for_connect);
-        self._socket.removeListener("end"  , _on_socket_end_for_connect);
+        this._socket.removeListener("error", _on_socket_error_for_connect);
+        this._socket.removeListener("end"  , _on_socket_end_for_connect);
     }
 
     function _on_socket_error_after_connection(err) {
@@ -188,31 +197,31 @@ ClientTCP_transport.prototype.connect = function (endpointUrl, callback, options
              * @event connection_break
              *
              */
-            self.emit("connection_break");
+            this.emit("connection_break");
         }
     }
 
-    self._socket.once("error", _on_socket_error_for_connect);
-    self._socket.once("end",_on_socket_end_for_connect);
+    this._socket.once("error", _on_socket_error_for_connect);
+    this._socket.once("end",_on_socket_end_for_connect);
 
-    self._socket.on("connect", function () {
+    this._socket.on("connect", function () {
 
         _remove_connect_listeners();
 
-        self._perform_HEL_ACK_transaction(function(err) {
+        this._perform_HEL_ACK_transaction((err) => {
             if(!err) {
 
                 // install error handler to detect connection break
-                self._socket.on("error",_on_socket_error_after_connection);
+                this._socket.on("error",_on_socket_error_after_connection);
 
-                self.connected = true;
+                this.connected = true;
                 /**
                  * notify the observers that the transport is connected (the socket is connected and the the HEL/ACK
                  * transaction has been done)
                  * @event connect
                  *
                  */
-                self.emit("connect");
+                this.emit("connect");
             } else {
                 debugLog("_perform_HEL_ACK_transaction has failed with err=",err.message);
             }
@@ -222,10 +231,9 @@ ClientTCP_transport.prototype.connect = function (endpointUrl, callback, options
 };
 
 
-ClientTCP_transport.prototype._handle_ACK_response = function (message_chunk, callback) {
+protected _handle_ACK_response(message_chunk, callback) {
 
-    var self = this;
-    var _stream = new BinaryStream(message_chunk);
+    var _stream = new DataStream(message_chunk);
     var messageHeader = readMessageHeader(_stream);
     var err;
 
@@ -242,69 +250,69 @@ ClientTCP_transport.prototype._handle_ACK_response = function (message_chunk, ca
         _stream.rewind();
         response = decodeMessage(_stream, responseClass);
         
-        var err =new Error("ACK: ERR received " + response.statusCode.toString() + " : " + response.reason);
-        err.statusCode =  response.statusCode;
+        let err =new Error("ACK: ERR received " + response.statusCode.toString() + " : " + response.reason);
+        (<any>err).statusCode =  response.statusCode;
         callback(err);
 
     } else {
         responseClass = AcknowledgeMessage;
         _stream.rewind();
         response = decodeMessage(_stream, responseClass);
-        self.parameters = response;
+        this._parameters = response;
         callback(null);
     }
 
 };
 
-ClientTCP_transport.prototype._send_HELLO_request = function () {
+protected _send_HELLO_request() {
 
-    var self = this;
-    assert(self._socket);
-    assert(_.isFinite(self.protocolVersion));
-    assert(self.endpointUrl.length > 0, " expecting a valid endpoint url");
+    
+    assert(this._socket);
+    assert(_.isFinite(this._protocolVersion));
+    assert(this.endpointUrl.length > 0, " expecting a valid endpoint url");
 
     // Write a message to the socket as soon as the client is connected,
     // the server will receive it as message from the client
     var request = new HelloMessage({
-        protocolVersion: self.protocolVersion,
+        protocolVersion: this._protocolVersion,
         receiveBufferSize:    1024 * 64 * 10,
         sendBufferSize:       1024 * 64 * 10,// 8196 min,
         maxMessageSize:       0, // 0 - no limits
         maxChunkCount:        0, // 0 - no limits
-        endpointUrl: self.endpointUrl
+        endpointUrl: this.endpointUrl
     });
 
     var messageChunk = packTcpMessage("HEL", request);
-    self._write_chunk(messageChunk);
+    this._write_chunk(messageChunk);
 
 };
 
 
-ClientTCP_transport.prototype._perform_HEL_ACK_transaction = function (callback) {
+protected _perform_HEL_ACK_transaction = function (callback) {
 
-    var self = this;
-    assert(self._socket);
+   
+    assert(this._socket);
     assert(_.isFunction(callback));
 
     var counter = 0;
 
-    self._install_one_time_message_receiver(function on_ACK_response(err, data) {
+    this._install_one_time_message_receiver(function on_ACK_response(err, data) {
 
         assert(counter === 0);
         counter += 1;
 
         if (err) {
             callback(err);
-            self._socket.end();
+            this._socket.end();
         } else {
-            self._handle_ACK_response(data, function (inner_err) {
+            this._handle_ACK_response(data, function (inner_err) {
                 callback(inner_err);
             });
         }
     });
-    self._send_HELLO_request();
+    this._send_HELLO_request();
 };
 
+}
 
-exports.ClientTCP_transport = ClientTCP_transport;
 

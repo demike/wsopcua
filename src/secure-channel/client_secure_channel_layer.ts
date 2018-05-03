@@ -19,24 +19,19 @@ import {StatusCodes} from '../constants/raw_status_codes';
 var crypto : Crypto = window.crypto || (<any>window).msCrypto;
 
 import * as utils from '../utils';
-
-var ClientTCP_transport = require("node-opcua-transport").ClientTCP_transport;
+var get_clock_tick = utils.get_clock_tick;
 
 var crypto_utils = require("node-opcua-crypto").crypto_utils;
 
-var verify_message_chunk = require("node-opcua-chunkmanager").verify_message_chunk;
+import {verify_message_chunk,readMessageHeader} from '../chunkmanager';
 
 var backoff = require("backoff");
-
-
-var get_clock_tick = utils.get_clock_tick;
-
-var readMessageHeader = require("node-opcua-chunkmanager").readMessageHeader;
 
 var messageHeaderToString = require("../message_header_to_string").messageHeaderToString;
 import {MessageChunker} from "./message_chunker";
 import * as secure_channel_service from "../service-secure-channel";
 import { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
+import { ClientTCP_transport } from '../transport/client_tcp_transport';
 
 var OpenSecureChannelRequest = secure_channel_service.OpenSecureChannelRequest;
 var CloseSecureChannelRequest = secure_channel_service.CloseSecureChannelRequest;
@@ -45,8 +40,8 @@ var AsymmetricAlgorithmSecurityHeader = secure_channel_service.AsymmetricAlgorit
 var ServiceFault = secure_channel_service.ServiceFault;
 var SecurityTokenRequestType = secure_channel_service.SecurityTokenRequestType;
 
-var do_trace_message = process.env.DEBUG && (process.env.DEBUG.indexOf("TRACE")) >= 0;
-var do_trace_statistics = process.env.DEBUG && (process.env.DEBUG.indexOf("STATS")) >= 0;
+var do_trace_message = false;
+var do_trace_statistics = false;
 
 function process_request_callback(request_data, err, response) {
 
@@ -199,7 +194,7 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
     _receiverPublicKey(arg0: any): any {
         throw new Error("Method not implemented.");
     }
-    _transport: any;
+    _transport: ClientTCP_transport;
     _isOpened: boolean;
     _securityToken: ChannelSecurityToken;
     protected _lastRequestId : number;
@@ -272,6 +267,10 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
 
     get clientNonce() {
         return this._clientNonce;
+    }
+
+    get endpointUri() {
+        return this._transport.endpointUri;
     }
 
     constructor(options : any) {
@@ -673,7 +672,7 @@ protected _on_connection(transport, callback, err?) {
  *
  *    ```
  */
-public create(endpoint_url : string , callback) {
+public create(endpoint_url : string , callback: Function) {
 
     assert(_.isFunction(callback));
     
@@ -688,7 +687,7 @@ public create(endpoint_url : string , callback) {
         // take the opportunity of this async method to perform some async pre-processing
         if (_.isUndefined(this._receiverPublicKey)) {
 
-            crypto_utils.extractPublicKeyFromCertificate(this.serverCertificate, function (err, publicKey) {
+            crypto_utils.extractPublicKeyFromCertificate(this.serverCertificate, (err, publicKey) => {
                 /* istanbul ignore next */
                 if (err) {
                     return callback(err);
@@ -710,7 +709,7 @@ public create(endpoint_url : string , callback) {
     // -------------------------------------------------------------------------
     // Handle reconnection
     // --------------------------------------------------------------------------
-    var _establish_connection = function (transport, endpoint_url, callback) {
+    var _establish_connection = function (transport: ClientTCP_transport, endpoint_url, callback) {
 
 
         var last_err = null;

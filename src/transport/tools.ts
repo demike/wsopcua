@@ -2,13 +2,8 @@
 import {assert} from '../assert';
 import {DataStream} from '../basic-types/DataStream';
 
-var createFastUninitializedBuffer = require("node-opcua-buffer-utils").createFastUninitializedBuffer;
-
-
-var TCPErrorMessage = require("../_generated_/_auto_generated_TCPErrorMessage").TCPErrorMessage;
-var readMessageHeader = require("node-opcua-chunkmanager").readMessageHeader;
-
-
+import {TCPErrorMessage} from "./TCPErrorMessage";
+import {readMessageHeader} from "../chunkmanager";
 
 function is_valid_msg_type(msgType) {
     assert(["HEL", "ACK", "ERR",   // Connection Layer
@@ -18,7 +13,7 @@ function is_valid_msg_type(msgType) {
 }
 
 
-function decodeMessage(stream : DataStream, ClassName) {
+export function decodeMessage(stream : DataStream, ClassName) {
 
     assert(stream instanceof DataStream);
     assert(ClassName instanceof Function, " expecting a function for " + ClassName);
@@ -41,11 +36,11 @@ function decodeMessage(stream : DataStream, ClassName) {
 
 
 
-function packTcpMessage(msgType, encodableObject) {
+export function packTcpMessage(msgType, encodableObject) {
 
     assert(is_valid_msg_type(msgType));
 
-    var messageChunk = createFastUninitializedBuffer(encodableObject.binaryStoreSize() + 8);
+    var messageChunk = new ArrayBuffer(encodableObject.binaryStoreSize() + 8);
     // encode encodeableObject in a packet
     var stream = new DataStream(messageChunk);
     encodeMessage(msgType, encodableObject, stream);
@@ -55,7 +50,7 @@ function packTcpMessage(msgType, encodableObject) {
 }
 
 // opc.tcp://xleuri11022:51210/UA/SampleServer
-function parseEndpointUrl(endpointUrl) {
+export function parseEndpointUrl(endpointUrl : string) {
 
     var r = /^([a-z.]*):\/\/([a-zA-Z\_\-\.\-0-9]*):([0-9]*)(\/.*){0,1}/;
 
@@ -71,7 +66,7 @@ function parseEndpointUrl(endpointUrl) {
         address: matches[4] || ""
     };
 }
-function is_valid_endpointUrl(endpointUrl) {
+export function is_valid_endpointUrl(endpointUrl) {
     var e = parseEndpointUrl(endpointUrl);
     return e.hasOwnProperty("hostname");
 }
@@ -112,11 +107,4 @@ var encodeMessage = function (msgType, messageContent, stream) {
     messageContent.encode(stream);
     assert(total_length === stream.length, "invalid message size");
 };
-
-
-exports.TCPErrorMessage = TCPErrorMessage;
-exports.decodeMessage = decodeMessage;
-exports.packTcpMessage = packTcpMessage;
-exports.parseEndpointUrl = parseEndpointUrl;
-exports.is_valid_endpointUrl = is_valid_endpointUrl;
 

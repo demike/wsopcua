@@ -36,6 +36,8 @@ export class TypeRegistry {
         type = new SimpleType("DataStream");
         type.Path = this.BASIC_TYPES_PATH + "/DataStream";
         this.addType(type.Name,type);
+        type.Written = true;
+        type.Complete = true;
 
         let structtype = new StructTypeFile("Variant");
         structtype.Path = "../variant";

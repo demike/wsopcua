@@ -10,10 +10,7 @@ import {get_clock_tick} from '../utils';
 
 var PacketAssembler = require("node-opcua-packet-assembler").PacketAssembler;
 
-var readMessageHeader = require("node-opcua-chunkmanager").readMessageHeader;
-
-var buffer_utils = require("node-opcua-buffer-utils");
-var createFastUninitializedBuffer = buffer_utils.createFastUninitializedBuffer;
+import {readMessageHeader} from '../chunkmanager';
 
 export function readRawMessageHeader(data) {
     var messageHeader = readMessageHeader(new DataStream(data));
@@ -48,13 +45,13 @@ export abstract class MessageBuilderBase extends EventEmitter{
         this.signatureLength = options.signatureLength || 0;
         this.options = options;
         this.packetAssembler = new PacketAssembler({ readMessageFunc: readRawMessageHeader });
-        var self = this;
-        this.packetAssembler.on("message", function (messageChunk) {
-            self._feed_messageChunk(messageChunk);
+       
+        this.packetAssembler.on("message",  (messageChunk) => {
+            this._feed_messageChunk(messageChunk);
         });
-        this.packetAssembler.on("newMessage", function (info, data) {
+        this.packetAssembler.on("newMessage",  (info, data) => {
             // record tick 0: when the first data is received
-            self._tick0 = get_clock_tick();
+            this._tick0 = get_clock_tick();
             /**
              *
              * notify the observers that a new message is being built
@@ -62,7 +59,7 @@ export abstract class MessageBuilderBase extends EventEmitter{
              * @param info
              * @param data
              */
-            self.emit("start_chunk", info, data);
+            this.emit("start_chunk", info, data);
         });
         this.security_defeated = false;
         this.total_body_size = 0;
@@ -77,10 +74,10 @@ export abstract class MessageBuilderBase extends EventEmitter{
         this.blocks = [];
         this.message_chunks = [];
     }
-    protected _read_headers(binaryStream) {
+    protected _read_headers(binaryStream : DataStream) {
         this.messageHeader = readMessageHeader(binaryStream);
         assert(binaryStream.length === 8);
-        this.secureChannelId = binaryStream.readUInt32();
+        this.secureChannelId = binaryStream.getUint32();
         assert(binaryStream.length === 12);
         // verifying secureChannelId
         if (this.expected_secureChannelId && this.secureChannelId !== this.expected_secureChannelId) {
@@ -94,22 +91,22 @@ export abstract class MessageBuilderBase extends EventEmitter{
      * @param message_chunk
      * @private
      */
-    protected _append(message_chunk) {
+    protected _append(message_chunk : ArrayBuffer) {
         if (this.status_error) {
             // the message builder is in error mode and further message chunks should be discarded.
             return false;
         }
         this.message_chunks.push(message_chunk);
-        this.total_message_size += message_chunk.length;
+        this.total_message_size += message_chunk.byteLength;
         var binaryStream = new DataStream(message_chunk);
         if (!this._read_headers(binaryStream)) {
             return false;
         }
         assert(binaryStream.length>= 12);
         // verify message chunk length
-        if (this.messageHeader.length !== message_chunk.length) {
+        if (this.messageHeader.length !== message_chunk.byteLength) {
             return this._report_error("Invalid messageChunk size: " +
-                "the provided chunk is " + message_chunk.length + " bytes long " +
+                "the provided chunk is " + message_chunk.byteLength + " bytes long " +
                 "but header specifies " + this.messageHeader.length);
         }
         // the start of the message body block
@@ -121,9 +118,7 @@ export abstract class MessageBuilderBase extends EventEmitter{
         // add message body to a queue
         // note : Buffer.slice create a shared memory !
         //        use Buffer.clone
-        var shared_buf = message_chunk.slice(offsetBodyStart, offsetBodyEnd);
-        var cloned_buf = createFastUninitializedBuffer(shared_buf.length);
-        shared_buf.copy(cloned_buf, 0, 0);
+        var cloned_buf = message_chunk.slice(offsetBodyStart, offsetBodyEnd);
         this.blocks.push(cloned_buf);
     }
     /**

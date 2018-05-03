@@ -108,6 +108,23 @@ export class ClientSession extends EventEmitter {
 
     protected static emptyUint32Array = new Uint32Array(0);
 
+    get client() {
+        return this._client;
+    }
+
+    set client(cli : OPCUAClientBase) {
+        this._client = cli;
+    }
+
+
+    get closed() {
+        return this._closed;
+    }
+
+    set closed(closed : boolean) {
+        this._closed = closed;
+    }
+
     constructor (client: OPCUAClientBase) {
         super();
         this._closeEventHasBeenEmmitted = false;
@@ -591,7 +608,7 @@ readAllAttributes(nodes : NodeId[], callback) {
  * @param callback.diagnosticInfos {DiagnosticInfo[]}
  *
  */
-read(nodesToRead, maxAge?, callback?) {
+public read(nodesToRead, maxAge?, callback?) {
 
     if (!callback) {
         callback = maxAge;
@@ -624,14 +641,14 @@ read(nodesToRead, maxAge?, callback?) {
     });
 };
 
-emitCloseEvent(statusCode) {
+public emitCloseEvent(statusCode?:any) {
 
 
-    var self = this;
-    if (!self._closeEventHasBeenEmmitted) {
+    
+    if (!this._closeEventHasBeenEmmitted) {
         debugLog("ClientSession#emitCloseEvent");
-        self._closeEventHasBeenEmmitted = true;
-        self.emit("session_closed",statusCode);
+        this._closeEventHasBeenEmmitted = true;
+        this.emit("session_closed",statusCode);
     }
 };
 

@@ -3,7 +3,7 @@
  * @module services.endpoints
  */
 
- export {ApplicationType} from './ApplicationType';
+ export {ApplicationType} from '../generated/ApplicationType';
  export {UserIdentityTokenType} from './UserIdentityTokenType';
  export {UserTokenPolicy} from '../generated/UserTokenPolicy';
  export {ApplicationDescription} from '../generated/ApplicationDescription';

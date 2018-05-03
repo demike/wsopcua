@@ -28,7 +28,7 @@ var GetEndpointsResponse = endpoints_service.GetEndpointsResponse;
  * @param callback [Function}
  */
 
-var register_server_service = require("node-opcua-service-register-server");
+import * as register_server_service from "../service-register-server";
 var FindServersRequest = register_server_service.FindServersRequest;
 var FindServersResponse = register_server_service.FindServersResponse;
 
@@ -44,6 +44,7 @@ function debugLog(s : String) {
 import {ClientSecureChannelLayer} from '../secure-channel/client_secure_channel_layer';
 import { OPCUASecureObject } from '../common/secure_object';
 import { RequestHeader } from '../service-secure-channel';
+import { ClientSession } from './client_session';
 
 var defaultConnectionStrategy = {
     maxRetry:     100,
@@ -125,7 +126,7 @@ export class OPCUAClientBase extends EventEmitter {
         /* TODO: check if this should be static */
         protected registry  = new ObjectRegistry();
 
-        protected _sessions : any[];
+        protected _sessions : ClientSession[];
         protected defaultSecureTokenLifetime : number;
 
         protected _endpointUrl : string;
@@ -523,7 +524,7 @@ public getEndpointsRequest(options, callback?) : void {
 
 
         // override me !
-        public _on_connection_reestablished(callback) {
+        protected _on_connection_reestablished(callback) {
             callback();
         };
 

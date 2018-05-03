@@ -14,9 +14,6 @@ var PacketAssembler = require("node-opcua-packet-assembler").PacketAssembler;
 import {writeTCPMessageHeader} from './tools';
 import {readRawMessageHeader} from './message_builder_base';
 
-var buffer_utils = require("node-opcua-buffer-utils");
-var createFastUninitializedBuffer = buffer_utils.createFastUninitializedBuffer;
-
 import {debugLog,doDebug} from '../common/debug';
 
 var fakeSocket = {invalid: true};
@@ -63,7 +60,7 @@ export class TCP_transport extends EventEmitter{
     protected _socket: any;
     timeout : number;
     headerSize : number;
-    protocolVersion : number;
+    _protocolVersion : number;
 
     bytesRead: number;
     bytesWritten: number;
@@ -99,7 +96,7 @@ constructor() {
      * @type {number}
      * @default  0
      */
-    this.protocolVersion = 0;
+    this._protocolVersion = 0;
 
     this.__disconnecting__ = false;
 
