@@ -25,9 +25,9 @@ var crypto_utils = require("node-opcua-crypto").crypto_utils;
 
 import {verify_message_chunk,readMessageHeader} from '../chunkmanager';
 
-var backoff = require("backoff");
+import * as backoff from '../backoff';
 
-var messageHeaderToString = require("../message_header_to_string").messageHeaderToString;
+import {messageHeaderToString} from './message_header_to_string';
 import {MessageChunker} from "./message_chunker";
 import * as secure_channel_service from "../service-secure-channel";
 import { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
