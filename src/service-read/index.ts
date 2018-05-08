@@ -17,10 +17,6 @@ export {TimestampsToReturn} from '../generated/TimestampsToReturn';
  */
 export {AttributeIds} from '../constants/AttributeIds';
 /**
- * @class AttributeNameById
- */
-exports.AttributeNameById = require("node-opcua-data-model").AttributeNameById;
-/**
  * @class ReadValueId
  */
 export {ReadValueId} from '../generated/ReadValueId';

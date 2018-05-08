@@ -116,6 +116,9 @@ export class ClientTCP_transport extends TCP_transport{
         return this._connected;
     }
 
+    get parameters() {
+        return this._parameters;
+    }
 
 constructor() {
     super();

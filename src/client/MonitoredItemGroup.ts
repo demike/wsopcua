@@ -13,10 +13,8 @@ import { MonitoringParameters } from '../generated/MonitoringParameters';
 import { TimestampsToReturn } from '../generated/TimestampsToReturn';
 import { MonitoringMode } from '../generated/MonitoringMode';
 
-var util = require("util");
-
-var subscription_service = require("node-opcua-service-subscription");
-var read_service = require("node-opcua-service-read");
+import * as subscription_service from '../service-subscription';
+import * as read_service from '../service-read';
 
 
 

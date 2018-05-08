@@ -87,6 +87,10 @@ export class OPCUAClient extends OPCUAClientBase {
     requestedSessionTimeout: any;
     endpoint_must_exist: boolean;
     clientName : string;
+
+    get clientNonce() {
+        return this._clientNonce;
+    }
 constructor(options) {
     super(options);
     options = options || {};
@@ -230,7 +234,7 @@ protected __createSession_step2(session : ClientSession, callback) {
                 assert(response instanceof CreateSessionResponse);
 
                 // istanbul ignore next
-                if (!validateServerNonce(request.serverNonce)) {
+                if (!validateServerNonce(response.serverNonce)) {
                     return callback(new Error("invalid server Nonce"));
                 }
 
@@ -328,7 +332,7 @@ protected _activateSession(session : ClientSession, callback) {
     this.createUserIdentityToken(session, this._userIdentityInfo, (err, userIdentityToken) => {
 
         if (err) {
-            session._client = _old_client;
+            session.client = _old_client;
             return callback(err);
         }
 
@@ -340,7 +344,7 @@ protected _activateSession(session : ClientSession, callback) {
             // clientCertificate. The SignatureAlgorithm shall be the AsymmetricSignatureAlgorithm
             // specified in the SecurityPolicy for the Endpoint. The SignatureData type is defined in 7.30.
 
-            clientSignature: self.computeClientSignature(self._secureChannel, serverCertificate, serverNonce),
+            clientSignature: this.computeClientSignature(this._secureChannel, serverCertificate, serverNonce),
 
             // These are the SoftwareCertificates which have been issued to the Client application. The productUri contained
             // in the SoftwareCertificates shall match the productUri in the ApplicationDescription passed by the Client in
@@ -371,10 +375,10 @@ protected _activateSession(session : ClientSession, callback) {
             // If the Client specified a user   identity token that supports digital signatures,
             // then it shall create a signature and pass it as this parameter. Otherwise the parameter is omitted.
             // The SignatureAlgorithm depends on the identity token type.
-            userTokenSignature: {
+            userTokenSignature: new SignatureData({
                 algorithm: null,
                 signature: null
-            }
+            })
 
         });
 
@@ -394,7 +398,7 @@ protected _activateSession(session : ClientSession, callback) {
             } else {
 
                 err = err || new Error(response.responseHeader.serviceResult.toString());
-                session._client = _old_client;
+                session.client = _old_client;
                 return callback(err, null);
             }
         });

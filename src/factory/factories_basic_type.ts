@@ -5,6 +5,7 @@
 import * as _ from 'underscore';
 import {assert} from '../assert';
 
+import * as ec from '../basic-types';
 import {registerType,_defaultTypeMap} from './factories_builtin_types';
 
 
@@ -92,7 +93,6 @@ registerBasicType({name: "UInt8",    subtype: "Byte"});
 registerBasicType({name: "Time",     subtype: "String"});
 // string in the form "en-US" or "de-DE" or "fr" etc...
 
-var ec = require("node-opcua-basic-types");
 registerBasicType({name: "LocaleId",
     subtype: "String",
     encode: ec.encodeLocaleId,

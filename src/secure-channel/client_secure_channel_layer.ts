@@ -269,8 +269,8 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
         return this._clientNonce;
     }
 
-    get endpointUri() {
-        return this._transport.endpointUri;
+    get endpointUrl() {
+        return this._transport.endpointUrl;
     }
 
     constructor(options : any) {
@@ -1315,7 +1315,7 @@ public close(callback : any) {
 
     this.__in_normal_close_operation = true;
 
-    if (!this._transport || this._transport.__disconnecting__) {
+    if (!this._transport || this._transport.disconnecting) {
         return callback(new Error("Transport disconnected"));
     }
 

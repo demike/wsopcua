@@ -7,6 +7,7 @@ import {assert} from "../assert";
 
 import * as _ from "underscore";
 import {makeNodeId} from "../nodeid/nodeid";
+import {ExpandedNodeId} from '../nodeid/expanded_nodeid';
 
 import {_defaultTypeMap} from "../factory/factories_builtin_types";
 import * as ec from "../basic-types";

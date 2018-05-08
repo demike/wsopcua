@@ -9,7 +9,7 @@ import { IMonitoringParameters } from "../generated/MonitoringParameters";
 import { TimestampsToReturn } from "../generated/TimestampsToReturn";
 import {MonitoredItemBase} from './MonitoredItemBase';
 
-var read_service = require("node-opcua-service-read");
+import * as read_service from "../service-read";
 
 
 /**
@@ -58,7 +58,7 @@ public toString() : string {
  * @param  done {Function} the done callback
  * @async
  */
-public terminate(done) {
+public terminate(done: Function) {
 
     assert(!done || _.isFunction(done));
     /**
@@ -67,7 +67,7 @@ public terminate(done) {
      */
     this.emit("terminated");
 
-    this._subscription._delete_monitored_items([self], function (err) {
+    this._subscription._delete_monitored_items([this], function (err) {
         if (done) {
             done(err);
         }

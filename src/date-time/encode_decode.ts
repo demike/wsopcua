@@ -1,12 +1,12 @@
 import { DataStream } from "../basic-types/DataStream";
 
 "use strict";
-var assert = require("node-opcua-assert");
-var _ =require("underscore");
+import {assert} from '../assert';
+import * as _ from 'underscore';
+import * as date_time from './date_time'
 
-var date_time = require("./date_time");
-var bn_dateToHundredNanoSecondFrom1601 = date_time.bn_dateToHundredNanoSecondFrom1601;
-var bn_hundredNanoSecondFrom1601ToDate = date_time.bn_hundredNanoSecondFrom1601ToDate;
+var bn_dateToHundredNanoSecondFrom1601 = date_time.bn_dateToHundredNanoSecondFrom1601_fast;
+var bn_hundredNanoSecondFrom1601ToDate = date_time.bn_hundredNanoSecondFrom1601ToDate_fast;
 
 
 

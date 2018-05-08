@@ -73,6 +73,10 @@ export class TCP_transport extends EventEmitter{
     
     protected _the_callback: any;
     
+    get disconnecting() {
+        return this.__disconnecting__;
+    }
+
 constructor() {
     super();
     /**

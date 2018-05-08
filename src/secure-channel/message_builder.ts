@@ -341,9 +341,9 @@ protected _decrypt = function (binaryStream) {
  * @return {Boolean}
  * @private
  */
-protected _read_headers(binaryStream) {
+protected _read_headers(binaryStream : DataStream) {
 
-    super._read_headers(arguments);
+    super._read_headers(binaryStream);
     assert(binaryStream.length === 12);
 
     var msgType = this.messageHeader.msgType;
@@ -354,12 +354,12 @@ protected _read_headers(binaryStream) {
     } else if (msgType === "ERR") {
 
         // extract Error StatusCode and additional message
-        binaryStream.length = 8;
+        //binaryStream.length = 8;
         var errorCode = decodeStatusCode(binaryStream);
         var message = decodeString(binaryStream);
 
         console.log(" ERROR RECEIVED FROM SENDER", errorCode.toString().cyan, message);
-        console.log(hexDump(binaryStream._buffer));
+        console.log(hexDump(binaryStream.buffer));
         return true;
 
     } else {

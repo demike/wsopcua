@@ -10,8 +10,7 @@ import {StatusCodes} from '../constants';
 import {assert} from '../assert'
 
 import * as subscription_service from "../service/service-subscription";
-
-var read_service = require("node-opcua-service-read");
+import * as read_service from '../service-read';
 
 import {TimestampsToReturn} from '../generated/TimestampsToReturn';
 import {AttributeIds, ObjectTypeIds} from '../constants';

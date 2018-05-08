@@ -73,7 +73,7 @@ var F_div_factor = (F / factor);
  * @param date {Date}
  * @returns {[high,low]}
  */
-function bn_dateToHundredNanoSecondFrom1601_fast(date: Date): number[] {
+export function bn_dateToHundredNanoSecondFrom1601_fast(date: Date): number[] {
     assert(date instanceof Date);
     if ((<any>date).high_low) {
          return (<any>date).high_low;
