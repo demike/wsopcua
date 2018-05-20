@@ -8,7 +8,7 @@ import {assert} from "../assert";
 import * as _  from "underscore";
 import {makeNodeId} from '../nodeid/nodeid';
 
-var _defaultTypeMap = require("node-opcua-factory/src/factories_builtin_types")._defaultTypeMap;
+import {_defaultTypeMap} from '../factory/factories_builtin_types';
 
 import * as ec from '../basic-types';
 var encodeArray = ec.encodeArray;

@@ -30,9 +30,7 @@ export function check_flag(value, mask): boolean {
     return ((value & mask.value) === mask.value);
 }
 
-
-//exports.buffer_ellipsis = require("./src/buffer_ellipsis").buffer_ellipsis;
-
+export {buffer_ellipsis} from './buffer_ellipsis';
 export * from './string_utils';
 export * from './get_clock_tick';
 

@@ -157,7 +157,7 @@ protected _after_create(monitoredItemResult : MonitoredItemCreateResult) {
         this._filterResult = monitoredItemResult.filterResult;
 
 
-        this._subscription._add_monitored_item(this._monitoringParameters.clientHandle, self);
+        this._subscription._add_monitored_item(this._monitoringParameters.clientHandle, this);
         /**
          * Notify the observers that the monitored item is now fully initialized.
          * @event initialized

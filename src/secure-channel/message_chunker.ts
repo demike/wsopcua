@@ -11,11 +11,8 @@ import {SequenceNumberGenerator} from "./sequence_number_generator";
 import { SignatureData } from '../generated/SignatureData';
 
 
-
-var AsymmetricAlgorithmSecurityHeader = require("node-opcua-service-secure-channel").AsymmetricAlgorithmSecurityHeader;
-var SymmetricAlgorithmSecurityHeader = require("node-opcua-service-secure-channel").SymmetricAlgorithmSecurityHeader;
-
-var SecureMessageChunkManager = require("./secure_message_chunk_manager").SecureMessageChunkManager;
+import {AsymmetricAlgorithmSecurityHeader,SymmetricAlgorithmSecurityHeader} from '../service-secure-channel';
+import {SecureMessageChunkManager} from './secure_message_chunk_manager';
 
 /**
  * @class MessageChunker
@@ -96,7 +93,7 @@ public chunkSecureMessage(msgType, options, message, messageChunkCallback) {
     if (msgType === "OPN") {
         securityHeader = this._securityHeader;
     } else {
-        securityHeader = new SymmetricAlgorithmSecurityHeader({tokenId: options.tokenId});
+        securityHeader.tokenId = options.tokenId;
     }
 
     var secure_chunker = new SecureMessageChunkManager(

@@ -7,8 +7,8 @@ import { DataStream } from "../basic-types/DataStream";
 
 export interface IAsymmetricAlgorithmSecurityHeader {
         securityPolicyUri : string;
-        senderCertificate : Uint8Array//ByteString;
-        receiverCertificateThumbprint : Uint8Array//ByteString;
+        senderCertificate? : Uint8Array//ByteString;
+        receiverCertificateThumbprint? : Uint8Array//ByteString;
 }
 
 //Asymmetric algorithms are used to secure the OpenSecureChannel messages.

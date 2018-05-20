@@ -2,7 +2,7 @@ import * as ec from '../basic-types';
 import { DataStream } from "../basic-types/DataStream";
 "use strict";
 
-var factories = require("node-opcua-factory");
+import * as factories from '../factory';
 
 // Symmetric algorithms are used to secure all messages other than the OpenSecureChannel messages
 // OPC UA Secure Conversation Message Header Release 1.02 Part 6 page 39

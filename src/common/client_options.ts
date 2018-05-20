@@ -1,5 +1,5 @@
 
-import {MessageSecurityMode} from '../secure-channel/MessageSecurityMode';
+import {MessageSecurityMode} from '../generated/MessageSecurityMode';
 
 export interface ConnectionStrategy {
     maxRetry?: number;

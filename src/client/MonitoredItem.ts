@@ -83,7 +83,7 @@ public terminate(done: Function) {
 public _monitor(done) {
     assert(done === undefined || _.isFunction(done));
     
-    MonitoredItemBase._toolbox_monitor(this._subscription, this._timestampsToReturn, [self], (err) => {
+    MonitoredItemBase._toolbox_monitor(this._subscription, this._timestampsToReturn, [this], (err) => {
         if (err) {
             this.emit("err", err.message);
             this.emit("terminated");

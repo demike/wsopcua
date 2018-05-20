@@ -1,25 +1,23 @@
 /**
  * @module opcua.miscellaneous
  */
-var assert = require("node-opcua-assert");
+import {assert} from '../assert';
 
-var BinaryStream = require("node-opcua-binary-stream").BinaryStream;
-var hexDump = require("node-opcua-debug").hexDump;
-
-var readMessageHeader = require("node-opcua-chunkmanager").readMessageHeader;
-
-var chooseSecurityHeader = require("./secure_message_chunk_manager").chooseSecurityHeader;
-var SequenceHeader = require("node-opcua-service-secure-channel").SequenceHeader;
+import {DataStream} from '../basic-types/DataStream';
+import {hexDump} from '../common/debug';
+import {readMessageHeader} from '../chunkmanager';
+import {chooseSecurityHeader} from './secure_message_chunk_manager';
+import {SequenceHeader} from '../service-secure-channel';
 
 /**
  * convert the messageChunk header to a string
  * @method messageHeaderToString
- * @param messageChunk {BinaryStream}
+ * @param messageChunk {DataStream}
  * @return {string}
  */
-function messageHeaderToString(messageChunk) {
+export function messageHeaderToString(messageChunk) : string {
 
-    var stream = new BinaryStream(messageChunk);
+    var stream = new DataStream(messageChunk);
 
     var messageHeader = readMessageHeader(stream);
     if (messageHeader.msgType === "ERR" || messageHeader.msgType === "HEL") {
@@ -32,7 +30,7 @@ function messageHeaderToString(messageChunk) {
     var sequenceHeader = new SequenceHeader();
     assert(stream.length === 8);
 
-    var secureChannelId = stream.readUInt32();
+    var secureChannelId = stream.getUint32();
     securityHeader.decode(stream);
     sequenceHeader.decode(stream);
 
@@ -48,4 +46,3 @@ function messageHeaderToString(messageChunk) {
         " security   = " + JSON.stringify(securityHeader) +
         "\n\n" + hexDump(slice);
 }
-exports.messageHeaderToString = messageHeaderToString;

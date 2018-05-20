@@ -9,7 +9,7 @@ import * as log from 'loglevel';
 //import async from 'rxjs';
 import {EventEmitter} from 'eventemitter3';
 import {SecurityPolicy,fromURI,toUri} from '../secure-channel/security_policy';
-import {MessageSecurityMode} from '../secure-channel/MessageSecurityMode';
+import {MessageSecurityMode} from '../secure-channel';
 import {once} from '../utils/once';
 import {delayed} from 'delayed';
 import {ObjectRegistry} from '../object-registry/objectRegistry'
@@ -45,6 +45,7 @@ import {ClientSecureChannelLayer} from '../secure-channel/client_secure_channel_
 import { OPCUASecureObject } from '../common/secure_object';
 import { RequestHeader } from '../service-secure-channel';
 import { ClientSession } from './client_session';
+import { EndpointDescription } from '../service-endpoints';
 
 var defaultConnectionStrategy = {
     maxRetry:     100,
@@ -145,7 +146,7 @@ export class OPCUAClientBase extends EventEmitter {
         protected _timedOutRequestCount : number;
     
         protected _secureChannel : ClientSecureChannelLayer;
-        protected _server_endpoints : any[];
+        protected _server_endpoints : EndpointDescription[];
 
         protected _isReconnecting : boolean;
         /**
@@ -244,7 +245,7 @@ export class OPCUAClientBase extends EventEmitter {
     this._secureChannel = null;
 
     this.defaultSecureTokenLifetime = options.defaultSecureTokenLifeTime || 600000;
-    this.securityMode = options.securityMode || MessageSecurityMode.NONE;
+    this.securityMode = options.securityMode || MessageSecurityMode.None;
 
     /**
      * @property securityPolicy
@@ -303,7 +304,7 @@ export class OPCUAClientBase extends EventEmitter {
                     return;
                 }
             
-                if (!this.serverCertificate && this.securityMode!== MessageSecurityMode.NONE) {
+                if (!this.serverCertificate && this.securityMode!== MessageSecurityMode.None) {
             
                     // we have not been given the serverCertificate but this certificate
                     // is required as the connection is to be secured.

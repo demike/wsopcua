@@ -252,7 +252,7 @@ protected __createSession_step2(session : ClientSession, callback) {
                 debugLog("revised session timeout = " + session.timeout);
 
                 this._server_endpoints = response.serverEndpoints;
-                session.serverEndpoints = response.serverEndpoints;
+//                session.serverEndpoints = response.serverEndpoints;
 
             } else {
                 err = new Error("Error " + response.responseHeader.serviceResult.name + " " + response.responseHeader.serviceResult.description);
@@ -406,6 +406,7 @@ protected _activateSession(session : ClientSession, callback) {
     });
 
 };
+
 
 /**
  * transfer session to this client

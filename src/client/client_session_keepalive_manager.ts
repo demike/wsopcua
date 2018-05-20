@@ -55,7 +55,7 @@ public ping_server(callback) {
     the_session.readVariableValue(serverStatus_State_Id, (err, dataValue) => {
         if (err) {
             console.log(" warning : ClientSessionKeepAliveManager#ping_server ", err.message);
-            self.stop();
+            this.stop();
 
             /**
              * @event failure
@@ -88,7 +88,7 @@ public start() {
 
     this.pingTimeout   =  this.session.timeout * 2/3;
     this.checkInterval =  this.pingTimeout  / 3;
-    this.timerId = setInterval(this.ping_server.bind(self),this.checkInterval);
+    this.timerId = setInterval(this.ping_server.bind(this),this.checkInterval);
 };
 
 public stop() : void {

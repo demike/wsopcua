@@ -8,23 +8,21 @@ import * as ec from '../basic-types';
 import * as securityPolicy_m from './security_policy';
 
 import {MessageBuilderBase} from '../transport/message_builder_base';
-import { MessageSecurityMode } from './MessageSecurityMode';
+import { MessageSecurityMode } from '../generated/MessageSecurityMode';
 
-
-var chooseSecurityHeader = require("./secure_channel_service").chooseSecurityHeader;
-
-import {SymmetricAlgorithmSecurityHeader} from '../service-secure-channel';
-import {SequenceHeader} from '../service-secure-channel';
+import {SymmetricAlgorithmSecurityHeader,SequenceHeader} from '../service-secure-channel';
+import {chooseSecurityHeader} from './secure_message_chunk_manager';
 
 var decodeString = ec.decodeString;
 
-var packet_analyzer = require("node-opcua-packet-analyzer").packet_analyzer;
+import {packet_analyzer} from '../packet-analyzer';
 
 
 import {doDebug,debugLog,hexDump} from '../common/debug';
 import { DataStream } from '../basic-types/DataStream';
 //xx require("./utils").setDebugFlag(__filename,true);
 
+import * as factory from '../factory';
 
 var crypto_utils = require("node-opcua-crypto").crypto_utils;
 
@@ -55,9 +53,9 @@ export class MessageBuilder extends MessageBuilderBase {
         super(options);
 
         this._securityPolicy = SecurityPolicy.Invalid; // not known yet
-        this.securityMode = options.securityMode || MessageSecurityMode.INVALID; // not known yet
+        this.securityMode = options.securityMode || MessageSecurityMode.Invalid; // not known yet
 
-        this._objectFactory = options.objectFactory || require("node-opcua-factory");
+        this._objectFactory = options.objectFactory || factory;
 
         assert(_.isFunction(this._objectFactory.constructObject), " the objectFactory must provide a constructObject method");
 
@@ -75,13 +73,13 @@ export class MessageBuilder extends MessageBuilderBase {
 
 
 public setSecurity(securityMode : MessageSecurityMode, securityPolicy : SecurityPolicy) {
-    assert(this.securityMode === MessageSecurityMode.INVALID, "security already set");
+    assert(this.securityMode === MessageSecurityMode.Invalid, "security already set");
     this._securityPolicy = securityPolicy;
     this.securityMode = securityMode;
     assert(this._securityPolicy !== undefined, "invalid security policy " + securityPolicy);
     assert(this.securityMode !== undefined, "invalid security mode " + securityMode);
     assert(this._securityPolicy !== SecurityPolicy.Invalid);
-    assert(this.securityMode !== MessageSecurityMode.INVALID);
+    assert(this.securityMode !== MessageSecurityMode.Invalid);
 };
 
 
@@ -120,7 +118,7 @@ protected _decrypt_OPN(binaryStream : DataStream) {
 
     assert(this._securityPolicy !== SecurityPolicy.None);
     assert(this._securityPolicy !== SecurityPolicy.Invalid);
-    assert(this.securityMode !== MessageSecurityMode.NONE);
+    assert(this.securityMode !== MessageSecurityMode.None);
     //xx assert(this.securityMode !== MessageSecurityMode.INVALID);
 
     /* istanbul ignore next */
@@ -240,8 +238,8 @@ protected _select_matching_token(tokenId) {
 protected _decrypt_MSG(binaryStream) {
 
     assert(this._securityHeader instanceof SymmetricAlgorithmSecurityHeader);
-    assert(this.securityMode !== MessageSecurityMode.NONE);
-    assert(this.securityMode !== MessageSecurityMode.INVALID);
+    assert(this.securityMode !== MessageSecurityMode.None);
+    assert(this.securityMode !== MessageSecurityMode.Invalid);
     assert(this._securityPolicy !== SecurityPolicy.None);
     assert(this._securityPolicy !== SecurityPolicy.Invalid);
 
@@ -269,7 +267,7 @@ protected _decrypt_MSG(binaryStream) {
     assert(derivedKeys !== null);
     assert(derivedKeys.signatureLength, " must provide a signature length");
 
-    if (this.securityMode === MessageSecurityMode.SIGNANDENCRYPT) {
+    if (this.securityMode === MessageSecurityMode.SignAndEncrypt) {
 
         var decryptedBuffer = crypto_utils.decryptBufferWithDerivedKeys(buf, derivedKeys);
 
@@ -299,7 +297,7 @@ protected _decrypt_MSG(binaryStream) {
     // remove signature
     binaryStream._buffer = crypto_utils.reduceLength(binaryStream._buffer, derivedKeys.signatureLength);
 
-    if (this.securityMode === MessageSecurityMode.SIGNANDENCRYPT) {
+    if (this.securityMode === MessageSecurityMode.SignAndEncrypt) {
         // remove padding
         binaryStream._buffer = crypto_utils.removePadding(binaryStream._buffer);
     }
@@ -319,11 +317,11 @@ protected _decrypt = function (binaryStream) {
 
     // check if security is active or not
     if (this.securityPolicy === SecurityPolicy.None) {
-        this.securityMode = MessageSecurityMode.NONE;
-        assert(this.securityMode === MessageSecurityMode.NONE, "expecting securityMode = None when securityPolicy is None");
+        this.securityMode = MessageSecurityMode.None;
+        assert(this.securityMode === MessageSecurityMode.None, "expecting securityMode = None when securityPolicy is None");
         return true; // nothing to do
     }
-    assert(this.securityMode !== MessageSecurityMode.NONE);
+    assert(this.securityMode !== MessageSecurityMode.None);
 
 
     if (msgType === "OPN") {

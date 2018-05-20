@@ -5,7 +5,7 @@
 
 import {assert} from '../assert';
 import * as _ from 'underscore';
-import {MessageSecurityMode} from './MessageSecurityMode';
+import {MessageSecurityMode} from '../generated/MessageSecurityMode';
 import {SignatureData} from '../generated/SignatureData';
 /**
  * @class SecurityPolicy
@@ -410,7 +410,7 @@ export function verifySignature(receiverCertificate, receiverNonce, signature, s
 
 export function getOptionsForSymmetricSignAndEncrypt(securityMode, derivedKeys) {
     assert(derivedKeys.hasOwnProperty("signatureLength"));
-    assert(securityMode !== MessageSecurityMode.NONE && securityMode !== MessageSecurityMode.INVALID);
+    assert(securityMode !== MessageSecurityMode.None && securityMode !== MessageSecurityMode.Invalid);
 
     var options = {
         signatureLength: derivedKeys.signatureLength,
@@ -418,7 +418,7 @@ export function getOptionsForSymmetricSignAndEncrypt(securityMode, derivedKeys) 
             return crypto_utils.makeMessageChunkSignatureWithDerivedKeys(chunk, derivedKeys);
         }
     };
-    if (securityMode === MessageSecurityMode.SIGNANDENCRYPT) {
+    if (securityMode === MessageSecurityMode.SignAndEncrypt) {
 
         options = _.extend(options, {
             plainBlockSize: derivedKeys.encryptingBlockSize,

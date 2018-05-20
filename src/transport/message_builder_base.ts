@@ -7,9 +7,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {assert} from '../assert';
 import {get_clock_tick} from '../utils';
 
-
-var PacketAssembler = require("node-opcua-packet-assembler").PacketAssembler;
-
+import {PacketAssembler} from '../packet-assembler/packet_assembler';
 import {readMessageHeader} from '../chunkmanager';
 
 export function readRawMessageHeader(data) {
