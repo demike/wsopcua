@@ -47,12 +47,12 @@ import {Variant} from '../variant';
 var makeResultMask = require("node-opcua-data-model").makeResultMask;
 var makeNodeClassMask = require("node-opcua-data-model").makeNodeClassMask;
 
-var subscription_service = require("node-opcua-service-subscription");
-var read_service = require("node-opcua-service-read");
-var historizing_service = require("node-opcua-service-history");
-var browse_service = require("node-opcua-service-browse");
-var write_service = require("node-opcua-service-write");
-var call_service = require("node-opcua-service-call");
+import * as subscription_service from '../service-subscription';
+import * as read_service from '../service-read';
+import * as historizing_service from '../service-historizing';
+import * as browse_service from '../service-browse';
+import * as write_service from '../service-write';
+import * as call_service from '../service-call';
 
 import * as utils from '../utils';
 import {doDebug,debugLog} from '../common/debug';
