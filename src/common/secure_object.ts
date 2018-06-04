@@ -6,17 +6,9 @@ import { OPCUAClientOptions } from "../opcua-client";
  */
 
 
-var crypto_utils = require("node-opcua-crypto").crypto_utils;
-var split_der = require("node-opcua-crypto").crypto_explore_certificate.split_der;
-//var fs = require("fs");
+
 import {assert} from '../assert';
 
-function _load_certificate(certificate_file) {
-    return crypto_utils.readCertificate(certificate_file);
-}
-function _load_private_key(private_key_file) {
-    return crypto_utils.readKeyPem(private_key_file);
-}
 
 export class OPCUASecureObject {
     protected _certificateChain: any;
@@ -53,7 +45,7 @@ public getCertificate() {
 
     if (!this._certificate) {
         var certChain    = this.getCertificateChain();
-        this._certificate  = split_der(certChain)[0];
+        this._certificate  = null;//**nomsgcrypt** split_der(certChain)[0];
     }
     return this._certificate;
 };
@@ -66,7 +58,7 @@ public getCertificateChain() {
 
     if (!this._certificateChain) {
      //   assert(fs.existsSync(this._certificateFile), "Certificate file must exist :" + this._certificateFile);
-        this._certificateChain = _load_certificate(this._certificateFile);
+        this._certificateChain = null;//**nomsgcrypt** _load_certificate(this._certificateFile);
     }
     return this._certificateChain;
 };
@@ -78,12 +70,15 @@ public getCertificateChain() {
  */
 public getPrivateKey () {
 
+    return null;
+/* **nomsgcrypt**
     if (!this._private_key_pem) {
         // create fake certificate
         //xx assert(fs.existsSync(this.privateKeyFile));
         this._private_key_pem = _load_private_key(this._privateKeyFile);
     }
     return this._private_key_pem;
+*/
 };
 
 }

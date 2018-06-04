@@ -10,7 +10,7 @@ import {assert} from '../assert';
  
 var crypto : Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
 import * as async from "async-es";
-var exploreCertificate = require("node-opcua-crypto").crypto_explore_certificate.exploreCertificate;
+//**nomsgcrypt** var exploreCertificate = require("node-opcua-crypto").crypto_explore_certificate.exploreCertificate;
 
 import {StatusCodes} from '../constants';
 import * as session_service from '../service-session';
@@ -32,13 +32,10 @@ import {MessageSecurityMode, SignatureData} from "../service-secure-channel";
 import {SecurityPolicy,getCryptoFactory,fromURI} from '../secure-channel/security_policy';
 import { LocalizedText } from "../generated/LocalizedText";
 
-var crypto_utils = require("node-opcua-crypto").crypto_utils;
+//**nomsgcrypt** var crypto_utils = require("node-opcua-crypto").crypto_utils;
 var UserNameIdentityToken = session_service.UserNameIdentityToken;
 
 import {computeSignature} from '../secure-channel';
-
-var buffer_utils = require("node-opcua-buffer-utils");
-var createFastUninitializedBuffer = buffer_utils.createFastUninitializedBuffer;
 
 import {UserIdentityTokenType} from '../service-endpoints';
 
@@ -115,10 +112,11 @@ protected _nextSessionName() {
     return this.clientName + this.___sessionName_counter;
 };
 
-protected _getApplicationUri() {
+protected _getApplicationUri() : Promise<string> {
 
     // get applicationURI from certificate
 
+/**nomsgcrypt**
     var certificate = this.getCertificate();
     var applicationUri;
     if (certificate) {
@@ -129,6 +127,9 @@ protected _getApplicationUri() {
         applicationUri = makeApplicationUrn(hostname, this.applicationName);
     }
     return applicationUri;
+*/
+    var hostname = window.location.hostname;
+    return  makeApplicationUrn(window.location.hostname, this.applicationName);
 
 };
 
@@ -182,7 +183,7 @@ protected _createSession(callback) {
     this.__createSession_step2(session, callback);
 };
 
-protected __createSession_step2(session : ClientSession, callback) {
+protected async __createSession_step2(session : ClientSession, callback) {
 
     assert(typeof callback === "function");
     assert(this._secureChannel);
@@ -191,11 +192,11 @@ protected __createSession_step2(session : ClientSession, callback) {
     assert(this.endpoint);
 
 
-    var applicationUri = this._getApplicationUri();
+    let applicationUri = await this._getApplicationUri();
 
     var applicationDescription = new ApplicationDescription({
         applicationUri: applicationUri,
-        productUri: "NodeOPCUA-Client",
+        productUri: "OPCUA-Client",
         applicationName: new LocalizedText({text: this.applicationName}),
         applicationType: ApplicationType.Client,
         gatewayServerUri: undefined,
@@ -1022,9 +1023,8 @@ function createUserNameIdentityToken(session, userName, password) {
         assert(securityPolicy);
     }
 
-    var serverCertificate = session.serverCertificate;
-    // if server does not provide certificate use unencrypted password
-    if (serverCertificate === null) {
+    // if server does not provide certificate use unencrypted password (no server certificate !!!)
+
         var userIdentityToken = new UserNameIdentityToken({
             userName: userName,
             password: Buffer.from(password, "utf-8"),
@@ -1032,43 +1032,8 @@ function createUserNameIdentityToken(session, userName, password) {
             policyId: userTokenPolicy.policyId
         });
         return userIdentityToken;
-    }
-
-    assert(serverCertificate instanceof Buffer);
-
-    serverCertificate = crypto_utils.toPem(serverCertificate, "CERTIFICATE");
-    var publicKey = crypto_utils.extractPublicKeyFromCertificateSync(serverCertificate);
-
-    var serverNonce = session.serverNonce;
-    // if serverNonce not specified by server
-    if (serverNonce === null) {
-        serverNonce = new ArrayBuffer(0);
-    }
-    assert(serverNonce instanceof ArrayBuffer);
-
-    // see Release 1.02 155 OPC Unified Architecture, Part 4
-    var cryptoFactory = getCryptoFactory(securityPolicy);
-
-    // istanbul ignore next
-    if (!cryptoFactory) {
-        throw new Error(" Unsupported security Policy");
-    }
-
-    var userIdentityToken = new UserNameIdentityToken({
-        userName: userName,
-        password: Buffer.from(password, "utf-8"),
-        encryptionAlgorithm: cryptoFactory.asymmetricEncryptionAlgorithm,
-        policyId: userTokenPolicy.policyId
-    });
-
-
-    // now encrypt password as requested
-    var lenBuf = createFastUninitializedBuffer(4);
-    lenBuf.writeUInt32LE(userIdentityToken.password.length + serverNonce.length, 0);
-    var block = Buffer.concat([lenBuf, userIdentityToken.password, serverNonce]);
-    userIdentityToken.password = cryptoFactory.asymmetricEncrypt(block, publicKey);
-
-    return userIdentityToken;
+    
+        //**nomsgcrypt**
 }
 
 

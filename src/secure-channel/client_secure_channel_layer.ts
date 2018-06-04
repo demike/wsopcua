@@ -21,8 +21,6 @@ var crypto : Crypto = window.crypto || (<any>window).msCrypto;
 import * as utils from '../utils';
 var get_clock_tick = utils.get_clock_tick;
 
-var crypto_utils = require("node-opcua-crypto").crypto_utils;
-
 import {verify_message_chunk,readMessageHeader} from '../chunkmanager';
 
 import * as backoff from '../backoff';
@@ -31,7 +29,7 @@ import {messageHeaderToString} from './message_header_to_string';
 import {MessageChunker} from "./message_chunker";
 import * as secure_channel_service from "../service-secure-channel";
 import { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
-import { ClientTCP_transport } from '../transport/client_tcp_transport';
+import { ClientWSTransport } from '../transport/client_ws_transport';
 
 var OpenSecureChannelRequest = secure_channel_service.OpenSecureChannelRequest;
 var CloseSecureChannelRequest = secure_channel_service.CloseSecureChannelRequest;
@@ -194,7 +192,7 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
     _receiverPublicKey(arg0: any): any {
         throw new Error("Method not implemented.");
     }
-    _transport: ClientTCP_transport;
+    _transport: ClientWSTransport;
     _isOpened: boolean;
     _securityToken: ChannelSecurityToken;
     protected _lastRequestId : number;
@@ -684,11 +682,13 @@ public create(endpoint_url : string , callback: Function) {
             return callback(new Error("ClientSecureChannelLayer#create : expecting a  server certificate when securityMode is not NONE"));
         }
 
+        
         // take the opportunity of this async method to perform some async pre-processing
+        //**nomsgcrypt**
+        /*
         if (_.isUndefined(this._receiverPublicKey)) {
 
             crypto_utils.extractPublicKeyFromCertificate(this.serverCertificate, (err, publicKey) => {
-                /* istanbul ignore next */
                 if (err) {
                     return callback(err);
                 }
@@ -699,9 +699,10 @@ public create(endpoint_url : string , callback: Function) {
             return undefined;
         }
         assert(typeof this._receiverPublicKey === "string");
+        */
     }
 
-    var transport = new ClientTCP_transport();
+    var transport = new ClientWSTransport();
     transport.timeout = this.transportTimeout;
     transport.protocolVersion = this.protocolVersion;
 
@@ -709,7 +710,7 @@ public create(endpoint_url : string , callback: Function) {
     // -------------------------------------------------------------------------
     // Handle reconnection
     // --------------------------------------------------------------------------
-    var _establish_connection = function (transport: ClientTCP_transport, endpoint_url, callback) {
+    var _establish_connection = function (transport: ClientWSTransport, endpoint_url, callback) {
 
 
         var last_err = null;
@@ -1168,7 +1169,7 @@ protected _construct_security_header() {
         case MessageSecurityMode.SignAndEncrypt:
             assert(this.securityPolicy !== SecurityPolicy.None);
             // get the thumbprint of the client certificate
-            var thumbprint = this._receiverCertificate ? crypto_utils.makeSHA1Thumbprint(this._receiverCertificate) : null;
+            var thumbprint = null; //**nomsgcrypt** this._receiverCertificate ? crypto_utils.makeSHA1Thumbprint(this._receiverCertificate) : null;
             securityHeader = new AsymmetricAlgorithmSecurityHeader({
                 securityPolicyUri: toUri(this.securityPolicy),
                 senderCertificate: this.getCertificateChain(),  // certificate of the private key used to sign the message
@@ -1184,6 +1185,7 @@ protected _construct_security_header() {
     this._securityHeader = securityHeader;
 };
 
+/* //**nomsgcrypt**
 protected _get_security_options_for_OPN() {
 
     
@@ -1229,7 +1231,9 @@ protected _get_security_options_for_OPN() {
 
     return options;
 };
+*/
 
+/* //**nomsgcrypt**
 protected _get_security_options_for_MSG() {
 
     if (this._securityMode === MessageSecurityMode.None) {
@@ -1241,6 +1245,7 @@ protected _get_security_options_for_MSG() {
     return getOptionsForSymmetricSignAndEncrypt(this._securityMode, derivedClientKeys);
 
 };
+*/
 
 protected _sendSecureOpcUARequest(msgType, requestMessage, requestId) {
 
@@ -1269,9 +1274,10 @@ protected _sendSecureOpcUARequest(msgType, requestMessage, requestId) {
     }
 
 
+/* //**nomsgcrypt**
     var security_options = (msgType === "OPN") ? this._get_security_options_for_OPN() : this._get_security_options_for_MSG();
     _.extend(options, security_options);
-
+*/
     /**
      * notify the observer that a client request is being sent the server
      * @event send_request
