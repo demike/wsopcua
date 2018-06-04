@@ -36,10 +36,6 @@ import {AttributeIds,ReferenceTypeIds} from '../constants/';
 import { DataType } from '../variant/DataTypeEnum';
 
 
-var query_service = require("node-opcua-service-query");
-
-
-
 import {DataValue} from '../data-value';
 import {Variant} from '../variant';
 
@@ -53,6 +49,8 @@ import * as historizing_service from '../service-history';
 import * as browse_service from '../service-browse';
 import * as write_service from '../service-write';
 import * as call_service from '../service-call';
+import * as query_service from "../service-query";
+
 
 import * as utils from '../utils';
 import {doDebug,debugLog} from '../common/debug';
@@ -720,12 +718,11 @@ protected _defaultRequest(SomeRequest, SomeResponse, options, callback) {
  */
 createSubscription(options : CreateSubscriptionRequest, callback) {
 
-    var self = this;
     assert(_.isFunction(callback));
 
     var request = new subscription_service.CreateSubscriptionRequest(options);
 
-    self.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction(request, (err, response) => {
 
         /* istanbul ignore next */
         if (err) {

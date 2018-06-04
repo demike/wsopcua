@@ -24,8 +24,6 @@ import { DataStream } from '../basic-types/DataStream';
 
 import * as factory from '../factory';
 
-var crypto_utils = require("node-opcua-crypto").crypto_utils;
-
 var decodeStatusCode = ec.decodeStatusCode;
 
 
@@ -114,6 +112,7 @@ protected _validateSequenceNumber(sequenceNumber : number) {
     this._previous_sequenceNumber = sequenceNumber;
 };
 
+/* **nomsgcrypt**
 protected _decrypt_OPN(binaryStream : DataStream) {
 
     assert(this._securityPolicy !== SecurityPolicy.None);
@@ -121,7 +120,6 @@ protected _decrypt_OPN(binaryStream : DataStream) {
     assert(this.securityMode !== MessageSecurityMode.None);
     //xx assert(this.securityMode !== MessageSecurityMode.INVALID);
 
-    /* istanbul ignore next */
     if (doDebug) {
         debugLog("securityHeader", JSON.stringify(this._securityHeader, null, " "));
     }
@@ -137,7 +135,6 @@ protected _decrypt_OPN(binaryStream : DataStream) {
     // [...]
     //
 
-    /* istanbul ignore next */
     if (doDebug) {
         debugLog("EN------------------------------");
         debugLog(hexDump(binaryStream.buffer));
@@ -167,7 +164,6 @@ protected _decrypt_OPN(binaryStream : DataStream) {
         // adjust length
         binaryStream.buffer = binaryStream.buffer.slice(0, binaryStream.pos + decryptedBuffer.length);
 
-        /* istanbul ignore next */
         if (doDebug) {
             debugLog("DE-----------------------------");
             debugLog(hexDump(binaryStream.buffer));
@@ -201,6 +197,7 @@ protected _decrypt_OPN(binaryStream : DataStream) {
 
     return true; // success
 };
+*/
 
 public pushNewToken(securityToken, derivedKeys) {
 
@@ -234,7 +231,7 @@ protected _select_matching_token(tokenId) {
 
 };
 
-
+/* //**nomsgcrypt**
 protected _decrypt_MSG(binaryStream) {
 
     assert(this._securityHeader instanceof SymmetricAlgorithmSecurityHeader);
@@ -277,7 +274,6 @@ protected _decrypt_MSG(binaryStream) {
         // adjust length
         binaryStream._buffer = binaryStream._buffer.slice(0, binaryStream.length + decryptedBuffer.length);
 
-        /* istanbul ignore next */
         if (doDebug) {
             debugLog("DE-----------------------------");
             debugLog(hexDump(binaryStream._buffer));
@@ -305,7 +301,7 @@ protected _decrypt_MSG(binaryStream) {
     return true;
 };
 
-protected _decrypt = function (binaryStream) {
+protected _decrypt(binaryStream : DataStream) {
 
     if (this.securityPolicy === SecurityPolicy.Invalid) {
         // this._report_error("SecurityPolicy");
@@ -331,6 +327,7 @@ protected _decrypt = function (binaryStream) {
     }
 
 };
+*/
 
 
 /**
@@ -370,9 +367,11 @@ protected _read_headers(binaryStream : DataStream) {
             this._cryptoFactory = securityPolicy_m.getCryptoFactory(this._securityPolicy);
         }
 
+        /* **nomsgcrypt**
         if (!this._decrypt(binaryStream)) {
             return false;
         }
+        */
 
         this.sequenceHeader = new SequenceHeader();
         this.sequenceHeader.decode(binaryStream);
