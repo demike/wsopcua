@@ -44,21 +44,23 @@ import {DataValue} from '../data-value';
 import {Variant} from '../variant';
 
 
-var makeResultMask = require("node-opcua-data-model").makeResultMask;
-var makeNodeClassMask = require("node-opcua-data-model").makeNodeClassMask;
+
+//var makeNodeClassMask = require("node-opcua-data-model").makeNodeClassMask;
 
 import * as subscription_service from '../service-subscription';
 import * as read_service from '../service-read';
-import * as historizing_service from '../service-historizing';
+import * as historizing_service from '../service-history';
 import * as browse_service from '../service-browse';
 import * as write_service from '../service-write';
 import * as call_service from '../service-call';
 
 import * as utils from '../utils';
 import {doDebug,debugLog} from '../common/debug';
+import { QualifiedName } from '../generated/QualifiedName';
+import { NodeClass } from '../generated/NodeClass';
 
 
-var resultMask = makeResultMask("ReferenceType");
+
 
 
 export enum BrowseDirection {
@@ -351,7 +353,7 @@ readVariableValue(nodes, callback) {
                     nodeId: resolveNodeId(node),
                     attributeId: read_service.AttributeIds.Value,
                     indexRange: null,
-                    dataEncoding: {namespaceIndex: 0, name: null}
+                    dataEncoding: new QualifiedName( {namespaceIndex: 0, name: null})
             });
 
         } else {
@@ -1152,9 +1154,9 @@ public getArgumentDefinition(methodId : NodeId, callback : (err : Error|null,inp
         nodeId: methodId,
         referenceTypeId: resolveNodeId("HasProperty"),
         browseDirection: BrowseDirection.Forward,
-        nodeClassMask: 0,// makeNodeClassMask("Variable"),
+        nodeClassMask: NodeClass.Variable,
         includeSubtypes: true,
-        resultMask: makeResultMask("BrowseName")
+        resultMask: browse_service.BrowseResultMask.BrowseName
     }];
 
     //Xx console.log("xxxx browseDescription", util.inspect(browseDescription, {colors: true, depth: 10}));
@@ -1316,7 +1318,7 @@ protected __findBasicDataType(session,dataTypeId,callback) {
             includeSubtypes: false,
             browseDirection: BrowseDirection.Inverse,
             nodeId: dataTypeId,
-            resultMask: resultMask
+            resultMask: browse_service.BrowseResultMask.ReferenceTypeId
         });
 
         session.browse([nodeToBrowse],function(err,results) {

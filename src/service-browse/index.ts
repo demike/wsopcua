@@ -15,6 +15,12 @@
      * @class BrowseResult
      */
     export {BrowseResult} from "../generated/BrowseResult";
+
+    /**
+     * @Class BrowseResultMask
+     */
+    export {BrowseResultMask} from '../generated/BrowseResultMask';
+
     /**
      * @class BrowseDescription
      */
