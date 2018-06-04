@@ -23,7 +23,8 @@ import {MonitoredItemGroup} from './MonitoredItemGroup';
 import {doDebug,debugLog} from '../common/debug';
 import {ClientSidePublishEngine} from './client_publish_engine';
 
-var async = require("async");
+import * as async from 'async-es';
+
 /**
  * a object to manage a subscription on the client side.
  *

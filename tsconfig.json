@@ -1,9 +1,11 @@
 {
     "compilerOptions": {
-      "module": "commonjs",
-      "target": "es5",
+      "module": "amd",
+      "target": "es6",
       "declaration": true,
-      "outDir": "./dist"
+      "sourceMap": true,
+      "outDir": "./dist",
+      "moduleResolution": "node"
     },
     "include": [
       "src/**/*"

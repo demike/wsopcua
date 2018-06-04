@@ -10,7 +10,7 @@ import { ClientSubscription} from './ClientSubscription';
 import * as subscription_service from '../service/service-subscription';
 import { RequestHeader } from '../generated/RequestHeader';
 
-var async = require("async");
+import * as async from 'async-es';
 
 //xx var debugLog = console.log;
 

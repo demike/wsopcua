@@ -8,7 +8,7 @@ import { OPCUAClientOptions } from "../opcua-client";
 
 var crypto_utils = require("node-opcua-crypto").crypto_utils;
 var split_der = require("node-opcua-crypto").crypto_explore_certificate.split_der;
-var fs = require("fs");
+//var fs = require("fs");
 import {assert} from '../assert';
 
 function _load_certificate(certificate_file) {
@@ -65,7 +65,7 @@ public getCertificate() {
 public getCertificateChain() {
 
     if (!this._certificateChain) {
-        assert(fs.existsSync(this._certificateFile), "Certificate file must exist :" + this._certificateFile);
+     //   assert(fs.existsSync(this._certificateFile), "Certificate file must exist :" + this._certificateFile);
         this._certificateChain = _load_certificate(this._certificateFile);
     }
     return this._certificateChain;

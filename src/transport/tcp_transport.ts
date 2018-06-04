@@ -352,13 +352,14 @@ protected _install_socket(socket) {
     });
 
     if (false) {
+        /*
         // set socket timeout
         debugLog("setting client/server socket timeout to " + this.timeout);
         this._socket.setTimeout(this.timeout,() =>{
             console.log(" connection has timed out (timeout =",this.timeout,")");
             this._socket.destroy();
         });
-
+        */
     }
 
 };

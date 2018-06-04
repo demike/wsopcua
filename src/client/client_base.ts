@@ -6,7 +6,7 @@
 import {assert} from '../assert';
 import * as _ from 'underscore';
 import * as log from 'loglevel';
-//import async from 'rxjs';
+import {async} from 'async-es';
 import {EventEmitter} from 'eventemitter3';
 import {SecurityPolicy,fromURI,toUri} from '../secure-channel/security_policy';
 import {MessageSecurityMode} from '../secure-channel';
@@ -453,10 +453,10 @@ public findServers(options, callback) {
         assert(_.isFunction(callback));
     
         var sessions = _.clone(this._sessions);
-        async.map(sessions, function (session, next) {
+        async.map(sessions, function (session: ClientSession, next) {
     
-            assert(session._client === this);
-            session.close(function(err){
+            assert(session.client === this);
+            session.close(true,function(err){
                 // We should not bother if we have an error here
                 // Session may fail to close , if they haven't been activate and forcefully closed by server
                 // in a attempt to preserve resources in the case of a DOS attack for instance.

@@ -26,14 +26,14 @@ import { MonitoredItemCreateResult } from '../generated/MonitoredItemCreateResul
 import { MonitoredItem } from './MonitoredItem';
 import { EventFilter } from '../generated/EventFilter';
 import { ExtensionObject } from '../generated/ExtensionObject';
-import { StatusCode} from '../basic-types';
+import { StatusCode,NodeId} from '../basic-types';
 
 //import {MonitoredItemsModifyRequest} from '../generated/MonitoredItemsModifyRequest';
 var MonitoredItemModifyRequest = subscription_service.MonitoredItemModifyRequest;
 
 export class MonitoredItemBase extends EventEmitter{
 
-    protected _itemToMonitor : any;
+    protected _itemToMonitor : read_service.ReadValueId;
     protected _monitoringParameters : MonitoringParameters;
     protected _subscription : ClientSubscription;
     protected _monitoringMode : MonitoringMode ;
@@ -42,9 +42,9 @@ export class MonitoredItemBase extends EventEmitter{
     protected _monitoredItemId : number;
     protected _filterResult : ExtensionObject;
 
-constructor(subscription, itemToMonitor, monitoringParameters : IMonitoringParameters) {
+constructor(subscription : ClientSubscription, itemToMonitor : read_service.ReadValueId, monitoringParameters : IMonitoringParameters) {
     super();
-    assert(subscription.constructor.name === "ClientSubscription");
+    //assert(subscription.constructor.name === "ClientSubscription");
 
     this._itemToMonitor = new read_service.ReadValueId(itemToMonitor);
     this._monitoringParameters = new MonitoringParameters(monitoringParameters);
@@ -59,6 +59,10 @@ public get monitoringParameters() {
 
 public get itemToMonitor() {
     return this._itemToMonitor;
+}
+
+public get nodeId() {
+    return this._itemToMonitor.nodeId;
 }
 
 public get monitoringMode() {
@@ -95,7 +99,7 @@ protected _prepare_for_monitoring () {
     // todo implement AggregateFilter
     // todo support DataChangeFilter
     // todo support whereClause
-    if (this._itemToMonitor.AttributeId === AttributeIds.EventNotifier) {
+    if (this._itemToMonitor.attributeId === AttributeIds.EventNotifier) {
 
         //
         // see OPCUA Spec 1.02 part 4 page 65 : 5.12.1.4 Filter
@@ -119,7 +123,7 @@ protected _prepare_for_monitoring () {
             };
         }
 
-    } else if (this._itemToMonitor.AttributeId === AttributeIds.Value) {
+    } else if (this._itemToMonitor.attributeId === AttributeIds.Value) {
         // the DataChangeFilter and the AggregateFilter are used when monitoring Variable Values
 
         // The Value Attribute is used when monitoring Variables. Variable values are monitored for a change

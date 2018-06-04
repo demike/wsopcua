@@ -9,7 +9,7 @@ import * as _ from "underscore";
 import {assert} from '../assert';
  
 var crypto : Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
-var async = require("async");
+import * as async from "async-es";
 var exploreCertificate = require("node-opcua-crypto").crypto_explore_certificate.exploreCertificate;
 
 import {StatusCodes} from '../constants';
@@ -427,7 +427,7 @@ public reactivateSession(session : ClientSession, callback) {
     }
 
     assert(session.client.endpointUrl === this.endpointUrl, "cannot reactivateSession on a different endpoint");
-    var old_client : OPCUAClientBase = session.client;
+    let old_client : OPCUAClientBase = session.client;
 
     debugLog("OPCUAClient#reactivateSession");
 
@@ -436,8 +436,8 @@ public reactivateSession(session : ClientSession, callback) {
 
             if (old_client !== this) {
                 // remove session from old client:
-                old_client._removeSession(session);
-                assert(!_.contains(old_client._sessions, session));
+                (<any>old_client)._removeSession(session); //cast to any as access of protected member to other instance should be possible
+                assert(!_.contains( (<any>old_client)._sessions, session));
 
                 this._addSession(session);
                 assert(_.contains(this._sessions, session));

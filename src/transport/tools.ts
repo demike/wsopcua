@@ -83,7 +83,7 @@ export function is_valid_endpointUrl(endpointUrl) {
 
 export function writeTCPMessageHeader(msgType, chunkType, total_length, stream) {
 
-    if (stream instanceof Buffer) {
+    if (stream instanceof ArrayBuffer) {
         stream = new DataStream(stream);
     }
     assert(is_valid_msg_type(msgType));
