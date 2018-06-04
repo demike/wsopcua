@@ -16,7 +16,7 @@ import {readRawMessageHeader} from './message_builder_base';
 
 import {debugLog,doDebug} from '../common/debug';
 
-var fakeSocket = {invalid: true};
+var fakeSocket : any = {invalid: true} ;
 
 export function setFakeTransport(socket_like_mock) {
     fakeSocket = socket_like_mock;
@@ -45,19 +45,17 @@ function record(data,extra) {
 */
 
 /**
- * TCP_transport
+ * WSTransport
  *
- * @class TCP_transport
- * @constructor
+ * @class WSTransport
  * @extends EventEmitter
  */
-export class TCP_transport extends EventEmitter{
+export class WSTransport extends EventEmitter{
 
-
-    packetAssembler: any;
+    packetAssembler: PacketAssembler;
     name: string;
-    _timerId: any;
-    protected _socket: any;
+    _timerId: number;
+    protected _socket: WebSocket;
     timeout : number;
     headerSize : number;
     _protocolVersion : number;
@@ -137,7 +135,7 @@ constructor() {
  *  - only one chunk can be created at a time.
  *  - a created chunk should be committed using the ```write``` method before an other one is created.
  */
-public createChunk(msg_type, chunk_type: string, length): ArrayBuffer {
+public createChunk(msg_type, chunk_type: string, length : number): ArrayBuffer {
 
     assert(msg_type === "MSG");
     assert(this._pending_buffer === undefined, "createChunk has already been called ( use write first)");
@@ -159,7 +157,7 @@ protected _write_chunk(message_chunk) {
     if (this._socket) {
         this.bytesWritten += message_chunk.length;
         this.chunkWrittenCount ++;
-        this._socket.write(message_chunk);
+        this._socket.send(message_chunk);
     }
 };
 
@@ -230,7 +228,7 @@ protected _start_timeout_timer() {
 
   
     assert(!this._timerId, "timer already started");
-    this._timerId = setTimeout(function () {
+    this._timerId = window.setTimeout(function () {
         this._timerId =null;
         this._fulfill_pending_promises(new Error("Timeout in waiting for data on socket ( timeout was = " + this.timeout + " ms )"));
     }, this.timeout);
@@ -255,7 +253,7 @@ public on_socket_closed(err) {
 public on_socket_ended(err) {
   
     assert(!this._on_socket_ended_called);
-    this._on_socket_ended_called = true; // we don't want to send close event twice ...
+    this._on_socket_ended_called = true; // we don't want to send ende event twice ...
     /**
      * notify the observers that the transport layer has been disconnected.
      * @event close
@@ -292,7 +290,7 @@ protected _on_socket_ended_message =  function(err) {
  * @param socket {Socket}
  * @protected
  */
-protected _install_socket(socket) {
+protected _install_socket(socket : WebSocket) {
 
     assert(socket);
  
@@ -313,29 +311,38 @@ protected _install_socket(socket) {
     });
 
 
-    this._socket.on("data", (data) => {
-        this.bytesRead += data.length;
-        if (data.length > 0) {
-            this.packetAssembler.feed(data);
+    this._socket.onmessage = (evt) => {
+        this.bytesRead += evt.data.length;
+        if (evt.data.length > 0) {
+            this.packetAssembler.feed(evt.data);
         }
 
-    }).on("close", function (had_error) {
+    };
+
+    this._socket.onclose = (evt : CloseEvent) => {
         // istanbul ignore next
         if (doDebug) {
-            debugLog(" SOCKET CLOSE : had_error =" + had_error.toString() + this.name);
+            debugLog(" SOCKET CLOSE : reason =" + evt.reason + " code=" + evt.code  + " name=" + this.name);
         }
         if (this._socket ) {
-            debugLog("  remote address = " + this._socket.remoteAddress + " " + this._socket.remoteFamily + " " + this._socket.remotePort);
+            debugLog("  remote address = " + this._socket.url);
         }
-        if (had_error) {
+        
+        let err = null;
+        if (evt.code != 1000 /* if not normal*/) {
+            /* TODO: what should we do now
             if (this._socket) {
                 this._socket.destroy();
             }
+            */
+           err = new Error("ERROR IN SOCKET: reason=" + evt.reason + " code=" + evt.code  + " name=" + this.name);
         }
-        var err = had_error ? new Error("ERROR IN SOCKET") : null;
+        
         this.on_socket_closed(err);
 
-    }).on("end", function (err) {
+    };
+    /*
+    this._socket.on("end", function (err) {
 
         // istanbul ignore next
         if (doDebug) {
@@ -343,24 +350,19 @@ protected _install_socket(socket) {
         }
         this._on_socket_ended_message(err);
 
-    }).on("error", function (err) {
+    };
+    */
+
+    this._socket.onerror = (evt : Event) => {
         // istanbul ignore next
         if (doDebug) {
-            debugLog(" SOCKET ERROR : " + err.message + this._socket.name + this.name);
+            debugLog(" SOCKET ERROR : " + this.name);
         }
-        // note: The "close" event will be called directly following this event.
-    });
 
-    if (false) {
-        /*
-        // set socket timeout
-        debugLog("setting client/server socket timeout to " + this.timeout);
-        this._socket.setTimeout(this.timeout,() =>{
-            console.log(" connection has timed out (timeout =",this.timeout,")");
-            this._socket.destroy();
-        });
-        */
-    }
+        
+
+        // note: The "close" event will be called directly following this event.
+    };
 
 };
 
@@ -417,20 +419,18 @@ public disconnect(callback) {
     this._cleanup_timers();
 
     if (this._socket) {
-        this._socket.end();
-        this._socket.destroy();
+        this._socket.onclose = () => {
+            this.on_socket_ended(null);
+            callback();
+        }
+        this._socket.close();
         this._socket = null;
     }
-
-    setImmediate(function () {
-        this.on_socket_ended(null);
-        callback();
-    });
 
 };
 
 public isValid() {
-    return this._socket && !this._socket.destroyed && !this.__disconnecting__;
+    return this._socket && (this._socket.readyState == this._socket.OPEN) && !this.__disconnecting__;
 };
 
 }

@@ -12,7 +12,7 @@ import * as _ from 'underscore';
 import {DataStream} from '../basic-types/DataStream';
 
 // this modules
-import {TCP_transport,getFakeTransport} from './tcp_transport';
+import {WSTransport,getFakeTransport} from './ws_transport';
 
 import {packTcpMessage,parseEndpointUrl} from './tools';
 
@@ -28,24 +28,25 @@ import {readMessageHeader} from '../chunkmanager';
 
 import {decodeMessage} from "./tools";
 
-function createClientSocket(endpointUrl : string) {
+function createClientSocket(endpointUrl : string) : WebSocket {
     // create a socket based on Url
     let ep = parseEndpointUrl(endpointUrl);
     let port = ep.port;
     let hostname = ep.hostname;
     switch (ep.protocol) {
         case "websocket":
+        case "opc.tcp":
             //TODO: that's it --> implement me
         case "fake":
             var fakeSocket = getFakeTransport();
             assert(ep.protocol === "fake", " Unsupported transport protocol");
-            process.nextTick(function () {
+            setTimeout(function () {
                 (<any>fakeSocket).emit("connect");
-            });
-            return fakeSocket;
+            },0);
+            return <WebSocket>fakeSocket;
         case "http":
         case "https":
-        case "opc.tcp":
+        
             // var socket = net.connect({host: hostname, port: port});
             // socket.setNoDelay(true);
 
@@ -60,16 +61,15 @@ function createClientSocket(endpointUrl : string) {
  * initiates a communication with a HEL/ACK transaction.
  * It negociates the communication parameters with the other end.
  *
- * @class ClientTCP_transport
- * @extends TCP_transport
- * @constructor
+ * @class ClientWSTransport
+ * @extends WSTransport
  *
  *
  *
  * @example
  *
  *    ```javascript
- *    var transport = ClientTCP_transport(url);
+ *    var transport = ClientWSTransport(url);
  *
  *    transport.timeout = 1000;
  *
@@ -96,7 +96,7 @@ function createClientSocket(endpointUrl : string) {
  *
  *
  */
-export class ClientTCP_transport extends TCP_transport{
+export class ClientWSTransport extends WSTransport{
     numberOfRetry: number;
     _connected: boolean;
     serverUri: string;
@@ -165,59 +165,15 @@ public connect(endpointUrl : string, callback : Function, options?) {
     catch (err) {
         return callback(err);
     }
-    this._socket.name = "CLIENT";
+//    this._socket.name = "CLIENT";
     this._install_socket(this._socket);
 
-    function _on_socket_error_for_connect(err) {
-        // this handler will catch attempt to connect to an inaccessible address.
-        assert(err instanceof Error);
-        _remove_connect_listeners();
-        callback(err);
-    }
-    function _on_socket_end_for_connect(err) {
-        console.log("Socket has been closed by server",err);
-    }
-
-    function _remove_connect_listeners() {
-        this._socket.removeListener("error", _on_socket_error_for_connect);
-        this._socket.removeListener("end"  , _on_socket_end_for_connect);
-    }
-
-    function _on_socket_error_after_connection(err) {
-        debugLog(" ClientTCP_transport Socket Error",err.message);
-
-        // EPIPE : EPIPE (Broken pipe): A write on a pipe, socket, or FIFO for which there is no process to read the
-        // data. Commonly encountered at the net and http layers, indicative that the remote side of the stream being
-        // written to has been closed.
-
-        // ECONNRESET (Connection reset by peer): A connection was forcibly closed by a peer. This normally results
-        // from a loss of the connection on the remote socket due to a timeout or reboot. Commonly encountered via the
-        // http and net modu
-
-
-        if (err.message.match(/ECONNRESET|EPIPE/)) {
-            /**
-             * @event connection_break
-             *
-             */
-            this.emit("connection_break");
-        }
-    }
-
-    this._socket.once("error", _on_socket_error_for_connect);
-    this._socket.once("end",_on_socket_end_for_connect);
-
-    this._socket.on("connect", function () {
-
-        _remove_connect_listeners();
+    this._socket.onopen =  () => {
 
         this._perform_HEL_ACK_transaction((err) => {
             if(!err) {
 
-                // install error handler to detect connection break
-                this._socket.on("error",_on_socket_error_after_connection);
-
-                this.connected = true;
+                this._connected = true;
                 /**
                  * notify the observers that the transport is connected (the socket is connected and the the HEL/ACK
                  * transaction has been done)
@@ -230,7 +186,7 @@ public connect(endpointUrl : string, callback : Function, options?) {
             }
             callback(err);
         });
-    });
+    };
 };
 
 
@@ -299,14 +255,14 @@ protected _perform_HEL_ACK_transaction(callback) {
 
     var counter = 0;
 
-    this._install_one_time_message_receiver(function on_ACK_response(err, data) {
+    this._install_one_time_message_receiver((err, data) => {
 
         assert(counter === 0);
         counter += 1;
 
         if (err) {
             callback(err);
-            this._socket.end();
+            this._socket.close(1002,"OPC-UA: HELLO - ACK failed");
         } else {
             this._handle_ACK_response(data, function (inner_err) {
                 callback(inner_err);
