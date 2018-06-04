@@ -151,6 +151,7 @@
      */
     export {SetMonitoringModeResponse} from '../generated/SetMonitoringModeResponse';
 
+    export { EventFilter } from '../generated/EventFilter';
 // Event results
     /**
      * @class EventFilterResult

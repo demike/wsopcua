@@ -9,7 +9,7 @@ import {EventEmitter} from 'eventemitter3';
 import {StatusCodes} from '../constants';
 import {assert} from '../assert'
 
-import * as subscription_service from "../service/service-subscription";
+import * as subscription_service from "../service-subscription";
 import * as read_service from '../service-read';
 
 import {TimestampsToReturn} from '../generated/TimestampsToReturn';
@@ -24,7 +24,7 @@ import { MonitoringParameters, IMonitoringParameters } from '../generated/Monito
 import { MonitoringMode } from '../generated/MonitoringMode';
 import { MonitoredItemCreateResult } from '../generated/MonitoredItemCreateResult';
 import { MonitoredItem } from './MonitoredItem';
-import { EventFilter } from '../generated/EventFilter';
+
 import { ExtensionObject } from '../generated/ExtensionObject';
 import { StatusCode,NodeId} from '../basic-types';
 
@@ -116,7 +116,7 @@ protected _prepare_for_monitoring () {
         this._monitoringParameters.filter = this._monitoringParameters.filter || new subscription_service.EventFilter({});
 
         var filter : ExtensionObject = this._monitoringParameters.filter;
-        if (!(filter instanceof EventFilter)) {
+        if (!(filter instanceof subscription_service.EventFilter)) {
             return {
                 error: "Mismatch between attributeId and filter in monitoring parameters : " +
                 "An EventFilter object is required when itemToMonitor.attributeId== AttributeIds.EventNotifier"

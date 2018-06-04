@@ -12,7 +12,7 @@ import {TimestampsToReturn} from '../generated/TimestampsToReturn';
 import {AttributeIds} from '../constants';
 import {resolveNodeId} from '../nodeid/nodeid';
 
-import * as subscription_service from "../service/service-subscription";
+import * as subscription_service from "../service-subscription";
 
 import {ClientSession} from './client_session';
 import {MonitoredItem} from './MonitoredItem';

@@ -7,7 +7,7 @@ import {StatusCodes} from '../constants/raw_status_codes';
 import { ClientSession } from './client_session';
 import { ClientSubscription} from './ClientSubscription';
 
-import * as subscription_service from '../service/service-subscription';
+import * as subscription_service from '../service-subscription';
 import { RequestHeader } from '../generated/RequestHeader';
 
 import * as async from 'async-es';
