@@ -33,7 +33,8 @@ export abstract class BSDClassFileParser {
         
         let at = this.el.attributes.getNamedItem(ClassFile.ATTR_NAME);
         if (at == null) {
-            console.log("Error: could not find name attribute"); 
+            console.log("Error: could not find name attribute");
+            return; 
         }
         this.cls.Name = at.value;
 

@@ -149,6 +149,7 @@ export class ClassFile {
 
         let ii;
         let mem = null;
+        name = name.charAt(0).toLowerCase() + name.slice(1);
         for (ii=0;ii < this.members.length; ii++) {
             mem = this.members[ii];
             if (mem.Name == name) {

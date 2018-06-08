@@ -10,8 +10,8 @@ export class XSDSchemaParser {
     public static readonly TAG_STRUCT_TYPE = "opc:StructuredType";
 
     public clsFileMap : { [key : string] : XSDClassFile };
-    protected outPath : string;
-    protected inPath : string;
+    protected outPath : string = "";
+    protected inPath : string = "";
 
     constructor() {
         this.clsFileMap = {};

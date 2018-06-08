@@ -178,8 +178,6 @@ export function makeRelativePath(str: string,addressSpace?): RelativePath {
     }
 
 
-    let relPath = new RelativePath(r);
-    relPath.noOfElements = relPath.elements.length;
-    return relPath;
-    //xx console.log(r.toString());
+    return new RelativePath(r);
+        //xx console.log(r.toString());
 }

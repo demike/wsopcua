@@ -39,7 +39,6 @@ export function constructBrowsePathFromQualifiedName(startingNode, browsePath) {
         startingNode: startingNode.nodeId, // ROOT
         relativePath: new RelativePath({
             elements: elements,
-            noOfElements : elements.length
         })
     });
     return browsePath;

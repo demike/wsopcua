@@ -2,7 +2,7 @@ import {ClassMethod} from './SchemaParser.module';
 
 export abstract class XSDClassFile {
     name : string;
-    baseClass : string;
+    baseClass : string|null;
     fileHeader : string;
     imports : string[];
     documentation : string;

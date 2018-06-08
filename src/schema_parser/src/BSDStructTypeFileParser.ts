@@ -31,9 +31,11 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
         }
 
         let isArr = !!lengthField;
+        let attrName = el.attributes.getNamedItem(ClassFile.ATTR_NAME);
+        let attrTypeName = el.attributes.getNamedItem(BSDClassFileParser.ATTR_TYPE_NAME);
         let mem = new ClassMember(
-            el.attributes.getNamedItem(ClassFile.ATTR_NAME).value,
-            el.attributes.getNamedItem(BSDClassFileParser.ATTR_TYPE_NAME).value,
+            (attrName) ? attrName.value : null,
+            (attrTypeName)? attrTypeName.value : null,
             true,null,bitLength,isArr
         );
 
