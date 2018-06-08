@@ -20,7 +20,6 @@ import {packet_analyzer} from '../packet-analyzer';
 
 import {doDebug,debugLog,hexDump} from '../common/debug';
 import { DataStream } from '../basic-types/DataStream';
-//xx require("./utils").setDebugFlag(__filename,true);
 
 import * as factory from '../factory';
 

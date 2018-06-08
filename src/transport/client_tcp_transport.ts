@@ -150,7 +150,7 @@ public connect(endpointUrl : string, callback : Function, options?) {
 
     var ep = parseEndpointUrl(endpointUrl);
 
-    var hostname = require("os").hostname();
+    var hostname = window.location.hostname;
 
     this.endpointUrl = endpointUrl;
 

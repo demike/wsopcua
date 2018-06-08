@@ -5,7 +5,7 @@ import * as _ from 'underscore';
 import {EventEmitter} from 'eventemitter3';
 import {DataStream} from '../basic-types/DataStream'
 import { MessageSecurityMode } from '../service-secure-channel';
-import { SecurityPolicy, getCryptoFactory, toUri, getOptionsForSymmetricSignAndEncrypt, ICryptoFactory } from './security_policy';
+import { SecurityPolicy, getCryptoFactory, toUri,/* **nomsgcrypt** getOptionsForSymmetricSignAndEncrypt,*/ ICryptoFactory } from './security_policy';
 import { MessageBuilder } from './message_builder';
 import { OPCUAClientOptions,OPCUAClientBase } from '../client/client_base';
 

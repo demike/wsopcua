@@ -14,7 +14,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
             return true;
         }
 
-        if (el.tagName != BSDClassFileParser.TAG_FIELD) {
+        if (el == null || el.tagName != BSDClassFileParser.TAG_FIELD) {
             return false;
         }
 

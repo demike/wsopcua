@@ -7,6 +7,8 @@ import {assert} from '../assert';
 import * as _ from 'underscore';
 import {MessageSecurityMode} from '../generated/MessageSecurityMode';
 import {SignatureData} from '../generated/SignatureData';
+
+import * as crypto_utils from "../crypto/crypto_utils";
 /**
  * @class SecurityPolicy
  * @static
@@ -98,7 +100,7 @@ export  function toUri(value : any) : SecurityPolicy {
 
 
 
-var crypto_utils = require("node-opcua-crypto").crypto_utils;
+
 
 
 // --------------------

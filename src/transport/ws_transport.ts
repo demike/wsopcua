@@ -30,19 +30,6 @@ export function getFakeTransport() {
 };
 
 var counter =0;
-/*
-function record(data,extra) {
-
-    extra = extra || "";
-
-    var c = ("00000000" +counter.toString(10)).substr(-8);
-    data._serialNumber = c;
-    data.info = data.info || "";
-    var l ="";// "-L="+("00000000" +data.length).substr(-8);
-    require("fs").writeFileSync("data"+c+l+data.info+extra+".org",data,"binary");
-    counter++;
-}
-*/
 
 /**
  * WSTransport

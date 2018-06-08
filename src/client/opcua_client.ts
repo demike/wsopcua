@@ -128,7 +128,6 @@ protected _getApplicationUri() : Promise<string> {
     }
     return applicationUri;
 */
-    var hostname = window.location.hostname;
     return  makeApplicationUrn(window.location.hostname, this.applicationName);
 
 };

@@ -29,6 +29,7 @@ export abstract class XSDClassFile {
         this.fileHeader = "";
         this.documentation = "";
         this.classHeader = "";
+        this.baseClass = null;
     }
 
     public parse() : void {

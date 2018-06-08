@@ -5,11 +5,10 @@ import {assert} from  "../assert";
 import * as _ from "underscore";
 
 import {resolveNodeId} from '../nodeid/nodeid';
-
-var translate_browse_paths_to_node_ids_service = require("node-opcua-service-translate-browse-path");
-var BrowsePath = translate_browse_paths_to_node_ids_service.BrowsePath;
+import {BrowsePath,RelativePath, RelativePathElement} from '../service-translate-browse-path';
 
 import {StatusCodes,AttributeIds} from '../constants';
+import { QualifiedName } from "../data-model";
 
 var hasPropertyRefId = resolveNodeId("HasProperty");
 /* NodeId  ns=0;i=46*/
@@ -18,16 +17,16 @@ function browsePathPropertyRequest(nodeId, propertyName) {
 
     return new BrowsePath({
         startingNode: /* NodeId  */ nodeId,
-        relativePath: /* RelativePath   */  {
-            elements: /* RelativePathElement */ [
+        relativePath: new RelativePath(  {
+            elements: /* RelativePathElement */ [new RelativePathElement(
                 {
                     referenceTypeId: hasPropertyRefId,
                     isInverse: false,
                     includeSubtypes: false,
-                    targetName: {namespaceIndex: 0, name: propertyName}
-                }
+                    targetName: new QualifiedName({namespaceIndex: 0, name: propertyName})
+                })
             ]
-        }
+        })
     });
 
 }

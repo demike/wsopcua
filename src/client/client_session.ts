@@ -50,6 +50,7 @@ import * as browse_service from '../service-browse';
 import * as write_service from '../service-write';
 import * as call_service from '../service-call';
 import * as query_service from "../service-query";
+import * as translate_service from "../service-translate-browse-path";
 
 
 import * as utils from '../utils';
@@ -908,7 +909,7 @@ public setPublishingMode(publishingEnabled : boolean, subscriptionIds : number[]
  *
  * @method translateBrowsePath
  * @async
- * @param browsePath {BrowsePath|Array<BrowsePathResult>}
+ * @param browsePath {BrowsePath|Array<BrowsePath>}
  * @param callback {Function}
  * @param callback.err {Error|null}
  * @param callback.response {BrowsePathResult|Array<BrowsePathResult>}
@@ -919,13 +920,11 @@ public setPublishingMode(publishingEnabled : boolean, subscriptionIds : number[]
 public translateBrowsePath(browsePath, callback) {
     assert(_.isFunction(callback));
 
-    var translate_service = require("node-opcua-service-translate-browse-path");
-
     var has_single_element = !_.isArray(browsePath);
     browsePath = has_single_element ? [browsePath] : browsePath;
 
     var request = new translate_service.TranslateBrowsePathsToNodeIdsRequest({
-        browsePath: browsePath
+        browsePaths: browsePath
     });
 
     this.performMessageTransaction(request, (err, response) => {

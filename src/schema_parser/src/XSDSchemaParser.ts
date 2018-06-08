@@ -14,7 +14,7 @@ export class XSDSchemaParser {
     protected inPath : string;
 
     constructor() {
-
+        this.clsFileMap = {};
     }
 
     public parse(inpath : string, outpath : string) {

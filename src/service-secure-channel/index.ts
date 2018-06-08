@@ -1,5 +1,3 @@
-import { OpenSecureChannelResponse } from "../generated/OpenSecureChannelResponse";
-
 "use strict";
 /**
  * @module services.secure-channel
