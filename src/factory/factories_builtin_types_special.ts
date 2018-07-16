@@ -24,11 +24,9 @@ function _self_decode(Type) {
     };
 }
 
-export function registerSpecialVariantEncoder(ConstructorFunc) {
+export function registerSpecialVariantEncoder(ConstructorFunc,name : string) {
 
     assert(_.isFunction(ConstructorFunc));
-
-    var name = ConstructorFunc.prototype._schema.name;
 
     registerBuiltInType({
         name: name,

@@ -78,10 +78,11 @@ public update(options) {
  */
 public chunkSecureMessage(msgType, options, message, messageChunkCallback) {
 
+    options = options || {};
     assert(_.isFunction(messageChunkCallback));
 
     // calculate message size ( with its  encodingDefaultBinary)
-    var binSize = message.binaryStoreSize() + 4;
+    var binSize = DataStream.binaryStoreSize(message) + 4;
     
     var stream = new DataStream(binSize);
     this._stream = stream;
@@ -93,7 +94,7 @@ public chunkSecureMessage(msgType, options, message, messageChunkCallback) {
     if (msgType === "OPN") {
         securityHeader = this._securityHeader;
     } else {
-        securityHeader.tokenId = options.tokenId;
+        securityHeader = new SymmetricAlgorithmSecurityHeader({tokenId: options.tokenId});
     }
 
     var secure_chunker = new SecureMessageChunkManager(

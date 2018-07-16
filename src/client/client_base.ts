@@ -6,12 +6,12 @@
 import {assert} from '../assert';
 import * as _ from 'underscore';
 import * as log from 'loglevel';
-import {async} from 'async-es';
+import * as async from 'async-es';
 import {EventEmitter} from 'eventemitter3';
 import {SecurityPolicy,fromURI,toUri} from '../secure-channel/security_policy';
 import {MessageSecurityMode} from '../secure-channel';
 import {once} from '../utils/once';
-import {delayed} from 'delayed';
+import * as delayed from 'delayed';
 import {ObjectRegistry} from '../object-registry/objectRegistry'
 //import {OPCUASecureObject} from '../common/secure_object'
 import {doDebug} from '../common/debug';
@@ -46,6 +46,8 @@ import { OPCUASecureObject } from '../common/secure_object';
 import { RequestHeader } from '../service-secure-channel';
 import { ClientSession } from './client_session';
 import { EndpointDescription } from '../service-endpoints';
+import { IFindServersRequest } from '../generated/FindServersRequest';
+import { IGetEndpointsRequest } from '../generated/GetEndpointsRequest';
 
 var defaultConnectionStrategy = {
     maxRetry:     100,
@@ -86,6 +88,12 @@ export interface OPCUAClientOptions {
         privateKeyFile?: string,// "certificates/client_key_1024.pem"] {String} client private key pem file.
         clientName?: string //] {String} a client name string that will be used to generate session names.
     }
+
+export interface IFindServersOptions {
+    endpointUrl? : string;
+    localeIds? : string[];
+    serverUris? : string[];
+}
 
 /**
  * @class OPCUAClientBase
@@ -417,7 +425,7 @@ export class OPCUAClientBase extends EventEmitter {
  * @param [options.serverUris] Array
  * @param callback
  */
-public findServers(options, callback) {
+public findServers(options : IFindServersOptions, callback : ResponseCallback<string[]>) {
     
         if (!this._secureChannel) {
             setImmediate(function () {
@@ -426,10 +434,11 @@ public findServers(options, callback) {
             return;
         }
     
+        /*
         if (!callback) {
             callback = options;
             options = {};
-        }
+        }*/
     
         var request = new FindServersRequest({
             endpointUrl: options.endpointUrl || this._endpointUrl,
@@ -479,7 +488,7 @@ public findServers(options, callback) {
     
     };
         /**
- * @method getEndpointsRequest
+ * @method getEndpoints
  * @async
  * @async
  *
@@ -492,11 +501,16 @@ public findServers(options, callback) {
  * @param callback.serverEndpoints {Array<EndpointDescription>} the array of endpoint descriptions
  *
  */
-public getEndpointsRequest(options, callback?) : void {   
+public getEndpoints(options : IGetEndpointsRequest, callback?) : void {   
         if (!callback) {
             callback = options;
             options = {};
         }
+
+        if (!options) {
+            options = {};
+        }
+        
         assert(_.isFunction(callback));
     
         options.endpointUrl = options.endpointUrl || this._endpointUrl;
@@ -563,7 +577,7 @@ public findEndpoint(endpointUrl, securityMode, securityPolicy) {
     return _.find(this._server_endpoints, function (endpoint) {
         return endpoint.endpointUrl === endpointUrl &&
             endpoint.securityMode === securityMode &&
-            endpoint.securityPolicyUri === securityPolicy.value;
+            endpoint.securityPolicyUri === securityPolicy;
     });
 };
 
@@ -623,7 +637,7 @@ private static __findEndpoint(endpointUrl,securityMode,securityPolicy,callback) 
             client.connect(endpointUrl, callback);
         },
         function (callback) {
-            client.getEndpointsRequest( (err, endpoints) => {
+            client.getEndpoints( null,(err, endpoints) => {
 
                 if (!err) {
                     endpoints.forEach(function (endpoint, i) {
@@ -720,7 +734,7 @@ protected _recreate_secure_channel(callback : Function) {
 
 protected _internal_create_secure_channel (callback : Function) {
 
-    let secureChannel;
+    let secureChannel : ClientSecureChannelLayer;
     assert(this._secureChannel === null);
     assert(_.isString(this._endpointUrl));
 
@@ -768,7 +782,7 @@ protected _internal_create_secure_channel (callback : Function) {
 
             if (!this.knowsServerEndpoint) {
                 assert(this._secureChannel !== null);
-                this.getEndpointsRequest((err/*, endpoints*/) => {
+                this.getEndpoints(null,(err/*, endpoints*/) => {
                     _inner_callback(err);
                 });
             } else {

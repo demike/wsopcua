@@ -114,11 +114,11 @@ function RSAOAEP_Decrypt(buffer, privateKey) {
 }
 // --------------------
 
-function asymmetricVerifyChunk(chunk, certificate) {
+function asymmetricVerifyChunk(chunk : Uint8Array, certificate : Uint8Array) {
 
     var crypto_factory = this;
-    assert(chunk instanceof Buffer);
-    assert(certificate instanceof Buffer);
+    assert(chunk instanceof Uint8Array);
+    assert(certificate instanceof Uint8Array);
     // let's get the signatureLength by checking the size
     // of the certificate's public key
     var cert = crypto_utils.exploreCertificate(certificate);
@@ -130,9 +130,7 @@ function asymmetricVerifyChunk(chunk, certificate) {
 
 }
 
-function RSAPKCS1V15SHA1_Verify(buffer, signature, certificate) {
-    assert(certificate instanceof Buffer);
-    assert(signature instanceof Buffer);
+function RSAPKCS1V15SHA1_Verify(buffer : Uint8Array, signature, certificate : Uint8Array) {
     var options = {
         algorithm: "RSA-SHA1",
         publicKey: crypto_utils.toPem(certificate, "CERTIFICATE")
@@ -141,7 +139,7 @@ function RSAPKCS1V15SHA1_Verify(buffer, signature, certificate) {
 }
 var RSAPKCS1OAEPSHA1_Verify = RSAPKCS1V15SHA1_Verify;
 
-function RSAPKCS1OAEPSHA256_Verify(buffer, signature, certificate) {
+function RSAPKCS1OAEPSHA256_Verify(buffer, signature, certificate : Uint8Array) {
     var options = {
         algorithm: "RSA-SHA256",
         publicKey: crypto_utils.toPem(certificate, "CERTIFICATE")
@@ -150,9 +148,9 @@ function RSAPKCS1OAEPSHA256_Verify(buffer, signature, certificate) {
 }
 
 
-function RSAPKCS1V15SHA1_Sign(buffer, privateKey) {
+function RSAPKCS1V15SHA1_Sign(buffer, privateKey : Uint8Array | string) {
 
-    if (privateKey instanceof Buffer) {
+    if (privateKey instanceof Uint8Array) {
         privateKey = crypto_utils.toPem(privateKey, "RSA PRIVATE KEY");
     }
     var params = {
@@ -163,9 +161,9 @@ function RSAPKCS1V15SHA1_Sign(buffer, privateKey) {
     return crypto_utils.makeMessageChunkSignature(buffer, params);
 }
 
-function RSAPKCS1V15SHA256_Sign(buffer, privateKey) {
+function RSAPKCS1V15SHA256_Sign(buffer, privateKey : Uint8Array | string) {
 
-    if (privateKey instanceof Buffer) {
+    if (privateKey instanceof Uint8Array) {
         privateKey = crypto_utils.toPem(privateKey, "RSA PRIVATE KEY");
     }
     var params = {
@@ -356,7 +354,7 @@ export function getCryptoFactory(securityPolicy : SecurityPolicy) : ICryptoFacto
     }
 }
 
-export function computeSignature(senderCertificate, senderNonce, receiverPrivatekey, securityPolicy) {
+export function computeSignature(senderCertificate : Uint8Array, senderNonce : Uint8Array, receiverPrivatekey, securityPolicy) {
 
     if (!senderNonce || !senderCertificate) {
         return null;
@@ -367,7 +365,9 @@ export function computeSignature(senderCertificate, senderNonce, receiverPrivate
         return null;
     }
     // This parameter is calculated by appending the clientNonce to the clientCertificate
-    var buffer = Buffer.concat([senderCertificate, senderNonce]);
+    var buffer = new Uint8Array(senderCertificate.byteLength + senderNonce.byteLength);  //Buffer.concat([senderCertificate, senderNonce]);
+    buffer.set(senderCertificate);
+    buffer.set(senderNonce,senderCertificate.byteLength);
 
     // ... and signing the resulting sequence of bytes.
     var signature = crypto_factory.asymmetricSign(buffer, receiverPrivatekey);
@@ -383,7 +383,7 @@ export function computeSignature(senderCertificate, senderNonce, receiverPrivate
     });
 }
 
-export function verifySignature(receiverCertificate, receiverNonce, signature, senderCertificate, securityPolicy) {
+export function verifySignature(receiverCertificate : Uint8Array, receiverNonce : Uint8Array, signature : SignatureData, senderCertificate : Uint8Array, securityPolicy) {
 
     if (securityPolicy === SecurityPolicy.None) {
         return true;
@@ -392,20 +392,21 @@ export function verifySignature(receiverCertificate, receiverNonce, signature, s
     if (!crypto_factory) {
         return false;
     }
-    assert(receiverNonce instanceof  Buffer);
-    assert(receiverCertificate instanceof  Buffer);
+    assert(receiverNonce instanceof  Uint8Array);
+    assert(receiverCertificate instanceof Uint8Array);
     assert(signature instanceof SignatureData);
 
-    assert(senderCertificate instanceof Buffer);
+    assert(senderCertificate instanceof Uint8Array);
 
-    if (!(signature.signature instanceof Buffer)) {
+    if (!(signature.signature instanceof Uint8Array)) {
         // no signature provided
         return false;
     }
 
-    assert(signature.signature instanceof Buffer);
     // This parameter is calculated by appending the clientNonce to the clientCertificate
-    var buffer = Buffer.concat([receiverCertificate, receiverNonce]);
+    var buffer = new Uint8Array(receiverCertificate.byteLength + receiverNonce.byteLength);  //Buffer.concat([senderCertificate, senderNonce]);
+    buffer.set(receiverCertificate);
+    buffer.set(receiverNonce,receiverCertificate.byteLength);
 
     return crypto_factory.asymmetricVerify(buffer, signature.signature, senderCertificate);
 }

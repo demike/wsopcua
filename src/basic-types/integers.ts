@@ -200,11 +200,13 @@ export function randomInt64() : number[] {
     // High, low
     return [getRandomInt(0, 0xFFFFFFFF), getRandomInt(0, 0xFFFFFFFF)];
 };
+
+/*
 export var coerceInt64 = coerceUInt64;
 export var isValidInt64 = isValidUInt64;
 export var encodeInt64 = encodeUInt64;
 export var decodeInt64 = decodeUInt64;
-
+*/
 
 
 export function coerceInt8(value) : number {

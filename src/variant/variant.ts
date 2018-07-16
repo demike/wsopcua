@@ -54,7 +54,7 @@ public arrayType : VariantArrayType = VariantArrayType.Scalar;
 public value : any;
 public dimensions : UInt32[] = null;
 
-constructor(options : IVariant)
+constructor(options? : IVariant)
 {
     super();
     options = <any>options || {};
@@ -213,8 +213,8 @@ public clone() : Variant {
 import {register_class_definition} from '../factory/factories_factories';
 import {registerSpecialVariantEncoder} from '../factory/factories_builtin_types_special';
 import { DataTypeNode } from "../generated/DataTypeNode";
-register_class_definition("Variant",Variant);
-registerSpecialVariantEncoder(Variant);
+register_class_definition("Variant",Variant,makeExpandedNodeId(generate_new_id()));
+registerSpecialVariantEncoder(Variant,"Variant");
 
 
 
@@ -312,6 +312,7 @@ function isValidMatrixVariant(dataType,value,dimensions) : boolean{
 
 
 import {findBuiltInType} from '../factory/factories_builtin_types';
+import { generate_new_id } from "../factory";
 function get_encoder(dataType : DataType) {
     var encode = findBuiltInType(DataType[dataType]).encode;
     /* istanbul ignore next */

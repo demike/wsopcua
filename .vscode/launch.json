@@ -5,6 +5,24 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch wsopcua in Chrome",
+            "userDataDir": "${workspaceRoot}/out/chrome",
+            "sourceMaps": true,
+            "file": "${workspaceRoot}/examples/index.html",
+            "trace" : true,
+            "webRoot": "${workspaceFolder}/",
+            "sourceMapPathOverrides": {
+                "webpack:///./*": "${webRoot}/*",
+                "webpack:///src/*": "${webRoot}/*",
+                "webpack:///*": "*",
+                "webpack:///./~/*": "${webRoot}/node_modules/*",
+                "meteor://💻app/*": "${webRoot}/*"
+            }
+            
+        },
+        {
             "type": "node",
             "request": "launch",
             "name": "Launch Schema Parser",

@@ -136,4 +136,4 @@ public clone(target: any): BaseUAObject {
 }
 }
 
-register_class_definition("HelloMessage",HelloMessage);
+register_class_definition("HelloMessage",HelloMessage,makeExpandedNodeId(generate_new_id()));

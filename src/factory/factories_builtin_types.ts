@@ -7,6 +7,7 @@ import {assert} from '../assert';
 import {makeNodeId,coerceNodeId,NodeId} from '../nodeid/nodeid';
 import { ExpandedNodeId,makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 import * as ec from '../basic-types';
+import {encodeBoolean} from '../basic-types';
 import {StatusCodes} from '../constants/raw_status_codes';
  
 
@@ -45,7 +46,7 @@ var _defaultType = [
     },
     {
         name: "Boolean",
-        encode: ec.encodeBoolean,
+        encode: encodeBoolean,
         decode: ec.decodeBoolean,
         defaultValue: false,
         coerce: ec.coerceBoolean
@@ -60,16 +61,16 @@ var _defaultType = [
     {name: "UInt32", encode: ec.encodeUInt32, decode: ec.decodeUInt32, defaultValue: 0, coerce: ec.coerceUInt32},
     {
         name: "Int64",
-        encode: ec.encodeInt64,
-        decode: ec.decodeInt64,
-        defaultValue: ec.coerceInt64(0),
+        encode: ec.encodeUInt64,//ec.encodeInt64,
+        decode: ec.decodeUInt64,//ec.decodeInt64,
+        defaultValue: 0,//ec.coerceInt64(0),
         coerce: ec.coerceInt64
     },
     {
         name: "UInt64",
         encode: ec.encodeUInt64,
         decode: ec.decodeUInt64,
-        defaultValue: ec.coerceUInt64(0),
+        defaultValue: 0,//ec.coerceUInt64(0),
         coerce: ec.coerceUInt64
     },
     {name: "Float", encode: ec.encodeFloat, decode: ec.decodeFloat, defaultValue: 0.0, coerce: ec.coerceFloat},
@@ -157,7 +158,8 @@ export interface ITypeSchema {
     name : string;
     encode : Function,
     decode : Function,
-    coerce? : Function
+    coerce? : Function,
+//    defaultValue? : Function
 } 
 
 /**
@@ -166,7 +168,11 @@ export interface ITypeSchema {
  * @constructor
  * create a new type Schema
  */
-export class TypeSchema {
+export class TypeSchema implements ITypeSchema {
+    name: string;
+    encode: Function;
+    decode: Function;
+    coerce?: Function;
     protected defaultValue : any;
 constructor(options :  ITypeSchema| any) {
 
@@ -234,7 +240,7 @@ constructor(options :  ITypeSchema| any) {
  * @method registerType
  * @param schema {TypeSchema}
  */
-export function registerType(schema) {
+export function registerType<T extends ITypeSchema>(schema: T) {
     assert(typeof schema.name === "string");
     if(!_.isFunction(schema.encode)) {
         throw new Error("schema "+ schema.name + " has no encode function");
@@ -243,7 +249,7 @@ export function registerType(schema) {
         throw new Error("schema "+ schema.name + " has no decode function");
     }
 
-    schema.category = "basic";
+   // schema.category = "basic";
     _defaultTypeMap[schema.name] = new TypeSchema(schema);
 }
 

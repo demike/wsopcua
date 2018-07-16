@@ -11,7 +11,7 @@ import {TimestampsToReturn} from '../generated/TimestampsToReturn';
 
 import {registerSpecialVariantEncoder} from '../factory';
 
-registerSpecialVariantEncoder(DataValue);
+registerSpecialVariantEncoder(DataValue,"DataValue");
 
 import {getCurrentClock,coerceClock} from '../date-time/date_time';
 
@@ -77,7 +77,6 @@ export function apply_timestamps(dataValue, timestampsToReturn, attributeId) {
     }
     return cloneDataValue;
 }
-exports.apply_timestamps = apply_timestamps;
 
 /*
  * @method _clone_with_array_replacement

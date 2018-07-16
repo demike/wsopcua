@@ -53,6 +53,6 @@ export function hasEnumeration(enumerationName : string) {
 };
 
 export function getEnumeration(enumerationName : string) {
-    assert(exports.hasEnumeration(enumerationName));
+    assert(hasEnumeration(enumerationName));
     return _enumerations[enumerationName];
 };

@@ -1,5 +1,3 @@
-import { OPCUAClientOptions } from "../opcua-client";
-
 "use strict";
 /**
  * @module opcua.miscellaneous
@@ -8,6 +6,7 @@ import { OPCUAClientOptions } from "../opcua-client";
 
 
 import {assert} from '../assert';
+import { OPCUAClientOptions } from "../client/client_base";
 
 
 export class OPCUASecureObject {
@@ -26,8 +25,8 @@ export class OPCUASecureObject {
  */
 constructor(options : OPCUAClientOptions) {
 
-    assert(typeof options.certificateFile === "string");
-    assert(typeof options.privateKeyFile === "string");
+//    assert(typeof options.certificateFile === "string");
+//    assert(typeof options.privateKeyFile === "string");
 
     this._certificate = null;
     this._certificateFile = options.certificateFile;

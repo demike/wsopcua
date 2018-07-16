@@ -7,6 +7,7 @@
 import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert';
 import * as _ from 'underscore';
+import { concatTypedArrays } from '../basic-types/array';
 
 var doDebug = false;
 
@@ -38,7 +39,7 @@ constructor (options) {
 
 };
 
-protected _read_packet_info(data) {
+protected _read_packet_info(data : DataView) {
     return this.readMessageFunc(data);
 };
 
@@ -52,12 +53,12 @@ protected _build_data(data) {
         return data;
     }
     this._stack.push(data);
-    data = Buffer.concat(this._stack);
+    data = concatTypedArrays(this._stack);
     this._stack.length = 0;
     return data;
 };
 
-public feed(data) {
+public feed(data : DataView) {
 
     var self = this;
 
@@ -66,7 +67,7 @@ public feed(data) {
     // xx assert(data.length > 0, "PacketAssembler expects a no-zero size data block");
     //xx assert(this.expectedLength === 0 || this.currentLength <= this.expectedLength);
 
-    if (this.expectedLength === 0 && this.currentLength + data.length >= this.minimumSizeInBytes) {
+    if (this.expectedLength === 0 && this.currentLength + data.byteLength >= this.minimumSizeInBytes) {
 
         // we are at a start of a block and there is enough data provided to read the length  of the block
 
@@ -88,15 +89,15 @@ public feed(data) {
 
     }
 
-    if (this.expectedLength === 0 || this.currentLength + data.length < this.expectedLength) {
+    if (this.expectedLength === 0 || this.currentLength + data.byteLength < this.expectedLength) {
 
         this._stack.push(data);
-        this.currentLength += data.length;
+        this.currentLength += data.byteLength;
         // expecting more data to complete current message chunk
 
-    } else if (this.currentLength + data.length === this.expectedLength) {
+    } else if (this.currentLength + data.byteLength === this.expectedLength) {
 
-        this.currentLength += data.length;
+        this.currentLength += data.byteLength;
 
         messageChunk = this._build_data(data);
 
@@ -117,11 +118,11 @@ public feed(data) {
         // the chunk need to be split
         var size1 = this.expectedLength - this.currentLength;
         if (size1 > 0) {
-            var chunk1 = data.slice(0, size1);
+            var chunk1 = new DataView(data.buffer,0,size1);//.slice(0, size1);
             self.feed(chunk1);
         }
-        var chunk2 = data.slice(size1);
-        if (chunk2.length > 0) {
+        var chunk2 = new DataView(data.buffer,size1);
+        if (chunk2.byteLength > 0) {
             self.feed(chunk2);
         }
     }

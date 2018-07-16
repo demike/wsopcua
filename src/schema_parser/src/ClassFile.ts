@@ -15,6 +15,9 @@ export declare class Set< Value > {
 
 
 export class ClassFile {
+    protected id : string;
+    protected namespace : string;
+
     protected name : string;
     protected baseClass? : ClassFile|null = null;
     protected fileHeader : string;
@@ -123,6 +126,11 @@ export class ClassFile {
         return this.utilityFunctions;
     }
 
+    public setTypeId(id : string,namespace : string) {
+        this.namespace = namespace;
+        this.id = id;
+    }
+
     constructor(name? : string, baseClass? : string|ClassFile , members? : ClassMember[], methods? : ClassMethod[]) {
         this.imports = new Set();
         this.members = (members)?members:[];
@@ -134,6 +142,9 @@ export class ClassFile {
         this.classHeader = "";
         this.utilityFunctions = [];
         this.defines = "";
+
+        this.id = "-1";
+        this.namespace = "";
     }
 
     public getMemberByName(name : string) : ClassMember | null{
@@ -248,7 +259,8 @@ export class ClassFile {
 
     protected getFactoryCode() : string {
         let str = "import {register_class_definition} from \"../factory/factories_factories\";\n";
-        str += "register_class_definition(\"" + this.name + "\"," + this.name + ");";
+        str += "import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';\n"
+        str += "register_class_definition(\"" + this.name + "\"," + this.name + ", makeExpandedNodeId("+ this.id + "," + this.namespace + "));";
         return str;
     }
 
@@ -301,6 +313,18 @@ export class ClassFile {
 
     public removeAllImports() {
         this.imports.clear();
+    }
+
+    public hasAnyMembers() : boolean {
+        let obj : any = <ClassFile>this;
+        while(obj) {
+            if (obj.members.length > 0) {
+                return true;
+            } 
+            obj = obj.BaseClass;
+        }
+
+        return false;
     }
 
 }

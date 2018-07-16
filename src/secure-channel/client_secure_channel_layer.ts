@@ -198,7 +198,7 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
     protected _lastRequestId : number;
     protected parent : OPCUAClientBase
     protected _clientNonce : Uint8Array;
-    protected protocolVersion : number;
+    public protocolVersion : number;
     protected messageChunker : MessageChunker;
     protected _securityMode : MessageSecurityMode;
     protected securityPolicy : SecurityPolicy;
@@ -477,7 +477,7 @@ protected _install_security_token_watchdog() {
     debugLog(" revisedLifeTime = " + liveTime);
 
     assert(this._securityTokenTimeoutId === null);
-    this._securityTokenTimeoutId = setTimeout(function () {
+    this._securityTokenTimeoutId = setTimeout( () => {
         this._securityTokenTimeoutId = null;
         this._on_security_token_about_to_expire();
 
@@ -536,7 +536,7 @@ protected _open_secure_channel_request(is_initial, callback) {
         requestedLifetime: this.defaultSecureTokenLifetime
     });
 
-    this._performMessageTransaction(msgType, msg, (error, response) =>{
+    this._performMessageTransaction(msgType, msg, (error, response : secure_channel_service.OpenSecureChannelResponse) =>{
 
         if (response && response.responseHeader.serviceResult !== StatusCodes.Good) {
             error = new Error(response.responseHeader.serviceResult.toString());
@@ -554,7 +554,7 @@ protected _open_secure_channel_request(is_initial, callback) {
             // A self-signed application instance certificate does not need to be verified with a CA.
             // todo : verify that Certificate URI matches the ApplicationURI of the server
 
-            this._securityToken = response._securityToken;
+            this._securityToken = response.securityToken;
             assert(this._securityToken.tokenId > 0 || msgType === "OPN", "_sendSecureOpcUARequest: invalid token Id ");
             assert(response.hasOwnProperty("serverNonce"));
 
@@ -579,7 +579,7 @@ protected _open_secure_channel_request(is_initial, callback) {
 
             var cryptoFactory = this.messageBuilder.cryptoFactory;
             if (cryptoFactory) {
-                assert(this._serverNonce instanceof Buffer);
+                assert(this._serverNonce instanceof Uint8Array);
                 this._derivedKeys = cryptoFactory.compute_derived_keys(this._serverNonce, this._clientNonce);
             }
 
@@ -609,7 +609,7 @@ protected _on_connection(transport, callback, err?) {
 
         this._transport = transport;
 
-        this._transport.on("message", function (message_chunk) {
+        this._transport.on("message", (message_chunk) => {
             /**
              * notify the observers that ClientSecureChannelLayer has received a message chunk
              * @event receive_chunk
@@ -710,18 +710,18 @@ public create(endpoint_url : string , callback: Function) {
     // -------------------------------------------------------------------------
     // Handle reconnection
     // --------------------------------------------------------------------------
-    var _establish_connection = function (transport: ClientWSTransport, endpoint_url, callback) {
+    var _establish_connection = (transport: ClientWSTransport, endpoint_url, callback) => {
 
 
         var last_err = null;
 
-        function _connect(_i_callback) {
+        var _connect = (_i_callback) => {
 
             if (this.__call && this.__call._cancelBackoff) {
                 return;
             }
 
-            transport.connect(endpoint_url, function (err) {
+            transport.connect(endpoint_url, (err) => {
 
                 // force Backoff to fail if err is not ECONNRESET or ECONNREFUSE
                 // this mean that the connection to the server has succeeded but for some reason
@@ -764,7 +764,7 @@ public create(endpoint_url : string , callback: Function) {
         }
 
 
-        function _backoff_completion(err) {
+        var _backoff_completion = (err) => {
 
             if (this.__call) {
                 // console log =
@@ -787,7 +787,7 @@ public create(endpoint_url : string , callback: Function) {
         this.__call.failAfter(Math.max(this.connectionStrategy.maxRetry, 1));
 
 
-        this.__call.on("backoff", function (number, delay) {
+        this.__call.on("backoff", (number, delay) => {
 
             debugLog(" Backoff #" + number + "delay = " + delay + this.__call.maxNumberOfRetry_);
             // Do something when backoff starts, e.g. show to the
@@ -798,7 +798,7 @@ public create(endpoint_url : string , callback: Function) {
             this.emit("backoff", number, delay);
         });
 
-        this.__call.on("abort", function () {
+        this.__call.on("abort", () => {
             debugLog(" abort # after " + this.__call.getNumRetries() + " retries");
             // Do something when backoff starts, e.g. show to the
             // user the delay before next reconnection attempt.
@@ -987,7 +987,7 @@ protected _performMessageTransaction(msgType, requestMessage, callback) {
 
     var hasTimedOut = false;
 
-    function modified_callback(err, response) {
+    let  modified_callback = (err, response) =>{
 
         /* istanbul ignore next */
         if (doDebug) {
@@ -1020,7 +1020,7 @@ protected _performMessageTransaction(msgType, requestMessage, callback) {
 
         // invoke user callback if it has not been intercepted first ( by a abrupt disconnection for instance )
         try {
-            local_callback.apply(this, arguments);
+            local_callback.apply(this, [err,response]);
         }
         catch (err) {
             console.log("ERROR !!! , please check here !!!! callback may be called twice !! ", err);
@@ -1031,7 +1031,7 @@ protected _performMessageTransaction(msgType, requestMessage, callback) {
         }
     }
 
-    timerId = setTimeout(function () {
+    timerId = setTimeout( () => {
         timerId = null;
         console.log(" Timeout .... waiting for response for ", requestMessage.constructor.name, requestMessage.requestHeader.toString());
 
@@ -1116,7 +1116,7 @@ protected _internal_perform_transaction(transaction_data) {
 
 };
 
-protected _send_chunk(requestId, messageChunk) {
+protected _send_chunk(requestId, messageChunk?) {
 
     var request_data = this._request_data[requestId];
 
@@ -1285,7 +1285,7 @@ protected _sendSecureOpcUARequest(msgType, requestMessage, requestId) {
      */
     this.emit("send_request", requestMessage);
 
-    this.messageChunker.chunkSecureMessage(msgType, options, requestMessage, this._send_chunk.bind(self, requestId));
+    this.messageChunker.chunkSecureMessage(msgType, options, requestMessage, this._send_chunk.bind(this, requestId));
 
 };
 

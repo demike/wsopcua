@@ -88,27 +88,27 @@ constructor (msgType, options : SecureMessageChunkManagerOptions, securityHeader
 
     this._sequenceHeader = new SequenceHeader({requestId: requestId, sequenceNumber: -1});
 
-    var securityHeaderSize = this._securityHeader.binaryStoreSize();
-    var sequenceHeaderSize = this._sequenceHeader.binaryStoreSize();
+    var securityHeaderSize = DataStream.binaryStoreSize(this._securityHeader);
+    var sequenceHeaderSize = DataStream.binaryStoreSize(this._sequenceHeader);
     assert(sequenceHeaderSize === 8);
 
     this._headerSize = 12 + securityHeaderSize;
-
+    var self = this;
     var params = {
         chunkSize: this._chunkSize,
 
         headerSize: this._headerSize,
-        writeHeaderFunc: function (block, isLast, totalLength) {
+        writeHeaderFunc:  (block, isLast, totalLength) => {
 
             var finalC = isLast ? "F" : "C";
-            finalC = this.aborted ? "A" : finalC;
+            finalC = this._aborted ? "A" : finalC;
             this.write_header(finalC, block, totalLength);
         },
 
         sequenceHeaderSize: options.sequenceHeaderSize,
-        writeSequenceHeaderFunc: function (block) {
-            assert(block.length === this.sequenceHeaderSize);
-            this.writeSequenceHeader(block);
+        writeSequenceHeaderFunc: function (block : DataStream | DataView) {
+            assert(block.byteLength === this.sequenceHeaderSize);
+            self.writeSequenceHeader(block);
         },
 
         // ---------------------------------------- Signing stuff
@@ -133,13 +133,14 @@ constructor (msgType, options : SecureMessageChunkManagerOptions, securityHeader
     });
 };
 
-public write_header(finalC, buf : ArrayBuffer, length) {
+public write_header(finalC, buf : DataStream | DataView, length) {
 
     assert(buf.byteLength > 12);
     assert(finalC.length === 1);
-    assert(buf instanceof Buffer);
 
-    var bs = new DataStream(buf);
+    if (buf instanceof DataView) {
+        buf = new DataStream(buf);
+    }
 
     // message header --------------------------
     
@@ -150,28 +151,30 @@ public write_header(finalC, buf : ArrayBuffer, length) {
     // MessageSize     UInt32   The length of the MessageChunk, in bytes. This value includes size of the message header.
     // SecureChannelId UInt32   A unique identifier for the ClientSecureChannelLayer assigned by the server.
 
-    bs.setUint8(this._msgType.charCodeAt(0));
-    bs.setUint8(this._msgType.charCodeAt(1));
-    bs.setUint8(this._msgType.charCodeAt(2));
-    bs.setUint8(finalC.charCodeAt(0));
+    buf.setUint8(this._msgType.charCodeAt(0));
+    buf.setUint8(this._msgType.charCodeAt(1));
+    buf.setUint8(this._msgType.charCodeAt(2));
+    buf.setUint8(finalC.charCodeAt(0));
 
-    bs.setUint32(length);
-    bs.setUint32(this._secureChannelId);
+    buf.setUint32(length);
+    buf.setUint32(this._secureChannelId);
 
-    assert(bs.length === 12);
+    assert(buf.length === 12);
 
-    //xx console.log("securityHeader size = ",this.securityHeader.binaryStoreSize());
+    //xx console.log("securityHeader size = ",DataStream.binaryStoreSize(this.securityHeader));
     // write Security Header -----------------
-    this._securityHeader.encode(bs);
-    assert(bs.length === this._headerSize);
+    this._securityHeader.encode(buf);
+    assert(buf.length === this._headerSize);
 };
 
-public writeSequenceHeader(block) {
-    var bs = new DataStream(block);
+public writeSequenceHeader(block : DataStream | DataView) {
+    if (block instanceof DataView) {
+        block = new DataStream(block);
+    }
     // write Sequence Header -----------------
     this._sequenceHeader.sequenceNumber = this._sequenceNumberGenerator.next();
-    this._sequenceHeader.encode(bs);
-    assert(bs.length === 8);
+    this._sequenceHeader.encode(block);
+    assert(block.length === 8);
 
 };
 

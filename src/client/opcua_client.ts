@@ -49,6 +49,8 @@ import {isNullOrUndefined} from '../utils';
 
 import {makeApplicationUrn} from "../common/applicationurn";
 import { UserIdentityToken } from "../generated/UserIdentityToken";
+import { stringToUint8Array } from "../basic-types/DataStream";
+import { Session } from "inspector";
 
 export interface UserIdentityInfo {
     userName?: string,
@@ -320,10 +322,10 @@ protected _activateSession(session : ClientSession, callback) {
     var serverCertificate = session.serverCertificate;
     // If the securityPolicyUri is NONE and none of the UserTokenPolicies requires encryption,
     // the Client shall ignore the ApplicationInstanceCertificate (serverCertificate)
-    assert(serverCertificate === null || serverCertificate instanceof Buffer);
+    assert(serverCertificate === null || serverCertificate instanceof Uint8Array );
 
     var serverNonce = session.serverNonce;
-    assert(!serverNonce || serverNonce instanceof Buffer);
+    assert(!serverNonce || serverNonce instanceof Uint8Array);
 
     // make sure session is attached to this client
     var _old_client = session.client;
@@ -480,10 +482,10 @@ public reactivateSession(session : ClientSession, callback) {
  *     });
  *
  */
-public createSession(userIdentityInfo : UserIdentityInfo, callback) {
+public createSession(userIdentityInfo : UserIdentityInfo, callback : (err : Error,session? : ClientSession) => void) {
 
     if (_.isFunction(userIdentityInfo)) {
-        callback = userIdentityInfo;
+        (<any>callback) = userIdentityInfo;
         userIdentityInfo = {};
     }
 
@@ -981,7 +983,7 @@ function findUserTokenPolicy(endpoint_description, userTokenType) : endpoints_se
     assert(endpoint_description instanceof EndpointDescription);
     var r = _.filter(endpoint_description.userIdentityTokens, function (userIdentity : endpoints_service.UserTokenPolicy) {
         // assert(userIdentity instanceof UserTokenPolicy)
-        assert(userIdentity.tokenType);
+        // assert(userIdentity.tokenType);   
         return userIdentity.tokenType === userTokenType;
     });
     return r.length === 0 ? null : r[0];
@@ -1026,7 +1028,7 @@ function createUserNameIdentityToken(session, userName, password) {
 
         var userIdentityToken = new UserNameIdentityToken({
             userName: userName,
-            password: Buffer.from(password, "utf-8"),
+            password: stringToUint8Array(password),//Buffer.from(password, "utf-8"),
             encryptionAlgorithm: null,
             policyId: userTokenPolicy.policyId
         });

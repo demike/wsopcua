@@ -15,12 +15,11 @@ import {DataStream} from '../basic-types/DataStream';
 
 var do_debug = false;
 
-export function verify_message_chunk(message_chunk) {
+export function verify_message_chunk(message_chunk : DataView | ArrayBuffer) {
     assert(message_chunk);
-    assert(message_chunk instanceof Buffer);
     var header = readMessageHeader(new DataStream(message_chunk));
-    if (message_chunk.length !== header.length) {
-        throw new Error(" chunk length = " + message_chunk.length + " message  length " + header.length);
+    if (message_chunk.byteLength !== header.length) {
+        throw new Error(" chunk length = " + message_chunk.byteLength + " message  length " + header.length);
     }
 }
 
@@ -118,9 +117,10 @@ export class ChunkManager extends EventEmitter {
     cursor: number;
     pending_chunk: ArrayBuffer;
     dataEnd: any;
-    emit(arg0: any, arg1: any, arg2: any,arg3?: any): any {
+/*    emit(arg0: any, arg1: any, arg2: any,arg3?: any): any {
         throw new Error("Method not implemented.");
     }
+*/
     constructor(options) {
         super();
         assert(argsIn(options, ChunkManager_options));
@@ -210,10 +210,10 @@ export class ChunkManager extends EventEmitter {
                 // Release 1.02  39  OPC Unified Architecture, Part 6:
                 // The sequence header ensures that the first  encrypted block of every  Message  sent over
                 // a channel will start with different data.
-                this.writeHeaderFunc(this.pending_chunk.slice(0, this.headerSize), isLast, expected_length);
+                this.writeHeaderFunc(new DataView(this.pending_chunk,0,this.headerSize),isLast, expected_length);
             }
             if (this.sequenceHeaderSize > 0) {
-                this.writeSequenceHeaderFunc(this.pending_chunk.slice(this.headerSize, this.headerSize + this.sequenceHeaderSize));
+                this.writeSequenceHeaderFunc(new DataView(this.pending_chunk,this.headerSize,/* this.headerSize + */this.sequenceHeaderSize));
             }
             this._write_signature(this.pending_chunk);
             this._encrypt(this.pending_chunk);

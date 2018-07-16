@@ -106,4 +106,4 @@ public clone(target?: SequenceHeader): BaseUAObject {
 }
 
 
-register_class_definition("SequenceHeader",SequenceHeader);
+register_class_definition("SequenceHeader",SequenceHeader,makeExpandedNodeId(generate_new_id()));

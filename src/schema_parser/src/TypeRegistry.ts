@@ -290,6 +290,11 @@ export class TypeRegistry {
         type.ImportAs = "ec";
         this.addType(type.Name,type);
         
+        //ExtensionObject:
+        type = new SimpleType("ExtensionObject");
+        type.Path = this.BASIC_TYPES_PATH;
+        type.ImportAs = "ec";
+        this.addType(type.Name,type);
         /*
 QualifiedName:     20 , 
 LocalizedText:     21 , 

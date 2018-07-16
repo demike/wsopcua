@@ -1,29 +1,32 @@
 "use strict";
-import * as fs from 'fs';
 import * as path from 'path';
+import * as fs from 'fs';
 
-
-
-var datafolder = path.join(__dirname,"../schemas");
 
 // see OPC-UA Part 6 , A2
-var codeMap : {[key:string] : string[]} = {};
+//export var codeMap : {[key:string] : string[]} = {};
+export var metaTypeMap : {[key : string]:{[key : string]:string[]}} = {};
 
-fs.readFile(path.join(datafolder,'/NodeIds.csv'),"utf8",(err : Error|null,data : string)=>{
-    if (err) {
-        console.log(err);
-    } else {
-        convert(data);
-    }
-});
+export function generateNodeIds(csvFilePath : string, outFileName : string, callback? : Function) {
+    fs.readFile(csvFilePath,"utf8",(err : Error|null,data : string)=>{
+        if (err) {
+            console.log(err);
+        } else {
+            convert(data,outFileName);
+            if (callback) {
+                callback();
+            }
+        }
+    });
+}
 
-function convert(data : string)
+function convert(data : string,outFileName : string)
 {
     let lines = data.split("\n");
 
 
     var name,id,type,codeName,value,typeName;
-    var metaMap : {[key : string]:{[key : string]:string[]}} = {};
+    metaTypeMap = {};
 
     lines.forEach(function(line) {
         let row = line.split(',');
@@ -34,16 +37,16 @@ function convert(data : string)
         let value : string    = row[1];
         let type : string = row[2];
 
-        if (!metaMap.hasOwnProperty(type)) {
-            metaMap[type]= {};
+        if (!metaTypeMap.hasOwnProperty(type)) {
+            metaTypeMap[type]= {};
         }
 
-        codeMap[codeName] = row;
-        metaMap[type][codeName]= row;
+        //codeMap[codeName] = row;
+        metaTypeMap[type][codeName]= row;
 
 
     });
-    var outFile = fs.createWriteStream(path.join(__dirname + "/../../constants","opcua_node_ids.ts"));
+    var outFile = fs.createWriteStream(path.join(__dirname + "/../../constants",outFileName));
     outFile.write("// this file has been automatically generated\n");
     outFile.write("// using schema_parser/generate_node_ids.ts\n");
 
@@ -65,9 +68,9 @@ function convert(data : string)
     }
 */
     var typeMap;
-    for(typeName in metaMap) {
-        if (metaMap.hasOwnProperty(typeName)) {
-            typeMap = metaMap[typeName];
+    for(typeName in metaTypeMap) {
+        if (metaTypeMap.hasOwnProperty(typeName)) {
+            typeMap = metaTypeMap[typeName];
             outFile.write(" export var "+ typeName + "Ids = { \n");
 
             var names = Object.keys(typeMap);

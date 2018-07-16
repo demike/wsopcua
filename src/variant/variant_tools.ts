@@ -223,11 +223,7 @@ export function buildVariantArray(dataType, nbElements, defaultValue) {
     return value;
 }
 
-// old version of nodejs do not provide a Buffer#equals test
-var oldNodeVersion =  (process.versions.node && process.versions.node.substring(0,1) === "0");
-
-
-function __check_same_array(arr1,arr2) {
+function __check_same_array(arr1 : any[],arr2 : any[]) {
 
     if (!arr1 || !arr2) {
         return !arr1 && !arr2;

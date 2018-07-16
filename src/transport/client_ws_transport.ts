@@ -36,7 +36,18 @@ function createClientSocket(endpointUrl : string) : WebSocket {
     switch (ep.protocol) {
         case "websocket":
         case "opc.tcp":
+        case "ws":
             //TODO: that's it --> implement me
+            let websocket = new WebSocket(endpointUrl);
+            websocket.binaryType  = "arraybuffer";
+            /*
+            websocket.onopen = function(evt) { onOpen(evt) };
+            websocket.onclose = function(evt) { onClose(evt) };
+            websocket.onmessage = function(evt) { onMessage(evt) };
+            websocket.onerror = function(evt) { onError(evt) };
+            */
+           return websocket;
+            break;
         case "fake":
             var fakeSocket = getFakeTransport();
             assert(ep.protocol === "fake", " Unsupported transport protocol");
@@ -261,7 +272,7 @@ protected _perform_HEL_ACK_transaction(callback) {
 
         if (err) {
             callback(err);
-            this._socket.close(1002,"OPC-UA: HELLO - ACK failed");
+            this._socket.close(1000,"OPC-UA: HELLO - ACK failed");
         } else {
             this._handle_ACK_response(data, function (inner_err) {
                 callback(inner_err);

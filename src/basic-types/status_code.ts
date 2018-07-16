@@ -5,6 +5,7 @@
 import * as _ from 'underscore';
 import {assert} from '../assert';
 import {StatusCodes} from '../constants';
+import { DataStream } from './DataStream';
 
 var extraStatusCodeBits = {
 
@@ -110,7 +111,11 @@ StatusCodes['Uncertain'] = {
 
 
 
-
+interface IStatusCodeOptions {
+    value : number;
+    description : string;
+    name : string;
+}
 
 /**
  * a particular StatusCode , with it's value , name and description
@@ -124,14 +129,22 @@ StatusCodes['Uncertain'] = {
  * @constructor
  */
 export class StatusCode {
-    public readonly value : number;
-    public readonly description : string;
-    public readonly name : string;
-constructor(options) {
-
-    this.value = options.value;
-    this.description = options.description;
-    this.name = options.name;
+    private _value: number;
+    public get value(): number {
+        return this._value;
+    }
+    private _description: string;
+    public get description(): string {
+        return this._description;
+    }
+    private _name: string;
+    public get name(): string {
+        return this._name;
+    }
+constructor(options : IStatusCodeOptions) {
+    this._value = options.value;
+    this._description = options.description;
+    this._name = options.name;
     //xx this.highword =  this.value ? 0x8000 + this.value : 0 ;
 }
 
@@ -165,22 +178,22 @@ public valueOf() : number {
 
 class ConstantStatusCode extends StatusCode {
     constructor(options) {
-        super(arguments);
+        super(options);
     }
 }
 
 
-export var encodeStatusCode = function (statusCode, stream) {
+export var encodeStatusCode = function (statusCode, stream : DataStream) {
     assert(statusCode instanceof StatusCode || statusCode instanceof ConstantStatusCode);
-    stream.writeUInt32(statusCode.value);
+    stream.setUint32(statusCode.value);
 };
 
 function b(c) {
     var tmp ="0000000000000000000000"+(c >>>0).toString(2);
     return tmp.substr(-32);
 }
-export var decodeStatusCode = function (stream) {
-    var code = stream.readUInt32();
+export var decodeStatusCode = function (stream : DataStream) {
+    var code = stream.getUint32();
 
     var code_without_info_bits = (code &  0xFFFF0000)>>>0;
     var info_bits = code & 0x0000FFFF;

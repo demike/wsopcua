@@ -2,7 +2,9 @@ import * as ec from '../basic-types';
 import { DataStream } from "../basic-types/DataStream";
 "use strict";
 
-import * as factories from '../factory';
+export interface ISymmetricAlgortihmSecurityHeader {
+    tokenId? : ec.UInt32;
+}
 
 // Symmetric algorithms are used to secure all messages other than the OpenSecureChannel messages
 // OPC UA Secure Conversation Message Header Release 1.02 Part 6 page 39
@@ -11,7 +13,15 @@ export class SymmetricAlgorithmSecurityHeader {
         // This identifier is returned by the server in an OpenSecureChannel response message. If a
         // Server receives a TokenId which it does not recognize it shall return an appropriate
         // transport layer error.
-        tokenId : ec.UInt32 = 0xDEADBEEF;
+
+
+        tokenId : ec.UInt32;
+
+        constructor(options? : ISymmetricAlgortihmSecurityHeader) {
+            options = options || {};
+
+            this.tokenId = options.tokenId || 0xDEADBEEF;
+        }
 
         encode(	out : DataStream) { 
             ec.encodeUInt32(this.tokenId,out);
@@ -33,4 +43,6 @@ export class SymmetricAlgorithmSecurityHeader {
 
 
 import {register_class_definition} from "../factory/factories_factories";
-register_class_definition("SymmetricAlgorithmSecurityHeader",SymmetricAlgorithmSecurityHeader);
+import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
+import { generate_new_id } from '../factory';
+register_class_definition("SymmetricAlgorithmSecurityHeader",SymmetricAlgorithmSecurityHeader,makeExpandedNodeId(generate_new_id()));

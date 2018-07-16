@@ -57,6 +57,8 @@ import * as utils from '../utils';
 import {doDebug,debugLog} from '../common/debug';
 import { QualifiedName } from '../generated/QualifiedName';
 import { NodeClass } from '../generated/NodeClass';
+import { DiagnosticInfo } from '../data-model';
+import { ReferenceDescription } from '../service-browse';
 
 
 
@@ -237,7 +239,7 @@ public static coerceBrowseDescription(data) {
  * @param {Error|null} callback.err
  * @param {BrowseResult[]} callback.results an array containing the BrowseResult of each BrowseDescription.
  */
-browse(nodes, callback) {
+browse(nodes, callback : (err : Error, results : browse_service.BrowseResult[], diagnostInfos : DiagnosticInfo[]| browse_service.BrowseResponse) => void) {
 
     this._requestedMaxReferencesPerNode = this._requestedMaxReferencesPerNode || 10000;
     assert(_.isFinite(this._requestedMaxReferencesPerNode));
@@ -254,7 +256,7 @@ browse(nodes, callback) {
         requestedMaxReferencesPerNode: this._requestedMaxReferencesPerNode
     });
 
-    this.performMessageTransaction(request, (err, response) => {
+    this.performMessageTransaction(request, (err, response : browse_service.BrowseResponse) => {
 
         var i, r;
 
@@ -959,7 +961,7 @@ public performMessageTransaction(request, callback) {
 
     this.lastRequestSentTime = Date.now();
 
-    this._client.performMessageTransaction(request, function (err, response) {
+    this._client.performMessageTransaction(request, (err, response) => {
 
         this.lastResponseReceivedTime = Date.now();
 
@@ -1170,14 +1172,14 @@ public getArgumentDefinition(methodId : NodeId, callback : (err : Error|null,inp
         });
 
         // note : InputArguments property is optional thus may be missing
-        inputArgumentRef = (inputArgumentRef.length === 1)  ? inputArgumentRef[0] : null;
+        inputArgumentRef = (inputArgumentRef.length === 1)  ? <any>inputArgumentRef[0] : null;
 
         var outputArgumentRef = results[0].references.filter(function (r) {
             return r.browseName.name === "OutputArguments";
         });
 
         // note : OutputArguments property is optional thus may be missing
-        outputArgumentRef = (outputArgumentRef.length === 1)  ? outputArgumentRef[0] : null;
+        outputArgumentRef = (outputArgumentRef.length === 1)  ? <any>outputArgumentRef[0] : null;
 
         //xx console.log("xxxx argument", util.inspect(argument, {colors: true, depth: 10}));
         //xx console.log("xxxx argument nodeId", argument.nodeId.toString());
@@ -1189,14 +1191,14 @@ public getArgumentDefinition(methodId : NodeId, callback : (err : Error|null,inp
 
         if(inputArgumentRef) {
             nodesToRead.push({
-                nodeId: inputArgumentRef.nodeId,
+                nodeId: (<ReferenceDescription><any>inputArgumentRef).nodeId,
                 attributeId: read_service.AttributeIds.Value
             });
             actions.push(function(result) { inputArguments = result.value.value;});
         }
         if(outputArgumentRef) {
             nodesToRead.push({
-                nodeId: outputArgumentRef.nodeId,
+                nodeId: (<ReferenceDescription><any>outputArgumentRef).nodeId,
                     attributeId: read_service.AttributeIds.Value
             });
             actions.push(function(result) { outputArguments = result.value.value;});

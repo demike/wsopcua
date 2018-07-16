@@ -9,8 +9,9 @@ import {get_clock_tick} from '../utils';
 
 import {PacketAssembler} from '../packet-assembler/packet_assembler';
 import {readMessageHeader} from '../chunkmanager';
+import { concatTypedArrays, concatArrayBuffers } from '../basic-types/array';
 
-export function readRawMessageHeader(data) {
+export function readRawMessageHeader(data : DataView | ArrayBuffer ) {
     var messageHeader = readMessageHeader(new DataStream(data));
     return {
         length: messageHeader.length,
@@ -89,11 +90,14 @@ export abstract class MessageBuilderBase extends EventEmitter{
      * @param message_chunk
      * @private
      */
-    protected _append(message_chunk : ArrayBuffer) {
+    protected _append(message_chunk : DataView | ArrayBuffer) {
         if (this.status_error) {
             // the message builder is in error mode and further message chunks should be discarded.
             return false;
         }
+
+        message_chunk = (message_chunk instanceof ArrayBuffer) ? message_chunk : message_chunk.buffer;
+
         this.message_chunks.push(message_chunk);
         this.total_message_size += message_chunk.byteLength;
         var binaryStream = new DataStream(message_chunk);
@@ -129,7 +133,7 @@ export abstract class MessageBuilderBase extends EventEmitter{
             this.packetAssembler.feed(data);
         }
     }
-    protected _feed_messageChunk(messageChunk) {
+    protected _feed_messageChunk(messageChunk : ArrayBuffer | DataView) {
         assert(messageChunk);
         var messageHeader = readMessageHeader(new DataStream(messageChunk));
         /**
@@ -144,7 +148,7 @@ export abstract class MessageBuilderBase extends EventEmitter{
             if (this.status_error) {
                 return false;
             }
-            var full_message_body = Buffer.concat(this.blocks);
+            var full_message_body = concatArrayBuffers(this.blocks);
             //record tick 1: when a complete message has been received ( all chunks assembled)
             this._tick1 = get_clock_tick();
             /**

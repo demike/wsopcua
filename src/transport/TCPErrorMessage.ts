@@ -12,6 +12,7 @@ import {makeNodeId} from "../nodeid/nodeid";
 import {_defaultTypeMap} from "../factory/factories_builtin_types";
 import * as ec from "../basic-types";
 
+
 import {makeExpandedNodeId} from "../nodeid/expanded_nodeid";
 
 import {_enumerations} from "../factory/factories_enumerations";
@@ -25,8 +26,8 @@ import { StatusCode,encodeStatusCode,decodeStatusCode} from "../basic-types/";
 
 var encodeArray = ec.encodeArray;
 var decodeArray = ec.decodeArray;
-var encode_StatusCode = encode_StatusCode;
-var decode_StatusCode = decode_StatusCode;
+var encode_StatusCode = encodeStatusCode;
+var decode_StatusCode = decodeStatusCode;
 var encode_String = ec.encodeString;
 var decode_String = ec.decodeString;
 
@@ -92,8 +93,9 @@ public decode(stream : DataStream) {
 
 public clone(target: any): BaseUAObject {
     throw new Error("Method not implemented.");
-}
 
 }
 
-register_class_definition("TCPErrorMessage",TCPErrorMessage);
+}
+
+register_class_definition("TCPErrorMessage",TCPErrorMessage,makeExpandedNodeId(generate_new_id()));

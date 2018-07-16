@@ -1,13 +1,17 @@
 {
     "compilerOptions": {
-      "module": "amd",
+      "module": "es2015",
       "target": "es6",
       "declaration": true,
       "sourceMap": true,
       "outDir": "./dist",
-      "moduleResolution": "node"
+      "moduleResolution": "node",
+     // "outFile": "./dist/ws-opcua.js"
     },
+    "exclude": [
+      "node_modules"
+    ],
     "include": [
-      "src/**/*"
+      "src/**/*",
     ]
   }

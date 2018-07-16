@@ -8,6 +8,7 @@
 
 import {assert} from "../assert";
 import * as _ from 'underscore';
+import { ExpandedNodeId } from "../basic-types";
 
 
 var constructorMap = {};
@@ -70,17 +71,16 @@ export function constructObject(expandedNodeId) {
     return callConstructor(constructor);
 };
 
-export function register_class_definition(classname, class_constructor) {
+export function register_class_definition(classname : string, class_constructor : any, nodeId : ExpandedNodeId) {
 
     registerFactory(classname, class_constructor);
 
-    var expandedNodeId = class_constructor.prototype.encodingDefaultBinary;
-
     /* istanbul ignore next */
-    if (expandedNodeId.value in constructorMap) {
-        throw new Error(" Class " + classname + " with ID " + expandedNodeId + "  already in constructorMap for  " + constructorMap[expandedNodeId.value].name);
+    if (nodeId.value in constructorMap) {
+        throw new Error(" Class " + classname + " with ID " + nodeId + "  already in constructorMap for  " + constructorMap[nodeId.value].name);
     }
-    constructorMap[expandedNodeId.value] = class_constructor;
+    class_constructor.prototype.encodingDefaultBinary = nodeId;
+    constructorMap[nodeId.value] = class_constructor;
 }
 
 

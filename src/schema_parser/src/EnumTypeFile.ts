@@ -52,7 +52,8 @@ export class EnumTypeFile extends ClassFile {
         for (let met of this.utilityFunctions) {
             str += "export function " + met.toString() + "\n";
         }
-        
+
+        str += "\n" + this.getFactoryCode();
         return str;
     }
 
@@ -67,6 +68,12 @@ export class EnumTypeFile extends ClassFile {
 
     public getInterfaceImportSrc() : string|null {
         return null;
+    }
+
+    protected getFactoryCode() : string {
+        let str = "import {registerEnumeration} from \"../factory/factories_enumerations\";\n";
+        str += "registerEnumeration(\"" + this.name + "\"," + this.name + ",encode" + this.name + " ,decode" + this.name + " ,null);";
+        return str;
     }
    
 }

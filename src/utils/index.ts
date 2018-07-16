@@ -12,9 +12,9 @@ import {assert} from '../assert';
  * @param mask
  * @return {number}
  */
-export function set_flag(value, mask): number {
+export function set_flag(value : number, mask : number): number {
     assert(mask !== undefined);
-    return (value | mask.value);
+    return (value | mask);
 }
 
 /**
@@ -26,8 +26,8 @@ export function set_flag(value, mask): number {
  * @return {boolean}
  */
 export function check_flag(value, mask): boolean {
-    assert(mask !== undefined && mask.value);
-    return ((value & mask.value) === mask.value);
+    assert(mask !== undefined);
+    return ((value & mask) === mask);
 }
 
 export {buffer_ellipsis} from './buffer_ellipsis';

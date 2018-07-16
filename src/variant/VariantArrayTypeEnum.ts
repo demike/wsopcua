@@ -8,4 +8,4 @@ export enum VariantArrayType {
     Matrix = 0x02
 }
 
-exports.VariantArrayType = factories.registerEnumeration("VariantArrayType",VariantArrayType,encodeInt32,decodeInt32);
+factories.registerEnumeration("VariantArrayType",VariantArrayType,encodeInt32,decodeInt32);

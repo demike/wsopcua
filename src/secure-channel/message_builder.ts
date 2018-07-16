@@ -45,7 +45,6 @@ export class MessageBuilder extends MessageBuilderBase {
  * @param [options.objectFactory=factories] a object that provides a constructObject(id) method
  */
     constructor(options? : any) {
-        super(options);
         options = options || {};
         super(options);
 

@@ -25,8 +25,7 @@ import { MonitoringMode } from '../generated/MonitoringMode';
 import { MonitoredItemCreateResult } from '../generated/MonitoredItemCreateResult';
 import { MonitoredItem } from './MonitoredItem';
 
-import { ExtensionObject } from '../generated/ExtensionObject';
-import { StatusCode,NodeId} from '../basic-types';
+import { StatusCode,NodeId,ExtensionObject} from '../basic-types';
 
 //import {MonitoredItemsModifyRequest} from '../generated/MonitoredItemsModifyRequest';
 var MonitoredItemModifyRequest = subscription_service.MonitoredItemModifyRequest;

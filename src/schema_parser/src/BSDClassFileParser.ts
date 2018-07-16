@@ -6,6 +6,7 @@ import {PathGenUtil} from './PathGenUtil';
 import {ClassMethod, TypeRegistry, ClassFile} from './SchemaParser.module';
 import { IncompleteTypeDefException } from './IncompleteTypeDefException';
 import { ClassMember } from './ClassMember';
+import { SimpleType } from './SimpleType';
 
 export abstract class BSDClassFileParser {
 
@@ -40,7 +41,10 @@ export abstract class BSDClassFileParser {
 
         at = this.el.attributes.getNamedItem(ClassFile.ATTR_BASE_CLASS);
         if (at != null) {
-            this.cls.BaseClass = TypeRegistry.getType(at.value);
+            let baseCls = TypeRegistry.getType(at.value);
+            if (! (baseCls instanceof SimpleType)) {
+                this.cls.BaseClass = baseCls;
+            }
         }
 
         TypeRegistry.addType(this.cls.Name,this.cls)

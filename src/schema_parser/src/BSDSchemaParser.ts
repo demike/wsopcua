@@ -16,15 +16,19 @@ export class BSDSchemaParser {
     protected outPath? : string;
     protected inPath? : string;
 
-
+    protected metaTypeMap : {[key : string]:{[key : string]:string[]}} = {};
+    protected namespace : string  = "0";
 
     constructor() {
         this.clsIncompleteTypes = [];
     }
 
-    public parse(inpath : string, outpath : string) {
+    public parse(inpath : string, outpath : string,metaTypeMap : {[key : string]:{[key : string]:string[]}},namespace : string) {
         this.inPath = inpath;
         this.outPath = outpath;
+        this.metaTypeMap = metaTypeMap;
+        this.namespace = namespace;
+        
         if (!fs.existsSync(outpath)) {
             fs.mkdirSync(outpath);
         } 
@@ -139,6 +143,13 @@ export class BSDSchemaParser {
         ar = TypeRegistry.getTypes();
         for (let file of ar) {
             if (!file.Written) {
+                let arParams = this.metaTypeMap[/*"DataType"*/"Object"][file.Name + "_Encoding_DefaultBinary"];
+                if (!arParams) {
+                    arParams = this.metaTypeMap["DataType"][file.Name ];
+                }
+                if (arParams) {
+                    file.setTypeId(arParams[1],this.namespace);
+                }
                 this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
                 file.Written = true;
             }

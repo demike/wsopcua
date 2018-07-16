@@ -40,7 +40,7 @@ export function packTcpMessage(msgType, encodableObject) {
 
     assert(is_valid_msg_type(msgType));
 
-    var messageChunk = new ArrayBuffer(encodableObject.binaryStoreSize() + 8);
+    var messageChunk = new ArrayBuffer(DataStream.binaryStoreSize(encodableObject) + 8);
     // encode encodeableObject in a packet
     var stream = new DataStream(messageChunk);
     encodeMessage(msgType, encodableObject, stream);
@@ -89,19 +89,19 @@ export function writeTCPMessageHeader(msgType, chunkType, total_length, stream) 
     assert(is_valid_msg_type(msgType));
     assert(["A", "F", "C"].indexOf(chunkType) !== -1);
 
-    stream.writeUInt8(msgType.charCodeAt(0));
-    stream.writeUInt8(msgType.charCodeAt(1));
-    stream.writeUInt8(msgType.charCodeAt(2));
+    stream.setUint8(msgType.charCodeAt(0));
+    stream.setUint8(msgType.charCodeAt(1));
+    stream.setUint8(msgType.charCodeAt(2));
     // Chunk type
-    stream.writeUInt8(chunkType.charCodeAt(0)); // reserved
+    stream.setUint8(chunkType.charCodeAt(0)); // reserved
 
-    stream.writeUInt32(total_length);
+    stream.setUint32(total_length);
 }
 
 var encodeMessage = function (msgType, messageContent, stream) {
 
     //the length of the message, in bytes. (includes the 8 bytes of the message header)
-    var total_length = messageContent.binaryStoreSize() + 8;
+    var total_length = DataStream.binaryStoreSize(messageContent) + 8;
 
     writeTCPMessageHeader(msgType, "F", total_length, stream);
     messageContent.encode(stream);

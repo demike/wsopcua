@@ -6,7 +6,7 @@ import { DataStream } from "../basic-types/DataStream";
 // OPC UA Secure Conversation Message Header : Part 6 page 36
 
 export interface IAsymmetricAlgorithmSecurityHeader {
-        securityPolicyUri : string;
+        securityPolicyUri? : string;
         senderCertificate? : Uint8Array//ByteString;
         receiverCertificateThumbprint? : Uint8Array//ByteString;
 }
@@ -16,6 +16,7 @@ export class AsymmetricAlgorithmSecurityHeader {
 
 
         constructor(options? : IAsymmetricAlgorithmSecurityHeader) {
+                options = options || {};
                 this.securityPolicyUri = options.securityPolicyUri;
                 this.senderCertificate = options.senderCertificate;
                 this.receiverCertificateThumbprint = options.receiverCertificateThumbprint;
@@ -81,4 +82,6 @@ export class AsymmetricAlgorithmSecurityHeader {
 }
 
 import {register_class_definition} from "../factory/factories_factories";
-register_class_definition("AsymmetricAlgorithmSecurityHeader",AsymmetricAlgorithmSecurityHeader);
+import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
+import { generate_new_id } from '../factory';
+register_class_definition("AsymmetricAlgorithmSecurityHeader",AsymmetricAlgorithmSecurityHeader,makeExpandedNodeId(generate_new_id()));

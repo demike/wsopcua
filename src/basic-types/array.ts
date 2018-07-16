@@ -77,3 +77,37 @@ export function cloneComplexArray(arr : any[]) {
     return out;
 
 }
+
+export function concatTypedArrays<T extends Uint16Array | Uint8Array | Uint32Array | Int16Array | Int8Array | Int32Array | Float32Array | Float64Array >(arrays : T[]) : T {
+    let len : number = 0;
+    for (let ar of arrays) {
+        len += ar.length;
+    }
+
+    let buf = new (<any>arrays[0].constructor)(len); //new (<any>T.constructor)(len);
+    let offset = 0;  
+    for (let ar of arrays) {
+        buf.set(ar,offset);
+        offset += ar.length;
+    }
+    return buf;
+}
+
+export function concatArrayBuffers(arrays : ArrayBuffer[]) : ArrayBuffer {
+    if (arrays.length == 1) {
+        return arrays[0];
+    }
+    let len : number = 0;
+    for (let ar of arrays) {
+        len += ar.byteLength;
+    }
+
+    let buf = new Uint8Array(len);
+
+    let offset = 0;  
+    for (let ar of arrays) {
+        buf.set(new Uint8Array(ar),offset);
+        offset += ar.byteLength;
+    }
+    return buf.buffer;
+}

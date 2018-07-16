@@ -206,7 +206,7 @@ export function analyze_object_binary_encoding(obj,options) {
 
     assert(obj);
 
-    var size = obj.binaryStoreSize();
+    var size = DataStream.binaryStoreSize(obj);
     console.log("-------------------------------------------------");
     console.log(" size = ", size);
     var stream = new DataStream(size);

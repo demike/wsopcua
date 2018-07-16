@@ -2,7 +2,6 @@
 
 import {DataStream} from './DataStream';
 import {assert} from '../assert';
-import * as _ from 'underscore';
 import  '../nodeid/nodeid';
 import {NodeId,NodeIdType,makeNodeId} from '../nodeid/nodeid';
 import {ExpandedNodeId} from '../nodeid/expanded_nodeid';
@@ -37,7 +36,7 @@ function is_uint16(value : number) : boolean  {
     return value >= 0 && value <= 0xFFFF;
 }
 
-function nodeID_encodingByte(nodeId) : number {
+function nodeID_encodingByte(nodeId : NodeId | ExpandedNodeId) : number {
 
     if (!nodeId) {
         return 0;
@@ -46,13 +45,13 @@ function nodeID_encodingByte(nodeId) : number {
 
     var encodingByte = 0;
 
-    if (nodeId.identifierType.is(NodeIdType.NUMERIC)) {
+    if (nodeId.identifierType ==NodeIdType.NUMERIC) {
 
-        if (is_uint8(nodeId.value) && (!nodeId.namespace) && !nodeId.namespaceUri && !nodeId.serverIndex) {
+        if (is_uint8(nodeId.value) && (!nodeId.namespace) && !(<ExpandedNodeId>nodeId).namespaceUri && !(<ExpandedNodeId>nodeId).serverIndex) {
 
             encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.TwoBytes);
 
-        } else if (is_uint16(nodeId.value) && is_uint8(nodeId.namespace) && !nodeId.namespaceUri && !nodeId.serverIndex) {
+        } else if (is_uint16(nodeId.value) && is_uint8(nodeId.namespace) && !(<ExpandedNodeId>nodeId).namespaceUri && !(<ExpandedNodeId>nodeId).serverIndex) {
 
             encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.FourBytes);
 
@@ -60,23 +59,27 @@ function nodeID_encodingByte(nodeId) : number {
             encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.Numeric);
         }
 
-    } else if (nodeId.identifierType.is(NodeIdType.STRING)) {
+    } else if (nodeId.identifierType == NodeIdType.STRING) {
 
         encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.String);
 
-    } else if (nodeId.identifierType.is(NodeIdType.BYTESTRING)) {
+    } else if (nodeId.identifierType == NodeIdType.BYTESTRING) {
         encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.ByteString);
 
-    } else if (nodeId.identifierType.is(NodeIdType.GUID)) {
+    } else if (nodeId.identifierType == NodeIdType.GUID) {
         encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.Guid);
     }
 
-    if (nodeId.hasOwnProperty("namespaceUri") && nodeId.namespaceUri) {
-        encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.NamespaceUriFlag);
+    if (nodeId instanceof ExpandedNodeId) {
+        if (nodeId.namespaceUri) {
+            encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.NamespaceUriFlag);
+        }
+
+        if (nodeId.serverIndex) {
+            encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.ServerIndexFlag);
+        }
     }
-    if (nodeId.hasOwnProperty("serverIndex") && nodeId.serverIndex) {
-        encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.ServerIndexFlag);
-    }
+ 
     return encodingByte;
 }
 

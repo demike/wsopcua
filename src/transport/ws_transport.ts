@@ -172,7 +172,7 @@ public write(message_chunk : ArrayBuffer) {
 };
 
 
-protected _fulfill_pending_promises(err, data) {
+protected _fulfill_pending_promises(err, data?) {
 
     this._cleanup_timers();
 
@@ -215,7 +215,7 @@ protected _start_timeout_timer() {
 
   
     assert(!this._timerId, "timer already started");
-    this._timerId = window.setTimeout(function () {
+    this._timerId = window.setTimeout( () => {
         this._timerId =null;
         this._fulfill_pending_promises(new Error("Timeout in waiting for data on socket ( timeout was = " + this.timeout + " ms )"));
     }, this.timeout);
@@ -297,11 +297,10 @@ protected _install_socket(socket : WebSocket) {
         this._on_message_received( message_chunk);
     });
 
-
-    this._socket.onmessage = (evt) => {
-        this.bytesRead += evt.data.length;
-        if (evt.data.length > 0) {
-            this.packetAssembler.feed(evt.data);
+    this._socket.onmessage = (evt : MessageEvent) => {
+        this.bytesRead += evt.data.byteLength;
+        if (evt.data.byteLength > 0) {
+            this.packetAssembler.feed(new DataView(evt.data));
         }
 
     };

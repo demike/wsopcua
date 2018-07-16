@@ -1,22 +1,12 @@
 // --------- This code has been automatically generated !!! 2018-02-08T10:26:02.549Z
 "use strict";
-/**
- * @module opcua.address_space.types
- */
-import {assert} from "../assert";
 
-import * as _ from "underscore";
-import {makeNodeId} from "../nodeid/nodeid";
-import {ExpandedNodeId} from '../nodeid/expanded_nodeid';
 
-import {_defaultTypeMap} from "../factory/factories_builtin_types";
 import * as ec from "../basic-types";
 
 
 import {makeExpandedNodeId} from "../nodeid/expanded_nodeid";
 
-import {_enumerations} from "../factory/factories_enumerations";
-import {getFactory} from '../factory/factories_factories';
 import {BaseUAObject} from '../factory/factories_baseobject';
 import {generate_new_id} from "../factory";
 
@@ -24,8 +14,7 @@ import {register_class_definition} from '../factory/factories_factories';
 import { DataStream } from "../basic-types/DataStream";
 import { UInt32 } from "../basic-types";
 
-var encodeArray = ec.encodeArray;
-var decodeArray = ec.decodeArray;
+
 var encode_UInt32 = ec.encodeUInt32;
 var decode_UInt32 = ec.decodeUInt32;
 
@@ -133,4 +122,4 @@ public clone(target: any): BaseUAObject {
 }
 
 
-register_class_definition("AcknowledgeMessage",AcknowledgeMessage);
+register_class_definition("AcknowledgeMessage",AcknowledgeMessage,makeExpandedNodeId(generate_new_id(),0));
