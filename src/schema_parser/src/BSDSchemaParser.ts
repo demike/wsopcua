@@ -36,6 +36,7 @@ export class BSDSchemaParser {
             if (err) throw err;
             //console.log(data);
             let doc = new JSDOM(data,{ contentType : "text/xml"});
+            this.fixSchemaFaults(doc)
             for (let i=0; i < doc.window.document.childNodes.length; i++) {
                 let el : HTMLElement = <HTMLElement>(doc.window.document.childNodes.item(i));
                 this.parseBSDElement(el);
@@ -136,6 +137,13 @@ export class BSDSchemaParser {
                 return;
             }
         }
+    }
+
+    protected fixSchemaFaults(doc : JSDOM) {
+
+        //uint16 instead of Int32
+        let el =doc.window.document.querySelector('[Name="QualifiedName"] > [Name="NamespaceIndex"]');
+        if (el) el.setAttribute("TypeName","opc:UInt16");             
     }
 
     protected writeFiles() {
