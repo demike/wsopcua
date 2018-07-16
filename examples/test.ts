@@ -68,12 +68,14 @@ function onGetEndpoints(err : Error|null, serverUris : EndpointDescription[]) {
 }
 
 function browseRoot() {
-    cli.createSession({userName : "anonymous", password : "anonymous"},(err,session) => {
+    cli.createSession(/*{userName : "anonymous", password : "anonymous"}*/null,(err,session) => {
         if(err) {
         console.log(err.name + ": " + err.message);
         return;
         }
+        
         cliSession = session;
+        console.log("session name: " + session.name);
         session.browse(new NodeId(NodeIdType.NUMERIC,85),onBrowse)
     });
 }

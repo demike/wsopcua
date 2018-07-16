@@ -38,8 +38,8 @@ export function encodeArray (arr : Array<any>, stream : DataStream, encode_eleme
 export function decodeArray (stream : DataStream, decode_element_func?: (stream : DataStream) => void ) {
 
     
-    var length = stream.getUint32();
-    if (length === 0xFFFFFFFF) {
+    var length = stream.getInt32();
+    if (length === -1) {
         return null;
     }
 

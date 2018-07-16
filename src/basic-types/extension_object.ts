@@ -74,7 +74,7 @@ export function encodeExtensionObject(object, stream : DataStream) {
 
         encodeNodeId(object.encodingDefaultBinary, stream);
         stream.setUint8(0x01); // 0x01 The body is encoded as a ByteString.
-        stream.setUint32(object.binaryStoreSize());
+        stream.setUint32(DataStream.binaryStoreSize(object));
         object.encode(stream);
     }
 }

@@ -274,8 +274,8 @@ export class DataStream {
        * @return {Uint8Array}
        */
       readByteStream() {
-        var bufLen = this.getUint32();
-        if (bufLen === 0xFFFFFFFF) {
+        var bufLen = this.getInt32();
+        if (bufLen === -1) {
             return null;
         }
         if (bufLen === 0) {
@@ -397,7 +397,7 @@ setUint32(value) : void {
   this.length += 4;
 };
 
-setUInt16(value) : void {
+setUint16(value) : void {
   this.length += 2;
 };
 
