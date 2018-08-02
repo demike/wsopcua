@@ -144,6 +144,13 @@ export class BSDSchemaParser {
         //uint16 instead of Int32
         let el =doc.window.document.querySelector('[Name="QualifiedName"] > [Name="NamespaceIndex"]');
         if (el) el.setAttribute("TypeName","opc:UInt16");             
+
+        //DataValue --> order of encoding bytes is wrong
+        el = doc.window.document.querySelector('[Name="DataValue"]');
+        let el2 = doc.window.document.querySelector('[Name="SourcePicosecondsSpecified"]');
+        let el3 =  doc.window.document.querySelector('[Name="ServerTimestampSpecified"]');
+        if(el) el.insertBefore(<Node>el3,<Node>el2);
+
     }
 
     protected writeFiles() {

@@ -4,6 +4,9 @@ import { ClassMember } from './ClassMember';
 import { ClassMember, ClassMethod, BSDClassFileParser, EnumTypeFile, ClassFile, StructTypeFile, SimpleType } from './SchemaParser.module';
 
 export class BSDStructTypeFileParser extends BSDClassFileParser {
+
+//    public static STR_SKIP_EXT_DECODING = "skipExtDecoding";
+
     protected encodingByteMap?: { [key: string]: ClassMember };
     /**
      * 
@@ -65,13 +68,17 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
         if (!this.cls) {
             return;
         }
+        let blnHasAnyMembers = this.cls.hasAnyMembers();
+        let body: string = "";
 
-        let body: string = "\t\toptions = options || {};\n";
-        if (this.cls.BaseClass) {
+        if (blnHasAnyMembers) {
+            body += "\t\toptions = options || {};\n";
+        }
+
+        if (this.cls.BaseClass && !(this.cls.BaseClass instanceof SimpleType)) {
             if (!this.cls.BaseClass.hasAnyMembers()) {
-                body += "super();\n";
-            } else {
-                
+                body += "\t\tsuper();\n";
+            } else {      
                 body += "\t\tsuper(options);\n";
             }
         }
@@ -91,10 +98,11 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
                 body += "\t\tthis." + mem.Name + "= (options." + mem.Name + ") ? options." + mem.Name + ":"+ alternativeCode +";\n";
             }
         }
-
-        let met: ClassMethod = new ClassMethod(null, null, "constructor", [
-            new ClassMember("options", new SimpleType("I" + this.cls.Name), false),
-        ], null, body);
+        let args = [];
+        if (this.cls.hasAnyMembers()) {
+            args.push(new ClassMember("options", new SimpleType("I" + this.cls.Name), false));
+        }
+        let met: ClassMethod = new ClassMethod(null, null, "constructor", args, null, body);
 
         this.cls.addMethod(met);
     }
@@ -161,7 +169,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
         if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
             body += "\t\tsuper.decode(inp);\n";
         }
-
+        
         body += this.createDecodeEncodingByteCode();
 
         for (let mem of this.cls.Members) {
@@ -169,6 +177,9 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
             if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + "Specified")) {
                 addIf = true;
                 body += "\t\tif(" + mem.Name + "Specified) {\n\t";
+                if (mem.Type instanceof StructTypeFile) {
+                    body += "\t\tthis." + mem.Name + "= new " + mem.Type.FullName + "();\n\t";
+                }
             }
 
             body += "\t\tthis." + mem.Name;
@@ -244,7 +255,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
             return;
         }
         let body: string = "\t\tif(!target) {\n\t\t\ttarget = new " + this.cls.Name + "();\n\t\t}\n";
-        if (this.cls.BaseClass != null) {
+        if (this.cls.BaseClass != null && this.cls.BaseClass.hasAnyMembers()) {
             body += "\t\tsuper.clone(target);\n";
         }
 
@@ -275,12 +286,12 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
     }
 
     protected createDefines() {
-        if (!this.cls) {
+        if (!this.cls || !this.cls.hasAnyMembers()) {
             return;
         }
         //header
         let str = "export interface I" + this.cls.Name;
-        if (this.cls.BaseClass) {
+        if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
             str += " extends I" + this.cls.BaseClass.Name;
         }
         str += " {\n";

@@ -30,7 +30,7 @@ import * as async from 'async-es';
  */
 export class ClientSidePublishEngine {
     protected _session : ClientSession;
-    protected subscriptionAcknowledgements : any[];
+    protected subscriptionAcknowledgements : subscription_service.SubscriptionAcknowledgement[];
     protected subscriptionMap  : {[key : number]: ClientSubscription; };
     protected timeoutHint : number;
     protected nbPendingPublishRequests : number;
@@ -102,10 +102,10 @@ public acknowledge_notification(subscriptionId : number, sequenceNumber : number
     //xx //xx assert(this.lastAcknowldegedSequence+1 === sequenceNumber,"expecting lastAcknowledgedSequence ");
     //xx this._lastAcked = sequenceNumber;
 
-    this.subscriptionAcknowledgements.push({
+    this.subscriptionAcknowledgements.push(new subscription_service.SubscriptionAcknowledgement({
         subscriptionId: subscriptionId,
         sequenceNumber: sequenceNumber
-    });
+    }));
 };
 
 public cleanup_acknowledgment_for_subscription(subscriptionId : number) {
@@ -129,13 +129,13 @@ public send_publish_request() {
 
     if (this._session && !this._session.isChannelValid()) {
         // wait for channel  to be valid
-        setTimeout(function () {
+        setTimeout(() => {
             if (this.subscriptionCount) {
                 this.send_publish_request();
             }
         }, 100);
     } else {
-        setImmediate(function () {
+        setImmediate( () => {
             if (!this.session || this.isSuspended) {
                 // session has been terminated or suspended
                 return;
@@ -197,7 +197,7 @@ protected _send_publish_request() {
 
     var active = true;
 
-    this._session.publish(publish_request, function (err, response) {
+    this._session.publish(publish_request, (err, response) => {
 
         this.nbPendingPublishRequests -= 1;
         if (err) {
@@ -345,7 +345,7 @@ public getSubscription(subscriptionId : number) {
     return self.subscriptionMap[subscriptionId];
 };
 
-protected _receive_publish_response (response) {
+protected _receive_publish_response (response : subscription_service.PublishResponse) {
 
     debugLog("receive publish response");
     var self = this;

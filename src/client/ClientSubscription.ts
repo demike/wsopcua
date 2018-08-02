@@ -16,14 +16,21 @@ import * as subscription_service from "../service-subscription";
 
 import {ClientSession} from './client_session';
 import {MonitoredItem} from './MonitoredItem';
-import {ReadValueId} from '../generated/ReadValueId';
+import {ReadValueId, IReadValueId} from '../generated/ReadValueId';
 
 import {MonitoredItemGroup} from './MonitoredItemGroup';
 
 import {doDebug,debugLog} from '../common/debug';
 import {ClientSidePublishEngine} from './client_publish_engine';
 
+import 'setimmediate';
+
 import * as async from 'async-es';
+import { IMonitoringParameters } from '../generated/MonitoringParameters';
+import { SessionOptions } from 'http2';
+import { ICreateSubscriptionRequest } from '../generated/CreateSubscriptionRequest';
+import { MonitoredItemBase } from './MonitoredItemBase';
+
 
 /**
  * a object to manage a subscription on the client side.
@@ -62,7 +69,7 @@ export class ClientSubscription extends EventEmitter{
     protected priority : number;
 
     protected _next_client_handle : number;
-    protected monitoredItems : any;
+    protected monitoredItems : { [key:number] : MonitoredItemBase};
 
     protected _timeoutHint : number;
     protected lastSequenceNumber : number;
@@ -85,7 +92,7 @@ export class ClientSubscription extends EventEmitter{
     }
 
 
-constructor (session : ClientSession, options) {
+constructor (session : ClientSession, options : ICreateSubscriptionRequest) {
     super();
     assert(session instanceof ClientSession);
 
@@ -133,7 +140,7 @@ constructor (session : ClientSession, options) {
 
     setImmediate(() => {
 
-        this.__create_subscription(function (err) {
+        this.__create_subscription( (err) => {
 
             if (!err) {
 
@@ -203,15 +210,13 @@ protected __create_subscription(callback) {
 };
 
 
-protected __on_publish_response_DataChangeNotification(notification) {
+protected __on_publish_response_DataChangeNotification(notification : subscription_service.DataChangeNotification) {
 
-    assert(notification._schema.name === "DataChangeNotification");
-
-    var self = this;
+    assert(notification instanceof subscription_service.DataChangeNotification);
 
     var monitoredItems = notification.monitoredItems;
 
-    monitoredItems.forEach(function (monitoredItem) {
+    monitoredItems.forEach( (monitoredItem) => {
 
         var monitorItemObj = this.monitoredItems[monitoredItem.clientHandle];
         if (monitorItemObj) {
@@ -227,15 +232,16 @@ protected __on_publish_response_DataChangeNotification(notification) {
 
 };
 
-protected __on_publish_response_StatusChangeNotification(notification) {
+protected __on_publish_response_StatusChangeNotification(notification : subscription_service.StatusChangeNotification) {
 
-    assert(notification._schema.name === "StatusChangeNotification");
+    assert(notification instanceof subscription_service.StatusChangeNotification);
 
-    debugLog("Client has received a Status Change Notification " + notification.statusCode.toString());
+    debugLog("Client has received a Status Change Notification " + notification.status.toString());
 
-    this._publishEngine.cleanup_acknowledgment_for_subscription(notification.subscriptionId);
+    //TODO !!!! what is this supposed to do --> this notification has no subscriptionId !!!!
+    this._publishEngine.cleanup_acknowledgment_for_subscription((<any>notification).subscriptionId);
 
-    if (notification.statusCode === StatusCodes.GoodSubscriptionTransferred) {
+    if (notification.status === StatusCodes.GoodSubscriptionTransferred) {
         // OPCUA UA Spec 1.0.3 : part 3 - page 82 - 5.13.7 TransferSubscriptions:
         // If the Server transfers the Subscription to the new Session, the Server shall issue a StatusChangeNotification
         // notificationMessage with the status code Good_SubscriptionTransferred to the old Session.
@@ -243,7 +249,7 @@ protected __on_publish_response_StatusChangeNotification(notification) {
         this.hasTimedOut = true;
         this.terminate(()=>{});
     }
-    if (notification.statusCode === StatusCodes.BadTimeout) {
+    if (notification.status === StatusCodes.BadTimeout) {
         // the server tells use that the subscription has timed out ..
         // this mean that this subscription has been closed on the server side and cannot process any
         // new PublishRequest.
@@ -266,14 +272,12 @@ protected __on_publish_response_StatusChangeNotification(notification) {
      * notify the observers that the server has send a status changed notification (such as BadTimeout )
      * @event status_changed
      */
-    this.emit("status_changed", notification.statusCode, notification.diagnosticInfo);
+    this.emit("status_changed", notification.status, notification.diagnosticInfo);
 
 };
 
-protected __on_publish_response_EventNotificationList (notification) {
-    assert(notification._schema.name === "EventNotificationList");
-
-    var self = this;
+protected __on_publish_response_EventNotificationList (notification:subscription_service.EventNotificationList) {
+    assert(notification instanceof subscription_service.EventNotificationList);
 
     notification.events.forEach((event)=> {
         var monitorItemObj = this.monitoredItems[event.clientHandle];
@@ -284,7 +288,7 @@ protected __on_publish_response_EventNotificationList (notification) {
     });
 };
 
-public onNotificationMessage(notificationMessage) {
+public onNotificationMessage(notificationMessage : subscription_service.NotificationMessage) {
     assert(notificationMessage.hasOwnProperty("sequenceNumber"));
 
     this.lastSequenceNumber = notificationMessage.sequenceNumber;
@@ -313,18 +317,18 @@ public onNotificationMessage(notificationMessage) {
         // let publish a global event
 
         // now process all notifications
-        notificationData.forEach(function (notification) {
+        notificationData.forEach( (notification) => {
             // DataChangeNotification / StatusChangeNotification / EventNotification
-            switch (notification._schema.name) {
-                case "DataChangeNotification":
+            switch ( notification.constructor) {
+                case subscription_service.DataChangeNotification:
                     // now inform each individual monitored item
-                    this.__on_publish_response_DataChangeNotification(notification);
+                    this.__on_publish_response_DataChangeNotification(<subscription_service.DataChangeNotification>notification);
                     break;
-                case "StatusChangeNotification":
-                    this.__on_publish_response_StatusChangeNotification(notification);
+                case subscription_service.StatusChangeNotification:
+                    this.__on_publish_response_StatusChangeNotification(<subscription_service.StatusChangeNotification>notification);
                     break;
-                case "EventNotificationList":
-                    this.__on_publish_response_EventNotificationList(notification);
+                case subscription_service.EventNotificationList:
+                    this.__on_publish_response_EventNotificationList(<subscription_service.EventNotificationList>notification);
                     break;
                 default:
                     console.log(" Invalid notification :", notification.toString());
@@ -562,7 +566,7 @@ protected _wait_for_subscription_to_be_ready(done) {
  *
  *
  */
-public monitor(itemToMonitor : ReadValueId, requestedParameters, timestampsToReturn, done) {
+public monitor(itemToMonitor : ReadValueId, requestedParameters : IMonitoringParameters, timestampsToReturn : TimestampsToReturn, done? : (err : Error|null,mItem? : MonitoredItem) => void) {
     assert(done === undefined || _.isFunction(done));
 
     itemToMonitor.nodeId = resolveNodeId(itemToMonitor.nodeId);
@@ -590,7 +594,7 @@ public monitor(itemToMonitor : ReadValueId, requestedParameters, timestampsToRet
  * @param timestampsToReturn
  * @param done
  */
-public monitorItems(itemsToMonitor, requestedParameters, timestampsToReturn, done) {
+public monitorItems(itemsToMonitor : IReadValueId[], requestedParameters : IMonitoringParameters, timestampsToReturn? : TimestampsToReturn, done? : (err : Error|null, mItemGroup?: MonitoredItemGroup ) => void ) : MonitoredItemGroup {
     // Try to resolve the nodeId and fail fast if we can't.
     itemsToMonitor.forEach(function (itemToMonitor) {
         itemToMonitor.nodeId = resolveNodeId(itemToMonitor.nodeId);
@@ -661,7 +665,7 @@ public isActive() : boolean {
     return typeof this._subscriptionId !== "string";
 };
 
-protected _remove(monitoredItem : MonitoredItem) {
+protected _remove(monitoredItem : MonitoredItemBase) {
 
     var clientHandle = monitoredItem.monitoringParameters.clientHandle;
     assert(clientHandle);
@@ -670,7 +674,7 @@ protected _remove(monitoredItem : MonitoredItem) {
     delete this.monitoredItems[clientHandle];
 };
 
-public _delete_monitored_items(monitoredItems, callback) : void {
+public _delete_monitored_items(monitoredItems : MonitoredItemBase[], callback) : void {
     assert(_.isArray(monitoredItems));
     
     assert(this.isActive());
@@ -691,7 +695,7 @@ public _delete_monitored_items(monitoredItems, callback) : void {
     });
 };
 
-protected _delete_monitored_item(monitoredItem, callback) : void {
+protected _delete_monitored_item(monitoredItem : MonitoredItemBase, callback) : void {
     this._delete_monitored_items([monitoredItem], callback);
 };
 
@@ -733,14 +737,14 @@ public recreateSubscriptionAndMonitoredItem(callback) {
 
             // re-create monitored items
 
-            var itemsToCreate = [];
-            _.forEach(monitoredItems_old, function (monitoredItem : MonitoredItem /*, clientHandle*/) {
+            let itemsToCreate : subscription_service.MonitoredItemCreateRequest[] = [];
+            _.forEach(monitoredItems_old, function (monitoredItem : MonitoredItemBase /*, clientHandle*/) {
                 assert(monitoredItem.monitoringParameters.clientHandle > 0);
-                itemsToCreate.push({
+                itemsToCreate.push(new subscription_service.MonitoredItemCreateRequest({
                     itemToMonitor: monitoredItem.itemToMonitor,
                     monitoringMode: monitoredItem.monitoringMode,
                     requestedParameters: monitoredItem.monitoringParameters
-                });
+                }));
 
             });
 

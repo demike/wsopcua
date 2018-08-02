@@ -12,7 +12,7 @@ export function randomBoolean() : boolean{
 };
 
 export function encodeBoolean(value : Boolean, stream : DataStream) {
-    assert(isValidBoolean(value));
+ //   assert(isValidBoolean(value));
     stream.setUint8(value ? 1 : 0);
 };
 export function decodeBoolean(stream : DataStream) {

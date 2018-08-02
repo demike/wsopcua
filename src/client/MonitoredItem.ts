@@ -10,6 +10,7 @@ import { TimestampsToReturn } from "../generated/TimestampsToReturn";
 import {MonitoredItemBase} from './MonitoredItemBase';
 
 import * as read_service from "../service-read";
+import { IReadValueId } from '../generated/ReadValueId';
 
 
 /**
@@ -35,7 +36,7 @@ import * as read_service from "../service-read";
  */
 export class MonitoredItem extends MonitoredItemBase {
     protected _timestampsToReturn : TimestampsToReturn;
-constructor (subscription : ClientSubscription, itemToMonitor, monitoringParameters : IMonitoringParameters, timestampsToReturn : TimestampsToReturn) {
+constructor (subscription : ClientSubscription, itemToMonitor : IReadValueId, monitoringParameters : IMonitoringParameters, timestampsToReturn? : TimestampsToReturn) {
 
     super(subscription,itemToMonitor,monitoringParameters);
     this._timestampsToReturn = timestampsToReturn || TimestampsToReturn.Neither;
@@ -108,7 +109,7 @@ public modify(parameters, timestampsToReturn : TimestampsToReturn, callback) {
         timestampsToReturn = null;
     }
     this._timestampsToReturn = timestampsToReturn || this._timestampsToReturn;
-    MonitoredItemBase._toolbox_modify(this._subscription, [self], parameters, this._timestampsToReturn, function (err, results) {
+    MonitoredItemBase._toolbox_modify(this._subscription, [this], parameters, this._timestampsToReturn, function (err, results) {
         if (err) {
             return callback(err);
         }

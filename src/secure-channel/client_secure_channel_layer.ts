@@ -1020,7 +1020,8 @@ protected _performMessageTransaction(msgType, requestMessage, callback) {
 
         // invoke user callback if it has not been intercepted first ( by a abrupt disconnection for instance )
         try {
-            local_callback.apply(this, [err,response]);
+            //local_callback.apply(this, [err,response]);
+            local_callback(err,response);
         }
         catch (err) {
             console.log("ERROR !!! , please check here !!!! callback may be called twice !! ", err);

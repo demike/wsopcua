@@ -13,10 +13,19 @@ export class ClassMember {
     protected _required? : boolean = true;
     protected _bitPos = 0; //only used by bit types
     protected _isArray = false;
+    protected _defaultValue : string|null = null;
 
 
     public get Length() : number {
         return this._length;
+    }
+
+    public get DefaultValue() : string | null {
+        return this._defaultValue;
+    }
+
+    public set DefaultValue(val : string|null ) {
+        this._defaultValue = val;
     }
 
     /**
@@ -139,6 +148,10 @@ export class ClassMember {
 
         if (this._length > 1 || this._isArray) {
             str += "[]";
+        }
+
+        if (this._defaultValue) {
+            str += " = " + this._defaultValue;
         }
 
         return str;

@@ -11,6 +11,7 @@ import * as _ from "underscore";
 import {resolveNodeId} from "../nodeid/nodeid";
 import {QualifiedName} from "../generated/QualifiedName";
 import {RelativePath, IRelativePath} from "../generated/RelativePath";
+import { RelativePathElement } from "../generated/RelativePathElement";
 
 /*
 
@@ -115,9 +116,8 @@ function makeQualifiedName(mm) {
 export function makeRelativePath(str: string,addressSpace?): RelativePath {
 
 
-    var r = {
-        elements:[]
-    };
+    
+    let r = new RelativePath({ elements : []});
 
     while (str.length>0) {
 
@@ -167,12 +167,12 @@ export function makeRelativePath(str: string,addressSpace?): RelativePath {
             assert(referenceTypeId && !referenceTypeId.isEmpty());
         }
 
-        r.elements.push({
+        r.elements.push(new RelativePathElement({
             referenceTypeId: referenceTypeId,
             isInverse: isInverse,
             includeSubtypes: includeSubtypes,
             targetName: makeQualifiedName(matches)
-        });
+        }));
 
         str = str.substr(matches[0].length);
     }

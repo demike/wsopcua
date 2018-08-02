@@ -22,6 +22,7 @@ import {doDebug,debugLog,hexDump} from '../common/debug';
 import { DataStream } from '../basic-types/DataStream';
 
 import * as factory from '../factory';
+import { ExtensionObject } from '../basic-types';
 
 var decodeStatusCode = ec.decodeStatusCode;
 
@@ -385,11 +386,11 @@ protected _read_headers(binaryStream : DataStream) {
 };
 
 
-protected _safe_decode_message_body(full_message_body, objMessage, binaryStream) {
+protected _safe_decode_message_body(full_message_body, objMessage  /*ExtensionObject*/, binaryStream) {
     try {
         // de-serialize the object from the binary stream
         var options = this._objectFactory;
-        objMessage.decode(binaryStream, options);
+        objMessage.decode(binaryStream,options);
     }
     catch (err) {
         console.log(err);

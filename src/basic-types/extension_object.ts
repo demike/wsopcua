@@ -68,7 +68,7 @@ export function encodeExtensionObject(object, stream : DataStream) {
         }
         /* istanbul ignore next */
         if (is_internal_id(object.encodingDefaultBinary.value)) {
-            console.log("xxxxxxxxx encoding ExtObj ", object.encodingDefaultBinary.toString(), object._schema.name);
+            console.log("xxxxxxxxx encoding ExtObj ", object.encodingDefaultBinary.toString(), object.constructor.name);
             throw new Error("Cannot find valid OPCUA encodingDefaultBinary for this object");
         }
 

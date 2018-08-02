@@ -62,7 +62,7 @@ export class ClassMethod {
         if (this.body) {
             str += " { \n" + this.body + "\n\t}\n\n";
         } else if(header) {
-            str += ";\n";
+            str += "{};\n";
         }
         return str;
     }

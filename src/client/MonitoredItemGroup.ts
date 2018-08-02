@@ -8,13 +8,14 @@ import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert'
 import {MonitoredItemBase} from './MonitoredItemBase'
 import { ClientSubscription } from '../client/ClientSubscription';
-import { ReadValueId } from '../generated/ReadValueId';
-import { MonitoringParameters } from '../generated/MonitoringParameters';
+import { ReadValueId, IReadValueId } from '../generated/ReadValueId';
+import { MonitoringParameters, IMonitoringParameters } from '../generated/MonitoringParameters';
 import { TimestampsToReturn } from '../generated/TimestampsToReturn';
 import { MonitoringMode } from '../generated/MonitoringMode';
 
 import * as subscription_service from '../service-subscription';
 import * as read_service from '../service-read';
+import { DataValue } from '../data-value';
 
 
 
@@ -44,7 +45,7 @@ export class MonitoredItemGroup extends EventEmitter{
     protected _subscription : ClientSubscription;
     protected _timestampsToReturn : TimestampsToReturn;
     protected _monitoringMode : MonitoringMode;
-constructor (subscription : ClientSubscription, itemsToMonitor : ReadValueId[], monitoringParameters : MonitoringParameters, timestampsToReturn : TimestampsToReturn) {
+constructor (subscription : ClientSubscription, itemsToMonitor : IReadValueId[], monitoringParameters : IMonitoringParameters, timestampsToReturn : TimestampsToReturn) {
     super();
     assert(_.isArray(itemsToMonitor));
 
@@ -58,6 +59,10 @@ constructor (subscription : ClientSubscription, itemsToMonitor : ReadValueId[], 
 
     this._timestampsToReturn = timestampsToReturn;
     this._monitoringMode = subscription_service.MonitoringMode.Reporting;
+}
+
+public get monitoredItems() : MonitoredItemBase[] {
+    return this._monitoredItems;
 }
 
 public toString() : string {
@@ -155,4 +160,18 @@ public setMonitoringMode(monitoringMode : MonitoringMode, callback) : void {
     
     MonitoredItemBase._toolbox_setMonitoringMode(this._subscription, this._monitoredItems, monitoringMode, callback);
 };
+
+
+public onChanged(callback : (item : MonitoredItemBase,dataValue : DataValue,index : number) => void) {
+    this.on("changed",callback);
+}
+
+public onTerminated(callback : () => void ) {
+    this.on("terminated",callback);
+}
+
+public onInitialized(callback : () => void ) {
+    this.on("initialized",callback);
+}
+
 }

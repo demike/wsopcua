@@ -10,9 +10,9 @@ import {OPCUAClientBase} from './client_base';
 import { OPCUAClientOptions } from '../common/client_options';
 import {StatusCodes} from '../constants/raw_status_codes';
 
-import {CreateMonitoredItemsRequest} from '../generated/CreateMonitoredItemsRequest';
+import {CreateMonitoredItemsRequest, ICreateMonitoredItemsRequest} from '../generated/CreateMonitoredItemsRequest';
 import {CreateMonitoredItemsResponse} from '../generated/CreateMonitoredItemsResponse';
-import {CreateSubscriptionRequest} from '../generated/CreateSubscriptionRequest';
+import {CreateSubscriptionRequest, ICreateSubscriptionRequest} from '../generated/CreateSubscriptionRequest';
 import {CreateSubscriptionResponse} from '../generated/CreateSubscriptionResponse';
 import { PublishResponse } from '../generated/PublishResponse';
 import { PublishRequest } from '../generated/PublishRequest';
@@ -171,7 +171,7 @@ public static coerceBrowseDescription(data) {
         return ClientSession.coerceBrowseDescription({
             nodeId: data,
             includeSubtypes: true,
-            browseDirection: BrowseDirection.Both,
+            browseDirection: BrowseDirection.Forward,//BrowseDirection.Both,
             nodeClassMask: 0,
             resultMask: 63
         });
@@ -239,17 +239,17 @@ public static coerceBrowseDescription(data) {
  * @param {Error|null} callback.err
  * @param {BrowseResult[]} callback.results an array containing the BrowseResult of each BrowseDescription.
  */
-browse(nodes, callback : (err : Error, results : browse_service.BrowseResult[], diagnostInfos : DiagnosticInfo[]| browse_service.BrowseResponse) => void) {
+browse(nodes : string|string[]|NodeId|NodeId[]|BrowseDescription|BrowseDescription[], callback : (err : Error, results : browse_service.BrowseResult[], diagnostInfos : DiagnosticInfo[]| browse_service.BrowseResponse) => void) {
 
     this._requestedMaxReferencesPerNode = this._requestedMaxReferencesPerNode || 10000;
     assert(_.isFinite(this._requestedMaxReferencesPerNode));
     assert(_.isFunction(callback));
 
     if (!_.isArray(nodes)) {
-        nodes = [nodes];
+        (<any>nodes) = [nodes];
     }
 
-    var nodesToBrowse = nodes.map(ClientSession.coerceBrowseDescription);
+    var nodesToBrowse = (<any>nodes).map(ClientSession.coerceBrowseDescription);
 
     var request = new browse_service.BrowseRequest({
         nodesToBrowse: nodesToBrowse,
@@ -336,13 +336,15 @@ browse(nodes, callback : (err : Error, results : browse_service.BrowseResult[], 
  *
  *
 */
-readVariableValue(nodes, callback) {
-    assert(_.isFunction(callback));
+readVariableValue(nodes : string | string[] | NodeId | NodeId[] |read_service.ReadValueId | read_service.ReadValueId[], 
+                    callback : (err:Error,results? : DataValue[], diagInf? : DiagnosticInfo[]) => void ) {
+    
+        assert(_.isFunction(callback));
 
 
     var isArray = _.isArray(nodes);
     if (!isArray) {
-        nodes = [nodes];
+        nodes = <string[]|read_service.ReadValueId[]>[nodes];
     }
 
     var nodesToRead = [];
@@ -362,7 +364,7 @@ readVariableValue(nodes, callback) {
             return new read_service.ReadValueId(node);
         }
     }
-    nodes.forEach(function (node) {
+    (<any[]>nodes).forEach(function (node) {
         nodesToRead.push(coerceReadValueId(node));
     });
 
@@ -371,7 +373,7 @@ readVariableValue(nodes, callback) {
         timestampsToReturn: read_service.TimestampsToReturn.Neither
     });
 
-    assert(nodes.length === request.nodesToRead.length);
+    assert((<any[]>nodes).length === request.nodesToRead.length);
 
     this.performMessageTransaction(request, (err, response) => {
 
@@ -383,7 +385,7 @@ readVariableValue(nodes, callback) {
             return callback(new Error(response.responseHeader.serviceResult.toString()));
         }
         assert(response instanceof read_service.ReadResponse);
-        assert(nodes.length === response.results.length);
+        assert((<any[]>nodes).length === response.results.length);
 
         response.results = response.results || [];
         response.diagnosticInfos = response.diagnosticInfos || [];
@@ -719,7 +721,7 @@ protected _defaultRequest(SomeRequest, SomeResponse, options, callback) {
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {CreateSubscriptionResponse} - the response
  */
-createSubscription(options : CreateSubscriptionRequest, callback) {
+createSubscription(options : ICreateSubscriptionRequest, callback : (err : Error|null,response : CreateSubscriptionResponse) =>void ) {
 
     assert(_.isFunction(callback));
 
@@ -780,7 +782,7 @@ transferSubscriptions(options : TransferSubscriptionsRequest,callback : Function
  * @param callback.err {Error|null}   - the Error if the async method has failed
  * @param callback.response {CreateMonitoredItemsResponse} - the response
  */
-public createMonitoredItems(options : CreateMonitoredItemsRequest, callback : (err : Error|null,response : CreateMonitoredItemsResponse)=>void) {
+public createMonitoredItems(options : ICreateMonitoredItemsRequest, callback : (err : Error|null,response : CreateMonitoredItemsResponse)=>void) {
     this._defaultRequest(
         subscription_service.CreateMonitoredItemsRequest,
         subscription_service.CreateMonitoredItemsResponse,
@@ -919,11 +921,11 @@ public setPublishingMode(publishingEnabled : boolean, subscriptionIds : number[]
  *
  *
  */
-public translateBrowsePath(browsePath, callback) {
+public translateBrowsePath(browsePath : translate_service.BrowsePath | translate_service.BrowsePath[], callback : (err :Error|null,results : translate_service.BrowsePathResult | translate_service.BrowsePathResult[]) => void) {
     assert(_.isFunction(callback));
 
     var has_single_element = !_.isArray(browsePath);
-    browsePath = has_single_element ? [browsePath] : browsePath;
+    browsePath = has_single_element ? [<translate_service.BrowsePath>browsePath] : <translate_service.BrowsePath[]>browsePath;
 
     var request = new translate_service.TranslateBrowsePathsToNodeIdsRequest({
         browsePaths: browsePath

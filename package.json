@@ -19,6 +19,7 @@
     "delayed": "^1.0.1",
     "eventemitter3": "^3.1.0",
     "loglevel": "^1.6.1",
+    "setimmediate": "^1.0.5",
     "underscore": "^1.9.0"
   },
   "devDependencies": {

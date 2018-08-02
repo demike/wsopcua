@@ -2,7 +2,7 @@
 import {ClassMember} from './ClassMember';
 import {TypeRegistry} from './TypeRegistry';
 */
-import {ClassMember, ClassMethod, TypeRegistry} from './SchemaParser.module';
+import {ClassMember, ClassMethod, TypeRegistry,SimpleType} from './SchemaParser.module';
 
 export declare class Set< Value > {
 	add( value : Value ) : Set< Value >
@@ -49,6 +49,17 @@ export class ClassFile {
 
     public get Name() : string {
         return this.name;
+    }
+
+    /*
+    return the full name including potential import as
+    i.e: ec.ExtensionObject
+    */
+    public get FullName() : string {
+        if (!this.importAs) {
+            return this.name;
+        }
+        return this.importAs + "." + this.name;
     }
 
     public get Path() : string {
@@ -176,8 +187,8 @@ export class ClassFile {
 
     protected getClassHeader() : string {
         let str = "export class " + this.name;
-        if (this.baseClass) {
-            str += " extends " + this.baseClass.Name;
+        if (this.baseClass && !(this.baseClass instanceof SimpleType)) {
+            str += " extends " + this.baseClass.FullName;
         }
         return str;
     }
@@ -293,7 +304,7 @@ export class ClassFile {
     
 
     public getInterfaceImportSrc() : string|null {
-        if (this.importAs) {
+        if (this.importAs || !this.hasAnyMembers()) {
             return null;
         }
         return "import {I" + this.Name + "} from '" + this.Path + "';"
@@ -322,6 +333,18 @@ export class ClassFile {
                 return true;
             } 
             obj = obj.BaseClass;
+        }
+
+        return false;
+    }
+
+    public hasBaseClass(cls : string) {
+        let obj  = this.baseClass;
+        while(obj) {
+            if(obj.name == cls) {
+                return true;
+            } 
+            obj = obj.baseClass;
         }
 
         return false;

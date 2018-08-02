@@ -26,6 +26,8 @@ import { MonitoredItemCreateResult } from '../generated/MonitoredItemCreateResul
 import { MonitoredItem } from './MonitoredItem';
 
 import { StatusCode,NodeId,ExtensionObject} from '../basic-types';
+import { IReadValueId } from '../generated/ReadValueId';
+import { QualifiedName } from '../data-model';
 
 //import {MonitoredItemsModifyRequest} from '../generated/MonitoredItemsModifyRequest';
 var MonitoredItemModifyRequest = subscription_service.MonitoredItemModifyRequest;
@@ -41,15 +43,18 @@ export class MonitoredItemBase extends EventEmitter{
     protected _monitoredItemId : number;
     protected _filterResult : ExtensionObject;
 
-constructor(subscription : ClientSubscription, itemToMonitor : read_service.ReadValueId, monitoringParameters : IMonitoringParameters) {
+
+constructor(subscription : ClientSubscription, itemToMonitor : IReadValueId, monitoringParameters : IMonitoringParameters) {
     super();
     //assert(subscription.constructor.name === "ClientSubscription");
+
+
 
     this._itemToMonitor = new read_service.ReadValueId(itemToMonitor);
     this._monitoringParameters = new MonitoringParameters(monitoringParameters);
     this._subscription = subscription;
     this._monitoringMode = subscription_service.MonitoringMode.Reporting;
-    assert(this._monitoringParameters.clientHandle === 4294967295, "should not have a client handle yet");
+    assert(this._monitoringParameters.clientHandle === null/*4294967295*/, "should not have a client handle yet");
 }
 
 public get monitoringParameters() {
@@ -68,9 +73,12 @@ public get monitoringMode() {
     return this._monitoringMode;
 }
 
+public get monitoredItemId() {
+    return this._monitoredItemId;
+}
 
 
-protected _notify_value_change(value) {
+public _notify_value_change(value) {
     /**
      * Notify the observers that the MonitoredItem value has changed on the server side.
      * @event changed
@@ -85,12 +93,12 @@ protected _notify_value_change(value) {
      }
 };
 
-protected _prepare_for_monitoring () {
+protected _prepare_for_monitoring () : subscription_service.MonitoredItemCreateRequest | Error{
 
     assert(this._subscription.subscriptionId !== "pending");
-    assert(this._monitoringParameters.clientHandle === 4294967295, "should not have a client handle yet");
+    assert(this._monitoringParameters.clientHandle === /*4294967295*/null, "should not have a client handle yet");
     this._monitoringParameters.clientHandle = this._subscription.nextClientHandle();
-    assert(this._monitoringParameters.clientHandle > 0 && this._monitoringParameters.clientHandle !== 4294967295);
+    assert(this._monitoringParameters.clientHandle > 0 && this._monitoringParameters.clientHandle !== null/*4294967295*/);
 
     // If attributeId is EventNotifier then monitoring parameters need a filter.
     // The filter must then either be DataChangeFilter, EventFilter or AggregateFilter.
@@ -116,10 +124,10 @@ protected _prepare_for_monitoring () {
 
         var filter : ExtensionObject = this._monitoringParameters.filter;
         if (!(filter instanceof subscription_service.EventFilter)) {
-            return {
-                error: "Mismatch between attributeId and filter in monitoring parameters : " +
+            return new Error(
+                "Mismatch between attributeId and filter in monitoring parameters : " +
                 "An EventFilter object is required when itemToMonitor.attributeId== AttributeIds.EventNotifier"
-            };
+            );
         }
 
     } else if (this._itemToMonitor.attributeId === AttributeIds.Value) {
@@ -131,18 +139,17 @@ protected _prepare_for_monitoring () {
         // to do : check 'DataChangeFilter'  && 'AggregateFilter'
     } else {
         if (this._monitoringParameters.filter) {
-            return {
-                error: "Mismatch between attributeId and filter in monitoring parameters : " +
+            return new Error(
+                "Mismatch between attributeId and filter in monitoring parameters : " +
                 "no filter expected when attributeId is not Value  or  EventNotifier"
-            };
+            );
         }
     }
-    return {
-        error: null,
+    return new subscription_service.MonitoredItemCreateRequest({
         itemToMonitor: this._itemToMonitor,
         monitoringMode: this._monitoringMode,
         requestedParameters: this._monitoringParameters
-    };
+    });
 
 };
 
@@ -180,17 +187,22 @@ protected _after_create(monitoredItemResult : MonitoredItemCreateResult) {
     }
 };
 
-public static _toolbox_monitor(subscription, timestampsToReturn, monitoredItems, done) {
-    assert(_.isFunction(done));
-    var itemsToCreate = [];
+public static _toolbox_monitor(subscription : ClientSubscription, timestampsToReturn, monitoredItems : MonitoredItemBase[], done) {
+    assert(_.isFunction(done) && (typeof subscription.subscriptionId === "number"));
+    var itemsToCreate : subscription_service.MonitoredItemCreateRequest[] = [];
     for (var i = 0; i < monitoredItems.length; i++) {
 
         var monitoredItem = monitoredItems[i];
-        var itemToCreate = monitoredItem._prepare_for_monitoring(done);
+        var itemToCreate = (<any>monitoredItem)._prepare_for_monitoring(done);
         if (_.isString(itemToCreate.error)) {
             return done(new Error(itemToCreate.error));
         }
         itemsToCreate.push(itemToCreate);
+    }
+
+    if(typeof subscription.subscriptionId === "string") {
+        //subscription either pending or terminated
+        throw new Error("subscription either pending or terminated - subscription.subscriptionId: " + subscription.subscriptionId );
     }
 
     var createMonitorItemsRequest = new subscription_service.CreateMonitoredItemsRequest({
@@ -220,19 +232,20 @@ public static _toolbox_monitor(subscription, timestampsToReturn, monitoredItems,
     });
 
 };
-public static _toolbox_modify(subscription, monitoredItems, parameters, timestampsToReturn, callback) {
+public static _toolbox_modify(subscription : ClientSubscription, monitoredItems : MonitoredItemBase[], parameters : IMonitoringParameters , timestampsToReturn : TimestampsToReturn, callback) {
 
     assert(callback === undefined || _.isFunction(callback));
 
     var itemsToModify = monitoredItems.map(function (monitoredItem) {
-        var clientHandle = monitoredItem.monitoringParameters.clientHandle;
+        let monParams = new MonitoringParameters(parameters);
+        monParams.clientHandle = monitoredItem.monitoringParameters.clientHandle;
         return new MonitoredItemModifyRequest({
-            monitoredItemId: monitoredItem.monitoredItemId,
-            requestedParameters: _.extend(_.clone(parameters), {clientHandle: clientHandle})
+            monitoredItemId: monitoredItem._monitoredItemId,
+            requestedParameters: monParams
         });
     });
     var modifyMonitoredItemsRequest = new ModifyMonitoredItemsRequest({
-        subscriptionId: subscription.subscriptionId,
+        subscriptionId: <number>subscription.subscriptionId,
         timestampsToReturn: timestampsToReturn,
         itemsToModify: itemsToModify
     });
