@@ -1,7 +1,6 @@
 "use strict";
 
 import {assert} from '../assert';
-import * as _ from 'underscore';
 import { DataStream } from './DataStream';
 
 
@@ -25,7 +24,7 @@ function getRandomInt(min : number, max : number) {
 }
 
 export function isValidUInt16(value : any) : boolean {
-    if (!_.isFinite(value)) {
+    if (!Number.isFinite(value)) {
         return false;
     }
     return value >= 0 && value <= 0xFFFF;
@@ -44,7 +43,7 @@ export function decodeUInt16(stream : DataStream) : number {
 };
 
 export function isValidInt16(value) : boolean {
-    if (!_.isFinite(value)) {
+    if (!Number.isFinite(value)) {
         return false;
     }
     return value >= -0x8000 && value <= 0x7FFF;
@@ -54,7 +53,7 @@ export function randomInt16() : number {
     return getRandomInt(-0x8000, 0x7FFF);
 };
 export function encodeInt16(value : number, stream : DataStream) {
-    assert(_.isFinite(value));
+    assert(Number.isFinite(value));
     stream.setInt16(value);
 };
 export function decodeInt16(stream : DataStream) : number {
@@ -62,7 +61,7 @@ export function decodeInt16(stream : DataStream) : number {
 };
 
 export function isValidInt32(value) : boolean {
-    if (!_.isFinite(value)) {
+    if (!Number.isFinite(value)) {
         return false;
     }
     return value >= -0x80000000 && value <= 0x7fffffff;
@@ -71,7 +70,7 @@ export function randomInt32() : number {
     return getRandomInt(-0x80000000, 0x7fffffff);
 };
 export function encodeInt32(value : number, stream : DataStream) {
-    assert(_.isFinite(value));
+    assert(Number.isFinite(value));
     stream.setInt32(value);
 };
 export function decodeInt32(stream : DataStream) : number {
@@ -79,7 +78,7 @@ export function decodeInt32(stream : DataStream) : number {
 };
 
 export function isValidUInt32(value) : boolean {
-    if (!_.isFinite(value)) {
+    if (!Number.isFinite(value)) {
         return false;
     }
     return value >= 0 && value <= 0xFFFFFFFF;
@@ -96,7 +95,7 @@ export function decodeUInt32(stream : DataStream) : number {
 };
 
 export function isValidInt8(value) : boolean  {
-    if (!_.isFinite(value)) {
+    if (!Number.isFinite(value)) {
         return false;
     }
     return value >= -0x80 && value <= 0x7F;
@@ -121,7 +120,7 @@ export var decodeSByte = decodeInt8;
 
 
 export function isValidUInt8(value) : boolean {
-    if (!_.isFinite(value)) {
+    if (!Number.isFinite(value)) {
         return false;
     }
     return value >= -0x00 && value <= 0xFF;
@@ -150,7 +149,7 @@ export function randomUInt64() : Array<number> {
 };
 export function encodeUInt64(value, stream : DataStream) {
 
-    if (_.isNumber(value)) {
+    if ('number' === typeof value) {
         value = coerceUInt64(value);
     }
     stream.setUint32(value[1]);
@@ -175,8 +174,8 @@ export function coerceUInt64(value) : number[] {
         return value;
     }
     if (value instanceof Array) {
-        assert(_.isNumber(value[0]));
-        assert(_.isNumber(value[1]));
+        assert('number' === typeof value[0]);
+        assert('number' === typeof value[1]);
         return value;
     }
     if (typeof value === "string") {

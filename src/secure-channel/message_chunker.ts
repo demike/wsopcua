@@ -4,7 +4,6 @@
  */
 
 import {assert} from '../assert';
-import * as _ from 'underscore';
 import {DataStream} from '../basic-types/DataStream'
 import * as ec from '../basic-types'
 import {SequenceNumberGenerator} from "./sequence_number_generator";
@@ -55,8 +54,8 @@ public update(options) {
     options.securityHeader = options.securityHeader ||
         new AsymmetricAlgorithmSecurityHeader({securityPolicyUri: "http://opcfoundation.org/UA/SecurityPolicy#None"});
 
-    assert(_.isObject(options));
-    assert(_.isObject(options.securityHeader));
+    assert(typeof options === 'object');
+    assert(typeof options.securityHeader === 'object');
 
     this._securityHeader = options.securityHeader;
     this._derivedKeys = options.derivedKeys || null;
@@ -79,7 +78,7 @@ public update(options) {
 public chunkSecureMessage(msgType, options, message, messageChunkCallback) {
 
     options = options || {};
-    assert(_.isFunction(messageChunkCallback));
+    assert('function' === typeof messageChunkCallback);
 
     // calculate message size ( with its  encodingDefaultBinary)
     var binSize = DataStream.binaryStoreSize(message) + 4;

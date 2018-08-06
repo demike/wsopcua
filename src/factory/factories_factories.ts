@@ -7,7 +7,6 @@
 
 
 import {assert} from "../assert";
-import * as _ from 'underscore';
 import { ExpandedNodeId } from "../basic-types";
 
 
@@ -40,7 +39,7 @@ export function dump() {
 
 export function callConstructor(constructor: Function ) {
 
-    assert(_.isFunction(constructor));
+    assert('function' === typeof constructor);
 
     var FactoryFunction = constructor.bind.apply(constructor, arguments);
 

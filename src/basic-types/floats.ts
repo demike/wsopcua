@@ -1,5 +1,5 @@
 "use strict";
-import * as _ from 'underscore';
+
 import {DataStream} from './DataStream'
 
 var minFloat = -3.40 * Math.pow(10, 38);
@@ -21,7 +21,7 @@ function getRandomDouble(min : number, max : number) {
 }
 
 export function isValidFloat(value : any) {
-    if (!_.isFinite(value)) {
+    if (!Number.isFinite(value)) {
         return false;
     }
     return value > minFloat && value < maxFloat;
@@ -72,7 +72,7 @@ export function decodeFloat(stream : DataStream) {
 };
 
 export function isValidDouble(value) {
-    if (!_.isFinite(value)) {
+    if (!Number.isFinite(value)) {
         return false;
     }
     return true;

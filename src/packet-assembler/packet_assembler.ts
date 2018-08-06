@@ -6,7 +6,6 @@
 
 import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert';
-import * as _ from 'underscore';
 import { concatTypedArrays } from '../basic-types/array';
 
 var doDebug = false;
@@ -35,7 +34,7 @@ constructor (options) {
     this.readMessageFunc = options.readMessageFunc;
     this.minimumSizeInBytes = options.minimumSizeInBytes || 8;
 
-    assert(_.isFunction(this.readMessageFunc), "packet assembler requires a readMessageFunc");
+    assert('function' === typeof this.readMessageFunc, "packet assembler requires a readMessageFunc");
 
 };
 

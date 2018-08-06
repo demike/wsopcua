@@ -2,7 +2,6 @@
 
 import {QualifiedName} from '../generated/QualifiedName';
 import {assert} from '../assert';
-import * as _ from 'underscore';
 /**
  * @method stringToQualifiedName
  * @param value {String}
@@ -32,7 +31,7 @@ export function coerceQualifyName(value) {
         return null;
     } else if (value instanceof QualifiedName) {
         return value;
-    } else if (_.isString(value)) {
+    } else if (typeof value === 'string' || value instanceof String) {
         return stringToQualifiedName(value);
     } else {
         assert(value.hasOwnProperty("namespaceIndex"));

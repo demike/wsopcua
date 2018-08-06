@@ -1,6 +1,5 @@
 "use strict";
 import {assert} from '../assert';
-import * as _ from 'underscore';
 import {DataStream} from './DataStream';
 /**
  * @method encodeArray
@@ -16,7 +15,7 @@ export function encodeArray (arr : Array<any>, stream : DataStream, encode_eleme
         stream.setUint32(0xFFFFFFFF);
         return;
     }
-    assert(_.isArray(arr));
+    assert(Array.isArray(arr));
     stream.setUint32(arr.length);
 
     if (encode_element_func) {

@@ -2,7 +2,6 @@
 
 
 import {assert} from  "../assert";
-import * as _ from "underscore";
 
 import {resolveNodeId} from '../nodeid/nodeid';
 import {BrowsePath,RelativePath, RelativePathElement} from '../service-translate-browse-path';
@@ -39,7 +38,7 @@ function browsePathPropertyRequest(nodeId, propertyName) {
  */
 function readUAAnalogItem(session, nodeId, callback) {
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
     var browsePath = [
         browsePathPropertyRequest(nodeId, "EngineeringUnits"),

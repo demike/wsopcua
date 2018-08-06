@@ -4,7 +4,6 @@
  * @module opcua.datamodel
  */
 import {NodeId,NodeIdType, coerceNodeId} from  './nodeid';
-import * as _ from 'underscore';
 
 /**
  * An ExpandedNodeId extends the NodeId structure.
@@ -109,7 +108,7 @@ export function makeExpandedNodeId(value : any, namespace? : number) {
     }
 
     var valueInt = parseInt(value, 10);
-    if (!_.isFinite(valueInt)) {
+    if (!Number.isFinite(valueInt)) {
         throw new Error(" cannot makeExpandedNodeId out of " + value);
     }
     namespace = namespace || 0;

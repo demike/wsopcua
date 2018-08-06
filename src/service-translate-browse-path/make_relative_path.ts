@@ -6,7 +6,6 @@
  */
 
 import {assert} from "../assert";
-import * as _ from "underscore";
 
 import {resolveNodeId} from "../nodeid/nodeid";
 import {QualifiedName} from "../generated/QualifiedName";

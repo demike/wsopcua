@@ -4,9 +4,9 @@
  */
 
 import {assert} from '../assert';
-import * as _ from 'underscore';
 import * as log from 'loglevel';
-import * as async from 'async-es';
+import async_series from 'async-es/series';
+import async_map from 'async-es/map';
 import {EventEmitter} from 'eventemitter3';
 import {SecurityPolicy,fromURI,toUri} from '../secure-channel/security_policy';
 import {MessageSecurityMode} from '../secure-channel';
@@ -269,7 +269,7 @@ export class OPCUAClientBase extends EventEmitter {
     this.serverCertificate = options.serverCertificate || null;
 
     
-    this.keepSessionAlive = _.isBoolean(options.keepSessionAlive) ? options.keepSessionAlive : false;
+    this.keepSessionAlive = options.keepSessionAlive ? options.keepSessionAlive : false;
     
     // statistics...
     this._byteRead    = 0;
@@ -300,7 +300,7 @@ export class OPCUAClientBase extends EventEmitter {
          * @param callback
          */
         connect(endpointUrl: string, callback: ErrorCallback): void {
-                assert(_.isFunction(callback), "expecting a callback");
+                assert('function' === typeof callback, "expecting a callback");
                             
                 this._endpointUrl = endpointUrl;
             
@@ -354,7 +354,7 @@ export class OPCUAClientBase extends EventEmitter {
     
         disconnect(callback: ErrorCallback): void {
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
     
         if (this.isReconnecting) {
             debugLog("OPCUAClientBase#disconnect called while reconnection is in progress");
@@ -459,10 +459,10 @@ public findServers(options : IFindServersOptions, callback : ResponseCallback<st
     
     protected _close_pending_sessions(callback) {
     
-        assert(_.isFunction(callback));
+        assert('function' === typeof callback);
     
-        var sessions = _.clone(this._sessions);
-        async.map(sessions, function (session: ClientSession, next) {
+        var sessions = this._sessions.slice();//_.clone(this._sessions);
+        async_map(sessions, function (session: ClientSession, next) {
     
             assert(session.client === this);
             session.close(true,function(err){
@@ -511,7 +511,7 @@ public getEndpoints(options : IGetEndpointsRequest, callback?) : void {
             options = {};
         }
         
-        assert(_.isFunction(callback));
+        assert('function' === typeof callback);
     
         options.endpointUrl = options.endpointUrl || this._endpointUrl;
         options.localeIds = options.localeIds || [];
@@ -546,7 +546,7 @@ public getEndpoints(options : IGetEndpointsRequest, callback?) : void {
 
         protected _addSession(session) {
             assert(!session._client || session._client === this);
-            assert(!_.contains(this._sessions, session), "session already added");
+            assert(this._sessions.indexOf(session) < 0, "session already added");
             session._client = this;
             this._sessions.push(session);
         
@@ -560,10 +560,10 @@ public getEndpoints(options : IGetEndpointsRequest, callback?) : void {
             var index = this._sessions.indexOf(session);
             if (index >= 0) {
                 this._sessions.splice(index, 1);
-                assert(!_.contains(this._sessions, session));
+                assert(this._sessions.indexOf(session) < 0);
                 session.dispose();
             }
-            assert(!_.contains(this._sessions, session));
+            assert(this._sessions.indexOf(session) < 0);
         };
         
         /**
@@ -574,7 +574,7 @@ public getEndpoints(options : IGetEndpointsRequest, callback?) : void {
  */
 public findEndpoint(endpointUrl, securityMode, securityPolicy) {
     assert(this.knowsServerEndpoint, "Server end point are not known yet");
-    return _.find(this._server_endpoints, function (endpoint) {
+    return this._server_endpoints.find(function (endpoint) {
         return endpoint.endpointUrl === endpointUrl &&
             endpoint.securityMode === securityMode &&
             endpoint.securityPolicyUri === securityPolicy;
@@ -654,7 +654,7 @@ private static __findEndpoint(endpointUrl,securityMode,securityPolicy,callback) 
         }
     ];
 
-    async.series(tasks,function(err){
+    async_series(tasks,function(err){
        if(err) { return callback(err); }
         if (!selected_endpoint) {
             callback (new Error(" Cannot find an Endpoint matching " +
@@ -681,7 +681,7 @@ protected _recreate_secure_channel(callback : Function) {
 
     debugLog("_recreate_secure_channel...");
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
     if (!this.knowsServerEndpoint) {
         return callback(new Error("Cannot reconnect, server endpoint is unknown"));
@@ -736,9 +736,9 @@ protected _internal_create_secure_channel (callback : Function) {
 
     let secureChannel : ClientSecureChannelLayer;
     assert(this._secureChannel === null);
-    assert(_.isString(this._endpointUrl));
+    assert( typeof this._endpointUrl === 'string' || <any>this._endpointUrl instanceof String);
 
-    async.series([
+    async_series([
 
         //------------------------------------------------- STEP 2 : OpenSecureChannel
         (_inner_callback) => {
@@ -893,7 +893,7 @@ private static _install_secure_channel_event_handlers(client : OPCUAClientBase,s
 
                     // now delegate to upper class the
                     if (client._on_connection_reestablished) {
-                        assert(_.isFunction(client._on_connection_reestablished));
+                        assert('function' === typeof client._on_connection_reestablished);
                         client._on_connection_reestablished((err) => {
 
                             if (err) {
@@ -950,7 +950,7 @@ public getCertificateChain(){
  */
 public findEndpointForSecurity(securityMode : MessageSecurityMode, securityPolicy : SecurityPolicy) {
     assert(this.knowsServerEndpoint, "Server end point are not known yet");
-    return _.find(this._server_endpoints, (endpoint) => {
+    return this._server_endpoints.find((endpoint) => {
         return endpoint.securityMode === securityMode &&
                endpoint.securityPolicyUri === securityPolicy;
     });

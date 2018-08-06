@@ -4,12 +4,11 @@
  */
 
 
-
-import * as _ from "underscore";
 import {assert} from '../assert';
  
 var crypto : Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
-import * as async from "async-es";
+import async_map from "async-es/map";
+import async_series from "async-es/series";
 //**nomsgcrypt** var exploreCertificate = require("node-opcua-crypto").crypto_explore_certificate.exploreCertificate;
 
 import {StatusCodes} from '../constants';
@@ -275,7 +274,7 @@ public computeClientSignature(channel, serverCertificate, serverNonce) : Signatu
 
 
 public createUserIdentityToken(session : ClientSession, userIdentityToken : UserIdentityToken|UserIdentityInfo, callback) {
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
 
     if (isAnonymous(this._userIdentityInfo)) {
@@ -439,10 +438,11 @@ public reactivateSession(session : ClientSession, callback) {
             if (old_client !== this) {
                 // remove session from old client:
                 (<any>old_client)._removeSession(session); //cast to any as access of protected member to other instance should be possible
-                assert(!_.contains( (<any>old_client)._sessions, session));
+                assert((<any>old_client)._sessions.indexOf(session) < 0/*!_.contains( (<any>old_client)._sessions, session*/);
 
                 this._addSession(session);
-                assert(_.contains(this._sessions, session));
+                
+                assert(this._sessions.indexOf(session) >= 0 /*_.contains(this._sessions, session)*/);
             }
 
         } else {
@@ -484,14 +484,14 @@ public reactivateSession(session : ClientSession, callback) {
  */
 public createSession(userIdentityInfo : UserIdentityInfo, callback : (err : Error,session? : ClientSession) => void) {
 
-    if (_.isFunction(userIdentityInfo)) {
+    if ('function' === typeof userIdentityInfo) {
         (<any>callback) = userIdentityInfo;
         userIdentityInfo = {};
     }
 
     this._userIdentityInfo = userIdentityInfo;
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
     this._createSession( (err, session) =>{
         if (err) {
@@ -517,7 +517,7 @@ public createSession(userIdentityInfo : UserIdentityInfo, callback : (err : Erro
  */
 public changeSessionIdentity(session, userIdentityInfo, callback) {
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
     var old_userIdentity = this._userIdentityInfo;
     this._userIdentityInfo = userIdentityInfo;
@@ -530,10 +530,10 @@ public changeSessionIdentity(session, userIdentityInfo, callback) {
 };
 
 
-protected _closeSession = function (session, deleteSubscriptions, callback) {
+protected _closeSession = function (session : ClientSession, deleteSubscriptions : boolean, callback) {
 
-    assert(_.isFunction(callback));
-    assert(_.isBoolean(deleteSubscriptions));
+    assert('function' === typeof callback);
+    //assert(_.isBoolean(deleteSubscriptions));
 
     // istanbul ignore next
     if (!this._secureChannel) {
@@ -574,8 +574,8 @@ protected _closeSession = function (session, deleteSubscriptions, callback) {
 public closeSession(session : ClientSession, deleteSubscriptions : boolean, callback : Function) {
 
    
-    assert(_.isBoolean(deleteSubscriptions));
-    assert(_.isFunction(callback));
+    //assert(_.isBoolean(deleteSubscriptions));
+    assert('function' === typeof callback);
     assert(session);
     assert(session.client === this, "session must be attached to self");
     session.closed = true;
@@ -585,7 +585,7 @@ public closeSession(session : ClientSession, deleteSubscriptions : boolean, call
         session.emitCloseEvent();
 
         this._removeSession(session);
-        assert(!_.contains(this._sessions, session));
+        assert(this._sessions.indexOf(session) < 0);
         assert(session.closed, "session must indicate it is closed");
 
         callback(err);
@@ -606,7 +606,7 @@ protected _ask_for_subscription_republish(session : ClientSession, callback : Fu
 
 protected _on_connection_reestablished(callback : Function) {
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
     // call base class implementation first
     super._on_connection_reestablished((err) => {
@@ -699,7 +699,7 @@ protected _on_connection_reestablished(callback : Function) {
         debugLog(" Starting Session reactivation");
         // repair session
         var sessions = this._sessions;
-        async.map(sessions, function (session, next) {
+        async_map(sessions, function (session, next) {
 
             debugLog("OPCUAClient#_on_connection_reestablished TRYING TO REACTIVATE SESSION");
             this._activateSession(session, function (err) {
@@ -716,7 +716,7 @@ protected _on_connection_reestablished(callback : Function) {
 
                     //   if failed => recreate a new Channel and transfer the subscription
                     var new_session = null;
-                    async.series([
+                    async_series([
                         (callback) => {
 
                             debugLog("Activating old session has failed ! => Creating a new session ....");
@@ -811,15 +811,15 @@ public toString() {
  */
 public withSession(endpointUrl, inner_func, callback) {
 
-    assert(_.isFunction(inner_func), "expecting inner function");
-    assert(_.isFunction(callback), "expecting callback function");
+    assert('function' === typeof inner_func, "expecting inner function");
+    assert('function' === typeof callback, "expecting callback function");
 
     
 
     var the_session;
     var the_error;
     var need_disconnect = false;
-    async.series([
+    async_series([
 
         // step 1 : connect to
         (callback) => {
@@ -945,11 +945,11 @@ public withSession(endpointUrl, inner_func, callback) {
 
 public withSubscription(endpointUrl, subscriptionParameters, innerFunc, callback) {
 
-    assert(_.isFunction(innerFunc));
-    assert(_.isFunction(callback));
+    assert('function' === typeof innerFunc);
+    assert('function' === typeof callback);
 
     this.withSession(endpointUrl, function (session, done) {
-        assert(_.isFunction(done));
+        assert('function' === typeof done);
 
         const subscription = new ClientSubscription(session, subscriptionParameters);
 
@@ -979,9 +979,9 @@ function isUserNamePassword(userIdentityInfo) {
     return res;
 }
 
-function findUserTokenPolicy(endpoint_description, userTokenType) : endpoints_service.UserTokenPolicy {
+function findUserTokenPolicy(endpoint_description : endpoints_service.EndpointDescription, userTokenType) : endpoints_service.UserTokenPolicy {
     assert(endpoint_description instanceof EndpointDescription);
-    var r = _.filter(endpoint_description.userIdentityTokens, function (userIdentity : endpoints_service.UserTokenPolicy) {
+    var r = endpoint_description.userIdentityTokens.filter( function (userIdentity : endpoints_service.UserTokenPolicy) {
         // assert(userIdentity instanceof UserTokenPolicy)
         // assert(userIdentity.tokenType);   
         return userIdentity.tokenType === userTokenType;

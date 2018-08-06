@@ -1,6 +1,5 @@
 "use strict";
 import {assert} from '../assert';
-import * as _ from 'underscore';
 
 import {DeadbandType} from '../generated/DeadbandType';
 import {DataType,VariantArrayType, Variant} from '../variant';
@@ -19,11 +18,11 @@ function _differenceScalar(value1 : number,value2 : number,dataType : DataType,a
             }
         }
         diff =  value1[1] - value2[1];
-        assert(_.isNumber(diff)&& _.isFinite(diff));
+        assert(Number.isFinite(diff));
         return Math.abs(diff) > absoluteDeadband;
     }
     diff =  value2 -value1;
-    assert(_.isNumber(diff)&& _.isFinite(diff));
+    assert(Number.isFinite(diff));
 
     return Math.abs(diff) > absoluteDeadband;
 
@@ -31,7 +30,7 @@ function _differenceScalar(value1 : number,value2 : number,dataType : DataType,a
 
 function difference(v1 : Variant ,v2 : Variant,absoluteDeadband : number) {
 
-    assert(_.isFinite(absoluteDeadband));
+    assert(Number.isFinite(absoluteDeadband));
 
     if (v1.arrayType === VariantArrayType.Array) {
 
@@ -102,7 +101,7 @@ export function check_deadband(variant1 : Variant,variant2 : Variant,deadbandTyp
             // each element of the array. If an element that requires a DataChange is found, then no further
             // deadband checking is necessary and the entire array shall be returned.
             //assert(false, "Not implemented yet");
-            assert(_.isNumber(valueRange));
+            assert(typeof valueRange === 'number');
             return check_deadband(variant1,variant2,DeadbandType.Absolute,valueRange * deadbandValue /100);
     }
 }

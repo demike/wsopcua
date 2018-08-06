@@ -2,7 +2,6 @@ import { DataStream } from "../basic-types/DataStream";
 
 "use strict";
 import {assert} from '../assert';
-import * as _ from 'underscore';
 import * as date_time from './date_time'
 
 var bn_dateToHundredNanoSecondFrom1601 = date_time.bn_dateToHundredNanoSecondFrom1601_fast;

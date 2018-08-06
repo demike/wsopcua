@@ -6,7 +6,6 @@
 
 // system requires
 import {assert} from '../assert';
-import * as _ from 'underscore';
 
 // opcua requires
 import {DataStream} from '../basic-types/DataStream';
@@ -152,12 +151,12 @@ public on_socket_ended(err) {
  */
 public connect(endpointUrl : string, callback : Function, options?) {
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
     options = options || {};
 
     this._protocolVersion = (options.protocolVersion !== undefined) ? options.protocolVersion : this._protocolVersion;
-    assert(_.isFinite(this._protocolVersion));
+    assert(Number.isFinite(this._protocolVersion));
 
     var ep = parseEndpointUrl(endpointUrl);
 
@@ -237,7 +236,7 @@ protected _send_HELLO_request() {
 
     
     assert(this._socket);
-    assert(_.isFinite(this._protocolVersion));
+    assert(Number.isFinite(this._protocolVersion));
     assert(this.endpointUrl.length > 0, " expecting a valid endpoint url");
 
     // Write a message to the socket as soon as the client is connected,
@@ -261,7 +260,7 @@ protected _perform_HEL_ACK_transaction(callback) {
 
    
     assert(this._socket);
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
     var counter = 0;
 

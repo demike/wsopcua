@@ -1,7 +1,6 @@
 "use strict";
 
 import {assert} from '../assert';
-import * as _ from 'underscore';
 import {EventEmitter} from 'eventemitter3';
 import {DataStream} from '../basic-types/DataStream'
 import { MessageSecurityMode } from '../service-secure-channel';
@@ -43,7 +42,7 @@ var do_trace_statistics = false;
 
 function process_request_callback(request_data, err, response) {
 
-    assert(_.isFunction(request_data.callback));
+    assert('function' === typeof request_data.callback);
 
     if (!response && !err && request_data.msgType !== "CLO") {
         // this case happens when CLO is called and when some pending transactions
@@ -406,7 +405,7 @@ protected _cancel_pending_transactions(err) {
  
     debugLog("_cancel_pending_transactions  " + Object.keys(this._request_data) +  (this._transport ? this._transport.name : "no transport"));
 
-    assert(err === null || _.isObject(err), "expecting valid error");
+    assert(typeof err === 'object', "expecting valid error");
     Object.keys(this._request_data).forEach(function (key) {
         var request_data = this._request_data[key];
         debugLog("xxxx Cancelling pending transaction " + request_data.key + request_data.msgType + request_data.request._schema.name);
@@ -500,7 +499,7 @@ protected _build_client_nonce() {
         // this securityPolicy may not be support yet ... let's return null
         return null;
     }
-    assert(_.isObject(cryptoFactory));
+    assert(typeof cryptoFactory === 'object');
     let arr = new Uint8Array(cryptoFactory.symmetricKeyLength);
     crypto.getRandomValues(arr);
     return arr;
@@ -672,7 +671,7 @@ protected _on_connection(transport, callback, err?) {
  */
 public create(endpoint_url : string , callback: Function) {
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
     
 
     if (this._securityMode !== MessageSecurityMode.None) {
@@ -832,7 +831,7 @@ public dispose() {
 };
 
 public abortConnection(callback) {
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
     
     if (this.__call) {
         this.__call.once("abort", function () {
@@ -935,7 +934,7 @@ public makeRequestId() {
 
  */
 public performMessageTransaction(requestMessage, callback) {
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
     this._performMessageTransaction("MSG", requestMessage, callback);
 };
 
@@ -971,7 +970,7 @@ protected _performMessageTransaction(msgType, requestMessage, callback) {
 
     /* jshint validthis: true */
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
   
 
     if (!this.isValid()) {
@@ -1069,7 +1068,7 @@ protected _internal_perform_transaction(transaction_data) {
 
     
 
-    assert(_.isFunction(transaction_data.callback));
+    assert('function' === typeof transaction_data.callback);
 
     if (!this._transport) {
         setTimeout(function () {
@@ -1210,7 +1209,7 @@ protected _get_security_options_for_OPN() {
     }
 
     assert(cryptoFactory, "expecting a cryptoFactory");
-    assert(_.isFunction(cryptoFactory.asymmetricSign));
+    assert('function' === typeof cryptoFactory.asymmetricSign);
 
     var options : any = {};
 
@@ -1311,7 +1310,7 @@ public close(callback : any) {
     //
     // ( Note : some servers do  send a CloseSecureChannel though !)
     
-    assert(_.isFunction(callback), "expecting a callback function, but got " + callback);
+    assert('function' === typeof callback, "expecting a callback function, but got " + callback);
 
     // there is no need for the security token expiration event to trigger anymore
     this._cancel_security_token_watchdog();

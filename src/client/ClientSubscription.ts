@@ -3,7 +3,6 @@
  * @module opcua.client
  */
 
-import * as _ from 'underscore';
 import {EventEmitter} from 'eventemitter3';
 import {StatusCodes} from '../constants';
 import {assert} from '../assert'
@@ -25,9 +24,9 @@ import {ClientSidePublishEngine} from './client_publish_engine';
 
 import 'setimmediate';
 
-import * as async from 'async-es';
+import series from 'async-es/series';
 import { IMonitoringParameters } from '../generated/MonitoringParameters';
-import { SessionOptions } from 'http2';
+
 import { ICreateSubscriptionRequest } from '../generated/CreateSubscriptionRequest';
 import { MonitoredItemBase } from './MonitoredItemBase';
 
@@ -160,7 +159,7 @@ constructor (session : ClientSession, options : ICreateSubscriptionRequest) {
 
 protected __create_subscription(callback) {
 
-    assert(_.isFunction(callback));
+    assert ('function' === typeof callback)
 
     var session = this._publishEngine.session;
 
@@ -361,14 +360,14 @@ protected _terminate_step2(callback) {
  */
 public terminate(callback) {
 
-    assert(_.isFunction(callback),"expecting a callback function");
+    assert('function' === typeof callback,"expecting a callback function");
 
     if (this._subscriptionId === "terminated") {
         // already terminated... just ignore
         return callback(new Error("Already Terminated"));
     }
 
-    if (_.isFinite(this._subscriptionId)) {
+    if (Number.isFinite(<any>this._subscriptionId)) {
 
         this._publishEngine.unregisterSubscription(this._subscriptionId);
 
@@ -440,7 +439,7 @@ protected _wait_for_subscription_to_be_ready(done) {
         } else if (self._subscriptionId === "terminated") {
             // the subscription has been terminated in the meantime
             // this indicates a potential issue in the code using this api.
-            if (_.isFunction(done)) {
+            if ('function' === typeof done) {
                 done(new Error("subscription has been deleted"));
             }
         } else {
@@ -567,7 +566,7 @@ protected _wait_for_subscription_to_be_ready(done) {
  *
  */
 public monitor(itemToMonitor : ReadValueId, requestedParameters : IMonitoringParameters, timestampsToReturn : TimestampsToReturn, done? : (err : Error|null,mItem? : MonitoredItem) => void) {
-    assert(done === undefined || _.isFunction(done));
+    assert(done === undefined || ('function' === typeof done));
 
     itemToMonitor.nodeId = resolveNodeId(itemToMonitor.nodeId);
     var monitoredItem = new MonitoredItem(this, itemToMonitor, requestedParameters, timestampsToReturn);
@@ -623,8 +622,8 @@ public monitorItems(itemsToMonitor : IReadValueId[], requestedParameters : IMoni
 //
 //     assert(itemToMonitor.nodeId);
 //     assert(itemToMonitor.attributeId);
-//     assert(done === undefined || _.isFunction(done));
-//     assert(!_.isFunction(timestampsToReturn));
+//     assert(done === undefined || ('function' === typeof done));
+//     assert('function' !== typeof timestampsToReturn);
 //
 //     // Try to resolve the nodeId and fail fast if we can't.
 //     resolveNodeId(itemToMonitor.nodeId);
@@ -648,7 +647,7 @@ public monitorItems(itemsToMonitor : IReadValueId[], requestedParameters : IMoni
 //         } else if (self.subscriptionId === "terminated") {
 //             // the subscription has been terminated in the meantime
 //             // this indicates a potential issue in the code using this api.
-//             if (_.isFunction(done)) {
+//             if ('function' === typeof done) {
 //                 done(new Error("subscription has been deleted"));
 //             }
 //         } else {
@@ -675,7 +674,7 @@ protected _remove(monitoredItem : MonitoredItemBase) {
 };
 
 public _delete_monitored_items(monitoredItems : MonitoredItemBase[], callback) : void {
-    assert(_.isArray(monitoredItems));
+    assert(Array.isArray(monitoredItems));
     
     assert(this.isActive());
 
@@ -700,7 +699,7 @@ protected _delete_monitored_item(monitoredItem : MonitoredItemBase, callback) : 
 };
 
 public setPublishingMode(publishingEnabled, callback) : void {
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
     this.session.setPublishingMode(publishingEnabled, <number>this._subscriptionId, (err, results) => {
         if (err) {
             return callback(err);
@@ -726,7 +725,7 @@ public recreateSubscriptionAndMonitoredItem(callback) {
 
     this._publishEngine.unregisterSubscription(this._subscriptionId);
 
-    async.series([
+    series([
 
         this.__create_subscription.bind(this),
 
@@ -738,15 +737,16 @@ public recreateSubscriptionAndMonitoredItem(callback) {
             // re-create monitored items
 
             let itemsToCreate : subscription_service.MonitoredItemCreateRequest[] = [];
-            _.forEach(monitoredItems_old, function (monitoredItem : MonitoredItemBase /*, clientHandle*/) {
+            
+            for (let key in monitoredItems_old) {
+                let monitoredItem = monitoredItems_old[key];
                 assert(monitoredItem.monitoringParameters.clientHandle > 0);
                 itemsToCreate.push(new subscription_service.MonitoredItemCreateRequest({
                     itemToMonitor: monitoredItem.itemToMonitor,
                     monitoringMode: monitoredItem.monitoringMode,
                     requestedParameters: monitoredItem.monitoringParameters
                 }));
-
-            });
+            }
 
             var createMonitorItemsRequest = new subscription_service.CreateMonitoredItemsRequest({
                 subscriptionId: <number>this._subscriptionId,

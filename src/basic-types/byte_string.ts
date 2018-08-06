@@ -1,5 +1,4 @@
 "use strict";
-import * as _ from 'underscore';
 import { DataStream } from './DataStream';
 
 function getRandomInt(min : number, max : number) {
@@ -28,7 +27,7 @@ export function decodeByteString(stream : DataStream) : Uint8Array{
 
 export function coerceByteString(value) : Uint8Array {
 
-    if (_.isArray(value)) {
+    if (Array.isArray(value)) {
         return new Uint8Array(value);
     }
     if (typeof value === "string") {

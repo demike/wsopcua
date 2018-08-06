@@ -1,6 +1,5 @@
 "use strict";
 
-import * as _ from 'underscore';
 import {assert} from '../assert';
 
 import { MonitoringMode } from "../generated/MonitoringMode";
@@ -61,7 +60,7 @@ public toString() : string {
  */
 public terminate(done: Function) {
 
-    assert(!done || _.isFunction(done));
+    assert(!done || ('function' === typeof done));
     /**
      * Notify the observer that this monitored item has been terminated.
      * @event terminated
@@ -82,7 +81,7 @@ public terminate(done: Function) {
  * @private
  */
 public _monitor(done) {
-    assert(done === undefined || _.isFunction(done));
+    assert(done === undefined || ('function' === typeof done));
     
     MonitoredItemBase._toolbox_monitor(this._subscription, this._timestampsToReturn, [this], (err) => {
         if (err) {
@@ -104,7 +103,7 @@ public _monitor(done) {
  * @param callback {Function}
  */
 public modify(parameters, timestampsToReturn : TimestampsToReturn, callback) {
-    if (_.isFunction(timestampsToReturn)) {
+    if ('function' === typeof timestampsToReturn) {
         callback = timestampsToReturn;
         timestampsToReturn = null;
     }

@@ -6,7 +6,6 @@ import { BrowseResult, BrowseDirection, BrowseDescription } from '../src/service
 import { DiagnosticInfo } from '../src/data-model';
 import { EndpointDescription } from '../src/service-endpoints';
 import { ReferenceTypeIds, StatusCodes, AttributeIds } from '../src/constants';
-import * as _ from 'underscore';
 import { BrowsePath } from '../src/generated/BrowsePath';
 import { RelativePath } from '../src/generated/RelativePath';
 import { makeBrowsePath, BrowsePathResult } from '../src/service-translate-browse-path';
@@ -106,16 +105,16 @@ function browse(nodeId: NodeId | NodeId[], elemId: string | string[]) {
     //   if (nodeCnt >maxNodeCnt) {
     //        return;
     //    }    
-    if (!_.isArray(nodeId)) {
-        nodeId = [nodeId];
+    if (!Array.isArray(nodeId)) {
+        nodeId = <any>[nodeId];
     }
 
-    if (!_.isArray(elemId)) {
-        elemId = [elemId];
+    if (!Array.isArray(elemId)) {
+        elemId = <any>[elemId];
     }
 
     let arBd = [];
-    for (let id of nodeId) {
+    for (let id of <NodeId[]>nodeId) {
         arBd.push(
             new BrowseDescription({
                 "nodeId": id, "browseDirection": BrowseDirection.Forward, "includeSubtypes": true,

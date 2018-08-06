@@ -4,7 +4,6 @@
  */
 
 import {assert} from '../assert';
-import * as _ from 'underscore';
 import {MessageSecurityMode} from '../generated/MessageSecurityMode';
 import {SignatureData} from '../generated/SignatureData';
 
@@ -423,13 +422,16 @@ export function getOptionsForSymmetricSignAndEncrypt(securityMode, derivedKeys) 
     };
     if (securityMode === MessageSecurityMode.SignAndEncrypt) {
 
-        options = _.extend(options, {
+        let ext = {
             plainBlockSize: derivedKeys.encryptingBlockSize,
             cipherBlockSize: derivedKeys.encryptingBlockSize,
             encrypt_buffer: function (chunk) {
                 return crypto_utils.encryptBufferWithDerivedKeys(chunk, derivedKeys);
             }
-        });
+        };
+        for(let k in ext) {
+            options[k] = ext[k];
+        }
     }
     return options;
 }

@@ -3,7 +3,6 @@
  * @module opcua.client
  */
 import {EventEmitter} from 'eventemitter3';
-import * as _ from 'underscore';
 import {assert} from '../assert';
 import {resolveNodeId,coerceNodeId,makeNodeId,NodeId} from '../nodeid/nodeid';
 import {OPCUAClientBase} from './client_base';
@@ -242,10 +241,10 @@ public static coerceBrowseDescription(data) {
 browse(nodes : string|string[]|NodeId|NodeId[]|BrowseDescription|BrowseDescription[], callback : (err : Error, results : browse_service.BrowseResult[], diagnostInfos : DiagnosticInfo[]| browse_service.BrowseResponse) => void) {
 
     this._requestedMaxReferencesPerNode = this._requestedMaxReferencesPerNode || 10000;
-    assert(_.isFinite(this._requestedMaxReferencesPerNode));
-    assert(_.isFunction(callback));
+    assert(Number.isFinite(this._requestedMaxReferencesPerNode));
+    assert('function' === typeof callback);
 
-    if (!_.isArray(nodes)) {
+    if (!Array.isArray(nodes)) {
         (<any>nodes) = [nodes];
     }
 
@@ -339,10 +338,10 @@ browse(nodes : string|string[]|NodeId|NodeId[]|BrowseDescription|BrowseDescripti
 readVariableValue(nodes : string | string[] | NodeId | NodeId[] |read_service.ReadValueId | read_service.ReadValueId[], 
                     callback : (err:Error,results? : DataValue[], diagInf? : DiagnosticInfo[]) => void ) {
     
-        assert(_.isFunction(callback));
+        assert('function' === typeof callback);
 
 
-    var isArray = _.isArray(nodes);
+    var isArray = Array.isArray(nodes);
     if (!isArray) {
         nodes = <string[]|read_service.ReadValueId[]>[nodes];
     }
@@ -414,8 +413,8 @@ readVariableValue(nodes : string | string[] | NodeId | NodeId[] |read_service.Re
  * @param callback.diagnosticInfos {DiagnosticInfo[]} - the diagnostic infos.
  */
 readHistoryValue(nodes, start, end, callback) {
-    assert(_.isFunction(callback));
-    if (!_.isArray(nodes)) {
+    assert('function' === typeof callback);
+    if (!Array.isArray(nodes)) {
         nodes = [nodes];
     }
 
@@ -476,8 +475,8 @@ readHistoryValue(nodes, start, end, callback) {
  */
 write(nodesToWrite, callback) {
 
-    assert(_.isFunction(callback));
-    assert(_.isArray(nodesToWrite));
+    assert('function' === typeof callback);
+    assert(Array.isArray(nodesToWrite));
 
     var request = new write_service.WriteRequest({nodesToWrite: nodesToWrite});
 
@@ -511,7 +510,7 @@ write(nodesToWrite, callback) {
  */
 writeSingleNode(nodeId : NodeId, value : Variant, callback : Function) {
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
     var nodesToWrite = [];
 
@@ -556,8 +555,8 @@ writeSingleNode(nodeId : NodeId, value : Variant, callback : Function) {
  */
 readAllAttributes(nodes : NodeId[], callback) {
 
-    assert(_.isFunction(callback));
-    if (!_.isArray(nodes)) {
+    assert('function' === typeof callback);
+    if (!Array.isArray(nodes)) {
         nodes = [nodes];
     }
 
@@ -620,8 +619,8 @@ public read(nodesToRead, maxAge?, callback?) {
         maxAge = 0;
     }
 
-    assert(_.isArray(nodesToRead));
-    assert(_.isFunction(callback));
+    assert(Array.isArray(nodesToRead));
+    assert('function' === typeof callback);
 
     // coerce nodeIds
     nodesToRead.forEach(function (node) {
@@ -659,7 +658,7 @@ public emitCloseEvent(statusCode?:any) {
 
 protected _defaultRequest(SomeRequest, SomeResponse, options, callback) {
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
     var request = new SomeRequest(options);
 
@@ -723,7 +722,7 @@ protected _defaultRequest(SomeRequest, SomeResponse, options, callback) {
  */
 createSubscription(options : ICreateSubscriptionRequest, callback : (err : Error|null,response : CreateSubscriptionResponse) =>void ) {
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
     var request = new subscription_service.CreateSubscriptionRequest(options);
 
@@ -885,10 +884,10 @@ public deleteMonitoredItems(options : IDeleteMonitoredItemsRequest, callback : (
  * @param callback.err {Error|null}   - the Error if the async method has failed
  */
 public setPublishingMode(publishingEnabled : boolean, subscriptionIds : number[]|number, callback) {
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
     assert(publishingEnabled === true || publishingEnabled === false);
-    if (!_.isArray(subscriptionIds)) {
-        assert(_.isNumber(subscriptionIds));
+    if (!Array.isArray(subscriptionIds)) {
+        assert(typeof subscriptionIds === 'number');
         subscriptionIds = [subscriptionIds];
     }
 
@@ -922,9 +921,9 @@ public setPublishingMode(publishingEnabled : boolean, subscriptionIds : number[]
  *
  */
 public translateBrowsePath(browsePath : translate_service.BrowsePath | translate_service.BrowsePath[], callback : (err :Error|null,results : translate_service.BrowsePathResult | translate_service.BrowsePathResult[]) => void) {
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
-    var has_single_element = !_.isArray(browsePath);
+    var has_single_element = !Array.isArray(browsePath);
     browsePath = has_single_element ? [<translate_service.BrowsePath>browsePath] : <translate_service.BrowsePath[]>browsePath;
 
     var request = new translate_service.TranslateBrowsePathsToNodeIdsRequest({
@@ -951,7 +950,7 @@ public isChannelValid() : boolean {
 
 public performMessageTransaction(request, callback) {
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
     assert(this._client);
 
     if (!this.isChannelValid()) {
@@ -999,8 +998,8 @@ public close(deleteSubscription : boolean = true,callback) {
         callback = deleteSubscription;
         deleteSubscription = true;
     }
-    assert(_.isFunction(callback));
-    assert(_.isBoolean(deleteSubscription));
+    assert('function' === typeof callback);
+    //assert(_.isBoolean(deleteSubscription));
     assert(this._client);
 
     this._terminatePublishEngine();
@@ -1048,7 +1047,7 @@ public hasBeenClosed() : boolean {
  */
 public call(methodsToCall : CallMethodRequest[], callback : (err : Error|null, response?: CallMethodResult[], diagnosticInfo? : any) => void ) {
 
-    assert(_.isArray(methodsToCall));
+    assert(Array.isArray(methodsToCall));
 
     // Note : The client has no explicit address space and therefore will struggle to
     //        access the method arguments signature.
@@ -1147,7 +1146,7 @@ public getMonitoredItems(subscriptionId : UInt32, callback) {
  */
 public getArgumentDefinition(methodId : NodeId, callback : (err : Error|null,inputArguments?:Argument[],outputarguments?:Argument[]) => void ) {
 
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
     assert(methodId instanceof NodeId);
 
     var browseDescription = [{
@@ -1236,7 +1235,7 @@ public getArgumentDefinition(methodId : NodeId, callback : (err : Error|null,inp
  *
  */
 public queryFirst(queryFirstRequest,callback) {
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
 
     var request = new query_service.QueryFirstRequest(queryFirstRequest);
 

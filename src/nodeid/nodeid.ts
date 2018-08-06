@@ -1,11 +1,9 @@
 "use strict";
 
-import {DataStream} from '../basic-types/DataStream';
-//import {assert} from 'better-assert/better-assert-browser';
-import * as _ from 'underscore';
 import {assert} from '../assert'
 import {isValidGuid,emptyGuid} from '../basic-types/guid'
 import * as constants from '../constants';
+import { isEqual } from '../utils';
 
 /**
  * @module opcua.datamodel
@@ -209,7 +207,7 @@ isEmpty() : Boolean {
             case NodeIdType.STRING:
                 return n1.value === n2.value;
             default:
-                return _.isEqual(n1.value,n2.value);
+                return isEqual(n1.value,n2.value);
         }
     }
 

@@ -3,7 +3,6 @@
  * @module opcua.client
  */
 
-import * as _ from 'underscore';
 import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert'
 import {MonitoredItemBase} from './MonitoredItemBase'
@@ -47,7 +46,7 @@ export class MonitoredItemGroup extends EventEmitter{
     protected _monitoringMode : MonitoringMode;
 constructor (subscription : ClientSubscription, itemsToMonitor : IReadValueId[], monitoringParameters : IMonitoringParameters, timestampsToReturn : TimestampsToReturn) {
     super();
-    assert(_.isArray(itemsToMonitor));
+    assert(Array.isArray(itemsToMonitor));
 
     timestampsToReturn = timestampsToReturn || TimestampsToReturn.Neither;
 
@@ -86,7 +85,7 @@ public toString() : string {
  */
 public terminate(done : Function) : void {
 
-    assert(!done || _.isFunction(done));
+    assert(!done || ('function' === typeof done));
     
     /**
      * Notify the observer that this monitored item has been terminated.
@@ -108,7 +107,7 @@ public terminate(done : Function) : void {
  * @private
  */
 public _monitor(done) : void {
-    assert(done === undefined || _.isFunction(done));
+    assert(done === undefined || ('function' === typeof done));
     
 
     this._monitoredItems.forEach((monitoredItem, index) => {

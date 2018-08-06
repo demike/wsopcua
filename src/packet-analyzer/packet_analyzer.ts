@@ -3,7 +3,6 @@
  * @module opcua.miscellaneous
  */
 import {assert} from '../assert';
-import * as _ from "underscore";
 import {DataStream} from '../basic-types/DataStream';
 import {hexDump} from '../common/debug';
 import {buffer_ellipsis} from '../utils';
@@ -52,9 +51,10 @@ function make_tracer(buffer, padding, offset) : any {
         hex_info = hex_info || "";
 
         // account for ESC codes for colors
-        var nbColorAttributes = _.filter(str, function (c) {
-            return c === "\u001b";
-        }).length;
+        let nbColorAttributes = 0;
+        for (let i=0;i<str.length; i++) {
+            if (str[i] === "\u001b") {nbColorAttributes++;}
+        }
         var extra = nbColorAttributes * 5;
         console.log((pad() + str + spaces).substr(0, 132 + extra) + "|" + hex_info);
     }
@@ -190,7 +190,8 @@ export function packet_analyzer(buffer : ArrayBuffer, id?, padding? : number, of
     var options = make_tracer(buffer, padding, offset);
     options.name = "message";
 
-    options = _.extend(options, custom_options);
+    for (let attrName in custom_options) { options[attrName] = custom_options[attrName];}
+   
     try {
         objMessage.decode_debug(stream, options);
     }

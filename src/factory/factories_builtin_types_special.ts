@@ -1,12 +1,11 @@
 "use strict";
 
 import {assert} from "../assert";
-import * as _ from "underscore";
 
 import  {registerType as registerBuiltInType} from './factories_builtin_types';
 
 function _self_encode(Type) {
-    assert(_.isFunction(Type));
+    assert('function' === typeof Type);
     return function (value, stream) {
         if (!value || !value.encode) {
             value = new Type(value);
@@ -15,7 +14,7 @@ function _self_encode(Type) {
     };
 }
 function _self_decode(Type) {
-    assert(_.isFunction(Type));
+    assert('function' === typeof Type);
 
     return function (stream) {
         var value = new Type();
@@ -26,7 +25,7 @@ function _self_decode(Type) {
 
 export function registerSpecialVariantEncoder(ConstructorFunc,name : string) {
 
-    assert(_.isFunction(ConstructorFunc));
+    assert('function' === typeof ConstructorFunc);
 
     registerBuiltInType({
         name: name,

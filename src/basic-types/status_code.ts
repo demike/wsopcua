@@ -2,7 +2,6 @@
 /**
  * @module opcua.datamodel
  */
-import * as _ from 'underscore';
 import {assert} from '../assert';
 import {StatusCodes} from '../constants';
 import { DataStream } from './DataStream';
@@ -216,11 +215,11 @@ export var decodeStatusCode = function (stream : DataStream) {
 
 /* construct status codes fast search indexes */
 var StatusCodes_reverse_map = {};
-_.forEach(StatusCodes, function (code) {
-    let csc = new ConstantStatusCode(code);
-    StatusCodes_reverse_map[csc.value] = csc;
-    StatusCodes[csc.name] = csc;
-});
+for (let codeName in StatusCodes) {
+     let csc = new ConstantStatusCode(StatusCodes[codeName]);
+     StatusCodes_reverse_map[csc.value] = csc;
+     StatusCodes[csc.name] = csc;
+}
 
 /**
  * @module StatusCodes
@@ -243,14 +242,14 @@ constructor(options) {
 }
 
 _getExtraName() : string {
-
-    var self = this;
     var str = [];
-    _.forEach(extraStatusCodeBits,function(value,key){
-        if ((self._extraBits & value ) === value) {
+    for(let key in extraStatusCodeBits) {
+        let value = extraStatusCodeBits[key];
+        if ((this._extraBits & value ) === value) {
             str.push(key);
         }
-    });
+    }
+  
     if (str.length === 0) {
         return "";
     }

@@ -6,7 +6,6 @@
  // system requires
 import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert';
-import * as _ from 'underscore';
 
 // opcua requires
 import {PacketAssembler} from '../packet-assembler/packet_assembler';
@@ -374,7 +373,7 @@ protected _install_one_time_message_receiver(callback) {
 
   
     assert(!this._the_callback, "callback already set");
-    assert(_.isFunction(callback));
+    assert('function' === typeof callback);
     this._the_callback = callback;
     this._start_timeout_timer();
 };
@@ -390,7 +389,7 @@ protected _install_one_time_message_receiver(callback) {
  */
 public disconnect(callback) {
 
-    assert(_.isFunction(callback), "expecting a callback function, but got " + callback);
+    assert('function' === typeof callback, "expecting a callback function, but got " + callback);
 
  
     if (this.__disconnecting__) {

@@ -1,5 +1,5 @@
 "use strict";
-import { filter, isNumber, isFunction } from "underscore";
+
 import { EventEmitter } from "eventemitter3";
 import {assert} from "../assert";
 
@@ -28,10 +28,14 @@ export class WatchDog extends EventEmitter{
     _visit_subscriber() {
         var self = this;
         self._current_time = Date.now();
-        var expired_subscribers = filter(self._subscriber, function (watchDogData) {
-            (<any>watchDogData).visitCount += 1;
-            return has_expired(watchDogData, self._current_time);
-        });
+        var expired_subscribers = [];
+        for (let k in this._subscriber) {
+            let watchDogData = this._subscriber[k];
+            watchDogData.visitCount += 1;
+            if (has_expired(watchDogData,this._current_time)) {
+                expired_subscribers.push(watchDogData)
+            }
+        }
         //xx console.log("_visit_subscriber", _.map(expired_subscribers, _.property("key")));
         if (expired_subscribers.length) {
             self.emit("timeout", expired_subscribers);
@@ -59,9 +63,9 @@ export class WatchDog extends EventEmitter{
     addSubscriber(subscriber : ISubscriber, timeout): number {
         this._current_time = Date.now();
         timeout = timeout || 1000;
-        assert(isNumber(timeout), " invalid timeout ");
-        assert(isFunction(subscriber.watchdogReset), " the subscriber must provide a watchdogReset method ");
-        assert(!isFunction((<any>subscriber).keepAlive));
+        assert(Number.isFinite(timeout), " invalid timeout ");
+        assert(typeof subscriber.watchdogReset === 'function', " the subscriber must provide a watchdogReset method ");
+        assert(typeof (<any>subscriber).keepAlive === 'function');
         this._counter += 1;
         var key = this._counter;
         (<any>subscriber)._watchDog = this;
@@ -89,8 +93,8 @@ export class WatchDog extends EventEmitter{
             return; // already removed !!!
         }
         assert(subscriber._watchDog instanceof WatchDog);
-        assert(isNumber(subscriber._watchDogData.key));
-        assert(isFunction(subscriber.keepAlive));
+        assert(typeof subscriber._watchDogData.key === 'number');
+        assert(typeof subscriber.keepAlive === 'function');
         assert(this._subscriber.hasOwnProperty(subscriber._watchDogData.key));
         delete this._subscriber[subscriber._watchDogData.key];
         delete subscriber._watchDog;
@@ -135,7 +139,7 @@ function has_expired(watchDogData, currentTime) {
 function keepAliveFunc() {
     var self = this;
     assert(self._watchDog instanceof WatchDog);
-    assert(isNumber(self._watchDogData.key));
+    assert(typeof self._watchDogData.key === 'function');
     self._watchDogData.last_seen = Date.now();
     if (self.onClientSeen) {
         self.onClientSeen(new Date(self._watchDogData.last_seen));

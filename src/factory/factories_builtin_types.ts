@@ -2,9 +2,8 @@
 /**
  * @module opcua.miscellaneous
  */
-import * as _ from 'underscore';
 import {assert} from '../assert';
-import {makeNodeId,coerceNodeId,NodeId} from '../nodeid/nodeid';
+import {makeNodeId,coerceNodeId} from '../nodeid/nodeid';
 import { ExpandedNodeId,makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 import * as ec from '../basic-types';
 import {encodeBoolean} from '../basic-types';
@@ -194,7 +193,7 @@ constructor(options :  ITypeSchema| any) {
         if (defaultValue === undefined) {
             defaultValue = this.defaultValue;
         }
-        if (_.isFunction(defaultValue)) {
+        if ('function' === typeof defaultValue) {
             // be careful not to cache this value , it must be call each time to make sure
             // we do not end up with the same value/instance twice.
             defaultValue = defaultValue();
@@ -242,10 +241,10 @@ constructor(options :  ITypeSchema| any) {
  */
 export function registerType<T extends ITypeSchema>(schema: T) {
     assert(typeof schema.name === "string");
-    if(!_.isFunction(schema.encode)) {
+    if('function' !== typeof schema.encode) {
         throw new Error("schema "+ schema.name + " has no encode function");
     }
-    if(!_.isFunction(schema.decode)) {
+    if('function' !== typeof schema.decode) {
         throw new Error("schema "+ schema.name + " has no decode function");
     }
 
@@ -274,7 +273,10 @@ export function findSimpleType(name : string) {
 
 // populate the default type map
 export var _defaultTypeMap = {};
-_defaultType.forEach(registerType);
+for (let t of _defaultType) {
+    registerType(t);
+}
+//_defaultType.forEach(registerType);
 
 /**
  * @method findBuiltInType

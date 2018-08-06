@@ -3,12 +3,6 @@
 /**
  * @module opcua.address_space.types
  */
-import {assert} from "../assert";
-
-import * as _  from "underscore";
-import {makeNodeId} from '../nodeid/nodeid';
-
-import {_defaultTypeMap} from '../factory/factories_builtin_types';
 
 import * as ec from '../basic-types';
 var encodeArray = ec.encodeArray;

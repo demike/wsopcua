@@ -1,8 +1,5 @@
 "use strict";
 
-import {assert} from '../assert';
-import * as _ from 'underscore';
-
 export class ObjectRegistry {
     protected _objectType : any;
     protected _cache : {};
@@ -43,11 +40,11 @@ export class ObjectRegistry {
             var className = this.getClassName();
             var str = " className :" + className +  " found => " + this.count() +  " object leaking\n";
         
-            _.forEach(this._cache,function(obj/*,key*/) {
+            for (let key in this._cache) {
+                let obj = this._cache[key];
                 str += (<any>obj.constructor).name + " " + obj.toString()+ "\n";
-            });
+            }
         
-      
             return str;
         };
 

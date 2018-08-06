@@ -1,7 +1,6 @@
 "use strict";
-import {assert} from '../assert';
+
 import { DataStream } from './DataStream';
-//import * as _ from 'underscore';
 
 export function isValidBoolean(value : any) : boolean{
     return typeof value === "boolean";

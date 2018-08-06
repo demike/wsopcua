@@ -5,7 +5,6 @@
 
 
 import {assert} from '../assert';
-import * as _ from 'underscore';
 import {EventEmitter} from 'eventemitter3';
 
 import {ChunkManager} from '../chunkmanager';
@@ -66,7 +65,7 @@ constructor (msgType, options : SecureMessageChunkManagerOptions, securityHeader
     msgType = msgType || "OPN";
 
     securityHeader = securityHeader || chooseSecurityHeader(msgType);
-    assert(_.isObject(securityHeader));
+    assert(typeof securityHeader === 'object');
 
     // the maximum size of a message chunk:
     // Note: OPCUA requires that chunkSize is at least 8196
@@ -75,7 +74,7 @@ constructor (msgType, options : SecureMessageChunkManagerOptions, securityHeader
     this._msgType = msgType;
 
     options.secureChannelId = options.secureChannelId || 0;
-    assert(_.isFinite(options.secureChannelId));
+    assert(Number.isFinite(options.secureChannelId));
     this._secureChannelId = options.secureChannelId;
 
     var requestId = options.requestId;

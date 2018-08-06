@@ -6,7 +6,6 @@
 
 import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert';
-import * as _ from 'underscore';
 
 import {readMessageHeader} from './read_message_header';
 import {DataStream} from '../basic-types/DataStream';
@@ -129,12 +128,12 @@ export class ChunkManager extends EventEmitter {
         this.headerSize = options.headerSize || 0;
         if (this.headerSize) {
             this.writeHeaderFunc = options.writeHeaderFunc;
-            assert(_.isFunction(this.writeHeaderFunc));
+            assert('function' === typeof this.writeHeaderFunc);
         }
         this.sequenceHeaderSize = options.sequenceHeaderSize === undefined ? 8 : options.sequenceHeaderSize;
         if (this.sequenceHeaderSize > 0) {
             this.writeSequenceHeaderFunc = options.writeSequenceHeaderFunc;
-            assert(_.isFunction(this.writeSequenceHeaderFunc));
+            assert('function' === typeof this.writeSequenceHeaderFunc);
         }
         this.signatureLength = options.signatureLength || 0;
         this.compute_signature = options.compute_signature;
@@ -151,7 +150,7 @@ export class ChunkManager extends EventEmitter {
             // with size equal to  CipherTextBlockSize. These values depend on the encryption algorithm and may
             // be the same.
             this.encrypt_buffer = options.encrypt_buffer;
-            assert(_.isFunction(this.encrypt_buffer));
+            assert('function' === typeof this.encrypt_buffer);
             // this is the formula proposed  by OPCUA
             this.maxBodySize = this.plainBlockSize * Math.floor((this.chunkSize - this.headerSize - this.signatureLength - 1) / this.cipherBlockSize) - this.sequenceHeaderSize;
             // this is the formula proposed  by ERN
@@ -178,7 +177,7 @@ export class ChunkManager extends EventEmitter {
      */
     _write_signature(chunk) {
         if (this.compute_signature) {
-            assert(_.isFunction(this.compute_signature));
+            assert('function' === typeof (this.compute_signature));
             assert(this.signatureLength !== 0);
             var signature_start = this.dataEnd;
             var section_to_sign = chunk.slice(0, signature_start);

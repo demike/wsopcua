@@ -1,6 +1,5 @@
 "use strict";
 
-import * as _ from 'underscore';
 import {assert} from '../assert';
 import {doDebug,debugLog} from '../common/debug';
 import {StatusCodes} from '../constants/raw_status_codes';
@@ -10,7 +9,8 @@ import { ClientSubscription} from './ClientSubscription';
 import * as subscription_service from '../service-subscription';
 import { RequestHeader } from '../generated/RequestHeader';
 
-import * as async from 'async-es';
+import forEachOf from 'async-es/forEachOf';
+import whilst from 'async-es/whilst';
 
 //xx var debugLog = console.log;
 
@@ -281,10 +281,10 @@ public registerSubscription(subscription : ClientSubscription) {
     debugLog("ClientSidePublishEngine#registerSubscription " + subscription.subscriptionId);
 
     assert(arguments.length === 1);
-    assert(_.isFinite(subscription.subscriptionId));
+    assert(Number.isFinite(<any>subscription.subscriptionId));
     assert(!this.subscriptionMap.hasOwnProperty(subscription.toString())); // already registered ?
-    assert(_.isFunction(subscription.onNotificationMessage));
-    assert(_.isFinite(subscription.timeoutHint));
+    assert('function' === typeof subscription.onNotificationMessage);
+    assert(Number.isFinite(subscription.timeoutHint));
 
     this.activeSubscriptionCount += 1;
     this.subscriptionMap[subscription.subscriptionId] = subscription;
@@ -320,7 +320,7 @@ public unregisterSubscription(subscriptionId : number | string) {
 
     debugLog("ClientSidePublishEngine#unregisterSubscription " + subscriptionId);
 
-    assert(_.isFinite(subscriptionId) && subscriptionId >0);
+    assert(Number.isFinite(<any>subscriptionId) && subscriptionId >0);
     
     this.activeSubscriptionCount -= 1;
     assert(subscriptionId in this.subscriptionMap);
@@ -340,7 +340,7 @@ public getSubscriptionIds() : number[] {
  */
 public getSubscription(subscriptionId : number) {
     var self = this;
-    assert(_.isFinite(subscriptionId) && subscriptionId >0);
+    assert(Number.isFinite(subscriptionId) && subscriptionId >0);
     assert(self.subscriptionMap.hasOwnProperty(subscriptionId.toString()));
     return self.subscriptionMap[subscriptionId];
 };
@@ -441,8 +441,8 @@ public republish(callback) {
 
         setImmediate(function() {
 
-            assert(_.isFunction(_i_callback));
-            async.whilst(function (){ return !is_done},_send_republish,function(err) {
+            assert('function' === typeof _i_callback);
+            whilst(function (){ return !is_done},_send_republish,function(err) {
 
                 debugLog("nbPendingPublishRequest = " + self.nbPendingPublishRequests);
                 debugLog(" _republish ends with " + (err ? err.message : "null"));
@@ -476,7 +476,7 @@ public republish(callback) {
 
     }
 
-    async.forEachOf(self.subscriptionMap,repairSubscription,callback);
+    forEachOf(self.subscriptionMap,repairSubscription,callback);
 }
 
 }

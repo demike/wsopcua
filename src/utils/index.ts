@@ -5,6 +5,7 @@
 
 import {assert} from '../assert';
 
+
 /**
  * set a flag
  * @method set_flag
@@ -42,3 +43,5 @@ export function isNullOrUndefined(value)  {
 
 export * from './get_function_parameters_name';
 export * from './once';
+export * from './isEqual';
+

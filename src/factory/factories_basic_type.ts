@@ -2,7 +2,6 @@
 /**
  * @module opcua.miscellaneous
  */
-import * as _ from 'underscore';
 import {assert} from '../assert';
 
 import * as ec from '../basic-types';
@@ -48,16 +47,16 @@ export function registerBasicType(schema) {
         console.log(JSON.stringify(schema));
         throw new Error(" cannot find subtype " + schema.subtype);
     }
-    assert(_.isFunction(t.decode));
+    assert('function' === typeof t.decode);
 
     var encodeFunc = schema.encode || t.encode;
-    assert(_.isFunction(encodeFunc));
+    assert('function' === typeof encodeFunc);
 
     var decodeFunc = schema.decode || t.decode;
-    assert(_.isFunction(decodeFunc));
+    assert('function' === typeof decodeFunc);
 
     var defaultValue = (schema.defaultValue === undefined ) ? t.defaultValue : schema.defaultValue;
-    // assert(_.isFunction(defaultValue));
+    // assert('function' === typeof defaultValue);
 
     var coerceFunc = schema.coerce || t.coerce;
 

@@ -1,10 +1,6 @@
 "use strict";
 
 import {assert} from "../assert";
-import * as _ from 'underscore';
-import {QualifiedName} from '../generated/QualifiedName';
-import {LocalizedText} from '../generated/LocalizedText';
-import {DiagnosticInfo} from '../generated/DiagnosticInfo';
 
 import {DataType} from './DataTypeEnum';
 import {VariantArrayType} from './VariantArrayTypeEnum';
@@ -289,7 +285,7 @@ function isValidArrayVariant(dataType, value)  : boolean{
         return true;
     }
     // array values can be store in Buffer, Float32Array
-    assert(_.isArray(value));
+    assert(Array.isArray(value));
     for (var i=0;i<value.length;i++) {
         if (!isValidScalarVariant(dataType, value[i])) {
             return false;
@@ -336,7 +332,7 @@ function encodeGeneralArray(dataType : DataType, stream, value) {
 
     var arr = value || [];
     assert(arr instanceof Array);
-    assert(_.isFinite(arr.length));
+    assert(Number.isFinite(arr.length));
     ec.encodeUInt32(arr.length, stream);
     var encode = get_encoder(dataType);
     var i, n = arr.length;

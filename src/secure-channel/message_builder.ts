@@ -2,7 +2,6 @@
 
 
 import {assert} from '../assert';
-import * as _ from 'underscore';
 import {SecurityPolicy,ICryptoFactory} from '../secure-channel/security_policy';
 import * as ec from '../basic-types';
 import * as securityPolicy_m from './security_policy';
@@ -54,10 +53,10 @@ export class MessageBuilder extends MessageBuilderBase {
 
         this._objectFactory = options.objectFactory || factory;
 
-        assert(_.isFunction(this._objectFactory.constructObject), " the objectFactory must provide a constructObject method");
+        assert('function' === typeof this._objectFactory.constructObject, " the objectFactory must provide a constructObject method");
 
         this._previous_sequenceNumber = -1; // means unknown
-        assert(_.isFinite(this._previous_sequenceNumber));
+        assert(Number.isFinite(this._previous_sequenceNumber));
     }
 
     set privateKey(key : string) {
@@ -83,8 +82,8 @@ public setSecurity(securityMode : MessageSecurityMode, securityPolicy : Security
 protected _validateSequenceNumber(sequenceNumber : number) {
 
     // checking that sequenceNumber is increasing
-    assert(_.isFinite(this._previous_sequenceNumber));
-    assert(_.isFinite(sequenceNumber) && sequenceNumber >= 0);
+    assert(Number.isFinite(this._previous_sequenceNumber));
+    assert(Number.isFinite(sequenceNumber) && sequenceNumber >= 0);
 
     var expectedSequenceNumber;
     if (this._previous_sequenceNumber !== -1) {

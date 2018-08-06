@@ -4,7 +4,6 @@
  */
 
 
-import * as _ from 'underscore';
 import {EventEmitter} from 'eventemitter3';
 import {StatusCodes} from '../constants';
 import {assert} from '../assert'
@@ -188,13 +187,13 @@ protected _after_create(monitoredItemResult : MonitoredItemCreateResult) {
 };
 
 public static _toolbox_monitor(subscription : ClientSubscription, timestampsToReturn, monitoredItems : MonitoredItemBase[], done) {
-    assert(_.isFunction(done) && (typeof subscription.subscriptionId === "number"));
+    assert(('function' === typeof done) && (typeof subscription.subscriptionId === "number"));
     var itemsToCreate : subscription_service.MonitoredItemCreateRequest[] = [];
     for (var i = 0; i < monitoredItems.length; i++) {
 
         var monitoredItem = monitoredItems[i];
         var itemToCreate = (<any>monitoredItem)._prepare_for_monitoring(done);
-        if (_.isString(itemToCreate.error)) {
+        if (typeof itemToCreate.error === 'string' || itemToCreate.error instanceof String  /*_.isString(itemToCreate.error)*/) {
             return done(new Error(itemToCreate.error));
         }
         itemsToCreate.push(itemToCreate);
@@ -234,7 +233,7 @@ public static _toolbox_monitor(subscription : ClientSubscription, timestampsToRe
 };
 public static _toolbox_modify(subscription : ClientSubscription, monitoredItems : MonitoredItemBase[], parameters : IMonitoringParameters , timestampsToReturn : TimestampsToReturn, callback) {
 
-    assert(callback === undefined || _.isFunction(callback));
+    assert(callback === undefined || ('function' === typeof callback));
 
     var itemsToModify = monitoredItems.map(function (monitoredItem) {
         let monParams = new MonitoringParameters(parameters);

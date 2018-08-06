@@ -1,6 +1,5 @@
 "use strict";
 import {assert} from "../assert";
-import * as _ from "underscore";
 
 export function offset_factor_1601() {
 

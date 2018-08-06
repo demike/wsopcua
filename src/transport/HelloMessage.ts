@@ -3,10 +3,6 @@
 /**
  * @module opcua.address_space.types
  */
-import {assert} from "../assert";
-import * as _  from "underscore";
-import {makeNodeId} from "../nodeid/nodeid";
-import {ExpandedNodeId} from '../nodeid/expanded_nodeid';
 
 import * as ec from "../basic-types";
 

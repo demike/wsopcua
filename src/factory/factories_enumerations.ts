@@ -4,7 +4,6 @@
  */
 
  import {assert} from '../assert'
-import * as _ from 'underscore';
 
 export var _enumerations = {};
 
@@ -32,8 +31,8 @@ export function registerEnumeration(name : string, enumeration : any, encode : F
         throw new Error("factories.registerEnumeration : Enumeration " + name + " has been already inserted");
     }
 
-    assert(_.isFunction(encode));
-    assert(_.isFunction(decode));
+    assert('function' === typeof encode);
+    assert('function' === typeof decode);
 
     var typeSchema = new TypeSchema(    {
         name: name,
