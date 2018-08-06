@@ -1,6 +1,5 @@
 "use strict";
 
-import * as  _ from 'underscore';
 import {assert} from '../assert';
 import {QualifiedName} from '../generated/QualifiedName';
 import {LocalizedText} from '../generated/LocalizedText';
@@ -10,6 +9,7 @@ import {DataType} from './DataTypeEnum';
 import {VariantArrayType} from './VariantArrayTypeEnum';
 
 import * as utils from '../utils';
+import { isEqual } from '../utils';
 
 
 var txtEncoder =  new TextEncoder();
@@ -59,7 +59,7 @@ export function coerceVariantType(dataType : DataType, value) {
             } else {
                 value = parseInt(value, 10);
             }
-            assert(_.isFinite(value), "expecting a number");
+            assert(Number.isFinite(value), "expecting a number");
             break;
         case DataType.UInt64:
             value = ec.coerceUInt64(value);
@@ -146,7 +146,7 @@ function isValidArrayVariant(dataType, value) {
         return true;
     }
     // array values can be store in ArrayBuffer, Float32Array
-    assert(_.isArray(value));
+    assert(Array.isArray(value));
     for (var i=0;i<value.length;i++) {
         if (!isValidScalarVariant(dataType, value[i])) {
             return false;
@@ -237,7 +237,7 @@ function __check_same_array(arr1 : any[],arr2 : any[]) {
  
     var n = arr1.length;
     for (var i = 0; i < n; i++) {
-        if (!_.isEqual(arr1[i], arr2[i])) {
+        if (!isEqual(arr1[i], arr2[i])) {
             return false;
         }
     }
