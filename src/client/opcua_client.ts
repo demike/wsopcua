@@ -49,7 +49,6 @@ import {isNullOrUndefined} from '../utils';
 import {makeApplicationUrn} from "../common/applicationurn";
 import { UserIdentityToken } from "../generated/UserIdentityToken";
 import { stringToUint8Array } from "../basic-types/DataStream";
-import { Session } from "inspector";
 
 export interface UserIdentityInfo {
     userName?: string,

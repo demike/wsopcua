@@ -7,16 +7,13 @@ import { DiagnosticInfo } from '../src/data-model';
 import { EndpointDescription } from '../src/service-endpoints';
 import { ReferenceTypeIds, StatusCodes, AttributeIds } from '../src/constants';
 import { BrowsePath } from '../src/generated/BrowsePath';
-import { RelativePath } from '../src/generated/RelativePath';
 import { makeBrowsePath, BrowsePathResult } from '../src/service-translate-browse-path';
-import { CreateSubscriptionRequest, CreateSubscriptionResponse, TimestampsToReturn } from '../src/service-subscription';
+import { TimestampsToReturn } from '../src/service-subscription';
 import { ClientSubscription } from '../src/client/ClientSubscription';
-import { MonitoredItem } from '../src/client/MonitoredItem';
 import { MonitoredItemGroup } from '../src/client/MonitoredItemGroup';
 import { DataValue } from '../src/data-value';
 import { MonitoredItemBase } from '../src/client/MonitoredItemBase';
 import { IReadValueId } from '../src/generated/ReadValueId';
-// /// <reference path="../dist/ws-opcua"/>
 
 
 function sleep(ms) {

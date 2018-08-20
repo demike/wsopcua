@@ -7,18 +7,20 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch wsopcua in Chrome",
+            "name": "Launch wsopcua test in Chrome",
             "userDataDir": "${workspaceRoot}/out/chrome",
             "sourceMaps": true,
             "file": "${workspaceRoot}/examples/index.html",
             "trace" : true,
             "webRoot": "${workspaceFolder}/",
+            "runtimeArgs": [
+                "--disable-web-security"
+             ],
             "sourceMapPathOverrides": {
                 "webpack:///./*": "${webRoot}/*",
                 "webpack:///src/*": "${webRoot}/*",
                 "webpack:///*": "*",
-                "webpack:///./~/*": "${webRoot}/node_modules/*",
-                "meteor://💻app/*": "${webRoot}/*"
+                "webpack:///./~/*": "${webRoot}/node_modules/*"
             }
             
         },

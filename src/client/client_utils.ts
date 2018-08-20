@@ -8,6 +8,7 @@ import {BrowsePath,RelativePath, RelativePathElement} from '../service-translate
 
 import {StatusCodes,AttributeIds} from '../constants';
 import { QualifiedName } from "../data-model";
+import { OPCUAClientBase, ResponseCallback } from "./client_base";
 
 var hasPropertyRefId = resolveNodeId("HasProperty");
 /* NodeId  ns=0;i=46*/
@@ -36,7 +37,7 @@ function browsePathPropertyRequest(nodeId, propertyName) {
  * @param nodeId
  * @param callback
  */
-function readUAAnalogItem(session, nodeId, callback) {
+export function readUAAnalogItem(session, nodeId, callback) {
 
     assert('function' === typeof callback);
 
@@ -101,5 +102,25 @@ function readUAAnalogItem(session, nodeId, callback) {
         });
     });
 }
-exports.readUAAnalogItem = readUAAnalogItem;
+
+export function perform_findServersRequest(discovery_server_endpointUrl : string, callback : ResponseCallback<string[]>) {
+
+
+    var client = new OPCUAClientBase({});
+
+    client.connect(discovery_server_endpointUrl, function (err) {
+        if (!err) {
+            client.findServers(null,function (err, servers) {
+                client.disconnect(function () {
+                    callback(err, servers);
+                });
+            });
+        } else {
+            client.disconnect(function () {
+                callback(err);
+            });
+        }
+    });
+}
+
 

@@ -15,6 +15,8 @@ export { NodeClass } from '../generated/NodeClass';
 
 export { AttributeIds } from '../constants';
 
+//export {AccessLevelFlag} from './access_level'; //<-- generated as AccessLevelType
+
 //AttributeNameById: require("./src/attributeIds").AttributeNameById,
 //is_valid_attributeId: require("./src/attributeIds").is_valid_attributeId,
 
@@ -38,6 +40,8 @@ export { BrowseDirection } from '../generated/BrowseDirection';
 export { EnumValueType } from '../generated/EnumValueType';
 export { AttributeWriteMask } from '../generated/AttributeWriteMask';
 export { TimeZoneDataType } from '../generated/TimeZoneDataType'
+
+export {coerceLocalizedText} from './localized_text_util'
 
 
 

@@ -4,8 +4,9 @@ module.exports = {
   watch: true,
   mode:"development",
   entry: {
-    main : [
+/*    main : [
             './src/client/opcua_client'],
+*/
     examples : ['./examples/test']
   },
   // Enable sourcemaps for debugging webpack's output.
@@ -26,7 +27,7 @@ module.exports = {
   output: {
     //filename: 'wsopcua.js',
 		filename: "[name].entry.js",
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'examples/dist'),
   //  library: "mylib"
   },
   optimization: {
