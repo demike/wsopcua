@@ -16,7 +16,7 @@ var _ = require("underscore");
  */
 OPCUAClient.prototype.withSessionAsync = async function (endpointUrl, func) {
 
-    assert(_.isFunction(func));
+    assert('function' === typeof func);
     assert(func.length === 1, "expecting a single argument in func");
 
     try {
