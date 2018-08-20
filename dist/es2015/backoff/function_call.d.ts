@@ -1,0 +1,32 @@
+import { EventEmitter } from 'eventemitter3';
+import { Backoff } from './backoff';
+import { BackoffStrategy } from './strategy/strategy';
+export declare class FunctionCall extends EventEmitter {
+    private state_;
+    protected retryPredicate_: (err: any) => boolean;
+    protected backoff_: Backoff;
+    protected numRetries_: number;
+    protected lastResult_: any[];
+    protected callback_: Function;
+    protected arguments_: any[];
+    protected function_: Function;
+    protected failAfter_: number;
+    protected strategy_: BackoffStrategy;
+    constructor(fn: Function, args: any[], callback: Function);
+    static DEFAULT_RETRY_PREDICATE_(err: any): boolean;
+    isPending(): boolean;
+    isRunning(): boolean;
+    isCompleted(): boolean;
+    isAborted(): boolean;
+    setStrategy(strategy: BackoffStrategy): this;
+    retryIf(retryPredicate: any): this;
+    getLastResult(): any[];
+    getNumRetries(): number;
+    failAfter(maxNumberOfRetry: number): this;
+    abort(): void;
+    start(backoffFactory: any): void;
+    protected doCall_(isRetry: boolean): void;
+    protected doCallback_(): void;
+    protected handleFunctionCallback_(): void;
+    protected handleBackoff_(number: any, delay: any, err: any): void;
+}

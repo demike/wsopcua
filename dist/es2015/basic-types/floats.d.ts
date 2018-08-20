@@ -1,0 +1,13 @@
+import { DataStream } from './DataStream';
+export declare type Float = number;
+export declare type Double = number;
+export declare function isValidFloat(value: any): boolean;
+export declare function randomFloat(): number;
+export declare function encodeFloat(value: any, stream: DataStream): void;
+export declare function decodeFloat(stream: DataStream): number;
+export declare function isValidDouble(value: any): boolean;
+export declare function randomDouble(): number;
+export declare function encodeDouble(value: number, stream: DataStream): void;
+export declare function decodeDouble(stream: DataStream): number;
+export declare function coerceFloat(value: any): any;
+export declare function coerceDouble(value: any): any;

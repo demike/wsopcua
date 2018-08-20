@@ -1,0 +1,12 @@
+import { DataStream } from './DataStream';
+import '../nodeid/nodeid';
+import { NodeId } from '../nodeid/nodeid';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+export { NodeId } from '../nodeid/nodeid';
+export { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+export declare function isValidNodeId(nodeId: any): boolean;
+export declare function randomNodeId(): NodeId;
+export declare function encodeNodeId(nodeId: NodeId, stream: DataStream): void;
+export declare function encodeExpandedNodeId(expandedNodeId: ExpandedNodeId, stream: DataStream): void;
+export declare function decodeNodeId(stream: DataStream): ExpandedNodeId;
+export declare function decodeExpandedNodeId(stream: DataStream): ExpandedNodeId;

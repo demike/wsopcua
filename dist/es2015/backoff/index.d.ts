@@ -1,0 +1,11 @@
+import { FunctionCall } from './function_call';
+import { Backoff } from './backoff';
+import { FibonacciBackoffStrategy } from './strategy/fibonacci';
+import { ExponentialBackoffStrategy } from './strategy/exponential';
+export { Backoff };
+export { ExponentialBackoffStrategy as ExponentialStrategy };
+export { FibonacciBackoffStrategy as FibonacciStrategy };
+export { FunctionCall };
+export declare function fibonacci(options: any): Backoff;
+export declare function exponential(options: any): Backoff;
+export declare function call(fn: Function, vargs?: any, callback?: Function): FunctionCall;
