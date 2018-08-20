@@ -4,8 +4,9 @@
   "license": "MYLicense",
   "author": "Michael Derfler",
   "private": true,
-  "main": "./dist/index.js",
-  "jsnext:main": "./dist/es2015/wsopcua/index.js",
+  "main": "dist/index.js",
+  "jsnext:main": "dist/es2015/wsopcua/index.js",
+  "module":"dist/es2015/wsopcua/index.js",
 
   "dependencies": {
     "@types/async": "^2.0.49",
