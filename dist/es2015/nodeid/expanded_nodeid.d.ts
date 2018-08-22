@@ -45,13 +45,13 @@ export declare class ExpandedNodeId extends NodeId {
  * @method toString
  * @return {string}
  */
-    toString(): String;
+    toString(): string;
     /**
      * convert nodeId to a JSON string. same as {@link NodeId#toString }
      * @method  toJSON
-     * @return {String}
+     * @return {string}
      */
-    toJSON(): String;
+    toJSON(): string;
     static coerceExpandedNodeId(value: any): ExpandedNodeId;
 }
 /**

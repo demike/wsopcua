@@ -111,9 +111,9 @@ constructor(identifierType : NodeIdType, value, namespace : number = 0) {
  *    ```
  *
  * @param [options.addressSpace] {AddressSpace}
- * @return {String}
+ * @return {string}
  */
-toString(options?:any) : String {
+toString(options?:any) : string {
 
     var addressSpace = options ? options.addressSpace : null;
     var str;
@@ -152,9 +152,9 @@ toString(options?:any) : String {
 /**
  * convert nodeId to a JSON string. same as {@link NodeId#toString }
  * @method  toJSON
- * @return {String}
+ * @return {string}
  */
-toJSON() : String {
+toJSON() : string {
     return this.toString();
 };
 

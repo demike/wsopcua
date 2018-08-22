@@ -71,15 +71,15 @@ export declare class NodeId {
      *    ```
      *
      * @param [options.addressSpace] {AddressSpace}
-     * @return {String}
+     * @return {string}
      */
-    toString(options?: any): String;
+    toString(options?: any): string;
     /**
      * convert nodeId to a JSON string. same as {@link NodeId#toString }
      * @method  toJSON
-     * @return {String}
+     * @return {string}
      */
-    toJSON(): String;
+    toJSON(): string;
     /**
      * @method isEmpty
      * @return {Boolean} true if the NodeId is null or empty

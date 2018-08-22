@@ -1,4 +1,5 @@
 "use strict";
+//TODO: remove this again, the generated classes should be used (note that the schema for the generated class ist wrong -> FIX IT!!!)
 /**
  * @module opcua.datamodel
  */

@@ -92,7 +92,7 @@ export class NodeId {
      *    ```
      *
      * @param [options.addressSpace] {AddressSpace}
-     * @return {String}
+     * @return {string}
      */
     toString(options) {
         var addressSpace = options ? options.addressSpace : null;
@@ -131,7 +131,7 @@ export class NodeId {
     /**
      * convert nodeId to a JSON string. same as {@link NodeId#toString }
      * @method  toJSON
-     * @return {String}
+     * @return {string}
      */
     toJSON() {
         return this.toString();

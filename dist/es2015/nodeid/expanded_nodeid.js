@@ -63,7 +63,7 @@ export class ExpandedNodeId extends NodeId {
     /**
      * convert nodeId to a JSON string. same as {@link NodeId#toString }
      * @method  toJSON
-     * @return {String}
+     * @return {string}
      */
     toJSON() {
         return this.toString();
