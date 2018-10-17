@@ -43,7 +43,7 @@ import {ClientSession} from './client_session';
 import * as utils from '../utils';
 import {doDebug,debugLog} from '../common/debug';
 
-import {OPCUAClientBase} from './client_base';
+import {OPCUAClientBase,OPCUAClientOptions} from './client_base';
 import {isNullOrUndefined} from '../utils';
 
 import {makeApplicationUrn} from "../common/applicationurn";
@@ -88,7 +88,7 @@ export class OPCUAClient extends OPCUAClientBase {
     get clientNonce() {
         return this._clientNonce;
     }
-constructor(options) {
+constructor(options : OPCUAClientOptions) {
     super(options);
     options = options || {};
 

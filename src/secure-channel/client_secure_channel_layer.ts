@@ -1322,11 +1322,13 @@ public close(callback : any) {
     this.__in_normal_close_operation = true;
 
     if (!this._transport || this._transport.disconnecting) {
+        this.dispose();
         return callback(new Error("Transport disconnected"));
     }
 
-    this._performMessageTransaction("CLO", request, function () {
+    this._performMessageTransaction("CLO", request, () => {
         ///xx this._transport.disconnect(function() {
+        this.dispose();
         callback();
         //xxx });
     });

@@ -25,6 +25,8 @@ var cli = new OPCUAClient(
     {
         applicationName: "testapp",
         clientName: "theClient",
+        endpoint_must_exist: false // <-- necessary for the websocket proxying to work
+        
         //TODO: add some more
     });
 var cliSession: ClientSession = null;
@@ -32,7 +34,7 @@ var cliSession: ClientSession = null;
 export function exectest() {
 
     //cli.findServers({endpointUrl : "192.168.110.10:4840"},onFindServers);
-    connect("ws://192.168.110.10:9876");
+    connect("ws://192.168.110.10:4444");
 }
 
 function connect(uri: string) {
@@ -43,7 +45,7 @@ function connect(uri: string) {
             console.log(err.name + ": " + err.message);
             return;
         } else {
-            cli.getEndpoints({ endpointUrl: "ws://192.168.110.10:9876" }, onGetEndpoints);
+            cli.getEndpoints({ endpointUrl: "ws://192.168.110.10:4444" }, onGetEndpoints);
         }
 
         //next step
@@ -233,7 +235,7 @@ var monItemGroup : MonitoredItemGroup;
 function createSubscription() {
     cliSubscription = new ClientSubscription(cliSession,{
         requestedPublishingInterval: 100,
-        requestedLifetimeCount: 100,
+        requestedLifetimeCount: 10000,
         requestedMaxKeepAliveCount: 50,
         maxNotificationsPerPublish: 10000,
         publishingEnabled: true,

@@ -359,7 +359,7 @@ export class OPCUAClientBase extends EventEmitter {
         if (this.isReconnecting) {
             debugLog("OPCUAClientBase#disconnect called while reconnection is in progress");
             // let's abort the reconnection process
-            return this._cancel_reconnection(function(err) {
+            return this._cancel_reconnection((err) => {
                 assert(!err," why would this fail ?");
                 assert(!this.isReconnecting);
                 // sessions cannot be cancelled properly and must be discarded.
@@ -386,7 +386,7 @@ export class OPCUAClientBase extends EventEmitter {
     
             this._destroy_secure_channel();
     
-            tmp_channel.close(function () {
+            tmp_channel.close(() => {
     
                 debugLog(" EMIT NORMAL CLOSE");
                 /**
@@ -425,7 +425,7 @@ export class OPCUAClientBase extends EventEmitter {
  * @param [options.serverUris] Array
  * @param callback
  */
-public findServers(options : IFindServersOptions, callback : ResponseCallback<string[]>) {
+public findServers(options : IFindServersOptions, callback : ResponseCallback<endpoints_service.ApplicationDescription[]>) {
     
         if (!this._secureChannel) {
             setImmediate(function () {
