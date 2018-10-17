@@ -1,6 +1,6 @@
 import { SignatureData } from "../service-secure-channel";
 import { ClientSession } from './client_session';
-import { OPCUAClientBase } from './client_base';
+import { OPCUAClientBase, OPCUAClientOptions } from './client_base';
 import { UserIdentityToken } from "../generated/UserIdentityToken";
 export interface UserIdentityInfo {
     userName?: string;
@@ -31,7 +31,7 @@ export declare class OPCUAClient extends OPCUAClientBase {
     endpoint_must_exist: boolean;
     clientName: string;
     readonly clientNonce: any;
-    constructor(options: any);
+    constructor(options: OPCUAClientOptions);
     protected _nextSessionName(): string;
     protected _getApplicationUri(): Promise<string>;
     protected __resolveEndPoint(): boolean;

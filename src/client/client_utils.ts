@@ -9,6 +9,7 @@ import {BrowsePath,RelativePath, RelativePathElement} from '../service-translate
 import {StatusCodes,AttributeIds} from '../constants';
 import { QualifiedName } from "../data-model";
 import { OPCUAClientBase, ResponseCallback } from "./client_base";
+import { ApplicationDescription } from "../service-endpoints";
 
 var hasPropertyRefId = resolveNodeId("HasProperty");
 /* NodeId  ns=0;i=46*/
@@ -103,7 +104,7 @@ export function readUAAnalogItem(session, nodeId, callback) {
     });
 }
 
-export function perform_findServersRequest(discovery_server_endpointUrl : string, callback : ResponseCallback<string[]>) {
+export function perform_findServersRequest(discovery_server_endpointUrl : string, callback : ResponseCallback<ApplicationDescription[]>) {
 
 
     var client = new OPCUAClientBase({});

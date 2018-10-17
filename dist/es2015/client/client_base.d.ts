@@ -146,7 +146,7 @@ export declare class OPCUAClientBase extends EventEmitter {
 * @param [options.serverUris] Array
 * @param callback
 */
-    findServers(options: IFindServersOptions, callback: ResponseCallback<string[]>): void;
+    findServers(options: IFindServersOptions, callback: ResponseCallback<endpoints_service.ApplicationDescription[]>): void;
     protected _close_pending_sessions(callback: any): void;
     /**
 * @method getEndpoints
