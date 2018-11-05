@@ -402,7 +402,7 @@ setUint16(value) : void {
 };
 
 
-setFloat(value) : void {
+setFloat32(value) : void {
   this.length += 4;
 };
 

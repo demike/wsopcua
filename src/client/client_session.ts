@@ -473,7 +473,7 @@ readHistoryValue(nodes, start, end, callback) {
  * @param callback.statusCodes {StatusCode[]} - an array of status code of each write
  * @param callback.diagnosticInfos {DiagnosticInfo[]} - the diagnostic infos.
  */
-write(nodesToWrite, callback) {
+write(nodesToWrite : write_service.WriteValue[], callback) {
 
     assert('function' === typeof callback);
     assert(Array.isArray(nodesToWrite));
@@ -514,12 +514,12 @@ writeSingleNode(nodeId : NodeId, value : Variant, callback : Function) {
 
     var nodesToWrite = [];
 
-    nodesToWrite.push({
+    nodesToWrite.push(new write_service.WriteValue({
         nodeId: resolveNodeId(nodeId),
         attributeId: read_service.AttributeIds.Value,
         indexRange: null,
         value: new DataValue({value: value})
-    });
+    }));
     this.write(nodesToWrite, function (err, statusCodes, diagnosticInfos) {
 
         /* istanbul ignore next */

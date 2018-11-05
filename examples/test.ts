@@ -8,12 +8,13 @@ import { EndpointDescription } from '../src/service-endpoints';
 import { ReferenceTypeIds, StatusCodes, AttributeIds } from '../src/constants';
 import { BrowsePath } from '../src/generated/BrowsePath';
 import { makeBrowsePath, BrowsePathResult } from '../src/service-translate-browse-path';
-import { TimestampsToReturn } from '../src/service-subscription';
+import { TimestampsToReturn, SetPublishingModeRequest } from '../src/service-subscription';
 import { ClientSubscription } from '../src/client/ClientSubscription';
 import { MonitoredItemGroup } from '../src/client/MonitoredItemGroup';
 import { DataValue } from '../src/data-value';
 import { MonitoredItemBase } from '../src/client/MonitoredItemBase';
 import { IReadValueId } from '../src/generated/ReadValueId';
+import { Variant, DataType, VariantArrayType } from '../src/variant';
 
 
 function sleep(ms) {
@@ -168,22 +169,23 @@ async function onBrowse(err: Error, result: BrowseResult, ulId: string) {
 
 
 var arPathsBNF = [
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:X/2:actPos",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:X/2:rPosMax",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:X/2:rPosMin",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:Y/2:actPos",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:Y/2:rPosMax",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:Y/2:rPosMin",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:Z/2:actPos",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:Z/2:rPosMax",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:Z/2:rPosMin",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:A/2:actPos",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:B/2:actPos",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:B/2:rPosMax",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:B/2:rPosMin",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:C1/2:ubActive",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:C2/2:actPos",
-    "/2:APPL/2:TT/2:_global/2:EqRobot1/2:X/2:Unknown",
+    "/5:_global/5:EqRobot1/5:X/5:posMin/5:r",
+    "/5:_global/5:EqRobot1/5:X/5:rPosMax",
+    "/5:_global/5:EqRobot1/5:X/5:actPos",
+    "/5:_global/5:EqRobot1/5:X/5:rPosMin",
+    "/5:_global/5:EqRobot1/5:Y/5:actPos",
+    "/5:_global/5:EqRobot1/5:Y/5:rPosMax",
+    "/5:_global/5:EqRobot1/5:Y/5:rPosMin",
+    "/5:_global/5:EqRobot1/5:Z/5:actPos",
+    "/5:_global/5:EqRobot1/5:Z/5:rPosMax",
+    "/5:_global/5:EqRobot1/5:Z/5:rPosMin",
+    "/5:_global/5:EqRobot1/5:A/5:actPos",
+    "/5:_global/5:EqRobot1/5:B/5:actPos",
+    "/5:_global/5:EqRobot1/5:B/5:rPosMax",
+    "/5:_global/5:EqRobot1/5:B/5:rPosMin",
+    "/5:_global/5:EqRobot1/5:C12/5:ubActive",
+    "/5:_global/5:EqRobot1/5:C22/5:actPos",
+    "/5:_global/5:EqRobot1/5:X/5:Unknown",
 ];
 
 var translatedIds : NodeId[]  = [];
@@ -322,6 +324,28 @@ function setInputValue(inputSelector : string,value : any) {
     let inp : HTMLInputElement = window.document.querySelector(inputSelector);
     inp.value = value;
 }
+
+var newValue = 100;
+export function onWriteValue() {
+    cliSession.writeSingleNode(translatedIds[0],new Variant({value:newValue++, dataType:DataType.Float,arrayType:VariantArrayType.Scalar}),onValueWritten);
+}
+
+function onValueWritten(err) {
+  if (err) {
+      console.log(err);
+      return;
+  }
+}
+
+function setupButtons() {
+    window.onload = () => {
+     window.document.querySelector<HTMLButtonElement>("#writeValue").onclick=onWriteValue;
+    }
+}
+
 // execute the test
 console.log("starting the tests");
 exectest();
+setupButtons();
+
+

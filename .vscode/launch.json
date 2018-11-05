@@ -8,14 +8,12 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch wsopcua test in Chrome",
-            "userDataDir": "${workspaceRoot}/out/chrome",
+            "userDataDir": "${workspaceFolder}/out/chrome",
             "sourceMaps": true,
-            "file": "${workspaceRoot}/examples/index.html",
+            "file": "${workspaceFolder}/examples/index.html",
             "trace" : true,
             "webRoot": "${workspaceFolder}/",
-            "runtimeArgs": [
-                "--disable-web-security"
-             ],
+            "runtimeArgs": [],
             "sourceMapPathOverrides": {
                 "webpack:///./*": "${webRoot}/*",
                 "webpack:///src/*": "${webRoot}/*",
