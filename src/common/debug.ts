@@ -1,12 +1,15 @@
 export var doDebug = false;
 
-export function debugLog(...args) {
-    console.log(args);
-}
-//export function debugLog(str : String) {
-//    console.log(str);
-//} 
 
+export function debugLog(...args) {
+    console.log(args.join(''));
+}
+
+/*
+export function debugLog(str : String) {
+    console.log(str);
+} 
+*/
 var _fillUp = function (value, count, fillWith) {
     var l = count - value.length;
     var ret = "";

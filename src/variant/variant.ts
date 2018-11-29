@@ -355,9 +355,9 @@ function encodeVariantArray(dataType, stream : DataStream, value) {
     return encodeGeneralArray(dataType, stream, value);
 }
 
-function decodeGeneralArray(dataType, stream) {
+function decodeGeneralArray(dataType, stream, length = 0xFFFFFFFF) {
 
-    var length = ec.decodeUInt32(stream);
+    var length = (length == 0xFFFFFFFF) ? ec.decodeUInt32(stream) : length;
 
     if (length === 0xFFFFFFFF) {
         return null;
@@ -399,7 +399,7 @@ function decodeVariantArray(dataType : DataType, stream : DataStream) {
            
     }
 
-    return decodeGeneralArray(dataType, stream);
+    return decodeGeneralArray(dataType, stream, length);
 }
 
 function calculate_product(array) {

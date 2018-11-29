@@ -58,6 +58,7 @@ import { QualifiedName } from '../generated/QualifiedName';
 import { NodeClass } from '../generated/NodeClass';
 import { DiagnosticInfo } from '../data-model';
 import { ReferenceDescription } from '../service-browse';
+import { IReadValueId } from '../generated/ReadValueId';
 
 
 
@@ -612,7 +613,7 @@ readAllAttributes(nodes : NodeId[], callback) {
  * @param callback.diagnosticInfos {DiagnosticInfo[]}
  *
  */
-public read(nodesToRead, maxAge?, callback?) {
+public read(nodesToRead: read_service.ReadValueId[], maxAge?, callback?) {
 
     if (!callback) {
         callback = maxAge;
@@ -1356,11 +1357,11 @@ public getBuiltInDataType(nodeId,callback : (err : Error|null,result?: DataType)
     var dataTypeId = null;
     var dataType;
     var session = this;
-    var nodes_to_read = [
-        {
+    var nodes_to_read = [new read_service.ReadValueId
+        ({
             nodeId: nodeId,
             attributeId: AttributeIds.DataType
-        }
+        })
     ];
     session.read(nodes_to_read, 0, (err,nodes_to_read,dataValues?) => {
         if (err) return callback(err);

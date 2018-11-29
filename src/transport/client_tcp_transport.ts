@@ -278,7 +278,7 @@ protected _send_HELLO_request() {
     var request = new HelloMessage({
         protocolVersion: this._protocolVersion,
         receiveBufferSize:    1024 * 64 * 10,
-        sendBufferSize:       1024 * 64 * 10,// 8196 min,
+        sendBufferSize:       1024 * 64 * 10,// 8192 min,
         maxMessageSize:       0, // 0 - no limits
         maxChunkCount:        0, // 0 - no limits
         endpointUrl: this.endpointUrl

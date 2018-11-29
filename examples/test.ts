@@ -15,6 +15,7 @@ import { DataValue } from '../src/data-value';
 import { MonitoredItemBase } from '../src/client/MonitoredItemBase';
 import { IReadValueId } from '../src/generated/ReadValueId';
 import { Variant, DataType, VariantArrayType } from '../src/variant';
+import { CallMethodRequest, CallMethodResult } from '../src/service-call';
 
 
 function sleep(ms) {
@@ -238,7 +239,7 @@ function createSubscription() {
     cliSubscription = new ClientSubscription(cliSession,{
         requestedPublishingInterval: 100,
         requestedLifetimeCount: 10000,
-        requestedMaxKeepAliveCount: 50,
+        requestedMaxKeepAliveCount: 100,
         maxNotificationsPerPublish: 10000,
         publishingEnabled: true,
         priority: 10
@@ -340,8 +341,39 @@ function onValueWritten(err) {
 function setupButtons() {
     window.onload = () => {
      window.document.querySelector<HTMLButtonElement>("#writeValue").onclick=onWriteValue;
+     window.document.querySelector<HTMLButtonElement>("#callMethod").onclick=callMethodTest;
     }
 }
+
+
+function callMethodTest() {
+
+   
+    let arNames : string[] = ["APPL.TT._global.EqRobot1.SuctionGripper1", "APPL.TT._global.EqRobot1.SuctionGripper2"];
+    let phraseNames: Variant = new Variant({ value: arNames, dataType: DataType.String, arrayType: VariantArrayType.Array });
+    let languageKey: Variant = new Variant({ value: "de", dataType: DataType.String, arrayType: VariantArrayType.Scalar});
+
+    const request = new CallMethodRequest({
+              inputArguments: [phraseNames,languageKey],
+              objectId: new NodeId(NodeIdType.STRING,"ResourceService",2),
+              methodId: new NodeId(NodeIdType.STRING,"getPhrases",2) });
+
+
+    cliSession.call([request], (err, response) => {
+      if (err) {
+
+        console.log(err + " ");
+      } else {
+        onMethodCall(response);
+      }
+    });
+
+}
+
+function onMethodCall(response: CallMethodResult[]) {
+   console.log("onMethodCall");
+}
+
 
 // execute the test
 console.log("starting the tests");

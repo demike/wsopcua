@@ -514,7 +514,7 @@ public createSession(userIdentityInfo : UserIdentityInfo, callback : (err : Erro
  * @param callback
  * @async
  */
-public changeSessionIdentity(session, userIdentityInfo, callback) {
+public changeSessionIdentity(session: ClientSession, userIdentityInfo: UserIdentityInfo, callback) {
 
     assert('function' === typeof callback);
 

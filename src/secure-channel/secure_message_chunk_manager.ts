@@ -38,10 +38,10 @@ export interface SecureMessageChunkManagerOptions {
  *
  * @param msgType
  * @param options
- * @param options.chunkSize {Integer} [=8196]
+ * @param options.chunkSize {number} [=8192]
  * @param options.secureChannelId
  * @param options.requestId
- * @param options.signatureLength  {Integer}  [undefined]
+ * @param options.signatureLength  {number}  [undefined]
  * @param options.signingFunc {Function} [undefined]
  *
  * @param securityHeader
@@ -68,7 +68,7 @@ constructor (msgType, options : SecureMessageChunkManagerOptions, securityHeader
     assert(typeof securityHeader === 'object');
 
     // the maximum size of a message chunk:
-    // Note: OPCUA requires that chunkSize is at least 8196
+    // Note: OPCUA requires that chunkSize is at least 8192
     this._chunkSize = options.chunkSize || 1024*128;
 
     this._msgType = msgType;
