@@ -38,6 +38,9 @@ export class ClientSidePublishEngine {
     protected nbMaxPublishRequestsAcceptedByServer : number;
     protected isSuspended : boolean;
 
+    /**
+     * the number of requests queued up and sent at once
+     */
     public static publishRequestCountInPipeline : number = 5;
 constructor (session : ClientSession) {
     assert(session instanceof Object);

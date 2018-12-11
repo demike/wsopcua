@@ -76,6 +76,10 @@ public get monitoredItemId() {
     return this._monitoredItemId;
 }
 
+public get statusCode() : StatusCode {
+    return this._statusCode;
+}
+
 
 public _notify_value_change(value) {
     /**
