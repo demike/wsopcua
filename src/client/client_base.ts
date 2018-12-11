@@ -87,6 +87,8 @@ export interface OPCUAClientOptions {
         certificateFile?: string, // "certificates/client_selfsigned_cert_1024.pem"] {String} client certificate pem file.
         privateKeyFile?: string,// "certificates/client_key_1024.pem"] {String} client private key pem file.
         clientName?: string //] {String} a client name string that will be used to generate session names.
+        tokenRenewalInterval?: number // if not specify or set to 0 , token  renewal will happen around 75% of the defaultSecureTokenLiveTime
+
     }
 
 export interface IFindServersOptions {
@@ -338,7 +340,7 @@ export class OPCUAClientBase extends EventEmitter {
                     });
                 }
             
-                //todo: make sure endpoint_url exists in the list of endpoints send by the server
+                //todo: make sure endpointUrl exists in the list of endpoints send by the server
                 // [...]
             
                 // make sure callback will only be call once regardless of outcome, and will be also deferred.
@@ -633,8 +635,16 @@ private static __findEndpoint(endpointUrl,securityMode,securityPolicy,callback) 
     var selected_endpoint = null;
     var all_endpoints = null;
     var tasks = [
-        function(callback) {
-            client.connect(endpointUrl, callback);
+        function (callback) {
+            client.on("backoff", function () {
+                console.log("finding Enpoint => reconnecting ");
+            });
+            client.connect(endpointUrl, function (err) {
+                if (err) {
+                    console.log("Fail to connect to server ", endpointUrl, " to collect certificate server");
+                }
+                return callback(err);
+             });
         },
         function (callback) {
             client.getEndpoints( null,(err, endpoints) => {
@@ -658,10 +668,15 @@ private static __findEndpoint(endpointUrl,securityMode,securityPolicy,callback) 
        if(err) { return callback(err); }
         if (!selected_endpoint) {
             callback (new Error(" Cannot find an Endpoint matching " +
-                " security mode: "+securityMode.toString() +
+                " security mode: " + securityMode.toString() +
                 " policy: " + securityPolicy.toString()));
         }
-        callback(null,selected_endpoint,all_endpoints);
+        
+        var result = {
+            selectedEndpoint: selected_endpoint,
+            endpoints: all_endpoints
+        };
+        callback(null, result);
     });
 }
 
