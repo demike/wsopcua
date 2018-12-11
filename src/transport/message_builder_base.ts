@@ -22,17 +22,16 @@ export function readRawMessageHeader(data : DataView | ArrayBuffer ) {
 export abstract class MessageBuilderBase extends EventEmitter{
     signatureLength: number;
     options: any;
-    packetAssembler: any;
+    packetAssembler: PacketAssembler;
     security_defeated: boolean;
     total_body_size: number;
     total_message_size: number;
     status_error: boolean;
     blocks: any[];
-    message_chunks: any[];
+    message_chunks: DataView[];
     messageHeader: any;
     secureChannelId: any;
     expected_secureChannelId: boolean;
-    offsetBodyStart: any;
   
     protected _tick0: number
     protected _tick1: number;
@@ -96,7 +95,9 @@ export abstract class MessageBuilderBase extends EventEmitter{
             return false;
         }
 
-        message_chunk = (message_chunk instanceof ArrayBuffer) ? message_chunk : message_chunk.buffer;
+     //   message_chunk = (message_chunk instanceof ArrayBuffer) ? message_chunk : message_chunk.buffer;
+     message_chunk = (message_chunk instanceof ArrayBuffer) ? new DataView(message_chunk) : message_chunk;
+
 
         this.message_chunks.push(message_chunk);
         this.total_message_size += message_chunk.byteLength;
@@ -114,13 +115,11 @@ export abstract class MessageBuilderBase extends EventEmitter{
         // the start of the message body block
         var offsetBodyStart = binaryStream.length;
         // the end of the message body block
-        var offsetBodyEnd = binaryStream.buffer.byteLength;
+        var offsetBodyEnd = binaryStream.view.byteLength;
         this.total_body_size += (offsetBodyEnd - offsetBodyStart);
-        this.offsetBodyStart = offsetBodyStart;
-        // add message body to a queue
-        // note : Buffer.slice create a shared memory !
-        //        use Buffer.clone
-        var cloned_buf = message_chunk.slice(offsetBodyStart, offsetBodyEnd);
+        ;
+
+        var cloned_buf = message_chunk.buffer.slice(offsetBodyStart + message_chunk.byteOffset, offsetBodyEnd + message_chunk.byteOffset);
         this.blocks.push(cloned_buf);
     }
     /**

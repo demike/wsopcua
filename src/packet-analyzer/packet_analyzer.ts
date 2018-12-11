@@ -60,8 +60,10 @@ function make_tracer(buffer, padding, offset) : any {
     }
 
     function display_encodeable(value, buffer : DataStream, start : number, end : number) {
-        var ext_buf = buffer.buffer.slice(start,end)
-        var stream = new DataStream(ext_buf);
+        let len = end - start;
+        let bStart = buffer.view.byteOffset + start;
+    //    var ext_buf = buffer..slice(start,end)
+        var stream = new DataStream(new DataView(buffer.view.buffer, bStart, len));
         var nodeId = ec.decodeNodeId(stream);
         var encodingMask = ec.decodeByte(stream); // 1 bin 2: xml
         var length = ec.decodeUInt32(stream);
@@ -69,7 +71,7 @@ function make_tracer(buffer, padding, offset) : any {
         display("     ExpandedNodId = " + nodeId);
         display("     encoding mask = " + encodingMask);
         display("            length = " + length);
-        packet_analyzer(ext_buf.slice(stream.length), value.encodingDefaultBinary, padding + 2, start + stream.length);
+        packet_analyzer(new DataView(buffer.view.buffer,buffer.view.byteOffset + stream.length)/*ext_buf.slice(stream.length)*/, value.encodingDefaultBinary, padding + 2, start + stream.length);
 
     }
 
@@ -128,7 +130,7 @@ function make_tracer(buffer, padding, offset) : any {
                         display("." + name + " : " + fieldType);
 
                         var _hexDump = "";
-                        if (value instanceof ArrayBuffer) {
+                        if (value instanceof ArrayBuffer || value instanceof DataView) {
                             _hexDump = hexDump(value);
                             console.log(_hexDump);
                             value = "<BUFFER>";
@@ -155,7 +157,7 @@ function make_tracer(buffer, padding, offset) : any {
 import * as factories from '../factory/factories_factories';
 /**
  * @method packet_analyzer
- * @param {Buffer} buffer
+ * @param {DataView} buffer
  * @param id
  * @param {Integer} padding
  * @param {Integer} offset
@@ -163,7 +165,7 @@ import * as factories from '../factory/factories_factories';
  * @param {Object} custom_options.factory
  * @param {Function} custom_options.factory.constructObject
  */
-export function packet_analyzer(buffer : ArrayBuffer, id?, padding? : number, offset? : number, custom_options?) {
+export function packet_analyzer(buffer : DataView, id?, padding? : number, offset? : number, custom_options?) {
 
    //xx var factories = custom_options.factory;
 
@@ -184,7 +186,7 @@ export function packet_analyzer(buffer : ArrayBuffer, id?, padding? : number, of
     catch (err) {
         console.log(id);
         console.log(err);
-        console.log("Cannot read decodeExpandedNodeId  on stream " + hexDump(stream.buffer));
+        console.log("Cannot read decodeExpandedNodeId  on stream " + hexDump(stream.view));
     }
 
     var options = make_tracer(buffer, padding, offset);
@@ -214,10 +216,10 @@ export function analyze_object_binary_encoding(obj,options) {
     obj.encode(stream);
     stream.rewind();
     console.log("-------------------------------------------------");
-    if (stream.buffer.byteLength < 256) {
-        console.log(hexDump(stream.buffer));
+    if (stream.view.byteLength < 256) {
+        console.log(hexDump(stream.view));
     }
-    packet_analyzer(stream.buffer, obj.encodingDefaultBinary);
+    packet_analyzer(stream.view, obj.encodingDefaultBinary);
 
 }
 

@@ -113,6 +113,8 @@ public feed(data : DataView) {
         this.emit("message", messageChunk);
 
     } else {
+
+        assert(this.expectedLength > 0);
         // there is more data in this chunk than expected...
         // the chunk need to be split
         var size1 = this.expectedLength - this.currentLength;

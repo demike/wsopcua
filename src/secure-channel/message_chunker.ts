@@ -106,7 +106,8 @@ public chunkSecureMessage(msgType, options, message, messageChunkCallback) {
             messageChunkCallback(null);
         });
 
-    secure_chunker.write(stream.buffer, stream.buffer.byteLength);
+    assert(stream.view.byteOffset === 0);
+    secure_chunker.write(stream.view.buffer, stream.view.buffer.byteLength);
     secure_chunker.end();
 };
 }

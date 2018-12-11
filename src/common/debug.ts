@@ -18,11 +18,12 @@ var _fillUp = function (value, count, fillWith) {
     return ret + value;
 }
 
-export function hexDump (arrayBuffer : ArrayBuffer, offset?, length?) {
+export function hexDump (view : DataView | ArrayBuffer, offset?, length?) {
 
-    var view = new DataView(arrayBuffer);
+    //var view = new DataView(arrayBuffer);
+    view = (view instanceof DataView) ? view : new DataView(view);
     offset = offset || 0;
-    length = length || arrayBuffer.byteLength;
+    length = length || view.byteLength;
 
     var out = _fillUp("Offset", 8, " ") + "  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F\n";
     var row = "";
