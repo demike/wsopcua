@@ -119,10 +119,12 @@ public feed(data : DataView) {
         // the chunk need to be split
         var size1 = this.expectedLength - this.currentLength;
         if (size1 > 0) {
-            var chunk1 = new DataView(data.buffer,0,size1);//.slice(0, size1);
+           // var chunk1 = new DataView(data.buffer,0,size1);
+           var chunk1 = new DataView(data.buffer.slice(0,size1));//.slice(0, size1);
             self.feed(chunk1);
         }
-        var chunk2 = new DataView(data.buffer,size1);
+        var chunk2 = new DataView(data.buffer.slice(size1));
+        // var chunk2 = new DataView(data.buffer,size1);
         if (chunk2.byteLength > 0) {
             self.feed(chunk2);
         }
