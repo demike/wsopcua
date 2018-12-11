@@ -129,7 +129,11 @@ toString(options?:any) : string {
             break;
         default:
             assert(this.identifierType === NodeIdType.BYTESTRING, "invalid identifierType in NodeId : " + this.identifierType);
-            str = "ns=" + this.namespace + ";b=" + this.value.toString("hex");
+            if (this.value)  {
+                str = "ns=" + this.namespace + ";b=" + this.value.toString("hex");
+            } else {
+                str = "ns=" + this.namespace + ";b=<null>"
+            }
             break;
     }
 
@@ -303,7 +307,7 @@ function reverse_map(nodeId) {
 export function resolveNodeId(node_or_string : NodeId | string) : NodeId {
 
     var nodeId : NodeId;
-    var raw_id = _name_to_nodeid_index[<string>node_or_string];
+    var raw_id = (typeof node_or_string === "string") ? _name_to_nodeid_index[node_or_string] : undefined ;
     if (raw_id !== undefined) {
         return raw_id;
     } else {

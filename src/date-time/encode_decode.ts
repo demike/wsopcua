@@ -35,8 +35,9 @@ export function randomDateTime() {
       r(0, 24), r(0, 59), r(0, 59), r(0, 1000));
 
 };
-export function encodeDateTime(date : Date, stream : DataStream) {
 
+export function encodeDateTime(date : Date, stream : DataStream) {
+    const MAXUINT32 = 4294967295; // 2**32 -1
     if (!date) {
         stream.setUint32(0);
         stream.setUint32(0);
@@ -54,7 +55,7 @@ export function encodeDateTime(date : Date, stream : DataStream) {
     if (hi<0 || lo<0) {
         hi=0;lo=0;
     }
-    if (hi <0 || lo<0 || hi > 2**32 || lo > 2**32 ) {
+    if (hi <0 || lo<0 || hi > MAXUINT32 || lo > MAXUINT32 ) {
         var hl = bn_dateToHundredNanoSecondFrom1601(date);
         throw new Error("INVALID " + hi  + " "+lo + " "+date.toUTCString());
     }
