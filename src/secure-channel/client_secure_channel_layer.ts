@@ -73,12 +73,12 @@ function _on_message_received(response, msgType, requestId) {
 
     /* istanbul ignore next */
     if (do_trace_message) {
-        console.log("xxxxx  <<<<<< _on_message_received ", requestId, response._schema.name);
+        console.log("xxxxx  <<<<<< _on_message_received ", requestId, response.constructor.name);
     }
 
     var request_data = this._request_data[requestId];
     if (!request_data) {
-        console.log("xxxxx  <<<<<< _on_message_received ", requestId, response._schema.name);
+        console.log("xxxxx  <<<<<< _on_message_received ", requestId, response.constructor.name);
         throw new Error(" =>  invalid requestId =" + requestId);
     }
 
@@ -89,7 +89,7 @@ function _on_message_received(response, msgType, requestId) {
     if (response.responseHeader.requestHandle !== request_data.request.requestHeader.requestHandle) {
         var expected = request_data.request.requestHeader.requestHandle;
         var actual = response.responseHeader.requestHandle;
-        var moreinfo = "Class = " + response._schema.name;
+        var moreinfo = "Class = " + response.constructor.name;
         console.log((" WARNING SERVER responseHeader.requestHandle is invalid" +
           ": expecting 0x" + expected.toString(16) +
           "  but got 0x" + actual.toString(16) + " "), moreinfo);
@@ -145,8 +145,8 @@ export function dump_transaction_statistics(stats : ITransactionStats ) {
 
     console.log("--------------------------------------------------------------------->> Stats");
     console.log("   request                   : ",
-      stats.request._schema.name.toString().yellow, " / ",
-      stats.response._schema.name.toString().yellow, " - ",
+      stats.request.constructor.name.toString().yellow, " / ",
+      stats.response.constructor.name.toString().yellow, " - ",
       stats.response.responseHeader.serviceResult.toString());
     console.log("   Bytes Read                : ", w(stats.bytesRead), " bytes");
     console.log("   Bytes Written             : ", w(stats.bytesWritten), " bytes");
@@ -218,7 +218,9 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
 
     protected __call : any;
     
-    public static defaultTransportTimeout : number = 10 * 1000; // 1 minute
+    public static defaultTransportTimeout : number = 10 * 1000;
+    public static minTransactionTimeout =  30 * 1000;    // 30 sec
+    public static defaultTransactionTimeout = 60 * 1000; // 1 minute
 
     //transaction stats
     request: any;
@@ -408,7 +410,7 @@ protected _cancel_pending_transactions(err) {
     assert(typeof err === 'object', "expecting valid error");
     Object.keys(this._request_data).forEach(function (key) {
         var request_data = this._request_data[key];
-        debugLog("xxxx Cancelling pending transaction " + request_data.key + request_data.msgType + request_data.request._schema.name);
+        debugLog("xxxx Cancelling pending transaction " + request_data.key + request_data.msgType + request_data.request.constructor.name);
         process_request_callback(request_data, err, null);
     });
 
@@ -981,6 +983,7 @@ protected _performMessageTransaction(msgType, requestMessage, callback) {
     var local_callback = callback;
 
     var timeout = requestMessage.requestHeader.timeoutHint || defaultTransactionTimeout;
+    timeout = Math.max(ClientSecureChannelLayer.minTransactionTimeout,timeout);
 
     var timerId = null;
 
@@ -1036,7 +1039,7 @@ protected _performMessageTransaction(msgType, requestMessage, callback) {
         console.log(" Timeout .... waiting for response for ", requestMessage.constructor.name, requestMessage.requestHeader.toString());
 
         hasTimedOut = true;
-        modified_callback(new Error("Transaction has timed out"), null);
+        modified_callback(new Error("Transaction has timed out ( timeout = " + timeout + " ms)"), null);
 
         this._timedout_request_count += 1;
         /**
@@ -1089,7 +1092,7 @@ protected _internal_perform_transaction(transaction_data) {
 
     /* istanbul ignore next */
     if (do_trace_message) {
-        console.log("xxxxx   >>>>>>                     " + requestId + requestMessage._schema.name);
+        console.log("xxxxx   >>>>>>                     " + requestId + requestMessage.constructor.name);
     }
     this._request_data[requestId] = {
         request: requestMessage,
