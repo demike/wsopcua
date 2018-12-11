@@ -59,6 +59,7 @@ import { NodeClass } from '../generated/NodeClass';
 import { DiagnosticInfo } from '../data-model';
 import { ReferenceDescription } from '../service-browse';
 import { IReadValueId } from '../generated/ReadValueId';
+import { getFunctionParameterNames } from '../utils';
 
 
 
@@ -207,21 +208,21 @@ public static coerceBrowseDescription(data) {
  *       nodeClassMask: 0,
  *       resultMask: 63
  *    }
- *    session.browse(browseDescription,function(err,results,diagnostics) {} );
+ *    session.browse(browseDescription,function(err,browseResults,diagnostics) {} );
  *    ```
  *
  * form3:
  *
  *    ``` javascript
- *    session.browse([ "RootFolder", "ObjectsFolder"],function(err,results,diagnostics) {
- *       assert(results.length === 2);
+ *    session.browse([ "RootFolder", "ObjectsFolder"],function(err,browseResults,diagnostics) {
+ *       assert(browseResults.length === 2);
  *    });
  *    ```
  *
  * form4:
  *
  *   ``` javascript
- *    var browseDescription = [
+ *    var browseDescriptions = [
  *      {
  *          nodeId: "ObjectsFolder",
  *          referenceTypeId: "Organizes",
@@ -231,25 +232,26 @@ public static coerceBrowseDescription(data) {
  *          resultMask: 63
  *      }
  *    ]
- *    session.browse(browseDescription,function(err,results,diagnostics) {} );
+ *    session.browse(browseDescription,function(err,browseResults,diagnostics) {} );
  *    ```
  *
- * @param nodes {Object}
- * @param {Function} callback
- * @param {Error|null} callback.err
- * @param {BrowseResult[]} callback.results an array containing the BrowseResult of each BrowseDescription.
+ * @param nodeToBrowse {String|BrowseDescription|Array[BrowseDescription]}
+ * @param callback {Function}
+ * @param callback.err {Error|null}
+ * @param callback.results         {BrowseResult[]|BrowseResult}  an array containing the BrowseResult of each BrowseDescription.
+ * @param callback.diagnosticInfos {DiagnosticInfo}  an array containing the BrowseResult of each BrowseDescription.
  */
-browse(nodes : string|string[]|NodeId|NodeId[]|BrowseDescription|BrowseDescription[], callback : (err : Error, results : browse_service.BrowseResult[], diagnostInfos : DiagnosticInfo[]| browse_service.BrowseResponse) => void) {
+browse(nodeToBrowse : string|string[]|NodeId|NodeId[]|BrowseDescription|BrowseDescription[], callback : (err : Error, results : browse_service.BrowseResult[], diagnostInfos : DiagnosticInfo[]| browse_service.BrowseResponse) => void) {
 
     this._requestedMaxReferencesPerNode = this._requestedMaxReferencesPerNode || 10000;
     assert(Number.isFinite(this._requestedMaxReferencesPerNode));
     assert('function' === typeof callback);
 
-    if (!Array.isArray(nodes)) {
-        (<any>nodes) = [nodes];
+    if (!Array.isArray(nodeToBrowse)) {
+        (<any>nodeToBrowse) = [nodeToBrowse];
     }
 
-    var nodesToBrowse = (<any>nodes).map(ClientSession.coerceBrowseDescription);
+    var nodesToBrowse = (<any>nodeToBrowse).map(ClientSession.coerceBrowseDescription);
 
     var request = new browse_service.BrowseRequest({
         nodesToBrowse: nodesToBrowse,
@@ -296,7 +298,7 @@ browse(nodes : string|string[]|NodeId|NodeId[]|BrowseDescription|BrowseDescripti
                 console.log("           continuationPoint ", r.continuationPoint);
             }
         }
-        callback(null, response.results, response.diagnosticInfos);
+        return callback(null, response.results, response.diagnosticInfos);
     });
 };
 
@@ -306,7 +308,13 @@ browse(nodes : string|string[]|NodeId|NodeId[]|BrowseDescription|BrowseDescripti
  * @async
  * @example:
  *
- *     session.readVariableValue("ns=2;s=Furnace_1.Temperature",function(err,dataValues,diagnostics) {} );
+  *     session.readVariableValue("ns=2;s=Furnace_1.Temperature",function(err,dataValue,diagnostics) {
+ *        if(err) { return callback(err); }
+ *        if (dataValue.statusCode === opcua.StatusCodes.Good) {
+ *        }
+ *        console.log(dataValue.toString());
+ *        callback();
+ *     });
  *
  * @param nodes  {ReadValueId[]} - the read value id
  * @param {Function} callback -   the callback function
@@ -364,9 +372,8 @@ readVariableValue(nodes : string | string[] | NodeId | NodeId[] |read_service.Re
             return new read_service.ReadValueId(node);
         }
     }
-    (<any[]>nodes).forEach(function (node) {
-        nodesToRead.push(coerceReadValueId(node));
-    });
+
+    nodesToRead = (<any[]>nodes).map(coerceReadValueId);
 
     var request = new read_service.ReadRequest({
         nodesToRead: nodesToRead,
@@ -415,7 +422,8 @@ readVariableValue(nodes : string | string[] | NodeId | NodeId[] |read_service.Re
  */
 readHistoryValue(nodes, start, end, callback) {
     assert('function' === typeof callback);
-    if (!Array.isArray(nodes)) {
+    let isArray = Array.isArray(nodes);
+    if (!isArray) {
         nodes = [nodes];
     }
 
@@ -459,7 +467,7 @@ readHistoryValue(nodes, start, end, callback) {
         assert(response instanceof historizing_service.HistoryReadResponse);
         assert(nodes.length === response.results.length);
 
-        callback(null, response.results, response.diagnosticInfos);
+        callback(null, isArray ? response.results : response.results[0],isArray ? response.diagnosticInfos :response.diagnosticInfos[0]);
     });
 };
 
@@ -473,13 +481,96 @@ readHistoryValue(nodes, start, end, callback) {
  * @param callback.err {object|null} the error if write has failed or null if OK
  * @param callback.statusCodes {StatusCode[]} - an array of status code of each write
  * @param callback.diagnosticInfos {DiagnosticInfo[]} - the diagnostic infos.
+  * @async
+ *
+ * @example
+ *
+ *     const nodesToWrite = [
+ *     {
+ *          nodeId: "ns=1;s=SetPoint1",
+ *          attributeIds: opcua.AttributeIds.Value,
+ *          value: {
+ *             statusCode: Good,
+ *             value: {
+ *               dataType: opcua.DataType.Double,
+ *               value: 100.0
+ *             }
+ *          }
+ *     },
+ *     {
+ *          nodeId: "ns=1;s=SetPoint2",
+ *          attributeIds: opcua.AttributeIds.Value,
+ *          value: {
+ *             statusCode: Good,
+ *             value: {
+ *               dataType: opcua.DataType.Double,
+ *               value: 45.0
+ *             }
+ *          }
+ *     }
+ *     ];
+ *     session.write(nodesToWrite,function (err,statusCodes) {
+ *       if(err) { return callback(err);}
+ *       //
+ *     });
+ *
+ * @method write
+ * @param nodeToWrite {WriteValue}  - the value to write
+ * @param {Function} callback -   the callback function
+ * @param callback.err {object|null} the error if write has failed or null if OK
+ * @param callback.statusCode {StatusCodes} - the status code of the write
+ * @async
+ *
+ * @example
+ *
+ *     const nodeToWrite = {
+ *          nodeId: "ns=1;s=SetPoint",
+ *          attributeIds: opcua.AttributeIds.Value,
+ *          value: {
+ *             statusCode: Good,
+ *             value: {
+ *               dataType: opcua.DataType.Double,
+ *               value: 100.0
+ *             }
+ *          }
+ *     };
+ *     session.write(nodeToWrite,function (err,statusCode) {
+ *       if(err) { return callback(err);}
+ *       //
+ *     });
+ *
+ *
+ * @method write
+ * @param nodeToWrite {WriteValue}  - the value to write
+ * @return Promise<StatusCode>
+ * @async
+ *
+ * @example
+ *   session.write(nodeToWrite).then(function(statusCode) { });
+ *
+ * @example
+ *   const statusCode = await session.write(nodeToWrite);
+ *
+ * @method write
+ * @param nodesToWrite {Array<WriteValue>}  - the value to write
+ * @return Promise<Array<StatusCode>>
+ * @async
+ *
+ * @example
+ *   session.write(nodesToWrite).then(function(statusCodes) { });
+ *
+ * @example
+ *   const statusCodes = await session.write(nodesToWrite);
  */
-write(nodesToWrite : write_service.WriteValue[], callback) {
+write(nodesToWrite : write_service.WriteValue[]|write_service.WriteValue, callback) {
 
     assert('function' === typeof callback);
-    assert(Array.isArray(nodesToWrite));
+    let isArray = Array.isArray(nodesToWrite);
+    if (!isArray) {
+        nodesToWrite = <write_service.WriteValue[]>[nodesToWrite];
+    }
 
-    var request = new write_service.WriteRequest({nodesToWrite: nodesToWrite});
+    var request = new write_service.WriteRequest({nodesToWrite: <write_service.WriteValue[]>nodesToWrite});
 
     this.performMessageTransaction(request, (err, response) => {
 
@@ -491,8 +582,8 @@ write(nodesToWrite : write_service.WriteValue[], callback) {
             return callback(new Error(response.responseHeader.serviceResult.toString()));
         }
         assert(response instanceof write_service.WriteResponse);
-        assert(nodesToWrite.length === response.results.length);
-        callback(null, response.results, response.diagnosticInfos);
+        assert((<write_service.WriteValue[]>nodesToWrite).length === response.results.length);
+        callback(null, isArray ? response.results : response.results[0], response.diagnosticInfos);
 
     });
 };
@@ -535,6 +626,41 @@ writeSingleNode(nodeId : NodeId, value : Variant, callback : Function) {
     });
 };
 
+protected static keys = Object.keys(read_service.AttributeIds).filter(function (k) {
+    return k !== "INVALID";
+});
+
+protected composeResult(nodes, nodesToRead : read_service.ReadValueId[], dataValues: DataValue[]) {
+    assert(nodesToRead.length === dataValues.length);
+   let i = 0, c = 0;
+   let results = [];
+   let dataValue, k, nodeToRead;
+    for (var n = 0; n < nodes.length; n++) {
+        let node = nodes[n];
+        let data:any = {};
+       data.node = node;
+       var addedProperty = 0;
+        for (i = 0; i < ClientSession.keys.length; i++) {
+           dataValue = dataValues[c];
+           nodeToRead = nodesToRead[c];
+           c++;
+           if (dataValue.statusCode === StatusCodes.Good) {
+               k = utils.lowerFirstLetter(ClientSession.keys[i]);
+               data[k] = dataValue.value.value;
+               addedProperty += 1;
+           }
+       }
+        if (addedProperty > 0) {
+           data.statusCode = StatusCodes.Good;
+       } else {
+           data.nodeId = resolveNodeId(node);
+           data.statusCode = StatusCodes.BadNodeIdUnknown;
+       }
+       results.push(data);
+   }
+    return results;
+}
+
 
 /**
  * @method readAllAttributes
@@ -542,44 +668,60 @@ writeSingleNode(nodeId : NodeId, value : Variant, callback : Function) {
  * @example:
  *
  *    ``` javascript
- *    session.readAllAttributes("ns=2;s=Furnace_1.Temperature",function(err,nodesToRead,dataValues,diagnostics) {} );
+ *    session.readAllAttributes("ns=2;s=Furnace_1.Temperature",function(err,data) {
+ *       if(data.statusCode === StatusCode.Good) {
+ *          console.log(" nodeId      = ",data.nodeId.toString());
+ *          console.log(" browseName  = ",data.browseName.toString());
+ *          console.log(" description = ",data.description.toString());
+ *          console.log(" value       = ",data.value.toString()));
+ *
+ *       }
+ *    });
  *    ```
  *
  * @async
- * @param nodes  {NodeId[]} - an array of nodeId to read
+ * @param nodes                  {NodeId|NodeId[]} - nodeId to read or an array of nodeId to read
  * @param callback              {Function} - the callback function
- * @param callback.err          {Error|null} - the error or null if the transaction was OK
- * @param callback.nodesToRead  {ReadValueId[]}
- * @param callback.results      {DataValue[]}
- * @param callback.diagnostic  {DiagnosticInfo[]}
+ * @param callback.err                  {Error|null} - the error or null if the transaction was OK
+ * @param callback.data                  {[]} a json object with the node attributes
+ * @param callback.data.statusCode      {StatusCodes}
+ * @param callback.data.nodeId          {NodeId}
+ * @param callback.data.<attribute>     {*}
  *
  */
-readAllAttributes(nodes : NodeId[], callback) {
+readAllAttributes(nodes : NodeId|NodeId[], callback) {
 
     assert('function' === typeof callback);
-    if (!Array.isArray(nodes)) {
-        nodes = [nodes];
+    const isArray = Array.isArray(nodes);
+    if (!isArray) {
+        nodes = <NodeId[]>[nodes];
     }
 
 
     var nodesToRead = [];
 
-    nodes.forEach(function (node) {
-        Object.keys(read_service.AttributeIds).forEach(function (key) {
-            var attributeId = read_service.AttributeIds[key];
+    (<NodeId[]>nodes).forEach(function (node) {
+        let nodeId = resolveNodeId(node);
+        if (!nodeId) {
+            throw new Error("cannot coerce " + node + " to a valid NodeId");
+        }
+        for (var i = 0; i < ClientSession.keys.length; i++) {
+            var attributeId = read_service.AttributeIds[ClientSession.keys[i]];
             nodesToRead.push({
-                nodeId: resolveNodeId(node),
+                nodeId: nodeId,
                 attributeId: attributeId,
                 indexRange: null,
                 dataEncoding: {namespaceIndex: 0, name: null}
             });
-        });
+        }
     });
 
-    this.read(nodesToRead, function (err, nodesToRead, result, diagnosticInfos) {
-        callback(err, nodesToRead, result, diagnosticInfos);
+   
+    this.read(nodesToRead, function (err, dataValues /*, diagnosticInfos */) {
+        if (err) return callback(err);
+        var results = this.composeResult(nodes, nodesToRead, dataValues);
+        callback(err, isArray ? results : results[0]);
     });
-
 
 };
 
@@ -588,6 +730,8 @@ readAllAttributes(nodes : NodeId[], callback) {
  *
  * @example:
  *
+ *  form1: reading many dataValue at once
+ * 
  *    ``` javascript
  *    var nodesToRead = [
  *        {
@@ -595,41 +739,73 @@ readAllAttributes(nodes : NodeId[], callback) {
  *             attributeId: AttributeIds.BrowseName
  *        }
  *    ];
- *    session.read(nodesToRead,function(err,nodesToRead,results,diagnosticInfos) {
+ *     session.read(nodesToRead,function(err,dataValues,diagnosticInfos) {
  *        if (!err) {
+ *           dataValues.forEach(dataValue=>console.log(dataValue.toString()));
+ *        }
+ *     });
+ *    ```
+ *
+ * form2: reading a single node
+ *
+ *  ``` javascript
+ *    var nodeToRead = {
+ *             nodeId:      "ns=2;s=Furnace_1.Temperature",
+ *             attributeId: AttributeIds.BrowseName
+ *    };
+ *
+ *    session.read(nodeToRead,function(err,dataValue,diagnosticInfos) {
+ *        if (!err) {
+ *           console.log(dataValue.toString());
  *        }
  *    });
  *    ```
  *
  * @async
- * @param nodesToRead               {[]} - an array of nodeId to read
+ * * @param nodesToRead            {ReadValueId|ReadValueId[]} - an array of nodeId to read or a ReadValueId
  * @param nodesToRead.nodeId       {NodeId|string}
- * @param nodesToRead.attributeId  {AttributeId[]}
+ * @param nodesToRead.attributeId  {AttributeIds (number)}
  * @param [maxAge]                 {Number}
- * @param callback                 {Function}      - the callback function
- * @param callback.err             {Error|null}    - the error or null if the transaction was OK
- * @param callback.nodesToRead     {ReadValueId[]}
- * @param callback.results         {DataValue[]}
+ * @param callback                 {Function}                - the callback function
+ * @param callback.err             {Error|null}              - the error or null if the transaction was OK}
+ * @param callback.results         {DataValue|DataValue[]}
  * @param callback.diagnosticInfos {DiagnosticInfo[]}
  *
  */
-public read(nodesToRead: read_service.ReadValueId[], maxAge?, callback?) {
+public read(nodesToRead: read_service.ReadValueId|read_service.ReadValueId[], maxAge?, callback?) {
 
     if (!callback) {
         callback = maxAge;
         maxAge = 0;
     }
 
-    assert(Array.isArray(nodesToRead));
+    var isArray = Array.isArray(nodesToRead);
+    if (!isArray) {
+        nodesToRead = <read_service.ReadValueId[]>[nodesToRead];
+     }
+
     assert('function' === typeof callback);
+/*
+    // the read method deprecation detection and warning
+    if (!(getFunctionParameterNames(callback)[1] === "dataValues" || getFunctionParameterNames(callback)[1] === "dataValue")) {
+            console.log("ERROR ClientSession#read  API has changed !!, please fix the client code");
+            console.log("replace ..:");
+            console.log("   session.read(nodesToRead,function(err,nodesToRead,results) {}");
+            console.log("with .... :");
+            console.log("   session.read(nodesToRead,function(err,dataValues) {}");
+            console.log("please make sure to refactor your code and check that he second argument of your callback function is named dataValues");
+            console.log("to make this exception disappear");
+            throw new Error("ERROR ClientSession#read  API has changed !!, please fix the client code");
+    }
+*/
 
     // coerce nodeIds
-    nodesToRead.forEach(function (node) {
+    (<read_service.ReadValueId[]>nodesToRead).forEach(function (node) {
         node.nodeId = resolveNodeId(node.nodeId);
     });
 
     var request = new read_service.ReadRequest({
-        nodesToRead: nodesToRead,
+        nodesToRead: <read_service.ReadValueId[]>nodesToRead,
         maxAge: maxAge,
         timestampsToReturn: read_service.TimestampsToReturn.Both
     });
@@ -641,7 +817,7 @@ public read(nodesToRead: read_service.ReadValueId[], maxAge?, callback?) {
             return callback(err, response);
         }
         assert(response instanceof read_service.ReadResponse);
-        callback(null, nodesToRead, response.results, response.diagnosticInfos);
+        return callback(null,isArray? response.results : response.results[0], isArray? response.diagnosticInfos:response.diagnosticInfos[0]);
 
     });
 };
@@ -1150,33 +1326,33 @@ public getArgumentDefinition(methodId : NodeId, callback : (err : Error|null,inp
     assert('function' === typeof callback);
     assert(methodId instanceof NodeId);
 
-    var browseDescription = [{
+    var browseDescription = {
         nodeId: methodId,
         referenceTypeId: resolveNodeId("HasProperty"),
         browseDirection: BrowseDirection.Forward,
         nodeClassMask: NodeClass.Variable,
         includeSubtypes: true,
         resultMask: browse_service.BrowseResultMask.BrowseName
-    }];
+    };
 
     //Xx console.log("xxxx browseDescription", util.inspect(browseDescription, {colors: true, depth: 10}));
-    this.browse(browseDescription, (err, results) => {
+    this.browse(browseDescription, (err, browseResult) => {
 
         /* istanbul ignore next */
         if (err) {
             return callback(err);
         }
-        results[0].references = results[0].references || [];
+        browseResult[0].references = browseResult[0].references || [];
 
         //xx console.log("xxxx results", util.inspect(results, {colors: true, depth: 10}));
-        var inputArgumentRef = results[0].references.filter(function (r) {
+        var inputArgumentRef = browseResult[0].references.filter(function (r) {
             return r.browseName.name === "InputArguments";
         });
 
         // note : InputArguments property is optional thus may be missing
         inputArgumentRef = (inputArgumentRef.length === 1)  ? <any>inputArgumentRef[0] : null;
 
-        var outputArgumentRef = results[0].references.filter(function (r) {
+        var outputArgumentRef = browseResult[0].references.filter(function (r) {
             return r.browseName.name === "OutputArguments";
         });
 
@@ -1206,18 +1382,20 @@ public getArgumentDefinition(methodId : NodeId, callback : (err : Error|null,inp
             actions.push(function(result) { outputArguments = result.value.value;});
         }
 
-        if (nodesToRead.length === 0 ) {
+        if (nodesToRead.length === 0) {
             return callback(null, inputArguments, outputArguments);
         }
         // now read the variable
-        this.read(nodesToRead,(err, unused_nodesToRead, results) => {
+        this.read(nodesToRead,(err, dataValues) => {
 
             /* istanbul ignore next */
             if (err) {
                 return callback(err);
             }
 
-            results.forEach(function(result,index){ actions[index].call(null,result); });
+            dataValues.forEach(function(result,index){ 
+                actions[index].call(null,result); 
+            });
 
             //xx console.log("xxxx result", util.inspect(result, {colors: true, depth: 10}));
             callback(null, inputArguments, outputArguments);
