@@ -117,7 +117,6 @@ export abstract class MessageBuilderBase extends EventEmitter{
         // the end of the message body block
         var offsetBodyEnd = binaryStream.view.byteLength;
         this.total_body_size += (offsetBodyEnd - offsetBodyStart);
-        ;
 
         var cloned_buf = message_chunk.buffer.slice(offsetBodyStart + message_chunk.byteOffset, offsetBodyEnd + message_chunk.byteOffset);
         this.blocks.push(cloned_buf);
