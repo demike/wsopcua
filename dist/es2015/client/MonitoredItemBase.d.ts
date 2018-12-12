@@ -26,6 +26,7 @@ export declare class MonitoredItemBase extends EventEmitter {
     readonly nodeId: NodeId;
     readonly monitoringMode: subscription_service.MonitoringMode;
     readonly monitoredItemId: number;
+    readonly statusCode: StatusCode;
     _notify_value_change(value: any): void;
     protected _prepare_for_monitoring(): subscription_service.MonitoredItemCreateRequest | Error;
     protected _after_create(monitoredItemResult: MonitoredItemCreateResult): void;

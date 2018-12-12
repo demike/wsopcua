@@ -67,6 +67,8 @@ export declare class ClientSecureChannelLayer extends EventEmitter implements IT
     protected connectionStrategy: any;
     protected __call: any;
     static defaultTransportTimeout: number;
+    static minTransactionTimeout: number;
+    static defaultTransactionTimeout: number;
     request: any;
     response: any;
     lap_sending_request: number;

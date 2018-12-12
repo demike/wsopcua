@@ -9,7 +9,7 @@ import { ChannelSecurityToken as ChannelSecurityTokenGen } from "../generated/Ch
  */
 export class ChannelSecurityToken extends ChannelSecurityTokenGen {
     get expired() {
-        return (this.createdAt.getTime() + this.revisedLifetime * 1.6) < Date.now();
+        return (this.createdAt.getTime() + this.revisedLifetime) < Date.now();
     }
     ;
 }

@@ -305,7 +305,7 @@ export class MessageBuilder extends MessageBuilderBase {
             var errorCode = decodeStatusCode(binaryStream);
             var message = decodeString(binaryStream);
             console.log(" ERROR RECEIVED FROM SENDER", errorCode.toString().cyan, message);
-            console.log(hexDump(binaryStream.buffer));
+            console.log(hexDump(binaryStream.view));
             return true;
         }
         else {

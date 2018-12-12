@@ -37,6 +37,9 @@ export class MonitoredItemBase extends EventEmitter {
     get monitoredItemId() {
         return this._monitoredItemId;
     }
+    get statusCode() {
+        return this._statusCode;
+    }
     _notify_value_change(value) {
         /**
          * Notify the observers that the MonitoredItem value has changed on the server side.

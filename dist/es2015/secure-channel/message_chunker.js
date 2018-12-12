@@ -48,9 +48,9 @@ export class MessageChunker {
      * @param msgType {String}
      * @param options
      * @param options.tokenId
-     * @param options.chunkSize    [default=8196]
+     * @param options.chunkSize    [default=8192]
      *
-     * @param options.signatureLength  {Integer} [default=0]
+     * @param options.signatureLength  {number} [default=0]
      * @param options.signingFunc {Function} [default=null]
      *
      * @param message {Object}
@@ -79,7 +79,8 @@ export class MessageChunker {
             .on("finished", function () {
             messageChunkCallback(null);
         });
-        secure_chunker.write(stream.buffer, stream.buffer.byteLength);
+        assert(stream.view.byteOffset === 0);
+        secure_chunker.write(stream.view.buffer, stream.view.buffer.byteLength);
         secure_chunker.end();
     }
     ;

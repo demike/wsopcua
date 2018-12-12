@@ -27,9 +27,9 @@ export declare class MessageChunker {
      * @param msgType {String}
      * @param options
      * @param options.tokenId
-     * @param options.chunkSize    [default=8196]
+     * @param options.chunkSize    [default=8192]
      *
-     * @param options.signatureLength  {Integer} [default=0]
+     * @param options.signatureLength  {number} [default=0]
      * @param options.signingFunc {Function} [default=null]
      *
      * @param message {Object}

@@ -28,6 +28,7 @@ import { DataValue } from '../data-value';
 import { Variant } from '../variant';
 import * as read_service from '../service-read';
 import * as browse_service from '../service-browse';
+import * as write_service from '../service-write';
 import * as translate_service from "../service-translate-browse-path";
 import { DiagnosticInfo } from '../data-model';
 export declare enum BrowseDirection {
@@ -107,21 +108,21 @@ export declare class ClientSession extends EventEmitter {
      *       nodeClassMask: 0,
      *       resultMask: 63
      *    }
-     *    session.browse(browseDescription,function(err,results,diagnostics) {} );
+     *    session.browse(browseDescription,function(err,browseResults,diagnostics) {} );
      *    ```
      *
      * form3:
      *
      *    ``` javascript
-     *    session.browse([ "RootFolder", "ObjectsFolder"],function(err,results,diagnostics) {
-     *       assert(results.length === 2);
+     *    session.browse([ "RootFolder", "ObjectsFolder"],function(err,browseResults,diagnostics) {
+     *       assert(browseResults.length === 2);
      *    });
      *    ```
      *
      * form4:
      *
      *   ``` javascript
-     *    var browseDescription = [
+     *    var browseDescriptions = [
      *      {
      *          nodeId: "ObjectsFolder",
      *          referenceTypeId: "Organizes",
@@ -131,21 +132,28 @@ export declare class ClientSession extends EventEmitter {
      *          resultMask: 63
      *      }
      *    ]
-     *    session.browse(browseDescription,function(err,results,diagnostics) {} );
+     *    session.browse(browseDescription,function(err,browseResults,diagnostics) {} );
      *    ```
      *
-     * @param nodes {Object}
-     * @param {Function} callback
-     * @param {Error|null} callback.err
-     * @param {BrowseResult[]} callback.results an array containing the BrowseResult of each BrowseDescription.
+     * @param nodeToBrowse {String|BrowseDescription|Array[BrowseDescription]}
+     * @param callback {Function}
+     * @param callback.err {Error|null}
+     * @param callback.results         {BrowseResult[]|BrowseResult}  an array containing the BrowseResult of each BrowseDescription.
+     * @param callback.diagnosticInfos {DiagnosticInfo}  an array containing the BrowseResult of each BrowseDescription.
      */
-    browse(nodes: string | string[] | NodeId | NodeId[] | BrowseDescription | BrowseDescription[], callback: (err: Error, results: browse_service.BrowseResult[], diagnostInfos: DiagnosticInfo[] | browse_service.BrowseResponse) => void): void;
+    browse(nodeToBrowse: string | string[] | NodeId | NodeId[] | BrowseDescription | BrowseDescription[], callback: (err: Error, results: browse_service.BrowseResult[], diagnostInfos: DiagnosticInfo[] | browse_service.BrowseResponse) => void): void;
     /**
      * @method readVariableValue
      * @async
      * @example:
      *
-     *     session.readVariableValue("ns=2;s=Furnace_1.Temperature",function(err,dataValues,diagnostics) {} );
+      *     session.readVariableValue("ns=2;s=Furnace_1.Temperature",function(err,dataValue,diagnostics) {
+     *        if(err) { return callback(err); }
+     *        if (dataValue.statusCode === opcua.StatusCodes.Good) {
+     *        }
+     *        console.log(dataValue.toString());
+     *        callback();
+     *     });
      *
      * @param nodes  {ReadValueId[]} - the read value id
      * @param {Function} callback -   the callback function
@@ -201,8 +209,88 @@ export declare class ClientSession extends EventEmitter {
      * @param callback.err {object|null} the error if write has failed or null if OK
      * @param callback.statusCodes {StatusCode[]} - an array of status code of each write
      * @param callback.diagnosticInfos {DiagnosticInfo[]} - the diagnostic infos.
+      * @async
+     *
+     * @example
+     *
+     *     const nodesToWrite = [
+     *     {
+     *          nodeId: "ns=1;s=SetPoint1",
+     *          attributeIds: opcua.AttributeIds.Value,
+     *          value: {
+     *             statusCode: Good,
+     *             value: {
+     *               dataType: opcua.DataType.Double,
+     *               value: 100.0
+     *             }
+     *          }
+     *     },
+     *     {
+     *          nodeId: "ns=1;s=SetPoint2",
+     *          attributeIds: opcua.AttributeIds.Value,
+     *          value: {
+     *             statusCode: Good,
+     *             value: {
+     *               dataType: opcua.DataType.Double,
+     *               value: 45.0
+     *             }
+     *          }
+     *     }
+     *     ];
+     *     session.write(nodesToWrite,function (err,statusCodes) {
+     *       if(err) { return callback(err);}
+     *       //
+     *     });
+     *
+     * @method write
+     * @param nodeToWrite {WriteValue}  - the value to write
+     * @param {Function} callback -   the callback function
+     * @param callback.err {object|null} the error if write has failed or null if OK
+     * @param callback.statusCode {StatusCodes} - the status code of the write
+     * @async
+     *
+     * @example
+     *
+     *     const nodeToWrite = {
+     *          nodeId: "ns=1;s=SetPoint",
+     *          attributeIds: opcua.AttributeIds.Value,
+     *          value: {
+     *             statusCode: Good,
+     *             value: {
+     *               dataType: opcua.DataType.Double,
+     *               value: 100.0
+     *             }
+     *          }
+     *     };
+     *     session.write(nodeToWrite,function (err,statusCode) {
+     *       if(err) { return callback(err);}
+     *       //
+     *     });
+     *
+     *
+     * @method write
+     * @param nodeToWrite {WriteValue}  - the value to write
+     * @return Promise<StatusCode>
+     * @async
+     *
+     * @example
+     *   session.write(nodeToWrite).then(function(statusCode) { });
+     *
+     * @example
+     *   const statusCode = await session.write(nodeToWrite);
+     *
+     * @method write
+     * @param nodesToWrite {Array<WriteValue>}  - the value to write
+     * @return Promise<Array<StatusCode>>
+     * @async
+     *
+     * @example
+     *   session.write(nodesToWrite).then(function(statusCodes) { });
+     *
+     * @example
+     *   const statusCodes = await session.write(nodesToWrite);
      */
-    write(nodesToWrite: any, callback: any): void;
+    write(nodesToWrite: write_service.WriteValue[] | write_service.WriteValue, callback: any): void;
     /**
      *
      * @async
@@ -215,29 +303,42 @@ export declare class ClientSession extends EventEmitter {
      * @param callback.diagnosticInfo {DiagnosticInfo} the diagnostic info.
      */
     writeSingleNode(nodeId: NodeId, value: Variant, callback: Function): void;
+    protected static keys: string[];
+    protected composeResult(nodes: any, nodesToRead: read_service.ReadValueId[], dataValues: DataValue[]): any[];
     /**
      * @method readAllAttributes
      *
      * @example:
      *
      *    ``` javascript
-     *    session.readAllAttributes("ns=2;s=Furnace_1.Temperature",function(err,nodesToRead,dataValues,diagnostics) {} );
+     *    session.readAllAttributes("ns=2;s=Furnace_1.Temperature",function(err,data) {
+     *       if(data.statusCode === StatusCode.Good) {
+     *          console.log(" nodeId      = ",data.nodeId.toString());
+     *          console.log(" browseName  = ",data.browseName.toString());
+     *          console.log(" description = ",data.description.toString());
+     *          console.log(" value       = ",data.value.toString()));
+     *
+     *       }
+     *    });
      *    ```
      *
      * @async
-     * @param nodes  {NodeId[]} - an array of nodeId to read
+     * @param nodes                  {NodeId|NodeId[]} - nodeId to read or an array of nodeId to read
      * @param callback              {Function} - the callback function
-     * @param callback.err          {Error|null} - the error or null if the transaction was OK
-     * @param callback.nodesToRead  {ReadValueId[]}
-     * @param callback.results      {DataValue[]}
-     * @param callback.diagnostic  {DiagnosticInfo[]}
+     * @param callback.err                  {Error|null} - the error or null if the transaction was OK
+     * @param callback.data                  {[]} a json object with the node attributes
+     * @param callback.data.statusCode      {StatusCodes}
+     * @param callback.data.nodeId          {NodeId}
+     * @param callback.data.<attribute>     {*}
      *
      */
-    readAllAttributes(nodes: NodeId[], callback: any): void;
+    readAllAttributes(nodes: NodeId | NodeId[], callback: any): void;
     /**
      * @method read
      *
      * @example:
+     *
+     *  form1: reading many dataValue at once
      *
      *    ``` javascript
      *    var nodesToRead = [
@@ -246,25 +347,40 @@ export declare class ClientSession extends EventEmitter {
      *             attributeId: AttributeIds.BrowseName
      *        }
      *    ];
-     *    session.read(nodesToRead,function(err,nodesToRead,results,diagnosticInfos) {
+     *     session.read(nodesToRead,function(err,dataValues,diagnosticInfos) {
      *        if (!err) {
+     *           dataValues.forEach(dataValue=>console.log(dataValue.toString()));
+     *        }
+     *     });
+     *    ```
+     *
+     * form2: reading a single node
+     *
+     *  ``` javascript
+     *    var nodeToRead = {
+     *             nodeId:      "ns=2;s=Furnace_1.Temperature",
+     *             attributeId: AttributeIds.BrowseName
+     *    };
+     *
+     *    session.read(nodeToRead,function(err,dataValue,diagnosticInfos) {
+     *        if (!err) {
+     *           console.log(dataValue.toString());
      *        }
      *    });
      *    ```
      *
      * @async
-     * @param nodesToRead               {[]} - an array of nodeId to read
+     * * @param nodesToRead            {ReadValueId|ReadValueId[]} - an array of nodeId to read or a ReadValueId
      * @param nodesToRead.nodeId       {NodeId|string}
-     * @param nodesToRead.attributeId  {AttributeId[]}
+     * @param nodesToRead.attributeId  {AttributeIds (number)}
      * @param [maxAge]                 {Number}
-     * @param callback                 {Function}      - the callback function
-     * @param callback.err             {Error|null}    - the error or null if the transaction was OK
-     * @param callback.nodesToRead     {ReadValueId[]}
-     * @param callback.results         {DataValue[]}
+     * @param callback                 {Function}                - the callback function
+     * @param callback.err             {Error|null}              - the error or null if the transaction was OK}
+     * @param callback.results         {DataValue|DataValue[]}
      * @param callback.diagnosticInfos {DiagnosticInfo[]}
      *
      */
-    read(nodesToRead: any, maxAge?: any, callback?: any): void;
+    read(nodesToRead: read_service.ReadValueId | read_service.ReadValueId[], maxAge?: any, callback?: any): void;
     emitCloseEvent(statusCode?: any): void;
     protected _defaultRequest(SomeRequest: any, SomeResponse: any, options: any, callback: any): void;
     /**

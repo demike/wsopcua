@@ -296,8 +296,8 @@ function encodeVariantArray(dataType, stream, value) {
     }
     return encodeGeneralArray(dataType, stream, value);
 }
-function decodeGeneralArray(dataType, stream) {
-    var length = ec.decodeUInt32(stream);
+function decodeGeneralArray(dataType, stream, length = 0xFFFFFFFF) {
+    var length = (length == 0xFFFFFFFF) ? ec.decodeUInt32(stream) : length;
     if (length === 0xFFFFFFFF) {
         return null;
     }
@@ -332,7 +332,7 @@ function decodeVariantArray(dataType, stream) {
             return new Uint32Array(stream.readArrayBuffer(length * Uint32Array.BYTES_PER_ELEMENT));
         //() case DataType.UInt64: ?
     }
-    return decodeGeneralArray(dataType, stream);
+    return decodeGeneralArray(dataType, stream, length);
 }
 function calculate_product(array) {
     return array.reduce(function (n, p) {

@@ -33,6 +33,7 @@ export interface OPCUAClientOptions {
     certificateFile?: string;
     privateKeyFile?: string;
     clientName?: string;
+    tokenRenewalInterval?: number;
 }
 export interface IFindServersOptions {
     endpointUrl?: string;

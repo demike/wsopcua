@@ -83,7 +83,7 @@ export declare class OPCUAClient extends OPCUAClientBase {
      * @param callback
      * @async
      */
-    changeSessionIdentity(session: any, userIdentityInfo: any, callback: any): void;
+    changeSessionIdentity(session: ClientSession, userIdentityInfo: UserIdentityInfo, callback: any): void;
     protected _closeSession: (session: ClientSession, deleteSubscriptions: boolean, callback: any) => any;
     /**
      *

@@ -1,24 +1,34 @@
-import { assert } from '../assert';
+// import {assert} from '../assert';
 var txtEncoder = new TextEncoder();
 var txtDecoder = new TextDecoder();
 export class DataStream {
     constructor(data) {
         this._pos = 0;
         if (data instanceof DataView) {
-            this.view = data;
+            this._view = data;
         }
         else if (data instanceof ArrayBuffer) {
-            this.view = new DataView(data);
+            this._view = new DataView(data);
         }
         else {
-            this.view = new DataView(new ArrayBuffer(data));
+            this._view = new DataView(new ArrayBuffer(data));
         }
     }
-    get buffer() {
-        return this.view.buffer;
+    /*
+    get buffer() : ArrayBuffer {
+      return this._view.buffer;
     }
-    set buffer(buf) {
-        this.view = new DataView(buf);
+
+    set buffer(buf : ArrayBuffer) {
+      this._view = new DataView(buf);
+    }
+
+    */
+    get view() {
+        return this._view;
+    }
+    set view(v) {
+        this._view = v;
     }
     get pos() {
         return this._pos;
@@ -38,7 +48,7 @@ export class DataStream {
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
     getFloat32(littleEndian = true) {
-        var val = this.view.getFloat32(this._pos, littleEndian);
+        var val = this._view.getFloat32(this._pos, littleEndian);
         this._pos += 4;
         return val;
     }
@@ -48,7 +58,7 @@ export class DataStream {
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
     getFloat64(littleEndian = true) {
-        var val = this.view.getFloat64(this._pos, littleEndian);
+        var val = this._view.getFloat64(this._pos, littleEndian);
         this._pos += 8;
         return val;
     }
@@ -58,7 +68,7 @@ export class DataStream {
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
     getInt8() {
-        var val = this.view.getInt8(this._pos);
+        var val = this._view.getInt8(this._pos);
         this._pos++;
         return val;
     }
@@ -68,7 +78,7 @@ export class DataStream {
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
     getInt16(littleEndian = true) {
-        var val = this.view.getInt16(this._pos, littleEndian);
+        var val = this._view.getInt16(this._pos, littleEndian);
         this._pos += 2;
         return val;
     }
@@ -78,7 +88,7 @@ export class DataStream {
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
     getInt32(littleEndian = true) {
-        var val = this.view.getInt32(this._pos, littleEndian);
+        var val = this._view.getInt32(this._pos, littleEndian);
         this._pos += 4;
         return val;
     }
@@ -88,12 +98,12 @@ export class DataStream {
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
     getUint8() {
-        var val = this.view.getUint8(this._pos);
+        var val = this._view.getUint8(this._pos);
         this._pos++;
         return val;
     }
     getByte() {
-        var val = this.view.getUint8(this._pos);
+        var val = this._view.getUint8(this._pos);
         this._pos++;
         return val;
     }
@@ -103,7 +113,7 @@ export class DataStream {
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
     getUint16(littleEndian = true) {
-        var val = this.view.getUint16(this._pos, littleEndian);
+        var val = this._view.getUint16(this._pos, littleEndian);
         this._pos += 2;
         return val;
     }
@@ -113,7 +123,7 @@ export class DataStream {
       * @param byteOffset The place in the buffer at which the value should be retrieved.
       */
     getUint32(littleEndian = true) {
-        var val = this.view.getUint32(this._pos, littleEndian);
+        var val = this._view.getUint32(this._pos, littleEndian);
         this._pos += 4;
         return val;
     }
@@ -125,7 +135,7 @@ export class DataStream {
       * otherwise a little-endian value should be written.
       */
     setFloat32(value, littleEndian = true) {
-        this.view.setFloat32(this._pos, value, littleEndian);
+        this._view.setFloat32(this._pos, value, littleEndian);
         this._pos += 4;
     }
     /**
@@ -136,7 +146,7 @@ export class DataStream {
       * otherwise a little-endian value should be written.
       */
     setFloat64(value, littleEndian = true) {
-        this.view.setFloat64(this._pos, value, littleEndian);
+        this._view.setFloat64(this._pos, value, littleEndian);
         this._pos += 8;
     }
     /**
@@ -145,7 +155,7 @@ export class DataStream {
       * @param value The value to set.
       */
     setInt8(value) {
-        this.view.setInt8(this._pos, value);
+        this._view.setInt8(this._pos, value);
         this._pos++;
     }
     /**
@@ -156,7 +166,7 @@ export class DataStream {
       * otherwise a little-endian value should be written.
       */
     setInt16(value, littleEndian = true) {
-        this.view.setInt16(this._pos, value, littleEndian);
+        this._view.setInt16(this._pos, value, littleEndian);
         this._pos += 2;
     }
     /**
@@ -167,7 +177,7 @@ export class DataStream {
       * otherwise a little-endian value should be written.
       */
     setInt32(value, littleEndian = true) {
-        this.view.setInt32(this._pos, value, littleEndian);
+        this._view.setInt32(this._pos, value, littleEndian);
         this._pos += 4;
     }
     /**
@@ -176,11 +186,11 @@ export class DataStream {
       * @param value The value to set.
       */
     setUint8(value) {
-        this.view.setUint8(this._pos, value);
+        this._view.setUint8(this._pos, value);
         this._pos++;
     }
     setByte(value) {
-        this.view.setUint8(this._pos, value);
+        this._view.setUint8(this._pos, value);
         this._pos++;
     }
     /**
@@ -191,7 +201,7 @@ export class DataStream {
       * otherwise a little-endian value should be written.
       */
     setUint16(value, littleEndian = true) {
-        this.view.setUint16(this._pos, value, littleEndian);
+        this._view.setUint16(this._pos, value, littleEndian);
         this._pos += 2;
     }
     /**
@@ -202,7 +212,7 @@ export class DataStream {
       * otherwise a little-endian value should be written.
       */
     setUint32(value, littleEndian = true) {
-        this.view.setUint32(this._pos, value, littleEndian);
+        this._view.setUint32(this._pos, value, littleEndian);
         this._pos += 4;
     }
     goBack(bytes) {
@@ -221,12 +231,12 @@ export class DataStream {
         }
         this.setInt32(buf.length);
         // make sure there is enough room in destination buffer
-        var remaining_bytes = this.view.buffer.byteLength - this._pos;
+        var remaining_bytes = this._view.buffer.byteLength - this._pos;
         /* istanbul ignore next */
         if (remaining_bytes < buf.length) {
             throw new Error("DataStream.writeByteStream error : not enough bytes left in buffer :  bufferLength is " + buf.length + " but only " + remaining_bytes + " left");
         }
-        var bytebuf = new Uint8Array(this.view.buffer);
+        var bytebuf = new Uint8Array(this._view.buffer);
         bytebuf.set(buf, this._pos);
         this._pos += buf.length;
     }
@@ -247,11 +257,11 @@ export class DataStream {
             return new Uint8Array(0);
         }
         // check that there is enough space in the buffer
-        var remaining_bytes = this.view.buffer.byteLength - this._pos;
+        var remaining_bytes = this._view.buffer.byteLength - this._pos;
         if (remaining_bytes < bufLen) {
             throw new Error("BinaryStream.readByteStream error : not enough bytes left in buffer :  bufferLength is " + bufLen + " but only " + remaining_bytes + " left");
         }
-        var buf = new Uint8Array(this.view.buffer.slice(this._pos, this._pos + bufLen));
+        var buf = new Uint8Array(this._view.buffer.slice(this._pos, this._pos + bufLen));
         this._pos += bufLen;
         return buf;
     }
@@ -286,7 +296,7 @@ export class DataStream {
         var byteArr = new Uint8Array(arrayBuf);
         var n = (length || byteArr.length) + offset;
         for (var i = offset; i < n; i++) {
-            this.view[this._pos++] = byteArr[i];
+            this._view[this._pos++] = byteArr[i];
         }
     }
     ;
@@ -296,7 +306,7 @@ export class DataStream {
     * @returns {Uint8Array}
     */
     readArrayBuffer(length) {
-        var arr = new Uint8Array(this.view.buffer, this._pos, length);
+        var arr = new Uint8Array(this._view.buffer, this._pos, length);
         this._pos += length;
         return arr;
     }
@@ -353,7 +363,7 @@ export class BinaryStreamSizeCalculator {
         this.length += 2;
     }
     ;
-    setFloat(value) {
+    setFloat32(value) {
         this.length += 4;
     }
     ;
@@ -366,7 +376,7 @@ export class BinaryStreamSizeCalculator {
     ;
     writeArrayBuffer(arrayBuf, offset, byteLength) {
         offset = offset || 0;
-        assert(arrayBuf instanceof ArrayBuffer);
+        //assert(arrayBuf instanceof ArrayBuffer);
         this.length += (byteLength || arrayBuf.byteLength /*new Uint8Array(arrayBuf).length*/);
     }
     ;

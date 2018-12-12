@@ -3,6 +3,7 @@
  */
 import { EventEmitter } from 'eventemitter3';
 import { DataStream } from '../basic-types/DataStream';
+import { PacketAssembler } from '../packet-assembler/packet_assembler';
 export declare function readRawMessageHeader(data: DataView | ArrayBuffer): {
     length: number;
     messageHeader: {
@@ -14,17 +15,16 @@ export declare function readRawMessageHeader(data: DataView | ArrayBuffer): {
 export declare abstract class MessageBuilderBase extends EventEmitter {
     signatureLength: number;
     options: any;
-    packetAssembler: any;
+    packetAssembler: PacketAssembler;
     security_defeated: boolean;
     total_body_size: number;
     total_message_size: number;
     status_error: boolean;
     blocks: any[];
-    message_chunks: any[];
+    message_chunks: DataView[];
     messageHeader: any;
     secureChannelId: any;
     expected_secureChannelId: boolean;
-    offsetBodyStart: any;
     protected _tick0: number;
     protected _tick1: number;
     sequenceHeader: any;

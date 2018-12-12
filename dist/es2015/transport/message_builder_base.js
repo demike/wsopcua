@@ -73,7 +73,8 @@ export class MessageBuilderBase extends EventEmitter {
             // the message builder is in error mode and further message chunks should be discarded.
             return false;
         }
-        message_chunk = (message_chunk instanceof ArrayBuffer) ? message_chunk : message_chunk.buffer;
+        //   message_chunk = (message_chunk instanceof ArrayBuffer) ? message_chunk : message_chunk.buffer;
+        message_chunk = (message_chunk instanceof ArrayBuffer) ? new DataView(message_chunk) : message_chunk;
         this.message_chunks.push(message_chunk);
         this.total_message_size += message_chunk.byteLength;
         var binaryStream = new DataStream(message_chunk);
@@ -90,13 +91,9 @@ export class MessageBuilderBase extends EventEmitter {
         // the start of the message body block
         var offsetBodyStart = binaryStream.length;
         // the end of the message body block
-        var offsetBodyEnd = binaryStream.buffer.byteLength;
+        var offsetBodyEnd = binaryStream.view.byteLength;
         this.total_body_size += (offsetBodyEnd - offsetBodyStart);
-        this.offsetBodyStart = offsetBodyStart;
-        // add message body to a queue
-        // note : Buffer.slice create a shared memory !
-        //        use Buffer.clone
-        var cloned_buf = message_chunk.slice(offsetBodyStart, offsetBodyEnd);
+        var cloned_buf = message_chunk.buffer.slice(offsetBodyStart + message_chunk.byteOffset, offsetBodyEnd + message_chunk.byteOffset);
         this.blocks.push(cloned_buf);
     }
     /**

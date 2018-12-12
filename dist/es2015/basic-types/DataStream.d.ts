@@ -1,8 +1,8 @@
 export declare class DataStream {
-    protected view: DataView;
+    protected _view: DataView;
     protected _pos: number;
     constructor(data: DataView | ArrayBuffer | number);
-    buffer: ArrayBuffer;
+    view: DataView;
     readonly pos: number;
     length: number;
     readonly byteLength: number;
@@ -168,7 +168,7 @@ export declare class BinaryStreamSizeCalculator {
     setInteger(value: any): void;
     setUint32(value: any): void;
     setUint16(value: any): void;
-    setFloat(value: any): void;
+    setFloat32(value: any): void;
     setFloat64(value: any): void;
     setDouble(value: any): void;
     writeArrayBuffer(arrayBuf: ArrayBuffer, offset: any, byteLength: any): void;

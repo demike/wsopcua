@@ -216,7 +216,7 @@ export class OPCUAClientBase extends EventEmitter {
                 return this.connect(endpointUrl, callback);
             });
         }
-        //todo: make sure endpoint_url exists in the list of endpoints send by the server
+        //todo: make sure endpointUrl exists in the list of endpoints send by the server
         // [...]
         // make sure callback will only be call once regardless of outcome, and will be also deferred.
         var callback_od = once(delayed.deferred(callback));
@@ -460,7 +460,15 @@ export class OPCUAClientBase extends EventEmitter {
         var all_endpoints = null;
         var tasks = [
             function (callback) {
-                client.connect(endpointUrl, callback);
+                client.on("backoff", function () {
+                    console.log("finding Enpoint => reconnecting ");
+                });
+                client.connect(endpointUrl, function (err) {
+                    if (err) {
+                        console.log("Fail to connect to server ", endpointUrl, " to collect certificate server");
+                    }
+                    return callback(err);
+                });
             },
             function (callback) {
                 client.getEndpoints(null, (err, endpoints) => {
@@ -487,7 +495,11 @@ export class OPCUAClientBase extends EventEmitter {
                     " security mode: " + securityMode.toString() +
                     " policy: " + securityPolicy.toString()));
             }
-            callback(null, selected_endpoint, all_endpoints);
+            var result = {
+                selectedEndpoint: selected_endpoint,
+                endpoints: all_endpoints
+            };
+            callback(null, result);
         });
     }
     _cancel_reconnection(callback) {

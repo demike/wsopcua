@@ -393,5 +393,8 @@ export class ClientSidePublishEngine {
         forEachOf(self.subscriptionMap, repairSubscription, callback);
     }
 }
+/**
+ * the number of requests queued up and sent at once
+ */
 ClientSidePublishEngine.publishRequestCountInPipeline = 5;
 //# sourceMappingURL=client_publish_engine.js.map

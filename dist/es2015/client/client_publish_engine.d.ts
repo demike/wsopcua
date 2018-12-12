@@ -26,6 +26,9 @@ export declare class ClientSidePublishEngine {
     protected activeSubscriptionCount: number;
     protected nbMaxPublishRequestsAcceptedByServer: number;
     protected isSuspended: boolean;
+    /**
+     * the number of requests queued up and sent at once
+     */
     static publishRequestCountInPipeline: number;
     constructor(session: ClientSession);
     /**

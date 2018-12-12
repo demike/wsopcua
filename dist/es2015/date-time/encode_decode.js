@@ -26,6 +26,7 @@ export function randomDateTime() {
 }
 ;
 export function encodeDateTime(date, stream) {
+    const MAXUINT32 = 4294967295; // 2**32 -1
     if (!date) {
         stream.setUint32(0);
         stream.setUint32(0);
@@ -43,7 +44,7 @@ export function encodeDateTime(date, stream) {
         hi = 0;
         lo = 0;
     }
-    if (hi < 0 || lo < 0 || hi > Math.pow(2, 32) || lo > Math.pow(2, 32)) {
+    if (hi < 0 || lo < 0 || hi > MAXUINT32 || lo > MAXUINT32) {
         var hl = bn_dateToHundredNanoSecondFrom1601(date);
         throw new Error("INVALID " + hi + " " + lo + " " + date.toUTCString());
     }
