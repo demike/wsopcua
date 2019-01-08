@@ -174,7 +174,7 @@ public write(message_chunk : ArrayBuffer) {
 };
 
 
-protected _fulfill_pending_promises(err, data) {
+protected _fulfill_pending_promises(err, data?) {
 
     this._cleanup_timers();
 
@@ -217,7 +217,7 @@ protected _start_timeout_timer() {
 
   
     assert(!this._timerId, "timer already started");
-    this._timerId = setTimeout(function () {
+    this._timerId = setTimeout( () => {
         this._timerId =null;
         this._fulfill_pending_promises(new Error("Timeout in waiting for data on socket ( timeout was = " + this.timeout + " ms )"));
     }, this.timeout);
@@ -306,7 +306,7 @@ protected _install_socket(socket) {
             this.packetAssembler.feed(data);
         }
 
-    }).on("close", function (had_error) {
+    }).on("close", (had_error) => {
         // istanbul ignore next
         if (doDebug) {
             debugLog(" SOCKET CLOSE : had_error =" + had_error.toString() + this.name);
@@ -322,7 +322,7 @@ protected _install_socket(socket) {
         var err = had_error ? new Error("ERROR IN SOCKET") : null;
         this.on_socket_closed(err);
 
-    }).on("end", function (err) {
+    }).on("end", (err) => {
 
         // istanbul ignore next
         if (doDebug) {
@@ -330,7 +330,7 @@ protected _install_socket(socket) {
         }
         this._on_socket_ended_message(err);
 
-    }).on("error", function (err) {
+    }).on("error", (err) => {
         // istanbul ignore next
         if (doDebug) {
             debugLog(" SOCKET ERROR : " + err.message + this._socket.name + this.name);

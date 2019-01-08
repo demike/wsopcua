@@ -529,7 +529,7 @@ public changeSessionIdentity(session: ClientSession, userIdentityInfo: UserIdent
 };
 
 
-protected _closeSession = function (session : ClientSession, deleteSubscriptions : boolean, callback) {
+protected _closeSession(session : ClientSession, deleteSubscriptions : boolean, callback) {
 
     assert('function' === typeof callback);
     //assert(_.isBoolean(deleteSubscriptions));
@@ -874,7 +874,7 @@ public withSession(endpointUrl, inner_func, callback) {
             });
         }
 
-    ], function (err1) {
+    ], (err1) => {
         if (need_disconnect) {
             console.log("Disconnecting client after failure");
             this.disconnect(function (err2) {

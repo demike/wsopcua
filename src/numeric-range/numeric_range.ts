@@ -255,7 +255,7 @@ protected _set_range_value(low : number, high : number) {
     }
 };
 
-public isValid = function () {
+public isValid() : boolean {
     return this.type !== NumericRangeType.InvalidRange;
 };
 
@@ -335,7 +335,7 @@ public toString () {
     }
 };
 
-public toJSON = function () {
+public toJSON () {
     return this.toString();
 };
 

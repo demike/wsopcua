@@ -167,7 +167,7 @@ public connect(endpointUrl : string, callback : Function, options?) {
     this._socket.name = "CLIENT";
     this._install_socket(this._socket);
 
-    function _on_socket_error_for_connect(err) {
+    let _on_socket_error_for_connect = (err) => {
         // this handler will catch attempt to connect to an inaccessible address.
         assert(err instanceof Error);
         _remove_connect_listeners();
@@ -177,12 +177,12 @@ public connect(endpointUrl : string, callback : Function, options?) {
         console.log("Socket has been closed by server",err);
     }
 
-    function _remove_connect_listeners() {
+    let _remove_connect_listeners = () => {
         this._socket.removeListener("error", _on_socket_error_for_connect);
         this._socket.removeListener("end"  , _on_socket_end_for_connect);
     }
 
-    function _on_socket_error_after_connection(err) {
+    let _on_socket_error_after_connection = (err) => {
         debugLog(" ClientTCP_transport Socket Error",err.message);
 
         // EPIPE : EPIPE (Broken pipe): A write on a pipe, socket, or FIFO for which there is no process to read the
@@ -206,7 +206,7 @@ public connect(endpointUrl : string, callback : Function, options?) {
     this._socket.once("error", _on_socket_error_for_connect);
     this._socket.once("end",_on_socket_end_for_connect);
 
-    this._socket.on("connect", function () {
+    this._socket.on("connect", () => {
 
         _remove_connect_listeners();
 
@@ -216,7 +216,7 @@ public connect(endpointUrl : string, callback : Function, options?) {
                 // install error handler to detect connection break
                 this._socket.on("error",_on_socket_error_after_connection);
 
-                this.connected = true;
+                this._connected = true;
                 /**
                  * notify the observers that the transport is connected (the socket is connected and the the HEL/ACK
                  * transaction has been done)
