@@ -12,9 +12,6 @@ import * as ec from '../basic-types';
 var encodeArray = ec.encodeArray;
 var decodeArray = ec.decodeArray;
 
-
-import {_enumerations} from '../factory/factories_enumerations';
-
 import {getFactory} from '../factory/factories_factories';
 import {BaseUAObject} from '../factory/factories_baseobject';
 import { DataStream } from "../basic-types/DataStream";

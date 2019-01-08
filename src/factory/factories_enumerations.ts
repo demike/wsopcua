@@ -5,13 +5,14 @@
 
  import {assert} from '../assert'
 
-export var _enumerations = {};
-
 import {TypeSchema} from './factories_builtin_types';
 
 function _encode_enumeration(member, stream) {
     stream.writeInteger(member.value);
 }
+
+let _enumerations = {};
+
 
 /**
  * @method registerEnumeration

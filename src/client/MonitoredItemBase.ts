@@ -12,21 +12,17 @@ import * as subscription_service from "../service-subscription";
 import * as read_service from '../service-read';
 
 import {TimestampsToReturn} from '../generated/TimestampsToReturn';
-import {AttributeIds, ObjectTypeIds} from '../constants';
+import {AttributeIds} from '../constants';
 import {ClientSubscription} from './ClientSubscription';
 
-import {resolveNodeId} from '../nodeid/nodeid';
 
-import {CreateMonitoredItemsRequest} from '../generated/CreateMonitoredItemsRequest';
 import {ModifyMonitoredItemsRequest} from '../generated/ModifyMonitoredItemsRequest';
 import { MonitoringParameters, IMonitoringParameters } from '../generated/MonitoringParameters';
 import { MonitoringMode } from '../generated/MonitoringMode';
 import { MonitoredItemCreateResult } from '../generated/MonitoredItemCreateResult';
-import { MonitoredItem } from './MonitoredItem';
 
-import { StatusCode,NodeId,ExtensionObject} from '../basic-types';
+import { StatusCode,ExtensionObject, NodeId} from '../basic-types';
 import { IReadValueId } from '../generated/ReadValueId';
-import { QualifiedName } from '../data-model';
 
 //import {MonitoredItemsModifyRequest} from '../generated/MonitoredItemsModifyRequest';
 var MonitoredItemModifyRequest = subscription_service.MonitoredItemModifyRequest;
@@ -64,7 +60,7 @@ public get itemToMonitor() {
     return this._itemToMonitor;
 }
 
-public get nodeId() {
+public get nodeId() : NodeId{
     return this._itemToMonitor.nodeId;
 }
 

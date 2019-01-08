@@ -2,6 +2,7 @@
 
 import {QualifiedName} from '../generated/QualifiedName';
 import {assert} from '../assert';
+import { DataStream } from '../basic-types/DataStream';
 /**
  * @method stringToQualifiedName
  * @param value {String}
@@ -39,4 +40,9 @@ export function coerceQualifyName(value) {
         return new QualifiedName(value);
     }
 }
+
+export function enocdeQualifiedName( value : QualifiedName, stream : DataStream) {
+    value.encode(stream);
+}
+
 

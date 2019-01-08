@@ -8,7 +8,6 @@ import { IMonitoringParameters } from "../generated/MonitoringParameters";
 import { TimestampsToReturn } from "../generated/TimestampsToReturn";
 import {MonitoredItemBase} from './MonitoredItemBase';
 
-import * as read_service from "../service-read";
 import { IReadValueId } from '../generated/ReadValueId';
 
 

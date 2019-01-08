@@ -6,7 +6,7 @@ import {DataStream} from '../basic-types/DataStream'
 import { MessageSecurityMode } from '../service-secure-channel';
 import { SecurityPolicy, getCryptoFactory, toUri,/* **nomsgcrypt** getOptionsForSymmetricSignAndEncrypt,*/ ICryptoFactory } from './security_policy';
 import { MessageBuilder } from './message_builder';
-import { OPCUAClientOptions,OPCUAClientBase } from '../client/client_base';
+import { OPCUAClientBase } from '../client/client_base';
 
 import * as log from 'loglevel';
 import {doDebug,debugLog,hexDump} from '../common/debug'
@@ -20,7 +20,7 @@ var crypto : Crypto = window.crypto || (<any>window).msCrypto;
 import * as utils from '../utils';
 var get_clock_tick = utils.get_clock_tick;
 
-import {verify_message_chunk,readMessageHeader} from '../chunkmanager';
+import {readMessageHeader} from '../chunkmanager';
 
 import * as backoff from '../backoff';
 
@@ -188,7 +188,7 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
     _derivedKeys: any;
     _receiverCertificate: string;
     _serverNonce: any;
-    _receiverPublicKey(arg0: any): any {
+    _receiverPublicKey(): any {
         throw new Error("Method not implemented.");
     }
     _transport: ClientWSTransport;

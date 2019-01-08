@@ -8,7 +8,7 @@ import * as log from 'loglevel';
 import async_series from 'async-es/series';
 import async_map from 'async-es/map';
 import {EventEmitter} from 'eventemitter3';
-import {SecurityPolicy,fromURI,toUri} from '../secure-channel/security_policy';
+import {SecurityPolicy,toUri} from '../secure-channel/security_policy';
 import {MessageSecurityMode} from '../secure-channel';
 import {once} from '../utils/once';
 import * as delayed from 'delayed';
@@ -46,7 +46,6 @@ import { OPCUASecureObject } from '../common/secure_object';
 import { RequestHeader } from '../service-secure-channel';
 import { ClientSession } from './client_session';
 import { EndpointDescription } from '../service-endpoints';
-import { IFindServersRequest } from '../generated/FindServersRequest';
 import { IGetEndpointsRequest } from '../generated/GetEndpointsRequest';
 
 var defaultConnectionStrategy = {
@@ -291,7 +290,7 @@ export class OPCUAClientBase extends EventEmitter {
     this.connectionStrategy= options.connectionStrategy || defaultConnectionStrategy;
     }
 
-    closeSession(arg0: any, arg1: any, arg2: any): any {
+    closeSession(session : ClientSession, deleteSubscriptions : boolean, callback : Function): any {
         throw new Error("Method not implemented.");
     }
 
@@ -348,7 +347,7 @@ export class OPCUAClientBase extends EventEmitter {
             
                 this.registry.register(this);
             
-                this._internal_create_secure_channel((err,secureChannel) => {
+                this._internal_create_secure_channel((err) => {
                     callback_od(err);
                 });
             
@@ -650,7 +649,7 @@ private static __findEndpoint(endpointUrl,securityMode,securityPolicy,callback) 
             client.getEndpoints( null,(err, endpoints) => {
 
                 if (!err) {
-                    endpoints.forEach(function (endpoint, i) {
+                    endpoints.forEach(function (endpoint) {
                         if (endpoint.securityMode === securityMode && endpoint.securityPolicyUri == securityPolicy.value){
                             selected_endpoint = endpoint; // found it
                         }
@@ -686,7 +685,7 @@ protected _cancel_reconnection(callback : Function) {
     if (!this._secureChannel) {
         return callback(null); // nothing to do
     }
-    this._secureChannel.abortConnection((err) => {
+    this._secureChannel.abortConnection(() => {
         this._secureChannel = null;
         callback();
     });

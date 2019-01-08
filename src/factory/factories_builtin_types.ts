@@ -8,6 +8,11 @@ import { ExpandedNodeId,makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 import * as ec from '../basic-types';
 import {encodeBoolean} from '../basic-types';
 import {StatusCodes} from '../constants/raw_status_codes';
+
+import { enocdeQualifiedName, coerceQualifyName } from '../data-model/qualified_name_util';
+import { decodeQualifiedName } from '../generated/QualifiedName';
+import { decodeLocalizedText } from '../generated/LocalizedText';
+import { enocdeLocalizedText,coerceLocalizedText } from '../data-model/localized_text_util';
  
 
 var emptyGuid = ec.emptyGuid;
@@ -110,6 +115,22 @@ var _defaultType = [
         encode: ec.encodeNodeId, decode: ec.decodeNodeId,
         defaultValue: makeNodeId,
         coerce: coerceNodeId
+    },
+
+    {
+        name: "QualifiedName",
+        encode: enocdeQualifiedName,
+        decode: decodeQualifiedName,
+        coerce: coerceQualifyName,
+        defaultValue: null
+    },
+
+    {
+        name: "LocalizedText",
+        encode: enocdeLocalizedText,
+        decode: decodeLocalizedText,
+        coerce: coerceLocalizedText,
+        defaultValue: null
     },
 
     {

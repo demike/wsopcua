@@ -7,13 +7,12 @@ import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert'
 import {MonitoredItemBase} from './MonitoredItemBase'
 import { ClientSubscription } from '../client/ClientSubscription';
-import { ReadValueId, IReadValueId } from '../generated/ReadValueId';
+import { IReadValueId } from '../generated/ReadValueId';
 import { MonitoringParameters, IMonitoringParameters } from '../generated/MonitoringParameters';
 import { TimestampsToReturn } from '../generated/TimestampsToReturn';
 import { MonitoringMode } from '../generated/MonitoringMode';
 
 import * as subscription_service from '../service-subscription';
-import * as read_service from '../service-read';
 import { DataValue } from '../data-value';
 
 

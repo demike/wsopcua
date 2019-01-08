@@ -6,12 +6,11 @@ import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert';
 import {resolveNodeId,coerceNodeId,makeNodeId,NodeId} from '../nodeid/nodeid';
 import {OPCUAClientBase} from './client_base';
-import { OPCUAClientOptions } from '../common/client_options';
 import {StatusCodes} from '../constants/raw_status_codes';
 
-import {CreateMonitoredItemsRequest, ICreateMonitoredItemsRequest} from '../generated/CreateMonitoredItemsRequest';
+import {ICreateMonitoredItemsRequest} from '../generated/CreateMonitoredItemsRequest';
 import {CreateMonitoredItemsResponse} from '../generated/CreateMonitoredItemsResponse';
-import {CreateSubscriptionRequest, ICreateSubscriptionRequest} from '../generated/CreateSubscriptionRequest';
+import {ICreateSubscriptionRequest} from '../generated/CreateSubscriptionRequest';
 import {CreateSubscriptionResponse} from '../generated/CreateSubscriptionResponse';
 import { PublishResponse } from '../generated/PublishResponse';
 import { PublishRequest } from '../generated/PublishRequest';
@@ -58,8 +57,6 @@ import { QualifiedName } from '../generated/QualifiedName';
 import { NodeClass } from '../generated/NodeClass';
 import { DiagnosticInfo } from '../data-model';
 import { ReferenceDescription } from '../service-browse';
-import { IReadValueId } from '../generated/ReadValueId';
-import { getFunctionParameterNames } from '../utils';
 
 
 
@@ -82,7 +79,6 @@ export interface BrowseDescription {
 }
 
 
-type CoercibleToBrowseDescription = string | BrowseDescription;
 
 
 
@@ -428,7 +424,6 @@ readHistoryValue(nodes, start, end, callback) {
     }
 
     var nodesToRead = [];
-    var historyReadDetails = [];
     nodes.forEach(function (node) {
         nodesToRead.push({
             nodeId: resolveNodeId(node),
@@ -644,7 +639,7 @@ protected composeResult(nodes, nodesToRead : read_service.ReadValueId[], dataVal
            dataValue = dataValues[c];
            nodeToRead = nodesToRead[c];
            c++;
-           if (dataValue.statusCode === StatusCodes.Good) {
+           if (dataValue.statusCode === null || dataValue.statusCode === StatusCodes.Good) {
                k = utils.lowerFirstLetter(ClientSession.keys[i]);
                data[k] = dataValue.value.value;
                addedProperty += 1;
@@ -707,17 +702,18 @@ readAllAttributes(nodes : NodeId|NodeId[], callback) {
         }
         for (var i = 0; i < ClientSession.keys.length; i++) {
             var attributeId = read_service.AttributeIds[ClientSession.keys[i]];
-            nodesToRead.push({
+            nodesToRead.push(new read_service.ReadValueId({
                 nodeId: nodeId,
                 attributeId: attributeId,
                 indexRange: null,
-                dataEncoding: {namespaceIndex: 0, name: null}
-            });
+                dataEncoding: new QualifiedName({namespaceIndex: 0, name: null})
+              
+            }));
         }
     });
 
    
-    this.read(nodesToRead, function (err, dataValues /*, diagnosticInfos */) {
+    this.read(nodesToRead, (err, dataValues /*, diagnosticInfos */) => {
         if (err) return callback(err);
         var results = this.composeResult(nodes, nodesToRead, dataValues);
         callback(err, isArray ? results : results[0]);
@@ -1533,7 +1529,6 @@ protected __findBasicDataType(session,dataTypeId,callback) {
 public getBuiltInDataType(nodeId,callback : (err : Error|null,result?: DataType)=>void){
 
     var dataTypeId = null;
-    var dataType;
     var session = this;
     var nodes_to_read = [new read_service.ReadValueId
         ({

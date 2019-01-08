@@ -9,8 +9,6 @@ import * as ec from "../basic-types";
 
 import {makeExpandedNodeId} from "../nodeid/expanded_nodeid";
 
-import {_enumerations} from "../factory/factories_enumerations";
-
 import {BaseUAObject} from '../factory/factories_baseobject';
 
 import {register_class_definition} from '../factory/factories_factories';

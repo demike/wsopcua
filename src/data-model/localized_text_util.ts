@@ -1,5 +1,6 @@
 import { LocalizedText } from "../generated/LocalizedText";
 import { assert} from '../assert';
+import { DataStream } from "../basic-types/DataStream";
 
 export function coerceLocalizedText(value) {
     if (value === undefined || value === null) {
@@ -14,4 +15,8 @@ export function coerceLocalizedText(value) {
     assert(value.hasOwnProperty("locale"));
     assert(value.hasOwnProperty("text"));
     return new LocalizedText(value);
+}
+
+export function enocdeLocalizedText( value : LocalizedText, stream : DataStream) {
+    value.encode(stream);
 }
