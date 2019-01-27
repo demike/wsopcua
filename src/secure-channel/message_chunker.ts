@@ -41,6 +41,15 @@ export class MessageChunker {
         this.update(options);
 
     }
+
+    public dispose() {
+        this._sequenceNumberGenerator = null;
+        this._securityHeader = null;
+        this._derivedKeys = null;
+        this._stream = null;
+    };
+
+
 /** update security information
  * @method update
  * @param options {Object}

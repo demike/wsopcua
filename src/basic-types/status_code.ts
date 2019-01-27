@@ -173,6 +173,17 @@ get hasStructureChangedBit() {
 public valueOf() : number {
     return this.value;
 };
+
+public isNot(other: IStatusCodeOptions) {
+    // assert(other instanceof StatusCode);
+    return this.value !== other.value;
+};
+
+public equals(other: StatusCode) {
+    // assert(other instanceof StatusCode);
+    return this.value === other.value;
+};
+
 }
 
 class ConstantStatusCode extends StatusCode {

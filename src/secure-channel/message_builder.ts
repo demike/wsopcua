@@ -79,6 +79,17 @@ public setSecurity(securityMode : MessageSecurityMode, securityPolicy : Security
 };
 
 
+public dispose() {
+    super.dispose();
+    this._securityPolicy = null;
+    this.securityMode = null;
+    this._objectFactory = null;
+    this._cryptoFactory = null;
+    this._securityHeader = null;
+    this._tokenStack = null;
+};
+
+
 protected _validateSequenceNumber(sequenceNumber : number) {
 
     // checking that sequenceNumber is increasing
@@ -202,6 +213,7 @@ public pushNewToken(securityToken, derivedKeys) {
     assert(securityToken.hasOwnProperty("tokenId"));
     //xx assert(derivedKeys ); in fact, can be null
 
+    // TODO: make sure this list doesn't grow indefinitly
     this._tokenStack = this._tokenStack || [];
     assert(this._tokenStack.length === 0 || this._tokenStack[0].tokenId !== securityToken.tokenId);
     this._tokenStack.push({securityToken: securityToken, derivedKeys: derivedKeys});

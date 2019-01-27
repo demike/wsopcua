@@ -181,5 +181,9 @@ export abstract class MessageBuilderBase extends EventEmitter{
         return false;
     }
 
+    public dispose() {
+        this.removeAllListeners();
+    };
+
     protected abstract _decode_message_body(full_message_body);
 }

@@ -5,7 +5,7 @@
 import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert';
 import {resolveNodeId,coerceNodeId,makeNodeId,NodeId} from '../nodeid/nodeid';
-import {OPCUAClientBase} from './client_base';
+import {OPCUAClientBase, OpcUaResponse, ErrorCallback, ResponseCallback} from './client_base';
 import {StatusCodes} from '../constants/raw_status_codes';
 
 import {ICreateMonitoredItemsRequest} from '../generated/CreateMonitoredItemsRequest';
@@ -57,7 +57,7 @@ import { QualifiedName } from '../generated/QualifiedName';
 import { NodeClass } from '../generated/NodeClass';
 import { DiagnosticInfo } from '../data-model';
 import { ReferenceDescription } from '../service-browse';
-
+import { RequestHeader } from '../generated/RequestHeader';
 
 
 
@@ -378,13 +378,13 @@ readVariableValue(nodes : string | string[] | NodeId | NodeId[] |read_service.Re
 
     assert((<any[]>nodes).length === request.nodesToRead.length);
 
-    this.performMessageTransaction(request, (err, response) => {
+    this.performMessageTransaction(request, (err, response: read_service.ReadResponse) => {
 
         /* istanbul ignore next */
         if (err) {
-            return callback(err, response);
+            return callback(err, <any>response);
         }
-        if (response.responseHeader.serviceResult !== StatusCodes.Good) {
+        if (response.responseHeader.serviceResult.isNot(StatusCodes.Good)) {
             return callback(new Error(response.responseHeader.serviceResult.toString()));
         }
         assert(response instanceof read_service.ReadResponse);
@@ -641,7 +641,7 @@ protected composeResult(nodes, nodesToRead : read_service.ReadValueId[], dataVal
            c++;
            if (dataValue.statusCode === null || dataValue.statusCode === StatusCodes.Good) {
                k = utils.lowerFirstLetter(ClientSession.keys[i]);
-               data[k] = dataValue.value.value;
+               data[k] = dataValue.value ? dataValue.value.value : null;
                addedProperty += 1;
            }
        }
@@ -1121,7 +1121,7 @@ public isChannelValid() : boolean {
     return this._client.secureChannel && this._client.secureChannel.isOpened();
 };
 
-public performMessageTransaction(request, callback) {
+public performMessageTransaction(request : {requestHeader:RequestHeader}, callback : ResponseCallback<any>) {
 
     assert('function' === typeof callback);
     assert(this._client);
@@ -1135,7 +1135,7 @@ public performMessageTransaction(request, callback) {
 
     this.lastRequestSentTime = Date.now();
 
-    this._client.performMessageTransaction(request, (err, response) => {
+    this._client.performMessageTransaction(request, (err: Error, response: OpcUaResponse) => {
 
         this.lastResponseReceivedTime = Date.now();
 
@@ -1438,7 +1438,7 @@ public startKeepAliveManager() {
          */
         this.emit("keepalive_failure");
     });
-    this._keepAliveManager.on("keepalive",function(state) {
+    this._keepAliveManager.on("keepalive",(state) => {
         /**
          * @event keepalive
          */
@@ -1466,9 +1466,9 @@ public toString() : void {
     var now = Date.now();
 
     console.log( " name..................... ",this.name);
-    console.log( " sessionId................ ",this.sessionId);
-    console.log( " authenticationToken...... ",this.authenticationToken);
-    console.log( " timeout.................. ",this._timeout);
+    console.log(" sessionId................ ", this.sessionId.toString());
+    console.log(" authenticationToken...... ", this.authenticationToken.toString());
+    console.log(" timeout.................. ", this.timeout , "ms");
     console.log( " serverNonce.............. ",this.serverNonce.toString("hex"));
     console.log( " serverCertificate........ ",this.serverCertificate.toString("base64"));
     console.log( " serverSignature.......... ",this.serverSignature);

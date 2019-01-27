@@ -2,7 +2,7 @@ export var doDebug = false;
 
 
 export function debugLog(...args) {
-    console.log(args.join(''));
+    console.debug(args.join(''));
 }
 
 /*

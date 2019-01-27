@@ -29,6 +29,8 @@ import {MessageChunker} from "./message_chunker";
 import * as secure_channel_service from "../service-secure-channel";
 import { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
 import { ClientWSTransport } from '../transport/client_ws_transport';
+import { OptionSet } from '../generated/OptionSet';
+import { ConnectionStrategy } from '../common/client_options';
 
 var OpenSecureChannelRequest = secure_channel_service.OpenSecureChannelRequest;
 var CloseSecureChannelRequest = secure_channel_service.CloseSecureChannelRequest;
@@ -161,6 +163,18 @@ export function dump_transaction_statistics(stats : ITransactionStats ) {
 }
 
 
+export interface ClientSecureChannelLayerOptions {
+    defaultSecureTokenLifeTime?: number,
+    tokenRenewalInterval?: number,
+    securityMode?: MessageSecurityMode,
+    securityPolicy?: SecurityPolicy,
+    serverCertificate?: any,
+    parent?: OPCUAClientBase,
+    factory?: any,
+    transportTimeout?: number,
+    connectionStrategy?: ConnectionStrategy,
+}
+
 /**
  * a ClientSecureChannelLayer represents the client side of the OPCUA secure channel.
  * @class ClientSecureChannelLayer
@@ -168,7 +182,8 @@ export function dump_transaction_statistics(stats : ITransactionStats ) {
  * @uses MessageChunker
  * @uses MessageBuilder
  * @param options
- * @param {Number} [options.defaultSecureTokenLifetime=30000 = 30 seconds]
+ * @param {Number} [options.defaultSecureTokenLifeTime=30000 = 30 seconds]
+ * @param {Number} [options.tokenRenewalInterval =0]  if 0, security token renewa&l will happen at 75% of defaultSecureTokenLifetime
  * @param [options.securityMode=MessageSecurityMode.NONE]
  * @param [options.securityPolicy=SecurityPolicy.None]
  * @param [options.serverCertificate=null] the serverCertificate (required if securityMode!=None)
@@ -202,6 +217,7 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
     protected _securityMode : MessageSecurityMode;
     protected securityPolicy : SecurityPolicy;
     protected defaultSecureTokenLifetime : number;
+    protected tokenRenewalInterval: number;
     protected serverCertificate : string;
     protected messageBuilder : MessageBuilder;
 
@@ -272,7 +288,7 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
         return this._transport.endpointUrl;
     }
 
-    constructor(options : any) {
+    constructor(options : ClientSecureChannelLayerOptions) {
     super();
     options = options || {};
 
@@ -286,7 +302,8 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
         derivedKeys: null
     });
 
-    this.defaultSecureTokenLifetime = options.defaultSecureTokenLifeTime || 30000;
+    this.defaultSecureTokenLifetime = options .defaultSecureTokenLifeTime || 30000;
+    this.tokenRenewalInterval = options.tokenRenewalInterval || 0;
 
     this._securityMode = options.securityMode || MessageSecurityMode.None;
 
@@ -294,7 +311,7 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
 
     this.serverCertificate = options.serverCertificate;
 
-    assert(this._securityMode !== MessageSecurityMode.Invalid, "invalid security Mode");
+    // assert(this._securityMode !== MessageSecurityMode.Invalid, "invalid security Mode");
     if (this._securityMode !== MessageSecurityMode.None) {
         assert(this.serverCertificate,"Expecting a valid certificate when security mode is not None");
         assert(this.securityPolicy !== SecurityPolicy.None, "Security Policy None is not a valid choice");
@@ -475,14 +492,19 @@ protected _install_security_token_watchdog() {
     //
     var liveTime = this._securityToken.revisedLifetime;
     assert(liveTime && liveTime > 20);
-    debugLog(" revisedLifeTime = " + liveTime);
+
+    let timeout = this.tokenRenewalInterval || liveTime * 75 / 100;
+    timeout = Math.min(timeout, liveTime * 75 / 100);
+    if (doDebug) {
+        debugLog(" time until next security token renewal = " + timeout + "( lifefime = " + liveTime + ")");
+    }
 
     assert(this._securityTokenTimeoutId === null);
     this._securityTokenTimeoutId = setTimeout( () => {
         this._securityTokenTimeoutId = null;
         this._on_security_token_about_to_expire();
 
-    }, liveTime * 75 / 100);
+    },timeout);
 }
 
 protected _build_client_nonce() {
@@ -509,7 +531,7 @@ protected _build_client_nonce() {
 }
 
 
-protected _open_secure_channel_request(is_initial, callback) {
+protected _open_secure_channel_request(is_initial: boolean, callback) {
 
     assert(this._securityMode !== MessageSecurityMode.Invalid, "invalid security mode");
     // from the specs:
@@ -545,7 +567,7 @@ protected _open_secure_channel_request(is_initial, callback) {
         if (!error) {
 
             /* istanbul ignore next */
-            if (doDebug) {
+            if (false && doDebug) {
                 debugLog(response.toString());
             }
             assert(response instanceof OpenSecureChannelResponse);
@@ -917,7 +939,7 @@ public makeRequestId() {
  * preconditions:
  *   - the channel must be opened
  *
- * @example
+ * example
  *
  *    ```javascript
  *    var secure_channel ; // get a  ClientSecureChannelLayer somehow
@@ -933,7 +955,6 @@ public makeRequestId() {
  *    });
  *    ```
  *
-
  */
 public performMessageTransaction(requestMessage, callback) {
     assert('function' === typeof callback);

@@ -262,6 +262,11 @@ export function sameVariant(v1, v2) {
     if (v1.value === v2.value) {
         return true;
     }
+    if(v1.arrayType === VariantArrayType.Scalar) {
+        if(Array.isArray(v1.value) && Array.isArray(v2.value)) {
+          return __check_same_array(v1.value,v2.value);
+        }
+    }
     if (v1.arrayType === VariantArrayType.Array) {
         return __check_same_array(v1.value,v2.value);
 

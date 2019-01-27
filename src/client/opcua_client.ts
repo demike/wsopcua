@@ -182,6 +182,26 @@ protected _createSession(callback) {
     this.__createSession_step2(session, callback);
 };
 
+protected static verifyEndpointDescriptionMatches(client: OPCUAClient,responseServerEndpoints: endpoints_service.EndpointDescription[]) {
+    // The Server returns its EndpointDescriptions in the response. Clients use this information to
+    // determine whether the list of EndpointDescriptions returned from the Discovery Endpoint matches
+    // the Endpoints that the Server has. If there is a difference then the Client shall close the
+    // Session and report an error.
+    // The Server returns all EndpointDescriptions for the serverUri
+    // specified by the Client in the request. The Client only verifies EndpointDescriptions with a
+    // transportProfileUri that matches the profileUri specified in the original GetEndpoints request.
+    // A Client may skip this check if the EndpointDescriptions were provided by a trusted source
+    // such as the Administrator.
+    //serverEndpoints:
+    // The Client shall verify this list with the list from a Discovery Endpoint if it used a Discovery Endpoint
+    // fetch to the EndpointDescriptions.
+
+    // ToDo
+
+    return true;
+}
+
+
 protected async __createSession_step2(session : ClientSession, callback) {
 
     assert(typeof callback === "function");
@@ -193,7 +213,7 @@ protected async __createSession_step2(session : ClientSession, callback) {
 
     let applicationUri = await this._getApplicationUri();
 
-    var applicationDescription = new ApplicationDescription({
+    let applicationDescription = new ApplicationDescription({
         applicationUri: applicationUri,
         productUri: "OPCUA-Client",
         applicationName: new LocalizedText({text: this.applicationName}),
@@ -251,8 +271,16 @@ protected async __createSession_step2(session : ClientSession, callback) {
 
                 debugLog("revised session timeout = " + session.timeout);
 
+                
+                if (!OPCUAClient.verifyEndpointDescriptionMatches(this,response.serverEndpoints)) {
+                    console.log("Endpoint description previously retrieved with GetendpointsDescription");
+                    console.log(this._server_endpoints);
+                    console.log("CreateSessionResponse.serverEndpoints= ");
+                    console.log(response.serverEndpoints);
+                    return callback(new Error("Invalid endpoint descriptions Found" ));
+                }
                 this._server_endpoints = response.serverEndpoints;
-//                session.serverEndpoints = response.serverEndpoints;
+               //TODO: xx session.serverEndpoints = response.serverEndpoints;
 
             } else {
                 err = new Error("Error " + response.responseHeader.serviceResult.name + " " + response.responseHeader.serviceResult.description);
@@ -275,7 +303,9 @@ public computeClientSignature(channel, serverCertificate, serverNonce) : Signatu
 public createUserIdentityToken(session : ClientSession, userIdentityToken : UserIdentityToken|UserIdentityInfo, callback) {
     assert('function' === typeof callback);
 
-
+    if (null === this._userIdentityInfo) {
+        return callback(null,null);
+    }
     if (isAnonymous(this._userIdentityInfo)) {
 
         try {
@@ -426,7 +456,7 @@ public reactivateSession(session : ClientSession, callback) {
         return callback(new Error(" End point must exist " + this._secureChannel.endpointUrl));
     }
 
-    assert(session.client.endpointUrl === this.endpointUrl, "cannot reactivateSession on a different endpoint");
+    assert(!session.client || session.client.endpointUrl === this.endpointUrl, "cannot reactivateSession on a different endpoint");
     let old_client : OPCUAClientBase = session.client;
 
     debugLog("OPCUAClient#reactivateSession");
@@ -436,9 +466,10 @@ public reactivateSession(session : ClientSession, callback) {
 
             if (old_client !== this) {
                 // remove session from old client:
-                (<any>old_client)._removeSession(session); //cast to any as access of protected member to other instance should be possible
-                assert((<any>old_client)._sessions.indexOf(session) < 0/*!_.contains( (<any>old_client)._sessions, session*/);
-
+                if (old_client) {
+                    (<any>old_client)._removeSession(session); //cast to any as access of protected member to other instance should be possible
+                    assert((<any>old_client)._sessions.indexOf(session) < 0/*!_.contains( (<any>old_client)._sessions, session*/);
+                }
                 this._addSession(session);
                 
                 assert(this._sessions.indexOf(session) >= 0 /*_.contains(this._sessions, session)*/);
@@ -448,7 +479,7 @@ public reactivateSession(session : ClientSession, callback) {
 
             // istanbul ignore next
             if (doDebug) {
-                console.log("reactivateSession has failed !", err);
+                console.log("reactivateSession has failed !", err.message);
             }
         }
         callback(err);
@@ -584,6 +615,8 @@ public closeSession(session : ClientSession, deleteSubscriptions : boolean, call
         session.emitCloseEvent();
 
         this._removeSession(session);
+        session.dispose();
+
         assert(this._sessions.indexOf(session) < 0);
         assert(session.closed, "session must indicate it is closed");
 
@@ -596,7 +629,7 @@ protected _ask_for_subscription_republish(session : ClientSession, callback : Fu
     debugLog("_ask_for_subscription_republish ");
     //xx assert(session.getPublishEngine().nbPendingPublishRequests === 0, "at this time, publish request queue shall still be empty");
     session.getPublishEngine().republish((err) =>{
-        debugLog("_ask_for_subscription_republish done");
+        debugLog("_ask_for_subscription_republish done" + (err ? err.message:"OKs"));
         // xx assert(session.getPublishEngine().nbPendingPublishRequests === 0);
         session.resumePublishEngine();
         callback(err);
@@ -700,13 +733,16 @@ protected _on_connection_reestablished(callback : Function) {
         var sessions = this._sessions;
         async_map(sessions, function (session, next) {
 
-            debugLog("OPCUAClient#_on_connection_reestablished TRYING TO REACTIVATE SESSION");
+            if(doDebug) {
+                debugLog("OPCUAClient#_on_connection_reestablished TRYING TO REACTIVATE EXISTING SESSION " + session.sessionId.toString());
+            }
+
             this._activateSession(session, function (err) {
                 //
                 // Note: current limitation :
                 //  - The reconnection doesn't work if connection break is cause by a server that crashes and restarts yet.
                 //
-                debugLog("ActivateSession : ", err ? err.message : "");
+                debugLog("ActivateSession : ", err ? err.message : " SUCCEESS !!! ");
                 if (err) {
                     if (session.hasBeenClosed()) {
                         debugLog("Aborting reactivation of old session because user requested session to be closed");
@@ -770,7 +806,7 @@ protected _on_connection_reestablished(callback : Function) {
                         },
                         (callback) =>{
                             assert(new_session.getPublishEngine().nbPendingPublishRequests === 0, "we should not be publishing here");
-                            //      call Republish
+                            // call Republish
                             return this._ask_for_subscription_republish(new_session, callback);
                         },
                         (callback) => { //start_publishing_as_normal

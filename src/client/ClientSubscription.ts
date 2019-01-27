@@ -793,6 +793,16 @@ public recreateSubscriptionAndMonitoredItem(callback) {
     ], callback);
 };
 
+public toString() {
+    var str = "";
+    str += "subscriptionId      :" + this.subscriptionId + "\n";
+    str += "publishingInterval  :" + this._publishingInterval + "\n";
+    str += "lifetimeCsount      :" + this.lifetimeCount + "\n";
+    str += "maxKeepAliveCount   :" + this.maxKeepAliveCount + "\n";
+    return str;
+};
+
+
 
 //var thenify = require("thenify");
 

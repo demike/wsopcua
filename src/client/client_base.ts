@@ -43,7 +43,7 @@ function debugLog(s : String) {
 
 import {ClientSecureChannelLayer} from '../secure-channel/client_secure_channel_layer';
 import { OPCUASecureObject } from '../common/secure_object';
-import { RequestHeader } from '../service-secure-channel';
+import { RequestHeader, ResponseHeader } from '../service-secure-channel';
 import { ClientSession } from './client_session';
 import { EndpointDescription } from '../service-endpoints';
 import { IGetEndpointsRequest } from '../generated/GetEndpointsRequest';
@@ -59,8 +59,12 @@ export interface ErrorCallback {
     (err?: Error): void;
 }
 
+export interface OpcUaResponse {
+    responseHeader: ResponseHeader;
+}
+
 export interface ResponseCallback<T> {
-    (err?: Error | null, response?: T): void;
+    (err?: Error | null, response?: T ): void;
 }
 
 
@@ -73,7 +77,7 @@ export interface ConnectionStrategy {
 
 export interface OPCUAClientOptions {
     
-        defaultSecureTokenLifeTime?: number, //default secure token lifetime in ms
+        defaultSecureTokenLifetime?: number, //default secure token lifetime in ms
         serverCertificate?: any, // =null] {Certificate} the server certificate.
         connectionStrategy?: ConnectionStrategy,
         // {MessageSecurityMode} the default security mode.
@@ -85,9 +89,9 @@ export interface OPCUAClientOptions {
         keepSessionAlive?: boolean,//=false]{Boolean}
         certificateFile?: string, // "certificates/client_selfsigned_cert_1024.pem"] {String} client certificate pem file.
         privateKeyFile?: string,// "certificates/client_key_1024.pem"] {String} client private key pem file.
-        clientName?: string //] {String} a client name string that will be used to generate session names.
-        tokenRenewalInterval?: number // if not specify or set to 0 , token  renewal will happen around 75% of the defaultSecureTokenLiveTime
-
+        clientName?: string, //] {String} a client name string that will be used to generate session names.
+        tokenRenewalInterval?: number, // if not specify or set to 0 , token  renewal will happen around 75% of the defaultSecureTokenLiveTime
+        keepPendingSessionsOnDisconnect?:boolean // = false, if set to true, pending session will not be automatically closed when disconnect is called
     }
 
 export interface IFindServersOptions {
@@ -108,6 +112,8 @@ export interface IFindServersOptions {
  * @param [options.privateKeyFile="certificates/client_key_1024.pem"] {String} client private key pem file.
  * @param [options.connectionStrategy] {Object}
  * @param [options.keepSessionAlive=false]{Boolean}
+ * @param [options.keepPendingSessionsOnDisconnect=false] if set to true, pending session will not be automatically closed *
+ *                                                  when disconnect is called
  * @constructor
  */
 export class OPCUAClientBase extends EventEmitter {
@@ -138,6 +144,8 @@ export class OPCUAClientBase extends EventEmitter {
 
         protected _sessions : ClientSession[];
         protected defaultSecureTokenLifetime : number;
+        protected tokenRenewalInterval: number;
+        protected keepPendingSessionsOnDisconnect: boolean;
 
         protected _endpointUrl : string;
         protected connectionStrategy : ConnectionStrategy;
@@ -253,7 +261,9 @@ export class OPCUAClientBase extends EventEmitter {
     this._server_endpoints = [];
     this._secureChannel = null;
 
-    this.defaultSecureTokenLifetime = options.defaultSecureTokenLifeTime || 600000;
+    this.defaultSecureTokenLifetime = options.defaultSecureTokenLifetime || 600000;
+    this.tokenRenewalInterval = options.tokenRenewalInterval || 0;
+    assert(Number.isFinite(this.tokenRenewalInterval) && this.tokenRenewalInterval >= 0);
     this.securityMode = options.securityMode || MessageSecurityMode.None;
 
     /**
@@ -288,6 +298,7 @@ export class OPCUAClientBase extends EventEmitter {
      * @type {options.connectionStrategy|{maxRetry, initialDelay, maxDelay, randomisationFactor}|*|{maxRetry: number, initialDelay: number, maxDelay: number, randomisationFactor: number}}
      */
     this.connectionStrategy= options.connectionStrategy || defaultConnectionStrategy;
+    this.keepPendingSessionsOnDisconnect = options.keepPendingSessionsOnDisconnect || false;
     }
 
     closeSession(session : ClientSession, deleteSubscriptions : boolean, callback : Function): any {
@@ -328,7 +339,13 @@ export class OPCUAClientBase extends EventEmitter {
                     // if the certificate has been certified by an Certificate Authority we have to
                     // verify that the certificates in the chain are valid and not revoked.
                     //
-                    return OPCUAClientBase.__findEndpoint(endpointUrl,this.securityMode,this.securityPolicy,(err,endpoint) =>{
+                    const params = {
+                        securityMode: this.securityMode,
+                        securityPolicy: this.securityPolicy,
+                        connectionStrategy: this.connectionStrategy,
+                        endpoint_must_exist: false
+                    };
+                    return OPCUAClientBase.__findEndpoint(endpointUrl,params,(err: Error,endpoint: any) =>{
                         if (err) { return callback(err); }
                         if (!endpoint) {
                             return callback(new Error("cannot find end point"));
@@ -367,7 +384,7 @@ export class OPCUAClientBase extends EventEmitter {
                 this.disconnect(callback);
             });
         }
-        if (this._sessions.length) {
+        if (this._sessions.length && !this.keepPendingSessionsOnDisconnect) {
             console.log("warning : disconnection : closing pending sessions");
             // disconnect has been called whereas living session exists
             // we need to close them first ....
@@ -375,6 +392,14 @@ export class OPCUAClientBase extends EventEmitter {
                 this.disconnect(callback);
             });
             return;
+        }
+
+        if (this._sessions.length ) {
+            // transfer active session to  orphan and detach them from channel
+            this._sessions.forEach((session) => {
+                this._removeSession(session)
+            });
+            this._sessions = [];
         }
     
         assert(this._sessions.length === 0, " attempt to disconnect a client with live sessions ");
@@ -502,12 +527,7 @@ public findServers(options : IFindServersOptions, callback : ResponseCallback<en
  * @param callback.serverEndpoints {Array<EndpointDescription>} the array of endpoint descriptions
  *
  */
-public getEndpoints(options : IGetEndpointsRequest, callback?) : void {   
-        if (!callback) {
-            callback = options;
-            options = {};
-        }
-
+public getEndpoints(options : IGetEndpointsRequest| null, callback : (err:Error,endpoints?:EndpointDescription[]) => void) : void {   
         if (!options) {
             options = {};
         }
@@ -557,12 +577,13 @@ public getEndpoints(options : IGetEndpointsRequest, callback?) : void {
         
         };
         
-        protected _removeSession(session) {
+        protected _removeSession(session: ClientSession) {
             var index = this._sessions.indexOf(session);
             if (index >= 0) {
                 this._sessions.splice(index, 1);
                 assert(this._sessions.indexOf(session) < 0);
-                session.dispose();
+                assert(session.client === this)
+                session.client = null;
             }
             assert(this._sessions.indexOf(session) < 0);
         };
@@ -627,13 +648,21 @@ protected _destroy_secure_channel() {
     }
 };
 
-private static __findEndpoint(endpointUrl,securityMode,securityPolicy,callback) {
+private static __findEndpoint(endpointUrl, params, callback) {
 
-    var client = new OPCUAClientBase();
+    const securityMode = params.securityMode;
+    const securityPolicy = params.securityPolicy;
 
-    var selected_endpoint = null;
-    var all_endpoints = null;
-    var tasks = [
+    const options = {
+        connectionStrategy: params.connectionStrategy,
+        endpoint_must_exist: false
+    };
+
+    let client = new OPCUAClientBase(options);
+
+    let selected_endpoint = null;
+    let all_endpoints = null;
+    let tasks = [
         function (callback) {
             client.on("backoff", function () {
                 console.log("finding Enpoint => reconnecting ");
@@ -650,7 +679,7 @@ private static __findEndpoint(endpointUrl,securityMode,securityPolicy,callback) 
 
                 if (!err) {
                     endpoints.forEach(function (endpoint) {
-                        if (endpoint.securityMode === securityMode && endpoint.securityPolicyUri == securityPolicy.value){
+                        if (endpoint.securityMode === securityMode && endpoint.securityPolicyUri === securityPolicy.value){
                             selected_endpoint = endpoint; // found it
                         }
                     });
@@ -698,6 +727,7 @@ protected _recreate_secure_channel(callback : Function) {
     assert('function' === typeof callback);
 
     if (!this.knowsServerEndpoint) {
+        console.log("Cannot reconnect , server endpoint is unknown");
         return callback(new Error("Cannot reconnect, server endpoint is unknown"));
     }
     assert(this.knowsServerEndpoint);
@@ -758,13 +788,14 @@ protected _internal_create_secure_channel (callback : Function) {
         (_inner_callback) => {
 
             secureChannel = new ClientSecureChannelLayer({
-                defaultSecureTokenLifetime: this.defaultSecureTokenLifetime,
+                defaultSecureTokenLifeTime: this.defaultSecureTokenLifetime,
                 securityMode: this.securityMode,
                 securityPolicy: this.securityPolicy,
                 serverCertificate: this.serverCertificate,
                 parent: this,
           //      objectFactory: this.objectFactory,
-                connectionStrategy: this.connectionStrategy
+                connectionStrategy: this.connectionStrategy,
+                tokenRenewalInterval: this.tokenRenewalInterval
             });
 
             this._secureChannel = secureChannel;
@@ -821,7 +852,7 @@ protected _internal_create_secure_channel (callback : Function) {
 };
 
 
-private static _install_secure_channel_event_handlers(client : OPCUAClientBase,secureChannel) {
+private static _install_secure_channel_event_handlers(client : OPCUAClientBase, secureChannel: ClientSecureChannelLayer) {
 
     assert(client instanceof OPCUAClientBase);
 
@@ -889,10 +920,8 @@ private static _install_secure_channel_event_handlers(client : OPCUAClientBase,s
             });
             return;
         } else {
-
-
-            client._recreate_secure_channel((err) => {
-
+ 
+            setImmediate(() => client._recreate_secure_channel((err) => {
                 debugLog("secureChannel#on(close) => _recreate_secure_channel returns " + err ? err.message : "OK");
                 if (err) {
                     //xx assert(!this._secureChannel);
@@ -919,7 +948,7 @@ private static _install_secure_channel_event_handlers(client : OPCUAClientBase,s
                         });
                     }
                 }
-            });
+            }));
         }
         //xx console.log("xxxx OPCUAClientBase emitting close".yellow.bold,err);
     });

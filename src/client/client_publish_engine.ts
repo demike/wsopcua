@@ -410,6 +410,13 @@ public republish(callback) {
     // After receiving this status, the Client shall start sending Publish requests with the normal Publish handling.
     // This sequence ensures that the lost NotificationMessages queued in the Server are not overwritten by new
     // Publish responses
+    /**
+     * call Republish continuously until all Notification messages of un-acknowledged notifications are reprocessed..
+     * @param subscription
+     * @param subscriptionId
+     * @param _i_callback
+     * @private
+     */
     function _republish(subscription,subscriptionId,_i_callback) {
 
         assert(subscription.subscriptionId === +subscriptionId);
@@ -430,6 +437,7 @@ public republish(callback) {
 
             self._session.republish(request,function(err,response){
                 if (!err &&  response.responseHeader.serviceResult === StatusCodes.Good) {
+                     // reprocess notification message  and keep going
                     subscription.onNotificationMessage(response.notificationMessage);
                 } else {
                     if (!err) {
@@ -454,11 +462,18 @@ public republish(callback) {
         });
     }
 
-    function repairSubscription(subscription,subscriptionId,_the_callback) {
+    function repairSubscription(subscription: ClientSubscription,subscriptionId,_the_callback) {
 
         _republish(subscription,subscriptionId,function (err) {
 
+            assert(!err || err instanceof Error);
 
+            debugLog("---------------------------------------------------- err =",err ? err.message: null);
+
+            if (err && err.message.match(/BadSessionInvalid/)) {
+                // _republish failed because subscriptionId is not valid anymore on server side.
+                return _the_callback(err);
+            }
             if (err && err.message.match(/SubscriptionIdInvalid/)) {
 
                 // _republish failed because subscriptionId is not valid anymore on server side.

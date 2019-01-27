@@ -23,6 +23,13 @@ import {assert} from '../assert';
 export class SequenceNumberGenerator {
 
 private _counter : number;
+
+// spec Part 3 says:
+// The same sequence number shall not be reused on a Subscription until over
+// four billion NotificationMessages have been sent.
+// At a continuous rate of one thousand NotificationMessages per second on a given Subscription, it would
+// take roughly fifty days for the same sequence number to be reused. This allows Clients to safely treat
+// sequence numbers as unique.
 public static readonly MAXVALUE : number = 4294966271;
 
 constructor()
