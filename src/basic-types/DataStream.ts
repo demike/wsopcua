@@ -340,13 +340,24 @@ export class DataStream {
     };
 
     /**
-    * @method readArrayBuffer
+    * @method readByteArray
     * @param length
     * @returns {Uint8Array}
     */
-    public readArrayBuffer(length : number): Uint8Array {
+    public readByteArray(length : number): Uint8Array {
       var arr = new Uint8Array(this._view.buffer,this._pos,length);
       this._pos += length;
+      return arr;
+    }
+
+    /**
+     * 
+     * @param length 
+     * @param constructorFn 
+     */
+    public readArrayBuffer(lengthInBytes : number): ArrayBuffer {
+      var arr = this._view.buffer.slice(this._pos,this._pos + lengthInBytes);
+      this._pos += lengthInBytes;
       return arr;
     }
 
