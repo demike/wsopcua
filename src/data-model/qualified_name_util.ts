@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import {QualifiedName} from '../generated/QualifiedName';
 import {assert} from '../assert';
@@ -15,9 +15,10 @@ import { DataStream } from '../basic-types/DataStream';
  */
 export function stringToQualifiedName(value) {
 
-    var split_array = value.split(":");
-    var namespaceIndex = 0;
-    if (!isNaN(parseFloat(split_array[0])) && isFinite(split_array[0]) && Number.isInteger(parseFloat(split_array[0])) && split_array.length > 1) {
+    const split_array = value.split(':');
+    let namespaceIndex = 0;
+    if (!isNaN(parseFloat(split_array[0])) && isFinite(split_array[0]) &&
+            Number.isInteger(parseFloat(split_array[0])) && split_array.length > 1) {
         namespaceIndex = parseInt(split_array[0]);
         split_array.shift();
         value = split_array.join(':');
@@ -35,13 +36,13 @@ export function coerceQualifyName(value) {
     } else if (typeof value === 'string' || value instanceof String) {
         return stringToQualifiedName(value);
     } else {
-        assert(value.hasOwnProperty("namespaceIndex"));
-        assert(value.hasOwnProperty("name"));
+        assert(value.hasOwnProperty('namespaceIndex'));
+        assert(value.hasOwnProperty('name'));
         return new QualifiedName(value);
     }
 }
 
-export function enocdeQualifiedName( value : QualifiedName, stream : DataStream) {
+export function enocdeQualifiedName( value: QualifiedName, stream: DataStream) {
     value.encode(stream);
 }
 

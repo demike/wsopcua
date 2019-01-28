@@ -2,7 +2,7 @@
 
 
 
-//coerceLocalizedText: require("./src/localized_text").coerceLocalizedText,
+// coerceLocalizedText: require("./src/localized_text").coerceLocalizedText,
 export { LocalizedText } from '../generated/LocalizedText';
 
 export { QualifiedName } from '../generated/QualifiedName';
@@ -15,23 +15,23 @@ export { NodeClass } from '../generated/NodeClass';
 
 export { AttributeIds } from '../constants';
 
-//export {AccessLevelFlag} from './access_level'; //<-- generated as AccessLevelType
+// export {AccessLevelFlag} from './access_level'; //<-- generated as AccessLevelType
 
-//AttributeNameById: require("./src/attributeIds").AttributeNameById,
-//is_valid_attributeId: require("./src/attributeIds").is_valid_attributeId,
+// AttributeNameById: require("./src/attributeIds").AttributeNameById,
+// is_valid_attributeId: require("./src/attributeIds").is_valid_attributeId,
 
-//NodeClassMask: require("./src/node_class_mask").NodeClassMask,
-//makeNodeClassMask: require("./src/node_class_mask").makeNodeClassMask,
+// NodeClassMask: require("./src/node_class_mask").NodeClassMask,
+// makeNodeClassMask: require("./src/node_class_mask").makeNodeClassMask,
 
 export { BrowseResultMask } from '../generated/BrowseResultMask';
-//ResultMask: require("./src/result_mask").ResultMask,
-//makeResultMask: require("./src/result_mask").makeResultMask,
+// ResultMask: require("./src/result_mask").ResultMask,
+// makeResultMask: require("./src/result_mask").makeResultMask,
 
 export { BrowseDirection } from '../generated/BrowseDirection';
 
 
-//AccessLevelFlag: require("./src/access_level").AccessLevelFlag,
-//makeAccessLevel: require("./src/access_level").makeAccessLevel,
+// AccessLevelFlag: require("./src/access_level").AccessLevelFlag,
+// makeAccessLevel: require("./src/access_level").makeAccessLevel,
 
 
 // is_dataEncoding:require("./src/data_encoding").is_dataEncoding,
@@ -39,9 +39,9 @@ export { BrowseDirection } from '../generated/BrowseDirection';
 
 export { EnumValueType } from '../generated/EnumValueType';
 export { AttributeWriteMask } from '../generated/AttributeWriteMask';
-export { TimeZoneDataType } from '../generated/TimeZoneDataType'
+export { TimeZoneDataType } from '../generated/TimeZoneDataType';
 
-export {coerceLocalizedText} from './localized_text_util'
+export {coerceLocalizedText} from './localized_text_util';
 
 
 

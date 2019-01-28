@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 import {assert} from '../assert';
 
 
@@ -10,11 +10,11 @@ import {TimestampsToReturn} from '../generated/TimestampsToReturn';
 
 import {registerSpecialVariantEncoder} from '../factory';
 
-registerSpecialVariantEncoder(DataValue,"DataValue");
+registerSpecialVariantEncoder(DataValue, 'DataValue');
 
-import {getCurrentClock,coerceClock} from '../date-time/date_time';
+import {getCurrentClock, coerceClock} from '../date-time/date_time';
 
-import {Variant,sameVariant,VariantArrayType} from '../variant';
+import {Variant, sameVariant, VariantArrayType} from '../variant';
 
 
 // DataValue.prototype.toString = function () {
@@ -25,31 +25,33 @@ import {Variant,sameVariant,VariantArrayType} from '../variant';
 //         str += "\n   value:            <null>";
 //     }
 //     str += "\n   statusCode:      " + (this.statusCode ? this.statusCode.toString() : "null");
-//     str += "\n   serverTimestamp: " + (this.serverTimestamp ? this.serverTimestamp.toISOString() + " $ " + this.serverPicoseconds : "null");//+ "  " + (this.serverTimestamp ? this.serverTimestamp.getTime() :"-");
-//     str += "\n   sourceTimestamp: " + (this.sourceTimestamp ? this.sourceTimestamp.toISOString() + " $ " + this.sourcePicoseconds : "null");// + "  " + (this.sourceTimestamp ? this.sourceTimestamp.getTime() :"-");
+//     str += "\n   serverTimestamp: " + (this.serverTimestamp ? this.serverTimestamp.toISOString() +
+//              " $ " + this.serverPicoseconds : "null");//+ "  " + (this.serverTimestamp ? this.serverTimestamp.getTime() :"-");
+//     str += "\n   sourceTimestamp: " + (this.sourceTimestamp ? this.sourceTimestamp.toISOString() +
+//              " $ " + this.sourcePicoseconds : "null");// + "  " + (this.sourceTimestamp ? this.sourceTimestamp.getTime() :"-");
 //     return str;
 // };
 
 export function apply_timestamps(dataValue, timestampsToReturn, attributeId) {
 
     assert(attributeId > 0);
-    assert(timestampsToReturn.hasOwnProperty("key"));
+    assert(timestampsToReturn.hasOwnProperty('key'));
     assert(dataValue instanceof DataValue);
-    assert(dataValue.hasOwnProperty("serverTimestamp"));
-    assert(dataValue.hasOwnProperty("sourceTimestamp"));
+    assert(dataValue.hasOwnProperty('serverTimestamp'));
+    assert(dataValue.hasOwnProperty('sourceTimestamp'));
 
-    var cloneDataValue = new DataValue({});
+    const cloneDataValue = new DataValue({});
     cloneDataValue.value = dataValue.value;
     cloneDataValue.statusCode = dataValue.statusCode;
 
-    var now = getCurrentClock();
+    const now = getCurrentClock();
     // apply timestamps
     switch (timestampsToReturn) {
         case TimestampsToReturn.Server:
             cloneDataValue.serverTimestamp = dataValue.serverTimestamp;
             cloneDataValue.serverPicoseconds = dataValue.serverPicoseconds;
             if (true || !cloneDataValue.serverTimestamp ) {
-                cloneDataValue.serverTimestamp =now.timestamp;
+                cloneDataValue.serverTimestamp = now.timestamp;
                 cloneDataValue.serverPicoseconds = now.picoseconds;
             }
             break;
@@ -61,7 +63,7 @@ export function apply_timestamps(dataValue, timestampsToReturn, attributeId) {
             cloneDataValue.serverTimestamp = dataValue.serverTimestamp;
             cloneDataValue.serverPicoseconds = dataValue.serverPicoseconds;
             if (true || !cloneDataValue.serverTimestamp ) {
-                cloneDataValue.serverTimestamp =now.timestamp;
+                cloneDataValue.serverTimestamp = now.timestamp;
                 cloneDataValue.serverPicoseconds = now.picoseconds;
             }
 
@@ -85,7 +87,7 @@ export function apply_timestamps(dataValue, timestampsToReturn, attributeId) {
  * @private
  * @static
  */
-function _clone_with_array_replacement(dataValue : DataValue, result) {
+function _clone_with_array_replacement(dataValue: DataValue, result) {
 
     return new DataValue({
         statusCode: result.statusCode,
@@ -111,22 +113,22 @@ function canRange(dataValue) {
 
 export function extractRange(dataValue: DataValue, indexRange) {
 
-    //xx console.log("xxxxxxx indexRange =".yellow,indexRange ? indexRange.toString():"<null>") ;
-    //xx console.log("         dataValue =",dataValue.toString());
-    //xx console.log("         can Range =", canRange(dataValue));
-    var variant = dataValue.value;
+    // xx console.log("xxxxxxx indexRange =".yellow,indexRange ? indexRange.toString():"<null>") ;
+    // xx console.log("         dataValue =",dataValue.toString());
+    // xx console.log("         can Range =", canRange(dataValue));
+    const variant = dataValue.value;
     if (indexRange && canRange(dataValue)) {
-        var result = indexRange.extract_values(variant.value, variant.dimensions);
+        const result = indexRange.extract_values(variant.value, variant.dimensions);
         dataValue = _clone_with_array_replacement(dataValue, result);
-        //xx console.log("         dataValue =",dataValue.toString());
+        // xx console.log("         dataValue =",dataValue.toString());
     } else {
         // clone the whole data Value
-        dataValue =new DataValue(dataValue);
+        dataValue = new DataValue(dataValue);
     }
     return dataValue;
 }
 
-function sameDate(date1,date2) {
+function sameDate(date1, date2) {
 
     if (date1 === date2) {
         return true;
@@ -142,39 +144,39 @@ function sameDate(date1,date2) {
 
 export function sourceTimestampHasChanged(dataValue1, dataValue2) {
 
-    assert(dataValue1,"expecting valid dataValue1");
-    assert(dataValue2,"expecting valid dataValue2");
-    var hasChanged =
-        !sameDate(dataValue1.sourceTimestamp, dataValue2.sourceTimestamp )||
+    assert(dataValue1, 'expecting valid dataValue1');
+    assert(dataValue2, 'expecting valid dataValue2');
+    const hasChanged =
+        !sameDate(dataValue1.sourceTimestamp, dataValue2.sourceTimestamp ) ||
         (dataValue1.sourcePicoseconds !== dataValue2.sourcePicoseconds);
     return hasChanged;
 }
 
 export function serverTimestampHasChanged(dataValue1, dataValue2) {
-    assert(dataValue1,"expecting valid dataValue1");
-    assert(dataValue2,"expecting valid dataValue2");
-    var hasChanged =
-        !sameDate(dataValue1.serverTimestamp ,dataValue2.serverTimestamp) ||
+    assert(dataValue1, 'expecting valid dataValue1');
+    assert(dataValue2, 'expecting valid dataValue2');
+    const hasChanged =
+        !sameDate(dataValue1.serverTimestamp , dataValue2.serverTimestamp) ||
         (dataValue1.serverPicoseconds !== dataValue2.serverPicoseconds);
     return hasChanged;
 }
 
-export function timestampHasChanged(dataValue1, dataValue2,timestampsToReturn) {
+export function timestampHasChanged(dataValue1, dataValue2, timestampsToReturn) {
 
-//TODO:    timestampsToReturn = timestampsToReturn || { key: "Neither"};
+// TODO:    timestampsToReturn = timestampsToReturn || { key: "Neither"};
     if (!timestampsToReturn) {
-        return sourceTimestampHasChanged(dataValue1,dataValue2) || serverTimestampHasChanged(dataValue1,dataValue2);
+        return sourceTimestampHasChanged(dataValue1, dataValue2) || serverTimestampHasChanged(dataValue1, dataValue2);
     }
-    switch(timestampsToReturn.key) {
-        case "Neither":
+    switch (timestampsToReturn.key) {
+        case 'Neither':
             return false;
-        case "Both":
-            return sourceTimestampHasChanged(dataValue1,dataValue2) || serverTimestampHasChanged(dataValue1,dataValue2);
-        case "Source":
-            return sourceTimestampHasChanged(dataValue1,dataValue2);
+        case 'Both':
+            return sourceTimestampHasChanged(dataValue1, dataValue2) || serverTimestampHasChanged(dataValue1, dataValue2);
+        case 'Source':
+            return sourceTimestampHasChanged(dataValue1, dataValue2);
         default:
-            assert(timestampsToReturn.key === "Server");
-            return serverTimestampHasChanged(dataValue1,dataValue2);
+            assert(timestampsToReturn.key === 'Server');
+            return serverTimestampHasChanged(dataValue1, dataValue2);
     }
 //    return sourceTimestampHasChanged(dataValue1,dataValue2) || serverTimestampHasChanged(dataValue1,dataValue2);
 }
@@ -186,7 +188,7 @@ export function timestampHasChanged(dataValue1, dataValue2,timestampsToReturn) {
  * @param [timestampsToReturn {TimestampsToReturn}]
  * @return {boolean} true if data values are identical
  */
-export function sameDataValue(v1: DataValue, v2: DataValue,timestampsToReturn: TimestampsToReturn): boolean {
+export function sameDataValue(v1: DataValue, v2: DataValue, timestampsToReturn: TimestampsToReturn): boolean {
 
     if (v1 === v2) {
         return true;
@@ -208,10 +210,10 @@ export function sameDataValue(v1: DataValue, v2: DataValue,timestampsToReturn: T
     // This will prevent us to deep compare potential large arrays.
     // but before this is possible, we need to implement a mechanism
     // that ensure that date() is always strictly increasing
-    if ((v1.sourceTimestamp && v2.sourceTimestamp) && !sourceTimestampHasChanged(v1,v2)) {
+    if ((v1.sourceTimestamp && v2.sourceTimestamp) && !sourceTimestampHasChanged(v1, v2)) {
        return true;
     }
-    if (timestampHasChanged(v1,v2,timestampsToReturn)) {
+    if (timestampHasChanged(v1, v2, timestampsToReturn)) {
         return false;
     }
 
