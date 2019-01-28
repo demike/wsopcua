@@ -17,8 +17,8 @@ import {ObjectRegistry} from '../object-registry/objectRegistry'
 import {doDebug} from '../common/debug';
 import * as endpoints_service from "../service-endpoints";
 
-var GetEndpointsRequest = endpoints_service.GetEndpointsRequest;
-var GetEndpointsResponse = endpoints_service.GetEndpointsResponse;
+const GetEndpointsRequest = endpoints_service.GetEndpointsRequest;
+const GetEndpointsResponse = endpoints_service.GetEndpointsResponse;
 
 /**
  *
@@ -29,8 +29,8 @@ var GetEndpointsResponse = endpoints_service.GetEndpointsResponse;
  */
 
 import * as register_server_service from "../service-register-server";
-var FindServersRequest = register_server_service.FindServersRequest;
-var FindServersResponse = register_server_service.FindServersResponse;
+const FindServersRequest = register_server_service.FindServersRequest;
+const FindServersResponse = register_server_service.FindServersResponse;
 
 
 function debugLog(s : String) {
@@ -48,7 +48,7 @@ import { ClientSession } from './client_session';
 import { EndpointDescription } from '../service-endpoints';
 import { IGetEndpointsRequest } from '../generated/GetEndpointsRequest';
 
-var defaultConnectionStrategy = {
+const defaultConnectionStrategy = {
     maxRetry:     100,
     initialDelay: 1000,
     maxDelay:     20000,
@@ -288,11 +288,6 @@ export class OPCUAClientBase extends EventEmitter {
     this._transactionsPerformed = 0;
     this._timedOutRequestCount = 0;
 
-    // this.objectFactory = {
-    //     constructObject: function (id) {
-    //         return factories.constructObject(id);
-    //     }
-    // };
     /**
      * @property connectionStrategy
      * @type {options.connectionStrategy|{maxRetry, initialDelay, maxDelay, randomisationFactor}|*|{maxRetry: number, initialDelay: number, maxDelay: number, randomisationFactor: number}}
@@ -325,7 +320,7 @@ export class OPCUAClientBase extends EventEmitter {
                 }
             
                 if (!this.serverCertificate && this.securityMode!== MessageSecurityMode.None) {
-            
+                    debugLog("OPCUAClient : getting serverCertificate");
                     // we have not been given the serverCertificate but this certificate
                     // is required as the connection is to be secured.
                     //
@@ -348,6 +343,7 @@ export class OPCUAClientBase extends EventEmitter {
                     return OPCUAClientBase.__findEndpoint(endpointUrl,params,(err: Error,endpoint: any) =>{
                         if (err) { return callback(err); }
                         if (!endpoint) {
+                            // no matching end point can be found ...
                             return callback(new Error("cannot find end point"));
                         }
                         //xx console.log(" Found End point ");
@@ -360,7 +356,7 @@ export class OPCUAClientBase extends EventEmitter {
                 // [...]
             
                 // make sure callback will only be call once regardless of outcome, and will be also deferred.
-                var callback_od = once(delayed.deferred(callback)); callback = null;
+                const callback_od = once(delayed.deferred(callback)); callback = null;
             
                 this.registry.register(this);
             
@@ -408,7 +404,7 @@ export class OPCUAClientBase extends EventEmitter {
     
         if (this._secureChannel) {
     
-            var tmp_channel = this._secureChannel;
+            const tmp_channel = this._secureChannel;
     
             this._destroy_secure_channel();
     
@@ -466,7 +462,7 @@ public findServers(options : IFindServersOptions, callback : ResponseCallback<en
             options = {};
         }*/
     
-        var request = new FindServersRequest({
+        const request = new FindServersRequest({
             endpointUrl: options.endpointUrl || this._endpointUrl,
             localeIds: options.localeIds || [],
             serverUris: options.serverUris || []
@@ -487,7 +483,7 @@ public findServers(options : IFindServersOptions, callback : ResponseCallback<en
     
         assert('function' === typeof callback);
     
-        var sessions = this._sessions.slice();//_.clone(this._sessions);
+        const sessions = this._sessions.slice();//_.clone(this._sessions);
         async_map(sessions, function (session: ClientSession, next) {
     
             assert(session.client === this);
@@ -538,7 +534,7 @@ public getEndpoints(options : IGetEndpointsRequest| null, callback : (err:Error,
         options.localeIds = options.localeIds || [];
         options.profileUris = options.profileUris || [];
     
-        var request = new GetEndpointsRequest({
+        const request = new GetEndpointsRequest({
             endpointUrl: options.endpointUrl,
             localeIds:   options.localeIds,
             profileUris: options.profileUris,
@@ -578,7 +574,7 @@ public getEndpoints(options : IGetEndpointsRequest| null, callback : (err:Error,
         };
         
         protected _removeSession(session: ClientSession) {
-            var index = this._sessions.indexOf(session);
+            const index = this._sessions.indexOf(session);
             if (index >= 0) {
                 this._sessions.splice(index, 1);
                 assert(this._sessions.indexOf(session) < 0);
@@ -645,6 +641,10 @@ protected _destroy_secure_channel() {
 
         this._secureChannel.removeAllListeners();
         this._secureChannel = null;
+        if (doDebug) {
+            debugLog("byteWritten  = " + this._byteWritten );
+            debugLog("byteRead     = " + this._byteRead);
+        }
     }
 };
 
@@ -700,7 +700,7 @@ private static __findEndpoint(endpointUrl, params, callback) {
                 " policy: " + securityPolicy.toString()));
         }
         
-        var result = {
+        const result = {
             selectedEndpoint: selected_endpoint,
             endpoints: all_endpoints
         };

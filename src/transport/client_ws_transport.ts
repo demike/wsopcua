@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.transport
  */
@@ -11,34 +11,34 @@ import {assert} from '../assert';
 import {DataStream} from '../basic-types/DataStream';
 
 // this modules
-import {WSTransport,getFakeTransport} from './ws_transport';
+import {WSTransport, getFakeTransport} from './ws_transport';
 
-import {packTcpMessage,parseEndpointUrl} from './tools';
+import {packTcpMessage, parseEndpointUrl} from './tools';
 
 
 
-import {HelloMessage} from "./HelloMessage";
-import {TCPErrorMessage} from "./TCPErrorMessage";
-import {AcknowledgeMessage} from "./AcknowledgeMessage";
+import {HelloMessage} from './HelloMessage';
+import {TCPErrorMessage} from './TCPErrorMessage';
+import {AcknowledgeMessage} from './AcknowledgeMessage';
 
 import {debugLog} from '../common/debug';
 import {readMessageHeader} from '../chunkmanager';
 
 
-import {decodeMessage} from "./tools";
+import {decodeMessage} from './tools';
 
-function createClientSocket(endpointUrl : string) : WebSocket {
+function createClientSocket(endpointUrl: string): WebSocket {
     // create a socket based on Url
-    let ep = parseEndpointUrl(endpointUrl);
-    let port = ep.port;
-    let hostname = ep.hostname;
+    const ep = parseEndpointUrl(endpointUrl);
+    const port = ep.port;
+    const hostname = ep.hostname;
     switch (ep.protocol) {
-        case "websocket":
-        case "opc.tcp":
-        case "ws":
-            //TODO: that's it --> implement me
-            let websocket = new WebSocket(endpointUrl);
-            websocket.binaryType  = "arraybuffer";
+        case 'websocket':
+        case 'opc.tcp':
+        case 'ws':
+            // TODO: that's it --> implement me
+            const websocket = new WebSocket(endpointUrl);
+            websocket.binaryType  = 'arraybuffer';
             /*
             websocket.onopen = function(evt) { onOpen(evt) };
             websocket.onclose = function(evt) { onClose(evt) };
@@ -47,22 +47,22 @@ function createClientSocket(endpointUrl : string) : WebSocket {
             */
            return websocket;
             break;
-        case "fake":
-            var fakeSocket = getFakeTransport();
-            assert(ep.protocol === "fake", " Unsupported transport protocol");
+        case 'fake':
+            const fakeSocket = getFakeTransport();
+            assert(ep.protocol === 'fake', ' Unsupported transport protocol');
             setTimeout(function () {
-                (<any>fakeSocket).emit("connect");
-            },0);
+                (<any>fakeSocket).emit('connect');
+            }, 0);
             return <WebSocket>fakeSocket;
-        case "http":
-        case "https":
-        
+        case 'http':
+        case 'https':
+
             // var socket = net.connect({host: hostname, port: port});
             // socket.setNoDelay(true);
 
             //  return socket;
         default:
-            throw new Error("this transport protocol is currently not supported :" + ep.protocol);
+            throw new Error('this transport protocol is currently not supported :' + ep.protocol);
     }
 }
 
@@ -106,19 +106,19 @@ function createClientSocket(endpointUrl : string) : WebSocket {
  *
  *
  */
-export class ClientWSTransport extends WSTransport{
+export class ClientWSTransport extends WSTransport {
     numberOfRetry: number;
     _connected: boolean;
     serverUri: string;
     endpointUrl: string;
     _protocolVersion: number;
-    _parameters : any;
+    _parameters: any;
 
     get protocolVersion() {
         return this._protocolVersion;
     }
 
-    set protocolVersion(v : number) {
+    set protocolVersion(v: number) {
         this._protocolVersion = v;
     }
 
@@ -132,15 +132,15 @@ export class ClientWSTransport extends WSTransport{
 
 constructor() {
     super();
-   
+
     this._connected = false;
-};
+}
 
 public on_socket_ended(err) {
     if (this._connected) {
         super.on_socket_ended(err);
     }
-};
+}
 
 /**
  * @method connect
@@ -149,7 +149,7 @@ public on_socket_ended(err) {
  * @param callback {Function} the callback function
  * @param [options={}]
  */
-public connect(endpointUrl : string, callback : Function, options?) {
+public connect(endpointUrl: string, callback: Function, options?) {
 
     assert('function' === typeof callback);
 
@@ -158,20 +158,19 @@ public connect(endpointUrl : string, callback : Function, options?) {
     this._protocolVersion = (options.protocolVersion !== undefined) ? options.protocolVersion : this._protocolVersion;
     assert(Number.isFinite(this._protocolVersion));
 
-    var ep = parseEndpointUrl(endpointUrl);
+    const ep = parseEndpointUrl(endpointUrl);
 
-    var hostname = window.location.hostname; //require("os").hostname();
+    const hostname = window.location.hostname; // require("os").hostname();
     this.endpointUrl = endpointUrl;
 
-    this.serverUri = "urn:" + hostname + ":Sample";
+    this.serverUri = 'urn:' + hostname + ':Sample';
 
-    debugLog("endpointUrl =", endpointUrl, "ep", ep);
+    debugLog('endpointUrl =', endpointUrl, 'ep', ep);
 
 
     try {
         this._socket = createClientSocket(endpointUrl);
-    }
-    catch (err) {
+    } catch (err) {
         return callback(err);
     }
 //    this._socket.name = "CLIENT";
@@ -180,7 +179,7 @@ public connect(endpointUrl : string, callback : Function, options?) {
     this._socket.onopen =  () => {
 
         this._perform_HEL_ACK_transaction((err) => {
-            if(!err) {
+            if (!err) {
 
                 this._connected = true;
                 /**
@@ -189,36 +188,36 @@ public connect(endpointUrl : string, callback : Function, options?) {
                  * @event connect
                  *
                  */
-                this.emit("connect");
+                this.emit('connect');
             } else {
-                debugLog("_perform_HEL_ACK_transaction has failed with err=",err.message);
+                debugLog('_perform_HEL_ACK_transaction has failed with err=', err.message);
             }
             callback(err);
         });
     };
-};
+}
 
 
 protected _handle_ACK_response(message_chunk, callback) {
 
-    var _stream = new DataStream(message_chunk);
-    var messageHeader = readMessageHeader(_stream);
-    var err;
+    const _stream = new DataStream(message_chunk);
+    const messageHeader = readMessageHeader(_stream);
 
-    if (messageHeader.isFinal !== "F") {
-        err = new Error(" invalid ACK message");
+
+    if (messageHeader.isFinal !== 'F') {
+        const err = new Error(' invalid ACK message');
         callback(err);
         return;
     }
 
-    var responseClass, response;
+    let responseClass, response;
 
-    if (messageHeader.msgType === "ERR") {
+    if (messageHeader.msgType === 'ERR') {
         responseClass = TCPErrorMessage;
         _stream.rewind();
         response = decodeMessage(_stream, responseClass);
-        
-        let err =new Error("ACK: ERR received " + response.statusCode.toString() + " : " + response.reason);
+
+        const err = new Error('ACK: ERR received ' + response.statusCode.toString() + ' : ' + response.reason);
         (<any>err).statusCode =  response.statusCode;
         callback(err);
 
@@ -230,39 +229,39 @@ protected _handle_ACK_response(message_chunk, callback) {
         callback(null);
     }
 
-};
+}
 
 protected _send_HELLO_request() {
 
-    
+
     assert(this._socket);
     assert(Number.isFinite(this._protocolVersion));
-    assert(this.endpointUrl.length > 0, " expecting a valid endpoint url");
+    assert(this.endpointUrl.length > 0, ' expecting a valid endpoint url');
 
     // Write a message to the socket as soon as the client is connected,
     // the server will receive it as message from the client
-    var request = new HelloMessage({
+    const request = new HelloMessage({
         protocolVersion: this._protocolVersion,
         receiveBufferSize:    1024 * 64 * 10,
-        sendBufferSize:       1024 * 64 * 10,// 8196 min,
+        sendBufferSize:       1024 * 64 * 10, // 8196 min,
         maxMessageSize:       0, // 0 - no limits
         maxChunkCount:        0, // 0 - no limits
         endpointUrl: this.endpointUrl
     });
 
-    var messageChunk = packTcpMessage("HEL", request);
+    const messageChunk = packTcpMessage('HEL', request);
     this._write_chunk(messageChunk);
 
-};
+}
 
 
 protected _perform_HEL_ACK_transaction(callback) {
 
-   
+
     assert(this._socket);
     assert('function' === typeof callback);
 
-    var counter = 0;
+    let counter = 0;
 
     this._install_one_time_message_receiver((err, data) => {
 
@@ -271,7 +270,7 @@ protected _perform_HEL_ACK_transaction(callback) {
 
         if (err) {
             callback(err);
-            this._socket.close(1000,"OPC-UA: HELLO - ACK failed");
+            this._socket.close(1000, 'OPC-UA: HELLO - ACK failed');
         } else {
             this._handle_ACK_response(data, function (inner_err) {
                 callback(inner_err);
@@ -279,7 +278,7 @@ protected _perform_HEL_ACK_transaction(callback) {
         }
     });
     this._send_HELLO_request();
-};
+}
 
 }
 

@@ -3,13 +3,16 @@
 
 import {assert} from  "../assert";
 
-import {resolveNodeId} from '../nodeid/nodeid';
-import {BrowsePath,RelativePath, RelativePathElement} from '../service-translate-browse-path';
+import {resolveNodeId, NodeId} from '../nodeid/nodeid';
+import {BrowsePath,RelativePath, RelativePathElement, makeBrowsePath, BrowsePathResult} from '../service-translate-browse-path';
 
 import {StatusCodes,AttributeIds} from '../constants';
 import { QualifiedName } from "../data-model";
 import { OPCUAClientBase, ResponseCallback } from "./client_base";
 import { ApplicationDescription } from "../service-endpoints";
+import { ClientSession } from "./client_session";
+import { ReadValueId } from "../service-read";
+import { lowerFirstLetter } from "../utils/string_utils";
 
 var hasPropertyRefId = resolveNodeId("HasProperty");
 /* NodeId  ns=0;i=46*/
@@ -123,5 +126,76 @@ export function perform_findServersRequest(discovery_server_endpointUrl : string
         }
     });
 }
+
+export function readHistorySeverCapabilities(the_session: ClientSession,callback : (err?: Error, data?: {[key: string]: string} ) => void) {
+    // display HistoryCapabilities of server
+    var browsePath = makeBrowsePath( /* ObjectsFolder */ 85,"/Server/ServerCapabilities.HistoryServerCapabilities");
+
+    the_session.translateBrowsePath(browsePath,function(err,result:BrowsePathResult ) {
+        if (err) { return callback(err); }
+        if ( (result).statusCode.isNot(StatusCodes.Good)) {
+            return callback();
+        }
+        let historyServerCapabilitiesNodeId = result.targets[0].targetId;
+        // (should be ns=0;i=11192)
+        assert(historyServerCapabilitiesNodeId.toString() === "ns=0;i=11192");
+
+        // -------------------------
+        var properties = [
+            "AccessHistoryDataCapability",
+            "AccessHistoryEventsCapability",
+            "DeleteAtTimeCapability",
+            "DeleteRawCapability",
+            "DeleteEventCapability",
+            "InsertAnnotationCapability",
+            "InsertDataCapability",
+            "InsertEventCapability",
+            "ReplaceDataCapability",
+            "ReplaceEventCapability",
+            "UpdateDataCapability",
+            "UpdateEventCapability",
+            "MaxReturnDataValues",
+            "MaxReturnEventValues",
+            "AggregateFunctions/AnnotationCount",
+            "AggregateFunctions/Average",
+            "AggregateFunctions/Count",
+            "AggregateFunctions/Delta",
+            "AggregateFunctions/DeltaBounds",
+            "AggregateFunctions/DurationBad",
+            "AggregateFunctions/DurationGood",
+            "AggregateFunctions/DurationStateNonZero",
+            // etc....
+        ];
+        var browsePaths = properties.map(function(prop) {
+            return makeBrowsePath(historyServerCapabilitiesNodeId,"." + prop);
+        });
+
+        the_session.translateBrowsePath(browsePaths,function(err,results:BrowsePathResult[]) {
+            if (err) {
+                return callback();
+            }
+            var nodeIds = results.map(function(result) {
+                return (result.statusCode === StatusCodes.Good) ? result.targets[0].targetId : NodeId.NullNodeId;
+            });
+
+            var nodesToRead = nodeIds.map(function(nodeId){
+                return new ReadValueId({ nodeId: nodeId, attributeId: AttributeIds.Value });
+            });
+
+            var data = {};
+            the_session.read(nodesToRead,function(err,dataValues){
+                if (err) { return callback(err);}
+
+                for(var i=0;i<dataValues.length; i++ ) {
+                    //xx console.log(properties[i] , "=",
+                    //xx     dataValues[i].value ? dataValues[i].value.toString() :"<null>" + dataValues[i].statusCode.toString());
+                    var propName = lowerFirstLetter(properties[i]);
+                    data[propName] = dataValues[i].value.value;
+                }
+                callback(null,data);
+            })
+        });
+    });
+};
 
 

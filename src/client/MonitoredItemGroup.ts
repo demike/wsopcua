@@ -64,9 +64,7 @@ public get monitoredItems() : MonitoredItemBase[] {
 }
 
 public toString() : string {
-
-    
-    var ret = "";
+    let ret = "";
     ret += "itemsToMonitor:        " + this._monitoredItems.map( (a) => {
           return a.nodeId.toString()
       }).join("\n");

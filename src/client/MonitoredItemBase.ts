@@ -25,7 +25,7 @@ import { StatusCode,ExtensionObject, NodeId} from '../basic-types';
 import { IReadValueId } from '../generated/ReadValueId';
 
 //import {MonitoredItemsModifyRequest} from '../generated/MonitoredItemsModifyRequest';
-var MonitoredItemModifyRequest = subscription_service.MonitoredItemModifyRequest;
+const MonitoredItemModifyRequest = subscription_service.MonitoredItemModifyRequest;
 
 export class MonitoredItemBase extends EventEmitter{
 
@@ -121,7 +121,7 @@ protected _prepare_for_monitoring () : subscription_service.MonitoredItemCreateR
         // note : the EventFilter is used when monitoring Events.
         this._monitoringParameters.filter = this._monitoringParameters.filter || new subscription_service.EventFilter({});
 
-        var filter : ExtensionObject = this._monitoringParameters.filter;
+        const filter : ExtensionObject = this._monitoringParameters.filter;
         if (!(filter instanceof subscription_service.EventFilter)) {
             return new Error(
                 "Mismatch between attributeId and filter in monitoring parameters : " +
@@ -180,7 +180,7 @@ protected _after_create(monitoredItemResult : MonitoredItemCreateResult) {
          * @event err
          * @param statusCode {StatusCode}
          */
-        var err = new Error(monitoredItemResult.statusCode.toString());
+        const err = new Error(monitoredItemResult.statusCode.toString());
         this.emit("err", err.message);
         this.emit("terminated");
     }
@@ -188,11 +188,11 @@ protected _after_create(monitoredItemResult : MonitoredItemCreateResult) {
 
 public static _toolbox_monitor(subscription : ClientSubscription, timestampsToReturn, monitoredItems : MonitoredItemBase[], done) {
     assert(('function' === typeof done) && (typeof subscription.subscriptionId === "number"));
-    var itemsToCreate : subscription_service.MonitoredItemCreateRequest[] = [];
-    for (var i = 0; i < monitoredItems.length; i++) {
+    const itemsToCreate : subscription_service.MonitoredItemCreateRequest[] = [];
+    for (let i = 0; i < monitoredItems.length; i++) {
 
-        var monitoredItem = monitoredItems[i];
-        var itemToCreate = (<any>monitoredItem)._prepare_for_monitoring(done);
+        const monitoredItem = monitoredItems[i];
+        const itemToCreate = (<any>monitoredItem)._prepare_for_monitoring(done);
         if (typeof itemToCreate.error === 'string' || itemToCreate.error instanceof String  /*_.isString(itemToCreate.error)*/) {
             return done(new Error(itemToCreate.error));
         }
@@ -204,7 +204,7 @@ public static _toolbox_monitor(subscription : ClientSubscription, timestampsToRe
         throw new Error("subscription either pending or terminated - subscription.subscriptionId: " + subscription.subscriptionId );
     }
 
-    var createMonitorItemsRequest = new subscription_service.CreateMonitoredItemsRequest({
+    const createMonitorItemsRequest = new subscription_service.CreateMonitoredItemsRequest({
         subscriptionId: subscription.subscriptionId,
         timestampsToReturn: timestampsToReturn,
         itemsToCreate: itemsToCreate
@@ -221,9 +221,9 @@ public static _toolbox_monitor(subscription : ClientSubscription, timestampsToRe
         } else {
             assert(response instanceof subscription_service.CreateMonitoredItemsResponse);
 
-            for (var i = 0; i < response.results.length; i++) {
-                var monitoredItemResult = response.results[i];
-                var monitoredItem = monitoredItems[i];
+            for (let i = 0; i < response.results.length; i++) {
+                const monitoredItemResult = response.results[i];
+                const monitoredItem = monitoredItems[i];
                 monitoredItem._after_create(monitoredItemResult);
             }
         }
@@ -235,7 +235,7 @@ public static _toolbox_modify(subscription : ClientSubscription, monitoredItems 
 
     assert(callback === undefined || ('function' === typeof callback));
 
-    var itemsToModify = monitoredItems.map(function (monitoredItem) {
+    const itemsToModify = monitoredItems.map(function (monitoredItem) {
         let monParams = new MonitoringParameters(parameters);
         monParams.clientHandle = monitoredItem.monitoringParameters.clientHandle;
         return new MonitoredItemModifyRequest({
@@ -243,7 +243,7 @@ public static _toolbox_modify(subscription : ClientSubscription, monitoredItems 
             requestedParameters: monParams
         });
     });
-    var modifyMonitoredItemsRequest = new ModifyMonitoredItemsRequest({
+    const modifyMonitoredItemsRequest = new ModifyMonitoredItemsRequest({
         subscriptionId: <number>subscription.subscriptionId,
         timestampsToReturn: timestampsToReturn,
         itemsToModify: itemsToModify
@@ -257,7 +257,7 @@ public static _toolbox_modify(subscription : ClientSubscription, monitoredItems 
         }
         assert(response.results.length === monitoredItems.length);
 
-        var res = response.results[0];
+        const res = response.results[0];
 
         /* istanbul ignore next */
         if (response.results.length === 1 && res.statusCode !== StatusCodes.Good) {
@@ -268,11 +268,11 @@ public static _toolbox_modify(subscription : ClientSubscription, monitoredItems 
 };
 public static _toolbox_setMonitoringMode(subscription : ClientSubscription, monitoredItems : MonitoredItemBase[], monitoringMode : MonitoringMode, callback) {
 
-    var monitoredItemIds = monitoredItems.map(function (monitoredItem) {
+    const monitoredItemIds = monitoredItems.map(function (monitoredItem) {
         return monitoredItem._monitoredItemId;
     });
 
-    var setMonitoringModeRequest = {
+    const setMonitoringModeRequest = {
         subscriptionId: subscription.subscriptionId,
         monitoringMode: monitoringMode,
         monitoredItemIds: monitoredItemIds

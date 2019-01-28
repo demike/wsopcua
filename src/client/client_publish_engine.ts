@@ -12,7 +12,7 @@ import { RequestHeader } from '../generated/RequestHeader';
 import forEachOf from 'async-es/forEachOf';
 import whilst from 'async-es/whilst';
 
-//xx var debugLog = console.log;
+//xx const debugLog = console.log;
 
 /**
  * A client side implementation to deal with publish service.
@@ -98,7 +98,7 @@ public acknowledge_notification(subscriptionId : number, sequenceNumber : number
 
     //xx //xx console.log("xxxxxxx acknowledge_notification".bgWhite.red.bold, sequenceNumber);
     //xx this._unacked = this._unacked || [];
-    //xx for (var i =this._lastAcked+1;i<sequenceNumber;i++) {
+    //xx for (let i =this._lastAcked+1;i<sequenceNumber;i++) {
     //xx     //xx console.log("xxxxxxx acknowledge_notification => remembering unacked sequence number".bgWhite.red,i);
     //xx     this._unacked.push(i);
     //xx }
@@ -158,7 +158,7 @@ protected _send_publish_request() {
 
     debugLog("sending publish request " + this.nbPendingPublishRequests);
 
-    var subscriptionAcknowledgements = this.subscriptionAcknowledgements;
+    const subscriptionAcknowledgements = this.subscriptionAcknowledgements;
     this.subscriptionAcknowledgements = [];
 
     // as started in the spec (Spec 1.02 part 4 page 81 5.13.2.2 Function DequeuePublishReq())
@@ -191,14 +191,14 @@ protected _send_publish_request() {
     // in our case:
 
     assert( this.nbPendingPublishRequests >0);
-    var calculatedTimeout = this.nbPendingPublishRequests * this.timeoutHint;
+    const calculatedTimeout = this.nbPendingPublishRequests * this.timeoutHint;
 
-    var publish_request = new subscription_service.PublishRequest({
+    const publish_request = new subscription_service.PublishRequest({
         requestHeader: new RequestHeader({timeoutHint: calculatedTimeout}), // see note
         subscriptionAcknowledgements: subscriptionAcknowledgements
     });
 
-    var active = true;
+    let active = true;
 
     this._session.publish(publish_request, (err, response) => {
 
@@ -309,7 +309,7 @@ public replenish_publish_request_queue() {
     // a response to be received before sending the next request.
     this.send_publish_request();
     // send more than one publish request to server to cope with latency
-    for (var i = 0; i < ClientSidePublishEngine.publishRequestCountInPipeline - 1; i++) {
+    for (let i = 0; i < ClientSidePublishEngine.publishRequestCountInPipeline - 1; i++) {
         this.send_publish_request();
     }
 };
@@ -342,7 +342,7 @@ public getSubscriptionIds() : number[] {
  * @return {Subscription|null}
  */
 public getSubscription(subscriptionId : number) {
-    var self = this;
+    const self = this;
     assert(Number.isFinite(subscriptionId) && subscriptionId >0);
     assert(self.subscriptionMap.hasOwnProperty(subscriptionId.toString()));
     return self.subscriptionMap[subscriptionId];
@@ -351,19 +351,19 @@ public getSubscription(subscriptionId : number) {
 protected _receive_publish_response (response : subscription_service.PublishResponse) {
 
     debugLog("receive publish response");
-    var self = this;
+    const self = this;
 
     // the id of the subscription sending the notification message
-    var subscriptionId = response.subscriptionId;
+    const subscriptionId = response.subscriptionId;
 
     // the sequence numbers available in this subscription
     // for retransmission and not acknowledged by the client
-    // -- var available_seq = response.availableSequenceNumbers;
+    // -- const available_seq = response.availableSequenceNumbers;
 
     // has the server more notification for us ?
-    // -- var moreNotifications = response.moreNotifications;
+    // -- const moreNotifications = response.moreNotifications;
 
-    var notificationMessage = response.notificationMessage;
+    const notificationMessage = response.notificationMessage;
     //  notificationMessage.sequenceNumber
     //  notificationMessage.publishTime
     //  notificationMessage.notificationData[]
@@ -379,7 +379,7 @@ protected _receive_publish_response (response : subscription_service.PublishResp
     // which is only an information of what will be the future sequenceNumber.
     //}
 
-    var subscription = self.subscriptionMap[subscriptionId];
+    const subscription = self.subscriptionMap[subscriptionId];
 
     if (subscription && self._session !== null) {
       
@@ -403,7 +403,7 @@ protected _receive_publish_response (response : subscription_service.PublishResp
 
 public republish(callback) {
 
-    var self = this;
+    const self = this;
 
     // After re-establishing the connection the Client shall call Republish in a loop, starting with the next expected
     // sequence number and incrementing the sequence number until the Server returns the status Bad_MessageNotAvailable.
@@ -421,10 +421,10 @@ public republish(callback) {
 
         assert(subscription.subscriptionId === +subscriptionId);
 
-        var is_done = false;
+        let is_done = false;
 
         function _send_republish(_b_callback) {
-            var request = new subscription_service.RepublishRequest({
+            const request = new subscription_service.RepublishRequest({
                 subscriptionId: subscription.subscriptionId,
                 retransmitSequenceNumber: subscription.lastSequenceNumber+1
             });
@@ -436,7 +436,7 @@ public republish(callback) {
             }
 
             self._session.republish(request,function(err,response){
-                if (!err &&  response.responseHeader.serviceResult === StatusCodes.Good) {
+                if (!err &&  response.responseHeader.serviceResult.equals(StatusCodes.Good)) {
                      // reprocess notification message  and keep going
                     subscription.onNotificationMessage(response.notificationMessage);
                 } else {

@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-import {DataStream} from './DataStream'
+import {DataStream} from './DataStream';
 
-var minFloat = -3.40 * Math.pow(10, 38);
-var maxFloat = 3.40 * Math.pow(10, 38);
+const minFloat = -3.40 * Math.pow(10, 38);
+const maxFloat = 3.40 * Math.pow(10, 38);
 
 export type Float = number;
 export type Double = number;
@@ -16,18 +16,18 @@ export type Double = number;
  * @return {*}
  * @private
  */
-function getRandomDouble(min : number, max : number) {
+function getRandomDouble(min: number, max: number) {
     return Math.random() * (max - min ) + min;
 }
 
-export function isValidFloat(value : any) {
+export function isValidFloat(value: any) {
     if (!Number.isFinite(value)) {
         return false;
     }
     return value > minFloat && value < maxFloat;
-};
+}
 
-function roundToFloat2(float : number) {
+function roundToFloat2(float: number) {
     if (float === 0) {
         return float;
     }
@@ -45,61 +45,61 @@ function roundToFloat2(float : number) {
     //   (though this is not guaranteed). This is a binary format that occupies 64 bits (8 bytes) and its
     //   significand has a precision of 53 bits (about 16 decimal digits).
     //
-    var nbDigits = Math.ceil(Math.log(Math.abs(float)) / Math.log(10));
-    var r = Math.pow(10, -nbDigits + 2);
-    return Math.round(float * r) / r;
+    const nbDigits = Math.ceil(Math.log(Math.abs(float)) / Math.log(10));
+    const rr = Math.pow(10, -nbDigits + 2);
+    return Math.round(float * rr) / rr;
 }
 
-var r = new Float32Array(1);
+const r = new Float32Array(1);
 function roundToFloat(float) {
     r[0] = float;
-    var float_r = r[0];
+    const float_r = r[0];
     return float_r;
 }
 
 export function randomFloat() {
     return roundToFloat(getRandomDouble(-1000, 1000));
-};
+}
 
-export function encodeFloat(value, stream : DataStream) {
+export function encodeFloat(value, stream: DataStream) {
     stream.setFloat32(value);
-};
+}
 
-export function decodeFloat(stream : DataStream) {
-    var float = stream.getFloat32();
+export function decodeFloat(stream: DataStream) {
+    const float = stream.getFloat32();
     return float;
-    //xx return roundToFloat(float);
-};
+    // xx return roundToFloat(float);
+}
 
 export function isValidDouble(value) {
     if (!Number.isFinite(value)) {
         return false;
     }
     return true;
-};
+}
 
 export function randomDouble() {
     return getRandomDouble(-1000000, 1000000);
-};
+}
 
-export function encodeDouble(value : number, stream : DataStream) {
+export function encodeDouble(value: number, stream: DataStream) {
     stream.setFloat64(value);
-};
+}
 
-export function decodeDouble(stream : DataStream) {
+export function decodeDouble(stream: DataStream) {
     return stream.getFloat64();
-};
+}
 
 export function coerceFloat(value) {
     if (value === null || value === undefined) {
         return value;
     }
     return parseFloat(value);
-};
+}
 export function coerceDouble(value) {
     if (value === null || value === undefined) {
         return value;
     }
     return parseFloat(value);
-};
+}
 

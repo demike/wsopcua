@@ -424,14 +424,14 @@ readHistoryValue(nodes, start, end, callback) {
     }
 
     var nodesToRead = [];
-    nodes.forEach(function (node) {
+    for( const node of nodes) {
         nodesToRead.push({
             nodeId: resolveNodeId(node),
             indexRange: null,
             dataEncoding: {namespaceIndex: 0, name: null},
             continuationPoint: null
         });
-    });
+    };
 
     var ReadRawModifiedDetails = new historizing_service.ReadRawModifiedDetails({
         isReadModified: false,
@@ -449,13 +449,13 @@ readHistoryValue(nodes, start, end, callback) {
     });
 
     assert(nodes.length === request.nodesToRead.length);
-    this.performMessageTransaction(request, (err, response) => {
+    this.performMessageTransaction(request, (err, response: historizing_service.HistoryReadResponse) => {
 
         if (err) {
             return callback(err, response);
         }
 
-        if (response.responseHeader.serviceResult !== StatusCodes.Good) {
+        if (response.responseHeader.serviceResult.isNot(StatusCodes.Good)) {
             return callback(new Error(response.responseHeader.serviceResult.toString()));
         }
 
@@ -567,13 +567,13 @@ write(nodesToWrite : write_service.WriteValue[]|write_service.WriteValue, callba
 
     var request = new write_service.WriteRequest({nodesToWrite: <write_service.WriteValue[]>nodesToWrite});
 
-    this.performMessageTransaction(request, (err, response) => {
+    this.performMessageTransaction(request, (err, response: write_service.WriteResponse) => {
 
         /* istanbul ignore next */
         if (err) {
             return callback(err, response);
         }
-        if (response.responseHeader.serviceResult !== StatusCodes.Good) {
+        if (response.responseHeader.serviceResult.isNot(StatusCodes.Good)) {
             return callback(new Error(response.responseHeader.serviceResult.toString()));
         }
         assert(response instanceof write_service.WriteResponse);
@@ -629,7 +629,7 @@ protected composeResult(nodes, nodesToRead : read_service.ReadValueId[], dataVal
     assert(nodesToRead.length === dataValues.length);
    let i = 0, c = 0;
    let results = [];
-   let dataValue, k, nodeToRead;
+   let dataValue: DataValue, k;
     for (var n = 0; n < nodes.length; n++) {
         let node = nodes[n];
         let data:any = {};
@@ -637,9 +637,8 @@ protected composeResult(nodes, nodesToRead : read_service.ReadValueId[], dataVal
        var addedProperty = 0;
         for (i = 0; i < ClientSession.keys.length; i++) {
            dataValue = dataValues[c];
-           nodeToRead = nodesToRead[c];
            c++;
-           if (dataValue.statusCode === null || dataValue.statusCode === StatusCodes.Good) {
+           if (dataValue.statusCode === null || dataValue.statusCode.equals(StatusCodes.Good)) {
                k = utils.lowerFirstLetter(ClientSession.keys[i]);
                data[k] = dataValue.value ? dataValue.value.value : null;
                addedProperty += 1;
@@ -695,7 +694,7 @@ readAllAttributes(nodes : NodeId|NodeId[], callback) {
 
     var nodesToRead = [];
 
-    (<NodeId[]>nodes).forEach(function (node) {
+    for (const node of <NodeId[]>nodes) {
         let nodeId = resolveNodeId(node);
         if (!nodeId) {
             throw new Error("cannot coerce " + node + " to a valid NodeId");
@@ -710,7 +709,7 @@ readAllAttributes(nodes : NodeId|NodeId[], callback) {
               
             }));
         }
-    });
+    };
 
    
     this.read(nodesToRead, (err, dataValues /*, diagnosticInfos */) => {
@@ -1144,8 +1143,8 @@ public performMessageTransaction(request : {requestHeader:RequestHeader}, callba
             return callback(err, response);
         }
 
-        if (response.responseHeader.serviceResult !== StatusCodes.Good) {
-            err = new Error(" ServiceResult is " + response.responseHeader.serviceResult.toString());
+        if (response.responseHeader.serviceResult.isNot(StatusCodes.Good)) {
+            err = new Error(" ServiceResult is " + response.responseHeader.serviceResult.toString() + " request was " + request.constructor.name);
         }
         callback(err, response);
     });
@@ -1282,7 +1281,7 @@ public getMonitoredItems(subscriptionId : UInt32, callback) {
             //xx console.log(" xxxxxxxxxxxxxxxxxx RRR err",err);
             //xx console.log(" xxxxxxxxxxxxxxxxxx RRR result ".red.bold,result.toString());
             //xx console.log(" xxxxxxxxxxxxxxxxxx RRR err",diagnosticInfo);
-            if (res.statusCode !== StatusCodes.Good) {
+            if (res.statusCode.isNot(StatusCodes.Good)) {
 
                 callback(new Error(res.statusCode.toString()), result, diagnosticInfo);
 
@@ -1389,8 +1388,8 @@ public getArgumentDefinition(methodId : NodeId, callback : (err : Error|null,inp
                 return callback(err);
             }
 
-            dataValues.forEach(function(result,index){ 
-                actions[index].call(null,result); 
+            dataValues.forEach(function(dataValue,index){ 
+                actions[index].call(null,dataValue); 
             });
 
             //xx console.log("xxxx result", util.inspect(result, {colors: true, depth: 10}));
@@ -1536,9 +1535,9 @@ public getBuiltInDataType(nodeId,callback : (err : Error|null,result?: DataType)
             attributeId: AttributeIds.DataType
         })
     ];
-    session.read(nodes_to_read, 0, (err,nodes_to_read,dataValues?) => {
+    session.read(nodes_to_read, 0, (err,nodes_to_read,dataValues?:DataValue[]) => {
         if (err) return callback(err);
-        if (dataValues[0].statusCode !== StatusCodes.Good) {
+        if (dataValues[0].statusCode.isNot(StatusCodes.Good)) {
             return callback(new Error("cannot read DataType Attribute "+  dataValues[0].statusCode.toString()));
         }
         dataTypeId = dataValues[0].value.value;

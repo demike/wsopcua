@@ -1,27 +1,24 @@
 // --------- This code has been automatically generated !!! 2018-02-08T10:26:02.544Z
-"use strict";
+'use strict';
 /**
  * @module opcua.address_space.types
  */
 
-import * as ec from "../basic-types";
+import * as ec from '../basic-types';
 
-import {makeExpandedNodeId} from "../nodeid/expanded_nodeid";
-import {generate_new_id} from "../factory";
+import {makeExpandedNodeId} from '../nodeid/expanded_nodeid';
+import {generate_new_id} from '../factory';
 
-import {BaseUAObject} from "../factory/factories_baseobject";
-import {register_class_definition} from "../factory/factories_factories";
-import { DataStream } from "../basic-types/DataStream";
+import {BaseUAObject} from '../factory/factories_baseobject';
+import {register_class_definition} from '../factory/factories_factories';
+import { DataStream } from '../basic-types/DataStream';
 
-var encodeArray = ec.encodeArray;
-var decodeArray = ec.decodeArray;
-var encode_UInt32 = ec.encodeUInt32;
-var decode_UInt32 = ec.decodeUInt32
-var encode_UAString = ec.encodeString;
-var decode_UAString = ec.decodeString;
+const encode_UInt32 = ec.encodeUInt32;
+const decode_UInt32 = ec.decodeUInt32;
+const encode_UAString = ec.encodeString;
+const decode_UAString = ec.decodeString;
 
 /**
- * 
  * @class HelloMessage
  * @constructor
  * @extends BaseUAObject
@@ -34,18 +31,20 @@ var decode_UAString = ec.decodeString;
  * @param  [options.endpointUrl] {UAString} The URL of the Endpoint which the Client wished to connect to.
  */
 export class HelloMessage extends BaseUAObject {
- 
+
+  public static encodingDefaultBinary = makeExpandedNodeId(generate_new_id());
+
   endpointUrl: string;
   maxChunkCount: number;
   maxMessageSize: number;
   sendBufferSize: number;
   receiveBufferSize: number;
   protocolVersion: number;
-constructor(options)
-{
+
+  constructor(options) {
   super();
     options = options || {};
- 
+
     /**
       * The latest version of the OPC UA TCP protocol supported by the Client
       * @property protocolVersion
@@ -92,44 +91,44 @@ constructor(options)
 }
 
 
-public static encodingDefaultBinary = makeExpandedNodeId(generate_new_id());
+
 
 
 /**
  * encode the object into a binary stream
  * @method encode
  *
- * @param stream {BinaryStream} 
+ * @param stream {BinaryStream}
  */
-public encode(stream : DataStream) {
-    encode_UInt32(this.protocolVersion,stream);
-    encode_UInt32(this.receiveBufferSize,stream);
-    encode_UInt32(this.sendBufferSize,stream);
-    encode_UInt32(this.maxMessageSize,stream);
-    encode_UInt32(this.maxChunkCount,stream);
-    encode_UAString(this.endpointUrl,stream);
-};
+public encode(stream: DataStream) {
+    encode_UInt32(this.protocolVersion, stream);
+    encode_UInt32(this.receiveBufferSize, stream);
+    encode_UInt32(this.sendBufferSize, stream);
+    encode_UInt32(this.maxMessageSize, stream);
+    encode_UInt32(this.maxChunkCount, stream);
+    encode_UAString(this.endpointUrl, stream);
+}
 /**
  * decode the object from a binary stream
  * @method decode
  *
- * @param stream {BinaryStream} 
- * @param [option] {object} 
+ * @param stream {BinaryStream}
+ * @param [option] {object}
  */
-public decode(stream : DataStream) {
+public decode(stream: DataStream) {
     // call base class implementation first
-    
+
     this.protocolVersion = decode_UInt32(stream);
     this.receiveBufferSize = decode_UInt32(stream);
     this.sendBufferSize = decode_UInt32(stream);
     this.maxMessageSize = decode_UInt32(stream);
     this.maxChunkCount = decode_UInt32(stream);
     this.endpointUrl = decode_UAString(stream);
-};
+}
 
 public clone(target: any): BaseUAObject {
-  throw new Error("Method not implemented.");
+  throw new Error('Method not implemented.');
 }
 }
 
-register_class_definition("HelloMessage",HelloMessage,makeExpandedNodeId(generate_new_id()));
+register_class_definition('HelloMessage', HelloMessage, makeExpandedNodeId(generate_new_id()));

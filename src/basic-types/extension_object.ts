@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.miscellaneous
  */
 
 
-import {constructObject,is_internal_id,registerBuiltInType} from '../factory';
+import {constructObject, is_internal_id, registerBuiltInType} from '../factory';
 
 import {makeNodeId} from '../nodeid/nodeid';
 import { encodeNodeId, decodeNodeId } from './nodeid';
@@ -12,7 +12,7 @@ import { DataStream } from './DataStream';
 
 export class ExtensionObject {
 
-};
+}
 
 export function constructEmptyExtensionObject(expandedNodeId) {
     return constructObject(expandedNodeId);
@@ -46,7 +46,7 @@ export function constructEmptyExtensionObject(expandedNodeId) {
 //
 
 
-export function encodeExtensionObject(object, stream : DataStream) {
+export function encodeExtensionObject(object, stream: DataStream) {
 
 
     if (!object) {
@@ -58,18 +58,18 @@ export function encodeExtensionObject(object, stream : DataStream) {
 
         /* istanbul ignore next */
         if (!object.encodingDefaultBinary) {
-            console.log("xxxxxxxxx encoding ExtObj ", object);
-            throw new Error("Cannot find encodingDefaultBinary for this object");
+            console.log('xxxxxxxxx encoding ExtObj ', object);
+            throw new Error('Cannot find encodingDefaultBinary for this object');
         }
         /* istanbul ignore next */
         if (object.encodingDefaultBinary.isEmpty()) {
-            console.log("xxxxxxxxx encoding ExtObj ", object.encodingDefaultBinary.toString());
-            throw new Error("Cannot find encodingDefaultBinary for this object");
+            console.log('xxxxxxxxx encoding ExtObj ', object.encodingDefaultBinary.toString());
+            throw new Error('Cannot find encodingDefaultBinary for this object');
         }
         /* istanbul ignore next */
         if (is_internal_id(object.encodingDefaultBinary.value)) {
-            console.log("xxxxxxxxx encoding ExtObj ", object.encodingDefaultBinary.toString(), object.constructor.name);
-            throw new Error("Cannot find valid OPCUA encodingDefaultBinary for this object");
+            console.log('xxxxxxxxx encoding ExtObj ', object.encodingDefaultBinary.toString(), object.constructor.name);
+            throw new Error('Cannot find valid OPCUA encodingDefaultBinary for this object');
         }
 
         encodeNodeId(object.encodingDefaultBinary, stream);
@@ -79,23 +79,23 @@ export function encodeExtensionObject(object, stream : DataStream) {
     }
 }
 
-export function decodeExtensionObject(stream : DataStream) {
+export function decodeExtensionObject(stream: DataStream) {
 
-    var nodeId = decodeNodeId(stream);
-    var encodingType = stream.getUint8();
+    const nodeId = decodeNodeId(stream);
+    const encodingType = stream.getUint8();
 
     if (encodingType === 0) {
         return null;
     }
 
-    var length = stream.getUint32();
+    const length = stream.getUint32();
 
     /* istanbul ignore next */
     if (nodeId.value === 0 || encodingType === 0) {
         return null;
     }
 
-    var object = constructEmptyExtensionObject(nodeId);
+    const object = constructEmptyExtensionObject(nodeId);
 
     /* istanbul ignore next */
     if (object === null) {
@@ -108,7 +108,7 @@ export function decodeExtensionObject(stream : DataStream) {
 }
 
 registerBuiltInType({
-    name: "ExtensionObject",
+    name: 'ExtensionObject',
     encode: encodeExtensionObject,
     decode: decodeExtensionObject,
     defaultValue: function () {
