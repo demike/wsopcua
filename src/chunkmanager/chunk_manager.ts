@@ -56,7 +56,7 @@ export function verify_message_chunk(message_chunk: DataView | ArrayBuffer) {
 
 function argsIn(obj, properties) {
 
-    var nbUnwanted = 0;
+    let nbUnwanted = 0;
     /* istanbul ignore next */
     if (do_debug) {
         Object.keys(obj).forEach(function (key) {
@@ -69,7 +69,7 @@ function argsIn(obj, properties) {
     return nbUnwanted === 0;
 }
 
-var ChunkManager_options = [
+const ChunkManager_options = [
     'chunkSize',
     'headerSize',
     'signatureLength',
@@ -143,8 +143,7 @@ export class ChunkManager extends EventEmitter {
             assert(this.plainBlockSize === 0);
             // unencrypted block
             this.maxBodySize = (this.chunkSize - this.headerSize - this.signatureLength - this.sequenceHeaderSize);
-        }
-        else {
+        } else {
             assert(this.plainBlockSize !== 0);
             // During encryption a block with a size equal to  PlainTextBlockSize  is processed to produce a block
             // with size equal to  CipherTextBlockSize. These values depend on the encryption algorithm and may
@@ -184,8 +183,7 @@ export class ChunkManager extends EventEmitter {
             const signature = this.compute_signature(section_to_sign);
             assert(signature.length === this.signatureLength);
             signature.copy(chunk, signature_start);
-        }
-        else {
+        } else {
             assert(this.signatureLength === 0, 'expecting NO SIGN');
         }
     }
@@ -212,7 +210,7 @@ export class ChunkManager extends EventEmitter {
                 this.writeHeaderFunc(new DataView(this.pending_chunk, 0, this.headerSize), isLast, expected_length);
             }
             if (this.sequenceHeaderSize > 0) {
-                this.writeSequenceHeaderFunc(new DataView(this.pending_chunk, this.headerSize,/* this.headerSize + */this.sequenceHeaderSize));
+                this.writeSequenceHeaderFunc(new DataView(this.pending_chunk, this.headerSize, /* this.headerSize + */this.sequenceHeaderSize));
             }
             this._write_signature(this.pending_chunk);
             this._encrypt(this.pending_chunk);
@@ -249,9 +247,9 @@ export class ChunkManager extends EventEmitter {
             const nb_to_write = Math.min(length - input_cursor, space_left);
             if (buffer) {
 
-                let arrBuffer = new Uint8Array(buffer, input_cursor, input_cursor + nb_to_write)
+                const arrBuffer = new Uint8Array(buffer, input_cursor, input_cursor + nb_to_write);
                 this.chunkArray.set(arrBuffer, this.cursor + this.dataOffset);
-                //buffer.copy(this.chunk, this.cursor + this.dataOffset, input_cursor, input_cursor + nb_to_write);
+                // buffer.copy(this.chunk, this.cursor + this.dataOffset, input_cursor, input_cursor + nb_to_write);
             }
             input_cursor += nb_to_write;
             this.cursor += nb_to_write;
@@ -267,7 +265,7 @@ export class ChunkManager extends EventEmitter {
         assert(extraNbPaddingByte === 0 || this.plainBlockSize > 256, 'extraNbPaddingByte only requested when key size > 2048');
         // write the padding byte
         this.chunk[this.cursor + this.dataOffset] = nbPaddingByte;
-        //this.chunk.writeUInt8(nbPaddingByte, this.cursor + this.dataOffset);
+        // this.chunk.writeUInt8(nbPaddingByte, this.cursor + this.dataOffset);
         this.cursor += 1;
         for (let i = 0; i < nbPaddingByteTotal; i++) {
             this.chunk[this.cursor + this.dataOffset + i] = nbPaddingByte;
@@ -290,8 +288,7 @@ export class ChunkManager extends EventEmitter {
             let curLength = this.sequenceHeaderSize + this.cursor + this.signatureLength;
             if (this.plainBlockSize > 256) {
                 curLength += 2; // account for extraPadding Byte Number;
-            }
-            else {
+            } else {
                 curLength += 1;
             }
             // let's calculate the required number of padding bytes

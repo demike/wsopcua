@@ -1026,10 +1026,10 @@ function findUserTokenPolicy(endpoint_description : endpoints_service.EndpointDe
 
 function createAnonymousIdentityToken(session) {
 
-    var endpoint_desc = session.endpoint;
+    const endpoint_desc = session.endpoint;
     assert(endpoint_desc instanceof EndpointDescription);
 
-    let userTokenPolicy : endpoints_service.UserTokenPolicy = findUserTokenPolicy(endpoint_desc, UserIdentityTokenType.ANONYMOUS);
+    const userTokenPolicy: endpoints_service.UserTokenPolicy = findUserTokenPolicy(endpoint_desc, UserIdentityTokenType.ANONYMOUS);
     if (!userTokenPolicy) {
         throw new Error("Cannot find ANONYMOUS user token policy in end point description");
     }
@@ -1041,7 +1041,7 @@ function createUserNameIdentityToken(session, userName, password) {
     // assert(endpoint instanceof EndpointDescription);
     assert(userName === null || typeof userName === "string");
     assert(password === null || typeof password === "string");
-    var endpoint_desc = session.endpoint;
+    const endpoint_desc = session.endpoint;
     assert(endpoint_desc instanceof EndpointDescription);
 
     var userTokenPolicy = findUserTokenPolicy(endpoint_desc, UserIdentityTokenType.USERNAME);

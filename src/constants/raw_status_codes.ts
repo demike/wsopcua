@@ -1,3 +1,4 @@
+// tslint:disable:max-line-length
 // this file has been automatically generated
  export const StatusCodes = {
   Good: { name: 'Good', value: 0, description: 'No Error' }

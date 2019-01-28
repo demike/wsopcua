@@ -1,3 +1,4 @@
+/* tslint:disable:no-bitwise */
 'use strict';
 /**
  * @module opcua.datamodel
@@ -227,6 +228,7 @@ export const decodeStatusCode = function (stream: DataStream) {
 
 /* construct status codes fast search indexes */
 const StatusCodes_reverse_map = {};
+// tslint:disable-next-line:forin
 for (const codeName in StatusCodes) {
      const csc = new ConstantStatusCode(StatusCodes[codeName]);
      StatusCodes_reverse_map[csc.value] = csc;
@@ -255,6 +257,7 @@ constructor(options) {
 
 _getExtraName(): string {
     const str = [];
+    // tslint:disable-next-line:forin
     for (const key in extraStatusCodeBits) {
         const value = extraStatusCodeBits[key];
         if ((this._extraBits & value ) === value) {

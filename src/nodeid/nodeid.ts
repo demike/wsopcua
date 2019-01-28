@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-import {assert} from '../assert'
-import {isValidGuid,emptyGuid} from '../basic-types/guid'
+import {assert} from '../assert';
+import {isValidGuid, emptyGuid} from '../basic-types/guid';
 import * as constants from '../constants';
 import { isEqual } from '../utils';
 
@@ -46,15 +46,15 @@ export enum NodeIdType {
      * @default 0x4
      */
     BYTESTRING = 0x04
-};
+}
 
 
 export class NodeId {
 
-static NullNodeId : NodeId = new NodeId(NodeIdType.NUMERIC,0);
-public identifierType : NodeIdType;
-public value : any;
-public namespace : number;
+static NullNodeId: NodeId = new NodeId(NodeIdType.NUMERIC, 0);
+public identifierType: NodeIdType;
+public value: any;
+public namespace: number;
 
 /**
  * Construct a node ID
@@ -70,7 +70,7 @@ public namespace : number;
  *    ```
  * @constructor
  */
-constructor(identifierType : NodeIdType, value, namespace : number = 0) {
+constructor(identifierType: NodeIdType, value, namespace: number = 0) {
     this.identifierType = identifierType;
 
     assert(this.identifierType);
@@ -91,7 +91,7 @@ constructor(identifierType : NodeIdType, value, namespace : number = 0) {
 
     assert(this.identifierType !== NodeIdType.NUMERIC || (this.value >= 0 && this.value <= 0xFFFFFFFF));
     assert(this.identifierType !== NodeIdType.GUID || isValidGuid(this.value));
-    assert(this.identifierType !== NodeIdType.STRING || typeof this.value === "string");
+    assert(this.identifierType !== NodeIdType.STRING || typeof this.value === 'string');
 
 }
 
@@ -113,26 +113,26 @@ constructor(identifierType : NodeIdType, value, namespace : number = 0) {
  * @param [options.addressSpace] {AddressSpace}
  * @return {string}
  */
-toString(options?:any) : string {
+toString(options?: any): string {
 
-    var addressSpace = options ? options.addressSpace : null;
-    var str;
+    const addressSpace = options ? options.addressSpace : null;
+    let str;
     switch (this.identifierType) {
         case NodeIdType.NUMERIC:
-            str = "ns=" + this.namespace + ";i=" + this.value;
+            str = 'ns=' + this.namespace + ';i=' + this.value;
             break;
         case NodeIdType.STRING:
-            str = "ns=" + this.namespace + ";s=" + this.value;
+            str = 'ns=' + this.namespace + ';s=' + this.value;
             break;
         case NodeIdType.GUID:
-            str = "ns=" + this.namespace + ";g=" + this.value;
+            str = 'ns=' + this.namespace + ';g=' + this.value;
             break;
         default:
-            assert(this.identifierType === NodeIdType.BYTESTRING, "invalid identifierType in NodeId : " + this.identifierType);
+            assert(this.identifierType === NodeIdType.BYTESTRING, 'invalid identifierType in NodeId : ' + this.identifierType);
             if (this.value)  {
-                str = "ns=" + this.namespace + ";b=" + this.value.toString("hex");
+                str = 'ns=' + this.namespace + ';b=' + this.value.toString('hex');
             } else {
-                str = "ns=" + this.namespace + ";b=<null>"
+                str = 'ns=' + this.namespace + ';b=<null>';
             }
             break;
     }
@@ -140,17 +140,17 @@ toString(options?:any) : string {
     if (addressSpace) {
         if (this.namespace === 0 && (this.identifierType === NodeIdType.NUMERIC)) {
             // find standard browse name
-            var name = reverse_map(this.value) || "<undefined>";
-            str += " " + name.green.bold;
+            const name = reverse_map(this.value) || '<undefined>';
+            str += ' ' + name.green.bold;
         } else {
             // let use the provided address space to figure out the browseNode of this node.
             // to make the message a little bit more useful.
-            var n = addressSpace.findNode(this);
-            str += " " + (n ? n.browseName.toString().green : " (????)");
+            const n = addressSpace.findNode(this);
+            str += ' ' + (n ? n.browseName.toString().green : ' (????)');
         }
     }
     return str;
-};
+}
 
 
 /**
@@ -158,16 +158,16 @@ toString(options?:any) : string {
  * @method  toJSON
  * @return {string}
  */
-toJSON() : string {
+toJSON(): string {
     return this.toString();
-};
+}
 
 
 /**
  * @method isEmpty
  * @return {Boolean} true if the NodeId is null or empty
  */
-isEmpty() : Boolean {
+isEmpty(): Boolean {
     switch (this.identifierType) {
         case NodeIdType.NUMERIC:
             return this.value === 0;
@@ -176,10 +176,10 @@ isEmpty() : Boolean {
         case NodeIdType.GUID:
             return !this.value || this.value === emptyGuid;
         default:
-            assert(this.identifierType === NodeIdType.BYTESTRING, "invalid identifierType in NodeId : " + this.identifierType);
+            assert(this.identifierType === NodeIdType.BYTESTRING, 'invalid identifierType in NodeId : ' + this.identifierType);
             return !this.value || this.value.length === 0;
     }
-};
+}
 
 
 /**
@@ -187,35 +187,35 @@ isEmpty() : Boolean {
  * @method displayText
  * @return {String}
  */
-    displayText() : String {
-    
+    displayText(): String {
+
         if (this.namespace === 0 && this.identifierType === NodeIdType.NUMERIC) {
-            var name = reverse_map(this.value);
+            const name = reverse_map(this.value);
             if (name) {
-                return name + " (" + this.toString() + ")";
+                return name + ' (' + this.toString() + ')';
             }
         }
         return this.toString();
-    
-    };
-    
-    static sameNodeId(n1: NodeId,n2 : NodeId) : boolean {
+
+    }
+
+    static sameNodeId(n1: NodeId, n2: NodeId): boolean {
         if (n1.identifierType !== n2.identifierType) {
             return false;
         }
         if (n1.namespace !== n2.namespace) {
             return false;
         }
-        switch(n1.identifierType) {
+        switch (n1.identifierType) {
             case NodeIdType.NUMERIC:
             case NodeIdType.STRING:
                 return n1.value === n2.value;
             default:
-                return isEqual(n1.value,n2.value);
+                return isEqual(n1.value, n2.value);
         }
     }
 
-};
+}
 
 /**
  * construct a node Id from a value and a namespace.
@@ -227,13 +227,13 @@ isEmpty() : Boolean {
  * @return {NodeId}
  */
 
-export function makeNodeId(value : Uint8Array|string|number, namespace?:number) : NodeId {
+export function makeNodeId(value: Uint8Array|string|number, namespace?: number): NodeId {
 
     value = value || 0;
     namespace = namespace || 0;
 
-    var identifierType = NodeIdType.NUMERIC;
-    if (typeof value === "string") {
+    let identifierType = NodeIdType.NUMERIC;
+    if (typeof value === 'string') {
         //            1         2         3
         //  012345678901234567890123456789012345
         // "72962B91-FA75-4AE6-8D28-B404DC7DAF63"
@@ -242,38 +242,38 @@ export function makeNodeId(value : Uint8Array|string|number, namespace?:number) 
         } else {
             identifierType = NodeIdType.STRING;
             // detect accidental string of form "ns=x;x";
-            assert(value.indexOf("ns=") === -1, " makeNodeId(string) ? did you mean using coerceNodeId instead? ");
+            assert(value.indexOf('ns=') === -1, ' makeNodeId(string) ? did you mean using coerceNodeId instead? ');
         }
     } else if (value instanceof Uint8Array) {
         identifierType = NodeIdType.BYTESTRING;
     }
 
-    var nodeId = new NodeId(identifierType, value, namespace);
+    const nodeId = new NodeId(identifierType, value, namespace);
 
-    assert(nodeId.hasOwnProperty("identifierType"));
+    assert(nodeId.hasOwnProperty('identifierType'));
 
     return nodeId;
-};
+}
 
 
-var DataTypeIds = constants.DataTypeIds;
-var VariableIds = constants.VariableIds;
-var ObjectIds = constants.ObjectIds;
-var ObjectTypeIds = constants.ObjectTypeIds;
-var VariableTypeIds = constants.VariableTypeIds;
-var MethodIds = constants.MethodIds;
-var ReferenceTypeIds = constants.ReferenceTypeIds;
+const DataTypeIds = constants.DataTypeIds;
+const VariableIds = constants.VariableIds;
+const ObjectIds = constants.ObjectIds;
+const ObjectTypeIds = constants.ObjectTypeIds;
+const VariableTypeIds = constants.VariableTypeIds;
+const MethodIds = constants.MethodIds;
+const ReferenceTypeIds = constants.ReferenceTypeIds;
 
 // reverse maps
-var _nodeid_to_name_index = {};
-var _name_to_nodeid_index = {};
+let _nodeid_to_name_index = {};
+let _name_to_nodeid_index = {};
 
 (function build_standard_nodeid_indexes() {
 
     function expand_map(direct_index) {
-        for (var name in direct_index) {
+        for (const name in direct_index) {
             if (direct_index.hasOwnProperty(name)) {
-                var value = direct_index[name];
+                const value = direct_index[name];
                 _nodeid_to_name_index[value] = name;
                 _name_to_nodeid_index[name] = new NodeId(NodeIdType.NUMERIC, value, 0);
             }
@@ -304,10 +304,10 @@ function reverse_map(nodeId) {
  * @param node_or_string {NodeId|String}
  * @return {NodeId}
  */
-export function resolveNodeId(node_or_string : NodeId | string) : NodeId {
+export function resolveNodeId(node_or_string: NodeId | string): NodeId {
 
-    var nodeId : NodeId;
-    var raw_id = (typeof node_or_string === "string") ? _name_to_nodeid_index[node_or_string] : undefined ;
+    let nodeId: NodeId;
+    const raw_id = (typeof node_or_string === 'string') ? _name_to_nodeid_index[node_or_string] : undefined ;
     if (raw_id !== undefined) {
         return raw_id;
     } else {
@@ -317,27 +317,28 @@ export function resolveNodeId(node_or_string : NodeId | string) : NodeId {
 }
 
 
-function from_hex(str : string) : Uint8Array {
-    var size = str.length / 2
-      , buf = new Uint8Array(size)
-      , character = ''
-  
-    for(var i = 0, len = str.length; i < len; ++i) {
-      character += str.charAt(i)
-  
-      if(i > 0 && (i % 2) === 1) {
-        buf[i>>>1] = parseInt(character, 16)
-        character = '' 
+function from_hex(str: string): Uint8Array {
+    const size = str.length / 2
+      , buf = new Uint8Array(size);
+    let character = '';
+
+    for (let i = 0, len = str.length; i < len; ++i) {
+      character += str.charAt(i);
+
+      if (i > 0 && (i % 2) === 1) {
+        // tslint:disable-next-line:no-bitwise
+        buf[i >>> 1] = parseInt(character, 16);
+        character = '';
       }
     }
-  
-    return buf; 
+
+    return buf;
 }
 
-let rege_ns_i = /ns=([0-9]+);i=([0-9]+)/;
-let rege_ns_s = /ns=([0-9]+);s=(.*)/;
-let rege_ns_b = /ns=([0-9]+);b=(.*)/;
-let rege_ns_g = /ns=([0-9]+);g=(.*)/;
+const rege_ns_i = /ns=([0-9]+);i=([0-9]+)/;
+const rege_ns_s = /ns=([0-9]+);s=(.*)/;
+const rege_ns_b = /ns=([0-9]+);b=(.*)/;
+const rege_ns_g = /ns=([0-9]+);g=(.*)/;
 
 
 
@@ -355,9 +356,9 @@ let rege_ns_g = /ns=([0-9]+);g=(.*)/;
  * @param value
  * @param namespace {Integer}
  */
-export function coerceNodeId(value, namespace? : number) : NodeId {
+export function coerceNodeId(value, namespace?: number): NodeId {
 
-    var matches, two_first;
+    let matches, two_first;
 
     if (value instanceof NodeId) {
         return value;
@@ -366,29 +367,29 @@ export function coerceNodeId(value, namespace? : number) : NodeId {
     value = value || 0;
     namespace = namespace || 0;
 
-    var identifierType = NodeIdType.NUMERIC;
+    let identifierType = NodeIdType.NUMERIC;
 
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
         identifierType = NodeIdType.STRING;
 
         two_first = value.substr(0, 2);
-        if (two_first === "i=") {
+        if (two_first === 'i=') {
 
             identifierType = NodeIdType.NUMERIC;
             value = parseInt(value.substr(2), 10);
 
-        } else if (two_first === "s=") {
+        } else if (two_first === 's=') {
 
             identifierType = NodeIdType.STRING;
             value = value.substr(2);
 
-        } else if (two_first === "b=") {
+        } else if (two_first === 'b=') {
 
             identifierType = NodeIdType.BYTESTRING;
-            
+
             value = from_hex(value.substr(2));
 
-        } else if (two_first === "g=") {
+        } else if (two_first === 'g=') {
 
             identifierType = NodeIdType.GUID;
             value = value.substr(2);
@@ -418,7 +419,7 @@ export function coerceNodeId(value, namespace? : number) : NodeId {
             namespace = parseInt(matches[1], 10);
             value = matches[2];
         } else {
-            throw new Error("String cannot be coerced to a nodeId : " + value);
+            throw new Error('String cannot be coerced to a nodeId : ' + value);
         }
 
     } else if (value instanceof Uint8Array) {
@@ -426,7 +427,7 @@ export function coerceNodeId(value, namespace? : number) : NodeId {
 
     } else if (value instanceof Object) {
         // it could be a Enum or a NodeId Like object
-        var tmp = value;
+        const tmp = value;
         value = tmp.value;
         namespace = namespace || tmp.namespace;
         identifierType = tmp.identifierType || identifierType;

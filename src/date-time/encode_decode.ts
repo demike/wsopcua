@@ -61,7 +61,7 @@ export function encodeDateTime(date: Date, stream: DataStream) {
     }
     stream.setUint32(lo);
     stream.setUint32(hi);
-    //xx assert(date.toString() === bn_hundredNanoSecondFrom1601ToDate(hi, lo).toString());
+    // xx assert(date.toString() === bn_hundredNanoSecondFrom1601ToDate(hi, lo).toString());
 }
 
 export function decodeDateTime(stream: DataStream) {

@@ -72,6 +72,7 @@ export class ClientSubscription extends EventEmitter{
 
     protected _timeoutHint : number;
     protected lastSequenceNumber : number;
+    protected lastRequestSentTime: Date;
 
     /**
      * the associated session
@@ -197,6 +198,7 @@ protected __create_subscription(callback) {
                 debugLog("lifetimeCount                    " + this.lifetimeCount);
                 debugLog("maxKeepAliveCount                " + this.maxKeepAliveCount);
                 debugLog("publish request timeout hint =   " + this._timeoutHint);
+                debugLog("hasTimedOut                      " + this.hasTimedOut);
             }
 
             this._publishEngine.registerSubscription(this);
@@ -288,6 +290,7 @@ protected __on_publish_response_EventNotificationList (notification:subscription
 };
 
 public onNotificationMessage(notificationMessage : subscription_service.NotificationMessage) {
+    this.lastRequestSentTime = Date.now();
     assert(notificationMessage.hasOwnProperty("sequenceNumber"));
 
     this.lastSequenceNumber = notificationMessage.sequenceNumber;
@@ -794,13 +797,21 @@ public recreateSubscriptionAndMonitoredItem(callback) {
 };
 
 public toString() {
-    var str = "";
+    let str = "";
     str += "subscriptionId      :" + this.subscriptionId + "\n";
     str += "publishingInterval  :" + this._publishingInterval + "\n";
     str += "lifetimeCsount      :" + this.lifetimeCount + "\n";
     str += "maxKeepAliveCount   :" + this.maxKeepAliveCount + "\n";
     return str;
-};
+}
+
+public evaluateRemainingLifetime(): number {
+    const subscription = this;
+    const now = Date.now();
+    const timeout = subscription._publishingInterval * subscription.lifetimeCount;
+    const expiryTime = subscription._lastRequestSentTime + timeout;
+    return Math.max(0, (expiryTime - now));
+}
 
 
 
