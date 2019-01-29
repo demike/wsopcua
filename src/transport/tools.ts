@@ -1,29 +1,29 @@
-"use strict";
+'use strict';
 import {assert} from '../assert';
 import {DataStream} from '../basic-types/DataStream';
 
-import {TCPErrorMessage} from "./TCPErrorMessage";
-import {readMessageHeader} from "../chunkmanager";
+import {TCPErrorMessage} from './TCPErrorMessage';
+import {readMessageHeader} from '../chunkmanager';
 
 function is_valid_msg_type(msgType) {
-    assert(["HEL", "ACK", "ERR",   // Connection Layer
-        "OPN", "MSG", "CLO"    // OPC Unified Architecture, Part 6 page 36
-    ].indexOf(msgType) >= 0, "invalid message type  " + msgType);
+    assert(['HEL', 'ACK', 'ERR',   // Connection Layer
+        'OPN', 'MSG', 'CLO'    // OPC Unified Architecture, Part 6 page 36
+    ].indexOf(msgType) >= 0, 'invalid message type  ' + msgType);
     return true;
 }
 
 
-export function decodeMessage(stream : DataStream, ClassName) {
+export function decodeMessage(stream: DataStream, ClassName) {
 
     assert(stream instanceof DataStream);
-    assert(ClassName instanceof Function, " expecting a function for " + ClassName);
+    assert(ClassName instanceof Function, ' expecting a function for ' + ClassName);
 
-    var header = readMessageHeader(stream);
-    //assert(stream.length === 8); //TODO: check this stream length?
+    const header = readMessageHeader(stream);
+    // assert(stream.length === 8); //TODO: check this stream length?
 
-    var obj;
-    if (header.msgType === "ERR") {
-        //xx console.log(" received an error");
+    let obj;
+    if (header.msgType === 'ERR') {
+        // xx console.log(" received an error");
         obj = new TCPErrorMessage();
         obj.decode(stream);
         return obj;
@@ -40,9 +40,9 @@ export function packTcpMessage(msgType, encodableObject) {
 
     assert(is_valid_msg_type(msgType));
 
-    var messageChunk = new ArrayBuffer(DataStream.binaryStoreSize(encodableObject) + 8);
+    const messageChunk = new ArrayBuffer(DataStream.binaryStoreSize(encodableObject) + 8);
     // encode encodeableObject in a packet
-    var stream = new DataStream(messageChunk);
+    const stream = new DataStream(messageChunk);
     encodeMessage(msgType, encodableObject, stream);
 
     return messageChunk;
@@ -50,25 +50,25 @@ export function packTcpMessage(msgType, encodableObject) {
 }
 
 // opc.tcp://xleuri11022:51210/UA/SampleServer
-export function parseEndpointUrl(endpointUrl : string) {
+export function parseEndpointUrl(endpointUrl: string) {
 
-    var r = /^([a-z.]*):\/\/([a-zA-Z\_\-\.\-0-9]*):([0-9]*)(\/.*){0,1}/;
+    const r = /^([a-z.]*):\/\/([a-zA-Z_\-.\-0-9]*):([0-9]*)(\/.*){0,1}/;
 
-    var matches = r.exec(endpointUrl);
+    const matches = r.exec(endpointUrl);
 
-    if(!matches) {
-        throw new Error("Invalid endpoint url " + endpointUrl);
+    if (!matches) {
+        throw new Error('Invalid endpoint url ' + endpointUrl);
     }
     return {
         protocol: matches[1],
         hostname: matches[2],
         port: parseInt(matches[3], 10),
-        address: matches[4] || ""
+        address: matches[4] || ''
     };
 }
 export function is_valid_endpointUrl(endpointUrl) {
-    var e = parseEndpointUrl(endpointUrl);
-    return e.hasOwnProperty("hostname");
+    const e = parseEndpointUrl(endpointUrl);
+    return e.hasOwnProperty('hostname');
 }
 
 
@@ -87,7 +87,7 @@ export function writeTCPMessageHeader(msgType, chunkType, total_length, stream) 
         stream = new DataStream(stream);
     }
     assert(is_valid_msg_type(msgType));
-    assert(["A", "F", "C"].indexOf(chunkType) !== -1);
+    assert(['A', 'F', 'C'].indexOf(chunkType) !== -1);
 
     stream.setUint8(msgType.charCodeAt(0));
     stream.setUint8(msgType.charCodeAt(1));
@@ -98,13 +98,13 @@ export function writeTCPMessageHeader(msgType, chunkType, total_length, stream) 
     stream.setUint32(total_length);
 }
 
-var encodeMessage = function (msgType, messageContent, stream) {
+function encodeMessage(msgType, messageContent, stream) {
 
-    //the length of the message, in bytes. (includes the 8 bytes of the message header)
-    var total_length = DataStream.binaryStoreSize(messageContent) + 8;
+    // the length of the message, in bytes. (includes the 8 bytes of the message header)
+    const total_length = DataStream.binaryStoreSize(messageContent) + 8;
 
-    writeTCPMessageHeader(msgType, "F", total_length, stream);
+    writeTCPMessageHeader(msgType, 'F', total_length, stream);
     messageContent.encode(stream);
-    assert(total_length === stream.length, "invalid message size");
-};
+    assert(total_length === stream.length, 'invalid message size');
+}
 

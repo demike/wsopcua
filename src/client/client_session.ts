@@ -61,7 +61,6 @@ import { RequestHeader } from '../generated/RequestHeader';
 import { IBrowseDescription } from '../generated/BrowseDescription';
 import { RegisterNodesRequest } from '../generated/RegisterNodesRequest';
 import { RegisterNodesResponse } from '../generated/RegisterNodesResponse';
-import { isArray } from 'util';
 import { UnregisterNodesRequest } from '../generated/UnregisterNodesRequest';
 import { UnregisterNodesResponse } from '../generated/UnregisterNodesResponse';
 import { TransferSubscriptionsResponse } from '../service-subscription';
@@ -310,6 +309,7 @@ export class ClientSession extends EventEmitter {
                 r = response.results[i];
 
                 if (r.continuationPoint !== null) {
+                    // tslint:disable-next-line:max-line-length
                     console.log(' warning: BrowseResponse : server didn\'t send all references and has provided a continuationPoint. Unfortunately we do not support this yet');
                     console.log('           self.requestedMaxReferencesPerNode = ', this._requestedMaxReferencesPerNode);
                     console.log('           continuationPoint ', r.continuationPoint);
@@ -367,8 +367,8 @@ export class ClientSession extends EventEmitter {
         assert('function' === typeof callback);
 
 
-        const isArray = Array.isArray(nodes);
-        if (!isArray) {
+        const isArr = Array.isArray(nodes);
+        if (!isArr) {
             nodes = <string[] | read_service.ReadValueId[]>[nodes];
         }
 
@@ -413,8 +413,8 @@ export class ClientSession extends EventEmitter {
 
             response.results = response.results || [];
             response.diagnosticInfos = response.diagnosticInfos || [];
-            const results = isArray ? response.results : response.results[0];
-            const diags = isArray ? response.diagnosticInfos : response.diagnosticInfos[0];
+            const results = isArr ? response.results : response.results[0];
+            const diags = isArr ? response.diagnosticInfos : response.diagnosticInfos[0];
 
             callback(null, results, diags);
 
@@ -440,8 +440,8 @@ export class ClientSession extends EventEmitter {
      */
     readHistoryValue(nodes, start, end, callback) {
         assert('function' === typeof callback);
-        const isArray = Array.isArray(nodes);
-        if (!isArray) {
+        const isArr = Array.isArray(nodes);
+        if (!isArr) {
             nodes = [nodes];
         }
 
@@ -484,8 +484,8 @@ export class ClientSession extends EventEmitter {
             assert(response instanceof historizing_service.HistoryReadResponse);
             assert(nodes.length === response.results.length);
 
-            callback(null, isArray ? response.results : response.results[0],
-                isArray ? response.diagnosticInfos : response.diagnosticInfos[0]);
+            callback(null, isArr ? response.results : response.results[0],
+                isArr ? response.diagnosticInfos : response.diagnosticInfos[0]);
         });
     }
 
@@ -1436,11 +1436,11 @@ public evaluateRemainingLifetime(): number {
                 return callback(null, inputArguments, outputArguments);
             }
             // now read the variable
-            this.read(nodesToRead, (err, dataValues) => {
+            this.read(nodesToRead, (error: Error|null, dataValues) => {
 
                 /* istanbul ignore next */
-                if (err) {
-                    return callback(err);
+                if (error) {
+                    return callback(error);
                 }
 
                 dataValues.forEach(function (dataValue, index) {
@@ -1456,7 +1456,7 @@ public evaluateRemainingLifetime(): number {
     }
 
     public registerNodes(nodesToRegister: NodeId[] | string[], callback: ResponseCallback<NodeId[]>) {
-        assert(isArray(nodesToRegister));
+        assert(Array.isArray(nodesToRegister));
 
         const request = new RegisterNodesRequest({
             nodesToRegister: (<any>nodesToRegister).map(resolveNodeId)
@@ -1488,7 +1488,7 @@ public evaluateRemainingLifetime(): number {
             assert(response instanceof UnregisterNodesResponse);
             callback(null);
         });
-    };
+    }
 
     /**
      * @method queryFirst
@@ -1562,7 +1562,8 @@ public evaluateRemainingLifetime(): number {
         console.log(' serverCertificate........ ', this.serverCertificate.toString('base64'));
         console.log(' serverSignature.......... ', this.serverSignature);
         console.log(' lastRequestSentTime...... ', new Date(this.lastRequestSentTime).toISOString(), now - this.lastRequestSentTime);
-        console.log(' lastResponseReceivedTime. ', new Date(this.lastResponseReceivedTime).toISOString(), now - this.lastResponseReceivedTime);
+        console.log(' lastResponseReceivedTime. ',
+                new Date(this.lastResponseReceivedTime).toISOString(), now - this.lastResponseReceivedTime);
     }
 
     protected __findBasicDataType(session, dataTypeId, callback) {
@@ -1625,7 +1626,7 @@ public evaluateRemainingLifetime(): number {
                 attributeId: AttributeIds.DataType
             })
         ];
-        session.read(nodes_to_read, 0, (err, nodes_to_read, dataValues?: DataValue[]) => {
+        session.read(nodes_to_read, 0, (err, nodesToRead, dataValues?: DataValue[]) => {
             if (err) { return callback(err); }
             if (dataValues[0].statusCode.isNot(StatusCodes.Good)) {
                 return callback(new Error('cannot read DataType Attribute ' + dataValues[0].statusCode.toString()));

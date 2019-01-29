@@ -338,11 +338,12 @@ protected _install_socket(socket) {
         // note: The "close" event will be called directly following this event.
     });
 
-    if (false) {
+    const do_destroy_on_timeout = false;
+    if (do_destroy_on_timeout) {
         /*
         // set socket timeout
-        debugLog("setting client/server socket timeout to " + this.timeout);
-        this._socket.setTimeout(this.timeout,() =>{
+        debugLog("setting client/server socket timeout to ",this.timeout);
+        this._socket.setTimeout(this.timeout,function(){
             console.log(" connection has timed out (timeout =",this.timeout,")");
             this._socket.destroy();
         });
@@ -417,7 +418,7 @@ public disconnect(callback) {
 };
 
 public isValid() {
-    return this._socket && !this._socket.destroyed && !this.__disconnecting__;
+    return this._socket !== null && !this._socket.destroyed && !this.__disconnecting__;
 };
 
 }

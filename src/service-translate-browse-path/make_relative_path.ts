@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 /*=
  * Release 1.03 page 152 OPC Unified Architecture, Part 4
  * Annex A (informative) BNF definitions
  * BNF for RelativePath
  */
 
-import {assert} from "../assert";
+import {assert} from '../assert';
 
-import {resolveNodeId} from "../nodeid/nodeid";
-import {QualifiedName} from "../generated/QualifiedName";
-import {RelativePath, IRelativePath} from "../generated/RelativePath";
-import { RelativePathElement } from "../generated/RelativePathElement";
+import {resolveNodeId} from '../nodeid/nodeid';
+import {QualifiedName} from '../generated/QualifiedName';
+import {RelativePath, IRelativePath} from '../generated/RelativePath';
+import { RelativePathElement } from '../generated/RelativePathElement';
 
 /*
 
@@ -62,8 +62,8 @@ import { RelativePathElement } from "../generated/RelativePathElement";
  *                          omitted then namespace index 0 is used.
  */
 
-var hierarchicalReferenceTypeNodeId = resolveNodeId("HierarchicalReferences");
-var aggregatesReferenceTypeNodeId = resolveNodeId("Aggregates");
+const hierarchicalReferenceTypeNodeId = resolveNodeId('HierarchicalReferences');
+const aggregatesReferenceTypeNodeId = resolveNodeId('Aggregates');
 
 
 
@@ -78,25 +78,25 @@ var aggregatesReferenceTypeNodeId = resolveNodeId("Aggregates");
 //  <reserved-char> ::= '/' | '.' | '<' | '>' | ':' | '#' | '!' | '&'
 //  <name-char> ::= All valid characters for a String (see Part 3) excluding reserved-chars.
 //
-var name_char = /[^/\.<>:#!&]/;
-var reserved_char = /[/\.<>:#!&]/;
-var regName = new RegExp( "(" + name_char.source + "|(\&" + reserved_char.source +"))+");
-var regNamespaceIndex = /[0-9]+/;
-var regBrowseName = new RegExp("("+ regNamespaceIndex.source +":)?(" + regName.source+")");
-var regReferenceType = new RegExp("\/|\\.|(\<(\#)?(\!)?("+ regBrowseName.source +")\>)");
+const name_char = /[^/.<>:#!&]/;
+const reserved_char = /[/.<>:#!&]/;
+const regName = new RegExp( '(' + name_char.source + '|(&' + reserved_char.source + '))+');
+const regNamespaceIndex = /[0-9]+/;
+const regBrowseName = new RegExp('(' + regNamespaceIndex.source + ':)?(' + regName.source + ')');
+const regReferenceType = new RegExp('/|\\.|(<(#)?(!)?(' + regBrowseName.source + ')>)');
 
-var regRelativePath = new RegExp("("+regReferenceType.source+")("+regBrowseName.source+")?");
+const regRelativePath = new RegExp('(' + regReferenceType.source + ')(' + regBrowseName.source + ')?');
 function unescape(str) {
-    return str.replace(/&/g,"");
+    return str.replace(/&/g, '');
 }
 function makeQualifiedName(mm) {
-    var strName = mm[10];
-    if (!strName || strName.length===0) {
+    const strName = mm[10];
+    if (!strName || strName.length === 0) {
         return new QualifiedName();
     }
-    var namespaceIndex = mm[11] ? parseInt(mm[11]) : 0 ;
-    var name = unescape(mm[12]);
-    return  new QualifiedName({namespaceIndex: namespaceIndex,name: name});
+    const namespaceIndex = mm[11] ? parseInt(mm[11]) : 0 ;
+    const name = unescape(mm[12]);
+    return  new QualifiedName({namespaceIndex: namespaceIndex, name: name});
 }
 
 /**
@@ -112,56 +112,56 @@ function makeQualifiedName(mm) {
  *      var relativePath = makeRelativePath("/Server.ServerStatus.CurrentTime");
  *
  */
-export function makeRelativePath(str: string,addressSpace?): RelativePath {
+export function makeRelativePath(str: string, addressSpace?): RelativePath {
 
 
-    
-    let r = new RelativePath({ elements : []});
 
-    while (str.length>0) {
+    const r = new RelativePath({ elements : []});
 
-        var matches = str.match(regRelativePath);
+    while (str.length > 0) {
+
+        const matches = str.match(regRelativePath);
         if (!matches) {
-            throw new Error("Malformed relative path  :'" + str +"'");
+            throw new Error('Malformed relative path  :\'' + str + '\'');
         }
         // console.log(mm);
 
-        var referenceTypeId,includeSubtypes,isInverse;
+        let referenceTypeId, includeSubtypes, isInverse;
 
         //
         // ------------ extract reference type
         //
-        var refStr = matches[1];
-        if (refStr === "/" ) {
+        const refStr = matches[1];
+        if (refStr === '/' ) {
 
-            referenceTypeId= hierarchicalReferenceTypeNodeId;
-            isInverse= false;
-            includeSubtypes= true;
-        }else if (refStr === "." ) {
+            referenceTypeId = hierarchicalReferenceTypeNodeId;
+            isInverse = false;
+            includeSubtypes = true;
+        } else if (refStr === '.' ) {
 
-            referenceTypeId= aggregatesReferenceTypeNodeId;
-            isInverse= false;
-            includeSubtypes= true;
+            referenceTypeId = aggregatesReferenceTypeNodeId;
+            isInverse = false;
+            includeSubtypes = true;
         } else {
 
             // match  3 =>    "#" or null
-            includeSubtypes = (matches[3] !== "#");
+            includeSubtypes = (matches[3] !== '#');
 
             // match  4 =>    "!" or null
-            isInverse = (matches[4] === "!");
+            isInverse = (matches[4] === '!');
 
             // match 5
             // namespace match 6 ( ns:)
             // name      match 7
-            var ns = matches[6] ? parseInt(matches[6]) :0;
-            var name = matches[7];
+            const ns = matches[6] ? parseInt(matches[6]) : 0;
+            const name = matches[7];
             if ( !matches[6] ) {
-                //xx console.log( mm[6])
+                // xx console.log( mm[6])
                 referenceTypeId = resolveNodeId(name);
 
             } else {
                 // AddressSpace.prototype.findReferenceType = function (refType,namespace)
-                referenceTypeId = addressSpace.findReferenceType(name,ns);
+                referenceTypeId = addressSpace.findReferenceType(name, ns);
             }
             assert(referenceTypeId && !referenceTypeId.isEmpty());
         }
@@ -178,5 +178,5 @@ export function makeRelativePath(str: string,addressSpace?): RelativePath {
 
 
     return new RelativePath(r);
-        //xx console.log(r.toString());
+        // xx console.log(r.toString());
 }

@@ -123,7 +123,7 @@ export function isValidUInt8(value): boolean {
     if (!Number.isFinite(value)) {
         return false;
     }
-    return value >= -0x00 && value <= 0xff;
+    return value >= 0x00 && value <= 0xff;
 }
 export function randomUInt8(): number {
     return getRandomInt(0x00, 0xff);

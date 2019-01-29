@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import {assert} from '../assert';
 import {doDebug, debugLog} from '../common/debug';
@@ -12,7 +12,7 @@ import { RequestHeader } from '../generated/RequestHeader';
 import forEachOf from 'async-es/forEachOf';
 import whilst from 'async-es/whilst';
 
-//xx const debugLog = console.log;
+// xx const debugLog = console.log;
 
 /**
  * A client side implementation to deal with publish service.
@@ -29,20 +29,22 @@ import whilst from 'async-es/whilst';
  * Subscription id callback
  */
 export class ClientSidePublishEngine {
-    protected _session : ClientSession;
-    protected subscriptionAcknowledgements : subscription_service.SubscriptionAcknowledgement[];
-    protected subscriptionMap  : {[key : number]: ClientSubscription; };
-    protected timeoutHint : number;
-    protected nbPendingPublishRequests : number;
-    protected activeSubscriptionCount : number;
-    protected nbMaxPublishRequestsAcceptedByServer : number;
-    protected isSuspended : boolean;
 
     /**
      * the number of requests queued up and sent at once
      */
-    public static publishRequestCountInPipeline : number = 5;
-constructor (session : ClientSession) {
+    public static publishRequestCountInPipeline = 5;
+
+    protected _session: ClientSession;
+    protected subscriptionAcknowledgements: subscription_service.SubscriptionAcknowledgement[];
+    protected subscriptionMap: {[key: number]: ClientSubscription; };
+    protected timeoutHint: number;
+    protected nbPendingPublishRequests: number;
+    protected activeSubscriptionCount: number;
+    protected nbMaxPublishRequestsAcceptedByServer: number;
+    protected isSuspended: boolean;
+
+constructor (session: ClientSession) {
     assert(session instanceof Object);
 
     this._session = session;
@@ -70,9 +72,9 @@ constructor (session : ClientSession) {
  * @property subscriptionCount
  * @type {Number}
  */
-public get subscriptionCount() {  
+public get subscriptionCount() {
     return Object.keys(this.subscriptionMap).length;
-};
+}
 
 public get session() {
     return this._session;
@@ -80,43 +82,43 @@ public get session() {
 
 
 public suspend(flag) {
-    assert(this.isSuspended !== !!flag,"invalid state");
+    assert(this.isSuspended !== !!flag, 'invalid state');
     this.isSuspended = !!flag;
     if (this.isSuspended) {
 
     } else {
         this.replenish_publish_request_queue();
     }
-};
+}
 
 /**
  * @method acknowledge_notification
  * @param subscriptionId {Number} the subscription id
  * @param sequenceNumber {Number} the sequence number
  */
-public acknowledge_notification(subscriptionId : number, sequenceNumber : number) {
+public acknowledge_notification(subscriptionId: number, sequenceNumber: number) {
 
-    //xx //xx console.log("xxxxxxx acknowledge_notification".bgWhite.red.bold, sequenceNumber);
-    //xx this._unacked = this._unacked || [];
-    //xx for (let i =this._lastAcked+1;i<sequenceNumber;i++) {
-    //xx     //xx console.log("xxxxxxx acknowledge_notification => remembering unacked sequence number".bgWhite.red,i);
-    //xx     this._unacked.push(i);
-    //xx }
-    //xx //xx assert(this.lastAcknowldegedSequence+1 === sequenceNumber,"expecting lastAcknowledgedSequence ");
-    //xx this._lastAcked = sequenceNumber;
+    // xx //xx console.log("xxxxxxx acknowledge_notification".bgWhite.red.bold, sequenceNumber);
+    // xx this._unacked = this._unacked || [];
+    // xx for (let i =this._lastAcked+1;i<sequenceNumber;i++) {
+    // xx     //xx console.log("xxxxxxx acknowledge_notification => remembering unacked sequence number".bgWhite.red,i);
+    // xx     this._unacked.push(i);
+    // xx }
+    // xx //xx assert(this.lastAcknowldegedSequence+1 === sequenceNumber,"expecting lastAcknowledgedSequence ");
+    // xx this._lastAcked = sequenceNumber;
 
     this.subscriptionAcknowledgements.push(new subscription_service.SubscriptionAcknowledgement({
         subscriptionId: subscriptionId,
         sequenceNumber: sequenceNumber
     }));
-};
+}
 
-public cleanup_acknowledgment_for_subscription(subscriptionId : number) {
+public cleanup_acknowledgment_for_subscription(subscriptionId: number) {
 
     this.subscriptionAcknowledgements = this.subscriptionAcknowledgements.filter(function (a) {
         return a.subscriptionId !== subscriptionId;
     });
-};
+}
 
 /**
  * @method send_publish_request
@@ -147,16 +149,16 @@ public send_publish_request() {
         });
 
     }
-};
+}
 
 
 protected _send_publish_request() {
-    assert(this._session, "ClientSidePublishEngine terminated ?");
-    assert(!this.isSuspended,"should not be suspended");
+    assert(this._session, 'ClientSidePublishEngine terminated ?');
+    assert(!this.isSuspended, 'should not be suspended');
 
-    this.nbPendingPublishRequests +=1;
+    this.nbPendingPublishRequests += 1;
 
-    debugLog("sending publish request " + this.nbPendingPublishRequests);
+    debugLog('sending publish request ' + this.nbPendingPublishRequests);
 
     const subscriptionAcknowledgements = this.subscriptionAcknowledgements;
     this.subscriptionAcknowledgements = [];
@@ -190,7 +192,7 @@ protected _send_publish_request() {
 
     // in our case:
 
-    assert( this.nbPendingPublishRequests >0);
+    assert( this.nbPendingPublishRequests > 0);
     const calculatedTimeout = this.nbPendingPublishRequests * this.timeoutHint;
 
     const publish_request = new subscription_service.PublishRequest({
@@ -204,25 +206,25 @@ protected _send_publish_request() {
 
         this.nbPendingPublishRequests -= 1;
         if (err) {
-            debugLog("ClientSidePublishEngine.prototype._send_publish_request callback : " + err.message);
-            debugLog("'" + err.message + "'");
+            debugLog('ClientSidePublishEngine.prototype._send_publish_request callback : ' + err.message);
+            debugLog('\'' + err.message + '\'');
 
-            if(err.message.match("not connected")) {
-                debugLog(" WARNING :  CLIENT IS NOT CONNECTED : MAY BE RECONNECTION IS IN PROGRESS");
-                debugLog("self.activeSubscriptionCount =" + this.activeSubscriptionCount);
+            if (err.message.match('not connected')) {
+                debugLog(' WARNING :  CLIENT IS NOT CONNECTED : MAY BE RECONNECTION IS IN PROGRESS');
+                debugLog('self.activeSubscriptionCount =' + this.activeSubscriptionCount);
                 // the previous publish request has ended up with an error because
                 // the connection has failed ...
                 // There is no need to send more publish request for the time being until reconnection is completed
                 active = false;
             }
             // istanbul ignore next
-            if (err.message.match(/BadNoSubscription/) &&  this.activeSubscriptionCount >=1) {
+            if (err.message.match(/BadNoSubscription/) &&  this.activeSubscriptionCount >= 1) {
                 // there is something wrong happening here.
                 // the server tells us that there is no subscription for this session
                 // but the client have some active subscription left.
                 // This could happen if the client has missed or not received the StatusChange Notification
-                debugLog(" WARNING :   SERVER TELLS THAT IT HAS NO SUBSCRIPTION , BUT CLIENT DISAGREE");
-                debugLog("self.activeSubscriptionCount =" + this.activeSubscriptionCount);
+                debugLog(' WARNING :   SERVER TELLS THAT IT HAS NO SUBSCRIPTION , BUT CLIENT DISAGREE');
+                debugLog('self.activeSubscriptionCount =' + this.activeSubscriptionCount);
                 active = false;
             }
 
@@ -232,8 +234,8 @@ protected _send_publish_request() {
                 // may be the session timeout is shorted than the subscription life time
                 // and the client does not send intermediate keepAlive request to keep the connection working.
                 //
-                debugLog(" WARNING : SERVER TELLS THAT THE SESSION HAS CLOSED ...");
-                debugLog("   the ClientSidePublishEngine shall now be disabled, as server will reject any further request");
+                debugLog(' WARNING : SERVER TELLS THAT THE SESSION HAS CLOSED ...');
+                debugLog('   the ClientSidePublishEngine shall now be disabled, as server will reject any further request');
                 // close all active subscription....
                 active = false;
             }
@@ -247,30 +249,31 @@ protected _send_publish_request() {
                 //   let adjust the nbMaxPublishRequestsAcceptedByServer value so we never overflow the server
                 //   with extraneous publish requests in the future.
                 //
-                this.nbMaxPublishRequestsAcceptedByServer = Math.min(this.nbPendingPublishRequests,this.nbMaxPublishRequestsAcceptedByServer);
+                this.nbMaxPublishRequestsAcceptedByServer =
+                        Math.min(this.nbPendingPublishRequests, this.nbMaxPublishRequestsAcceptedByServer);
                 active = false;
 
-                debugLog(" WARNING : SERVER TELLS THAT TOO MANY PUBLISH REQUEST HAS BEEN SEND ...");
-                debugLog(" On our side nbPendingPublishRequests = " + this.nbPendingPublishRequests);
-                debugLog(" => nbMaxPublishRequestsAcceptedByServer =" + this.nbMaxPublishRequestsAcceptedByServer);
+                debugLog(' WARNING : SERVER TELLS THAT TOO MANY PUBLISH REQUEST HAS BEEN SEND ...');
+                debugLog(' On our side nbPendingPublishRequests = ' + this.nbPendingPublishRequests);
+                debugLog(' => nbMaxPublishRequestsAcceptedByServer =' + this.nbMaxPublishRequestsAcceptedByServer);
             }
         } else {
             if (doDebug) {
-                debugLog("ClientSidePublishEngine.prototype._send_publish_request callback ");
+                debugLog('ClientSidePublishEngine.prototype._send_publish_request callback ');
             }
             this._receive_publish_response(response);
         }
 
         // feed the server with a new publish Request to the server
-        if (active  && this.activeSubscriptionCount>0 ) {
+        if (active  && this.activeSubscriptionCount > 0 ) {
             this.send_publish_request();
         }
     });
-};
+}
 
 public terminate() {
     this._session = null;
-};
+}
 
 /**
  * @method registerSubscription
@@ -279,9 +282,9 @@ public terminate() {
  * @param subscription.timeoutHint
  * @param subscription.onNotificationMessage {Function} callback
  */
-public registerSubscription(subscription : ClientSubscription) {
+public registerSubscription(subscription: ClientSubscription) {
 
-    debugLog("ClientSidePublishEngine#registerSubscription " + subscription.subscriptionId);
+    debugLog('ClientSidePublishEngine#registerSubscription ' + subscription.subscriptionId);
 
     assert(arguments.length === 1);
     assert(Number.isFinite(<any>subscription.subscriptionId));
@@ -293,10 +296,10 @@ public registerSubscription(subscription : ClientSubscription) {
     this.subscriptionMap[subscription.subscriptionId] = subscription;
 
     this.timeoutHint = Math.max(this.timeoutHint, subscription.timeoutHint);
-    debugLog("                       setting timeoutHint = " + this.timeoutHint + subscription.timeoutHint);
+    debugLog('                       setting timeoutHint = ' + this.timeoutHint + subscription.timeoutHint);
 
     this.replenish_publish_request_queue();
-};
+}
 
 public replenish_publish_request_queue() {
 
@@ -312,27 +315,27 @@ public replenish_publish_request_queue() {
     for (let i = 0; i < ClientSidePublishEngine.publishRequestCountInPipeline - 1; i++) {
         this.send_publish_request();
     }
-};
+}
 
 /**
  * @method unregisterSubscription
  *
  * @param subscriptionId
  */
-public unregisterSubscription(subscriptionId : number | string) {
+public unregisterSubscription(subscriptionId: number | string) {
 
-    debugLog("ClientSidePublishEngine#unregisterSubscription " + subscriptionId);
+    debugLog('ClientSidePublishEngine#unregisterSubscription ' + subscriptionId);
 
-    assert(Number.isFinite(<any>subscriptionId) && subscriptionId >0);
-    
+    assert(Number.isFinite(<any>subscriptionId) && subscriptionId > 0);
+
     this.activeSubscriptionCount -= 1;
     assert(subscriptionId in this.subscriptionMap);
     delete this.subscriptionMap[subscriptionId];
-};
+}
 
-public getSubscriptionIds() : number[] {
+public getSubscriptionIds(): number[] {
     return Object.keys(this.subscriptionMap).map(parseInt);
-};
+}
 
 
 /***
@@ -349,13 +352,13 @@ public getSubscription(subscriptionId: number) {
 }
 
 public hasSubscription(subscriptionId: number) {
-    assert(_.isFinite(subscriptionId) && subscriptionId > 0);
+    assert(Number.isFinite(subscriptionId) && subscriptionId > 0);
     return this.subscriptionMap.hasOwnProperty(subscriptionId);
 }
 
 protected _receive_publish_response (response: subscription_service.PublishResponse) {
 
-    debugLog("receive publish response");
+    debugLog('receive publish response');
     const self = this;
 
     // the id of the subscription sending the notification message
@@ -378,33 +381,32 @@ protected _receive_publish_response (response: subscription_service.PublishRespo
     if (notificationMessage.notificationData.length !== 0) {
         self.acknowledge_notification(subscriptionId, notificationMessage.sequenceNumber);
     }
-    //else {
+    // else {
     // this is a keep-alive notification
     // in this case , we shall not acknowledge notificationMessage.sequenceNumber
     // which is only an information of what will be the future sequenceNumber.
-    //}
+    // }
 
     const subscription = self.subscriptionMap[subscriptionId];
 
     if (subscription && self._session !== null) {
-      
-        try{
+
+        try {
            // delegate notificationData to the subscription callback
            subscription.onNotificationMessage(notificationMessage);
-        }
-        catch(err) {
-          if (doDebug){
+        } catch (err) {
+          if (doDebug) {
             console.log(err);
-            debugLog("Exception in onNotificationMessage" );
+            debugLog('Exception in onNotificationMessage' );
           }
         }
 
     } else {
-        debugLog(" ignoring notificationMessage" + notificationMessage + " for subscription" + subscriptionId);
-        debugLog(" because there is no subscription.");
-        debugLog(" or because there is no session for the subscription (session terminated ?).");
+        debugLog(' ignoring notificationMessage' + notificationMessage + ' for subscription' + subscriptionId);
+        debugLog(' because there is no subscription.');
+        debugLog(' or because there is no session for the subscription (session terminated ?).');
     }
-};
+}
 
 public republish(callback) {
 
@@ -422,7 +424,7 @@ public republish(callback) {
      * @param _i_callback
      * @private
      */
-    function _republish(subscription,subscriptionId,_i_callback) {
+    function _republish(subscription, subscriptionId, _i_callback) {
 
         assert(subscription.subscriptionId === +subscriptionId);
 
@@ -431,16 +433,16 @@ public republish(callback) {
         function _send_republish(_b_callback) {
             const request = new subscription_service.RepublishRequest({
                 subscriptionId: subscription.subscriptionId,
-                retransmitSequenceNumber: subscription.lastSequenceNumber+1
+                retransmitSequenceNumber: subscription.lastSequenceNumber + 1
             });
 
             // istanbul ignore next
             if (doDebug) {
-                debugLog(" republish Request for subscription" +
-                    request.subscriptionId + " retransmitSequenceNumber=" + request.retransmitSequenceNumber);
+                debugLog(' republish Request for subscription' +
+                    request.subscriptionId + ' retransmitSequenceNumber=' + request.retransmitSequenceNumber);
             }
 
-            self._session.republish(request,function(err,response){
+            self._session.republish(request, function(err, response) {
                 if (!err &&  response.responseHeader.serviceResult.equals(StatusCodes.Good)) {
                      // reprocess notification message  and keep going
                     subscription.onNotificationMessage(response.notificationMessage);
@@ -448,7 +450,7 @@ public republish(callback) {
                     if (!err) {
                         err = new Error(response.responseHeader.serviceResult.toString());
                     }
-                    debugLog(" _send_republish ends with " + err.message);
+                    debugLog(' _send_republish ends with ' + err.message);
                     is_done = true;
                 }
                 _b_callback(err);
@@ -458,22 +460,22 @@ public republish(callback) {
         setImmediate(function() {
 
             assert('function' === typeof _i_callback);
-            whilst(function (){ return !is_done},_send_republish,function(err) {
+            whilst(function () { return !is_done; }, _send_republish, function(err) {
 
-                debugLog("nbPendingPublishRequest = " + self.nbPendingPublishRequests);
-                debugLog(" _republish ends with " + (err ? err.message : "null"));
+                debugLog('nbPendingPublishRequest = ' + self.nbPendingPublishRequests);
+                debugLog(' _republish ends with ' + (err ? err.message : 'null'));
                 _i_callback(err);
             });
         });
     }
 
-    function repairSubscription(subscription: ClientSubscription,subscriptionId,_the_callback) {
+    function repairSubscription(subscription: ClientSubscription, subscriptionId, _the_callback) {
 
-        _republish(subscription,subscriptionId,function (err) {
+        _republish(subscription, subscriptionId, function (err) {
 
             assert(!err || err instanceof Error);
 
-            debugLog("---------------------------------------------------- err =",err ? err.message: null);
+            debugLog('---------------------------------------------------- err =', err ? err.message : null);
 
             if (err && err.message.match(/BadSessionInvalid/)) {
                 // _republish failed because subscriptionId is not valid anymore on server side.
@@ -490,7 +492,7 @@ public republish(callback) {
                 // In this case, Client must recreate a subscription and recreate monitored item without altering
                 // the event handlers
                 //
-                debugLog("_republish failed because subscriptionId is not valid anymore on server side.");
+                debugLog('_republish failed because subscriptionId is not valid anymore on server side.');
                 return subscription.recreateSubscriptionAndMonitoredItem(_the_callback);
             }
             _the_callback();
@@ -499,7 +501,7 @@ public republish(callback) {
 
     }
 
-    forEachOf(self.subscriptionMap,repairSubscription,callback);
+    forEachOf(self.subscriptionMap, repairSubscription, callback);
 }
 
 }

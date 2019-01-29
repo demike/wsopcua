@@ -12,7 +12,7 @@ import {registerSpecialVariantEncoder} from '../factory';
 
 registerSpecialVariantEncoder(DataValue, 'DataValue');
 
-import {getCurrentClock, coerceClock} from '../date-time/date_time';
+import {getCurrentClock} from '../date-time/date_time';
 
 import {Variant, sameVariant, VariantArrayType} from '../variant';
 
@@ -32,25 +32,22 @@ import {Variant, sameVariant, VariantArrayType} from '../variant';
 //     return str;
 // };
 
-export function apply_timestamps(dataValue, timestampsToReturn, attributeId) {
+export function apply_timestamps(dataValue: DataValue, timestampsToReturn: TimestampsToReturn, attributeId: number) {
 
     assert(attributeId > 0);
-    assert(timestampsToReturn.hasOwnProperty('key'));
-    assert(dataValue instanceof DataValue);
-    assert(dataValue.hasOwnProperty('serverTimestamp'));
-    assert(dataValue.hasOwnProperty('sourceTimestamp'));
 
     const cloneDataValue = new DataValue({});
     cloneDataValue.value = dataValue.value;
     cloneDataValue.statusCode = dataValue.statusCode;
 
-    const now = getCurrentClock();
+    let now = null;
     // apply timestamps
     switch (timestampsToReturn) {
         case TimestampsToReturn.Server:
             cloneDataValue.serverTimestamp = dataValue.serverTimestamp;
             cloneDataValue.serverPicoseconds = dataValue.serverPicoseconds;
-            if (true || !cloneDataValue.serverTimestamp ) {
+            if (!cloneDataValue.serverTimestamp ) {
+                now = now || getCurrentClock();
                 cloneDataValue.serverTimestamp = now.timestamp;
                 cloneDataValue.serverPicoseconds = now.picoseconds;
             }
@@ -62,7 +59,8 @@ export function apply_timestamps(dataValue, timestampsToReturn, attributeId) {
         case TimestampsToReturn.Both:
             cloneDataValue.serverTimestamp = dataValue.serverTimestamp;
             cloneDataValue.serverPicoseconds = dataValue.serverPicoseconds;
-            if (true || !cloneDataValue.serverTimestamp ) {
+            if (!cloneDataValue.serverTimestamp ) {
+                now = now || getCurrentClock();
                 cloneDataValue.serverTimestamp = now.timestamp;
                 cloneDataValue.serverPicoseconds = now.picoseconds;
             }

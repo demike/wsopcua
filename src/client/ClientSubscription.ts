@@ -1,17 +1,17 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.client
  */
 
 import {EventEmitter} from 'eventemitter3';
 import {StatusCodes} from '../constants';
-import {assert} from '../assert'
+import {assert} from '../assert';
 
 import {TimestampsToReturn} from '../generated/TimestampsToReturn';
 import {AttributeIds} from '../constants';
 import {resolveNodeId} from '../nodeid/nodeid';
 
-import * as subscription_service from "../service-subscription";
+import * as subscription_service from '../service-subscription';
 
 import {ClientSession} from './client_session';
 import {MonitoredItem} from './MonitoredItem';
@@ -19,7 +19,7 @@ import {ReadValueId, IReadValueId} from '../generated/ReadValueId';
 
 import {MonitoredItemGroup} from './MonitoredItemGroup';
 
-import {doDebug,debugLog} from '../common/debug';
+import {doDebug, debugLog} from '../common/debug';
 import {ClientSidePublishEngine} from './client_publish_engine';
 
 import 'setimmediate';
@@ -29,6 +29,7 @@ import { IMonitoringParameters } from '../generated/MonitoringParameters';
 
 import { ICreateSubscriptionRequest } from '../generated/CreateSubscriptionRequest';
 import { MonitoredItemBase } from './MonitoredItemBase';
+import { ErrorCallback } from './client_base';
 
 
 /**
@@ -54,25 +55,25 @@ import { MonitoredItemBase } from './MonitoredItemBase';
  *    "keepalive",                             : the subscription has received a keep alive message from the server
  *    "received_notifications",                : the subscription has received one or more notification
  */
-export class ClientSubscription extends EventEmitter{
+export class ClientSubscription extends EventEmitter {
 
-    protected hasTimedOut : boolean = false;
+    protected hasTimedOut = false;
 
-    protected _publishEngine : ClientSidePublishEngine;
-    protected _subscriptionId : number | string;
-    protected _publishingEnabled : boolean;
-    protected _publishingInterval : number;
-    protected lifetimeCount : number;
-    protected maxKeepAliveCount : number;
-    protected maxNotificationsPerPublish : number;
-    protected priority : number;
+    protected _publishEngine: ClientSidePublishEngine;
+    protected _subscriptionId: number | string;
+    protected _publishingEnabled: boolean;
+    protected _publishingInterval: number;
+    protected lifetimeCount: number;
+    protected maxKeepAliveCount: number;
+    protected maxNotificationsPerPublish: number;
+    protected priority: number;
 
-    protected _next_client_handle : number;
-    protected monitoredItems : { [key:number] : MonitoredItemBase};
+    protected _next_client_handle: number;
+    protected monitoredItems: { [key: number]: MonitoredItemBase};
 
-    protected _timeoutHint : number;
-    protected lastSequenceNumber : number;
-    protected lastRequestSentTime: Date;
+    protected _timeoutHint: number;
+    protected lastSequenceNumber: number;
+    protected lastRequestSentTime: number;
 
     /**
      * the associated session
@@ -81,7 +82,7 @@ export class ClientSubscription extends EventEmitter{
      */
     public get session() {
         return this._publishEngine.session;
-    } 
+    }
 
     public get subscriptionId() {
         return this._subscriptionId;
@@ -92,7 +93,7 @@ export class ClientSubscription extends EventEmitter{
     }
 
 
-constructor (session : ClientSession, options : ICreateSubscriptionRequest) {
+constructor (session: ClientSession, options: ICreateSubscriptionRequest) {
     super();
     assert(session instanceof ClientSession);
 
@@ -100,20 +101,22 @@ constructor (session : ClientSession, options : ICreateSubscriptionRequest) {
 
 
     //// options should have
-    //var allowedProperties = [
+    // var allowedProperties = [
     //    'requestedPublishingInterval',
     //    'requestedLifetimeCount',
     //    'requestedMaxKeepAliveCount',
     //    'maxNotificationsPerPublish',
     //    'publishingEnabled',
     //    'priority'
-    //];
+    // ];
 
     options = options || {};
     options.requestedPublishingInterval = options.requestedPublishingInterval || 100;
     options.requestedLifetimeCount = options.requestedLifetimeCount || 60;
     options.requestedMaxKeepAliveCount = options.requestedMaxKeepAliveCount || 10;
-    options.maxNotificationsPerPublish = (options.maxNotificationsPerPublish == null || options.maxNotificationsPerPublish == undefined) ? 0 : options.maxNotificationsPerPublish;
+    options.maxNotificationsPerPublish =
+            (options.maxNotificationsPerPublish === null || options.maxNotificationsPerPublish === undefined)
+                     ? 0 : options.maxNotificationsPerPublish;
     options.publishingEnabled = options.publishingEnabled ? true : false;
     options.priority = options.priority || 1;
 
@@ -125,7 +128,7 @@ constructor (session : ClientSession, options : ICreateSubscriptionRequest) {
     this._publishingEnabled = options.publishingEnabled;
     this.priority = options.priority;
 
-    this._subscriptionId = "pending";
+    this._subscriptionId = 'pending';
 
     this._next_client_handle = 0;
     this.monitoredItems = {};
@@ -145,12 +148,12 @@ constructor (session : ClientSession, options : ICreateSubscriptionRequest) {
             if (!err) {
 
 
-                setImmediate(()=> {
+                setImmediate(() => {
                     /**
                      * notify the observers that the subscription has now started
                      * @event started
                      */
-                    this.emit("started", this.subscriptionId);
+                    this.emit('started', this.subscriptionId);
                 });
             }
         });
@@ -160,13 +163,13 @@ constructor (session : ClientSession, options : ICreateSubscriptionRequest) {
 
 protected __create_subscription(callback) {
 
-    assert ('function' === typeof callback)
+    assert ('function' === typeof callback);
 
-    var session = this._publishEngine.session;
+    const session = this._publishEngine.session;
 
-    debugLog("ClientSubscription created ");
+    debugLog('ClientSubscription created ');
 
-    var request = new subscription_service.CreateSubscriptionRequest({
+    const request = new subscription_service.CreateSubscriptionRequest({
         requestedPublishingInterval: this._publishingInterval,
         requestedLifetimeCount: this.lifetimeCount,
         requestedMaxKeepAliveCount: this.maxKeepAliveCount,
@@ -179,7 +182,7 @@ protected __create_subscription(callback) {
 
         if (err) {
             /* istanbul ignore next */
-            this.emit("internal_error", err);
+            this.emit('internal_error', err);
             if (callback) {
                 return callback(err);
             }
@@ -193,12 +196,12 @@ protected __create_subscription(callback) {
             this._timeoutHint = (this.maxKeepAliveCount + 10 ) * this._publishingInterval;
 
             if (doDebug) {
-                debugLog("registering callback");
-                debugLog("publishingInterval               " + this._publishingInterval);
-                debugLog("lifetimeCount                    " + this.lifetimeCount);
-                debugLog("maxKeepAliveCount                " + this.maxKeepAliveCount);
-                debugLog("publish request timeout hint =   " + this._timeoutHint);
-                debugLog("hasTimedOut                      " + this.hasTimedOut);
+                debugLog('registering callback');
+                debugLog('publishingInterval               ' + this._publishingInterval);
+                debugLog('lifetimeCount                    ' + this.lifetimeCount);
+                debugLog('maxKeepAliveCount                ' + this.maxKeepAliveCount);
+                debugLog('publish request timeout hint =   ' + this._timeoutHint);
+                debugLog('hasTimedOut                      ' + this.hasTimedOut);
             }
 
             this._publishEngine.registerSubscription(this);
@@ -208,22 +211,22 @@ protected __create_subscription(callback) {
             }
         }
     });
-};
+}
 
 
-protected __on_publish_response_DataChangeNotification(notification : subscription_service.DataChangeNotification) {
+protected __on_publish_response_DataChangeNotification(notification: subscription_service.DataChangeNotification) {
 
     assert(notification instanceof subscription_service.DataChangeNotification);
 
-    var monitoredItems = notification.monitoredItems;
+    const monitoredItems = notification.monitoredItems;
 
     monitoredItems.forEach( (monitoredItem) => {
 
-        var monitorItemObj = this.monitoredItems[monitoredItem.clientHandle];
+        const monitorItemObj = this.monitoredItems[monitoredItem.clientHandle];
         if (monitorItemObj) {
             if (monitorItemObj.itemToMonitor.attributeId === AttributeIds.EventNotifier) {
-                console.log("Warning: Server send a DataChangeNotification for an EventNotifier. EventNotificationList was expected");
-                console.log("         the Server may not be fully OPCUA compliant. This notification will be ignored.");
+                console.log('Warning: Server send a DataChangeNotification for an EventNotifier. EventNotificationList was expected');
+                console.log('         the Server may not be fully OPCUA compliant. This notification will be ignored.');
             } else {
                 monitorItemObj._notify_value_change(monitoredItem.value);
             }
@@ -231,24 +234,24 @@ protected __on_publish_response_DataChangeNotification(notification : subscripti
 
     });
 
-};
+}
 
-protected __on_publish_response_StatusChangeNotification(notification : subscription_service.StatusChangeNotification) {
+protected __on_publish_response_StatusChangeNotification(notification: subscription_service.StatusChangeNotification) {
 
     assert(notification instanceof subscription_service.StatusChangeNotification);
 
-    debugLog("Client has received a Status Change Notification " + notification.status.toString());
+    debugLog('Client has received a Status Change Notification ' + notification.status.toString());
 
-    //TODO !!!! what is this supposed to do --> this notification has no subscriptionId !!!!
+    // TODO !!!! what is this supposed to do --> this notification has no subscriptionId !!!!
     this._publishEngine.cleanup_acknowledgment_for_subscription((<any>notification).subscriptionId);
 
     if (notification.status === StatusCodes.GoodSubscriptionTransferred) {
         // OPCUA UA Spec 1.0.3 : part 3 - page 82 - 5.13.7 TransferSubscriptions:
         // If the Server transfers the Subscription to the new Session, the Server shall issue a StatusChangeNotification
         // notificationMessage with the status code Good_SubscriptionTransferred to the old Session.
-        console.log("ClientSubscription#__on_publish_response_StatusChangeNotification : GoodSubscriptionTransferred");
+        console.log('ClientSubscription#__on_publish_response_StatusChangeNotification : GoodSubscriptionTransferred');
         this.hasTimedOut = true;
-        this.terminate(()=>{});
+        this.terminate(() => {});
     }
     if (notification.status === StatusCodes.BadTimeout) {
         // the server tells use that the subscription has timed out ..
@@ -267,46 +270,46 @@ protected __on_publish_response_StatusChangeNotification(notification : subscrip
         //    notificationMessage with the status code Bad_Timeout.
         //
         this.hasTimedOut = true;
-        this.terminate(()=>{});
+        this.terminate(() => {});
     }
     /**
      * notify the observers that the server has send a status changed notification (such as BadTimeout )
      * @event status_changed
      */
-    this.emit("status_changed", notification.status, notification.diagnosticInfo);
+    this.emit('status_changed', notification.status, notification.diagnosticInfo);
 
-};
+}
 
-protected __on_publish_response_EventNotificationList (notification:subscription_service.EventNotificationList) {
+protected __on_publish_response_EventNotificationList (notification: subscription_service.EventNotificationList) {
     assert(notification instanceof subscription_service.EventNotificationList);
 
-    notification.events.forEach((event)=> {
-        var monitorItemObj = this.monitoredItems[event.clientHandle];
-        assert(monitorItemObj, "Expecting a monitored item");
+    notification.events.forEach((event) => {
+        const monitorItemObj = this.monitoredItems[event.clientHandle];
+        assert(monitorItemObj, 'Expecting a monitored item');
 
 
         monitorItemObj._notify_value_change(event.eventFields);
     });
-};
+}
 
-public onNotificationMessage(notificationMessage : subscription_service.NotificationMessage) {
+public onNotificationMessage(notificationMessage: subscription_service.NotificationMessage) {
     this.lastRequestSentTime = Date.now();
-    assert(notificationMessage.hasOwnProperty("sequenceNumber"));
+    assert(notificationMessage.hasOwnProperty('sequenceNumber'));
 
     this.lastSequenceNumber = notificationMessage.sequenceNumber;
 
-    this.emit("raw_notification", notificationMessage);
+    this.emit('raw_notification', notificationMessage);
 
-    var notificationData = notificationMessage.notificationData;
+    const notificationData = notificationMessage.notificationData;
 
     if (notificationData.length === 0) {
         // this is a keep alive message
-        debugLog("Client : received a keep alive notification from client");
+        debugLog('Client : received a keep alive notification from client');
         /**
          * notify the observers that a keep alive Publish Response has been received from the server.
          * @event keepalive
          */
-        this.emit("keepalive");
+        this.emit('keepalive');
 
     } else {
 
@@ -315,7 +318,7 @@ public onNotificationMessage(notificationMessage : subscription_service.Notifica
          * each modified monitored Item
          * @event  received_notifications
          */
-        this.emit("received_notifications", notificationMessage);
+        this.emit('received_notifications', notificationMessage);
         // let publish a global event
 
         // now process all notifications
@@ -333,12 +336,12 @@ public onNotificationMessage(notificationMessage : subscription_service.Notifica
                     this.__on_publish_response_EventNotificationList(<subscription_service.EventNotificationList>notification);
                     break;
                 default:
-                    console.log(" Invalid notification :", notification.toString());
+                    console.log(' Invalid notification :', notification.toString());
             }
         });
     }
 
-};
+}
 
 
 
@@ -349,12 +352,12 @@ protected _terminate_step2(callback) {
          * notify the observers tha the client subscription has terminated
          * @event  terminated
          */
-        this._subscriptionId = "terminated";
-        this.emit("terminated");
+        this._subscriptionId = 'terminated';
+        this.emit('terminated');
         callback();
     });
 
-};
+}
 
 /**
  * @method terminate
@@ -363,11 +366,11 @@ protected _terminate_step2(callback) {
  */
 public terminate(callback) {
 
-    assert('function' === typeof callback,"expecting a callback function");
+    assert('function' === typeof callback, 'expecting a callback function');
 
-    if (this._subscriptionId === "terminated") {
+    if (this._subscriptionId === 'terminated') {
         // already terminated... just ignore
-        return callback(new Error("Already Terminated"));
+        return callback(new Error('Already Terminated'));
     }
 
     if (Number.isFinite(<any>this._subscriptionId)) {
@@ -389,29 +392,29 @@ public terminate(callback) {
                  * @event internal_error
                  * @param {Error} err the error
                  */
-                this.emit("internal_error", err);
+                this.emit('internal_error', err);
             }
             this._terminate_step2(callback);
         });
 
     } else {
-        assert(this._subscriptionId === "pending");
+        assert(this._subscriptionId === 'pending');
         this._terminate_step2(callback);
     }
-};
+}
 
 /**
  * increment and get next client handle
  * @method nextClientHandle
  */
-public nextClientHandle() : number {
+public nextClientHandle(): number {
     this._next_client_handle += 1;
     return this._next_client_handle;
-};
+}
 
 
 public _add_monitored_item(clientHandle, monitoredItem) {
-    assert(this.isActive(), "subscription must be active and not terminated");
+    assert(this.isActive(), 'subscription must be active and not terminated');
     assert(monitoredItem.monitoringParameters.clientHandle === clientHandle);
     this.monitoredItems[clientHandle] = monitoredItem;
 
@@ -420,30 +423,30 @@ public _add_monitored_item(clientHandle, monitoredItem) {
      * @event item_added
      * @param {MonitoredItem} the monitored item.
      */
-    this.emit("item_added", monitoredItem);
-};
+    this.emit('item_added', monitoredItem);
+}
 
 
 protected _wait_for_subscription_to_be_ready(done) {
 
-    var self = this;
+    const self = this;
 
-    var _watch_dog = 0;
+    let _watch_dog = 0;
 
     function wait_for_subscription_and_monitor() {
 
         _watch_dog++;
 
-        if (self._subscriptionId === "pending") {
+        if (self._subscriptionId === 'pending') {
             // the subscriptionID is not yet known because the server hasn't replied yet
             // let postpone this call, a little bit, to let things happen
             setImmediate(wait_for_subscription_and_monitor);
 
-        } else if (self._subscriptionId === "terminated") {
+        } else if (self._subscriptionId === 'terminated') {
             // the subscription has been terminated in the meantime
             // this indicates a potential issue in the code using this api.
             if ('function' === typeof done) {
-                done(new Error("subscription has been deleted"));
+                done(new Error('subscription has been deleted'));
             }
         } else {
             done();
@@ -452,7 +455,7 @@ protected _wait_for_subscription_to_be_ready(done) {
 
     setImmediate(wait_for_subscription_and_monitor);
 
-};
+}
 /**
  * add a monitor item to the subscription
  *
@@ -568,25 +571,26 @@ protected _wait_for_subscription_to_be_ready(done) {
  *
  *
  */
-public monitor(itemToMonitor : ReadValueId, requestedParameters : IMonitoringParameters, timestampsToReturn : TimestampsToReturn, done? : (err : Error|null,mItem? : MonitoredItem) => void) {
+public monitor(itemToMonitor: ReadValueId, requestedParameters: IMonitoringParameters, timestampsToReturn: TimestampsToReturn,
+    done?: (err: Error|null, mItem?: MonitoredItem) => void) {
     assert(done === undefined || ('function' === typeof done));
 
     itemToMonitor.nodeId = resolveNodeId(itemToMonitor.nodeId);
-    var monitoredItem = new MonitoredItem(this, itemToMonitor, requestedParameters, timestampsToReturn);
+    const monitoredItem = new MonitoredItem(this, itemToMonitor, requestedParameters, timestampsToReturn);
 
     this._wait_for_subscription_to_be_ready((err) => {
         if (err) {
             return done && done(err);
         }
-        monitoredItem._monitor(function(err){
-            if(err) {
-                return done && done(err);
+        monitoredItem._monitor(function(error?: Error) {
+            if (error) {
+                return done && done(error);
             }
-            done && done(err,monitoredItem);
+            if (done) { done(error, monitoredItem); }
         });
     });
     return monitoredItem;
-};
+}
 
 
 /**
@@ -596,27 +600,28 @@ public monitor(itemToMonitor : ReadValueId, requestedParameters : IMonitoringPar
  * @param timestampsToReturn
  * @param done
  */
-public monitorItems(itemsToMonitor : IReadValueId[], requestedParameters : IMonitoringParameters, timestampsToReturn? : TimestampsToReturn, done? : (err : Error|null, mItemGroup?: MonitoredItemGroup ) => void ) : MonitoredItemGroup {
+public monitorItems(itemsToMonitor: IReadValueId[], requestedParameters: IMonitoringParameters,
+    timestampsToReturn?: TimestampsToReturn, done?: (err: Error|null, mItemGroup?: MonitoredItemGroup ) => void ): MonitoredItemGroup {
     // Try to resolve the nodeId and fail fast if we can't.
     itemsToMonitor.forEach(function (itemToMonitor) {
         itemToMonitor.nodeId = resolveNodeId(itemToMonitor.nodeId);
     });
 
-    var monitoredItemGroup = new MonitoredItemGroup(this, itemsToMonitor, requestedParameters, timestampsToReturn);
+    const monitoredItemGroup = new MonitoredItemGroup(this, itemsToMonitor, requestedParameters, timestampsToReturn);
 
     this._wait_for_subscription_to_be_ready(function (err) {
         if (err) {
             return done && done(err);
         }
-        monitoredItemGroup._monitor(function(err) {
-            if(err) {
-                return done && done(err);
+        monitoredItemGroup._monitor(function(error?: Error) {
+            if (error) {
+                return done && done(error);
             }
-            done && done(err,monitoredItemGroup);
+            if (done) { done(error, monitoredItemGroup); }
         });
     });
     return monitoredItemGroup;
-};
+}
 
 // ClientSubscription.prototype.monitorOld = function (itemToMonitor, requestedParameters, timestampsToReturn, done) {
 //
@@ -663,22 +668,22 @@ public monitorItems(itemsToMonitor : IReadValueId[], requestedParameters : IMoni
 //     return monitoredItem;
 // };
 
-public isActive() : boolean {
-    return typeof this._subscriptionId !== "string";
-};
+public isActive(): boolean {
+    return typeof this._subscriptionId !== 'string';
+}
 
-protected _remove(monitoredItem : MonitoredItemBase) {
+protected _remove(monitoredItem: MonitoredItemBase) {
 
-    var clientHandle = monitoredItem.monitoringParameters.clientHandle;
+    const clientHandle = monitoredItem.monitoringParameters.clientHandle;
     assert(clientHandle);
     assert(clientHandle in this.monitoredItems);
     monitoredItem.removeAllListeners();
     delete this.monitoredItems[clientHandle];
-};
+}
 
-public _delete_monitored_items(monitoredItems : MonitoredItemBase[], callback) : void {
+public _delete_monitored_items(monitoredItems: MonitoredItemBase[], callback): void {
     assert(Array.isArray(monitoredItems));
-    
+
     assert(this.isActive());
 
     monitoredItems.forEach( (monitoredItem) => {
@@ -695,24 +700,24 @@ public _delete_monitored_items(monitoredItems : MonitoredItemBase[], callback) :
 
         callback(err);
     });
-};
+}
 
-protected _delete_monitored_item(monitoredItem : MonitoredItemBase, callback) : void {
+protected _delete_monitored_item(monitoredItem: MonitoredItemBase, callback): void {
     this._delete_monitored_items([monitoredItem], callback);
-};
+}
 
-public setPublishingMode(publishingEnabled, callback) : void {
+public setPublishingMode(publishingEnabled, callback): void {
     assert('function' === typeof callback);
     this.session.setPublishingMode(publishingEnabled, <number>this._subscriptionId, (err, results) => {
         if (err) {
             return callback(err);
         }
         if (results[0] !== StatusCodes.Good) {
-            return callback(new Error("Cannot setPublishingMode " + results[0].toString()));
+            return callback(new Error('Cannot setPublishingMode ' + results[0].toString()));
         }
         callback();
     });
-};
+}
 
 
 
@@ -722,9 +727,9 @@ public setPublishingMode(publishingEnabled, callback) : void {
  */
 public recreateSubscriptionAndMonitoredItem(callback) {
 
-    debugLog("ClientSubscription#recreateSubscriptionAndMonitoredItem");
-   
-    var monitoredItems_old = this.monitoredItems;
+    debugLog('ClientSubscription#recreateSubscriptionAndMonitoredItem');
+
+    const monitoredItems_old = this.monitoredItems;
 
     this._publishEngine.unregisterSubscription(this._subscriptionId);
 
@@ -732,17 +737,18 @@ public recreateSubscriptionAndMonitoredItem(callback) {
 
         this.__create_subscription.bind(this),
 
-        function (callback) {
+        function (cb: ErrorCallback) {
 
-            var test = this._publishEngine.getSubscription(<number>this.subscriptionId);
+            const test = this._publishEngine.getSubscription(<number>this.subscriptionId);
             assert(test === this);
 
             // re-create monitored items
 
-            let itemsToCreate : subscription_service.MonitoredItemCreateRequest[] = [];
-            
-            for (let key in monitoredItems_old) {
-                let monitoredItem = monitoredItems_old[key];
+            const itemsToCreate: subscription_service.MonitoredItemCreateRequest[] = [];
+
+            // tslint:disable-next-line:forin
+            for (const key in monitoredItems_old) {
+                const monitoredItem = monitoredItems_old[key];
                 assert(monitoredItem.monitoringParameters.clientHandle > 0);
                 itemsToCreate.push(new subscription_service.MonitoredItemCreateRequest({
                     itemToMonitor: monitoredItem.itemToMonitor,
@@ -751,7 +757,7 @@ public recreateSubscriptionAndMonitoredItem(callback) {
                 }));
             }
 
-            var createMonitorItemsRequest = new subscription_service.CreateMonitoredItemsRequest({
+            const createMonitorItemsRequest = new subscription_service.CreateMonitoredItemsRequest({
                 subscriptionId: <number>this._subscriptionId,
                 timestampsToReturn: TimestampsToReturn.Both, // self.timestampsToReturn,
                 itemsToCreate: itemsToCreate
@@ -761,12 +767,12 @@ public recreateSubscriptionAndMonitoredItem(callback) {
 
                 if (!err) {
                     assert(response instanceof subscription_service.CreateMonitoredItemsResponse);
-                    var monitoredItemResults = response.results;
+                    const monitoredItemResults = response.results;
 
                     monitoredItemResults.forEach(function (monitoredItemResult, index) {
 
-                        var clientHandle = itemsToCreate[index].requestedParameters.clientHandle;
-                        var monitoredItem = this.monitoredItems[clientHandle];
+                        const clientHandle = itemsToCreate[index].requestedParameters.clientHandle;
+                        const monitoredItem = this.monitoredItems[clientHandle];
 
                         if (monitoredItemResult.statusCode === StatusCodes.Good) {
 
@@ -778,30 +784,30 @@ public recreateSubscriptionAndMonitoredItem(callback) {
 
                             // istanbul ignore next
                             if (doDebug) {
-                                debugLog("monitoredItemResult.statusCode = " + monitoredItemResult.toString());
+                                debugLog('monitoredItemResult.statusCode = ' + monitoredItemResult.toString());
                             }
 
                         } else {
                             // TODO: what should we do ?
-                            debugLog("monitoredItemResult.statusCode = " + monitoredItemResult.statusCode.toString());
+                            debugLog('monitoredItemResult.statusCode = ' + monitoredItemResult.statusCode.toString());
                         }
                     });
 
                 }
-                callback(err);
+                cb(err);
             });
 
         }
 
     ], callback);
-};
+}
 
 public toString() {
-    let str = "";
-    str += "subscriptionId      :" + this.subscriptionId + "\n";
-    str += "publishingInterval  :" + this._publishingInterval + "\n";
-    str += "lifetimeCsount      :" + this.lifetimeCount + "\n";
-    str += "maxKeepAliveCount   :" + this.maxKeepAliveCount + "\n";
+    let str = '';
+    str += 'subscriptionId      :' + this.subscriptionId + '\n';
+    str += 'publishingInterval  :' + this._publishingInterval + '\n';
+    str += 'lifetimeCsount      :' + this.lifetimeCount + '\n';
+    str += 'maxKeepAliveCount   :' + this.maxKeepAliveCount + '\n';
     return str;
 }
 
@@ -809,17 +815,18 @@ public evaluateRemainingLifetime(): number {
     const subscription = this;
     const now = Date.now();
     const timeout = subscription._publishingInterval * subscription.lifetimeCount;
-    const expiryTime = subscription._lastRequestSentTime + timeout;
+    const expiryTime = subscription.lastRequestSentTime + timeout;
     return Math.max(0, (expiryTime - now));
 }
 
 
 
-//var thenify = require("thenify");
+// var thenify = require("thenify");
 
 // ClientSubscription.prototype.setPublishingMode = thenify.withCallback(ClientSubscription.prototype.setPublishingMode);
 // //xx ClientSubscription.prototype.monitor           = thenify.withCallback(ClientSubscription.prototype.monitor);
 // xx ClientSubscription.prototype.monitorItems      = thenify.withCallback(ClientSubscription.prototype.monitorItems);
-// ClientSubscription.prototype.recreateSubscriptionAndMonitoredItem = thenify.withCallback(ClientSubscription.prototype.recreateSubscriptionAndMonitoredItem);
+// ClientSubscription.prototype.recreateSubscriptionAndMonitoredItem =
+//              thenify.withCallback(ClientSubscription.prototype.recreateSubscriptionAndMonitoredItem);
 // ClientSubscription.prototype.terminate = thenify.withCallback(ClientSubscription.prototype.terminate);
 }

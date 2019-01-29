@@ -14,7 +14,7 @@ export abstract class BaseUAObject {
  * @param stream {BinaryStream}
  * @param options {BinaryStream}
  */
-public abstract encode(stream : DataStream|BinaryStreamSizeCalculator);
+public abstract encode(stream: DataStream|BinaryStreamSizeCalculator);
 
 /**
  * Decode the object from the binary stream.
@@ -23,16 +23,16 @@ public abstract encode(stream : DataStream|BinaryStreamSizeCalculator);
  * @param stream {BinaryStream}
  * @param options {Object}
  */
-public abstract decode(stream : DataStream);
+public abstract decode(stream: DataStream);
 
 /**
  * Calculate the required size to store this object in a binary stream.
  * @method binaryStoreSize
  * @return {Number}
  */
-binaryStoreSize() : number {
+binaryStoreSize(): number {
 
-    var stream = new BinaryStreamSizeCalculator();
+    const stream = new BinaryStreamSizeCalculator();
     this.encode(stream);
     return stream.length;
 };
@@ -41,7 +41,7 @@ binaryStoreSize() : number {
  * @method toString
  * @return {String}
  */
-toString() : string {
+toString(): string {
     return this.toJSON();
 };
 
