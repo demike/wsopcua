@@ -1,7 +1,7 @@
 "use strict";
 
 import {assert} from '../assert';
-import {doDebug,debugLog} from '../common/debug';
+import {doDebug, debugLog} from '../common/debug';
 import {StatusCodes} from '../constants/raw_status_codes';
 import { ClientSession } from './client_session';
 import { ClientSubscription} from './ClientSubscription';
@@ -341,14 +341,19 @@ public getSubscriptionIds() : number[] {
  * @param subscriptionId {Number} the subscription Id
  * @return {Subscription|null}
  */
-public getSubscription(subscriptionId : number) {
+public getSubscription(subscriptionId: number) {
     const self = this;
-    assert(Number.isFinite(subscriptionId) && subscriptionId >0);
+    assert(Number.isFinite(subscriptionId) && subscriptionId > 0);
     assert(self.subscriptionMap.hasOwnProperty(subscriptionId.toString()));
     return self.subscriptionMap[subscriptionId];
-};
+}
 
-protected _receive_publish_response (response : subscription_service.PublishResponse) {
+public hasSubscription(subscriptionId: number) {
+    assert(_.isFinite(subscriptionId) && subscriptionId > 0);
+    return this.subscriptionMap.hasOwnProperty(subscriptionId);
+}
+
+protected _receive_publish_response (response: subscription_service.PublishResponse) {
 
     debugLog("receive publish response");
     const self = this;

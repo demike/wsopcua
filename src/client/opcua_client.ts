@@ -5,34 +5,34 @@
 
 
 import {assert} from '../assert';
- 
-var crypto : Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
+
+const crypto: Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
 import async_map from "async-es/map";
 import async_series from "async-es/series";
-//**nomsgcrypt** var exploreCertificate = require("node-opcua-crypto").crypto_explore_certificate.exploreCertificate;
+// **nomsgcrypt** var exploreCertificate = require("node-opcua-crypto").crypto_explore_certificate.exploreCertificate;
 
 import {StatusCodes} from '../constants';
 import * as session_service from '../service-session';
 import {ClientSubscription} from './ClientSubscription';
 
-var AnonymousIdentityToken = session_service.AnonymousIdentityToken;
-var CreateSessionRequest = session_service.CreateSessionRequest;
-var CreateSessionResponse = session_service.CreateSessionResponse;
-var ActivateSessionRequest = session_service.ActivateSessionRequest;
-var ActivateSessionResponse = session_service.ActivateSessionResponse;
-var CloseSessionRequest = session_service.CloseSessionRequest;
+const AnonymousIdentityToken = session_service.AnonymousIdentityToken;
+const CreateSessionRequest = session_service.CreateSessionRequest;
+const CreateSessionResponse = session_service.CreateSessionResponse;
+const ActivateSessionRequest = session_service.ActivateSessionRequest;
+const ActivateSessionResponse = session_service.ActivateSessionResponse;
+const CloseSessionRequest = session_service.CloseSessionRequest;
 
 import * as endpoints_service from "../service-endpoints";
-var ApplicationDescription = endpoints_service.ApplicationDescription;
-var ApplicationType = endpoints_service.ApplicationType;
-var EndpointDescription = endpoints_service.EndpointDescription;
+const ApplicationDescription = endpoints_service.ApplicationDescription;
+const ApplicationType = endpoints_service.ApplicationType;
+const EndpointDescription = endpoints_service.EndpointDescription;
 
 import {MessageSecurityMode, SignatureData} from "../service-secure-channel";
-import {SecurityPolicy,getCryptoFactory,fromURI} from '../secure-channel/security_policy';
+import {SecurityPolicy, fromURI} from '../secure-channel/security_policy';
 import { LocalizedText } from "../generated/LocalizedText";
 
-//**nomsgcrypt** var crypto_utils = require("node-opcua-crypto").crypto_utils;
-var UserNameIdentityToken = session_service.UserNameIdentityToken;
+// **nomsgcrypt** var crypto_utils = require("node-opcua-crypto").crypto_utils;
+const UserNameIdentityToken = session_service.UserNameIdentityToken;
 
 import {computeSignature} from '../secure-channel';
 
@@ -40,19 +40,19 @@ import {UserIdentityTokenType} from '../service-endpoints';
 
 import {ClientSession} from './client_session';
 
-import * as utils from '../utils';
-import {doDebug,debugLog} from '../common/debug';
+import {doDebug, debugLog} from '../common/debug';
 
-import {OPCUAClientBase,OPCUAClientOptions} from './client_base';
+import {OPCUAClientBase, OPCUAClientOptions, ErrorCallback} from './client_base';
 import {isNullOrUndefined} from '../utils';
 
 import {makeApplicationUrn} from "../common/applicationurn";
 import { UserIdentityToken } from "../generated/UserIdentityToken";
 import { stringToUint8Array } from "../basic-types/DataStream";
+import { repair_client_sessions } from './reconnection';
 
 export interface UserIdentityInfo {
-    userName?: string,
-    password?: string
+    userName?: string;
+    password?: string;
 }
 
 function validateServerNonce(serverNonce) {
@@ -202,7 +202,7 @@ protected static verifyEndpointDescriptionMatches(client: OPCUAClient,responseSe
 }
 
 
-protected async __createSession_step2(session : ClientSession, callback) {
+protected async __createSession_step2(session: ClientSession, callback) {
 
     assert(typeof callback === "function");
     assert(this._secureChannel);
@@ -340,7 +340,6 @@ public createUserIdentityToken(session : ClientSession, userIdentityToken : User
 protected _activateSession(session : ClientSession, callback) {
 
     assert(typeof callback === "function");
-   
 
     // istanbul ignore next
     if (!this._secureChannel) {
@@ -636,195 +635,13 @@ protected _ask_for_subscription_republish(session : ClientSession, callback : Fu
     });
 };
 
-protected _on_connection_reestablished(callback : Function) {
+protected _on_connection_reestablished(callback: ErrorCallback) {
 
     assert('function' === typeof callback);
 
     // call base class implementation first
     super._on_connection_reestablished((err) => {
-
-        //
-        // a new secure channel has be created, we need to reactivate the session,
-        // and reestablish the subscription and restart the publish engine.
-        //
-        //
-        // see OPC UA part 4 ( version 1.03 ) figure 34 page 106
-        // 6.5 Reestablishing subscription....
-        //
-        //
-        //
-        //                      +---------------------+
-        //                      | CreateSecureChannel |
-        //                      | CreateSession       |
-        //                      | ActivateSession     |
-        //                      +---------------------+
-        //                                |
-        //                                |
-        //                                v
-        //                      +---------------------+
-        //                      | CreateSubscription  |<-------------------------------------------------------------+
-        //                      +---------------------+                                                              |
-        //                                |                                                                         (1)
-        //                                |
-        //                                v
-        //                      +---------------------+
-        //     (2)------------->| StartPublishEngine  |
-        //                      +---------------------+
-        //                                |
-        //                                V
-        //                      +---------------------+
-        //             +------->| Monitor Connection  |
-        //             |        +---------------------+
-        //             |                    |
-        //             |                    v
-        //             |          Good    /   \
-        //             +-----------------/ SR? \______Broken_____+
-        //                               \     /                 |
-        //                                \   /                  |
-        //                                                       |
-        //                                                       v
-        //                                                 +---------------------+
-        //                                                 |                     |
-        //                                                 | CreateSecureChannel |<-----+
-        //                                                 |                     |      |
-        //                                                 +---------------------+      |
-        //                                                         |                    |
-        //                                                         v                    |
-        //                                                       /   \                  |
-        //                                                      / SR? \______Bad________+
-        //                                                      \     /
-        //                                                       \   /
-        //                                                         |
-        //                                                         |Good
-        //                                                         v
-        //                                                 +---------------------+
-        //                                                 |                     |
-        //                                                 | ActivateSession     |
-        //                                                 |                     |
-        //                                                 +---------------------+
-        //                                                         |
-        //                                                         v                    +-------------------+       +----------------------+
-        //                                                       /   \                  | CreateSession     |       |                      |
-        //                                                      / SR? \______Bad_______>| ActivateSession   |-----> | TransferSubscription |
-        //                                                      \     /                 |                   |       |                      |       (1)
-        //                                                       \   /                  +-------------------+       +----------------------+        ^
-        //                                                         | Good                                                      |                    |
-        //                                                         v   (for each subscription)                                   |                    |
-        //                                                 +--------------------+                                            /   \                  |
-        //                                                 |                    |                                     OK    / OK? \______Bad________+
-        //                                                 | RePublish          |<----------------------------------------- \     /
-        //                                             +-->|                    |                                            \   /
-        //                                             |   +--------------------+
-        //                                             |           |
-        //                                             |           v
-        //                                             | GOOD    /   \
-        //                                             +------  / SR? \______Bad SubscriptionInvalidId______>(1)
-        // (2)                                                  \     /
-        //  ^                                                    \   /
-        //  |                                                      |
-        //  |                                                      |
-        //  |                             BadMessageNotAvailable   |
-        //  +------------------------------------------------------+
-        //
-
-
-        debugLog(" Starting Session reactivation");
-        // repair session
-        var sessions = this._sessions;
-        async_map(sessions, function (session, next) {
-
-            if(doDebug) {
-                debugLog("OPCUAClient#_on_connection_reestablished TRYING TO REACTIVATE EXISTING SESSION " + session.sessionId.toString());
-            }
-
-            this._activateSession(session, function (err) {
-                //
-                // Note: current limitation :
-                //  - The reconnection doesn't work if connection break is cause by a server that crashes and restarts yet.
-                //
-                debugLog("ActivateSession : ", err ? err.message : " SUCCEESS !!! ");
-                if (err) {
-                    if (session.hasBeenClosed()) {
-                        debugLog("Aborting reactivation of old session because user requested session to be closed");
-                        return callback(new Error("reconnection cancelled due to session termination"));
-                    }
-
-                    //   if failed => recreate a new Channel and transfer the subscription
-                    var new_session = null;
-                    async_series([
-                        (callback) => {
-
-                            debugLog("Activating old session has failed ! => Creating a new session ....");
-
-                            session.getPublishEngine().suspend(true);
-
-                            // create new session, based on old session,
-                            // so we can reuse subscriptions data
-                            this.__createSession_step2(session, function (err, _new_session) {
-                                debugLog(" Creating a new session (based on old session data).... Done");
-                                if (!err) {
-                                    new_session = _new_session;
-                                    assert(session === _new_session, "session should be recycled");
-                                }
-                                callback(err);
-                            });
-                        },
-                        (callback) => {
-                            debugLog(" activating a new session ....");
-                            this._activateSession(new_session, function (err) {
-                                debugLog(" activating a new session .... Done");
-                                ///xx self._addSession(new_session);
-                                callback(err);
-                            });
-                        },
-                        (callback) =>{
-
-                            // get the old subscriptions id from the old session
-                            var subscriptionsIds = session.getPublishEngine().getSubscriptionIds();
-
-                            debugLog("  session subscriptionCount = ", new_session.getPublishEngine().subscriptionCount);
-                            if (subscriptionsIds.length === 0) {
-                                debugLog(" No subscriptions => skipping transfer subscriptions");
-                                return callback(); // no need to transfer subscriptions
-                            }
-                            debugLog(" asking server to transfer subscriptions = [", subscriptionsIds.join(", "), "]");
-                            // Transfer subscriptions
-                            var options = {
-                                subscriptionIds: subscriptionsIds,
-                                sendInitialValues: false
-                            };
-
-                            assert(new_session.getPublishEngine().nbPendingPublishRequests === 0, "we should not be publishing here");
-                            new_session.transferSubscriptions(options, function (err, results) {
-                                if (err) {
-                                    return callback(err);
-                                }
-                                debugLog("Transfer subscriptions  done", results.toString());
-                                debugLog("  new session subscriptionCount = ", new_session.getPublishEngine().subscriptionCount);
-                                callback();
-                            });
-                        },
-                        (callback) =>{
-                            assert(new_session.getPublishEngine().nbPendingPublishRequests === 0, "we should not be publishing here");
-                            // call Republish
-                            return this._ask_for_subscription_republish(new_session, callback);
-                        },
-                        (callback) => { //start_publishing_as_normal
-                            new_session.getPublishEngine().suspend(false);
-                            callback();
-                        }
-                    ], next);
-
-                } else {
-                    //      call Republish
-                    return this._ask_for_subscription_republish(session, next);
-                }
-            });
-
-        }, function (err, results) {
-            return callback(err);
-        });
-
+        repair_client_sessions(this, callback);
     });
 
 };
@@ -1044,14 +861,23 @@ function createUserNameIdentityToken(session, userName, password) {
     const endpoint_desc = session.endpoint;
     assert(endpoint_desc instanceof EndpointDescription);
 
-    var userTokenPolicy = findUserTokenPolicy(endpoint_desc, UserIdentityTokenType.USERNAME);
+    /**
+     * OPC Unified Architecture 1.0.4:  Part 4 155
+     * Each UserIdentityToken allowed by an Endpoint shall have a UserTokenPolicy specified in the
+     * EndpointDescription. The UserTokenPolicy specifies what SecurityPolicy to use when encrypting
+     * or signing. If this SecurityPolicy is omitted then the Client uses the SecurityPolicy in the
+     * EndpointDescription. If the matching SecurityPolicy is set to None then no encryption or signature
+     * is required.
+     *
+     */
+    const userTokenPolicy = findUserTokenPolicy(endpoint_desc, UserIdentityTokenType.USERNAME);
 
     // istanbul ignore next
     if (!userTokenPolicy) {
         throw new Error("Cannot find USERNAME user token policy in end point description");
     }
 
-    var securityPolicy = fromURI(userTokenPolicy.securityPolicyUri);
+    let securityPolicy = fromURI(userTokenPolicy.securityPolicyUri);
 
     // if the security policy is not specified we use the session security policy
     if (securityPolicy === SecurityPolicy.Invalid) {
@@ -1060,15 +886,14 @@ function createUserNameIdentityToken(session, userName, password) {
     }
 
     // if server does not provide certificate use unencrypted password (no server certificate !!!)
-
-        var userIdentityToken = new UserNameIdentityToken({
+        const identityToken = new UserNameIdentityToken({
             userName: userName,
-            password: stringToUint8Array(password),//Buffer.from(password, "utf-8"),
+            password: stringToUint8Array(password), // Buffer.from(password, "utf-8"),
             encryptionAlgorithm: null,
             policyId: userTokenPolicy.policyId
         });
-        return userIdentityToken;
-    
+        return identityToken;
+
         //**nomsgcrypt**
 }
 

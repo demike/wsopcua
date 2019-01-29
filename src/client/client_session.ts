@@ -64,6 +64,7 @@ import { RegisterNodesResponse } from '../generated/RegisterNodesResponse';
 import { isArray } from 'util';
 import { UnregisterNodesRequest } from '../generated/UnregisterNodesRequest';
 import { UnregisterNodesResponse } from '../generated/UnregisterNodesResponse';
+import { TransferSubscriptionsResponse } from '../service-subscription';
 
 
 
@@ -957,7 +958,7 @@ export class ClientSession extends EventEmitter {
      * @param callback.err {Error|null}   - the Error if the async method has failed
      * @param callback.response {TransferSubscriptionsResponse} - the response
      */
-    transferSubscriptions(options: TransferSubscriptionsRequest, callback: FunctionConstructor) {
+    transferSubscriptions(options: TransferSubscriptionsRequest, callback: ResponseCallback<TransferSubscriptionsResponse>) {
         this._defaultRequest(
             subscription_service.TransferSubscriptionsRequest,
             subscription_service.TransferSubscriptionsResponse,

@@ -232,6 +232,10 @@ export class OPCUAClientBase extends EventEmitter {
         return this._endpointUrl;
     }
 
+    get sessions(): ClientSession[] {
+        return this._sessions;
+    }
+
     constructor(options?: OPCUAClientOptions) {
         super();
 
