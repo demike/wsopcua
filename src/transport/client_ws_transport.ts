@@ -39,12 +39,6 @@ function createClientSocket(endpointUrl: string): WebSocket {
             // TODO: that's it --> implement me
             const websocket = new WebSocket(endpointUrl);
             websocket.binaryType  = 'arraybuffer';
-            /*
-            websocket.onopen = function(evt) { onOpen(evt) };
-            websocket.onclose = function(evt) { onClose(evt) };
-            websocket.onmessage = function(evt) { onMessage(evt) };
-            websocket.onerror = function(evt) { onError(evt) };
-            */
            return websocket;
             break;
         case 'fake':
@@ -181,6 +175,9 @@ public connect(endpointUrl: string, callback: Function, options?) {
         this._perform_HEL_ACK_transaction((err) => {
             if (!err) {
 
+                // install error handler to detect connection break
+                this.on('socket_error', (evt: CloseEvent) => {this._on_socket_error_after_connection(evt); });
+
                 this._connected = true;
                 /**
                  * notify the observers that the transport is connected (the socket is connected and the the HEL/ACK
@@ -278,6 +275,26 @@ protected _perform_HEL_ACK_transaction(callback) {
         }
     });
     this._send_HELLO_request();
+}
+
+protected _on_socket_error_after_connection(evt: CloseEvent)  {
+    debugLog(' ClientWSTransport Socket Error', evt);
+
+    // EPIPE : EPIPE (Broken pipe): A write on a pipe, socket, or FIFO for which there is no process to read the
+    // data. Commonly encountered at the net and http layers, indicative that the remote side of the stream being
+    // written to has been closed.
+
+    // ECONNRESET (Connection reset by peer): A connection was forcibly closed by a peer. This normally results
+    // from a loss of the connection on the remote socket due to a timeout or reboot. Commonly encountered via the
+    // http and net modu
+
+
+    if ( evt.code !== 1000  /*all kinds of errors*/) {
+        /**
+         * @event connection_break
+         */
+        this.emit('connection_break');
+    }
 }
 
 }

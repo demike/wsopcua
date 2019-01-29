@@ -56,7 +56,7 @@ function process_request_callback(request_data, err, response) {
 
         response.responseHeader.stringTable = response.responseHeader.stringTable || [];
         response.responseHeader.stringTable = [response.responseHeader.stringTable.join('\n')];
-        err = new Error(' ServiceFault returned by server ' + response.toString());
+        err = new Error(' ServiceFault returned by server ' + JSON.stringify(response));
         err.response = response;
         response = null;
     }
@@ -245,6 +245,7 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
     super();
     options = options || {};
 
+    this._transport = null;
     this._lastRequestId = 0;
     this.parent = options.parent;
     this._clientNonce = null; // will be created when needed
@@ -380,7 +381,7 @@ protected _cancel_pending_transactions(err) {
          + Object.keys(this._request_data) +  (this._transport ? this._transport.name : 'no transport'));
 
     assert(typeof err === 'object', 'expecting valid error');
-    Object.keys(this._request_data).forEach(function (key) {
+    Object.keys(this._request_data).forEach((key) => {
         const request_data = this._request_data[key];
         debugLog('xxxx Cancelling pending transaction ' + request_data.key + request_data.msgType + request_data.request.constructor.name);
         process_request_callback(request_data, err, null);
@@ -752,9 +753,9 @@ public create(endpoint_url: string , callback: Function) {
                 this.__call = null;
 
                 if (err) {
-                    callback(last_err);
+                    cb(last_err);
                 } else {
-                    callback();
+                    cb();
                 }
             }
         };

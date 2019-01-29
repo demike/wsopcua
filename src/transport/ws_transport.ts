@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.transport
  */
@@ -13,22 +13,22 @@ import {PacketAssembler} from '../packet-assembler/packet_assembler';
 import {writeTCPMessageHeader} from './tools';
 import {readRawMessageHeader} from './message_builder_base';
 
-import {debugLog,doDebug} from '../common/debug';
+import {debugLog, doDebug} from '../common/debug';
 
-var fakeSocket : any = {invalid: true} ;
+let fakeSocket: any = {invalid: true} ;
 
 export function setFakeTransport(socket_like_mock) {
     fakeSocket = socket_like_mock;
-};
+}
 
 export function getFakeTransport() {
-    if (fakeSocket.invalid){
-        throw new Error("getFakeTransport: setFakeTransport must be called first  - BadProtocolVersionUnsupported");
+    if (fakeSocket.invalid) {
+        throw new Error('getFakeTransport: setFakeTransport must be called first  - BadProtocolVersionUnsupported');
     }
     return fakeSocket;
-};
+}
 
-var counter =0;
+let counter = 0;
 
 /**
  * WSTransport
@@ -36,27 +36,27 @@ var counter =0;
  * @class WSTransport
  * @extends EventEmitter
  */
-export class WSTransport extends EventEmitter{
+export class WSTransport extends EventEmitter {
 
     packetAssembler: PacketAssembler;
     name: string;
     _timerId: number;
     protected _socket: WebSocket;
-    timeout : number;
-    headerSize : number;
-    _protocolVersion : number;
+    timeout: number;
+    headerSize: number;
+    _protocolVersion: number;
 
     bytesRead: number;
     bytesWritten: number;
     chunkReadCount: number;
     chunkWrittenCount: number;
-    protected __disconnecting__ : boolean;
+    protected __disconnecting__: boolean;
     protected _on_socket_closed_called: boolean;
     protected _on_socket_ended_called: boolean;
     protected _pending_buffer: any;
-    
+
     protected _the_callback: any;
-    
+
     get disconnecting() {
         return this.__disconnecting__;
     }
@@ -98,12 +98,12 @@ constructor() {
      * @property chunkWrittenCount
      * @type {number}
      */
-    this.chunkWrittenCount= 0;
+    this.chunkWrittenCount = 0;
     /***
      * @property chunkReadCount
      * @type {number}
      */
-    this.chunkReadCount= 0;
+    this.chunkReadCount = 0;
 }
 
 
@@ -121,19 +121,19 @@ constructor() {
  *  - only one chunk can be created at a time.
  *  - a created chunk should be committed using the ```write``` method before an other one is created.
  */
-public createChunk(msg_type, chunk_type: string, length : number): ArrayBuffer {
+public createChunk(msg_type, chunk_type: string, length: number): ArrayBuffer {
 
-    assert(msg_type === "MSG");
-    assert(this._pending_buffer === undefined, "createChunk has already been called ( use write first)");
+    assert(msg_type === 'MSG');
+    assert(this._pending_buffer === undefined, 'createChunk has already been called ( use write first)');
 
-    let total_length = length + this.headerSize;
-    let buffer = new ArrayBuffer(total_length);
-    writeTCPMessageHeader("MSG", chunk_type, total_length, buffer);
+    const total_length = length + this.headerSize;
+    const buffer = new ArrayBuffer(total_length);
+    writeTCPMessageHeader('MSG', chunk_type, total_length, buffer);
 
     this._pending_buffer = buffer;
 
     return buffer;
-};
+}
 
 
 
@@ -145,7 +145,7 @@ protected _write_chunk(message_chunk) {
         this.chunkWrittenCount ++;
         this._socket.send(message_chunk);
     }
-};
+}
 
 /**
  * write the message_chunk on the socket.
@@ -157,25 +157,26 @@ protected _write_chunk(message_chunk) {
  *  - once a message chunk has been written, it is possible to call ```createChunk``` again.
  *
  */
-public write(message_chunk : ArrayBuffer) {
+public write(message_chunk: ArrayBuffer) {
 
-    assert((this._pending_buffer === undefined) || this._pending_buffer === message_chunk, " write should be used with buffer created by createChunk");
+    assert((this._pending_buffer === undefined) ||
+                this._pending_buffer === message_chunk, ' write should be used with buffer created by createChunk');
 
-    var header = readRawMessageHeader(message_chunk);
+    const header = readRawMessageHeader(message_chunk);
     assert(header.length === message_chunk.byteLength);
-    assert(["F", "C", "A"].indexOf(header.messageHeader.isFinal) !== -1);
+    assert(['F', 'C', 'A'].indexOf(header.messageHeader.isFinal) !== -1);
 
     this._write_chunk(message_chunk);
 
     this._pending_buffer = undefined;
-};
+}
 
 
 protected _fulfill_pending_promises(err, data?) {
 
     this._cleanup_timers();
 
-    var the_callback = this._the_callback;
+    const the_callback = this._the_callback;
     this._the_callback = null;
 
     if (the_callback) {
@@ -187,7 +188,7 @@ protected _fulfill_pending_promises(err, data?) {
 }
 
 protected _on_message_received(message_chunk) {
-    var has_callback = this._fulfill_pending_promises(null,message_chunk); 
+    const has_callback = this._fulfill_pending_promises(null, message_chunk);
     this.chunkReadCount ++;
 
     if (!has_callback) {
@@ -196,14 +197,12 @@ protected _on_message_received(message_chunk) {
          * @event message
          * @param message_chunk {Buffer} the message chunk
          */
-        this.emit("message", message_chunk);
+        this.emit('message', message_chunk);
     }
 }
 
 
 protected _cleanup_timers() {
-
- 
     if (this._timerId) {
         clearTimeout(this._timerId);
         this._timerId = null;
@@ -212,11 +211,10 @@ protected _cleanup_timers() {
 
 protected _start_timeout_timer() {
 
-  
-    assert(!this._timerId, "timer already started");
+    assert(!this._timerId, 'timer already started');
     this._timerId = window.setTimeout( () => {
-        this._timerId =null;
-        this._fulfill_pending_promises(new Error("Timeout in waiting for data on socket ( timeout was = " + this.timeout + " ms )"));
+        this._timerId = null;
+        this._fulfill_pending_promises(new Error('Timeout in waiting for data on socket ( timeout was = ' + this.timeout + ' ms )'));
     }, this.timeout);
 
 }
@@ -233,11 +231,11 @@ public on_socket_closed(err) {
      * @event socket_closed
      * @param err the Error object or null
      */
-    this.emit("socket_closed", err || null);
-};
+    this.emit('socket_closed', err || null);
+}
 
 public on_socket_ended(err) {
-  
+
     assert(!this._on_socket_ended_called);
     this._on_socket_ended_called = true; // we don't want to send ende event twice ...
     /**
@@ -245,29 +243,27 @@ public on_socket_ended(err) {
      * @event close
      * @param err the Error object or null
      */
-    this.emit("close", err || null);
-};
+    this.emit('close', err || null);
+}
 
 protected _on_socket_ended_message =  function(err) {
-
-  
     if (this.__disconnecting__) {
         return;
     }
     this._on_socket_ended = null;
     this._on_data_received = null;
 
-    debugLog("Transport Connection ended " + self.name);
+    debugLog('Transport Connection ended ' + self.name);
     assert(!this.__disconnecting__);
-    err = err || new Error("_socket has been disconnected by third party");
+    err = err || new Error('_socket has been disconnected by third party');
 
     this.on_socket_ended(err);
 
     this.__disconnecting__ = true;
 
-    debugLog(" bytesRead    = " + this.bytesRead);
-    debugLog(" bytesWritten = " + this.bytesWritten);
-    this._fulfill_pending_promises(new Error("Connection aborted - ended by server : " + (err ? err.message : "")));
+    debugLog(' bytesRead    = ' + this.bytesRead);
+    debugLog(' bytesWritten = ' + this.bytesWritten);
+    this._fulfill_pending_promises(new Error('Connection aborted - ended by server : ' + (err ? err.message : '')));
 };
 
 
@@ -276,12 +272,12 @@ protected _on_socket_ended_message =  function(err) {
  * @param socket {Socket}
  * @protected
  */
-protected _install_socket(socket : WebSocket) {
+protected _install_socket(socket: WebSocket) {
 
     assert(socket);
- 
 
-    this.name = " Transport " + counter;
+
+    this.name = ' Transport ' + counter;
     counter += 1;
 
     this._socket = socket;
@@ -292,11 +288,11 @@ protected _install_socket(socket : WebSocket) {
         minimumSizeInBytes: this.headerSize
     });
 
-    this.packetAssembler.on("message", (message_chunk) => {
+    this.packetAssembler.on('message', (message_chunk) => {
         this._on_message_received( message_chunk);
     });
 
-    this._socket.onmessage = (evt : MessageEvent) => {
+    this._socket.onmessage = (evt: MessageEvent) => {
         this.bytesRead += evt.data.byteLength;
         if (evt.data.byteLength > 0) {
             this.packetAssembler.feed(new DataView(evt.data));
@@ -304,25 +300,26 @@ protected _install_socket(socket : WebSocket) {
 
     };
 
-    this._socket.onclose = (evt : CloseEvent) => {
+    this._socket.onclose = (evt: CloseEvent) => {
         // istanbul ignore next
         if (doDebug) {
-            debugLog(" SOCKET CLOSE : reason =" + evt.reason + " code=" + evt.code  + " name=" + this.name);
+            debugLog(' SOCKET CLOSE : reason =' + evt.reason + ' code=' + evt.code  + ' name=' + this.name);
         }
         if (this._socket ) {
-            debugLog("  remote address = " + this._socket.url);
+            debugLog('  remote address = ' + this._socket.url);
         }
-        
+
         let err = null;
-        if (evt.code != 1000 /* if not normal*/) {
+        if (evt.code !== 1000 /* if not normal*/) {
             /* TODO: what should we do now
             if (this._socket) {
                 this._socket.destroy();
             }
             */
-           err = new Error("ERROR IN SOCKET: reason=" + evt.reason + " code=" + evt.code  + " name=" + this.name);
+           this.emit('socket_error', evt);
+           err = new Error('ERROR IN SOCKET: reason=' + evt.reason + ' code=' + evt.code  + ' name=' + this.name);
         }
-        
+
         this.on_socket_closed(err);
 
     };
@@ -338,18 +335,16 @@ protected _install_socket(socket : WebSocket) {
     };
     */
 
-    this._socket.onerror = (evt : Event) => {
+    this._socket.addEventListener('error', (evt: Event) => {
         // istanbul ignore next
         if (doDebug) {
-            debugLog(" SOCKET ERROR : " + this.name);
+            debugLog(' SOCKET ERROR : ' + this.name);
         }
 
-        
-
         // note: The "close" event will be called directly following this event.
-    };
+    });
 
-};
+}
 
 
 /**
@@ -371,12 +366,12 @@ protected _install_socket(socket : WebSocket) {
  */
 protected _install_one_time_message_receiver(callback) {
 
-  
-    assert(!this._the_callback, "callback already set");
+
+    assert(!this._the_callback, 'callback already set');
     assert('function' === typeof callback);
     this._the_callback = callback;
     this._start_timeout_timer();
-};
+}
 
 
 /**
@@ -389,34 +384,34 @@ protected _install_one_time_message_receiver(callback) {
  */
 public disconnect(callback) {
 
-    assert('function' === typeof callback, "expecting a callback function, but got " + callback);
+    assert('function' === typeof callback, 'expecting a callback function, but got ' + callback);
 
- 
+
     if (this.__disconnecting__) {
         callback();
         return;
     }
 
-    assert(!this.__disconnecting__, "TCP Transport has already been disconnected");
+    assert(!this.__disconnecting__, 'TCP Transport has already been disconnected');
     this.__disconnecting__ = true;
 
-    assert(!this._the_callback, "disconnect shall not be called while the 'one time message receiver' is in operation");
+    assert(!this._the_callback, 'disconnect shall not be called while the \'one time message receiver\' is in operation');
     this._cleanup_timers();
 
     if (this._socket) {
         this._socket.onclose = () => {
             this.on_socket_ended(null);
             callback();
-        }
+        };
         this._socket.close();
         this._socket = null;
     }
 
-};
+}
 
 public isValid() {
     return this._socket && (this._socket.readyState == this._socket.OPEN) && !this.__disconnecting__;
-};
+}
 
 }
 

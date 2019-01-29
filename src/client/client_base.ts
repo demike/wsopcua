@@ -726,7 +726,7 @@ export class OPCUAClientBase extends EventEmitter {
         });
     }
 
-    protected _recreate_secure_channel(callback: Function) {
+    protected _recreate_secure_channel(callback: ErrorCallback) {
 
         debugLog('_recreate_secure_channel...');
 
@@ -928,7 +928,7 @@ export class OPCUAClientBase extends EventEmitter {
             } else {
 
                 setImmediate(() => client._recreate_secure_channel((err) => {
-                    debugLog('secureChannel#on(close) => _recreate_secure_channel returns ' + err ? err.message : 'OK');
+                    debugLog('secureChannel#on(close) => _recreate_secure_channel returns ' + (err ? err.message : 'OK'));
                     if (err) {
                         // xx assert(!this._secureChannel);
                         client.emit('close', err);

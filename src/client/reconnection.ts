@@ -287,7 +287,6 @@ export function repair_client_session(client: OPCUAClient, session: ClientSessio
 
 export function repair_client_sessions(client: OPCUAClient, callback: ErrorCallback) {
 
-    const self = client;
     debugLog(' Starting sessions reactivation');
     // repair session
     const sessions = client.sessions;

@@ -362,7 +362,7 @@ export class ClientSession extends EventEmitter {
      *
     */
     readVariableValue(nodes: string | string[] | NodeId | NodeId[] | read_service.ReadValueId | read_service.ReadValueId[],
-        callback: (err: Error, results?: DataValue[], diagInf?: DiagnosticInfo[]) => void) {
+        callback: (err: Error, results?: DataValue[]|DataValue, diagInf?: DiagnosticInfo[]| DiagnosticInfo) => void) {
 
         assert('function' === typeof callback);
 
