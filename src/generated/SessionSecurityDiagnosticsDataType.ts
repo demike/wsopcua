@@ -93,7 +93,7 @@ export class SessionSecurityDiagnosticsDataType {
 
 }
 export function decodeSessionSecurityDiagnosticsDataType(	inp : DataStream) : SessionSecurityDiagnosticsDataType { 
-		let obj = new SessionSecurityDiagnosticsDataType();
+		const obj = new SessionSecurityDiagnosticsDataType();
 			obj.decode(inp); 
 			return obj;
 

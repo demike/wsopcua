@@ -46,7 +46,7 @@ export class LiteralOperand extends FilterOperand {
 
 }
 export function decodeLiteralOperand(	inp : DataStream) : LiteralOperand { 
-		let obj = new LiteralOperand();
+		const obj = new LiteralOperand();
 			obj.decode(inp); 
 			return obj;
 

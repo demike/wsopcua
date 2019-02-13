@@ -57,7 +57,7 @@ export class QueryNextRequest {
 
 }
 export function decodeQueryNextRequest(	inp : DataStream) : QueryNextRequest { 
-		let obj = new QueryNextRequest();
+		const obj = new QueryNextRequest();
 			obj.decode(inp); 
 			return obj;
 

@@ -70,7 +70,7 @@ export class ReadRawModifiedDetails extends HistoryReadDetails {
 
 }
 export function decodeReadRawModifiedDetails(	inp : DataStream) : ReadRawModifiedDetails { 
-		let obj = new ReadRawModifiedDetails();
+		const obj = new ReadRawModifiedDetails();
 			obj.decode(inp); 
 			return obj;
 

@@ -77,7 +77,7 @@ export class ServerStatusDataType {
 
 }
 export function decodeServerStatusDataType(	inp : DataStream) : ServerStatusDataType { 
-		let obj = new ServerStatusDataType();
+		const obj = new ServerStatusDataType();
 			obj.decode(inp); 
 			return obj;
 

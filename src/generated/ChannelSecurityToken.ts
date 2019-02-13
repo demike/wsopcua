@@ -62,7 +62,7 @@ export class ChannelSecurityToken {
 
 }
 export function decodeChannelSecurityToken(	inp : DataStream) : ChannelSecurityToken { 
-		let obj = new ChannelSecurityToken();
+		const obj = new ChannelSecurityToken();
 			obj.decode(inp); 
 			return obj;
 

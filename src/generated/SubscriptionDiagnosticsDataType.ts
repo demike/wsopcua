@@ -224,7 +224,7 @@ export class SubscriptionDiagnosticsDataType {
 
 }
 export function decodeSubscriptionDiagnosticsDataType(	inp : DataStream) : SubscriptionDiagnosticsDataType { 
-		let obj = new SubscriptionDiagnosticsDataType();
+		const obj = new SubscriptionDiagnosticsDataType();
 			obj.decode(inp); 
 			return obj;
 

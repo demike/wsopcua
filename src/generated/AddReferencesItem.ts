@@ -75,7 +75,7 @@ export class AddReferencesItem {
 
 }
 export function decodeAddReferencesItem(	inp : DataStream) : AddReferencesItem { 
-		let obj = new AddReferencesItem();
+		const obj = new AddReferencesItem();
 			obj.decode(inp); 
 			return obj;
 

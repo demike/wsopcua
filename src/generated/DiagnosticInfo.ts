@@ -113,7 +113,7 @@ export class DiagnosticInfo {
 
 }
 export function decodeDiagnosticInfo(	inp : DataStream) : DiagnosticInfo { 
-		let obj = new DiagnosticInfo();
+		const obj = new DiagnosticInfo();
 			obj.decode(inp); 
 			return obj;
 

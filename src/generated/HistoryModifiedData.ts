@@ -58,7 +58,7 @@ export class HistoryModifiedData extends HistoryData {
 
 }
 export function decodeHistoryModifiedData(	inp : DataStream) : HistoryModifiedData { 
-		let obj = new HistoryModifiedData();
+		const obj = new HistoryModifiedData();
 			obj.decode(inp); 
 			return obj;
 

@@ -51,7 +51,7 @@ export class CancelRequest {
 
 }
 export function decodeCancelRequest(	inp : DataStream) : CancelRequest { 
-		let obj = new CancelRequest();
+		const obj = new CancelRequest();
 			obj.decode(inp); 
 			return obj;
 

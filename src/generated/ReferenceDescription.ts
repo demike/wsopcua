@@ -83,7 +83,7 @@ export class ReferenceDescription {
 
 }
 export function decodeReferenceDescription(	inp : DataStream) : ReferenceDescription { 
-		let obj = new ReferenceDescription();
+		const obj = new ReferenceDescription();
 			obj.decode(inp); 
 			return obj;
 

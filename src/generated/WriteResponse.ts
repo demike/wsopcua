@@ -59,7 +59,7 @@ export class WriteResponse {
 
 }
 export function decodeWriteResponse(	inp : DataStream) : WriteResponse { 
-		let obj = new WriteResponse();
+		const obj = new WriteResponse();
 			obj.decode(inp); 
 			return obj;
 

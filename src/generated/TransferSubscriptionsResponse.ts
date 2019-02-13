@@ -61,7 +61,7 @@ export class TransferSubscriptionsResponse {
 
 }
 export function decodeTransferSubscriptionsResponse(	inp : DataStream) : TransferSubscriptionsResponse { 
-		let obj = new TransferSubscriptionsResponse();
+		const obj = new TransferSubscriptionsResponse();
 			obj.decode(inp); 
 			return obj;
 

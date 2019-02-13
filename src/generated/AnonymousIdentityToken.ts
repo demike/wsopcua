@@ -43,7 +43,7 @@ export class AnonymousIdentityToken extends UserIdentityToken {
 
 }
 export function decodeAnonymousIdentityToken(	inp : DataStream) : AnonymousIdentityToken { 
-		let obj = new AnonymousIdentityToken();
+		const obj = new AnonymousIdentityToken();
 			obj.decode(inp); 
 			return obj;
 

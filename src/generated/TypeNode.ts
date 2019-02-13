@@ -62,7 +62,7 @@ export class TypeNode extends Node {
 
 }
 export function decodeTypeNode(	inp : DataStream) : TypeNode { 
-		let obj = new TypeNode();
+		const obj = new TypeNode();
 			obj.decode(inp); 
 			return obj;
 

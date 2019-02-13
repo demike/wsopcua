@@ -59,7 +59,7 @@ export class DeleteMonitoredItemsResponse {
 
 }
 export function decodeDeleteMonitoredItemsResponse(	inp : DataStream) : DeleteMonitoredItemsResponse { 
-		let obj = new DeleteMonitoredItemsResponse();
+		const obj = new DeleteMonitoredItemsResponse();
 			obj.decode(inp); 
 			return obj;
 

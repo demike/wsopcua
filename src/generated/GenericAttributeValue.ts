@@ -51,7 +51,7 @@ export class GenericAttributeValue {
 
 }
 export function decodeGenericAttributeValue(	inp : DataStream) : GenericAttributeValue { 
-		let obj = new GenericAttributeValue();
+		const obj = new GenericAttributeValue();
 			obj.decode(inp); 
 			return obj;
 

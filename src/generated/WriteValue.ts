@@ -63,7 +63,7 @@ export class WriteValue {
 
 }
 export function decodeWriteValue(	inp : DataStream) : WriteValue { 
-		let obj = new WriteValue();
+		const obj = new WriteValue();
 			obj.decode(inp); 
 			return obj;
 

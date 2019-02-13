@@ -51,7 +51,7 @@ export class CloseSessionRequest {
 
 }
 export function decodeCloseSessionRequest(	inp : DataStream) : CloseSessionRequest { 
-		let obj = new CloseSessionRequest();
+		const obj = new CloseSessionRequest();
 			obj.decode(inp); 
 			return obj;
 

@@ -92,7 +92,7 @@ export class EndpointConfiguration {
 
 }
 export function decodeEndpointConfiguration(	inp : DataStream) : EndpointConfiguration { 
-		let obj = new EndpointConfiguration();
+		const obj = new EndpointConfiguration();
 			obj.decode(inp); 
 			return obj;
 

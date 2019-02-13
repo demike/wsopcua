@@ -53,7 +53,7 @@ export class TranslateBrowsePathsToNodeIdsRequest {
 
 }
 export function decodeTranslateBrowsePathsToNodeIdsRequest(	inp : DataStream) : TranslateBrowsePathsToNodeIdsRequest { 
-		let obj = new TranslateBrowsePathsToNodeIdsRequest();
+		const obj = new TranslateBrowsePathsToNodeIdsRequest();
 			obj.decode(inp); 
 			return obj;
 

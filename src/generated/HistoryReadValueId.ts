@@ -63,7 +63,7 @@ export class HistoryReadValueId {
 
 }
 export function decodeHistoryReadValueId(	inp : DataStream) : HistoryReadValueId { 
-		let obj = new HistoryReadValueId();
+		const obj = new HistoryReadValueId();
 			obj.decode(inp); 
 			return obj;
 

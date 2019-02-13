@@ -56,7 +56,7 @@ export class NotificationMessage {
 
 }
 export function decodeNotificationMessage(	inp : DataStream) : NotificationMessage { 
-		let obj = new NotificationMessage();
+		const obj = new NotificationMessage();
 			obj.decode(inp); 
 			return obj;
 

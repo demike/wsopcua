@@ -66,7 +66,7 @@ export class UpdateEventDetails extends HistoryUpdateDetails {
 
 }
 export function decodeUpdateEventDetails(	inp : DataStream) : UpdateEventDetails { 
-		let obj = new UpdateEventDetails();
+		const obj = new UpdateEventDetails();
 			obj.decode(inp); 
 			return obj;
 

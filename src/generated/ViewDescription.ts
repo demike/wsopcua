@@ -56,7 +56,7 @@ export class ViewDescription {
 
 }
 export function decodeViewDescription(	inp : DataStream) : ViewDescription { 
-		let obj = new ViewDescription();
+		const obj = new ViewDescription();
 			obj.decode(inp); 
 			return obj;
 

@@ -172,7 +172,7 @@ export class VariableNode extends InstanceNode {
 
 }
 export function decodeVariableNode(	inp : DataStream) : VariableNode { 
-		let obj = new VariableNode();
+		const obj = new VariableNode();
 			obj.decode(inp); 
 			return obj;
 

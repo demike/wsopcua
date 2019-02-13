@@ -50,7 +50,7 @@ export class NumericNodeId {
 
 }
 export function decodeNumericNodeId(	inp : DataStream) : NumericNodeId { 
-		let obj = new NumericNodeId();
+		const obj = new NumericNodeId();
 			obj.decode(inp); 
 			return obj;
 
@@ -58,6 +58,3 @@ export function decodeNumericNodeId(	inp : DataStream) : NumericNodeId {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition("NumericNodeId",NumericNodeId, makeExpandedNodeId(-1,));

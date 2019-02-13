@@ -59,7 +59,7 @@ export class DeleteNodesResponse {
 
 }
 export function decodeDeleteNodesResponse(	inp : DataStream) : DeleteNodesResponse { 
-		let obj = new DeleteNodesResponse();
+		const obj = new DeleteNodesResponse();
 			obj.decode(inp); 
 			return obj;
 

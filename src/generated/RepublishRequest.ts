@@ -57,7 +57,7 @@ export class RepublishRequest {
 
 }
 export function decodeRepublishRequest(	inp : DataStream) : RepublishRequest { 
-		let obj = new RepublishRequest();
+		const obj = new RepublishRequest();
 			obj.decode(inp); 
 			return obj;
 

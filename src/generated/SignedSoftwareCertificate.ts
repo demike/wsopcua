@@ -50,7 +50,7 @@ export class SignedSoftwareCertificate {
 
 }
 export function decodeSignedSoftwareCertificate(	inp : DataStream) : SignedSoftwareCertificate { 
-		let obj = new SignedSoftwareCertificate();
+		const obj = new SignedSoftwareCertificate();
 			obj.decode(inp); 
 			return obj;
 

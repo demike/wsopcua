@@ -44,7 +44,7 @@ export class TwoByteNodeId {
 
 }
 export function decodeTwoByteNodeId(	inp : DataStream) : TwoByteNodeId { 
-		let obj = new TwoByteNodeId();
+		const obj = new TwoByteNodeId();
 			obj.decode(inp); 
 			return obj;
 
@@ -52,6 +52,3 @@ export function decodeTwoByteNodeId(	inp : DataStream) : TwoByteNodeId {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition("TwoByteNodeId",TwoByteNodeId, makeExpandedNodeId(-1,));

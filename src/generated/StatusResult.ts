@@ -51,7 +51,7 @@ export class StatusResult {
 
 }
 export function decodeStatusResult(	inp : DataStream) : StatusResult { 
-		let obj = new StatusResult();
+		const obj = new StatusResult();
 			obj.decode(inp); 
 			return obj;
 

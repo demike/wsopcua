@@ -50,7 +50,7 @@ export class DeleteNodesItem {
 
 }
 export function decodeDeleteNodesItem(	inp : DataStream) : DeleteNodesItem { 
-		let obj = new DeleteNodesItem();
+		const obj = new DeleteNodesItem();
 			obj.decode(inp); 
 			return obj;
 

@@ -63,7 +63,7 @@ export class EndpointType {
 
 }
 export function decodeEndpointType(	inp : DataStream) : EndpointType { 
-		let obj = new EndpointType();
+		const obj = new EndpointType();
 			obj.decode(inp); 
 			return obj;
 

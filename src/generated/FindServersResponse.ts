@@ -53,7 +53,7 @@ export class FindServersResponse {
 
 }
 export function decodeFindServersResponse(	inp : DataStream) : FindServersResponse { 
-		let obj = new FindServersResponse();
+		const obj = new FindServersResponse();
 			obj.decode(inp); 
 			return obj;
 

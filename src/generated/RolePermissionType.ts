@@ -50,7 +50,7 @@ export class RolePermissionType {
 
 }
 export function decodeRolePermissionType(	inp : DataStream) : RolePermissionType { 
-		let obj = new RolePermissionType();
+		const obj = new RolePermissionType();
 			obj.decode(inp); 
 			return obj;
 

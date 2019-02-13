@@ -56,7 +56,7 @@ export class ModelChangeStructureDataType {
 
 }
 export function decodeModelChangeStructureDataType(	inp : DataStream) : ModelChangeStructureDataType { 
-		let obj = new ModelChangeStructureDataType();
+		const obj = new ModelChangeStructureDataType();
 			obj.decode(inp); 
 			return obj;
 

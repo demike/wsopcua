@@ -50,7 +50,7 @@ export class SubscriptionAcknowledgement {
 
 }
 export function decodeSubscriptionAcknowledgement(	inp : DataStream) : SubscriptionAcknowledgement { 
-		let obj = new SubscriptionAcknowledgement();
+		const obj = new SubscriptionAcknowledgement();
 			obj.decode(inp); 
 			return obj;
 

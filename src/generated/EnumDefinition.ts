@@ -46,7 +46,7 @@ export class EnumDefinition {
 
 }
 export function decodeEnumDefinition(	inp : DataStream) : EnumDefinition { 
-		let obj = new EnumDefinition();
+		const obj = new EnumDefinition();
 			obj.decode(inp); 
 			return obj;
 

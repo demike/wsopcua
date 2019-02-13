@@ -77,7 +77,7 @@ export class OpenSecureChannelRequest {
 
 }
 export function decodeOpenSecureChannelRequest(	inp : DataStream) : OpenSecureChannelRequest { 
-		let obj = new OpenSecureChannelRequest();
+		const obj = new OpenSecureChannelRequest();
 			obj.decode(inp); 
 			return obj;
 

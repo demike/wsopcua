@@ -22,6 +22,11 @@ const ActivateSessionRequest = session_service.ActivateSessionRequest;
 const ActivateSessionResponse = session_service.ActivateSessionResponse;
 const CloseSessionRequest = session_service.CloseSessionRequest;
 
+/**
+ * import all the generated classes (they have side effects --> do not tree shake them away)
+ */
+import '../generated';
+
 import * as endpoints_service from "../service-endpoints";
 const ApplicationDescription = endpoints_service.ApplicationDescription;
 const ApplicationType = endpoints_service.ApplicationType;

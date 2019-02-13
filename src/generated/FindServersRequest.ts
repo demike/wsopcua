@@ -63,7 +63,7 @@ export class FindServersRequest {
 
 }
 export function decodeFindServersRequest(	inp : DataStream) : FindServersRequest { 
-		let obj = new FindServersRequest();
+		const obj = new FindServersRequest();
 			obj.decode(inp); 
 			return obj;
 

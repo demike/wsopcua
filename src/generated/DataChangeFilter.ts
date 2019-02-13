@@ -59,7 +59,7 @@ export class DataChangeFilter extends MonitoringFilter {
 
 }
 export function decodeDataChangeFilter(	inp : DataStream) : DataChangeFilter { 
-		let obj = new DataChangeFilter();
+		const obj = new DataChangeFilter();
 			obj.decode(inp); 
 			return obj;
 

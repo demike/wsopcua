@@ -53,7 +53,7 @@ export class DeleteReferencesRequest {
 
 }
 export function decodeDeleteReferencesRequest(	inp : DataStream) : DeleteReferencesRequest { 
-		let obj = new DeleteReferencesRequest();
+		const obj = new DeleteReferencesRequest();
 			obj.decode(inp); 
 			return obj;
 

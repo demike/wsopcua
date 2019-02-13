@@ -71,7 +71,7 @@ export class SetTriggeringResponse {
 
 }
 export function decodeSetTriggeringResponse(	inp : DataStream) : SetTriggeringResponse { 
-		let obj = new SetTriggeringResponse();
+		const obj = new SetTriggeringResponse();
 			obj.decode(inp); 
 			return obj;
 

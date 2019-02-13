@@ -65,7 +65,7 @@ export class StructureDefinition {
 
 }
 export function decodeStructureDefinition(	inp : DataStream) : StructureDefinition { 
-		let obj = new StructureDefinition();
+		const obj = new StructureDefinition();
 			obj.decode(inp); 
 			return obj;
 

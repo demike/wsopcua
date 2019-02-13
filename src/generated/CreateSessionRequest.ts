@@ -94,7 +94,7 @@ export class CreateSessionRequest {
 
 }
 export function decodeCreateSessionRequest(	inp : DataStream) : CreateSessionRequest { 
-		let obj = new CreateSessionRequest();
+		const obj = new CreateSessionRequest();
 			obj.decode(inp); 
 			return obj;
 

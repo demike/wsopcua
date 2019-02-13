@@ -57,7 +57,7 @@ export class RedundantServerDataType {
 
 }
 export function decodeRedundantServerDataType(	inp : DataStream) : RedundantServerDataType { 
-		let obj = new RedundantServerDataType();
+		const obj = new RedundantServerDataType();
 			obj.decode(inp); 
 			return obj;
 

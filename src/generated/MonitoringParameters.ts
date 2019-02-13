@@ -68,7 +68,7 @@ export class MonitoringParameters {
 
 }
 export function decodeMonitoringParameters(	inp : DataStream) : MonitoringParameters { 
-		let obj = new MonitoringParameters();
+		const obj = new MonitoringParameters();
 			obj.decode(inp); 
 			return obj;
 

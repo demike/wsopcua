@@ -298,7 +298,7 @@ export class SessionDiagnosticsDataType {
 
 }
 export function decodeSessionDiagnosticsDataType(	inp : DataStream) : SessionDiagnosticsDataType { 
-		let obj = new SessionDiagnosticsDataType();
+		const obj = new SessionDiagnosticsDataType();
 			obj.decode(inp); 
 			return obj;
 

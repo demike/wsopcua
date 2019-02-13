@@ -53,7 +53,7 @@ export class AddNodesRequest {
 
 }
 export function decodeAddNodesRequest(	inp : DataStream) : AddNodesRequest { 
-		let obj = new AddNodesRequest();
+		const obj = new AddNodesRequest();
 			obj.decode(inp); 
 			return obj;
 

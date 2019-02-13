@@ -51,7 +51,7 @@ export class BrowsePath {
 
 }
 export function decodeBrowsePath(	inp : DataStream) : BrowsePath { 
-		let obj = new BrowsePath();
+		const obj = new BrowsePath();
 			obj.decode(inp); 
 			return obj;
 

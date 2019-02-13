@@ -63,7 +63,7 @@ export class ReferenceTypeAttributes extends NodeAttributes {
 
 }
 export function decodeReferenceTypeAttributes(	inp : DataStream) : ReferenceTypeAttributes { 
-		let obj = new ReferenceTypeAttributes();
+		const obj = new ReferenceTypeAttributes();
 			obj.decode(inp); 
 			return obj;
 

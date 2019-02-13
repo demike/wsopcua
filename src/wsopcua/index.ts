@@ -8,6 +8,7 @@ export {ExpandedNodeId,makeExpandedNodeId/*,coerceExpandedNodeId*/} from '../nod
 
 export {StatusCodes} from '../constants/raw_status_codes'
 
+import '../generated';
 
 export {DataType} from '../variant/DataTypeEnum';
 export {Variant,IVariant} from '../variant/variant';

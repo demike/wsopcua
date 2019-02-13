@@ -71,7 +71,7 @@ export class ReadProcessedDetails extends HistoryReadDetails {
 
 }
 export function decodeReadProcessedDetails(	inp : DataStream) : ReadProcessedDetails { 
-		let obj = new ReadProcessedDetails();
+		const obj = new ReadProcessedDetails();
 			obj.decode(inp); 
 			return obj;
 

@@ -44,7 +44,7 @@ export class UserIdentityToken {
 
 }
 export function decodeUserIdentityToken(	inp : DataStream) : UserIdentityToken { 
-		let obj = new UserIdentityToken();
+		const obj = new UserIdentityToken();
 			obj.decode(inp); 
 			return obj;
 

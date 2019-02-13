@@ -56,7 +56,7 @@ export class DataChangeNotification extends NotificationData {
 
 }
 export function decodeDataChangeNotification(	inp : DataStream) : DataChangeNotification { 
-		let obj = new DataChangeNotification();
+		const obj = new DataChangeNotification();
 			obj.decode(inp); 
 			return obj;
 

@@ -81,7 +81,7 @@ export class StructureField {
 
 }
 export function decodeStructureField(	inp : DataStream) : StructureField { 
-		let obj = new StructureField();
+		const obj = new StructureField();
 			obj.decode(inp); 
 			return obj;
 

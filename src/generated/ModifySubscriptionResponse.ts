@@ -63,7 +63,7 @@ export class ModifySubscriptionResponse {
 
 }
 export function decodeModifySubscriptionResponse(	inp : DataStream) : ModifySubscriptionResponse { 
-		let obj = new ModifySubscriptionResponse();
+		const obj = new ModifySubscriptionResponse();
 			obj.decode(inp); 
 			return obj;
 

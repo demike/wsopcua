@@ -53,7 +53,7 @@ export class AddReferencesRequest {
 
 }
 export function decodeAddReferencesRequest(	inp : DataStream) : AddReferencesRequest { 
-		let obj = new AddReferencesRequest();
+		const obj = new AddReferencesRequest();
 			obj.decode(inp); 
 			return obj;
 

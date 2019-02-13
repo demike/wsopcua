@@ -61,7 +61,7 @@ export class BrowseResponse {
 
 }
 export function decodeBrowseResponse(	inp : DataStream) : BrowseResponse { 
-		let obj = new BrowseResponse();
+		const obj = new BrowseResponse();
 			obj.decode(inp); 
 			return obj;
 

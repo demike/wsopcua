@@ -62,7 +62,7 @@ export class DeleteRawModifiedDetails extends HistoryUpdateDetails {
 
 }
 export function decodeDeleteRawModifiedDetails(	inp : DataStream) : DeleteRawModifiedDetails { 
-		let obj = new DeleteRawModifiedDetails();
+		const obj = new DeleteRawModifiedDetails();
 			obj.decode(inp); 
 			return obj;
 

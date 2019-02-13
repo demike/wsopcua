@@ -50,7 +50,7 @@ export class DoubleComplexNumberType {
 
 }
 export function decodeDoubleComplexNumberType(	inp : DataStream) : DoubleComplexNumberType { 
-		let obj = new DoubleComplexNumberType();
+		const obj = new DoubleComplexNumberType();
 			obj.decode(inp); 
 			return obj;
 

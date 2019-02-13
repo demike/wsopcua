@@ -66,7 +66,7 @@ export class SimpleAttributeOperand extends FilterOperand {
 
 }
 export function decodeSimpleAttributeOperand(	inp : DataStream) : SimpleAttributeOperand { 
-		let obj = new SimpleAttributeOperand();
+		const obj = new SimpleAttributeOperand();
 			obj.decode(inp); 
 			return obj;
 

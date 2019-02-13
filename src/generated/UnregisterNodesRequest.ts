@@ -51,7 +51,7 @@ export class UnregisterNodesRequest {
 
 }
 export function decodeUnregisterNodesRequest(	inp : DataStream) : UnregisterNodesRequest { 
-		let obj = new UnregisterNodesRequest();
+		const obj = new UnregisterNodesRequest();
 			obj.decode(inp); 
 			return obj;
 

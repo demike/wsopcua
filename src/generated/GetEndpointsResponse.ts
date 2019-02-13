@@ -53,7 +53,7 @@ export class GetEndpointsResponse {
 
 }
 export function decodeGetEndpointsResponse(	inp : DataStream) : GetEndpointsResponse { 
-		let obj = new GetEndpointsResponse();
+		const obj = new GetEndpointsResponse();
 			obj.decode(inp); 
 			return obj;
 

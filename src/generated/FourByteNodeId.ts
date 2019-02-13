@@ -50,7 +50,7 @@ export class FourByteNodeId {
 
 }
 export function decodeFourByteNodeId(	inp : DataStream) : FourByteNodeId { 
-		let obj = new FourByteNodeId();
+		const obj = new FourByteNodeId();
 			obj.decode(inp); 
 			return obj;
 
@@ -58,6 +58,3 @@ export function decodeFourByteNodeId(	inp : DataStream) : FourByteNodeId {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition("FourByteNodeId",FourByteNodeId, makeExpandedNodeId(-1,));

@@ -56,7 +56,7 @@ export class SessionlessInvokeResponseType {
 
 }
 export function decodeSessionlessInvokeResponseType(	inp : DataStream) : SessionlessInvokeResponseType { 
-		let obj = new SessionlessInvokeResponseType();
+		const obj = new SessionlessInvokeResponseType();
 			obj.decode(inp); 
 			return obj;
 

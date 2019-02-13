@@ -129,7 +129,7 @@ export class ViewNode extends InstanceNode {
 
 }
 export function decodeViewNode(	inp : DataStream) : ViewNode { 
-		let obj = new ViewNode();
+		const obj = new ViewNode();
 			obj.decode(inp); 
 			return obj;
 

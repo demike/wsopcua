@@ -50,7 +50,7 @@ export class DecimalDataType {
 
 }
 export function decodeDecimalDataType(	inp : DataStream) : DecimalDataType { 
-		let obj = new DecimalDataType();
+		const obj = new DecimalDataType();
 			obj.decode(inp); 
 			return obj;
 

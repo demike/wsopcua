@@ -45,7 +45,7 @@ export class ServiceFault {
 
 }
 export function decodeServiceFault(	inp : DataStream) : ServiceFault { 
-		let obj = new ServiceFault();
+		const obj = new ServiceFault();
 			obj.decode(inp); 
 			return obj;
 

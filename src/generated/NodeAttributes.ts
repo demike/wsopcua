@@ -69,7 +69,7 @@ export class NodeAttributes {
 
 }
 export function decodeNodeAttributes(	inp : DataStream) : NodeAttributes { 
-		let obj = new NodeAttributes();
+		const obj = new NodeAttributes();
 			obj.decode(inp); 
 			return obj;
 

@@ -82,7 +82,7 @@ export class ApplicationDescription {
 
 }
 export function decodeApplicationDescription(	inp : DataStream) : ApplicationDescription { 
-		let obj = new ApplicationDescription();
+		const obj = new ApplicationDescription();
 			obj.decode(inp); 
 			return obj;
 

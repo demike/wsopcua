@@ -56,7 +56,7 @@ export class ViewAttributes extends NodeAttributes {
 
 }
 export function decodeViewAttributes(	inp : DataStream) : ViewAttributes { 
-		let obj = new ViewAttributes();
+		const obj = new ViewAttributes();
 			obj.decode(inp); 
 			return obj;
 

@@ -111,7 +111,7 @@ export class Node {
 
 }
 export function decodeNode(	inp : DataStream) : Node { 
-		let obj = new Node();
+		const obj = new Node();
 			obj.decode(inp); 
 			return obj;
 

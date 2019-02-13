@@ -57,7 +57,7 @@ export class TransferSubscriptionsRequest {
 
 }
 export function decodeTransferSubscriptionsRequest(	inp : DataStream) : TransferSubscriptionsRequest { 
-		let obj = new TransferSubscriptionsRequest();
+		const obj = new TransferSubscriptionsRequest();
 			obj.decode(inp); 
 			return obj;
 

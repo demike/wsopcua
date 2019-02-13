@@ -52,7 +52,7 @@ export class BrowsePathResult {
 
 }
 export function decodeBrowsePathResult(	inp : DataStream) : BrowsePathResult { 
-		let obj = new BrowsePathResult();
+		const obj = new BrowsePathResult();
 			obj.decode(inp); 
 			return obj;
 

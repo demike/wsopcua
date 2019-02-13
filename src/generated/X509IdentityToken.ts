@@ -50,7 +50,7 @@ export class X509IdentityToken extends UserIdentityToken {
 
 }
 export function decodeX509IdentityToken(	inp : DataStream) : X509IdentityToken { 
-		let obj = new X509IdentityToken();
+		const obj = new X509IdentityToken();
 			obj.decode(inp); 
 			return obj;
 

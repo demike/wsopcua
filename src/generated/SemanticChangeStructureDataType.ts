@@ -50,7 +50,7 @@ export class SemanticChangeStructureDataType {
 
 }
 export function decodeSemanticChangeStructureDataType(	inp : DataStream) : SemanticChangeStructureDataType { 
-		let obj = new SemanticChangeStructureDataType();
+		const obj = new SemanticChangeStructureDataType();
 			obj.decode(inp); 
 			return obj;
 

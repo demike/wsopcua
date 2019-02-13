@@ -63,7 +63,7 @@ export class ReadValueId {
 
 }
 export function decodeReadValueId(	inp : DataStream) : ReadValueId { 
-		let obj = new ReadValueId();
+		const obj = new ReadValueId();
 			obj.decode(inp); 
 			return obj;
 

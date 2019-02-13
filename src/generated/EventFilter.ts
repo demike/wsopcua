@@ -55,7 +55,7 @@ export class EventFilter extends MonitoringFilter {
 
 }
 export function decodeEventFilter(	inp : DataStream) : EventFilter { 
-		let obj = new EventFilter();
+		const obj = new EventFilter();
 			obj.decode(inp); 
 			return obj;
 

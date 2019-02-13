@@ -51,7 +51,7 @@ export class IdentityMappingRuleType {
 
 }
 export function decodeIdentityMappingRuleType(	inp : DataStream) : IdentityMappingRuleType { 
-		let obj = new IdentityMappingRuleType();
+		const obj = new IdentityMappingRuleType();
 			obj.decode(inp); 
 			return obj;
 

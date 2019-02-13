@@ -57,7 +57,7 @@ export class QueryDataDescription {
 
 }
 export function decodeQueryDataDescription(	inp : DataStream) : QueryDataDescription { 
-		let obj = new QueryDataDescription();
+		const obj = new QueryDataDescription();
 			obj.decode(inp); 
 			return obj;
 

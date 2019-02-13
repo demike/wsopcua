@@ -52,7 +52,7 @@ export class GenericAttributes extends NodeAttributes {
 
 }
 export function decodeGenericAttributes(	inp : DataStream) : GenericAttributes { 
-		let obj = new GenericAttributes();
+		const obj = new GenericAttributes();
 			obj.decode(inp); 
 			return obj;
 

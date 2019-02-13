@@ -61,7 +61,7 @@ export class CallResponse {
 
 }
 export function decodeCallResponse(	inp : DataStream) : CallResponse { 
-		let obj = new CallResponse();
+		const obj = new CallResponse();
 			obj.decode(inp); 
 			return obj;
 

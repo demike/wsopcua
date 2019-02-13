@@ -59,7 +59,7 @@ export class UpdateDataDetails extends HistoryUpdateDetails {
 
 }
 export function decodeUpdateDataDetails(	inp : DataStream) : UpdateDataDetails { 
-		let obj = new UpdateDataDetails();
+		const obj = new UpdateDataDetails();
 			obj.decode(inp); 
 			return obj;
 

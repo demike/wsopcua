@@ -62,7 +62,7 @@ export class UserNameIdentityToken extends UserIdentityToken {
 
 }
 export function decodeUserNameIdentityToken(	inp : DataStream) : UserNameIdentityToken { 
-		let obj = new UserNameIdentityToken();
+		const obj = new UserNameIdentityToken();
 			obj.decode(inp); 
 			return obj;
 

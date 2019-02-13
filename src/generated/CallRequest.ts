@@ -53,7 +53,7 @@ export class CallRequest {
 
 }
 export function decodeCallRequest(	inp : DataStream) : CallRequest { 
-		let obj = new CallRequest();
+		const obj = new CallRequest();
 			obj.decode(inp); 
 			return obj;
 

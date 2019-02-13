@@ -82,7 +82,7 @@ export class AddNodesItem {
 
 }
 export function decodeAddNodesItem(	inp : DataStream) : AddNodesItem { 
-		let obj = new AddNodesItem();
+		const obj = new AddNodesItem();
 			obj.decode(inp); 
 			return obj;
 

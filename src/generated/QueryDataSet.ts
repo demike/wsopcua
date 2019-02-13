@@ -58,7 +58,7 @@ export class QueryDataSet {
 
 }
 export function decodeQueryDataSet(	inp : DataStream) : QueryDataSet { 
-		let obj = new QueryDataSet();
+		const obj = new QueryDataSet();
 			obj.decode(inp); 
 			return obj;
 

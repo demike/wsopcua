@@ -45,7 +45,7 @@ export class CloseSecureChannelRequest {
 
 }
 export function decodeCloseSecureChannelRequest(	inp : DataStream) : CloseSecureChannelRequest { 
-		let obj = new CloseSecureChannelRequest();
+		const obj = new CloseSecureChannelRequest();
 			obj.decode(inp); 
 			return obj;
 

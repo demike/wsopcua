@@ -269,6 +269,11 @@ export class ClassFile {
 
 
     protected getFactoryCode() : string {
+
+        if (this.id === '-1') {
+            return '';
+        }
+
         let str = "import {register_class_definition} from \"../factory/factories_factories\";\n";
         str += "import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';\n"
         str += "register_class_definition(\"" + this.name + "\"," + this.name + ", makeExpandedNodeId("+ this.id + "," + this.namespace + "));";

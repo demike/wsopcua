@@ -46,7 +46,7 @@ export class ContentFilter {
 
 }
 export function decodeContentFilter(	inp : DataStream) : ContentFilter { 
-		let obj = new ContentFilter();
+		const obj = new ContentFilter();
 			obj.decode(inp); 
 			return obj;
 

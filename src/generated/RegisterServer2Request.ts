@@ -58,7 +58,7 @@ export class RegisterServer2Request {
 
 }
 export function decodeRegisterServer2Request(	inp : DataStream) : RegisterServer2Request { 
-		let obj = new RegisterServer2Request();
+		const obj = new RegisterServer2Request();
 			obj.decode(inp); 
 			return obj;
 

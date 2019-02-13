@@ -52,7 +52,7 @@ export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
 
 }
 export function decodeMdnsDiscoveryConfiguration(	inp : DataStream) : MdnsDiscoveryConfiguration { 
-		let obj = new MdnsDiscoveryConfiguration();
+		const obj = new MdnsDiscoveryConfiguration();
 			obj.decode(inp); 
 			return obj;
 

@@ -72,7 +72,7 @@ export class HistoryReadRequest {
 
 }
 export function decodeHistoryReadRequest(	inp : DataStream) : HistoryReadRequest { 
-		let obj = new HistoryReadRequest();
+		const obj = new HistoryReadRequest();
 			obj.decode(inp); 
 			return obj;
 

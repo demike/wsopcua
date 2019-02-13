@@ -52,7 +52,7 @@ export class RepublishResponse {
 
 }
 export function decodeRepublishResponse(	inp : DataStream) : RepublishResponse { 
-		let obj = new RepublishResponse();
+		const obj = new RepublishResponse();
 			obj.decode(inp); 
 			return obj;
 

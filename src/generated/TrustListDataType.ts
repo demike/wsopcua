@@ -68,7 +68,7 @@ export class TrustListDataType {
 
 }
 export function decodeTrustListDataType(	inp : DataStream) : TrustListDataType { 
-		let obj = new TrustListDataType();
+		const obj = new TrustListDataType();
 			obj.decode(inp); 
 			return obj;
 

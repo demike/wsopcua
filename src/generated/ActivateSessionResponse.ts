@@ -65,7 +65,7 @@ export class ActivateSessionResponse {
 
 }
 export function decodeActivateSessionResponse(	inp : DataStream) : ActivateSessionResponse { 
-		let obj = new ActivateSessionResponse();
+		const obj = new ActivateSessionResponse();
 			obj.decode(inp); 
 			return obj;
 

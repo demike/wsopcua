@@ -51,7 +51,7 @@ export class RegisterNodesResponse {
 
 }
 export function decodeRegisterNodesResponse(	inp : DataStream) : RegisterNodesResponse { 
-		let obj = new RegisterNodesResponse();
+		const obj = new RegisterNodesResponse();
 			obj.decode(inp); 
 			return obj;
 

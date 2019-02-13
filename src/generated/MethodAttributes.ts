@@ -56,7 +56,7 @@ export class MethodAttributes extends NodeAttributes {
 
 }
 export function decodeMethodAttributes(	inp : DataStream) : MethodAttributes { 
-		let obj = new MethodAttributes();
+		const obj = new MethodAttributes();
 			obj.decode(inp); 
 			return obj;
 

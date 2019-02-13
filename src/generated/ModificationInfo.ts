@@ -57,7 +57,7 @@ export class ModificationInfo {
 
 }
 export function decodeModificationInfo(	inp : DataStream) : ModificationInfo { 
-		let obj = new ModificationInfo();
+		const obj = new ModificationInfo();
 			obj.decode(inp); 
 			return obj;
 

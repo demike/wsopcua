@@ -62,7 +62,7 @@ export class SamplingIntervalDiagnosticsDataType {
 
 }
 export function decodeSamplingIntervalDiagnosticsDataType(	inp : DataStream) : SamplingIntervalDiagnosticsDataType { 
-		let obj = new SamplingIntervalDiagnosticsDataType();
+		const obj = new SamplingIntervalDiagnosticsDataType();
 			obj.decode(inp); 
 			return obj;
 

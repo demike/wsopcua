@@ -46,7 +46,7 @@ export class HistoryEvent {
 
 }
 export function decodeHistoryEvent(	inp : DataStream) : HistoryEvent { 
-		let obj = new HistoryEvent();
+		const obj = new HistoryEvent();
 			obj.decode(inp); 
 			return obj;
 

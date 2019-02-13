@@ -59,7 +59,7 @@ export class SetMonitoringModeResponse {
 
 }
 export function decodeSetMonitoringModeResponse(	inp : DataStream) : SetMonitoringModeResponse { 
-		let obj = new SetMonitoringModeResponse();
+		const obj = new SetMonitoringModeResponse();
 			obj.decode(inp); 
 			return obj;
 

@@ -52,7 +52,7 @@ export class NetworkGroupDataType {
 
 }
 export function decodeNetworkGroupDataType(	inp : DataStream) : NetworkGroupDataType { 
-		let obj = new NetworkGroupDataType();
+		const obj = new NetworkGroupDataType();
 			obj.decode(inp); 
 			return obj;
 

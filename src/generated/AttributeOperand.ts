@@ -71,7 +71,7 @@ export class AttributeOperand extends FilterOperand {
 
 }
 export function decodeAttributeOperand(	inp : DataStream) : AttributeOperand { 
-		let obj = new AttributeOperand();
+		const obj = new AttributeOperand();
 			obj.decode(inp); 
 			return obj;
 

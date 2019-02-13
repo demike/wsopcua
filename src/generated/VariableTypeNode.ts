@@ -148,7 +148,7 @@ export class VariableTypeNode extends TypeNode {
 
 }
 export function decodeVariableTypeNode(	inp : DataStream) : VariableTypeNode { 
-		let obj = new VariableTypeNode();
+		const obj = new VariableTypeNode();
 			obj.decode(inp); 
 			return obj;
 

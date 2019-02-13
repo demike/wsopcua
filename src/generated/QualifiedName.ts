@@ -50,7 +50,7 @@ export class QualifiedName {
 
 }
 export function decodeQualifiedName(	inp : DataStream) : QualifiedName { 
-		let obj = new QualifiedName();
+		const obj = new QualifiedName();
 			obj.decode(inp); 
 			return obj;
 

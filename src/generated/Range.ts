@@ -50,7 +50,7 @@ export class Range {
 
 }
 export function decodeRange(	inp : DataStream) : Range { 
-		let obj = new Range();
+		const obj = new Range();
 			obj.decode(inp); 
 			return obj;
 

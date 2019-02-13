@@ -52,7 +52,7 @@ export class EventFieldList {
 
 }
 export function decodeEventFieldList(	inp : DataStream) : EventFieldList { 
-		let obj = new EventFieldList();
+		const obj = new EventFieldList();
 			obj.decode(inp); 
 			return obj;
 

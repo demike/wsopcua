@@ -75,7 +75,7 @@ export class VariableTypeAttributes extends NodeAttributes {
 
 }
 export function decodeVariableTypeAttributes(	inp : DataStream) : VariableTypeAttributes { 
-		let obj = new VariableTypeAttributes();
+		const obj = new VariableTypeAttributes();
 			obj.decode(inp); 
 			return obj;
 

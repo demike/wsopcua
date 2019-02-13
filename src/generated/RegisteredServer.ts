@@ -89,7 +89,7 @@ export class RegisteredServer {
 
 }
 export function decodeRegisteredServer(	inp : DataStream) : RegisteredServer { 
-		let obj = new RegisteredServer();
+		const obj = new RegisteredServer();
 			obj.decode(inp); 
 			return obj;
 

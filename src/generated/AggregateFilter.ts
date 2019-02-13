@@ -65,7 +65,7 @@ export class AggregateFilter extends MonitoringFilter {
 
 }
 export function decodeAggregateFilter(	inp : DataStream) : AggregateFilter { 
-		let obj = new AggregateFilter();
+		const obj = new AggregateFilter();
 			obj.decode(inp); 
 			return obj;
 

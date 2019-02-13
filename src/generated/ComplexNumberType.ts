@@ -50,7 +50,7 @@ export class ComplexNumberType {
 
 }
 export function decodeComplexNumberType(	inp : DataStream) : ComplexNumberType { 
-		let obj = new ComplexNumberType();
+		const obj = new ComplexNumberType();
 			obj.decode(inp); 
 			return obj;
 

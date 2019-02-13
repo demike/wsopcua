@@ -57,7 +57,7 @@ export class EnumValueType {
 
 }
 export function decodeEnumValueType(	inp : DataStream) : EnumValueType { 
-		let obj = new EnumValueType();
+		const obj = new EnumValueType();
 			obj.decode(inp); 
 			return obj;
 

@@ -58,7 +58,7 @@ export class ParsingResult {
 
 }
 export function decodeParsingResult(	inp : DataStream) : ParsingResult { 
-		let obj = new ParsingResult();
+		const obj = new ParsingResult();
 			obj.decode(inp); 
 			return obj;
 

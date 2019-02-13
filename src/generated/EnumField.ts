@@ -50,7 +50,7 @@ export class EnumField extends EnumValueType {
 
 }
 export function decodeEnumField(	inp : DataStream) : EnumField { 
-		let obj = new EnumField();
+		const obj = new EnumField();
 			obj.decode(inp); 
 			return obj;
 

@@ -50,7 +50,7 @@ export class XVType {
 
 }
 export function decodeXVType(	inp : DataStream) : XVType { 
-		let obj = new XVType();
+		const obj = new XVType();
 			obj.decode(inp); 
 			return obj;
 

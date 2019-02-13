@@ -68,7 +68,7 @@ export class AggregateConfiguration {
 
 }
 export function decodeAggregateConfiguration(	inp : DataStream) : AggregateConfiguration { 
-		let obj = new AggregateConfiguration();
+		const obj = new AggregateConfiguration();
 			obj.decode(inp); 
 			return obj;
 

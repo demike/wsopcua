@@ -52,7 +52,7 @@ export class ReadAtTimeDetails extends HistoryReadDetails {
 
 }
 export function decodeReadAtTimeDetails(	inp : DataStream) : ReadAtTimeDetails { 
-		let obj = new ReadAtTimeDetails();
+		const obj = new ReadAtTimeDetails();
 			obj.decode(inp); 
 			return obj;
 

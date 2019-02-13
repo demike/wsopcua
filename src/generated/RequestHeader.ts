@@ -80,7 +80,7 @@ export class RequestHeader {
 
 }
 export function decodeRequestHeader(	inp : DataStream) : RequestHeader { 
-		let obj = new RequestHeader();
+		const obj = new RequestHeader();
 			obj.decode(inp); 
 			return obj;
 

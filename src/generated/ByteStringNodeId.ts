@@ -50,7 +50,7 @@ export class ByteStringNodeId {
 
 }
 export function decodeByteStringNodeId(	inp : DataStream) : ByteStringNodeId { 
-		let obj = new ByteStringNodeId();
+		const obj = new ByteStringNodeId();
 			obj.decode(inp); 
 			return obj;
 
@@ -58,6 +58,3 @@ export function decodeByteStringNodeId(	inp : DataStream) : ByteStringNodeId {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition("ByteStringNodeId",ByteStringNodeId, makeExpandedNodeId(-1,));

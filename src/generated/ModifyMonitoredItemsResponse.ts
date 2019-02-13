@@ -61,7 +61,7 @@ export class ModifyMonitoredItemsResponse {
 
 }
 export function decodeModifyMonitoredItemsResponse(	inp : DataStream) : ModifyMonitoredItemsResponse { 
-		let obj = new ModifyMonitoredItemsResponse();
+		const obj = new ModifyMonitoredItemsResponse();
 			obj.decode(inp); 
 			return obj;
 

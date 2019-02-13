@@ -51,7 +51,7 @@ export class RegisterNodesRequest {
 
 }
 export function decodeRegisterNodesRequest(	inp : DataStream) : RegisterNodesRequest { 
-		let obj = new RegisterNodesRequest();
+		const obj = new RegisterNodesRequest();
 			obj.decode(inp); 
 			return obj;
 

@@ -56,7 +56,7 @@ export class ReferenceNode {
 
 }
 export function decodeReferenceNode(	inp : DataStream) : ReferenceNode { 
-		let obj = new ReferenceNode();
+		const obj = new ReferenceNode();
 			obj.decode(inp); 
 			return obj;
 

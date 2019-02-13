@@ -43,7 +43,9 @@ export class BSDSchemaParser {
             } 
             //second pass for incomplete types
             this.parseSecondPass();
+            this.writeIndexFile();
             this.writeFiles();
+            
         });
     }
 
@@ -170,7 +172,28 @@ export class BSDSchemaParser {
             }
         }
     }
- 
+
+    protected writeIndexFile() {
+
+        let strFileContent = '';
+        const ar = TypeRegistry.getTypes();
+
+        for (const file of ar) {
+            if (file.Written) {
+                continue;
+            }
+            strFileContent += 'export * from \'./' + file.Name + '\';\n';
+        }
+
+        fs.writeFile(this.outPath + '/index.ts' , strFileContent, 'utf8', (err) => {
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log('file written: ' + this.outPath + '/index.ts');
+            }
+        });
+    }
+
     public parseComplexType() {
         console.log("hohoho");
     }

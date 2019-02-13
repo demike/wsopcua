@@ -59,7 +59,7 @@ export class MonitoredItemCreateRequest {
 
 }
 export function decodeMonitoredItemCreateRequest(	inp : DataStream) : MonitoredItemCreateRequest { 
-		let obj = new MonitoredItemCreateRequest();
+		const obj = new MonitoredItemCreateRequest();
 			obj.decode(inp); 
 			return obj;
 

@@ -62,7 +62,7 @@ export class LocalizedText {
 
 }
 export function decodeLocalizedText(	inp : DataStream) : LocalizedText { 
-		let obj = new LocalizedText();
+		const obj = new LocalizedText();
 			obj.decode(inp); 
 			return obj;
 

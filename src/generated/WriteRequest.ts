@@ -53,7 +53,7 @@ export class WriteRequest {
 
 }
 export function decodeWriteRequest(	inp : DataStream) : WriteRequest { 
-		let obj = new WriteRequest();
+		const obj = new WriteRequest();
 			obj.decode(inp); 
 			return obj;
 

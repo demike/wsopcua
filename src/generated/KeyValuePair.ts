@@ -52,7 +52,7 @@ export class KeyValuePair {
 
 }
 export function decodeKeyValuePair(	inp : DataStream) : KeyValuePair { 
-		let obj = new KeyValuePair();
+		const obj = new KeyValuePair();
 			obj.decode(inp); 
 			return obj;
 

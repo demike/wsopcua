@@ -50,7 +50,7 @@ export class DeleteEventDetails extends HistoryUpdateDetails {
 
 }
 export function decodeDeleteEventDetails(	inp : DataStream) : DeleteEventDetails { 
-		let obj = new DeleteEventDetails();
+		const obj = new DeleteEventDetails();
 			obj.decode(inp); 
 			return obj;
 

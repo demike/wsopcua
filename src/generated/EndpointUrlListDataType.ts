@@ -44,7 +44,7 @@ export class EndpointUrlListDataType {
 
 }
 export function decodeEndpointUrlListDataType(	inp : DataStream) : EndpointUrlListDataType { 
-		let obj = new EndpointUrlListDataType();
+		const obj = new EndpointUrlListDataType();
 			obj.decode(inp); 
 			return obj;
 

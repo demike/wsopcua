@@ -84,7 +84,7 @@ export class PublishResponse {
 
 }
 export function decodePublishResponse(	inp : DataStream) : PublishResponse { 
-		let obj = new PublishResponse();
+		const obj = new PublishResponse();
 			obj.decode(inp); 
 			return obj;
 

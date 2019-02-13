@@ -61,7 +61,7 @@ export class AddNodesResponse {
 
 }
 export function decodeAddNodesResponse(	inp : DataStream) : AddNodesResponse { 
-		let obj = new AddNodesResponse();
+		const obj = new AddNodesResponse();
 			obj.decode(inp); 
 			return obj;
 

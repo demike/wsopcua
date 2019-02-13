@@ -66,7 +66,7 @@ export class CallMethodResult {
 
 }
 export function decodeCallMethodResult(	inp : DataStream) : CallMethodResult { 
-		let obj = new CallMethodResult();
+		const obj = new CallMethodResult();
 			obj.decode(inp); 
 			return obj;
 

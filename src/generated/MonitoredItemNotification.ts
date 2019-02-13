@@ -51,7 +51,7 @@ export class MonitoredItemNotification {
 
 }
 export function decodeMonitoredItemNotification(	inp : DataStream) : MonitoredItemNotification { 
-		let obj = new MonitoredItemNotification();
+		const obj = new MonitoredItemNotification();
 			obj.decode(inp); 
 			return obj;
 

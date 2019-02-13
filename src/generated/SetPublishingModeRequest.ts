@@ -57,7 +57,7 @@ export class SetPublishingModeRequest {
 
 }
 export function decodeSetPublishingModeRequest(	inp : DataStream) : SetPublishingModeRequest { 
-		let obj = new SetPublishingModeRequest();
+		const obj = new SetPublishingModeRequest();
 			obj.decode(inp); 
 			return obj;
 

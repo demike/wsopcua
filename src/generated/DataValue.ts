@@ -104,7 +104,7 @@ export class DataValue {
 
 }
 export function decodeDataValue(	inp : DataStream) : DataValue { 
-		let obj = new DataValue();
+		const obj = new DataValue();
 			obj.decode(inp); 
 			return obj;
 

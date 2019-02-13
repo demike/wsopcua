@@ -110,7 +110,7 @@ export class ServerDiagnosticsSummaryDataType {
 
 }
 export function decodeServerDiagnosticsSummaryDataType(	inp : DataStream) : ServerDiagnosticsSummaryDataType { 
-		let obj = new ServerDiagnosticsSummaryDataType();
+		const obj = new ServerDiagnosticsSummaryDataType();
 			obj.decode(inp); 
 			return obj;
 

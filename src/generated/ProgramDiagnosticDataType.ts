@@ -101,7 +101,7 @@ export class ProgramDiagnosticDataType {
 
 }
 export function decodeProgramDiagnosticDataType(	inp : DataStream) : ProgramDiagnosticDataType { 
-		let obj = new ProgramDiagnosticDataType();
+		const obj = new ProgramDiagnosticDataType();
 			obj.decode(inp); 
 			return obj;
 

@@ -51,7 +51,7 @@ export class DeleteSubscriptionsRequest {
 
 }
 export function decodeDeleteSubscriptionsRequest(	inp : DataStream) : DeleteSubscriptionsRequest { 
-		let obj = new DeleteSubscriptionsRequest();
+		const obj = new DeleteSubscriptionsRequest();
 			obj.decode(inp); 
 			return obj;
 

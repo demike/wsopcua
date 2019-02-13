@@ -63,7 +63,7 @@ export class GetEndpointsRequest {
 
 }
 export function decodeGetEndpointsRequest(	inp : DataStream) : GetEndpointsRequest { 
-		let obj = new GetEndpointsRequest();
+		const obj = new GetEndpointsRequest();
 			obj.decode(inp); 
 			return obj;
 

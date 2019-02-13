@@ -68,7 +68,7 @@ export class DeleteReferencesItem {
 
 }
 export function decodeDeleteReferencesItem(	inp : DataStream) : DeleteReferencesItem { 
-		let obj = new DeleteReferencesItem();
+		const obj = new DeleteReferencesItem();
 			obj.decode(inp); 
 			return obj;
 

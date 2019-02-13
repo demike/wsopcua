@@ -50,7 +50,7 @@ export class ObjectAttributes extends NodeAttributes {
 
 }
 export function decodeObjectAttributes(	inp : DataStream) : ObjectAttributes { 
-		let obj = new ObjectAttributes();
+		const obj = new ObjectAttributes();
 			obj.decode(inp); 
 			return obj;
 

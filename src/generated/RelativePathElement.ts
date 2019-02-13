@@ -63,7 +63,7 @@ export class RelativePathElement {
 
 }
 export function decodeRelativePathElement(	inp : DataStream) : RelativePathElement { 
-		let obj = new RelativePathElement();
+		const obj = new RelativePathElement();
 			obj.decode(inp); 
 			return obj;
 

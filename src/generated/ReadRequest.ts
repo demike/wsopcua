@@ -66,7 +66,7 @@ export class ReadRequest {
 
 }
 export function decodeReadRequest(	inp : DataStream) : ReadRequest { 
-		let obj = new ReadRequest();
+		const obj = new ReadRequest();
 			obj.decode(inp); 
 			return obj;
 

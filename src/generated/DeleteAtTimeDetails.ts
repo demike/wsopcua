@@ -50,7 +50,7 @@ export class DeleteAtTimeDetails extends HistoryUpdateDetails {
 
 }
 export function decodeDeleteAtTimeDetails(	inp : DataStream) : DeleteAtTimeDetails { 
-		let obj = new DeleteAtTimeDetails();
+		const obj = new DeleteAtTimeDetails();
 			obj.decode(inp); 
 			return obj;
 

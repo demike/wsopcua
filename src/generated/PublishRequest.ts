@@ -53,7 +53,7 @@ export class PublishRequest {
 
 }
 export function decodePublishRequest(	inp : DataStream) : PublishRequest { 
-		let obj = new PublishRequest();
+		const obj = new PublishRequest();
 			obj.decode(inp); 
 			return obj;
 

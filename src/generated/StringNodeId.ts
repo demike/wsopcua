@@ -50,7 +50,7 @@ export class StringNodeId {
 
 }
 export function decodeStringNodeId(	inp : DataStream) : StringNodeId { 
-		let obj = new StringNodeId();
+		const obj = new StringNodeId();
 			obj.decode(inp); 
 			return obj;
 
@@ -58,6 +58,3 @@ export function decodeStringNodeId(	inp : DataStream) : StringNodeId {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition("StringNodeId",StringNodeId, makeExpandedNodeId(-1,));

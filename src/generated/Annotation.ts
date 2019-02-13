@@ -56,7 +56,7 @@ export class Annotation {
 
 }
 export function decodeAnnotation(	inp : DataStream) : Annotation { 
-		let obj = new Annotation();
+		const obj = new Annotation();
 			obj.decode(inp); 
 			return obj;
 

@@ -57,7 +57,7 @@ export class DeleteMonitoredItemsRequest {
 
 }
 export function decodeDeleteMonitoredItemsRequest(	inp : DataStream) : DeleteMonitoredItemsRequest { 
-		let obj = new DeleteMonitoredItemsRequest();
+		const obj = new DeleteMonitoredItemsRequest();
 			obj.decode(inp); 
 			return obj;
 

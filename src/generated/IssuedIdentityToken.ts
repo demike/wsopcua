@@ -56,7 +56,7 @@ export class IssuedIdentityToken extends UserIdentityToken {
 
 }
 export function decodeIssuedIdentityToken(	inp : DataStream) : IssuedIdentityToken { 
-		let obj = new IssuedIdentityToken();
+		const obj = new IssuedIdentityToken();
 			obj.decode(inp); 
 			return obj;
 

@@ -50,7 +50,7 @@ export class ServiceCounterDataType {
 
 }
 export function decodeServiceCounterDataType(	inp : DataStream) : ServiceCounterDataType { 
-		let obj = new ServiceCounterDataType();
+		const obj = new ServiceCounterDataType();
 			obj.decode(inp); 
 			return obj;
 

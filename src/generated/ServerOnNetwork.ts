@@ -62,7 +62,7 @@ export class ServerOnNetwork {
 
 }
 export function decodeServerOnNetwork(	inp : DataStream) : ServerOnNetwork { 
-		let obj = new ServerOnNetwork();
+		const obj = new ServerOnNetwork();
 			obj.decode(inp); 
 			return obj;
 

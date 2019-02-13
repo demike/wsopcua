@@ -75,7 +75,7 @@ export class ResponseHeader {
 
 }
 export function decodeResponseHeader(	inp : DataStream) : ResponseHeader { 
-		let obj = new ResponseHeader();
+		const obj = new ResponseHeader();
 			obj.decode(inp); 
 			return obj;
 

@@ -135,7 +135,7 @@ export class ReferenceTypeNode extends TypeNode {
 
 }
 export function decodeReferenceTypeNode(	inp : DataStream) : ReferenceTypeNode { 
-		let obj = new ReferenceTypeNode();
+		const obj = new ReferenceTypeNode();
 			obj.decode(inp); 
 			return obj;
 

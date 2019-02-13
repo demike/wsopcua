@@ -129,7 +129,7 @@ export class MethodNode extends InstanceNode {
 
 }
 export function decodeMethodNode(	inp : DataStream) : MethodNode { 
-		let obj = new MethodNode();
+		const obj = new MethodNode();
 			obj.decode(inp); 
 			return obj;
 

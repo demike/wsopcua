@@ -46,7 +46,7 @@ export class HistoryEventFieldList {
 
 }
 export function decodeHistoryEventFieldList(	inp : DataStream) : HistoryEventFieldList { 
-		let obj = new HistoryEventFieldList();
+		const obj = new HistoryEventFieldList();
 			obj.decode(inp); 
 			return obj;
 

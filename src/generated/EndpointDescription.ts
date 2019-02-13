@@ -90,7 +90,7 @@ export class EndpointDescription {
 
 }
 export function decodeEndpointDescription(	inp : DataStream) : EndpointDescription { 
-		let obj = new EndpointDescription();
+		const obj = new EndpointDescription();
 			obj.decode(inp); 
 			return obj;
 

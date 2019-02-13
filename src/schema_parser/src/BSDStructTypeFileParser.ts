@@ -207,7 +207,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
         this.cls.addMethod(dec);
 
         //create decode as array method
-        body = "\t\tlet obj = new " + this.cls.Name + "();\n";
+        body = "\t\tconst obj = new " + this.cls.Name + "();\n";
         body += "\t\t\tobj.decode(inp); \n\t\t\treturn obj;\n";
         let fnDec = new ClassMethod(null, this.cls.Name, "decode" + this.cls.Name,
             [new ClassMember("inp", ClassFile.IO_TYPE)],

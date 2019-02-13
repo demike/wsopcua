@@ -48,7 +48,7 @@ export class EventNotificationList extends NotificationData {
 
 }
 export function decodeEventNotificationList(	inp : DataStream) : EventNotificationList { 
-		let obj = new EventNotificationList();
+		const obj = new EventNotificationList();
 			obj.decode(inp); 
 			return obj;
 

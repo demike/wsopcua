@@ -69,7 +69,7 @@ export class SetTriggeringRequest {
 
 }
 export function decodeSetTriggeringRequest(	inp : DataStream) : SetTriggeringRequest { 
-		let obj = new SetTriggeringRequest();
+		const obj = new SetTriggeringRequest();
 			obj.decode(inp); 
 			return obj;
 

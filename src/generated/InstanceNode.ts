@@ -62,7 +62,7 @@ export class InstanceNode extends Node {
 
 }
 export function decodeInstanceNode(	inp : DataStream) : InstanceNode { 
-		let obj = new InstanceNode();
+		const obj = new InstanceNode();
 			obj.decode(inp); 
 			return obj;
 

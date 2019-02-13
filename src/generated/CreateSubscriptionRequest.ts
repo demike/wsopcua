@@ -81,7 +81,7 @@ export class CreateSubscriptionRequest {
 
 }
 export function decodeCreateSubscriptionRequest(	inp : DataStream) : CreateSubscriptionRequest { 
-		let obj = new CreateSubscriptionRequest();
+		const obj = new CreateSubscriptionRequest();
 			obj.decode(inp); 
 			return obj;
 

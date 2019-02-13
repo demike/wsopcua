@@ -53,7 +53,7 @@ export class StatusChangeNotification extends NotificationData {
 
 }
 export function decodeStatusChangeNotification(	inp : DataStream) : StatusChangeNotification { 
-		let obj = new StatusChangeNotification();
+		const obj = new StatusChangeNotification();
 			obj.decode(inp); 
 			return obj;
 

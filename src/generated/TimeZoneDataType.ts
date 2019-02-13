@@ -50,7 +50,7 @@ export class TimeZoneDataType {
 
 }
 export function decodeTimeZoneDataType(	inp : DataStream) : TimeZoneDataType { 
-		let obj = new TimeZoneDataType();
+		const obj = new TimeZoneDataType();
 			obj.decode(inp); 
 			return obj;
 

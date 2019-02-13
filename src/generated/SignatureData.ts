@@ -50,7 +50,7 @@ export class SignatureData {
 
 }
 export function decodeSignatureData(	inp : DataStream) : SignatureData { 
-		let obj = new SignatureData();
+		const obj = new SignatureData();
 			obj.decode(inp); 
 			return obj;
 

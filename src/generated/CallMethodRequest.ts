@@ -58,7 +58,7 @@ export class CallMethodRequest {
 
 }
 export function decodeCallMethodRequest(	inp : DataStream) : CallMethodRequest { 
-		let obj = new CallMethodRequest();
+		const obj = new CallMethodRequest();
 			obj.decode(inp); 
 			return obj;
 

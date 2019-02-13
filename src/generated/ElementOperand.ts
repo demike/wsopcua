@@ -46,7 +46,7 @@ export class ElementOperand extends FilterOperand {
 
 }
 export function decodeElementOperand(	inp : DataStream) : ElementOperand { 
-		let obj = new ElementOperand();
+		const obj = new ElementOperand();
 			obj.decode(inp); 
 			return obj;
 

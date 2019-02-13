@@ -63,7 +63,7 @@ export class EUInformation {
 
 }
 export function decodeEUInformation(	inp : DataStream) : EUInformation { 
-		let obj = new EUInformation();
+		const obj = new EUInformation();
 			obj.decode(inp); 
 			return obj;
 

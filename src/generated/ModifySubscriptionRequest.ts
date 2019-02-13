@@ -81,7 +81,7 @@ export class ModifySubscriptionRequest {
 
 }
 export function decodeModifySubscriptionRequest(	inp : DataStream) : ModifySubscriptionRequest { 
-		let obj = new ModifySubscriptionRequest();
+		const obj = new ModifySubscriptionRequest();
 			obj.decode(inp); 
 			return obj;
 

@@ -50,7 +50,7 @@ export class AddNodesResult {
 
 }
 export function decodeAddNodesResult(	inp : DataStream) : AddNodesResult { 
-		let obj = new AddNodesResult();
+		const obj = new AddNodesResult();
 			obj.decode(inp); 
 			return obj;
 

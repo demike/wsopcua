@@ -79,7 +79,7 @@ export class QueryFirstRequest {
 
 }
 export function decodeQueryFirstRequest(	inp : DataStream) : QueryFirstRequest { 
-		let obj = new QueryFirstRequest();
+		const obj = new QueryFirstRequest();
 			obj.decode(inp); 
 			return obj;
 

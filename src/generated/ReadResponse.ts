@@ -61,7 +61,7 @@ export class ReadResponse {
 
 }
 export function decodeReadResponse(	inp : DataStream) : ReadResponse { 
-		let obj = new ReadResponse();
+		const obj = new ReadResponse();
 			obj.decode(inp); 
 			return obj;
 

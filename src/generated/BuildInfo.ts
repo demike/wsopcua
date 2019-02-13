@@ -74,7 +74,7 @@ export class BuildInfo {
 
 }
 export function decodeBuildInfo(	inp : DataStream) : BuildInfo { 
-		let obj = new BuildInfo();
+		const obj = new BuildInfo();
 			obj.decode(inp); 
 			return obj;
 

@@ -61,7 +61,7 @@ export class TranslateBrowsePathsToNodeIdsResponse {
 
 }
 export function decodeTranslateBrowsePathsToNodeIdsResponse(	inp : DataStream) : TranslateBrowsePathsToNodeIdsResponse { 
-		let obj = new TranslateBrowsePathsToNodeIdsResponse();
+		const obj = new TranslateBrowsePathsToNodeIdsResponse();
 			obj.decode(inp); 
 			return obj;
 

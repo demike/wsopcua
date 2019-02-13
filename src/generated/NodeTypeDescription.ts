@@ -58,7 +58,7 @@ export class NodeTypeDescription {
 
 }
 export function decodeNodeTypeDescription(	inp : DataStream) : NodeTypeDescription { 
-		let obj = new NodeTypeDescription();
+		const obj = new NodeTypeDescription();
 			obj.decode(inp); 
 			return obj;
 

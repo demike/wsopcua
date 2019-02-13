@@ -104,7 +104,7 @@ export class CreateSessionResponse {
 
 }
 export function decodeCreateSessionResponse(	inp : DataStream) : CreateSessionResponse { 
-		let obj = new CreateSessionResponse();
+		const obj = new CreateSessionResponse();
 			obj.decode(inp); 
 			return obj;
 

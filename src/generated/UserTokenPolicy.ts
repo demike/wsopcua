@@ -69,7 +69,7 @@ export class UserTokenPolicy {
 
 }
 export function decodeUserTokenPolicy(	inp : DataStream) : UserTokenPolicy { 
-		let obj = new UserTokenPolicy();
+		const obj = new UserTokenPolicy();
 			obj.decode(inp); 
 			return obj;
 

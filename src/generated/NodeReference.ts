@@ -62,7 +62,7 @@ export class NodeReference {
 
 }
 export function decodeNodeReference(	inp : DataStream) : NodeReference { 
-		let obj = new NodeReference();
+		const obj = new NodeReference();
 			obj.decode(inp); 
 			return obj;
 

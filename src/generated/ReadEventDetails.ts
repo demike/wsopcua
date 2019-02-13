@@ -65,7 +65,7 @@ export class ReadEventDetails extends HistoryReadDetails {
 
 }
 export function decodeReadEventDetails(	inp : DataStream) : ReadEventDetails { 
-		let obj = new ReadEventDetails();
+		const obj = new ReadEventDetails();
 			obj.decode(inp); 
 			return obj;
 

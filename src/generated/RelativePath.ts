@@ -46,7 +46,7 @@ export class RelativePath {
 
 }
 export function decodeRelativePath(	inp : DataStream) : RelativePath { 
-		let obj = new RelativePath();
+		const obj = new RelativePath();
 			obj.decode(inp); 
 			return obj;
 

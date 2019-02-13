@@ -72,7 +72,7 @@ export class AxisInformation {
 
 }
 export function decodeAxisInformation(	inp : DataStream) : AxisInformation { 
-		let obj = new AxisInformation();
+		const obj = new AxisInformation();
 			obj.decode(inp); 
 			return obj;
 

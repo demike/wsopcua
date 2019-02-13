@@ -50,7 +50,7 @@ export class TransferResult {
 
 }
 export function decodeTransferResult(	inp : DataStream) : TransferResult { 
-		let obj = new TransferResult();
+		const obj = new TransferResult();
 			obj.decode(inp); 
 			return obj;
 

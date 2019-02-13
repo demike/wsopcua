@@ -50,7 +50,7 @@ export class OptionSet {
 
 }
 export function decodeOptionSet(	inp : DataStream) : OptionSet { 
-		let obj = new OptionSet();
+		const obj = new OptionSet();
 			obj.decode(inp); 
 			return obj;
 

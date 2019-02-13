@@ -68,7 +68,7 @@ export class MonitoredItemCreateResult {
 
 }
 export function decodeMonitoredItemCreateResult(	inp : DataStream) : MonitoredItemCreateResult { 
-		let obj = new MonitoredItemCreateResult();
+		const obj = new MonitoredItemCreateResult();
 			obj.decode(inp); 
 			return obj;
 

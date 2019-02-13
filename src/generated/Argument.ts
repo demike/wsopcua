@@ -69,7 +69,7 @@ export class Argument {
 
 }
 export function decodeArgument(	inp : DataStream) : Argument { 
-		let obj = new Argument();
+		const obj = new Argument();
 			obj.decode(inp); 
 			return obj;
 
