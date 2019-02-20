@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * @module services.subscription
  */
@@ -206,4 +206,4 @@
     export {TransferSubscriptionsResponse} from '../generated/TransferSubscriptionsResponse';
 
 
-    export {check_deadband} from "./deadband_checker";
+    export {check_deadband} from './deadband_checker';

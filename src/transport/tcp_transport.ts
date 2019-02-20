@@ -408,7 +408,7 @@ public disconnect(callback) {
     if (this._socket) {
         this._socket.end();
         this._socket.destroy();
- //Xx        this._socket.removeAllListeners();
+ // Xx        this._socket.removeAllListeners();
         this._socket = null;
     }
 

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import {assert} from '../assert';
 import {QualifiedName} from '../generated/QualifiedName';
@@ -12,14 +12,14 @@ import * as utils from '../utils';
 import { isEqual } from '../utils';
 
 
-var txtEncoder =  new TextEncoder();
+const txtEncoder =  new TextEncoder();
 
 function isEnumerationItem(value) {
-    return (value instanceof Object && (value.hasOwnProperty("value")) && value.hasOwnProperty("key"));
+    return (value instanceof Object && (value.hasOwnProperty('value')) && value.hasOwnProperty('key'));
 }
 
 
-export function coerceVariantType(dataType : DataType, value) {
+export function coerceVariantType(dataType: DataType, value) {
     /* eslint max-statements: ["error",1000], complexity: ["error",1000]*/
     if (value === undefined ) { value = null; }
     if (isEnumerationItem(value)) {
@@ -28,7 +28,7 @@ export function coerceVariantType(dataType : DataType, value) {
 
         // istanbul ignore next
         if (dataType !== DataType.Int32) {
-            throw new Error("expecting DataType.Int32 for enumeration values ; got DataType." + dataType.toString() + " instead");
+            throw new Error('expecting DataType.Int32 for enumeration values ; got DataType.' + dataType.toString() + ' instead');
         }
     }
 
@@ -59,7 +59,7 @@ export function coerceVariantType(dataType : DataType, value) {
             } else {
                 value = parseInt(value, 10);
             }
-            assert(Number.isFinite(value), "expecting a number");
+            assert(Number.isFinite(value), 'expecting a number');
             break;
         case DataType.UInt64:
             value = ec.coerceUInt64(value);
@@ -73,10 +73,10 @@ export function coerceVariantType(dataType : DataType, value) {
             assert(value === null || value instanceof Date);
             break;
         case DataType.String:
-            assert(typeof value === "string" || value === null);
+            assert(typeof value === 'string' || value === null);
             break;
         case DataType.ByteString:
-            value = (typeof value === "string") ? txtEncoder.encode(value) : value;
+            value = (typeof value === 'string') ? txtEncoder.encode(value) : value;
             if (!(value === null || value instanceof ArrayBuffer)) {
                 throw new Error('ByteString should be null or a Buffer');
             }
@@ -91,7 +91,7 @@ export function coerceVariantType(dataType : DataType, value) {
 
 
 
-function isValidScalarVariant(dataType : DataType, value) {
+function isValidScalarVariant(dataType: DataType, value) {
 
     assert(value === null || DataType.Int64 === dataType || DataType.ByteString === dataType || DataType.UInt64 === dataType || !(value instanceof Array));
     assert(value === null || !(value instanceof Int32Array));
@@ -100,7 +100,7 @@ function isValidScalarVariant(dataType : DataType, value) {
         case DataType.NodeId:
             return ec.isValidNodeId(value);
         case DataType.String:
-            return typeof value === "string" || utils.isNullOrUndefined(value);
+            return typeof value === 'string' || utils.isNullOrUndefined(value);
         case DataType.Int64:
             return ec.isValidInt64(value);
         case DataType.UInt64:
@@ -147,7 +147,7 @@ function isValidArrayVariant(dataType, value) {
     }
     // array values can be store in ArrayBuffer, Float32Array
     assert(Array.isArray(value));
-    for (var i=0;i<value.length;i++) {
+    for (let i = 0; i < value.length; i++) {
         if (!isValidScalarVariant(dataType, value[i])) {
             return false;
         }
@@ -156,12 +156,12 @@ function isValidArrayVariant(dataType, value) {
 }
 
 /*istanbul ignore next*/
-function isValidMatrixVariant(dataType,value,dimensions) {
+function isValidMatrixVariant(dataType, value, dimensions) {
 
-    if(!dimensions) {
+    if (!dimensions) {
         return false;
     }
-    if (!isValidArrayVariant(dataType,value)) {
+    if (!isValidArrayVariant(dataType, value)) {
         return false;
     }
     return true;
@@ -169,7 +169,7 @@ function isValidMatrixVariant(dataType,value,dimensions) {
 
 export function isValidVariant(arrayType, dataType, value, dimensions) {
 
-    assert(dataType,"expecting a variant type");
+    assert(dataType, 'expecting a variant type');
 
     switch (arrayType) {
         case VariantArrayType.Scalar:
@@ -186,7 +186,7 @@ export function isValidVariant(arrayType, dataType, value, dimensions) {
 
 export function buildVariantArray(dataType, nbElements, defaultValue) {
 
-    var value;
+    let value;
     switch (dataType) {
         case DataType.Float:
             value = new Float32Array(nbElements);
@@ -213,17 +213,17 @@ export function buildVariantArray(dataType, nbElements, defaultValue) {
             value = new Int8Array(nbElements);
             break;
         default:
-            //xx console.log("xxxx DataType = ",dataType ? dataType.toString(): null,"nb Elements =",nbElements);
+            // xx console.log("xxxx DataType = ",dataType ? dataType.toString(): null,"nb Elements =",nbElements);
             value = new Array(nbElements);
-            for (var i = 0; i < nbElements; i++) {
+            for (let i = 0; i < nbElements; i++) {
                 value[i] = defaultValue;
             }
-        //xx console.log("xxx done");
+        // xx console.log("xxx done");
     }
     return value;
 }
 
-function __check_same_array(arr1 : any[],arr2 : any[]) {
+function __check_same_array(arr1: any[], arr2: any[]) {
 
     if (!arr1 || !arr2) {
         return !arr1 && !arr2;
@@ -234,9 +234,9 @@ function __check_same_array(arr1 : any[],arr2 : any[]) {
     if (arr1.length === 0 && 0 === arr2.length) {
         return true;
     }
- 
-    var n = arr1.length;
-    for (var i = 0; i < n; i++) {
+
+    const n = arr1.length;
+    for (let i = 0; i < n; i++) {
         if (!isEqual(arr1[i], arr2[i])) {
             return false;
         }
@@ -246,7 +246,7 @@ function __check_same_array(arr1 : any[],arr2 : any[]) {
 }
 export function sameVariant(v1, v2) {
 
-    //xx assert(v1 && v1.constructor.name === "Variant");
+    // xx assert(v1 && v1.constructor.name === "Variant");
     if (v1 === v2) {
         return true;
     }
@@ -262,19 +262,19 @@ export function sameVariant(v1, v2) {
     if (v1.value === v2.value) {
         return true;
     }
-    if(v1.arrayType === VariantArrayType.Scalar) {
-        if(Array.isArray(v1.value) && Array.isArray(v2.value)) {
-          return __check_same_array(v1.value,v2.value);
+    if (v1.arrayType === VariantArrayType.Scalar) {
+        if (Array.isArray(v1.value) && Array.isArray(v2.value)) {
+          return __check_same_array(v1.value, v2.value);
         }
     }
     if (v1.arrayType === VariantArrayType.Array) {
-        return __check_same_array(v1.value,v2.value);
+        return __check_same_array(v1.value, v2.value);
 
     } else if (v1.arrayType === VariantArrayType.Matrix) {
-        if (!__check_same_array(v1.dimensions,v2.dimensions)) {
+        if (!__check_same_array(v1.dimensions, v2.dimensions)) {
             return false;
         }
-        return __check_same_array(v1.value,v2.value);
+        return __check_same_array(v1.value, v2.value);
     }
     return false;
-};
+}

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.address_space.types
  */
@@ -35,7 +35,7 @@ binaryStoreSize(): number {
     const stream = new BinaryStreamSizeCalculator();
     this.encode(stream);
     return stream.length;
-};
+}
 
 /**
  * @method toString
@@ -43,7 +43,7 @@ binaryStoreSize(): number {
  */
 toString(): string {
     return this.toJSON();
-};
+}
 
 
 /**
@@ -52,18 +52,18 @@ toString(): string {
  * @method isValid
  * @return {boolean}
  */
-isValid() : boolean {
-    //TODO implement me
+isValid(): boolean {
+    // TODO implement me
     return true;
-};
+}
 
 
 
-toJSON() : string {
+toJSON(): string {
     return JSON.stringify(this);
 }
 
 
-public abstract clone(target : any) : BaseUAObject;
+public abstract clone(target: any): BaseUAObject;
 
 }

@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-import {assert} from "../assert";
+import {assert} from '../assert';
 
 import {DataType} from './DataTypeEnum';
 import {VariantArrayType} from './VariantArrayTypeEnum';
@@ -9,46 +9,45 @@ import {makeExpandedNodeId} from '../nodeid/expanded_nodeid';
 
 import {_defaultTypeMap} from '../factory/factories_builtin_types';
 import * as ec from '../basic-types';
-var encodeArray = ec.encodeArray;
-var decodeArray = ec.decodeArray;
+let encodeArray = ec.encodeArray;
+let decodeArray = ec.decodeArray;
 
 import {getFactory} from '../factory/factories_factories';
 import {BaseUAObject} from '../factory/factories_baseobject';
-import { DataStream } from "../basic-types/DataStream";
-import { UInt32 } from "../basic-types";
+import { DataStream } from '../basic-types/DataStream';
+import { UInt32 } from '../basic-types';
 
 
-var Variant_ArrayMask = 0x80;
-var Variant_ArrayDimensionsMask = 0x40;
-var Variant_TypeMask = 0x3F;
+let Variant_ArrayMask = 0x80;
+let Variant_ArrayDimensionsMask = 0x40;
+let Variant_TypeMask = 0x3F;
 
 export interface IVariant {
-    dataType? : DataType;
-    arrayType? : VariantArrayType;
-    value? : any;
-    dimensions? : UInt32[];
+    dataType?: DataType;
+    arrayType?: VariantArrayType;
+    value?: any;
+    dimensions?: UInt32[];
 }
- 
+
 /**
- * 
+ *
  * @class Variant
  * @constructor
  * @extends BaseUAObject
  * @param  options {Object}
  * @param  [options.dataType = 0] {DataType} the variant type.
- * @param  [options.arrayType = 0] {VariantArrayType} 
- * @param  [options.value = null] {Any} 
+ * @param  [options.arrayType = 0] {VariantArrayType}
+ * @param  [options.value = null] {Any}
  * @param  [options.dimensions = null] {UInt32[]} the matrix dimensions
  */
 export class Variant extends BaseUAObject {
 
-public dataType : DataType = DataType.Null;
-public arrayType : VariantArrayType = VariantArrayType.Scalar;
-public value : any;
-public dimensions : UInt32[] = null;
+public dataType: DataType = DataType.Null;
+public arrayType: VariantArrayType = VariantArrayType.Scalar;
+public value: any;
+public dimensions: UInt32[] = null;
 
-constructor(options? : IVariant)
-{
+constructor(options?: IVariant) {
     super();
     options = <any>options || {};
 
@@ -63,7 +62,7 @@ constructor(options? : IVariant)
      }
 
     /**
-      * 
+      *
       * @property arrayType
       * @type {VariantArrayType}
       * @default  0
@@ -73,7 +72,7 @@ constructor(options? : IVariant)
      }
 
     /**
-      * 
+      *
       * @property value
       * @type {Any}
       * @default  null
@@ -95,22 +94,22 @@ constructor(options? : IVariant)
    // Object.preventExtensions(self);
 }
 
-//## Define Enumeration setters
-public setDataType(value : number | DataType) {
+// ## Define Enumeration setters
+public setDataType(value: number | DataType) {
     if ( !(value in DataType)) {
-        throw new Error("value cannot be coerced to DataType: " + value);
+        throw new Error('value cannot be coerced to DataType: ' + value);
     }
 
    this.dataType = value;
-};
+}
 
-public setArrayType(value : number| VariantArrayType) {
+public setArrayType(value: number| VariantArrayType) {
     if (! (value in VariantArrayType)) {
-        throw new Error("value cannot be coerced to VariantArrayType: " + value);
+        throw new Error('value cannot be coerced to VariantArrayType: ' + value);
     }
 
    this.arrayType = value;
-};
+}
 
 
 // Variant.prototype.encodingDefaultBinary = makeExpandedNodeId(schema.id);
@@ -124,8 +123,8 @@ public setArrayType(value : number| VariantArrayType) {
 // var decode_Any = _defaultTypeMap.Any.decode;
 // var encode_UInt32 = _defaultTypeMap.UInt32.encode;
 // var decode_UInt32 = _defaultTypeMap.UInt32.decode;
-public encode(out : DataStream) {
-    var encodingByte = this.dataType;
+public encode(out: DataStream) {
+    let encodingByte = this.dataType;
 
     if (this.arrayType === VariantArrayType.Array || this.arrayType === VariantArrayType.Matrix) {
         encodingByte |= Variant_ArrayMask;
@@ -137,55 +136,53 @@ public encode(out : DataStream) {
 
     if (this.arrayType === VariantArrayType.Array || this.arrayType === VariantArrayType.Matrix) {
         encodeVariantArray(this.dataType, out, this.value);
-    }
-    else {
-        var encode = get_encoder(this.dataType);
+    } else {
+        let encode = get_encoder(this.dataType);
         encode(this.value, out);
     }
 
     if (this.dimensions) {
         encodeGeneralArray(DataType.UInt32, out, this.dimensions);
     }
-};
+}
 /**
  * decode the object from a binary stream
  * @method decode
  *
- * @param stream {DataStream} 
- * @param [option] {object} 
+ * @param stream {DataStream}
+ * @param [option] {object}
  */
-public decode(inp : DataStream) {
-    var encodingByte = ec.decodeUInt8(inp);
+public decode(inp: DataStream) {
+    let encodingByte = ec.decodeUInt8(inp);
 
-    var isArray = ((encodingByte & Variant_ArrayMask) === Variant_ArrayMask);
+    let isArray = ((encodingByte & Variant_ArrayMask) === Variant_ArrayMask);
 
-    var hasDimension = (( encodingByte & Variant_ArrayDimensionsMask  ) === Variant_ArrayDimensionsMask);
+    let hasDimension = (( encodingByte & Variant_ArrayDimensionsMask  ) === Variant_ArrayDimensionsMask);
 
     this.dataType = encodingByte & Variant_TypeMask;
 
     if (! (this.dataType in DataType)) {
-        throw new Error("cannot find DataType for encodingByte = 0x" + (encodingByte & Variant_TypeMask).toString(16));
+        throw new Error('cannot find DataType for encodingByte = 0x' + (encodingByte & Variant_TypeMask).toString(16));
     }
     if (isArray) {
         this.arrayType = hasDimension ? VariantArrayType.Matrix : VariantArrayType.Array;
         this.value = decodeVariantArray(this.dataType, inp);
-    }
-    else {
+    } else {
         this.arrayType = VariantArrayType.Scalar;
-        var decode = get_decoder(this.dataType);
+        let decode = get_decoder(this.dataType);
         this.value = decode(inp);
     }
     if (hasDimension) {
         this.dimensions = decodeGeneralArray(DataType.UInt32, inp);
-        var verification = calculate_product(this.dimensions);
+        let verification = calculate_product(this.dimensions);
         if (verification !== this.value.length) {
-            throw new Error("BadDecodingError");
+            throw new Error('BadDecodingError');
         }
     }
-};
+}
 
-public coerceVariant(variantLike : any) {
-    var value =  (variantLike instanceof Variant) ? variantLike : new Variant(variantLike);
+public coerceVariant(variantLike: any) {
+    let value =  (variantLike instanceof Variant) ? variantLike : new Variant(variantLike);
     assert(value instanceof Variant);
     return value;
 }
@@ -196,25 +193,25 @@ public coerceVariant(variantLike : any) {
  *
  * @return {Variant}
  */
-public clone() : Variant {
+public clone(): Variant {
     return new Variant(this);
-};
+}
 
 
 }
 
 import {register_class_definition} from '../factory/factories_factories';
 import {registerSpecialVariantEncoder} from '../factory/factories_builtin_types_special';
-import { DataTypeNode } from "../generated/DataTypeNode";
-register_class_definition("Variant",Variant,makeExpandedNodeId(generate_new_id()));
-registerSpecialVariantEncoder(Variant,"Variant");
+import { DataTypeNode } from '../generated/DataTypeNode';
+register_class_definition('Variant', Variant, makeExpandedNodeId(generate_new_id()));
+registerSpecialVariantEncoder(Variant, "Variant");
 
 
 
 
-export function isValidVariant(arrayType : VariantArrayType, dataType : DataType, value, dimensions) {
+export function isValidVariant(arrayType: VariantArrayType, dataType: DataType, value, dimensions) {
 
-    assert(dataType,"expecting a variant type");
+    assert(dataType,'expecting a variant type');
 
     switch (arrayType) {
         case VariantArrayType.Scalar:
@@ -227,7 +224,7 @@ export function isValidVariant(arrayType : VariantArrayType, dataType : DataType
     }
 }
 
-function isValidScalarVariant(dataType, value) : boolean{
+function isValidScalarVariant(dataType, value): boolean {
 
     assert(value === null || DataType.Int64 === dataType || DataType.ByteString === dataType || DataType.UInt64 === dataType || !(value instanceof Array));
     assert(value === null || !(value instanceof Int32Array));
@@ -236,7 +233,7 @@ function isValidScalarVariant(dataType, value) : boolean{
         case DataType.NodeId:
             return ec.isValidNodeId(value);
         case DataType.String:
-            return typeof value === "string" || value === null || value === undefined;
+            return typeof value === 'string' || value === null || value === undefined;
         case DataType.Int64:
             return ec.isValidInt64(value);
         case DataType.UInt64:
@@ -262,7 +259,7 @@ function isValidScalarVariant(dataType, value) : boolean{
     }
 }
 
-function isValidArrayVariant(dataType, value)  : boolean{
+function isValidArrayVariant(dataType, value): boolean {
 
     if (dataType === DataType.Float && value instanceof Float32Array) {
         return true;
@@ -283,7 +280,7 @@ function isValidArrayVariant(dataType, value)  : boolean{
     }
     // array values can be store in Buffer, Float32Array
     assert(Array.isArray(value));
-    for (var i=0;i<value.length;i++) {
+    for (let i = 0; i < value.length; i++) {
         if (!isValidScalarVariant(dataType, value[i])) {
             return false;
         }
@@ -292,12 +289,12 @@ function isValidArrayVariant(dataType, value)  : boolean{
 }
 
 /*istanbul ignore next*/
-function isValidMatrixVariant(dataType,value,dimensions) : boolean{
+function isValidMatrixVariant(dataType, value, dimensions): boolean {
 
-    if(!dimensions) {
+    if (!dimensions) {
         return false;
     }
-    if (!isValidArrayVariant(dataType,value)) {
+    if (!isValidArrayVariant(dataType, value)) {
         return false;
     }
     return true;
@@ -305,48 +302,48 @@ function isValidMatrixVariant(dataType,value,dimensions) : boolean{
 
 
 import {findBuiltInType} from '../factory/factories_builtin_types';
-import { generate_new_id } from "../factory";
-function get_encoder(dataType : DataType) {
-    var encode = findBuiltInType(DataType[dataType]).encode;
+import { generate_new_id } from '../factory';
+function get_encoder(dataType: DataType) {
+    let encode = findBuiltInType(DataType[dataType]).encode;
     /* istanbul ignore next */
     if (!encode) {
-        throw new Error("Cannot find encode function for dataType " + dataType);
+        throw new Error('Cannot find encode function for dataType ' + dataType);
     }
     return encode;
 }
 
-function get_decoder(dataType : DataType) {
-    var decode = findBuiltInType(DataType[dataType]).decode;
+function get_decoder(dataType: DataType) {
+    let decode = findBuiltInType(DataType[dataType]).decode;
     /* istanbul ignore next */
     if (!decode) {
-        throw new Error("Variant.decode : cannot find decoder for type " + dataType);
+        throw new Error('Variant.decode : cannot find decoder for type ' + dataType);
     }
     return decode;
 }
 
 
-function encodeGeneralArray(dataType : DataType, stream, value) {
+function encodeGeneralArray(dataType: DataType, stream, value) {
 
-    var arr = value || [];
+    let arr = value || [];
     assert(arr instanceof Array);
     assert(Number.isFinite(arr.length));
     ec.encodeUInt32(arr.length, stream);
-    var encode = get_encoder(dataType);
-    var i, n = arr.length;
+    let encode = get_encoder(dataType);
+    let i, n = arr.length;
     for (i = 0; i < n; i++) {
         encode(arr[i], stream);
     }
 }
 
-function encodeVariantArray(dataType, stream : DataStream, value) {
+function encodeVariantArray(dataType, stream: DataStream, value) {
 
     if (value.buffer && value.buffer instanceof ArrayBuffer) {
         try {
             ec.encodeUInt32(value.length, stream);
             stream.writeArrayBuffer(value.buffer, value.byteOffset, value.byteLength);
         } catch (err) {
-            console.log("DATATYPE: " + dataType);
-            console.log("value: " + value.length);
+            console.log('DATATYPE: ' + dataType);
+            console.log('value: ' + value.length);
         }
     }
     return encodeGeneralArray(dataType, stream, value);
@@ -354,28 +351,28 @@ function encodeVariantArray(dataType, stream : DataStream, value) {
 
 function decodeGeneralArray(dataType, stream, length = 0xFFFFFFFF) {
 
-    var length = (length == 0xFFFFFFFF) ? ec.decodeUInt32(stream) : length;
+    let length = (length == 0xFFFFFFFF) ? ec.decodeUInt32(stream) : length;
 
     if (length === 0xFFFFFFFF) {
         return null;
     }
 
-    var decode = get_decoder(dataType);
+    let decode = get_decoder(dataType);
 
-    var arr = [];
-    for (var i = 0; i < length; i++) {
+    let arr = [];
+    for (let i = 0; i < length; i++) {
         arr.push(decode(stream));
     }
     return arr;
 }
 
-function decodeVariantArray(dataType : DataType, stream : DataStream) {
+function decodeVariantArray(dataType: DataType, stream: DataStream) {
 
-    let length = ec.decodeUInt32(stream);
+    const length = ec.decodeUInt32(stream);
     if (length === 0xFFFFFFFF) {
         return null;
     }
-    switch(dataType) {
+    switch (dataType) {
         case DataType.Float:
             return new Float32Array(stream.readArrayBuffer(length * Float32Array.BYTES_PER_ELEMENT));
         case DataType.Double:
@@ -392,8 +389,8 @@ function decodeVariantArray(dataType : DataType, stream : DataStream) {
             return new Uint16Array(stream.readArrayBuffer(length * Uint32Array.BYTES_PER_ELEMENT));
         case DataType.UInt32:
             return new Uint32Array(stream.readArrayBuffer(length * Uint32Array.BYTES_PER_ELEMENT));
-       //() case DataType.UInt64: ?
-           
+       // () case DataType.UInt64: ?
+
     }
 
     return decodeGeneralArray(dataType, stream, length);
@@ -405,9 +402,9 @@ function calculate_product(array) {
     }, 1);
 }
 
-export function decodeVariant(	inp : DataStream) : Variant { 
-    let obj = new Variant(null);
-        obj.decode(inp); 
+export function decodeVariant(	inp: DataStream): Variant {
+    const obj = new Variant(null);
+        obj.decode(inp);
         return obj;
 
 }

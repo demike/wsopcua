@@ -1673,26 +1673,26 @@ public evaluateRemainingLifetime(): number {
  * @param callback.err            {null|Error}
  * @param callback.namespaceArray {Array<String>}
  */
-    public readNamespaceArray(callback){
+    public readNamespaceArray(callback) {
         this.read(new read_service.ReadValueId({
-            nodeId:   new NodeId(NodeIdType.NUMERIC, /*VariableIds.Server_NamespaceArray*/2255, 0), //resolveNodeId('Server_NamespaceArray'),
+            nodeId:   new NodeId(NodeIdType.NUMERIC, /*VariableIds.Server_NamespaceArray*/2255, 0), // resolveNodeId('Server_NamespaceArray'),
             attributeId: AttributeIds.Value
-        }), (err: Error,dataValue: DataValue) => {
-            if (err) return callback(err);
+        }), (err: Error, dataValue: DataValue) => {
+            if (err) { return callback(err); }
 
             if (dataValue.statusCode !== StatusCodes.Good) {
-                return callback(new Error("readNamespaceArray : "+ dataValue.statusCode.toString()));
+                return callback(new Error('readNamespaceArray : ' + dataValue.statusCode.toString()));
             }
             assert(dataValue.value.value instanceof Array);
-            this._namespaceArray = dataValue.value.value;// keep a cache
+            this._namespaceArray = dataValue.value.value; // keep a cache
             callback(null, this._namespaceArray);
         });
-    };
+    }
 
-    public getNamespaceIndex(namespaceUri: string){
-        assert(this._namespaceArray,'please make sure that readNamespaceArray has been called');
+    public getNamespaceIndex(namespaceUri: string) {
+        assert(this._namespaceArray, 'please make sure that readNamespaceArray has been called');
         return this._namespaceArray.indexOf(namespaceUri);
-    };
+    }
 
 }
 

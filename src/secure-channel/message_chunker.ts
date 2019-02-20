@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.miscellaneous
  */
 
 import {assert} from '../assert';
-import {DataStream} from '../basic-types/DataStream'
-import * as ec from '../basic-types'
-import {SequenceNumberGenerator} from "./sequence_number_generator";
+import {DataStream} from '../basic-types/DataStream';
+import * as ec from '../basic-types';
+import {SequenceNumberGenerator} from './sequence_number_generator';
 import { SignatureData } from '../generated/SignatureData';
 
 
-import {AsymmetricAlgorithmSecurityHeader,SymmetricAlgorithmSecurityHeader} from '../service-secure-channel';
+import {AsymmetricAlgorithmSecurityHeader, SymmetricAlgorithmSecurityHeader} from '../service-secure-channel';
 import {SecureMessageChunkManager} from './secure_message_chunk_manager';
 
 /**
@@ -22,10 +22,10 @@ import {SecureMessageChunkManager} from './secure_message_chunk_manager';
  */
 export class MessageChunker {
 
-    protected _sequenceNumberGenerator : SequenceNumberGenerator;
+    protected _sequenceNumberGenerator: SequenceNumberGenerator;
     protected _securityHeader;
     protected _derivedKeys;
-    protected _stream : DataStream;
+    protected _stream: DataStream;
 
     get securityHeader() {
         return this._securityHeader;
@@ -47,7 +47,7 @@ export class MessageChunker {
         this._securityHeader = null;
         this._derivedKeys = null;
         this._stream = null;
-    };
+    }
 
 
 /** update security information
@@ -61,7 +61,7 @@ public update(options) {
 
     options = options || {};
     options.securityHeader = options.securityHeader ||
-        new AsymmetricAlgorithmSecurityHeader({securityPolicyUri: "http://opcfoundation.org/UA/SecurityPolicy#None"});
+        new AsymmetricAlgorithmSecurityHeader({securityPolicyUri: 'http://opcfoundation.org/UA/SecurityPolicy#None'});
 
     assert(typeof options === 'object');
     assert(typeof options.securityHeader === 'object');
@@ -69,7 +69,7 @@ public update(options) {
     this._securityHeader = options.securityHeader;
     this._derivedKeys = options.derivedKeys || null;
 
-};
+}
 
 /**
  * @method chunkSecureMessage
@@ -90,33 +90,33 @@ public chunkSecureMessage(msgType, options, message, messageChunkCallback) {
     assert('function' === typeof messageChunkCallback);
 
     // calculate message size ( with its  encodingDefaultBinary)
-    var binSize = DataStream.binaryStoreSize(message) + 4;
-    
-    var stream = new DataStream(binSize);
+    const binSize = DataStream.binaryStoreSize(message) + 4;
+
+    const stream = new DataStream(binSize);
     this._stream = stream;
 
     ec.encodeExpandedNodeId(message.encodingDefaultBinary, stream);
     message.encode(stream);
 
-    var securityHeader;
-    if (msgType === "OPN") {
+    let securityHeader;
+    if (msgType === 'OPN') {
         securityHeader = this._securityHeader;
     } else {
         securityHeader = new SymmetricAlgorithmSecurityHeader({tokenId: options.tokenId});
     }
 
-    var secure_chunker = new SecureMessageChunkManager(
+    const secure_chunker = new SecureMessageChunkManager(
         msgType, options, securityHeader, this._sequenceNumberGenerator
     )
-        .on("chunk", function (messageChunk) {
+        .on('chunk', function (messageChunk) {
             messageChunkCallback(messageChunk);
         })
-        .on("finished", function () {
+        .on('finished', function () {
             messageChunkCallback(null);
         });
 
     assert(stream.view.byteOffset === 0);
     secure_chunker.write(stream.view.buffer, stream.view.buffer.byteLength);
     secure_chunker.end();
-};
+}
 }

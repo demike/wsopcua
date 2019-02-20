@@ -107,7 +107,7 @@ export function decodeExtensionObject(stream: DataStream) {
     const streamLengthBefore = stream.length;
     try {
         object.decode(stream);
-    } catch(err) {
+    } catch (err) {
             console.log('Cannot decode object ', err.message);
     }
 

@@ -56,17 +56,13 @@ const defaultConnectionStrategy = {
     randomisationFactor: 0.1
 };
 
-export interface ErrorCallback {
-    (err?: Error): void;
-}
+export type ErrorCallback = (err?: Error) => void;
 
 export interface OpcUaResponse {
     responseHeader: ResponseHeader;
 }
 
-export interface ResponseCallback<T> {
-    (err?: Error | null, response?: T): void;
-}
+export type ResponseCallback<T> = (err?: Error | null, response?: T) => void;
 
 
 export interface ConnectionStrategy {
@@ -529,7 +525,7 @@ export class OPCUAClientBase extends EventEmitter {
             assert(response instanceof FindServersOnNetworkResponse);
             callback(null, (<FindServersOnNetworkResponse>response).servers);
         });
-    };
+    }
 
 
     protected _close_pending_sessions(callback) {

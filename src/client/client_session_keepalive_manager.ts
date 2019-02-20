@@ -8,7 +8,7 @@ import {StatusCodes} from '../constants';
 import {ServerState} from '../generated/ServerState';
 import { debugLog } from '../common/debug';
 
-var serverStatus_State_Id = coerceNodeId(VariableIds.Server_ServerStatus_State);
+const serverStatus_State_Id = coerceNodeId(VariableIds.Server_ServerStatus_State);
 
 
 
@@ -16,11 +16,11 @@ export class ClientSessionKeepAliveManager extends EventEmitter {
 
     protected timerId;
     protected session;
-    protected pingTimeout : number;
-    protected lastKnownState : any;
+    protected pingTimeout: number;
+    protected lastKnownState: any;
     protected checkInterval: number;
 
-constructor ( session : ClientSession) {
+constructor ( session: ClientSession) {
     super();
     this.session = session;
     this.timerId = 0;
@@ -47,7 +47,7 @@ public ping_server(callback: () => void) {
     const timeSinceLastServerContact = now - the_session.lastResponseReceivedTime;
     if (timeSinceLastServerContact < this.pingTimeout) {
         // no need to send a ping yet
-        //xx console.log("Skipping ",timeSinceLastServerContact,self.session.timeout);
+        // xx console.log("Skipping ",timeSinceLastServerContact,self.session.timeout);
         return callback();
     }
 
@@ -60,7 +60,7 @@ public ping_server(callback: () => void) {
     // Server_ServerStatus_State
     the_session.readVariableValue(serverStatus_State_Id, (err, dataValue) => {
         if (err) {
-            console.log(" warning : ClientSessionKeepAliveManager#ping_server ", err.message);
+            console.log(' warning : ClientSessionKeepAliveManager#ping_server ', err.message);
             this.stop();
 
             /**
@@ -68,39 +68,39 @@ public ping_server(callback: () => void) {
              * raised when the server is not responding or is responding with en error to
              * the keep alive read Variable value transaction
              */
-            this.emit("failure");
+            this.emit('failure');
 
         } else {
             if (dataValue.statusCode === StatusCodes.Good) {
-                var newState = ServerState[dataValue.value.value];
-                //istanbul ignore next
+                const newState = ServerState[dataValue.value.value];
+                // istanbul ignore next
                 if (newState !== this.lastKnownState) {
-                    console.log(" Server State = ", newState.toString());
+                    console.log(' Server State = ', newState.toString());
                 }
                 this.lastKnownState = newState;
             }
 
-            this.emit("keepalive",this.lastKnownState);
+            this.emit('keepalive', this.lastKnownState);
         }
         callback();
     });
-};
+}
 
 
 public start() {
-    
+
     assert(!this.timerId);
     assert(this.session.timeout > 100);
 
-    this.pingTimeout   =  this.session.timeout * 2/3;
+    this.pingTimeout   =  this.session.timeout * 2 / 3;
     this.checkInterval =  this.pingTimeout  / 3;
-    this.timerId = setInterval(this.ping_server.bind(this),this.checkInterval);
-};
+    this.timerId = setInterval(this.ping_server.bind(this), this.checkInterval);
+}
 
-public stop() : void {
+public stop(): void {
     if (this.timerId) {
         clearInterval(this.timerId);
         this.timerId = 0;
     }
-};
+}
 }

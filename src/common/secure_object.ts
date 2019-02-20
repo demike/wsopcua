@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.miscellaneous
  */
 
 
-import { OPCUAClientOptions } from "../client/client_base";
+import { OPCUAClientOptions } from '../client/client_base';
 
 
 export class OPCUASecureObject {
@@ -21,7 +21,7 @@ export class OPCUASecureObject {
  * @param options.privateKeyFile {string}
  * @constructor
  */
-constructor(options : OPCUAClientOptions) {
+constructor(options: OPCUAClientOptions) {
 
 //    assert(typeof options.certificateFile === "string");
 //    assert(typeof options.privateKeyFile === "string");
@@ -41,11 +41,11 @@ constructor(options : OPCUAClientOptions) {
 public getCertificate() {
 
     if (!this._certificate) {
-        var certChain    = this.getCertificateChain();
-        this._certificate  = null;//**nomsgcrypt** split_der(certChain)[0];
+        const certChain    = this.getCertificateChain();
+        this._certificate  = null; // **nomsgcrypt** split_der(certChain)[0];
     }
     return this._certificate;
-};
+}
 
 /**
  * @method getCertificateChain
@@ -55,10 +55,10 @@ public getCertificateChain() {
 
     if (!this._certificateChain) {
      //   assert(fs.existsSync(this._certificateFile), "Certificate file must exist :" + this._certificateFile);
-        this._certificateChain = null;//**nomsgcrypt** _load_certificate(this._certificateFile);
+        this._certificateChain = null; // **nomsgcrypt** _load_certificate(this._certificateFile);
     }
     return this._certificateChain;
-};
+}
 
 
 /**
@@ -76,6 +76,6 @@ public getPrivateKey () {
     }
     return this._private_key_pem;
 */
-};
+}
 
 }

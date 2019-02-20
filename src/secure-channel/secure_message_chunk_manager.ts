@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.miscellaneous
  */
@@ -10,11 +10,11 @@ import {EventEmitter} from 'eventemitter3';
 import {ChunkManager} from '../chunkmanager';
 import {DataStream} from '../basic-types/DataStream';
 
-import {SequenceHeader,AsymmetricAlgorithmSecurityHeader,SymmetricAlgorithmSecurityHeader} from '../service-secure-channel';
+import {SequenceHeader, AsymmetricAlgorithmSecurityHeader, SymmetricAlgorithmSecurityHeader} from '../service-secure-channel';
 
 export function chooseSecurityHeader(msgType) {
 
-    var securityHeader = (msgType === "OPN") ?
+    const securityHeader = (msgType === 'OPN') ?
         new AsymmetricAlgorithmSecurityHeader() :
         new SymmetricAlgorithmSecurityHeader();
     return securityHeader;
@@ -22,15 +22,15 @@ export function chooseSecurityHeader(msgType) {
 
 
 export interface SecureMessageChunkManagerOptions {
-    sequenceHeaderSize: number
+    sequenceHeaderSize: number;
     secureChannelId: any;
     chunkSize?: number;
     requestId?: number;
-    signatureLength : number;
-    signingFunc : Function
-    plainBlockSize: number,
-    cipherBlockSize: number,
-    encrypt_buffer: ArrayBuffer
+    signatureLength: number;
+    signingFunc: Function;
+    plainBlockSize: number;
+    cipherBlockSize: number;
+    encrypt_buffer: ArrayBuffer;
 }
 
 /**
@@ -58,11 +58,11 @@ export class SecureMessageChunkManager extends EventEmitter {
     protected _chunkSize: number;
     protected _aborted: boolean;
     protected _headerSize: number;
-constructor (msgType, options : SecureMessageChunkManagerOptions, securityHeader, sequenceNumberGenerator) {
-    super()
+constructor (msgType, options: SecureMessageChunkManagerOptions, securityHeader, sequenceNumberGenerator) {
+    super();
     this._aborted = false;
 
-    msgType = msgType || "OPN";
+    msgType = msgType || 'OPN';
 
     securityHeader = securityHeader || chooseSecurityHeader(msgType);
     assert(typeof securityHeader === 'object');
@@ -77,35 +77,35 @@ constructor (msgType, options : SecureMessageChunkManagerOptions, securityHeader
     assert(Number.isFinite(options.secureChannelId));
     this._secureChannelId = options.secureChannelId;
 
-    var requestId = options.requestId;
+    const requestId = options.requestId;
 
     this._sequenceNumberGenerator = sequenceNumberGenerator;
 
     this._securityHeader = securityHeader;
 
-    assert(requestId > 0, "expecting a valid request ID");
+    assert(requestId > 0, 'expecting a valid request ID');
 
     this._sequenceHeader = new SequenceHeader({requestId: requestId, sequenceNumber: -1});
 
-    var securityHeaderSize = DataStream.binaryStoreSize(this._securityHeader);
-    var sequenceHeaderSize = DataStream.binaryStoreSize(this._sequenceHeader);
+    const securityHeaderSize = DataStream.binaryStoreSize(this._securityHeader);
+    const sequenceHeaderSize = DataStream.binaryStoreSize(this._sequenceHeader);
     assert(sequenceHeaderSize === 8);
 
     this._headerSize = 12 + securityHeaderSize;
-    var self = this;
-    var params = {
+    const self = this;
+    const params = {
         chunkSize: this._chunkSize,
 
         headerSize: this._headerSize,
         writeHeaderFunc:  (block, isLast, totalLength) => {
 
-            var finalC = isLast ? "F" : "C";
-            finalC = this._aborted ? "A" : finalC;
+            let finalC = isLast ? 'F' : 'C';
+            finalC = this._aborted ? 'A' : finalC;
             this.write_header(finalC, block, totalLength);
         },
 
         sequenceHeaderSize: options.sequenceHeaderSize,
-        writeSequenceHeaderFunc: function (block : DataStream | DataView) {
+        writeSequenceHeaderFunc: function (block: DataStream | DataView) {
             assert(block.byteLength === this.sequenceHeaderSize);
             self.writeSequenceHeader(block);
         },
@@ -122,17 +122,17 @@ constructor (msgType, options : SecureMessageChunkManagerOptions, securityHeader
 
     this._chunkManager = new ChunkManager(params);
 
-    this._chunkManager.on("chunk", (chunk, is_last) => {
+    this._chunkManager.on('chunk', (chunk, is_last) => {
         /**
          * @event chunk
          * @param chunk {Buffer}
          */
-        this.emit("chunk", chunk, is_last || this._aborted);
+        this.emit('chunk', chunk, is_last || this._aborted);
 
     });
-};
+}
 
-public write_header(finalC, buf : DataStream | DataView, length) {
+public write_header(finalC, buf: DataStream | DataView, length) {
 
     assert(buf.byteLength > 12);
     assert(finalC.length === 1);
@@ -142,7 +142,7 @@ public write_header(finalC, buf : DataStream | DataView, length) {
     }
 
     // message header --------------------------
-    
+
     // ---------------------------------------------------------------
     // OPC UA Secure Conversation Message Header : Part 6 page 36
     // MessageType     Byte[3]
@@ -160,13 +160,13 @@ public write_header(finalC, buf : DataStream | DataView, length) {
 
     assert(buf.length === 12);
 
-    //xx console.log("securityHeader size = ",DataStream.binaryStoreSize(this.securityHeader));
+    // xx console.log("securityHeader size = ",DataStream.binaryStoreSize(this.securityHeader));
     // write Security Header -----------------
     this._securityHeader.encode(buf);
     assert(buf.length === this._headerSize);
-};
+}
 
-public writeSequenceHeader(block : DataStream | DataView) {
+public writeSequenceHeader(block: DataStream | DataView) {
     if (block instanceof DataView) {
         block = new DataStream(block);
     }
@@ -175,17 +175,17 @@ public writeSequenceHeader(block : DataStream | DataView) {
     this._sequenceHeader.encode(block);
     assert(block.length === 8);
 
-};
+}
 
 /**
  * @method write
  * @param buffer {Buffer}
  * @param length {Integer} - optional if not provided  buffer.length is used instead.
  */
-public write(buffer : ArrayBuffer, length : number) {
+public write(buffer: ArrayBuffer, length: number) {
     length = length || buffer.byteLength;
     this._chunkManager.write(buffer, length);
-};
+}
 
 /**
  * @method abort
@@ -194,14 +194,14 @@ public write(buffer : ArrayBuffer, length : number) {
 public abort() {
     this._aborted = true;
     this.end();
-};
+}
 
 /**
  * @method end
  */
 public end() {
     this._chunkManager.end();
-    this.emit("finished");
-};
+    this.emit('finished');
+}
 
 }

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.client
  */
@@ -7,8 +7,8 @@
 import {assert} from '../assert';
 
 const crypto: Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
-import async_map from "async-es/map";
-import async_series from "async-es/series";
+import async_map from 'async-es/map';
+import async_series from 'async-es/series';
 // **nomsgcrypt** var exploreCertificate = require("node-opcua-crypto").crypto_explore_certificate.exploreCertificate;
 
 import {StatusCodes} from '../constants';
@@ -27,14 +27,14 @@ const CloseSessionRequest = session_service.CloseSessionRequest;
  */
 import '../generated';
 
-import * as endpoints_service from "../service-endpoints";
+import * as endpoints_service from '../service-endpoints';
 const ApplicationDescription = endpoints_service.ApplicationDescription;
 const ApplicationType = endpoints_service.ApplicationType;
 const EndpointDescription = endpoints_service.EndpointDescription;
 
-import {MessageSecurityMode, SignatureData} from "../service-secure-channel";
+import {MessageSecurityMode, SignatureData} from '../service-secure-channel';
 import {SecurityPolicy, fromURI} from '../secure-channel/security_policy';
-import { LocalizedText } from "../generated/LocalizedText";
+import { LocalizedText } from '../generated/LocalizedText';
 
 // **nomsgcrypt** var crypto_utils = require("node-opcua-crypto").crypto_utils;
 const UserNameIdentityToken = session_service.UserNameIdentityToken;
@@ -50,9 +50,9 @@ import {doDebug, debugLog} from '../common/debug';
 import {OPCUAClientBase, OPCUAClientOptions, ErrorCallback, ResponseCallback} from './client_base';
 import {isNullOrUndefined} from '../utils';
 
-import {makeApplicationUrn} from "../common/applicationurn";
-import { UserIdentityToken } from "../generated/UserIdentityToken";
-import { stringToUint8Array } from "../basic-types/DataStream";
+import {makeApplicationUrn} from '../common/applicationurn';
+import { UserIdentityToken } from '../generated/UserIdentityToken';
+import { stringToUint8Array } from '../basic-types/DataStream';
 import { repair_client_sessions } from './reconnection';
 
 export interface UserIdentityInfo {
@@ -93,7 +93,7 @@ export class OPCUAClient extends OPCUAClientBase {
     get clientNonce() {
         return this._clientNonce;
     }
-constructor(options : OPCUAClientOptions) {
+constructor(options: OPCUAClientOptions) {
     super(options);
     options = options || {};
 
@@ -112,9 +112,9 @@ protected _nextSessionName() {
     }
     this.___sessionName_counter += 1;
     return this._clientName + this.___sessionName_counter;
-};
+}
 
-protected _getApplicationUri() : Promise<string> {
+protected _getApplicationUri(): Promise<string> {
 
     // get applicationURI from certificate
 
@@ -136,14 +136,14 @@ protected _getApplicationUri() : Promise<string> {
 */
     return  makeApplicationUrn(window.location.hostname, this.applicationName);
 
-};
+}
 
 
 protected __resolveEndPoint() {
 
     this.securityPolicy = this.securityPolicy || SecurityPolicy.None;
 
-    var endpoint = this.findEndpoint(this._secureChannel.endpointUrl, this.securityMode, this.securityPolicy);
+    let endpoint = this.findEndpoint(this._secureChannel.endpointUrl, this.securityMode, this.securityPolicy);
     this.endpoint = endpoint;
 
 
@@ -154,7 +154,7 @@ protected __resolveEndPoint() {
 
     if (!this.endpoint) {
         if (this.endpoint_must_exist) {
-            debugLog("OPCUAClient#endpoint_must_exist = true and endpoint with url ", this._secureChannel.endpointUrl, " cannot be found");
+            debugLog('OPCUAClient#endpoint_must_exist = true and endpoint with url ', this._secureChannel.endpointUrl, ' cannot be found');
             return false;
         } else {
             // fallback :
@@ -170,25 +170,25 @@ protected __resolveEndPoint() {
         }
     }
     return true;
-};
+}
 
 protected _createSession(callback) {
-    assert(typeof callback === "function");
+    assert(typeof callback === 'function');
     assert(this._secureChannel);
     if (!this.__resolveEndPoint() || !this.endpoint) {
-        console.log(this._server_endpoints.map(function (endpoint){
-           return endpoint.endpointUrl + " " + endpoint.securityMode.toString() + " " + endpoint.securityPolicyUri;
+        console.log(this._server_endpoints.map(function (endpoint) {
+           return endpoint.endpointUrl + ' ' + endpoint.securityMode.toString() + ' ' + endpoint.securityPolicyUri;
         }));
-        return callback(new Error(" End point must exist " + this._secureChannel.endpointUrl));
+        return callback(new Error(' End point must exist ' + this._secureChannel.endpointUrl));
     }
     this._serverUri = this.endpoint.server.applicationUri;
     this._endpointUrl = this._secureChannel.endpointUrl;
 
-    var session = new ClientSession(this);
+    const session = new ClientSession(this);
     this.__createSession_step2(session, callback);
-};
+}
 
-protected static verifyEndpointDescriptionMatches(client: OPCUAClient,responseServerEndpoints: endpoints_service.EndpointDescription[]) {
+protected static verifyEndpointDescriptionMatches(client: OPCUAClient, responseServerEndpoints: endpoints_service.EndpointDescription[]) {
     // The Server returns its EndpointDescriptions in the response. Clients use this information to
     // determine whether the list of EndpointDescriptions returned from the Discovery Endpoint matches
     // the Endpoints that the Server has. If there is a difference then the Client shall close the
@@ -198,7 +198,7 @@ protected static verifyEndpointDescriptionMatches(client: OPCUAClient,responseSe
     // transportProfileUri that matches the profileUri specified in the original GetEndpoints request.
     // A Client may skip this check if the EndpointDescriptions were provided by a trusted source
     // such as the Administrator.
-    //serverEndpoints:
+    // serverEndpoints:
     // The Client shall verify this list with the list from a Discovery Endpoint if it used a Discovery Endpoint
     // fetch to the EndpointDescriptions.
 
@@ -210,18 +210,18 @@ protected static verifyEndpointDescriptionMatches(client: OPCUAClient,responseSe
 
 protected async __createSession_step2(session: ClientSession, callback) {
 
-    assert(typeof callback === "function");
+    assert(typeof callback === 'function');
     assert(this._secureChannel);
-    assert(this._serverUri, " must have a valid server URI");
-    assert(this._endpointUrl, " must have a valid server endpointUrl");
+    assert(this._serverUri, ' must have a valid server URI');
+    assert(this._endpointUrl, ' must have a valid server endpointUrl');
     assert(this.endpoint);
 
 
-    let applicationUri = await this._getApplicationUri();
+    const applicationUri = await this._getApplicationUri();
 
-    let applicationDescription = new ApplicationDescription({
+    const applicationDescription = new ApplicationDescription({
         applicationUri: applicationUri,
-        productUri: "OPCUA-Client",
+        productUri: 'OPCUA-Client',
         applicationName: new LocalizedText({text: this.applicationName}),
         applicationType: ApplicationType.Client,
         gatewayServerUri: undefined,
@@ -231,9 +231,9 @@ protected async __createSession_step2(session: ClientSession, callback) {
 
     // note : do not confuse CreateSessionRequest.clientNonce with OpenSecureChannelRequest.clientNonce
     //        which are two different nonce, with different size (although they share the same name )
-    this._clientNonce = crypto.getRandomValues(new Uint8Array(32));//randomBytes(32);
+    this._clientNonce = crypto.getRandomValues(new Uint8Array(32)); // randomBytes(32);
 
-    var request = new CreateSessionRequest({
+    const request = new CreateSessionRequest({
         clientDescription: applicationDescription,
         serverUri: this._serverUri,
         endpointUrl: this.endpointUrl,
@@ -247,13 +247,13 @@ protected async __createSession_step2(session: ClientSession, callback) {
     // a client Nonce must be provided if security mode is set
     assert(this._secureChannel.securityMode === MessageSecurityMode.None || request.clientNonce !== null);
 
-    this.performMessageTransaction(request , (err, response : session_service.CreateSessionResponse) => {
+    this.performMessageTransaction(request , (err, response: session_service.CreateSessionResponse) => {
 
         if (!err) {
-            //xx console.log("xxxxx response",response.toString());
-            //xx console.log("xxxxx response",response.responseHeader.serviceResult);
+            // xx console.log("xxxxx response",response.toString());
+            // xx console.log("xxxxx response",response.responseHeader.serviceResult);
             if (response.responseHeader.serviceResult === StatusCodes.BadTooManySessions) {
-                err = new Error("Too Many Sessions : " + response.responseHeader.serviceResult.toString());
+                err = new Error('Too Many Sessions : ' + response.responseHeader.serviceResult.toString());
 
             } else if (response.responseHeader.serviceResult === StatusCodes.Good) {
 
@@ -261,7 +261,7 @@ protected async __createSession_step2(session: ClientSession, callback) {
 
                 // istanbul ignore next
                 if (!validateServerNonce(response.serverNonce)) {
-                    return callback(new Error("invalid server Nonce"));
+                    return callback(new Error('invalid server Nonce'));
                 }
 
                 // todo: verify SignedSoftwareCertificates and  response.serverSignature
@@ -275,21 +275,21 @@ protected async __createSession_step2(session: ClientSession, callback) {
                 session.serverCertificate = response.serverCertificate;
                 session.serverSignature = response.serverSignature;
 
-                debugLog("revised session timeout = " + session.timeout);
+                debugLog('revised session timeout = ' + session.timeout);
 
-                
-                if (!OPCUAClient.verifyEndpointDescriptionMatches(this,response.serverEndpoints)) {
-                    console.log("Endpoint description previously retrieved with GetendpointsDescription");
+
+                if (!OPCUAClient.verifyEndpointDescriptionMatches(this, response.serverEndpoints)) {
+                    console.log('Endpoint description previously retrieved with GetendpointsDescription');
                     console.log(this._server_endpoints);
-                    console.log("CreateSessionResponse.serverEndpoints= ");
+                    console.log('CreateSessionResponse.serverEndpoints= ');
                     console.log(response.serverEndpoints);
-                    return callback(new Error("Invalid endpoint descriptions Found" ));
+                    return callback(new Error('Invalid endpoint descriptions Found' ));
                 }
                 this._server_endpoints = response.serverEndpoints;
-               //TODO: xx session.serverEndpoints = response.serverEndpoints;
+               // TODO: xx session.serverEndpoints = response.serverEndpoints;
 
             } else {
-                err = new Error("Error " + response.responseHeader.serviceResult.name + " " + response.responseHeader.serviceResult.description);
+                err = new Error('Error ' + response.responseHeader.serviceResult.name + ' ' + response.responseHeader.serviceResult.description);
             }
         }
         if (err) {
@@ -299,69 +299,67 @@ protected async __createSession_step2(session: ClientSession, callback) {
         }
     });
 
-};
+}
 
-public computeClientSignature(channel, serverCertificate, serverNonce) : SignatureData{
+public computeClientSignature(channel, serverCertificate, serverNonce): SignatureData {
     return computeSignature(serverCertificate, serverNonce, this.getPrivateKey(), channel.messageBuilder.securityPolicy);
-};
+}
 
 
-public createUserIdentityToken(session : ClientSession, userIdentityToken : UserIdentityToken|UserIdentityInfo, callback) {
+public createUserIdentityToken(session: ClientSession, userIdentityToken: UserIdentityToken|UserIdentityInfo, callback) {
     assert('function' === typeof callback);
 
     if (null === this._userIdentityInfo) {
-        return callback(null,null);
+        return callback(null, null);
     }
     if (isAnonymous(this._userIdentityInfo)) {
 
         try {
             userIdentityToken = createAnonymousIdentityToken(session);
             return callback(null, userIdentityToken);
-        }
-        catch (err) {
+        } catch (err) {
             return callback(err);
         }
 
     } else if (isUserNamePassword(this._userIdentityInfo)) {
 
-        var userName = this._userIdentityInfo.userName;
-        var password = this._userIdentityInfo.password;
+        const userName = this._userIdentityInfo.userName;
+        const password = this._userIdentityInfo.password;
 
         try {
             userIdentityToken = createUserNameIdentityToken(session, userName, password);
             return callback(null, userIdentityToken);
-        }
-        catch (err) {
-            //xx console.log(err.stack);
+        } catch (err) {
+            // xx console.log(err.stack);
             return callback(err);
         }
     } else {
-        console.log(" userIdentityToken = ", userIdentityToken);
-        return callback(new Error("CLIENT: Invalid userIdentityToken"));
+        console.log(' userIdentityToken = ', userIdentityToken);
+        return callback(new Error('CLIENT: Invalid userIdentityToken'));
     }
-};
+}
 
 
 // see OPCUA Part 4 - $7.35
-protected _activateSession(session : ClientSession, callback) {
+protected _activateSession(session: ClientSession, callback) {
 
-    assert(typeof callback === "function");
+    assert(typeof callback === 'function');
 
     // istanbul ignore next
     if (!this._secureChannel) {
-        return callback(new Error(" No secure channel"));
+        return callback(new Error(' No secure channel'));
     }
 
-    var serverCertificate = session.serverCertificate;
+    const serverCertificate = session.serverCertificate;
     // If the securityPolicyUri is NONE and none of the UserTokenPolicies requires encryption,
     // the Client shall ignore the ApplicationInstanceCertificate (serverCertificate)
     assert(serverCertificate === null || serverCertificate instanceof Uint8Array );
 
-    var serverNonce = session.serverNonce;
+    const serverNonce = session.serverNonce;
     assert(!serverNonce || serverNonce instanceof Uint8Array);
 
     // make sure session is attached to this client
-    var _old_client = session.client;
+    const _old_client = session.client;
     session.client = this;
 
     this.createUserIdentityToken(session, this._userIdentityInfo, (err, userIdentityToken) => {
@@ -373,7 +371,7 @@ protected _activateSession(session : ClientSession, callback) {
 
         // TODO. fill the ActivateSessionRequest
         // see 5.6.3.2 Parameters OPC Unified Architecture, Part 4 30 Release 1.02
-        var request = new ActivateSessionRequest({
+        const request = new ActivateSessionRequest({
 
             // This is a signature generated with the private key associated with the
             // clientCertificate. The SignatureAlgorithm shall be the AsymmetricSignatureAlgorithm
@@ -426,7 +424,7 @@ protected _activateSession(session : ClientSession, callback) {
                 session.serverNonce = response.serverNonce;
 
                 if (!validateServerNonce(session.serverNonce)) {
-                    return callback(new Error("Invalid server Nonce"));
+                    return callback(new Error('Invalid server Nonce'));
                 }
                 return callback(null, session);
 
@@ -440,7 +438,7 @@ protected _activateSession(session : ClientSession, callback) {
 
     });
 
-};
+}
 
 
 /**
@@ -450,21 +448,21 @@ protected _activateSession(session : ClientSession, callback) {
  * @param callback
  * @return {*}
  */
-public reactivateSession(session : ClientSession, callback) {
+public reactivateSession(session: ClientSession, callback) {
 
 
-    assert(typeof callback === "function");
-    assert(this._secureChannel, " client must be connected first");
+    assert(typeof callback === 'function');
+    assert(this._secureChannel, ' client must be connected first');
 
     // istanbul ignore next
     if (!this.__resolveEndPoint() || !this.endpoint) {
-        return callback(new Error(" End point must exist " + this._secureChannel.endpointUrl));
+        return callback(new Error(' End point must exist ' + this._secureChannel.endpointUrl));
     }
 
-    assert(!session.client || session.client.endpointUrl === this.endpointUrl, "cannot reactivateSession on a different endpoint");
-    let old_client : OPCUAClientBase = session.client;
+    assert(!session.client || session.client.endpointUrl === this.endpointUrl, 'cannot reactivateSession on a different endpoint');
+    const old_client: OPCUAClientBase = session.client;
 
-    debugLog("OPCUAClient#reactivateSession");
+    debugLog('OPCUAClient#reactivateSession');
 
     this._activateSession(session, (err) => {
         if (!err) {
@@ -472,11 +470,11 @@ public reactivateSession(session : ClientSession, callback) {
             if (old_client !== this) {
                 // remove session from old client:
                 if (old_client) {
-                    (<any>old_client)._removeSession(session); //cast to any as access of protected member to other instance should be possible
+                    (<any>old_client)._removeSession(session); // cast to any as access of protected member to other instance should be possible
                     assert((<any>old_client)._sessions.indexOf(session) < 0/*!_.contains( (<any>old_client)._sessions, session*/);
                 }
                 this._addSession(session);
-                
+
                 assert(this._sessions.indexOf(session) >= 0 /*_.contains(this._sessions, session)*/);
             }
 
@@ -484,12 +482,12 @@ public reactivateSession(session : ClientSession, callback) {
 
             // istanbul ignore next
             if (doDebug) {
-                console.log("reactivateSession has failed !", err.message);
+                console.log('reactivateSession has failed !', err.message);
             }
         }
         callback(err);
     });
-};
+}
 /**
  * create and activate a new session
  * @async
@@ -517,7 +515,7 @@ public reactivateSession(session : ClientSession, callback) {
  *     });
  *
  */
-public createSession(userIdentityInfo : UserIdentityInfo, callback : (err : Error,session? : ClientSession) => void) {
+public createSession(userIdentityInfo: UserIdentityInfo, callback: (err: Error, session?: ClientSession) => void) {
 
     if ('function' === typeof userIdentityInfo) {
         (<any>callback) = userIdentityInfo;
@@ -528,7 +526,7 @@ public createSession(userIdentityInfo : UserIdentityInfo, callback : (err : Erro
 
     assert('function' === typeof callback);
 
-    this._createSession( (err, session) =>{
+    this._createSession( (err, session) => {
         if (err) {
             callback(err);
         } else {
@@ -540,7 +538,7 @@ public createSession(userIdentityInfo : UserIdentityInfo, callback : (err : Erro
             });
         }
     });
-};
+}
 
 
 /**
@@ -554,7 +552,7 @@ public changeSessionIdentity(session: ClientSession, userIdentityInfo: UserIdent
 
     assert('function' === typeof callback);
 
-    var old_userIdentity = this._userIdentityInfo;
+    const old_userIdentity = this._userIdentityInfo;
     this._userIdentityInfo = userIdentityInfo;
 
     this._activateSession(session, function (err) {
@@ -562,7 +560,7 @@ public changeSessionIdentity(session: ClientSession, userIdentityInfo: UserIdent
     });
 
 
-};
+}
 
 
 protected _closeSession(session: ClientSession,
@@ -572,7 +570,7 @@ protected _closeSession(session: ClientSession,
 
     // istanbul ignore next
     if (!this._secureChannel) {
-        return callback(new Error("no channel"));
+        return callback(new Error('no channel'));
     }
     assert(this._secureChannel);
 
@@ -592,16 +590,16 @@ protected _closeSession(session: ClientSession,
     session.performMessageTransaction(request, function (err, response) {
 
         if (err) {
-            //xx console.log("xxx received : ", err, response);
-            //xx self._secureChannel.close(function () {
-            //xx     callback(err, null);
-            //xx });
+            // xx console.log("xxx received : ", err, response);
+            // xx self._secureChannel.close(function () {
+            // xx     callback(err, null);
+            // xx });
             callback(err, null);
         } else {
             callback(err, response);
         }
     });
-};
+}
 
 /**
  *
@@ -612,15 +610,15 @@ protected _closeSession(session: ClientSession,
  * @param callback {Function} - the callback
  * @param callback.err {Error|null}   - the Error if the async method has failed
  */
-public closeSession(session : ClientSession, deleteSubscriptions : boolean, callback : Function) {
+public closeSession(session: ClientSession, deleteSubscriptions: boolean, callback: Function) {
 
-   
-    //assert(_.isBoolean(deleteSubscriptions));
+
+    // assert(_.isBoolean(deleteSubscriptions));
     assert('function' === typeof callback);
     assert(session);
-    assert(session.client === this, "session must be attached to self");
+    assert(session.client === this, 'session must be attached to self');
     session.closed = true;
-    //todo : send close session on secure channel
+    // todo : send close session on secure channel
     this._closeSession(session, deleteSubscriptions,  (err) => {
 
         session.emitCloseEvent();
@@ -629,23 +627,23 @@ public closeSession(session : ClientSession, deleteSubscriptions : boolean, call
         session.dispose();
 
         assert(this._sessions.indexOf(session) < 0);
-        assert(session.closed, "session must indicate it is closed");
+        assert(session.closed, 'session must indicate it is closed');
 
         callback(err);
     });
-};
+}
 
-protected _ask_for_subscription_republish(session : ClientSession, callback : Function) {
+protected _ask_for_subscription_republish(session: ClientSession, callback: Function) {
 
-    debugLog("_ask_for_subscription_republish ");
-    //xx assert(session.getPublishEngine().nbPendingPublishRequests === 0, "at this time, publish request queue shall still be empty");
-    session.getPublishEngine().republish((err) =>{
-        debugLog("_ask_for_subscription_republish done" + (err ? err.message:"OKs"));
+    debugLog('_ask_for_subscription_republish ');
+    // xx assert(session.getPublishEngine().nbPendingPublishRequests === 0, "at this time, publish request queue shall still be empty");
+    session.getPublishEngine().republish((err) => {
+        debugLog('_ask_for_subscription_republish done' + (err ? err.message : 'OKs'));
         // xx assert(session.getPublishEngine().nbPendingPublishRequests === 0);
         session.resumePublishEngine();
         callback(err);
     });
-};
+}
 
 protected _on_connection_reestablished(callback: ErrorCallback) {
 
@@ -656,15 +654,15 @@ protected _on_connection_reestablished(callback: ErrorCallback) {
         repair_client_sessions(this, callback);
     });
 
-};
+}
 
 
 public toString() {
     super.toString();
-    console.log("  requestedSessionTimeout....... ", this.requestedSessionTimeout);
-    console.log("  endpointUrl................... ", this.endpointUrl);
-    console.log("  serverUri..................... ", this._serverUri);
-};
+    console.log('  requestedSessionTimeout....... ', this.requestedSessionTimeout);
+    console.log('  endpointUrl................... ', this.endpointUrl);
+    console.log('  serverUri..................... ', this._serverUri);
+}
 
 /**
  * @method withSession
@@ -675,14 +673,14 @@ public toString() {
  */
 public withSession(endpointUrl, inner_func, callback) {
 
-    assert('function' === typeof inner_func, "expecting inner function");
-    assert('function' === typeof callback, "expecting callback function");
+    assert('function' === typeof inner_func, 'expecting inner function');
+    assert('function' === typeof callback, 'expecting callback function');
 
-    
 
-    var the_session;
-    var the_error;
-    var need_disconnect = false;
+
+    let the_session;
+    let the_error;
+    let need_disconnect = false;
     async_series([
 
         // step 1 : connect to
@@ -690,7 +688,7 @@ public withSession(endpointUrl, inner_func, callback) {
             this.connect(endpointUrl, function (err) {
                 need_disconnect = true;
                 if (err) {
-                    console.log(" cannot connect to endpoint :", endpointUrl);
+                    console.log(' cannot connect to endpoint :', endpointUrl);
                 }
                 callback(err);
             });
@@ -706,25 +704,24 @@ public withSession(endpointUrl, inner_func, callback) {
             });
         },
 
-        (callback) =>{
+        (callback) => {
             try {
                 inner_func(the_session, function (err) {
                     the_error = err;
                     callback();
                 });
-            }
-            catch (err) {
-                console.log("OPCUAClient#withClientSession", err.message);
+            } catch (err) {
+                console.log('OPCUAClient#withClientSession', err.message);
                 the_error = err;
                 callback();
             }
         },
 
         // close session
-        (callback) =>{
+        (callback) => {
             the_session.close(/*deleteSubscriptions=*/true, function (err) {
                 if (err) {
-                    console.log("OPCUAClient#withClientSession: session closed failed ?");
+                    console.log('OPCUAClient#withClientSession: session closed failed ?');
                 }
                 callback();
             });
@@ -733,7 +730,7 @@ public withSession(endpointUrl, inner_func, callback) {
             this.disconnect(function (err) {
                 need_disconnect = false;
                 if (err) {
-                    console.log("OPCUAClient#withClientSession: client disconnect failed ?");
+                    console.log('OPCUAClient#withClientSession: client disconnect failed ?');
                 }
                 callback();
             });
@@ -741,7 +738,7 @@ public withSession(endpointUrl, inner_func, callback) {
 
     ], (err1) => {
         if (need_disconnect) {
-            console.log("Disconnecting client after failure");
+            console.log('Disconnecting client after failure');
             this.disconnect(function (err2) {
                 return callback(the_error || err1 || err2);
             });
@@ -749,24 +746,24 @@ public withSession(endpointUrl, inner_func, callback) {
             return callback(the_error || err1);
         }
     });
-};
+}
 
 
-//var thenify = require("thenify");
+// var thenify = require("thenify");
 /**
  * @method connect
  * @param endpointUrl {string}
  * @async
  * @return {Promise}
  */
-//OPCUAClient.prototype.connect = thenify.withCallback(OPCUAClient.prototype.connect);
+// OPCUAClient.prototype.connect = thenify.withCallback(OPCUAClient.prototype.connect);
 /**
  * @method disconnect
  * disconnect client from server
  * @return {Promise}
  * @async
  */
-//OPCUAClient.prototype.disconnect = thenify.withCallback(OPCUAClient.prototype.disconnect);
+// OPCUAClient.prototype.disconnect = thenify.withCallback(OPCUAClient.prototype.disconnect);
 /**
  * @method createSession
  * @param [userIdentityInfo {Object} ] optional
@@ -785,7 +782,7 @@ public withSession(endpointUrl, inner_func, callback) {
  *     const session = client.createSession(userIdentityInfo);
  *
  */
-//OPCUAClient.prototype.createSession = thenify.withCallback(OPCUAClient.prototype.createSession);
+// OPCUAClient.prototype.createSession = thenify.withCallback(OPCUAClient.prototype.createSession);
 /**
  * @method changeSessionIdentity
  * @param session
@@ -793,7 +790,7 @@ public withSession(endpointUrl, inner_func, callback) {
  * @return {Promise}
  * @async
  */
-//OPCUAClient.prototype.changeSessionIdentity = thenify.withCallback(OPCUAClient.prototype.changeSessionIdentity);
+// OPCUAClient.prototype.changeSessionIdentity = thenify.withCallback(OPCUAClient.prototype.changeSessionIdentity);
 /**
  * @method closeSession
  * @param session {ClientSession}
@@ -804,7 +801,7 @@ public withSession(endpointUrl, inner_func, callback) {
  *    const session  = await client.createSession();
  *    await client.closeSession(session);
  */
-//OPCUAClient.prototype.closeSession = thenify.withCallback(OPCUAClient.prototype.closeSession);
+// OPCUAClient.prototype.closeSession = thenify.withCallback(OPCUAClient.prototype.closeSession);
 
 
 public withSubscription(endpointUrl, subscriptionParameters, innerFunc, callback) {
@@ -825,13 +822,12 @@ public withSubscription(endpointUrl, subscriptionParameters, innerFunc, callback
                 });
             });
 
-        }
-        catch (err) {
+        } catch (err) {
             console.log(err);
             done(err);
         }
     }, callback);
-};
+}
 }
 
 function isAnonymous(userIdentityInfo) {
@@ -839,15 +835,15 @@ function isAnonymous(userIdentityInfo) {
 }
 
 function isUserNamePassword(userIdentityInfo) {
-    var res = (userIdentityInfo.userName !== undefined) && (userIdentityInfo.password !== undefined);
+    const res = (userIdentityInfo.userName !== undefined) && (userIdentityInfo.password !== undefined);
     return res;
 }
 
-function findUserTokenPolicy(endpoint_description : endpoints_service.EndpointDescription, userTokenType) : endpoints_service.UserTokenPolicy {
+function findUserTokenPolicy(endpoint_description: endpoints_service.EndpointDescription, userTokenType): endpoints_service.UserTokenPolicy {
     assert(endpoint_description instanceof EndpointDescription);
-    var r = endpoint_description.userIdentityTokens.filter( function (userIdentity : endpoints_service.UserTokenPolicy) {
+    const r = endpoint_description.userIdentityTokens.filter( function (userIdentity: endpoints_service.UserTokenPolicy) {
         // assert(userIdentity instanceof UserTokenPolicy)
-        // assert(userIdentity.tokenType);   
+        // assert(userIdentity.tokenType);
         return userIdentity.tokenType === userTokenType;
     });
     return r.length === 0 ? null : r[0];
@@ -860,7 +856,7 @@ function createAnonymousIdentityToken(session) {
 
     const userTokenPolicy: endpoints_service.UserTokenPolicy = findUserTokenPolicy(endpoint_desc, UserIdentityTokenType.ANONYMOUS);
     if (!userTokenPolicy) {
-        throw new Error("Cannot find ANONYMOUS user token policy in end point description");
+        throw new Error('Cannot find ANONYMOUS user token policy in end point description');
     }
     return new AnonymousIdentityToken({policyId: userTokenPolicy.policyId});
 }
@@ -868,8 +864,8 @@ function createAnonymousIdentityToken(session) {
 function createUserNameIdentityToken(session, userName, password) {
 
     // assert(endpoint instanceof EndpointDescription);
-    assert(userName === null || typeof userName === "string");
-    assert(password === null || typeof password === "string");
+    assert(userName === null || typeof userName === 'string');
+    assert(password === null || typeof password === 'string');
     const endpoint_desc = session.endpoint;
     assert(endpoint_desc instanceof EndpointDescription);
 
@@ -886,7 +882,7 @@ function createUserNameIdentityToken(session, userName, password) {
 
     // istanbul ignore next
     if (!userTokenPolicy) {
-        throw new Error("Cannot find USERNAME user token policy in end point description");
+        throw new Error('Cannot find USERNAME user token policy in end point description');
     }
 
     let securityPolicy = fromURI(userTokenPolicy.securityPolicyUri);

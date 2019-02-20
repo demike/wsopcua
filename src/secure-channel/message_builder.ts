@@ -1,29 +1,29 @@
-"use strict";
+'use strict';
 
 
 import {assert} from '../assert';
-import {SecurityPolicy,ICryptoFactory} from '../secure-channel/security_policy';
+import {SecurityPolicy, ICryptoFactory} from '../secure-channel/security_policy';
 import * as ec from '../basic-types';
 import * as securityPolicy_m from './security_policy';
 
 import {MessageBuilderBase} from '../transport/message_builder_base';
 import { MessageSecurityMode } from '../generated/MessageSecurityMode';
 
-import {SymmetricAlgorithmSecurityHeader,SequenceHeader} from '../service-secure-channel';
+import {SymmetricAlgorithmSecurityHeader, SequenceHeader} from '../service-secure-channel';
 import {chooseSecurityHeader} from './secure_message_chunk_manager';
 
-var decodeString = ec.decodeString;
+const decodeString = ec.decodeString;
 
 import {packet_analyzer} from '../packet-analyzer';
 
 
-import {doDebug,debugLog,hexDump} from '../common/debug';
+import {doDebug, debugLog, hexDump} from '../common/debug';
 import { DataStream } from '../basic-types/DataStream';
 
 import * as factory from '../factory';
 import { ExtensionObject } from '../basic-types';
 
-var decodeStatusCode = ec.decodeStatusCode;
+const decodeStatusCode = ec.decodeStatusCode;
 
 
 export class MessageBuilder extends MessageBuilderBase {
@@ -44,7 +44,7 @@ export class MessageBuilder extends MessageBuilderBase {
  * @param options.securityMode {MessageSecurityMode} the security Mode
  * @param [options.objectFactory=factories] a object that provides a constructObject(id) method
  */
-    constructor(options? : any) {
+    constructor(options?: any) {
         options = options || {};
         super(options);
 
@@ -53,13 +53,13 @@ export class MessageBuilder extends MessageBuilderBase {
 
         this._objectFactory = options.objectFactory || factory;
 
-        assert('function' === typeof this._objectFactory.constructObject, " the objectFactory must provide a constructObject method");
+        assert('function' === typeof this._objectFactory.constructObject, ' the objectFactory must provide a constructObject method');
 
         this._previous_sequenceNumber = -1; // means unknown
         assert(Number.isFinite(this._previous_sequenceNumber));
     }
 
-    set privateKey(key : string) {
+    set privateKey(key: string) {
         this._privateKey = key;
     }
 
@@ -68,15 +68,15 @@ export class MessageBuilder extends MessageBuilderBase {
     }
 
 
-public setSecurity(securityMode : MessageSecurityMode, securityPolicy : SecurityPolicy) {
-    assert(this.securityMode === MessageSecurityMode.Invalid, "security already set");
+public setSecurity(securityMode: MessageSecurityMode, securityPolicy: SecurityPolicy) {
+    assert(this.securityMode === MessageSecurityMode.Invalid, 'security already set');
     this._securityPolicy = securityPolicy;
     this.securityMode = securityMode;
-    assert(this._securityPolicy !== undefined, "invalid security policy " + securityPolicy);
-    assert(this.securityMode !== undefined, "invalid security mode " + securityMode);
+    assert(this._securityPolicy !== undefined, 'invalid security policy ' + securityPolicy);
+    assert(this.securityMode !== undefined, 'invalid security mode ' + securityMode);
     assert(this._securityPolicy !== SecurityPolicy.Invalid);
     assert(this.securityMode !== MessageSecurityMode.Invalid);
-};
+}
 
 
 public dispose() {
@@ -87,22 +87,22 @@ public dispose() {
     this._cryptoFactory = null;
     this._securityHeader = null;
     this._tokenStack = null;
-};
+}
 
 
-protected _validateSequenceNumber(sequenceNumber : number) {
+protected _validateSequenceNumber(sequenceNumber: number) {
 
     // checking that sequenceNumber is increasing
     assert(Number.isFinite(this._previous_sequenceNumber));
     assert(Number.isFinite(sequenceNumber) && sequenceNumber >= 0);
 
-    var expectedSequenceNumber;
+    let expectedSequenceNumber;
     if (this._previous_sequenceNumber !== -1) {
 
         expectedSequenceNumber = this._previous_sequenceNumber + 1;
 
         if (expectedSequenceNumber !== sequenceNumber) {
-            var errMessage = "Invalid Sequence Number found ( expected " + expectedSequenceNumber + ", got " + sequenceNumber + ")";
+            const errMessage = 'Invalid Sequence Number found ( expected ' + expectedSequenceNumber + ', got ' + sequenceNumber + ')';
             debugLog(errMessage);
             /**
              * notify the observers that a message with an invalid sequence number has been received.
@@ -110,16 +110,16 @@ protected _validateSequenceNumber(sequenceNumber : number) {
              * @param {Number} expected sequence Number
              * @param {Number} actual sequence Number
              */
-            this.emit("invalid_sequence_number", expectedSequenceNumber, sequenceNumber);
+            this.emit('invalid_sequence_number', expectedSequenceNumber, sequenceNumber);
         }
         // todo : handle the case where sequenceNumber wraps back to < 1024
     }
     /* istanbul ignore next */
     if (doDebug) {
-        debugLog(" Sequence Number = " + sequenceNumber);
+        debugLog(' Sequence Number = ' + sequenceNumber);
     }
     this._previous_sequenceNumber = sequenceNumber;
-};
+}
 
 /* **nomsgcrypt**
 protected _decrypt_OPN(binaryStream : DataStream) {
@@ -210,19 +210,19 @@ protected _decrypt_OPN(binaryStream : DataStream) {
 
 public pushNewToken(securityToken, derivedKeys) {
 
-    assert(securityToken.hasOwnProperty("tokenId"));
-    //xx assert(derivedKeys ); in fact, can be null
+    assert(securityToken.hasOwnProperty('tokenId'));
+    // xx assert(derivedKeys ); in fact, can be null
 
     // TODO: make sure this list doesn't grow indefinitly
     this._tokenStack = this._tokenStack || [];
     assert(this._tokenStack.length === 0 || this._tokenStack[0].tokenId !== securityToken.tokenId);
     this._tokenStack.push({securityToken: securityToken, derivedKeys: derivedKeys});
 
-};
+}
 
 protected _select_matching_token(tokenId) {
 
-    var got_new_token = false;
+    let got_new_token = false;
     this._tokenStack = this._tokenStack || [];
     while (this._tokenStack.length) {
         if (this._tokenStack.length === 0) {
@@ -230,7 +230,7 @@ protected _select_matching_token(tokenId) {
         }
         if (this._tokenStack[0].securityToken.tokenId === tokenId) {
             if (got_new_token) {
-                this.emit("new_token", tokenId);
+                this.emit('new_token', tokenId);
             }
             return this._tokenStack[0];
         }
@@ -239,7 +239,7 @@ protected _select_matching_token(tokenId) {
         got_new_token = true;
     }
 
-};
+}
 
 /* //**nomsgcrypt**
 protected _decrypt_MSG(binaryStream) {
@@ -346,20 +346,20 @@ protected _decrypt(binaryStream : DataStream) {
  * @return {Boolean}
  * @private
  */
-protected _read_headers(binaryStream : DataStream) {
+protected _read_headers(binaryStream: DataStream) {
 
     super._read_headers(binaryStream);
     assert(binaryStream.length === 12);
 
-    var msgType = this.messageHeader.msgType;
+    const msgType = this.messageHeader.msgType;
 
-    if (msgType === "HEL" || msgType === "ACK") {
+    if (msgType === 'HEL' || msgType === 'ACK') {
 
         this._securityPolicy = SecurityPolicy.None;
-    } else if (msgType === "ERR") {
+    } else if (msgType === 'ERR') {
 
         // extract Error StatusCode and additional message
-        //binaryStream.length = 8;
+        // binaryStream.length = 8;
         const errorCode = decodeStatusCode(binaryStream);
         const message = decodeString(binaryStream);
         if (doDebug) {
@@ -373,7 +373,7 @@ protected _read_headers(binaryStream : DataStream) {
         this._securityHeader = chooseSecurityHeader(msgType);
         this._securityHeader.decode(binaryStream);
 
-        if (msgType === "OPN") {
+        if (msgType === 'OPN') {
             this._securityPolicy = securityPolicy_m.fromURI(this._securityHeader.securityPolicyUri);
             this._cryptoFactory = securityPolicy_m.getCryptoFactory(this._securityPolicy);
         }
@@ -389,29 +389,28 @@ protected _read_headers(binaryStream : DataStream) {
 
         /* istanbul ignore next */
         if (doDebug) {
-            debugLog(" Sequence Header", this.sequenceHeader);
+            debugLog(' Sequence Header', this.sequenceHeader);
         }
 
         this._validateSequenceNumber(this.sequenceHeader.sequenceNumber);
     }
     return true;
-};
+}
 
 
 protected _safe_decode_message_body(full_message_body, objMessage  /*ExtensionObject*/, binaryStream) {
     try {
         // de-serialize the object from the binary stream
-        var options = this._objectFactory;
-        objMessage.decode(binaryStream,options);
-    }
-    catch (err) {
+        const options = this._objectFactory;
+        objMessage.decode(binaryStream, options);
+    } catch (err) {
         console.log(err);
         console.log(err.stack);
         console.log(hexDump(full_message_body));
         packet_analyzer(full_message_body);
 
-        let i=0;
-        console.log(" ---------------- block");
+        let i = 0;
+        console.log(' ---------------- block');
         this.message_chunks.forEach(function (messageChunk) {
             console.log(' ---------------- chunk i=', i++);
             console.log(hexDump(messageChunk));
@@ -419,37 +418,37 @@ protected _safe_decode_message_body(full_message_body, objMessage  /*ExtensionOb
         return false;
     }
     return true;
-};
+}
 
 protected _decode_message_body(full_message_body) {
 
-    var binaryStream = new DataStream(full_message_body);
-    var msgType = this.messageHeader.msgType;
+    const binaryStream = new DataStream(full_message_body);
+    const msgType = this.messageHeader.msgType;
 
-    if (msgType === "ERR") {
+    if (msgType === 'ERR') {
         // invalid message type
-        this._report_error("ERROR RECEIVED");
+        this._report_error('ERROR RECEIVED');
         return false;
     }
-    if (msgType === "HEL" || msgType === "ACK") {
+    if (msgType === 'HEL' || msgType === 'ACK') {
         // invalid message type
-        this._report_error("Invalid message type ( HEL/ACK )");
+        this._report_error('Invalid message type ( HEL/ACK )');
         return false;
     }
 
     // read expandedNodeId:
-    var id = ec.decodeExpandedNodeId(binaryStream);
+    const id = ec.decodeExpandedNodeId(binaryStream);
 
     // construct the object
-    var objMessage = this._objectFactory.constructObject(id);
+    const objMessage = this._objectFactory.constructObject(id);
 
     if (!objMessage) {
-        this._report_error("cannot construct object with nodeID " + id);
+        this._report_error('cannot construct object with nodeID ' + id);
         return false;
 
     } else {
 
-        debugLog("message size =",this.total_message_size," body size =",this.total_body_size);
+        debugLog('message size =', this.total_message_size, ' body size =', this.total_body_size);
 
         if (this._safe_decode_message_body(full_message_body, objMessage, binaryStream)) {
             try {
@@ -460,24 +459,23 @@ protected _decode_message_body(full_message_body) {
                  * @param {String} msgType the message type ( "HEL","ACK","OPN","CLO" or "MSG" )
                  * @param {Number} the request Id
                  */
-                this.emit("message", objMessage, msgType, this.sequenceHeader.requestId, this.secureChannelId);
-            }
-            catch (err) {
+                this.emit('message', objMessage, msgType, this.sequenceHeader.requestId, this.secureChannelId);
+            } catch (err) {
                 // this code catches a uncaught exception somewhere in one of the event handler
                 // this indicates a bug in the code that uses this class
                 // please check the stack trace to find the problem
-                console.log("MessageBuilder : ERROR DETECTED IN event handler");
+                console.log('MessageBuilder : ERROR DETECTED IN event handler');
                 console.log(err);
                 console.log(err.stack);
             }
         } else {
-            var message = "cannot decode message  for valid object of type " + id.toString() + " " + objMessage.constructor.name;
+            const message = 'cannot decode message  for valid object of type ' + id.toString() + ' ' + objMessage.constructor.name;
             console.log(message);
             this._report_error(message);
             return false;
         }
     }
     return true;
-};
+}
 
 }
