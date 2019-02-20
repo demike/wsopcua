@@ -9,8 +9,8 @@ import {makeExpandedNodeId} from '../nodeid/expanded_nodeid';
 
 import {_defaultTypeMap} from '../factory/factories_builtin_types';
 import * as ec from '../basic-types';
-let encodeArray = ec.encodeArray;
-let decodeArray = ec.decodeArray;
+const encodeArray = ec.encodeArray;
+const decodeArray = ec.decodeArray;
 
 import {getFactory} from '../factory/factories_factories';
 import {BaseUAObject} from '../factory/factories_baseobject';
@@ -18,9 +18,9 @@ import { DataStream } from '../basic-types/DataStream';
 import { UInt32 } from '../basic-types';
 
 
-let Variant_ArrayMask = 0x80;
-let Variant_ArrayDimensionsMask = 0x40;
-let Variant_TypeMask = 0x3F;
+const Variant_ArrayMask = 0x80;
+const Variant_ArrayDimensionsMask = 0x40;
+const Variant_TypeMask = 0x3F;
 
 export interface IVariant {
     dataType?: DataType;
@@ -137,7 +137,7 @@ public encode(out: DataStream) {
     if (this.arrayType === VariantArrayType.Array || this.arrayType === VariantArrayType.Matrix) {
         encodeVariantArray(this.dataType, out, this.value);
     } else {
-        let encode = get_encoder(this.dataType);
+        const encode = get_encoder(this.dataType);
         encode(this.value, out);
     }
 
@@ -153,11 +153,11 @@ public encode(out: DataStream) {
  * @param [option] {object}
  */
 public decode(inp: DataStream) {
-    let encodingByte = ec.decodeUInt8(inp);
+    const encodingByte = ec.decodeUInt8(inp);
 
-    let isArray = ((encodingByte & Variant_ArrayMask) === Variant_ArrayMask);
+    const isArray = ((encodingByte & Variant_ArrayMask) === Variant_ArrayMask);
 
-    let hasDimension = (( encodingByte & Variant_ArrayDimensionsMask  ) === Variant_ArrayDimensionsMask);
+    const hasDimension = (( encodingByte & Variant_ArrayDimensionsMask  ) === Variant_ArrayDimensionsMask);
 
     this.dataType = encodingByte & Variant_TypeMask;
 
@@ -169,12 +169,12 @@ public decode(inp: DataStream) {
         this.value = decodeVariantArray(this.dataType, inp);
     } else {
         this.arrayType = VariantArrayType.Scalar;
-        let decode = get_decoder(this.dataType);
+        const decode = get_decoder(this.dataType);
         this.value = decode(inp);
     }
     if (hasDimension) {
         this.dimensions = decodeGeneralArray(DataType.UInt32, inp);
-        let verification = calculate_product(this.dimensions);
+        const verification = calculate_product(this.dimensions);
         if (verification !== this.value.length) {
             throw new Error('BadDecodingError');
         }
@@ -182,7 +182,7 @@ public decode(inp: DataStream) {
 }
 
 public coerceVariant(variantLike: any) {
-    let value =  (variantLike instanceof Variant) ? variantLike : new Variant(variantLike);
+    const value =  (variantLike instanceof Variant) ? variantLike : new Variant(variantLike);
     assert(value instanceof Variant);
     return value;
 }
@@ -204,14 +204,14 @@ import {register_class_definition} from '../factory/factories_factories';
 import {registerSpecialVariantEncoder} from '../factory/factories_builtin_types_special';
 import { DataTypeNode } from '../generated/DataTypeNode';
 register_class_definition('Variant', Variant, makeExpandedNodeId(generate_new_id()));
-registerSpecialVariantEncoder(Variant, "Variant");
+registerSpecialVariantEncoder(Variant, 'Variant');
 
 
 
 
 export function isValidVariant(arrayType: VariantArrayType, dataType: DataType, value, dimensions) {
 
-    assert(dataType,'expecting a variant type');
+    assert(dataType, 'expecting a variant type');
 
     switch (arrayType) {
         case VariantArrayType.Scalar:
@@ -304,7 +304,7 @@ function isValidMatrixVariant(dataType, value, dimensions): boolean {
 import {findBuiltInType} from '../factory/factories_builtin_types';
 import { generate_new_id } from '../factory';
 function get_encoder(dataType: DataType) {
-    let encode = findBuiltInType(DataType[dataType]).encode;
+    const encode = findBuiltInType(DataType[dataType]).encode;
     /* istanbul ignore next */
     if (!encode) {
         throw new Error('Cannot find encode function for dataType ' + dataType);
@@ -313,7 +313,7 @@ function get_encoder(dataType: DataType) {
 }
 
 function get_decoder(dataType: DataType) {
-    let decode = findBuiltInType(DataType[dataType]).decode;
+    const decode = findBuiltInType(DataType[dataType]).decode;
     /* istanbul ignore next */
     if (!decode) {
         throw new Error('Variant.decode : cannot find decoder for type ' + dataType);
@@ -324,11 +324,11 @@ function get_decoder(dataType: DataType) {
 
 function encodeGeneralArray(dataType: DataType, stream, value) {
 
-    let arr = value || [];
+    const arr = value || [];
     assert(arr instanceof Array);
     assert(Number.isFinite(arr.length));
     ec.encodeUInt32(arr.length, stream);
-    let encode = get_encoder(dataType);
+    const encode = get_encoder(dataType);
     let i, n = arr.length;
     for (i = 0; i < n; i++) {
         encode(arr[i], stream);
@@ -351,15 +351,15 @@ function encodeVariantArray(dataType, stream: DataStream, value) {
 
 function decodeGeneralArray(dataType, stream, length = 0xFFFFFFFF) {
 
-    let length = (length == 0xFFFFFFFF) ? ec.decodeUInt32(stream) : length;
+    length = (length === 0xFFFFFFFF) ? ec.decodeUInt32(stream) : length;
 
     if (length === 0xFFFFFFFF) {
         return null;
     }
 
-    let decode = get_decoder(dataType);
+    const decode = get_decoder(dataType);
 
-    let arr = [];
+    const arr = [];
     for (let i = 0; i < length; i++) {
         arr.push(decode(stream));
     }
