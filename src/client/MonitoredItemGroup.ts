@@ -43,7 +43,8 @@ export class MonitoredItemGroup extends EventEmitter{
     protected _subscription : ClientSubscription;
     protected _timestampsToReturn : TimestampsToReturn;
     protected _monitoringMode : MonitoringMode;
-constructor (subscription : ClientSubscription, itemsToMonitor : IReadValueId[], monitoringParameters : IMonitoringParameters, timestampsToReturn : TimestampsToReturn) {
+constructor (subscription : ClientSubscription, itemsToMonitor : IReadValueId[], 
+                monitoringParameters : IMonitoringParameters, timestampsToReturn : TimestampsToReturn) {
     super();
     assert(Array.isArray(itemsToMonitor));
 
@@ -64,13 +65,13 @@ public get monitoredItems() : MonitoredItemBase[] {
 }
 
 public toString() : string {
-    let ret = "";
-    ret += "itemsToMonitor:        " + this._monitoredItems.map( (a) => {
-          return a.nodeId.toString()
-      }).join("\n");
+    let ret = 'ClientMonitoredItemGroup : \n';
+    ret += 'itemsToMonitor:       = [\n ' + this._monitoredItems.map(function (monitoredItem) {
+        return monitoredItem.itemToMonitor.toString();
+    }).join('\n') + '\n];\n';
 
-    ret += "timestampsToReturn:   " + this._timestampsToReturn.toString() + "\n";
-    ret += "monitoringMode        " + this._monitoringMode;
+    ret += 'timestampsToReturn:   ' + this._timestampsToReturn.toString() + '\n';
+    ret += 'monitoringMode        ' + this._monitoringMode;
     return ret;
 };
 
@@ -146,13 +147,13 @@ public _monitor(done) : void {
  * @param [timestampsToReturn=null] {TimestampsToReturn}
  * @param callback {Function}
  */
-public modify(parameters, timestampsToReturn?: TimestampsToReturn, callback?) : void {
+public modify(parameters: IMonitoringParameters, timestampsToReturn?: TimestampsToReturn, callback?) : void {
     
     this._timestampsToReturn = timestampsToReturn || this._timestampsToReturn;
     MonitoredItemBase._toolbox_modify(this._subscription, this._monitoredItems, parameters, this._timestampsToReturn, callback);
 };
 
-public setMonitoringMode(monitoringMode : MonitoringMode, callback) : void {
+public setMonitoringMode(monitoringMode: MonitoringMode, callback) : void {
     
     MonitoredItemBase._toolbox_setMonitoringMode(this._subscription, this._monitoredItems, monitoringMode, callback);
 };

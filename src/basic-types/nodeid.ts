@@ -161,7 +161,7 @@ const _decodeNodeId = function (encoding_byte, stream: DataStream) {
 
     let value, namespace, nodeIdType;
     // tslint:disable-next-line:no-bitwise
-    encoding_byte &= 0x3F;
+    encoding_byte &= 0x3f; // 1 to 5
 
     switch (encoding_byte) {
         case EnumNodeIdEncoding.TwoBytes:
@@ -192,7 +192,8 @@ const _decodeNodeId = function (encoding_byte, stream: DataStream) {
             if (encoding_byte !== EnumNodeIdEncoding.Guid) {
 
                 // tslint:disable-next-line:no-bitwise
-                console.log(' encoding_byte = ' + encoding_byte.toString(16), encoding_byte, encoding_byte & 0x3f);
+                console.log(' encoding_byte = 0x' + encoding_byte.toString(16), ' bin='
+                    , ('0000000000000000' + encoding_byte.toString(2)).substr(-16), encoding_byte, (encoding_byte & 0x3f) );
                 throw new Error(' encoding_byte = ' + encoding_byte.toString(16));
             }
             namespace = stream.getUint16();

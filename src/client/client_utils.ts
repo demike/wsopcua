@@ -8,11 +8,13 @@ import {BrowsePath,RelativePath, RelativePathElement, makeBrowsePath, BrowsePath
 
 import {StatusCodes,AttributeIds} from '../constants';
 import { QualifiedName } from "../data-model";
-import { OPCUAClientBase, ResponseCallback } from "./client_base";
-import { ApplicationDescription } from "../service-endpoints";
+import { OPCUAClientBase, ResponseCallback, ErrorCallback } from "./client_base";
+import { ApplicationDescription, EndpointDescription } from "../service-endpoints";
 import { ClientSession } from "./client_session";
 import { ReadValueId } from "../service-read";
 import { lowerFirstLetter } from "../utils/string_utils";
+import { ServerOnNetwork } from "../generated";
+import { async_series} from 'async-es/series';
 
 var hasPropertyRefId = resolveNodeId("HasProperty");
 /* NodeId  ns=0;i=46*/
@@ -107,16 +109,64 @@ export function readUAAnalogItem(session, nodeId, callback) {
     });
 }
 
-export function perform_findServersRequest(discovery_server_endpointUrl : string, callback : ResponseCallback<ApplicationDescription[]>) {
+/**
+ * extract the server endpoints exposed by a discovery server
+ * @method perform_findServers
+ * @async
+ * @param discovery_server_endpointUrl
+ * @param callback
+ */
+export function perform_findServers(discovery_server_endpointUrl: string,
+    callback: (err: Error, servers: ApplicationDescription[], endpoints: EndpointDescription[]) => void) {
 
 
-    var client = new OPCUAClientBase({});
+    const client = new OPCUAClientBase({});
+
+    let servers = [];
+    let endpoints =[];
+
+    async_series([
+        function (cb: ErrorCallback) {
+            client.connect(discovery_server_endpointUrl, cb);
+        },
+        function (cb: ErrorCallback) {
+            client.findServers(null, function (err, _servers) {
+                servers = _servers;
+                cb(err);
+            });
+        },
+        function (cb: ErrorCallback) {
+            client.getEndpoints({endpointUrl: null}, function (err, _endpoints) {
+                endpoints =  _endpoints;
+                cb(err);
+            });
+        },
+
+    ], function(err: Error) {
+        client.disconnect(function () {
+            callback(err, servers, endpoints);
+        });
+    });
+}
+
+
+/**
+ * extract the servers on the network exposed by a discovery server
+ * @method perform_findServersOnNetwork
+ * @async
+ * @param discovery_server_endpointUrl
+ * @param callback
+ */
+export function perform_findServersOnNetwork(discovery_server_endpointUrl: string, callback: ResponseCallback<ServerOnNetwork[]>) {
+
+
+    const client = new OPCUAClientBase({});
 
     client.connect(discovery_server_endpointUrl, function (err) {
         if (!err) {
-            client.findServers(null,function (err, servers) {
+            client.findServersOnNetwork(null, function (error, servers) {
                 client.disconnect(function () {
-                    callback(err, servers);
+                    callback(error, servers);
                 });
             });
         } else {
@@ -127,7 +177,8 @@ export function perform_findServersRequest(discovery_server_endpointUrl : string
     });
 }
 
-export function readHistorySeverCapabilities(the_session: ClientSession,callback : (err?: Error, data?: {[key: string]: string} ) => void) {
+export function readHistoryServerCapabilities(the_session: ClientSession,
+            callback : (err?: Error, data?: {[key: string]: string} ) => void) {
     // display HistoryCapabilities of server
     var browsePath = makeBrowsePath( /* ObjectsFolder */ 85,"/Server/ServerCapabilities.HistoryServerCapabilities");
 
@@ -192,10 +243,10 @@ export function readHistorySeverCapabilities(the_session: ClientSession,callback
                     var propName = lowerFirstLetter(properties[i]);
                     data[propName] = dataValues[i].value.value;
                 }
-                callback(null,data);
-            })
+                callback(null, data);
+            });
         });
     });
-};
+}
 
 

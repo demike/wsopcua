@@ -4,7 +4,7 @@
  */
 import { EventEmitter } from 'eventemitter3';
 import { assert } from '../assert';
-import { resolveNodeId, coerceNodeId, makeNodeId, NodeId } from '../nodeid/nodeid';
+import { resolveNodeId, coerceNodeId, makeNodeId, NodeId, NodeIdType } from '../nodeid/nodeid';
 import { OPCUAClientBase, OpcUaResponse, ErrorCallback, ResponseCallback } from './client_base';
 import { StatusCodes } from '../constants/raw_status_codes';
 
@@ -25,7 +25,7 @@ import { TransferSubscriptionsRequest } from '../generated/TransferSubscriptions
 import { ClientSidePublishEngine } from './client_publish_engine';
 import { ClientSessionKeepAliveManager } from './client_session_keepalive_manager';
 
-import { UInt32 } from '../basic-types';
+import { UInt32, StatusCode } from '../basic-types';
 import { CallMethodRequest } from '../generated/CallMethodRequest';
 import { CallMethodResult } from '../generated/CallMethodResult';
 import { Argument } from '../generated/Argument';
@@ -145,6 +145,10 @@ export class ClientSession extends EventEmitter {
         return this._publishEngine ? this._publishEngine.subscriptionCount : 0;
     }
 
+    public get isReconnecting() {
+        return this._client ? this._client.isReconnecting : false;
+    }
+
     protected static emptyUint32Array = new Uint32Array(0);
 
     protected static keys = Object.keys(read_service.AttributeIds).filter(function (k) {
@@ -167,15 +171,17 @@ export class ClientSession extends EventEmitter {
     protected lastRequestSentTime: number;
     protected lastResponseReceivedTime: number;
     protected _timeout: number;
+    protected _namespaceArray: string[] | undefined;
 
     public static coerceBrowseDescription(data) {
         if (typeof data === 'string' || data instanceof NodeId) {
             return ClientSession.coerceBrowseDescription({
                 nodeId: data,
                 includeSubtypes: true,
-                browseDirection: BrowseDirection.Forward, // BrowseDirection.Both,
+                browseDirection: BrowseDirection.Forward,
                 nodeClassMask: 0,
-                resultMask: 63
+                resultMask: 63,
+                referenceTypeId: 'HierarchicalReferences'
             });
         } else {
             data.nodeId = resolveNodeId(data.nodeId);
@@ -506,7 +512,7 @@ export class ClientSession extends EventEmitter {
      *     const nodesToWrite = [
      *     {
      *          nodeId: "ns=1;s=SetPoint1",
-     *          attributeIds: opcua.AttributeIds.Value,
+     *          attributeId: opcua.AttributeIds.Value,
      *          value: {
      *             statusCode: Good,
      *             value: {
@@ -517,7 +523,7 @@ export class ClientSession extends EventEmitter {
      *     },
      *     {
      *          nodeId: "ns=1;s=SetPoint2",
-     *          attributeIds: opcua.AttributeIds.Value,
+     *          attributeId: opcua.AttributeIds.Value,
      *          value: {
      *             statusCode: Good,
      *             value: {
@@ -543,7 +549,7 @@ export class ClientSession extends EventEmitter {
      *
      *     const nodeToWrite = {
      *          nodeId: "ns=1;s=SetPoint",
-     *          attributeIds: opcua.AttributeIds.Value,
+     *          attributeId: opcua.AttributeIds.Value,
      *          value: {
      *             statusCode: Good,
      *             value: {
@@ -857,8 +863,19 @@ export class ClientSession extends EventEmitter {
             request.trace = new Error().stack;
         }
 
+        if (this._closeEventHasBeenEmmitted) {
+            debugLog('ClientSession#_defaultRequest => session has been closed !! ' + request.toString());
+            setImmediate(function() {
+                callback(new Error('ClientSession is closed !'));
+            });
+            return ;
+        }
+
         this.performMessageTransaction(request, (err, response) => {
 
+            if (this._closeEventHasBeenEmmitted) {
+                debugLog('ClientSession#_defaultRequest ... err =', err, response ? response.toString() : ' null');
+            }
             /* istanbul ignore next */
             if (err) {
                 // let intercept interesting error message
@@ -867,13 +884,15 @@ export class ClientSession extends EventEmitter {
                     // probably due to timeout issue
                     // let's print some statistics
                     const now = new Date();
+                    if (doDebug) {
                     debugLog(' server send BadSessionClosed !');
+                    debugLog(' request was               ', request.toString());
                     debugLog(' timeout.................. ' + this._timeout);
                     debugLog(' lastRequestSentTime...... ' + new Date(this.lastRequestSentTime).toISOString()
                             + (<any>now - this.lastRequestSentTime));
                     debugLog(' lastResponseReceivedTime. ' + new Date(this.lastResponseReceivedTime).toISOString()
                             + (<any>now - this.lastResponseReceivedTime));
-
+                    }
                     // xxx  DO NOT TERMINATE SESSION, as we will need a publishEngine when we reconnect self._terminatePublishEngine();
 
                     /**
@@ -1078,7 +1097,7 @@ export class ClientSession extends EventEmitter {
      * @param callback {Function}
      * @param callback.err {Error|null}   - the Error if the async method has failed
      */
-    public setPublishingMode(publishingEnabled: boolean, subscriptionIds: number[] | number, callback) {
+    public setPublishingMode(publishingEnabled: boolean, subscriptionIds: number[] | number, callback: ResponseCallback<StatusCode[]>) {
         assert('function' === typeof callback);
         assert(publishingEnabled === true || publishingEnabled === false);
         if (!Array.isArray(subscriptionIds)) {
@@ -1086,20 +1105,19 @@ export class ClientSession extends EventEmitter {
             subscriptionIds = [subscriptionIds];
         }
 
-        const request = new subscription_service.SetPublishingModeRequest({
+        const options = new subscription_service.SetPublishingModeRequest({
             publishingEnabled: publishingEnabled,
             subscriptionIds: subscriptionIds
         });
 
-        this.performMessageTransaction(request, function (err, response) {
-
-            /* istanbul ignore next */
+        this._defaultRequest(
+            subscription_service.SetPublishingModeRequest,
+            subscription_service.SetPublishingModeResponse,
+            options,  function (err: Error, response: subscription_service.SetPublishingModeResponse) {
             if (err) {
                 return callback(err, null);
             }
-
             callback(err, response.results);
-
         });
     }
 
@@ -1224,7 +1242,11 @@ public evaluateRemainingLifetime(): number {
             deleteSubscription = true;
         }
         assert('function' === typeof callback);
-        // assert(_.isBoolean(deleteSubscription));
+
+        if (!this._client)  {
+            debugLog('ClientSession#close : warning, client is already closed');
+            return callback(null); // already close ?
+        }
         assert(this._client);
 
         this._terminatePublishEngine();
@@ -1237,7 +1259,7 @@ public evaluateRemainingLifetime(): number {
      * @returns {Boolean}
      */
     public hasBeenClosed(): boolean {
-        return utils.isNullOrUndefined(this._client) || this._closed;
+        return utils.isNullOrUndefined(this._client) || this._closed || this._closeEventHasBeenEmmitted;
     }
 
     /**
@@ -1610,7 +1632,7 @@ public evaluateRemainingLifetime(): number {
      *        assert(dataType === opcua.DataType.DateTime);
      *     });
      *     // or
-     *     nodeId = opcua.coerceNodeId("ns=411;s=Scalar_Static_ImagePNG");
+     *     nodeId = opcua.coerceNodeId("ns=2;s=Scalar_Static_ImagePNG");
      *     session.getBuildInDataType(nodeId,function(err,dataType) {
      *        assert(dataType === opcua.DataType.ByteString);
      *     });
@@ -1644,6 +1666,34 @@ public evaluateRemainingLifetime(): number {
             this._publishEngine.replenish_publish_request_queue();
         }
     }
+
+    /**
+ *
+ * @param callback                [Function}
+ * @param callback.err            {null|Error}
+ * @param callback.namespaceArray {Array<String>}
+ */
+    public readNamespaceArray(callback){
+        this.read(new read_service.ReadValueId({
+            nodeId:   new NodeId(NodeIdType.NUMERIC, /*VariableIds.Server_NamespaceArray*/2255, 0), //resolveNodeId('Server_NamespaceArray'),
+            attributeId: AttributeIds.Value
+        }), (err: Error,dataValue: DataValue) => {
+            if (err) return callback(err);
+
+            if (dataValue.statusCode !== StatusCodes.Good) {
+                return callback(new Error("readNamespaceArray : "+ dataValue.statusCode.toString()));
+            }
+            assert(dataValue.value.value instanceof Array);
+            this._namespaceArray = dataValue.value.value;// keep a cache
+            callback(null, this._namespaceArray);
+        });
+    };
+
+    public getNamespaceIndex(namespaceUri: string){
+        assert(this._namespaceArray,'please make sure that readNamespaceArray has been called');
+        return this._namespaceArray.indexOf(namespaceUri);
+    };
+
 }
 
 

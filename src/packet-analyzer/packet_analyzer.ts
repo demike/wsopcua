@@ -9,19 +9,19 @@ import {buffer_ellipsis} from '../utils';
 import * as ec from '../basic-types';
 
 
-var spaces = "                                                                                                                                                                             ";
+const spaces = "                                                                                                                                                                             ";
 function f(n, width) : string {
-    var s = n.toString();
+    const s = n.toString();
     return (s + "      ").substr(0, Math.max(s.length, width));
 }
 
 function display_encoding_mask(padding, encoding_mask, encoding_info) {
-    var bits = [];
+    let bits = [];
     for (let item in encoding_info) {
         if (isFinite(Number(item))) {
             console.log(item);
-            var mask = Number(item);
-            var bit = Math.log(mask) / Math.log(2);
+            const mask = Number(item);
+            const bit = Math.log(mask) / Math.log(2);
             bits = [".", ".", ".", ".", ".", ".", ".", ".", "."];
             bits[bit] = ((encoding_mask & mask) === mask) ? "Y" : "n";
 
@@ -32,8 +32,8 @@ function display_encoding_mask(padding, encoding_mask, encoding_info) {
 }
 
 function hex_block(start, end, buffer) {
-    var n = end - start;
-    var strBuf = buffer_ellipsis(buffer);
+    const n = end - start;
+    const strBuf = buffer_ellipsis(buffer);
     return "s:" + f(start, 4) + " e:" + f(end, 4) + " n:" + f(n, 4) + " " + strBuf;
 }
 
@@ -43,7 +43,7 @@ function make_tracer(buffer, padding, offset) : any {
     padding = padding || 0;
     offset = offset || 0;
 
-    var pad = function () {
+    const pad = function () {
         return "                                                       ".substr(0, padding);
     };
 
@@ -55,27 +55,28 @@ function make_tracer(buffer, padding, offset) : any {
         for (let i=0;i<str.length; i++) {
             if (str[i] === "\u001b") {nbColorAttributes++;}
         }
-        var extra = nbColorAttributes * 5;
+        const extra = nbColorAttributes * 5;
         console.log((pad() + str + spaces).substr(0, 132 + extra) + "|" + hex_info);
     }
 
     function display_encodeable(value, buffer : DataStream, start : number, end : number) {
         let len = end - start;
-        let bStart = buffer.view.byteOffset + start;
-    //    var ext_buf = buffer..slice(start,end)
-        var stream = new DataStream(new DataView(buffer.view.buffer, bStart, len));
-        var nodeId = ec.decodeNodeId(stream);
-        var encodingMask = ec.decodeByte(stream); // 1 bin 2: xml
-        var length = ec.decodeUInt32(stream);
+        const bStart = buffer.view.byteOffset + start;
+    //    const ext_buf = buffer..slice(start,end)
+        const stream = new DataStream(new DataView(buffer.view.buffer, bStart, len));
+        const nodeId = ec.decodeNodeId(stream);
+        const encodingMask = ec.decodeByte(stream); // 1 bin 2: xml
+        const length = ec.decodeUInt32(stream);
 
-        display("     ExpandedNodId = " + nodeId);
-        display("     encoding mask = " + encodingMask);
-        display("            length = " + length);
-        packet_analyzer(new DataView(buffer.view.buffer,buffer.view.byteOffset + stream.length)/*ext_buf.slice(stream.length)*/, value.encodingDefaultBinary, padding + 2, start + stream.length);
+        display('     ExpandedNodId = ' + nodeId);
+        display('     encoding mask = ' + encodingMask);
+        display('            length = ' + length);
+        packet_analyzer(new DataView(buffer.view.buffer,buffer.view.byteOffset + stream.length)
+            /*ext_buf.slice(stream.length)*/, value.encodingDefaultBinary, padding + 2, start + stream.length);
 
     }
 
-    var options = {
+    const options = {
 
         tracer: {
 
@@ -84,15 +85,15 @@ function make_tracer(buffer, padding, offset) : any {
             },
 
             encoding_byte: function (encoding_mask, valueEnum, start, end) {
-                var b = buffer.slice(start, end);
-                display("  012345678", hex_block(start, end, b));
+                const b = buffer.slice(start, end);
+                display('  012345678', hex_block(start, end, b));
                 display_encoding_mask(pad(), encoding_mask, valueEnum);
             },
 
             trace: function (operation, name, value, start, end, fieldType) {
 
-                var b = buffer.slice(start, end);
-                var str = "";
+                const b = buffer.slice(start, end);
+                let _hexDump = "";
 
                 switch (operation) {
 
@@ -129,7 +130,7 @@ function make_tracer(buffer, padding, offset) : any {
                     case "member":
                         display("." + name + " : " + fieldType);
 
-                        var _hexDump = "";
+                        _hexDump = "";
                         if (value instanceof ArrayBuffer || value instanceof DataView) {
                             _hexDump = hexDump(value);
                             console.log(_hexDump);
@@ -141,7 +142,7 @@ function make_tracer(buffer, padding, offset) : any {
                             if (fieldType === "ExtensionObject") {
                                 display_encodeable(value, buffer, start, end);
                             } else {
-                                str = value.toString() || "<empty>";
+                                const str = value.toString() || "<empty>";
                                 display(str);
                             }
                         }
@@ -167,11 +168,11 @@ import * as factories from '../factory/factories_factories';
  */
 export function packet_analyzer(buffer : DataView, id?, padding? : number, offset? : number, custom_options?) {
 
-   //xx var factories = custom_options.factory;
+   //xx const factories = custom_options.factory;
 
-    var stream = new DataStream(buffer);
+    const stream = new DataStream(buffer);
 
-    var objMessage;
+    let objMessage;
     if (!id) {
 
         id = ec.decodeExpandedNodeId(stream);
@@ -189,11 +190,11 @@ export function packet_analyzer(buffer : DataView, id?, padding? : number, offse
         console.log("Cannot read decodeExpandedNodeId  on stream " + hexDump(stream.view));
     }
 
-    var options = make_tracer(buffer, padding, offset);
+    const options = make_tracer(buffer, padding, offset);
     options.name = "message";
 
     for (let attrName in custom_options) { options[attrName] = custom_options[attrName];}
-   
+
     try {
         objMessage.decode_debug(stream, options);
     }
@@ -209,10 +210,10 @@ export function analyze_object_binary_encoding(obj,options) {
 
     assert(obj);
 
-    var size = DataStream.binaryStoreSize(obj);
+    const size = DataStream.binaryStoreSize(obj);
     console.log("-------------------------------------------------");
     console.log(" size = ", size);
-    var stream = new DataStream(size);
+    const stream = new DataStream(size);
     obj.encode(stream);
     stream.rewind();
     console.log("-------------------------------------------------");

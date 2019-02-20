@@ -6,6 +6,7 @@ import {coerceNodeId} from '../nodeid/nodeid';
 import {VariableIds} from '../constants';
 import {StatusCodes} from '../constants';
 import {ServerState} from '../generated/ServerState';
+import { debugLog } from '../common/debug';
 
 var serverStatus_State_Id = coerceNodeId(VariableIds.Server_ServerStatus_State);
 
@@ -34,22 +35,27 @@ constructor ( session : ClientSession) {
  *
  * @param callback
  */
-public ping_server(callback) {
+public ping_server(callback: () => void) {
     callback = callback || function () { };
-    var the_session = this.session;
+    const the_session = this.session;
     if (!the_session) {
         return callback();
     }
 
-    var now = Date.now();
+    const now = Date.now();
 
-    var timeSinceLastServerContact = now - the_session.lastResponseReceivedTime;
+    const timeSinceLastServerContact = now - the_session.lastResponseReceivedTime;
     if (timeSinceLastServerContact < this.pingTimeout) {
         // no need to send a ping yet
         //xx console.log("Skipping ",timeSinceLastServerContact,self.session.timeout);
         return callback();
     }
-    //xx console.log("readVariableValue ",timeSinceLastServerContact,self.session.timeout);
+
+    if (the_session.isReconnecting) {
+        debugLog('ClientSessionKeepAliveManager#ping_server skipped because client is reconnecting');
+        return callback();
+    }
+    debugLog('ClientSessionKeepAliveManager#ping_server ', timeSinceLastServerContact, this.session.timeout);
 
     // Server_ServerStatus_State
     the_session.readVariableValue(serverStatus_State_Id, (err, dataValue) => {

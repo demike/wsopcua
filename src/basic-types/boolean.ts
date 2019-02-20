@@ -10,7 +10,7 @@ export function randomBoolean(): boolean {
     return Math.random() > 0.5;
 }
 
-export function encodeBoolean(value: Boolean, stream: DataStream) {
+export function encodeBoolean(value: boolean, stream: DataStream) {
  //   assert(isValidBoolean(value));
     stream.setUint8(value ? 1 : 0);
 }

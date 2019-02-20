@@ -47,7 +47,7 @@ import {ClientSession} from './client_session';
 
 import {doDebug, debugLog} from '../common/debug';
 
-import {OPCUAClientBase, OPCUAClientOptions, ErrorCallback} from './client_base';
+import {OPCUAClientBase, OPCUAClientOptions, ErrorCallback, ResponseCallback} from './client_base';
 import {isNullOrUndefined} from '../utils';
 
 import {makeApplicationUrn} from "../common/applicationurn";
@@ -80,15 +80,15 @@ function validateServerNonce(serverNonce) {
  * @constructor
  */
 export class OPCUAClient extends OPCUAClientBase {
-   
+
     protected _clientNonce: any;
     protected _userIdentityInfo: UserIdentityInfo;
     protected _serverUri: string;
     private ___sessionName_counter: any;
-    applicationName: any;
+
     requestedSessionTimeout: any;
     endpoint_must_exist: boolean;
-    clientName : string;
+
 
     get clientNonce() {
         return this._clientNonce;
@@ -103,9 +103,6 @@ constructor(options : OPCUAClientOptions) {
     // By default, the client is strict.
     this.endpoint_must_exist = (isNullOrUndefined(options.endpoint_must_exist)) ? true : !!options.endpoint_must_exist;
     this.requestedSessionTimeout = options.requestedSessionTimeout || 60000; // 1 minute
-    this.applicationName = options.applicationName || "NodeOPCUA-Client";
-    this.clientName = options.clientName || "Session";
-
 }
 
 
@@ -114,7 +111,7 @@ protected _nextSessionName() {
         this.___sessionName_counter = 0;
     }
     this.___sessionName_counter += 1;
-    return this.clientName + this.___sessionName_counter;
+    return this._clientName + this.___sessionName_counter;
 };
 
 protected _getApplicationUri() : Promise<string> {
@@ -122,13 +119,17 @@ protected _getApplicationUri() : Promise<string> {
     // get applicationURI from certificate
 
 /**nomsgcrypt**
-    var certificate = this.getCertificate();
-    var applicationUri;
+    const certificate = this.getCertificate();
+    let applicationUri;
     if (certificate) {
-        var e = exploreCertificate(certificate);
-        applicationUri = e.tbsCertificate.extensions.subjectAltName.uniformResourceIdentifier[0];
+        const e = exploreCertificate(certificate);
+        if (!e.tbsCertificate.extensions  || !e.tbsCertificate.extensions.subjectAltName) {
+            console.log(" Warning: client certificate is invalid : subjectAltName is missing"));
+            applicationUri = makeApplicationUrn(hostname, this.applicationName);
+        } else {
+            applicationUri = e.tbsCertificate.extensions.subjectAltName.uniformResourceIdentifier[0];
+        }
     } else {
-        var hostname = require("node-opcua-hostname").get_fully_qualified_domain_name();
         applicationUri = makeApplicationUrn(hostname, this.applicationName);
     }
     return applicationUri;
@@ -564,10 +565,10 @@ public changeSessionIdentity(session: ClientSession, userIdentityInfo: UserIdent
 };
 
 
-protected _closeSession(session : ClientSession, deleteSubscriptions : boolean, callback) {
+protected _closeSession(session: ClientSession,
+    deleteSubscriptions: boolean, callback: ResponseCallback<session_service.CloseSessionResponse>) {
 
     assert('function' === typeof callback);
-    //assert(_.isBoolean(deleteSubscriptions));
 
     // istanbul ignore next
     if (!this._secureChannel) {
@@ -575,13 +576,19 @@ protected _closeSession(session : ClientSession, deleteSubscriptions : boolean, 
     }
     assert(this._secureChannel);
 
-    var request = new CloseSessionRequest({
+    const request = new CloseSessionRequest({
         deleteSubscriptions: deleteSubscriptions
     });
 
     if (!this._secureChannel.isValid()) {
         return callback();
     }
+
+    if (this.isReconnecting) {
+        console.log('OPCUAClient#_closeSession called while reconnection in progress ! What shall we do');
+        return callback();
+    }
+
     session.performMessageTransaction(request, function (err, response) {
 
         if (err) {
@@ -899,7 +906,7 @@ function createUserNameIdentityToken(session, userName, password) {
         });
         return identityToken;
 
-        //**nomsgcrypt**
+        // **nomsgcrypt**
 }
 
 

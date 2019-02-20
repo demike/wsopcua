@@ -304,6 +304,7 @@ protected _perform_HEL_ACK_transaction(callback) {
         if (err) {
             callback(err);
             this._socket.end();
+           //Xx this._socket.removeAllListeners();
         } else {
             this._handle_ACK_response(data, function (inner_err) {
                 callback(inner_err);

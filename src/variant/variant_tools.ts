@@ -76,14 +76,14 @@ export function coerceVariantType(dataType : DataType, value) {
             assert(typeof value === "string" || value === null);
             break;
         case DataType.ByteString:
-            value = (typeof value === "string") ? txtEncoder.encode(value): value;
+            value = (typeof value === "string") ? txtEncoder.encode(value) : value;
             if (!(value === null || value instanceof ArrayBuffer)) {
-                throw new Error("ByteString should be null or a Buffer");
+                throw new Error('ByteString should be null or a Buffer');
             }
             assert(value === null || value instanceof ArrayBuffer);
             break;
         default:
-            assert(dataType !== undefined && dataType !== null, "Invalid DataType");
+            assert(dataType !== undefined && dataType !== null, 'Invalid DataType');
             break;
     }
     return value;

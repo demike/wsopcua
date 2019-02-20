@@ -47,11 +47,12 @@ import { RequestHeader, ResponseHeader } from '../service-secure-channel';
 import { ClientSession } from './client_session';
 import { EndpointDescription } from '../service-endpoints';
 import { IGetEndpointsRequest } from '../generated/GetEndpointsRequest';
+import { FindServersOnNetworkRequest, IFindServersOnNetworkRequest, FindServersOnNetworkResponse, ServerOnNetwork } from '../generated';
 
 const defaultConnectionStrategy = {
-    maxRetry: 100,
+    maxRetry: 10000000, // almost infinite
     initialDelay: 1000,
-    maxDelay: 20000,
+    maxDelay: 20 * 1000, // 20 seconds
     randomisationFactor: 0.1
 };
 
@@ -167,6 +168,9 @@ export class OPCUAClientBase extends EventEmitter {
     protected _server_endpoints: EndpointDescription[];
 
     protected _isReconnecting: boolean;
+
+    protected _clientName: string;
+    protected _applicationName: string;
     /**
      * total number of bytes read by the client
      * @property bytesRead
@@ -221,7 +225,7 @@ export class OPCUAClientBase extends EventEmitter {
      * @type {Boolean}
      */
     get reconnectOnFailure() {
-        return this.connectionStrategy.maxRetry > 0;
+        return this.connectionStrategy.maxRetry > 0 || this.connectionStrategy.maxRetry === -1;
     }
 
     get secureChannel() {
@@ -236,10 +240,21 @@ export class OPCUAClientBase extends EventEmitter {
         return this._sessions;
     }
 
+    get clientName(): string {
+        return this._clientName;
+    }
+
+    get applicationName(): string {
+        return this._applicationName;
+    }
+
     constructor(options?: OPCUAClientOptions) {
         super();
 
         options = options || {};
+
+        this._clientName = options.clientName || 'Session';
+        this._applicationName = options.applicationName || 'NodeOPCUA-Client';
 
         // options.certificateFile = options.certificateFile || path.join(__dirname, "../certificates/client_selfsigned_cert_1024.pem");
         // options.privateKeyFile = options.privateKeyFile || path.join(__dirname, "../certificates/PKI/own/private/private_key.pem");
@@ -317,6 +332,8 @@ export class OPCUAClientBase extends EventEmitter {
 
         this._endpointUrl = endpointUrl;
 
+        debugLog('OPCUAClientBase#connect ' + endpointUrl);
+
         // prevent illegal call to connect
         if (this._secureChannel !== null) {
             setImmediate(() => {
@@ -340,11 +357,18 @@ export class OPCUAClientBase extends EventEmitter {
             // if the certificate has been certified by an Certificate Authority we have to
             // verify that the certificates in the chain are valid and not revoked.
             //
+
+        /** NOCRYPT
+            const cert = this.certificateFile || 'certificates/client_selfsigned_cert_1024.pem';
+            const key = self.privateKeyFile || 'certificates/client_key_1024.pem';
+        */
+            const appName = this._applicationName || 'NodeOPCUA-Client';
             const params = {
                 securityMode: this.securityMode,
                 securityPolicy: this.securityPolicy,
                 connectionStrategy: this.connectionStrategy,
-                endpoint_must_exist: false
+                endpoint_must_exist: false,
+                applicationName: appName
             };
             return OPCUAClientBase.__findEndpoint(endpointUrl, params, (err: Error, endpoint: any) => {
                 if (err) { return callback(err); }
@@ -375,6 +399,8 @@ export class OPCUAClientBase extends EventEmitter {
     disconnect(callback: ErrorCallback): void {
 
         assert('function' === typeof callback);
+
+        debugLog('OPCUAClientBase#disconnect' + this.endpointUrl);
 
         if (this.isReconnecting) {
             debugLog('OPCUAClientBase#disconnect called while reconnection is in progress');
@@ -484,6 +510,27 @@ export class OPCUAClientBase extends EventEmitter {
         });
     }
 
+    public findServersOnNetwork(options: IFindServersOnNetworkRequest,
+        callback: (error: Error|null, servers?: ServerOnNetwork[]) => void ) {
+
+        if (!this._secureChannel) {
+            setImmediate(function () {
+                callback(new Error('Invalid Secure Channel'));
+            });
+            return;
+        }
+
+        const request = new FindServersOnNetworkRequest(options);
+
+        this.performMessageTransaction(request, function (err, response) {
+            if (err) {
+                return callback(err);
+            }
+            assert(response instanceof FindServersOnNetworkResponse);
+            callback(null, (<FindServersOnNetworkResponse>response).servers);
+        });
+    };
+
 
     protected _close_pending_sessions(callback) {
 
@@ -536,12 +583,12 @@ export class OPCUAClientBase extends EventEmitter {
 
         assert('function' === typeof callback);
 
-        options.endpointUrl = options.endpointUrl || this._endpointUrl;
+        //  options.endpointUrl = options.hasOwnProperty("endpointUrl") ? options.endpointUrl : this._endpointUrl;
         options.localeIds = options.localeIds || [];
         options.profileUris = options.profileUris || [];
 
         const request = new GetEndpointsRequest({
-            endpointUrl: options.endpointUrl,
+            endpointUrl: options.endpointUrl || this.endpointUrl,
             localeIds: options.localeIds,
             profileUris: options.profileUris,
             requestHeader: new RequestHeader({
@@ -661,7 +708,10 @@ export class OPCUAClientBase extends EventEmitter {
 
         const options = {
             connectionStrategy: params.connectionStrategy,
-            endpoint_must_exist: false
+            endpoint_must_exist: false,
+            certificateFile: params.certificateFile,
+            privateKeyFile: params.privateKeyFile,
+            applicationName: params.applicationName
         };
 
         const client = new OPCUAClientBase(options);
@@ -671,7 +721,7 @@ export class OPCUAClientBase extends EventEmitter {
         const tasks = [
             function (cb) {
                 client.on('backoff', function () {
-                    console.log('finding Enpoint => reconnecting ');
+                    console.log('finding Endpoint => reconnecting ');
                 });
                 client.connect(endpointUrl, function (err) {
                     if (err) {
@@ -810,9 +860,14 @@ export class OPCUAClientBase extends EventEmitter {
 
                 secureChannel.create(this._endpointUrl, (err) => {
                     if (err) {
-                        debugLog('Cannot create secureChannel');
+                        debugLog('Cannot create secureChannel' + (err.message ? err.message : ''));
                         this._destroy_secure_channel();
                     } else {
+                        if (!this._secureChannel) {
+                            console.log('_secureChannel has been closed during the transaction !');
+                            this._destroy_secure_channel();
+                            return _inner_callback(new Error('Secure Channel Closed'));
+                        }
                         OPCUAClientBase._install_secure_channel_event_handlers(this, secureChannel);
                     }
                     _inner_callback(err);
@@ -926,7 +981,8 @@ export class OPCUAClientBase extends EventEmitter {
                 });
                 return;
             } else {
-
+                client.emit('connection_lost');
+                debugLog('recreating new secure channel ');
                 setImmediate(() => client._recreate_secure_channel((err) => {
                     debugLog('secureChannel#on(close) => _recreate_secure_channel returns ' + (err ? err.message : 'OK'));
                     if (err) {

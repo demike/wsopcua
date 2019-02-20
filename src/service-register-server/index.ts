@@ -1,4 +1,5 @@
 "use strict";
+
 /**
  * @module services.register-server
  */
@@ -30,3 +31,6 @@ export {FindServersRequest}  from "../generated/FindServersRequest";
  */
 export {FindServersResponse} from "../generated/FindServersResponse";
 
+export {FindServersOnNetworkRequest} from '../generated/FindServersOnNetworkRequest';
+export {FindServersOnNetworkResponse} from '../generated/FindServersOnNetworkResponse';
+export {ServerOnNetwork} from '../generated/ServerOnNetwork';

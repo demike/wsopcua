@@ -4,8 +4,6 @@
  */
 
 
-
-import {assert} from '../assert';
 import { OPCUAClientOptions } from "../client/client_base";
 
 

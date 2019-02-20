@@ -360,11 +360,12 @@ protected _read_headers(binaryStream : DataStream) {
 
         // extract Error StatusCode and additional message
         //binaryStream.length = 8;
-        var errorCode = decodeStatusCode(binaryStream);
-        var message = decodeString(binaryStream);
-
-        console.log(" ERROR RECEIVED FROM SENDER", errorCode.toString().cyan, message);
-        console.log(hexDump(binaryStream.view));
+        const errorCode = decodeStatusCode(binaryStream);
+        const message = decodeString(binaryStream);
+        if (doDebug) {
+            console.log(' ERROR RECEIVED FROM SENDER', errorCode.toString(), message);
+            console.log(hexDump(binaryStream.view));
+        }
         return true;
 
     } else {
@@ -409,8 +410,10 @@ protected _safe_decode_message_body(full_message_body, objMessage  /*ExtensionOb
         console.log(hexDump(full_message_body));
         packet_analyzer(full_message_body);
 
+        let i=0;
         console.log(" ---------------- block");
         this.message_chunks.forEach(function (messageChunk) {
+            console.log(' ---------------- chunk i=', i++);
             console.log(hexDump(messageChunk));
         });
         return false;

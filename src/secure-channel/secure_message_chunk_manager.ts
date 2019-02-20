@@ -69,7 +69,7 @@ constructor (msgType, options : SecureMessageChunkManagerOptions, securityHeader
 
     // the maximum size of a message chunk:
     // Note: OPCUA requires that chunkSize is at least 8192
-    this._chunkSize = options.chunkSize || 1024*128;
+    this._chunkSize = options.chunkSize || 1024 * 128;
 
     this._msgType = msgType;
 

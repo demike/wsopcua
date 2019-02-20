@@ -17,16 +17,17 @@ import whilst from 'async-es/whilst';
 /**
  * A client side implementation to deal with publish service.
  *
- * @class ClientSidePublishEngine
- *
- * @param session {ClientSession} - the client session
- * @constructor
  *
  * The ClientSidePublishEngine encapsulates the mechanism to
  * deal with a OPCUA Server and constantly sending PublishRequest
  * The ClientSidePublishEngine also performs  notification acknowledgements.
  * Finally, ClientSidePublishEngine dispatch PublishResponse to the correct
  * Subscription id callback
+ *
+ * @class ClientSidePublishEngine
+ * @constructor
+ * @param session {ClientSession} - the client session
+ *
  */
 export class ClientSidePublishEngine {
 
@@ -45,7 +46,6 @@ export class ClientSidePublishEngine {
     protected isSuspended: boolean;
 
 constructor (session: ClientSession) {
-    assert(session instanceof Object);
 
     this._session = session;
 
@@ -329,8 +329,16 @@ public unregisterSubscription(subscriptionId: number | string) {
     assert(Number.isFinite(<any>subscriptionId) && subscriptionId > 0);
 
     this.activeSubscriptionCount -= 1;
-    assert(subscriptionId in this.subscriptionMap);
-    delete this.subscriptionMap[subscriptionId];
+
+    // note : it is possible that we get here while the server has already requested
+    //        a session shutdown ... in this case it is pssoble that subscriptionId is already
+    //        removed
+    if (this.subscriptionMap.hasOwnProperty(subscriptionId)) {
+        delete this.subscriptionMap[subscriptionId];
+    } else {
+        debugLog('ClientSidePublishEngine#unregisterSubscription cannot find subscription  ', subscriptionId);
+    }
+
 }
 
 public getSubscriptionIds(): number[] {
@@ -431,6 +439,7 @@ public republish(callback) {
         let is_done = false;
 
         function _send_republish(_b_callback) {
+            assert(Number.isFinite(subscription.lastSequenceNumber) && subscription.lastSequenceNumber + 1 >= 0);
             const request = new subscription_service.RepublishRequest({
                 subscriptionId: subscription.subscriptionId,
                 retransmitSequenceNumber: subscription.lastSequenceNumber + 1
@@ -442,6 +451,12 @@ public republish(callback) {
                     request.subscriptionId + ' retransmitSequenceNumber=' + request.retransmitSequenceNumber);
             }
 
+            if (!self.session || (<any>self.session)._closeEventHasBeenEmmitted) {
+                debugLog('ClientPublishEngine#_republish aborted ');
+                // has  client been disconnected in the mean time ?
+                is_done = true;
+                return _b_callback();
+            }
             self._session.republish(request, function(err, response) {
                 if (!err &&  response.responseHeader.serviceResult.equals(StatusCodes.Good)) {
                      // reprocess notification message  and keep going

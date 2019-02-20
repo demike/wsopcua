@@ -129,6 +129,7 @@ constructor (session: ClientSession, options: ICreateSubscriptionRequest) {
     this.priority = options.priority;
 
     this._subscriptionId = 'pending';
+    this.lastSequenceNumber = -1;
 
     this._next_client_handle = 0;
     this.monitoredItems = {};
@@ -675,7 +676,11 @@ public isActive(): boolean {
 protected _remove(monitoredItem: MonitoredItemBase) {
 
     const clientHandle = monitoredItem.monitoringParameters.clientHandle;
-    assert(clientHandle);
+    assert(clientHandle > 0);
+
+    if (!this.monitoredItems.hasOwnProperty(clientHandle)) {
+        return; // maybe monitoredItem failed to be created  ....
+    }
     assert(clientHandle in this.monitoredItems);
     monitoredItem.removeAllListeners();
     delete this.monitoredItems[clientHandle];

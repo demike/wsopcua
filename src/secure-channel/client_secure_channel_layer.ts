@@ -7,7 +7,7 @@ import { MessageSecurityMode } from '../service-secure-channel';
 import { SecurityPolicy, getCryptoFactory, toUri,
             /* **nomsgcrypt** getOptionsForSymmetricSignAndEncrypt,*/ ICryptoFactory } from './security_policy';
 import { MessageBuilder } from './message_builder';
-import { OPCUAClientBase } from '../client/client_base';
+import { OPCUAClientBase, ErrorCallback } from '../client/client_base';
 
 import * as log from 'loglevel';
 import {doDebug, debugLog, hexDump} from '../common/debug';
@@ -286,11 +286,15 @@ export class ClientSecureChannelLayer extends EventEmitter implements ITransacti
         //
         debugLog('request id = ' + requestId + err);
         let request_data = this._request_data[requestId];
-        console.log(' message was ');
-        console.log(request_data);
+        if (doDebug) {
+            console.log(' message was ');
+            console.log(request_data);
+        }
         if (!request_data) {
             request_data = this._request_data[requestId + 1];
-            console.log(' message was 2:', request_data ? request_data.request.toString() : '<null>');
+            if (doDebug) {
+                console.log(' message was 2:', request_data ? request_data.request.toString() : '<null>');
+            }
         }
         // xx console.log(request_data.request.toString());
 
@@ -675,7 +679,7 @@ public create(endpoint_url: string , callback: Function) {
                 assert(!_.isUndefined(this._receiverPublicKey)); // make sure we wont go into infinite recursion calling create again.
                 this.create(endpoint_url, callback);
             });
-            return undefined;
+            return;
         }
         assert(typeof this._receiverPublicKey === "string");
         */
@@ -753,7 +757,7 @@ public create(endpoint_url: string , callback: Function) {
                 this.__call = null;
 
                 if (err) {
-                    cb(last_err);
+                    cb(last_err || err);
                 } else {
                     cb();
                 }
@@ -900,12 +904,12 @@ public makeRequestId() {
  *    ```javascript
  *    var secure_channel ; // get a  ClientSecureChannelLayer somehow
  *
- *    var message = new BrowseNameRequest({...});
+ *    var message = new BrowseRequest({...});
  *    secure_channel.performMessageTransaction(message,function(err,response) {
  *       if (err) {
  *         // an error has occurred
  *       } else {
- *          assert(response instanceof BrowseNameResponse);
+ *          assert(response instanceof BrowseResponse);
  *         // do something with response.
  *       }
  *    });
@@ -1019,16 +1023,16 @@ protected _performMessageTransaction(msgType, requestMessage, callback) {
 
         this._timedout_request_count += 1;
         /**
-         * @event timed_out_request
          * notify the observer that the response from the request has not been
          * received within the timeoutHint specified
+         * @event timed_out_request
          * @param message_chunk {Object}  the message chunk
          */
         this.emit('timed_out_request', requestMessage);
 
     }, timeout);
 
-    const transaction_data = {msgType: msgType, request: requestMessage, callback: modified_callback};
+    const transaction_data = {timerId: timerId, msgType: msgType, request: requestMessage, callback: modified_callback};
 
 // xx    this._pending_callback = callback;
 
@@ -1052,7 +1056,7 @@ protected _internal_perform_transaction(transaction_data) {
     if (!this._transport) {
         setTimeout(function () {
             transaction_data.callback(new Error('Client not connected'));
-        }, 1000);
+        }, 100);
         return;
     }
     assert(this._transport, ' must have a valid transport');
@@ -1269,6 +1273,32 @@ protected _sendSecureOpcUARequest(msgType, requestMessage, requestId) {
 
 }
 
+public getDisplayName(): string {
+
+    if (!this.parent) { return ''; }
+    return '' + ( this.parent.applicationName ? this.parent.applicationName + ' ' : '' ) + this.parent.clientName;
+}
+
+public cancelPendingTransactions(callback: () => void ) {
+
+    // istanbul ignore next
+    if (doDebug) {
+        debugLog(' PENDING TRANSACTION = ',
+             this.getDisplayName(),
+             Object.keys(this._request_data)
+                 .map(k => this._request_data[k].request.constructor.name).join(''));
+    }
+
+    for ( const key of Object.keys(this._request_data)) {
+        // kill timer id
+        const transaction = this._request_data[key];
+        if (transaction.callback) {
+            transaction.callback(new Error('Transaction has been canceled because client channel  is beeing closed'));
+        }
+    }
+    setImmediate(callback);
+}
+
 /**
  * Close a client SecureChannel ,by sending a CloseSecureChannelRequest to the server.
  *
@@ -1279,7 +1309,7 @@ protected _sendSecureOpcUARequest(msgType, requestMessage, requestId) {
  * @async
  * @param callback {Function}
  */
-public close(callback: any) {
+public close(callback: ErrorCallback) {
 
 
     // what the specs says:
@@ -1292,25 +1322,37 @@ public close(callback: any) {
 
     assert('function' === typeof callback, 'expecting a callback function, but got ' + callback);
 
-    // there is no need for the security token expiration event to trigger anymore
-    this._cancel_security_token_watchdog();
+        // cancel any pending transaction
+    this.cancelPendingTransactions(() => {
 
-    debugLog('Sending CloseSecureChannelRequest to server');
-    // xx console.log("xxxx Sending CloseSecureChannelRequest to server");
-    const request = new CloseSecureChannelRequest();
+        // what the specs says:
+        // --------------------
+            //   The client closes the connection by sending a CloseSecureChannelRequest and closing the
+            //   socket gracefully. When the server receives this message it shall release all resources
+            //   allocated for the channel. The server does not send a CloseSecureChannel response
+            //
+            // ( Note : some servers do  send a CloseSecureChannel though !)
 
-    this.__in_normal_close_operation = true;
+        // there is no need for the security token expiration event to trigger anymore
+        this._cancel_security_token_watchdog();
 
-    if (!this._transport || this._transport.disconnecting) {
-        this.dispose();
-        return callback(new Error('Transport disconnected'));
-    }
+        debugLog('Sending CloseSecureChannelRequest to server');
+        // xx console.log("xxxx Sending CloseSecureChannelRequest to server");
+        const request = new CloseSecureChannelRequest();
 
-    this._performMessageTransaction('CLO', request, () => {
-        /// xx this._transport.disconnect(function() {
-        this.dispose();
-        callback();
-        // xxx });
+        this.__in_normal_close_operation = true;
+
+        if (!this._transport || this._transport.disconnecting) {
+            this.dispose();
+            return callback(new Error('Transport disconnected'));
+        }
+
+        this._performMessageTransaction('CLO', request, () => {
+            /// xx this._transport.disconnect(function() {
+            this.dispose();
+            callback();
+            // xxx });
+        });
     });
 }
 
