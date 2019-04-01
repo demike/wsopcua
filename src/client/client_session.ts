@@ -90,14 +90,14 @@ export interface BrowseDescription {
 
 
 
-
+export type ClientSessionEvent = 'session_closed'|'keepalive'|'keepalive_failure';
 
 /**
  * @class ClientSession
  * @param client {OPCUAClient}
  * @constructor
  */
-export class ClientSession extends EventEmitter {
+export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
     get client() {
         return this._client;

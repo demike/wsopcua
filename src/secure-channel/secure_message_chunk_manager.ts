@@ -11,8 +11,11 @@ import {ChunkManager} from '../chunkmanager';
 import {DataStream} from '../basic-types/DataStream';
 
 import {SequenceHeader, AsymmetricAlgorithmSecurityHeader, SymmetricAlgorithmSecurityHeader} from '../service-secure-channel';
+import { SequenceNumberGenerator } from './sequence_number_generator';
 
-export function chooseSecurityHeader(msgType) {
+export type SecureMessageChunkManagerEvents = 'chunk'|'finished';
+
+export function chooseSecurityHeader(msgType: string) {
 
     const securityHeader = (msgType === 'OPN') ?
         new AsymmetricAlgorithmSecurityHeader() :
@@ -23,7 +26,7 @@ export function chooseSecurityHeader(msgType) {
 
 export interface SecureMessageChunkManagerOptions {
     sequenceHeaderSize: number;
-    secureChannelId: any;
+    secureChannelId: number;
     chunkSize?: number;
     requestId?: number;
     signatureLength: number;
@@ -48,17 +51,20 @@ export interface SecureMessageChunkManagerOptions {
  * @param sequenceNumberGenerator
  * @constructor
  */
-export class SecureMessageChunkManager extends EventEmitter {
+export class SecureMessageChunkManager extends EventEmitter<SecureMessageChunkManagerEvents> {
     protected _chunkManager: ChunkManager;
     protected _sequenceHeader: SequenceHeader;
     protected _securityHeader: any;
-    protected _sequenceNumberGenerator: any;
-    protected _secureChannelId: any;
-    protected _msgType: any;
+    protected _sequenceNumberGenerator: SequenceNumberGenerator;
+    protected _secureChannelId: number;
+    protected _msgType: string;
     protected _chunkSize: number;
     protected _aborted: boolean;
     protected _headerSize: number;
-constructor (msgType, options: SecureMessageChunkManagerOptions, securityHeader, sequenceNumberGenerator) {
+constructor (msgType: string, options: SecureMessageChunkManagerOptions, 
+    securityHeader: AsymmetricAlgorithmSecurityHeader | SymmetricAlgorithmSecurityHeader, 
+    sequenceNumberGenerator: SequenceNumberGenerator) {
+
     super();
     this._aborted = false;
 
@@ -97,9 +103,9 @@ constructor (msgType, options: SecureMessageChunkManagerOptions, securityHeader,
         chunkSize: this._chunkSize,
 
         headerSize: this._headerSize,
-        writeHeaderFunc:  (block, isLast, totalLength) => {
+        writeHeaderFunc:  (block: DataStream | DataView, isLast: boolean, totalLength: number) => {
 
-            let finalC = isLast ? 'F' : 'C';
+            let finalC: 'A'|'F'|'C' = isLast ? 'F' : 'C';
             finalC = this._aborted ? 'A' : finalC;
             this.write_header(finalC, block, totalLength);
         },
@@ -132,7 +138,7 @@ constructor (msgType, options: SecureMessageChunkManagerOptions, securityHeader,
     });
 }
 
-public write_header(finalC, buf: DataStream | DataView, length) {
+public write_header(finalC: 'A'|'F'|'C', buf: DataStream | DataView, length: number) {
 
     assert(buf.byteLength > 12);
     assert(finalC.length === 1);

@@ -1,8 +1,8 @@
-export function once(fn : Function, context?) { 
-	var result;
+export function once(fn: Function, context?: any) {
+	let result: any;
 
-	return function(...args: any[]) { 
-		if(fn) {
+	return function (...args: any[]): any {
+		if (fn) {
 			result = fn.apply(context || this, arguments);
 			fn = null;
 		}

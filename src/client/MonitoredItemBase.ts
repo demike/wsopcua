@@ -24,10 +24,12 @@ import { MonitoredItemCreateResult } from '../generated/MonitoredItemCreateResul
 import { StatusCode,ExtensionObject, NodeId} from '../basic-types';
 import { IReadValueId } from '../generated/ReadValueId';
 
+export type MonitoredItemEvents = 'initialized'|'changed'|'terminated'|'err';
+
 //import {MonitoredItemsModifyRequest} from '../generated/MonitoredItemsModifyRequest';
 const MonitoredItemModifyRequest = subscription_service.MonitoredItemModifyRequest;
 
-export class MonitoredItemBase extends EventEmitter{
+export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents>{
 
     protected _itemToMonitor : read_service.ReadValueId;
     protected _monitoringParameters : MonitoringParameters;

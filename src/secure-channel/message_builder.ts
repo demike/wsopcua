@@ -21,7 +21,6 @@ import {doDebug, debugLog, hexDump} from '../common/debug';
 import { DataStream } from '../basic-types/DataStream';
 
 import * as factory from '../factory';
-import { ExtensionObject } from '../basic-types';
 
 const decodeStatusCode = ec.decodeStatusCode;
 

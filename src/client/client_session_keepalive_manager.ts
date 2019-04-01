@@ -10,9 +10,9 @@ import { debugLog } from '../common/debug';
 
 const serverStatus_State_Id = coerceNodeId(VariableIds.Server_ServerStatus_State);
 
+export type ClientSessionKeepAliveManagerEvents = 'failure'|'keepalive';
 
-
-export class ClientSessionKeepAliveManager extends EventEmitter {
+export class ClientSessionKeepAliveManager extends EventEmitter<ClientSessionKeepAliveManagerEvents> {
 
     protected timerId;
     protected session;

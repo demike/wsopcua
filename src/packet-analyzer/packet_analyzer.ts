@@ -10,12 +10,12 @@ import * as ec from '../basic-types';
 
 
 const spaces = "                                                                                                                                                                             ";
-function f(n, width) : string {
+function f(n: number, width: number) : string {
     const s = n.toString();
     return (s + "      ").substr(0, Math.max(s.length, width));
 }
 
-function display_encoding_mask(padding, encoding_mask, encoding_info) {
+function display_encoding_mask(padding: string, encoding_mask, encoding_info) {
     let bits = [];
     for (let item in encoding_info) {
         if (isFinite(Number(item))) {
@@ -31,14 +31,14 @@ function display_encoding_mask(padding, encoding_mask, encoding_info) {
     // DataValueEncodingByte
 }
 
-function hex_block(start, end, buffer) {
+function hex_block(start: number, end: number, buffer: ArrayBuffer) {
     const n = end - start;
     const strBuf = buffer_ellipsis(buffer);
     return "s:" + f(start, 4) + " e:" + f(end, 4) + " n:" + f(n, 4) + " " + strBuf;
 }
 
 
-function make_tracer(buffer, padding, offset) : any {
+function make_tracer(buffer: DataView, padding: number, offset: number) : any {
 
     padding = padding || 0;
     offset = offset || 0;
@@ -59,11 +59,11 @@ function make_tracer(buffer, padding, offset) : any {
         console.log((pad() + str + spaces).substr(0, 132 + extra) + "|" + hex_info);
     }
 
-    function display_encodeable(value, buffer : DataStream, start : number, end : number) {
+    function display_encodeable(value, buffer : DataView, start : number, end : number) {
         let len = end - start;
-        const bStart = buffer.view.byteOffset + start;
+        const bStart = buffer.byteOffset + start;
     //    const ext_buf = buffer..slice(start,end)
-        const stream = new DataStream(new DataView(buffer.view.buffer, bStart, len));
+        const stream = new DataStream(new DataView(buffer.buffer, bStart, len));
         const nodeId = ec.decodeNodeId(stream);
         const encodingMask = ec.decodeByte(stream); // 1 bin 2: xml
         const length = ec.decodeUInt32(stream);
@@ -71,7 +71,7 @@ function make_tracer(buffer, padding, offset) : any {
         display('     ExpandedNodId = ' + nodeId);
         display('     encoding mask = ' + encodingMask);
         display('            length = ' + length);
-        packet_analyzer(new DataView(buffer.view.buffer,buffer.view.byteOffset + stream.length)
+        packet_analyzer(new DataView(buffer.buffer,buffer.byteOffset + stream.length)
             /*ext_buf.slice(stream.length)*/, value.encodingDefaultBinary, padding + 2, start + stream.length);
 
     }
@@ -80,19 +80,19 @@ function make_tracer(buffer, padding, offset) : any {
 
         tracer: {
 
-            dump: function (title, value) {
-                display(title + "  " + value.toString());
+            dump: function (title: string, value: any) {
+                display(title + '  ' + value.toString());
             },
 
-            encoding_byte: function (encoding_mask, valueEnum, start, end) {
-                const b = buffer.slice(start, end);
+            encoding_byte: function (encoding_mask, valueEnum, start: number, end: number) {
+                const b = buffer.buffer.slice(start, end);
                 display('  012345678', hex_block(start, end, b));
                 display_encoding_mask(pad(), encoding_mask, valueEnum);
             },
 
-            trace: function (operation, name, value, start, end, fieldType) {
+            trace: function (operation: string, name: string, value: any, start: number, end: number, fieldType: string) {
 
-                const b = buffer.slice(start, end);
+                const b = buffer.buffer.slice(start, end);
                 let _hexDump = "";
 
                 switch (operation) {
@@ -166,7 +166,7 @@ import * as factories from '../factory/factories_factories';
  * @param {Object} custom_options.factory
  * @param {Function} custom_options.factory.constructObject
  */
-export function packet_analyzer(buffer : DataView, id?, padding? : number, offset? : number, custom_options?) {
+export function packet_analyzer(buffer: DataView, id?, padding? : number, offset?: number, custom_options?) {
 
    //xx const factories = custom_options.factory;
 
@@ -206,7 +206,7 @@ export function packet_analyzer(buffer : DataView, id?, padding? : number, offse
 }
 
 
-export function analyze_object_binary_encoding(obj,options) {
+export function analyze_object_binary_encoding(obj) {
 
     assert(obj);
 

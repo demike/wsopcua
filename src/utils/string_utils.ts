@@ -9,7 +9,7 @@ export function capitalizeFirstLetter(str: string) : string  {
 
 var ACode = "A".charCodeAt(0);
 var ZCode = "Z".charCodeAt(0);
-export function isUpperCaseChar(c) : boolean {
+export function isUpperCaseChar(c: string): boolean {
     var code = c.charCodeAt(0);
     return code >= ACode && code <= ZCode;
 }

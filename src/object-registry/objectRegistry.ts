@@ -1,8 +1,10 @@
 "use strict";
 
+import { IEncodable } from "../factory/factories_baseobject";
+
 export class ObjectRegistry {
     protected _objectType : any;
-    protected _cache : {};
+    protected _cache: {[key: string]: Object};
     public static registries : any[] = [];
     private static hashCounter : number = 1;
     constructor(objectType ?: any) {
@@ -11,31 +13,31 @@ export class ObjectRegistry {
         ObjectRegistry.registries.push(this);    
     }
 
-    public register(obj) {
-        
+    public register(obj: {}) {
+
             if (!this._objectType) {
                 this._objectType = obj.constructor;
             }
-        
-            if (!obj._____hash) {
-                obj._____hash = ObjectRegistry.hashCounter;
+
+            if (!(obj as any)._____hash) {
+                (obj as any)._____hash = ObjectRegistry.hashCounter;
                 ObjectRegistry.hashCounter += 1;
-                this._cache[obj._____hash] = obj;
+                this._cache[(obj as any)._____hash] = obj;
             }
-        
-         
+
+
         };
         
-        public unregister(obj) {
-            this._cache[obj._____hash] = null;
-            delete this._cache[obj._____hash];
+        public unregister(obj: {}) {
+            this._cache[(obj as any)._____hash] = null;
+            delete this._cache[(obj as any)._____hash];
         };
         
         public count() : number {
             return Object.keys(this._cache).length;
         };
         
-        public toString() : string {
+        public toString(): string {
         
             var className = this.getClassName();
             var str = " className :" + className +  " found => " + this.count() +  " object leaking\n";
@@ -48,7 +50,7 @@ export class ObjectRegistry {
             return str;
         };
 
-        public getClassName() : string {
+        public getClassName(): string {
             return this._objectType ? this._objectType.name : "<???>";
          };               
 }

@@ -1,7 +1,7 @@
 var SymbolProto = typeof Symbol !== 'undefined' ? Symbol.prototype : null;
 
 
-export function isEqual(a, b,aStack?,bStack?) {
+export function isEqual(a: any, b: any,aStack?: any[], bStack?: any[]) {
   // Identical objects are equal. `0 === -0`, but they aren't identical.
   // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
   if (a === b) return a !== 0 || 1 / a === 1 / b;
@@ -17,7 +17,7 @@ export function isEqual(a, b,aStack?,bStack?) {
 
 // Internal recursive comparison function for `isEqual`.
 
-function deepEq(a, b, aStack, bStack) {
+function deepEq(a: any, b: any, aStack?: any[], bStack?: any[]) {
     // Compare `[[Class]]` names.
     var className = toString.call(a);
     if (className !== toString.call(b)) return false;

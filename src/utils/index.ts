@@ -26,7 +26,7 @@ export function set_flag(value : number, mask : number): number {
  * @param mask
  * @return {boolean}
  */
-export function check_flag(value, mask): boolean {
+export function check_flag(value: number, mask: number): boolean {
     assert(mask !== undefined);
     return ((value & mask) === mask);
 }
@@ -37,7 +37,7 @@ export * from './get_clock_tick';
 
 //exports.compare_buffers = require("./src/compare_buffers").compare_buffers;
 
-export function isNullOrUndefined(value)  {
+export function isNullOrUndefined(value: any)  {
     return ( value === undefined ) || (value === null);
 }
 

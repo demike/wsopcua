@@ -53,7 +53,7 @@ export class NodeId {
 
 static NullNodeId: NodeId = new NodeId(NodeIdType.NUMERIC, 0);
 public identifierType: NodeIdType;
-public value: any;
+public value: number|string|Uint8Array;
 public namespace: number;
 
 /**
@@ -70,7 +70,7 @@ public namespace: number;
  *    ```
  * @constructor
  */
-constructor(identifierType: NodeIdType, value, namespace: number = 0) {
+constructor(identifierType: NodeIdType, value: number|string|Uint8Array, namespace: number = 0) {
     this.identifierType = identifierType;
 
     assert(this.identifierType);
@@ -90,7 +90,7 @@ constructor(identifierType: NodeIdType, value, namespace: number = 0) {
     assert(this.namespace >= 0 && this.namespace <= 0xFFFF);
 
     assert(this.identifierType !== NodeIdType.NUMERIC || (this.value >= 0 && this.value <= 0xFFFFFFFF));
-    assert(this.identifierType !== NodeIdType.GUID || isValidGuid(this.value));
+    assert(this.identifierType !== NodeIdType.GUID || isValidGuid(<string>this.value));
     assert(this.identifierType !== NodeIdType.STRING || typeof this.value === 'string');
 
 }
@@ -130,7 +130,7 @@ toString(options?: any): string {
         default:
             assert(this.identifierType === NodeIdType.BYTESTRING, 'invalid identifierType in NodeId : ' + this.identifierType);
             if (this.value)  {
-                str = 'ns=' + this.namespace + ';b=' + this.value.toString('hex');
+                str = 'ns=' + this.namespace + ';b=' + (this.value as number).toString(16);
             } else {
                 str = 'ns=' + this.namespace + ';b=<null>';
             }
@@ -140,13 +140,13 @@ toString(options?: any): string {
     if (addressSpace) {
         if (this.namespace === 0 && (this.identifierType === NodeIdType.NUMERIC)) {
             // find standard browse name
-            const name = reverse_map(this.value) || '<undefined>';
-            str += ' ' + name.green.bold;
+            const name = reverse_map(<number>this.value) || '<undefined>';
+            str += ' ' + name;
         } else {
             // let use the provided address space to figure out the browseNode of this node.
             // to make the message a little bit more useful.
             const n = addressSpace.findNode(this);
-            str += ' ' + (n ? n.browseName.toString().green : ' (????)');
+            str += ' ' + (n ? n.browseName.toString() : ' (????)');
         }
     }
     return str;
@@ -172,12 +172,12 @@ isEmpty(): Boolean {
         case NodeIdType.NUMERIC:
             return this.value === 0;
         case NodeIdType.STRING:
-            return !this.value || this.value.length === 0;
+            return !this.value || (this.value as string).length === 0;
         case NodeIdType.GUID:
             return !this.value || this.value === emptyGuid;
         default:
             assert(this.identifierType === NodeIdType.BYTESTRING, 'invalid identifierType in NodeId : ' + this.identifierType);
-            return !this.value || this.value.length === 0;
+            return !this.value || (this.value as Uint8Array).byteLength === 0;
     }
 }
 
@@ -190,7 +190,7 @@ isEmpty(): Boolean {
     displayText(): String {
 
         if (this.namespace === 0 && this.identifierType === NodeIdType.NUMERIC) {
-            const name = reverse_map(this.value);
+            const name = reverse_map(<number>this.value);
             if (name) {
                 return name + ' (' + this.toString() + ')';
             }
@@ -270,12 +270,12 @@ const MethodIds = constants.MethodIds;
 const ReferenceTypeIds = constants.ReferenceTypeIds;
 
 // reverse maps
-let _nodeid_to_name_index = {};
-let _name_to_nodeid_index = {};
+let _nodeid_to_name_index : {[name: number]: string} = {};
+let _name_to_nodeid_index : {[name: string]: NodeId} = {};
 
 (function build_standard_nodeid_indexes() {
 
-    function expand_map(direct_index) {
+    function expand_map(direct_index: {[name: string]: number}) {
         for (const name in direct_index) {
             if (direct_index.hasOwnProperty(name)) {
                 const value = direct_index[name];
@@ -297,7 +297,7 @@ let _name_to_nodeid_index = {};
 
 })();
 
-function reverse_map(nodeId) {
+function reverse_map(nodeId: number) {
     return _nodeid_to_name_index[nodeId];
 }
 
@@ -361,7 +361,7 @@ const rege_ns_g = /ns=([0-9]+);g=(.*)/;
  * @param value
  * @param namespace {Integer}
  */
-export function coerceNodeId(value, namespace?: number): NodeId {
+export function coerceNodeId(value: any, namespace?: number): NodeId {
 
     let matches, two_first;
 

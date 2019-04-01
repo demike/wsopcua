@@ -10,16 +10,17 @@ import {VariantArrayType} from './VariantArrayTypeEnum';
 
 import * as utils from '../utils';
 import { isEqual } from '../utils';
+import { Variant } from './variant';
 
 
 const txtEncoder =  new TextEncoder();
 
-function isEnumerationItem(value) {
+function isEnumerationItem(value: any) {
     return (value instanceof Object && (value.hasOwnProperty('value')) && value.hasOwnProperty('key'));
 }
 
 
-export function coerceVariantType(dataType: DataType, value) {
+export function coerceVariantType(dataType: DataType, value: any) {
     /* eslint max-statements: ["error",1000], complexity: ["error",1000]*/
     if (value === undefined ) { value = null; }
     if (isEnumerationItem(value)) {
@@ -91,7 +92,7 @@ export function coerceVariantType(dataType: DataType, value) {
 
 
 
-function isValidScalarVariant(dataType: DataType, value) {
+function isValidScalarVariant(dataType: DataType, value: any) {
 
     assert(value === null || DataType.Int64 === dataType || DataType.ByteString === dataType || DataType.UInt64 === dataType || !(value instanceof Array));
     assert(value === null || !(value instanceof Int32Array));
@@ -126,7 +127,7 @@ function isValidScalarVariant(dataType: DataType, value) {
     }
 }
 
-function isValidArrayVariant(dataType, value) {
+function isValidArrayVariant(dataType: DataType, value: any) {
 
     if (dataType === DataType.Float && value instanceof Float32Array) {
         return true;
@@ -156,7 +157,7 @@ function isValidArrayVariant(dataType, value) {
 }
 
 /*istanbul ignore next*/
-function isValidMatrixVariant(dataType, value, dimensions) {
+function isValidMatrixVariant(dataType: DataType, value: any, dimensions?:number[]) {
 
     if (!dimensions) {
         return false;
@@ -167,7 +168,7 @@ function isValidMatrixVariant(dataType, value, dimensions) {
     return true;
 }
 
-export function isValidVariant(arrayType, dataType, value, dimensions) {
+export function isValidVariant(arrayType: VariantArrayType, dataType: DataType, value: any, dimensions?: number[]) {
 
     assert(dataType, 'expecting a variant type');
 
@@ -184,7 +185,13 @@ export function isValidVariant(arrayType, dataType, value, dimensions) {
 
 
 
-export function buildVariantArray(dataType, nbElements, defaultValue) {
+/**
+ * TOOD: fix this method, code looks weird
+ * @param dataType
+ * @param nbElements
+ * @param defaultValue
+ */
+export function buildVariantArray(dataType: DataType, nbElements: Iterable<number>, defaultValue: number) {
 
     let value;
     switch (dataType) {
@@ -215,8 +222,8 @@ export function buildVariantArray(dataType, nbElements, defaultValue) {
         default:
             // xx console.log("xxxx DataType = ",dataType ? dataType.toString(): null,"nb Elements =",nbElements);
             value = new Array(nbElements);
-            for (let i = 0; i < nbElements; i++) {
-                value[i] = defaultValue;
+            for (let i = 0; i < value.length; i++) {
+                (value as Array<any>)[i] = defaultValue;
             }
         // xx console.log("xxx done");
     }
@@ -244,7 +251,7 @@ function __check_same_array(arr1: any[], arr2: any[]) {
     return true;
 
 }
-export function sameVariant(v1, v2) {
+export function sameVariant(v1: Variant, v2: Variant): boolean {
 
     // xx assert(v1 && v1.constructor.name === "Variant");
     if (v1 === v2) {

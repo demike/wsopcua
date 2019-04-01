@@ -30,6 +30,7 @@ export function getFakeTransport() {
 
 let counter = 0;
 
+export type TcpTransportEvents = 'connect'|'message'|'connection_break'|'close'|'socket_closed';
 
 /**
  * TCP_transport
@@ -38,7 +39,7 @@ let counter = 0;
  * @constructor
  * @extends EventEmitter
  */
-export class TCP_transport extends EventEmitter {
+export class TCP_transport extends EventEmitter<TcpTransportEvents> {
 
 
     packetAssembler: any;
@@ -124,7 +125,7 @@ constructor() {
  *  - only one chunk can be created at a time.
  *  - a created chunk should be committed using the ```write``` method before an other one is created.
  */
-public createChunk(msg_type, chunk_type: string, length): ArrayBuffer {
+public createChunk(msg_type: string, chunk_type: string, length: number): ArrayBuffer {
 
     assert(msg_type === 'MSG');
     assert(this._pending_buffer === undefined, 'createChunk has already been called ( use write first)');
@@ -141,10 +142,10 @@ public createChunk(msg_type, chunk_type: string, length): ArrayBuffer {
 
 
 
-protected _write_chunk(message_chunk) {
+protected _write_chunk(message_chunk: string | ArrayBufferLike | Blob | ArrayBufferView) {
 
     if (this._socket) {
-        this.bytesWritten += message_chunk.length;
+        this.bytesWritten += ( (message_chunk as ArrayBufferLike).byteLength) ? (message_chunk as ArrayBufferLike).byteLength : (message_chunk as string).length;
         this.chunkWrittenCount ++;
         this._socket.write(message_chunk);
     }

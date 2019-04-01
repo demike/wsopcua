@@ -15,7 +15,7 @@ import { MonitoringMode } from '../generated/MonitoringMode';
 import * as subscription_service from '../service-subscription';
 import { DataValue } from '../data-value';
 
-
+export type MonitoredItemGroupEvents = 'initialized'|'terminated'|'changed';
 
 /**
  * ClientMonitoredItemGroup
@@ -38,7 +38,7 @@ import { DataValue } from '../data-value';
  *
  *  note: this.monitoringMode = subscription_service.MonitoringMode.Reporting;
  */
-export class MonitoredItemGroup extends EventEmitter {
+export class MonitoredItemGroup extends EventEmitter<MonitoredItemGroupEvents> {
     protected _monitoredItems: MonitoredItemBase[];
     protected _subscription: ClientSubscription;
     protected _timestampsToReturn: TimestampsToReturn;

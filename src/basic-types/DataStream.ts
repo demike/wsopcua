@@ -1,3 +1,6 @@
+import { IEncodable } from "../factory/factories_baseobject";
+import { Int8, UInt8, Int16, UInt32, UInt16 } from "./integers";
+
 // import {assert} from '../assert';
 
 const txtEncoder = new TextEncoder();
@@ -55,7 +58,7 @@ export class DataStream {
   protected _pos: number;
 
 
-  public static binaryStoreSize(obj): number {
+  public static binaryStoreSize(obj: IEncodable): number {
     const stream = new BinaryStreamSizeCalculator();
     obj.encode(stream);
     return stream.length;
@@ -341,12 +344,19 @@ export class DataStream {
   public writeArrayBuffer(arrayBuf: ArrayBuffer, offset: number, length: number) {
     offset = offset || 0;
 
+    /*
     const byteArr = new Uint8Array(arrayBuf);
     const n = (length || byteArr.length) + offset;
+
     let i: number;
     for (i = offset; i < n; i++) {
       this._view[this._pos++] = byteArr[i];
     }
+    */
+   const byteArr = new Uint8Array(arrayBuf, offset, length);
+   const viewBuffer = new Uint8Array(this._view.buffer);
+   viewBuffer.set(byteArr,this._pos);
+   this._pos += length;
   }
 
   /**
@@ -397,15 +407,15 @@ export class BinaryStreamSizeCalculator {
     this.length = 0;
   }
 
-  setInt8(value): void {
+  setInt8(value: Int8): void {
     this.length += 1;
   }
 
-  setUint8(value): void {
+  setUint8(value: UInt8): void {
     this.length += 1;
   }
 
-  setInt16(value): void {
+  setInt16(value: Int16): void {
     this.length += 2;
   }
 
@@ -413,32 +423,32 @@ export class BinaryStreamSizeCalculator {
     this.length += 4;
   }
 
-  setInteger(value): void {
+  setInteger(value: number): void {
     this.length += 4;
   }
 
-  setUint32(value): void {
+  setUint32(value: UInt32): void {
     this.length += 4;
   }
 
-  setUint16(value): void {
+  setUint16(value: UInt16): void {
     this.length += 2;
   }
 
 
-  setFloat32(value): void {
+  setFloat32(value: number): void {
     this.length += 4;
   }
 
-  setFloat64(value): void {
+  setFloat64(value: number|[number, number]): void {
     this.length += 8;
   }
 
-  setDouble(value): void {
+  setDouble(value: number|[number, number]): void {
     this.length += 8;
   }
 
-  writeArrayBuffer(arrayBuf: ArrayBuffer, offset, byteLength): void {
+  writeArrayBuffer(arrayBuf: ArrayBuffer, offset: number, byteLength: number): void {
     offset = offset || 0;
     // assert(arrayBuf instanceof ArrayBuffer);
     this.length += (byteLength || arrayBuf.byteLength/*new Uint8Array(arrayBuf).length*/);

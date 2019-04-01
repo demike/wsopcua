@@ -10,7 +10,6 @@ import {MonitoredItemBase} from './MonitoredItemBase';
 
 import { IReadValueId } from '../generated/ReadValueId';
 
-
 /**
  * ClientMonitoredItem
  * @class ClientMonitoredItem

@@ -6,9 +6,11 @@
 
 import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert';
-import { concatTypedArrays } from '../basic-types/array';
+import { concatDataViews } from '../basic-types/array';
 
 var doDebug = false;
+
+export type PacketAssemblerEvents = 'newMessage'|'message';
 
 /***
  * @class PacketAssembler
@@ -18,14 +20,14 @@ var doDebug = false;
  *                                             readMessageFunc can be called
  * @constructor
  */
-export class PacketAssembler extends EventEmitter {
+export class PacketAssembler extends EventEmitter<PacketAssemblerEvents> {
     packet_info: any;
     minimumSizeInBytes: any;
     readMessageFunc: any;
     currentLength: number;
     expectedLength: number;
-    protected _stack: any[];
-constructor (options) {
+    protected _stack: DataView[];
+constructor (options: { readMessageFunc: any; minimumSizeInBytes?: any; }) {
     super();
     this._stack = [];
     this.expectedLength = 0;
@@ -38,11 +40,11 @@ constructor (options) {
 
 };
 
-protected _read_packet_info(data : DataView) {
+protected _read_packet_info(data: DataView) {
     return this.readMessageFunc(data);
 };
 
-protected _build_data(data) {
+protected _build_data(data: DataView) {
     if (data && this._stack.length === 0) {
         return data;
     }
@@ -52,7 +54,7 @@ protected _build_data(data) {
         return data;
     }
     this._stack.push(data);
-    data = concatTypedArrays(this._stack);
+    data = concatDataViews(this._stack);
     this._stack.length = 0;
     return data;
 };
@@ -84,7 +86,7 @@ public feed(data : DataView) {
         assert(this.expectedLength > 0);
 
         // we can now emit an event to signal the start of a new packet
-        this.emit("newMessage", this.packet_info, data);
+        this.emit('newMessage', this.packet_info, data);
 
     }
 
@@ -104,7 +106,7 @@ public feed(data : DataView) {
         if (doDebug) {
             var packet_info = this._read_packet_info(messageChunk);
             assert(this.packet_info.length === packet_info.length);
-            assert(messageChunk.length === packet_info.length);
+            assert(messageChunk.byteLength === packet_info.length);
         }
         // reset
         this.currentLength = 0;

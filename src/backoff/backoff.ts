@@ -2,9 +2,12 @@
 //      Licensed under the MIT license.
 import {EventEmitter} from 'eventemitter3';
 import {BackoffStrategy} from './strategy/strategy'
+
+export type BackoffEvents = 'fail'|'backoff'|'ready';
+
 // A class to hold the state of a backoff operation. Accepts a backoff strategy
 // to generate the backoff delays.
-export class Backoff extends EventEmitter { 
+export class Backoff extends EventEmitter<BackoffEvents> {
     handlers: { backoff: any; };
     timeoutID_: number;
     backoffDelay_: any;
@@ -48,7 +51,7 @@ public backoff(err) {
         this.reset();
     } else {
         this.backoffDelay_ = this.backoffStrategy_.next();
-        this.timeoutID_ = setTimeout(this.handlers.backoff, this.backoffDelay_);
+        this.timeoutID_ = window.setTimeout(this.handlers.backoff, this.backoffDelay_);
         this.emit('backoff', this.backoffNumber_, this.backoffDelay_, err);
     }
 };

@@ -66,7 +66,7 @@ function difference(v1 : Variant ,v2 : Variant,absoluteDeadband : number) {
  * @param valueRange    {Float}
  * @return {boolean}
  */
-export function check_deadband(variant1 : Variant,variant2 : Variant,deadbandType : DeadbandType,deadbandValue : number,valueRange? : number) {
+export function check_deadband(variant1 : Variant,variant2 : Variant,deadbandType : DeadbandType,deadbandValue : number,valueRange? : number): boolean {
 
 
     switch (deadbandType) {

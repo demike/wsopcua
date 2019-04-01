@@ -11,7 +11,8 @@ import { SignatureData } from '../generated/SignatureData';
 
 
 import {AsymmetricAlgorithmSecurityHeader, SymmetricAlgorithmSecurityHeader} from '../service-secure-channel';
-import {SecureMessageChunkManager} from './secure_message_chunk_manager';
+import {SecureMessageChunkManager, SecureMessageChunkManagerOptions} from './secure_message_chunk_manager';
+import { ISymmetricAlgortihmSecurityHeader } from '../service-secure-channel/SymmetricAlgorithmSecurityHeader';
 
 /**
  * @class MessageChunker
@@ -84,9 +85,10 @@ public update(options) {
  * @param message {Object}
  * @param messageChunkCallback   {Function}
  */
-public chunkSecureMessage(msgType, options, message, messageChunkCallback) {
+public chunkSecureMessage(msgType: string, options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader,
+     message, messageChunkCallback) {
 
-    options = options || {};
+    options = <any>options || {};
     assert('function' === typeof messageChunkCallback);
 
     // calculate message size ( with its  encodingDefaultBinary)
@@ -108,7 +110,7 @@ public chunkSecureMessage(msgType, options, message, messageChunkCallback) {
     const secure_chunker = new SecureMessageChunkManager(
         msgType, options, securityHeader, this._sequenceNumberGenerator
     )
-        .on('chunk', function (messageChunk) {
+        .on('chunk', function (messageChunk: DataView) {
             messageChunkCallback(messageChunk);
         })
         .on('finished', function () {

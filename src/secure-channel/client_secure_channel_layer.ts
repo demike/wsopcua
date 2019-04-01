@@ -30,7 +30,6 @@ import {MessageChunker} from './message_chunker';
 import * as secure_channel_service from '../service-secure-channel';
 import { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
 import { ClientWSTransport } from '../transport/client_ws_transport';
-import { OptionSet } from '../generated/OptionSet';
 import { ConnectionStrategy } from '../common/client_options';
 
 const OpenSecureChannelRequest = secure_channel_service.OpenSecureChannelRequest;
@@ -43,7 +42,7 @@ const SecurityTokenRequestType = secure_channel_service.SecurityTokenRequestType
 const do_trace_message = false;
 const do_trace_statistics = false;
 
-function process_request_callback(request_data, err, response) {
+function process_request_callback(request_data, err: Error, response) {
 
     assert('function' === typeof request_data.callback);
 
@@ -57,7 +56,7 @@ function process_request_callback(request_data, err, response) {
         response.responseHeader.stringTable = response.responseHeader.stringTable || [];
         response.responseHeader.stringTable = [response.responseHeader.stringTable.join('\n')];
         err = new Error(' ServiceFault returned by server ' + JSON.stringify(response));
-        err.response = response;
+        (<any>err).response = response;
         response = null;
     }
 
@@ -68,7 +67,7 @@ function process_request_callback(request_data, err, response) {
     the_callback_func(err, response);
 }
 
-function _on_message_received(response, msgType, requestId) {
+function _on_message_received(response, msgType: string, requestId: number) {
 
     /* jshint validthis: true */
 
@@ -142,7 +141,7 @@ export interface ITransactionStats {
 export function dump_transaction_statistics(stats: ITransactionStats ) {
 
 
-    function w(str) {
+    function w(str: any) {
         return ('                  ' + str).substr(-12);
     }
 
@@ -163,6 +162,9 @@ export function dump_transaction_statistics(stats: ITransactionStats ) {
 
 }
 
+export type ClientSecureChannelLayerEvents = 'end_transaction'|'close'|'receive_chunk'
+                    |'abort'|'lifetime_75'|'backoff'|'security_token_renewed'|'receive_response'
+                    |'timed_out_request'|'send_chunk'|'send_request';
 
 export interface ClientSecureChannelLayerOptions {
     defaultSecureTokenLifeTime?: number;
@@ -197,7 +199,7 @@ export interface ClientSecureChannelLayerOptions {
  * @param [options.connectionStrategy.maxDelay      = 10000]
  * @constructor
  */
-export class ClientSecureChannelLayer extends EventEmitter implements ITransactionStats {
+export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLayerEvents> implements ITransactionStats {
     _receiverPublicKey(): any {
         throw new Error('Method not implemented.');
     }
@@ -378,7 +380,7 @@ public isTransactionInProgress() {
     return Object.keys(this._request_data).length > 0;
 }
 
-protected _cancel_pending_transactions(err) {
+protected _cancel_pending_transactions(err: Error) {
     /* jshint validthis: true */
 
     debugLog('_cancel_pending_transactions  '
@@ -395,7 +397,7 @@ protected _cancel_pending_transactions(err) {
 
 }
 
-protected _on_transport_closed(error) {
+protected _on_transport_closed(error: Error) {
 
     debugLog(' =>ClientSecureChannelLayer#_on_transport_closed');
     /* jshint validthis: true */
@@ -491,7 +493,7 @@ protected _build_client_nonce() {
 }
 
 
-protected _open_secure_channel_request(is_initial: boolean, callback) {
+protected _open_secure_channel_request(is_initial: boolean, callback: ErrorCallback) {
 
     assert(this._securityMode !== MessageSecurityMode.Invalid, 'invalid security mode');
     // from the specs:
@@ -577,7 +579,7 @@ protected _open_secure_channel_request(is_initial: boolean, callback) {
     });
 }
 
-protected _on_connection(transport, callback, err?) {
+protected _on_connection(transport: ClientWSTransport, callback: ErrorCallback, err?: Error) {
 
     /* jshint validthis: true */
 
@@ -653,7 +655,7 @@ protected _on_connection(transport, callback, err?) {
  *
  *    ```
  */
-public create(endpoint_url: string , callback: Function) {
+public create(endpoint_url: string , callback: ErrorCallback) {
 
     assert('function' === typeof callback);
 
@@ -693,18 +695,18 @@ public create(endpoint_url: string , callback: Function) {
     // -------------------------------------------------------------------------
     // Handle reconnection
     // --------------------------------------------------------------------------
-    const _establish_connection = (transport: ClientWSTransport, endpointUrl, cb) => {
+    const _establish_connection = (transport: ClientWSTransport, endpointUrl: string, cb: ErrorCallback) => {
 
 
-        let last_err = null;
+        let last_err: Error = null;
 
-        const _connect = (_i_callback) => {
+        const _connect = (_i_callback: ErrorCallback) => {
 
             if (this.__call && this.__call._cancelBackoff) {
                 return;
             }
 
-            transport.connect(endpointUrl, (err) => {
+            transport.connect(endpointUrl, (err?: Error) => {
 
                 // force Backoff to fail if err is not ECONNRESET or ECONNREFUSE
                 // this mean that the connection to the server has succeeded but for some reason
@@ -747,7 +749,7 @@ public create(endpoint_url: string , callback: Function) {
         }
 
 
-        const _backoff_completion = (err) => {
+        const _backoff_completion = (err: Error) => {
 
             if (this.__call) {
                 // console log =
@@ -770,7 +772,7 @@ public create(endpoint_url: string , callback: Function) {
         this.__call.failAfter(Math.max(this.connectionStrategy.maxRetry, 1));
 
 
-        this.__call.on('backoff', (number, delay) => {
+        this.__call.on('backoff', (number: number, delay: number) => {
 
             debugLog(' Backoff #' + number + 'delay = ' + delay + this.__call.maxNumberOfRetry_);
             // Do something when backoff starts, e.g. show to the
@@ -916,7 +918,7 @@ public makeRequestId() {
  *    ```
  *
  */
-public performMessageTransaction(requestMessage, callback) {
+public performMessageTransaction(requestMessage: any, callback: Function) {
     assert('function' === typeof callback);
     this._performMessageTransaction('MSG', requestMessage, callback);
 }
@@ -1388,7 +1390,7 @@ public close(callback: ErrorCallback) {
 
    // protected _transport :
     protected transportTimeout: number;
-    protected channelId;
+    protected channelId: number;
     protected connectionStrategy: any;
 
     protected __call: any;

@@ -10,9 +10,9 @@ import {assert} from '../assert';
 import { ExpandedNodeId } from '../basic-types';
 
 
-const constructorMap = {};
+const constructorMap: {[key: string]: Function} = {};
 
-const _global_factories = {};
+const _global_factories : {[key: string]: Function} = {};
 
 export function getFactory(type_name: string ) {
     return _global_factories[type_name];
@@ -47,24 +47,24 @@ export function callConstructor(constructor: Function ) {
 }
 
 
-export function getConstructor(expandedId) {
+export function getConstructor(expandedId: ExpandedNodeId) {
 
     if (!(expandedId && (expandedId.value in constructorMap))) {
         console.log('#getConstructor : cannot find constructor for expandedId ', expandedId.toString());
         return null;
     }
-    return constructorMap[expandedId.value];
+    return constructorMap[<string|number>expandedId.value];
 }
 
-export function hasConstructor(expandedId) {
+export function hasConstructor(expandedId: ExpandedNodeId) {
     if (!expandedId) { return false; }
     assert(expandedId.hasOwnProperty('value'));
     // only namespace 0 can be in constructorMap
     if (expandedId.namespace !== 0) { return false; }
-    return !!constructorMap[expandedId.value];
+    return !!constructorMap[<string|number>expandedId.value];
 }
 
-export function constructObject(expandedNodeId) {
+export function constructObject(expandedNodeId: ExpandedNodeId) {
     const constructor = getConstructor(expandedNodeId);
     if (!constructor) { return null; }
     return callConstructor(constructor);
@@ -77,10 +77,10 @@ export function register_class_definition(classname: string, class_constructor: 
     /* istanbul ignore next */
     if (nodeId.value in constructorMap) {
         throw new Error(' Class ' + classname + ' with ID ' + nodeId +
-                '  already in constructorMap for  ' + constructorMap[nodeId.value].name);
+                '  already in constructorMap for  ' + constructorMap[<number|string>nodeId.value].name);
     }
     class_constructor.prototype.encodingDefaultBinary = nodeId;
-    constructorMap[nodeId.value] = class_constructor;
+    constructorMap[<number|string>nodeId.value] = class_constructor;
 }
 
 

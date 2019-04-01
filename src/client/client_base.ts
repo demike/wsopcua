@@ -98,6 +98,10 @@ export interface IFindServersOptions {
     serverUris?: string[];
 }
 
+export type OPCUAClientEvents = 'close'|'backoff'|'abort'|'start_reconnection'|'send_chunk'|'after_reconnection'
+                                    |'send_request'|'receive_chunk'|'receive_response'|'lifetime_75'
+                                    |'security_token_renewed'|'connection_lost'|'connection_reestablished'|'timed_out_request';
+
 /**
  * @class OPCUAClientBase
  * @extends EventEmitter
@@ -114,7 +118,7 @@ export interface IFindServersOptions {
  *                                                  when disconnect is called
  * @constructor
  */
-export class OPCUAClientBase extends EventEmitter {
+export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
     endpoint: any;
     secureObject: OPCUASecureObject;
@@ -162,8 +166,6 @@ export class OPCUAClientBase extends EventEmitter {
 
     protected _secureChannel: ClientSecureChannelLayer;
     protected _server_endpoints: EndpointDescription[];
-
-    protected _isReconnecting: boolean;
 
     protected _clientName: string;
     protected _applicationName: string;
@@ -533,7 +535,7 @@ export class OPCUAClientBase extends EventEmitter {
         assert('function' === typeof callback);
 
         const sessions = this._sessions.slice(); // _.clone(this._sessions);
-        async_map(sessions, function (session: ClientSession, next) {
+        async_map(sessions, (session: ClientSession, next) => {
 
             assert(session.client === this);
             session.close(true, function (err) {

@@ -9,12 +9,13 @@ import {constructObject, is_internal_id, registerBuiltInType} from '../factory';
 import {makeNodeId} from '../nodeid/nodeid';
 import { encodeNodeId, decodeNodeId } from './nodeid';
 import { DataStream } from './DataStream';
+import { ExpandedNodeId } from '../wsopcua';
 
 export class ExtensionObject {
 
 }
 
-export function constructEmptyExtensionObject(expandedNodeId) {
+export function constructEmptyExtensionObject(expandedNodeId: ExpandedNodeId) {
     return constructObject(expandedNodeId);
 }
 

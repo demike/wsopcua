@@ -94,6 +94,25 @@ export function concatTypedArrays<T extends Uint16Array | Uint8Array | Uint32Arr
     return buf;
 }
 
+export function concatDataViews(views: DataView[]) {
+    if (views.length === 1) {
+        return views[0];
+    }
+    let len = 0;
+    for (const ar of views) {
+        len += ar.byteLength;
+    }
+
+    const buf = new Uint8Array(len);
+
+    let offset = 0;
+    for (const v of views) {
+        buf.set(new Uint8Array(v.buffer), offset);
+        offset += v.byteLength;
+    }
+    return new DataView(buf.buffer);
+}
+
 export function concatArrayBuffers(arrays: ArrayBuffer[]): ArrayBuffer {
     if (arrays.length === 1) {
         return arrays[0];

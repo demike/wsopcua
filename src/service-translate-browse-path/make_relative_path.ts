@@ -86,7 +86,7 @@ const regBrowseName = new RegExp('(' + regNamespaceIndex.source + ':)?(' + regNa
 const regReferenceType = new RegExp('/|\\.|(<(#)?(!)?(' + regBrowseName.source + ')>)');
 
 const regRelativePath = new RegExp('(' + regReferenceType.source + ')(' + regBrowseName.source + ')?');
-function unescape(str) {
+function unescape(str: string): string {
     return str.replace(/&/g, '');
 }
 function makeQualifiedName(mm) {

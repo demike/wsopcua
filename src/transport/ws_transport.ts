@@ -30,13 +30,15 @@ export function getFakeTransport() {
 
 let counter = 0;
 
+export type WSTransportEvents = 'connect'|'message'|'socket_closed'|'close'|'socket_error'|'connection_break'|'error';
+
 /**
  * WSTransport
  *
  * @class WSTransport
  * @extends EventEmitter
  */
-export class WSTransport extends EventEmitter {
+export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
 
     packetAssembler: PacketAssembler;
     name: string;
@@ -121,7 +123,7 @@ constructor() {
  *  - only one chunk can be created at a time.
  *  - a created chunk should be committed using the ```write``` method before an other one is created.
  */
-public createChunk(msg_type, chunk_type: string, length: number): ArrayBuffer {
+public createChunk(msg_type: string, chunk_type: string, length: number): ArrayBuffer {
 
     assert(msg_type === 'MSG');
     assert(this._pending_buffer === undefined, 'createChunk has already been called ( use write first)');
@@ -138,10 +140,10 @@ public createChunk(msg_type, chunk_type: string, length: number): ArrayBuffer {
 
 
 
-protected _write_chunk(message_chunk) {
+protected _write_chunk(message_chunk: ArrayBuffer) {
 
     if (this._socket) {
-        this.bytesWritten += message_chunk.length;
+        this.bytesWritten += message_chunk.byteLength;
         this.chunkWrittenCount ++;
         this._socket.send(message_chunk);
     }
@@ -172,7 +174,7 @@ public write(message_chunk: ArrayBuffer) {
 }
 
 
-protected _fulfill_pending_promises(err, data?) {
+protected _fulfill_pending_promises(err: Error, data?: DataView) {
 
     this._cleanup_timers();
 
@@ -187,7 +189,7 @@ protected _fulfill_pending_promises(err, data?) {
 
 }
 
-protected _on_message_received(message_chunk) {
+protected _on_message_received(message_chunk: DataView) {
     const has_callback = this._fulfill_pending_promises(null, message_chunk);
     this.chunkReadCount ++;
 
@@ -219,7 +221,7 @@ protected _start_timeout_timer() {
 
 }
 
-public on_socket_closed(err) {
+public on_socket_closed(err: Error) {
 
     if (this._on_socket_closed_called) {
         return;
@@ -234,7 +236,7 @@ public on_socket_closed(err) {
     this.emit('socket_closed', err || null);
 }
 
-public on_socket_ended(err) {
+public on_socket_ended(err: Error) {
 
     assert(!this._on_socket_ended_called);
     this._on_socket_ended_called = true; // we don't want to send ende event twice ...
@@ -246,7 +248,7 @@ public on_socket_ended(err) {
     this.emit('close', err || null);
 }
 
-protected _on_socket_ended_message =  function(err) {
+protected _on_socket_ended_message =  function(err: Error) {
     if (this.__disconnecting__) {
         return;
     }
@@ -364,7 +366,7 @@ protected _install_socket(socket: WebSocket) {
  * @param callback.messageChunk {Buffer|null}
  * @protected
  */
-protected _install_one_time_message_receiver(callback) {
+protected _install_one_time_message_receiver(callback: Function) {
 
 
     assert(!this._the_callback, 'callback already set');
@@ -382,7 +384,7 @@ protected _install_one_time_message_receiver(callback) {
  * @async
  * @param callback
  */
-public disconnect(callback) {
+public disconnect(callback: Function) {
 
     assert('function' === typeof callback, 'expecting a callback function, but got ' + callback);
 

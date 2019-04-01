@@ -5,7 +5,18 @@
 
 import {BinaryStreamSizeCalculator, DataStream} from '../basic-types/DataStream';
 
-export abstract class BaseUAObject {
+
+
+export interface IEncodable {
+    encode(stream: DataStream|BinaryStreamSizeCalculator): void;
+    decode(stream: DataStream): void;
+}
+
+export interface IEncodableConstructor {
+    new(): IEncodable;
+}
+
+export abstract class BaseUAObject implements IEncodable{
 
 /**
  * Encode the object to the binary stream.
@@ -14,7 +25,7 @@ export abstract class BaseUAObject {
  * @param stream {BinaryStream}
  * @param options {BinaryStream}
  */
-public abstract encode(stream: DataStream|BinaryStreamSizeCalculator);
+public abstract encode(stream: DataStream|BinaryStreamSizeCalculator): void;
 
 /**
  * Decode the object from the binary stream.
@@ -23,7 +34,7 @@ public abstract encode(stream: DataStream|BinaryStreamSizeCalculator);
  * @param stream {BinaryStream}
  * @param options {Object}
  */
-public abstract decode(stream: DataStream);
+public abstract decode(stream: DataStream): void;
 
 /**
  * Calculate the required size to store this object in a binary stream.

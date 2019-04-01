@@ -81,6 +81,9 @@ const ChunkManager_options = [
     'writeSequenceHeaderFunc',
     'writeHeaderFunc'
 ];
+
+export type ChunkManagerEvents = 'chunk';
+
 /**
  * @class ChunkManager
  * @param options {Object}
@@ -97,7 +100,7 @@ const ChunkManager_options = [
  * @extends EventEmitter
  * @constructor
  */
-export class ChunkManager extends EventEmitter {
+export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
     chunkSize: any;
     headerSize: any;
     writeHeaderFunc: any;

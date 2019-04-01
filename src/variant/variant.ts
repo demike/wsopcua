@@ -209,7 +209,7 @@ registerSpecialVariantEncoder(Variant, 'Variant');
 
 
 
-export function isValidVariant(arrayType: VariantArrayType, dataType: DataType, value, dimensions) {
+export function isValidVariant(arrayType: VariantArrayType, dataType: DataType, value: any, dimensions?: number[]) {
 
     assert(dataType, 'expecting a variant type');
 
@@ -224,7 +224,7 @@ export function isValidVariant(arrayType: VariantArrayType, dataType: DataType, 
     }
 }
 
-function isValidScalarVariant(dataType, value): boolean {
+function isValidScalarVariant(dataType: DataType, value: any): boolean {
 
     assert(value === null || DataType.Int64 === dataType || DataType.ByteString === dataType || DataType.UInt64 === dataType || !(value instanceof Array));
     assert(value === null || !(value instanceof Int32Array));
@@ -259,7 +259,7 @@ function isValidScalarVariant(dataType, value): boolean {
     }
 }
 
-function isValidArrayVariant(dataType, value): boolean {
+function isValidArrayVariant(dataType: DataType, value: any): boolean {
 
     if (dataType === DataType.Float && value instanceof Float32Array) {
         return true;
@@ -289,7 +289,7 @@ function isValidArrayVariant(dataType, value): boolean {
 }
 
 /*istanbul ignore next*/
-function isValidMatrixVariant(dataType, value, dimensions): boolean {
+function isValidMatrixVariant(dataType: DataType, value: any, dimensions?: number[]): boolean {
 
     if (!dimensions) {
         return false;
@@ -322,7 +322,7 @@ function get_decoder(dataType: DataType) {
 }
 
 
-function encodeGeneralArray(dataType: DataType, stream, value) {
+function encodeGeneralArray(dataType: DataType, stream: DataStream, value: any) {
 
     const arr = value || [];
     assert(arr instanceof Array);
@@ -335,7 +335,7 @@ function encodeGeneralArray(dataType: DataType, stream, value) {
     }
 }
 
-function encodeVariantArray(dataType, stream: DataStream, value) {
+function encodeVariantArray(dataType: DataType, stream: DataStream, value: any) {
 
     if (value.buffer && value.buffer instanceof ArrayBuffer) {
         try {
@@ -349,7 +349,7 @@ function encodeVariantArray(dataType, stream: DataStream, value) {
     return encodeGeneralArray(dataType, stream, value);
 }
 
-function decodeGeneralArray(dataType, stream, length = 0xFFFFFFFF) {
+function decodeGeneralArray(dataType: DataType, stream: DataStream, length: number = 0xFFFFFFFF) {
 
     length = (length === 0xFFFFFFFF) ? ec.decodeUInt32(stream) : length;
 
@@ -396,7 +396,7 @@ function decodeVariantArray(dataType: DataType, stream: DataStream) {
     return decodeGeneralArray(dataType, stream, length);
 }
 
-function calculate_product(array) {
+function calculate_product(array: number[]) {
     return array.reduce(function (n, p) {
         return n * p;
     }, 1);

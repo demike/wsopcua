@@ -4,8 +4,9 @@ import {DataStream} from '../basic-types/DataStream';
 
 import {TCPErrorMessage} from './TCPErrorMessage';
 import {readMessageHeader} from '../chunkmanager';
+import { IEncodable, IEncodableConstructor } from '../factory/factories_baseobject';
 
-function is_valid_msg_type(msgType) {
+function is_valid_msg_type(msgType: string) {
     assert(['HEL', 'ACK', 'ERR',   // Connection Layer
         'OPN', 'MSG', 'CLO'    // OPC Unified Architecture, Part 6 page 36
     ].indexOf(msgType) >= 0, 'invalid message type  ' + msgType);
@@ -13,7 +14,7 @@ function is_valid_msg_type(msgType) {
 }
 
 
-export function decodeMessage(stream: DataStream, ClassName) {
+export function decodeMessage(stream: DataStream, ClassName: IEncodableConstructor) {
 
     assert(stream instanceof DataStream);
     assert(ClassName instanceof Function, ' expecting a function for ' + ClassName);
@@ -36,7 +37,7 @@ export function decodeMessage(stream: DataStream, ClassName) {
 
 
 
-export function packTcpMessage(msgType, encodableObject) {
+export function packTcpMessage(msgType: string, encodableObject: IEncodable) {
 
     assert(is_valid_msg_type(msgType));
 
@@ -66,7 +67,7 @@ export function parseEndpointUrl(endpointUrl: string) {
         address: matches[4] || ''
     };
 }
-export function is_valid_endpointUrl(endpointUrl) {
+export function is_valid_endpointUrl(endpointUrl: string) {
     const e = parseEndpointUrl(endpointUrl);
     return e.hasOwnProperty('hostname');
 }
@@ -77,11 +78,11 @@ export function is_valid_endpointUrl(endpointUrl) {
  * @type {{
  *     msgType: String,
  *     messageContent: Object,
- *     binaryStream: BinaryStream
+ *     binaryStream: DataStream
  * }}
  */
 
-export function writeTCPMessageHeader(msgType, chunkType, total_length, stream) {
+export function writeTCPMessageHeader(msgType: string, chunkType: string, total_length: number, stream: DataStream|ArrayBuffer) {
 
     if (stream instanceof ArrayBuffer) {
         stream = new DataStream(stream);
@@ -98,7 +99,7 @@ export function writeTCPMessageHeader(msgType, chunkType, total_length, stream) 
     stream.setUint32(total_length);
 }
 
-function encodeMessage(msgType, messageContent, stream) {
+function encodeMessage(msgType: string, messageContent: IEncodable, stream: DataStream) {
 
     // the length of the message, in bytes. (includes the 8 bytes of the message header)
     const total_length = DataStream.binaryStoreSize(messageContent) + 8;

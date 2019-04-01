@@ -106,7 +106,7 @@ constructor(options: OPCUAClientOptions) {
 }
 
 
-protected _nextSessionName() {
+protected _nextSessionName(): string {
     if (!this.___sessionName_counter) {
         this.___sessionName_counter = 0;
     }
@@ -139,7 +139,7 @@ protected _getApplicationUri(): Promise<string> {
 }
 
 
-protected __resolveEndPoint() {
+protected __resolveEndPoint(): boolean{
 
     this.securityPolicy = this.securityPolicy || SecurityPolicy.None;
 
@@ -172,7 +172,7 @@ protected __resolveEndPoint() {
     return true;
 }
 
-protected _createSession(callback) {
+protected _createSession(callback): void {
     assert(typeof callback === 'function');
     assert(this._secureChannel);
     if (!this.__resolveEndPoint() || !this.endpoint) {
@@ -188,7 +188,8 @@ protected _createSession(callback) {
     this.__createSession_step2(session, callback);
 }
 
-protected static verifyEndpointDescriptionMatches(client: OPCUAClient, responseServerEndpoints: endpoints_service.EndpointDescription[]) {
+protected static verifyEndpointDescriptionMatches(client: OPCUAClient,
+     responseServerEndpoints: endpoints_service.EndpointDescription[]): boolean {
     // The Server returns its EndpointDescriptions in the response. Clients use this information to
     // determine whether the list of EndpointDescriptions returned from the Discovery Endpoint matches
     // the Endpoints that the Server has. If there is a difference then the Client shall close the
@@ -208,7 +209,7 @@ protected static verifyEndpointDescriptionMatches(client: OPCUAClient, responseS
 }
 
 
-protected async __createSession_step2(session: ClientSession, callback) {
+protected async __createSession_step2(session: ClientSession, callback: ResponseCallback<ClientSession>) {
 
     assert(typeof callback === 'function');
     assert(this._secureChannel);
@@ -306,7 +307,8 @@ public computeClientSignature(channel, serverCertificate, serverNonce): Signatur
 }
 
 
-public createUserIdentityToken(session: ClientSession, userIdentityToken: UserIdentityToken|UserIdentityInfo, callback) {
+public createUserIdentityToken(session: ClientSession, userIdentityToken: UserIdentityToken|UserIdentityInfo,
+    callback: ResponseCallback<UserIdentityToken>): void {
     assert('function' === typeof callback);
 
     if (null === this._userIdentityInfo) {
@@ -341,7 +343,7 @@ public createUserIdentityToken(session: ClientSession, userIdentityToken: UserId
 
 
 // see OPCUA Part 4 - $7.35
-protected _activateSession(session: ClientSession, callback) {
+protected _activateSession(session: ClientSession, callback: ResponseCallback<ClientSession>) {
 
     assert(typeof callback === 'function');
 
@@ -830,11 +832,11 @@ public withSubscription(endpointUrl, subscriptionParameters, innerFunc, callback
 }
 }
 
-function isAnonymous(userIdentityInfo) {
+function isAnonymous(userIdentityInfo): boolean {
     return !userIdentityInfo || (!userIdentityInfo.userName && !userIdentityInfo.password);
 }
 
-function isUserNamePassword(userIdentityInfo) {
+function isUserNamePassword(userIdentityInfo): boolean {
     const res = (userIdentityInfo.userName !== undefined) && (userIdentityInfo.password !== undefined);
     return res;
 }
@@ -849,7 +851,7 @@ function findUserTokenPolicy(endpoint_description: endpoints_service.EndpointDes
     return r.length === 0 ? null : r[0];
 }
 
-function createAnonymousIdentityToken(session) {
+function createAnonymousIdentityToken(session: ClientSession): session_service.AnonymousIdentityToken {
 
     const endpoint_desc = session.endpoint;
     assert(endpoint_desc instanceof EndpointDescription);
@@ -861,7 +863,7 @@ function createAnonymousIdentityToken(session) {
     return new AnonymousIdentityToken({policyId: userTokenPolicy.policyId});
 }
 
-function createUserNameIdentityToken(session, userName, password) {
+function createUserNameIdentityToken(session: ClientSession, userName: string, password: string): session_service.UserNameIdentityToken {
 
     // assert(endpoint instanceof EndpointDescription);
     assert(userName === null || typeof userName === 'string');
@@ -889,7 +891,7 @@ function createUserNameIdentityToken(session, userName, password) {
 
     // if the security policy is not specified we use the session security policy
     if (securityPolicy === SecurityPolicy.Invalid) {
-        securityPolicy = session._client._secureChannel.securityPolicy;
+        securityPolicy = (<any>session)._client._secureChannel.securityPolicy;
         assert(securityPolicy);
     }
 

@@ -31,6 +31,7 @@ import { ICreateSubscriptionRequest } from '../generated/CreateSubscriptionReque
 import { MonitoredItemBase } from './MonitoredItemBase';
 import { ErrorCallback } from './client_base';
 
+export type ClientSubscriptionEvents = 'started'|'internal_error'|'status_changed'|'raw_notification'|'keepalive'|'received_notifications'|'terminated'|'item_added';
 
 /**
  * a object to manage a subscription on the client side.
@@ -55,7 +56,7 @@ import { ErrorCallback } from './client_base';
  *    "keepalive",                             : the subscription has received a keep alive message from the server
  *    "received_notifications",                : the subscription has received one or more notification
  */
-export class ClientSubscription extends EventEmitter {
+export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
 
     protected hasTimedOut = false;
 
@@ -742,7 +743,7 @@ public recreateSubscriptionAndMonitoredItem(callback) {
 
         this.__create_subscription.bind(this),
 
-        function (cb: ErrorCallback) {
+        (cb: ErrorCallback) => {
 
             const test = this._publishEngine.getSubscription(<number>this.subscriptionId);
             assert(test === this);

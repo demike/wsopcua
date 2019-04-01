@@ -9,7 +9,7 @@ import {get_clock_tick} from '../utils';
 
 import {PacketAssembler} from '../packet-assembler/packet_assembler';
 import {readMessageHeader} from '../chunkmanager';
-import { concatTypedArrays, concatArrayBuffers } from '../basic-types/array';
+import { concatArrayBuffers } from '../basic-types/array';
 
 export function readRawMessageHeader(data: DataView | ArrayBuffer ) {
     const messageHeader = readMessageHeader(new DataStream(data));
@@ -19,7 +19,9 @@ export function readRawMessageHeader(data: DataView | ArrayBuffer ) {
     };
 }
 
-export abstract class MessageBuilderBase extends EventEmitter {
+export type MessageBuilderEvents = 'start_chunk'|'chunk'|'new_token'|'full_message_body'|'message'|'error'|'invalid_sequence_number';
+
+export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEvents> {
     signatureLength: number;
     options: any;
     packetAssembler: PacketAssembler;

@@ -6,11 +6,24 @@ import {assert} from "../assert";
 
 export interface ISubscriber {
     watchdogReset(): void;
+    _watchDog: WatchDog;
+    _watchDogData: IWatchDogData;
+    keepAlive?: Function;
     //onClientSeen(d : Date) : void;
 }
 
+export interface IWatchDogData {
+    key: string;
+    subscriber: ISubscriber;
+    timeout: number;
+    last_seen: number;
+    visitCount: number;
+};
+
+export type WatchDogEvents = 'timeout';
+
 export class WatchDog extends EventEmitter{
-    protected _subscriber: {};
+    protected _subscriber: {[key: string] : ISubscriber};
     protected _counter: number;
     protected _current_time: number;
     protected _visit_subscriber_b: any;
@@ -30,7 +43,7 @@ export class WatchDog extends EventEmitter{
         self._current_time = Date.now();
         var expired_subscribers = [];
         for (let k in this._subscriber) {
-            let watchDogData = this._subscriber[k];
+            let watchDogData = this._subscriber[k]._watchDogData;
             watchDogData.visitCount += 1;
             if (has_expired(watchDogData,this._current_time)) {
                 expired_subscribers.push(watchDogData)
@@ -60,7 +73,7 @@ export class WatchDog extends EventEmitter{
      * @param timeout
      * @return {number}
      */
-    addSubscriber(subscriber : ISubscriber, timeout): number {
+    addSubscriber(subscriber : ISubscriber, timeout: number): number {
         this._current_time = Date.now();
         timeout = timeout || 1000;
         assert(Number.isFinite(timeout), " invalid timeout ");
@@ -88,7 +101,7 @@ export class WatchDog extends EventEmitter{
         }
         return key;
     }
-    removeSubscriber(subscriber) {
+    removeSubscriber(subscriber: ISubscriber) {
         if (!subscriber._watchDog) {
             return; // already removed !!!
         }
@@ -131,7 +144,7 @@ export class WatchDog extends EventEmitter{
         
 }
 
-function has_expired(watchDogData, currentTime) {
+function has_expired(watchDogData: IWatchDogData, currentTime: number) {
     var elapsed_time = currentTime - watchDogData.last_seen;
     return elapsed_time > watchDogData.timeout;
 }

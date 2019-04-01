@@ -17,8 +17,11 @@ enum FunctionCallState {
     // The call was aborted.
     ABORTED = 3
   };
+
+export type FunctionCallEvents = 'abort'|'backoff';
+
 // Wraps a function to be called in a backoff loop.
-export class FunctionCall extends EventEmitter{
+export class FunctionCall extends EventEmitter<FunctionCallEvents>{
 
     private state_: FunctionCallState;
     protected retryPredicate_: (err: any) => boolean;

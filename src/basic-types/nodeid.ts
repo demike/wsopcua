@@ -47,12 +47,12 @@ function nodeID_encodingByte(nodeId: NodeId | ExpandedNodeId): number {
 
     if (nodeId.identifierType === NodeIdType.NUMERIC) {
 
-        if (is_uint8(nodeId.value) && (!nodeId.namespace) &&
+        if (is_uint8(<number>nodeId.value) && (!nodeId.namespace) &&
             !(<ExpandedNodeId>nodeId).namespaceUri && !(<ExpandedNodeId>nodeId).serverIndex) {
 
             encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.TwoBytes);
 
-        } else if (is_uint16(nodeId.value) && is_uint8(nodeId.namespace) &&
+        } else if (is_uint16(<number>nodeId.value) && is_uint8(nodeId.namespace) &&
             !(<ExpandedNodeId>nodeId).namespaceUri && !(<ExpandedNodeId>nodeId).serverIndex) {
 
             encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.FourBytes);
