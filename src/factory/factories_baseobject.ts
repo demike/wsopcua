@@ -53,7 +53,7 @@ binaryStoreSize(): number {
  * @return {String}
  */
 toString(): string {
-    return this.toJSON();
+    return JSON.stringify(this);
 }
 
 
@@ -67,13 +67,6 @@ isValid(): boolean {
     // TODO implement me
     return true;
 }
-
-
-
-toJSON(): string {
-    return JSON.stringify(this);
-}
-
 
 public abstract clone(target: any): BaseUAObject;
 
