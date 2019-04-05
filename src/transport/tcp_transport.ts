@@ -14,6 +14,7 @@ import {writeTCPMessageHeader} from './tools';
 import {readRawMessageHeader} from './message_builder_base';
 
 import {debugLog, doDebug} from '../common/debug';
+import { ResponseCallback } from '../client/client_base';
 
 let fakeSocket = {invalid: true};
 
@@ -372,7 +373,7 @@ protected _install_socket(socket) {
  * @param callback.messageChunk {Buffer|null}
  * @protected
  */
-protected _install_one_time_message_receiver(callback) {
+protected _install_one_time_message_receiver(callback: ResponseCallback<DataView>) {
 
 
     assert(!this._the_callback, 'callback already set');

@@ -21,13 +21,13 @@ export type PacketAssemblerEvents = 'newMessage'|'message';
  * @constructor
  */
 export class PacketAssembler extends EventEmitter<PacketAssemblerEvents> {
-    packet_info: any;
-    minimumSizeInBytes: any;
-    readMessageFunc: any;
+    packet_info: string;
+    minimumSizeInBytes: number;
+    readMessageFunc: (buf: DataView) => string;
     currentLength: number;
     expectedLength: number;
     protected _stack: DataView[];
-constructor (options: { readMessageFunc: any; minimumSizeInBytes?: any; }) {
+constructor (options: { readMessageFunc: (buf: DataView) => any; minimumSizeInBytes?: number; }) {
     super();
     this._stack = [];
     this.expectedLength = 0;

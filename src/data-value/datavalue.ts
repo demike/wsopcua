@@ -15,6 +15,7 @@ registerSpecialVariantEncoder(DataValue, 'DataValue');
 import {getCurrentClock} from '../date-time/date_time';
 
 import {Variant, sameVariant, VariantArrayType} from '../variant';
+import { NumericRange } from '../wsopcua';
 
 
 // DataValue.prototype.toString = function () {
@@ -102,14 +103,14 @@ function _clone_with_array_replacement(dataValue: DataValue, result) {
     });
 }
 
-function canRange(dataValue) {
+function canRange(dataValue: DataValue) {
     return dataValue.value && (( dataValue.value.arrayType !== VariantArrayType.Scalar ) ||
         ( (dataValue.value.arrayType === VariantArrayType.Scalar) && (dataValue.value.dataType === DataType.ByteString) ) ||
         ( (dataValue.value.arrayType === VariantArrayType.Scalar) && (dataValue.value.dataType === DataType.String) ));
 }
 
 
-export function extractRange(dataValue: DataValue, indexRange) {
+export function extractRange(dataValue: DataValue, indexRange: NumericRange) {
 
     // xx console.log("xxxxxxx indexRange =".yellow,indexRange ? indexRange.toString():"<null>") ;
     // xx console.log("         dataValue =",dataValue.toString());
@@ -126,7 +127,7 @@ export function extractRange(dataValue: DataValue, indexRange) {
     return dataValue;
 }
 
-function sameDate(date1, date2) {
+function sameDate(date1: Date, date2: Date) {
 
     if (date1 === date2) {
         return true;
@@ -140,7 +141,7 @@ function sameDate(date1, date2) {
     return date1.getTime() === date2.getTime();
 }
 
-export function sourceTimestampHasChanged(dataValue1, dataValue2) {
+export function sourceTimestampHasChanged(dataValue1: DataValue, dataValue2: DataValue) {
 
     assert(dataValue1, 'expecting valid dataValue1');
     assert(dataValue2, 'expecting valid dataValue2');
@@ -150,7 +151,7 @@ export function sourceTimestampHasChanged(dataValue1, dataValue2) {
     return hasChanged;
 }
 
-export function serverTimestampHasChanged(dataValue1, dataValue2) {
+export function serverTimestampHasChanged(dataValue1: DataValue, dataValue2: DataValue) {
     assert(dataValue1, 'expecting valid dataValue1');
     assert(dataValue2, 'expecting valid dataValue2');
     const hasChanged =
@@ -159,22 +160,24 @@ export function serverTimestampHasChanged(dataValue1, dataValue2) {
     return hasChanged;
 }
 
-export function timestampHasChanged(dataValue1, dataValue2, timestampsToReturn) {
+export function timestampHasChanged(dataValue1: DataValue, dataValue2: DataValue, timestampsToReturn?: TimestampsToReturn) {
 
 // TODO:    timestampsToReturn = timestampsToReturn || { key: "Neither"};
-    if (!timestampsToReturn) {
+    if (timestampsToReturn === undefined || timestampsToReturn === null) {
         return sourceTimestampHasChanged(dataValue1, dataValue2) || serverTimestampHasChanged(dataValue1, dataValue2);
     }
-    switch (timestampsToReturn.key) {
-        case 'Neither':
+    switch (timestampsToReturn) {
+        case TimestampsToReturn.Neither:
             return false;
-        case 'Both':
+        case TimestampsToReturn.Both:
             return sourceTimestampHasChanged(dataValue1, dataValue2) || serverTimestampHasChanged(dataValue1, dataValue2);
-        case 'Source':
+        case TimestampsToReturn.Source:
             return sourceTimestampHasChanged(dataValue1, dataValue2);
-        default:
-            assert(timestampsToReturn.key === 'Server');
+        case TimestampsToReturn.Server:
             return serverTimestampHasChanged(dataValue1, dataValue2);
+        default:
+            throw new Error('timesampHasChanged function called with TimestampsToReturn.Invalid');
+
     }
 //    return sourceTimestampHasChanged(dataValue1,dataValue2) || serverTimestampHasChanged(dataValue1,dataValue2);
 }

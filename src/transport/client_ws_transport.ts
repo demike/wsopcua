@@ -26,6 +26,7 @@ import {readMessageHeader} from '../chunkmanager';
 
 
 import {decodeMessage} from './tools';
+import { ErrorCallback } from '../client/client_base';
 
 function createClientSocket(endpointUrl: string): WebSocket {
     // create a socket based on Url
@@ -141,10 +142,10 @@ public on_socket_ended(err) {
  * @method connect
  * @async
  * @param endpointUrl {String}
- * @param callback {Function} the callback function
+ * @param callback {ErrorCallback} the callback function
  * @param [options={}]
  */
-public connect(endpointUrl: string, callback: Function, options?) {
+public connect(endpointUrl: string, callback: ErrorCallback, options?) {
 
     assert('function' === typeof callback);
 

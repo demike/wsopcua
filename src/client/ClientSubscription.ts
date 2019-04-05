@@ -163,7 +163,7 @@ constructor (session: ClientSession, options: ICreateSubscriptionRequest) {
 }
 
 
-protected __create_subscription(callback) {
+protected __create_subscription(callback: ErrorCallback) {
 
     assert ('function' === typeof callback);
 
@@ -348,7 +348,7 @@ public onNotificationMessage(notificationMessage: subscription_service.Notificat
 
 
 
-protected _terminate_step2(callback) {
+protected _terminate_step2(callback: ErrorCallback) {
     setImmediate(() => {
         /**
          * notify the observers tha the client subscription has terminated
@@ -366,7 +366,7 @@ protected _terminate_step2(callback) {
  * @param callback
  *
  */
-public terminate(callback) {
+public terminate(callback: ErrorCallback) {
 
     assert('function' === typeof callback, 'expecting a callback function');
 
@@ -386,7 +386,7 @@ public terminate(callback) {
 
         this.session.deleteSubscriptions({
             subscriptionIds: [<number>this._subscriptionId]
-        }, (err) => {
+        }, (err: Error) => {
 
             if (err) {
                 /**
@@ -415,7 +415,7 @@ public nextClientHandle(): number {
 }
 
 
-public _add_monitored_item(clientHandle, monitoredItem) {
+public _add_monitored_item(clientHandle: number, monitoredItem: MonitoredItemBase) {
     assert(this.isActive(), 'subscription must be active and not terminated');
     assert(monitoredItem.monitoringParameters.clientHandle === clientHandle);
     this.monitoredItems[clientHandle] = monitoredItem;
@@ -429,7 +429,7 @@ public _add_monitored_item(clientHandle, monitoredItem) {
 }
 
 
-protected _wait_for_subscription_to_be_ready(done) {
+protected _wait_for_subscription_to_be_ready(done: ErrorCallback) {
 
     const self = this;
 
@@ -475,7 +475,7 @@ protected _wait_for_subscription_to_be_ready(done) {
  * @param requestedParameters.queueSize        {Counter}
  * @param requestedParameters.discardOldest    {Boolean}
  * @param timestampsToReturn                   {TimestampsToReturn} //{TimestampsToReturnId}
- * @param  [done]                              {Function} optional done callback
+ * @param  [done]                              {(err: Error|null, mItem?: MonitoredItem) => void} optional done callback
  * @return {ClientMonitoredItem}
  *
  *
@@ -687,7 +687,7 @@ protected _remove(monitoredItem: MonitoredItemBase) {
     delete this.monitoredItems[clientHandle];
 }
 
-public _delete_monitored_items(monitoredItems: MonitoredItemBase[], callback): void {
+public _delete_monitored_items(monitoredItems: MonitoredItemBase[], callback: ErrorCallback): void {
     assert(Array.isArray(monitoredItems));
 
     assert(this.isActive());
@@ -708,11 +708,11 @@ public _delete_monitored_items(monitoredItems: MonitoredItemBase[], callback): v
     });
 }
 
-protected _delete_monitored_item(monitoredItem: MonitoredItemBase, callback): void {
+protected _delete_monitored_item(monitoredItem: MonitoredItemBase, callback: ErrorCallback): void {
     this._delete_monitored_items([monitoredItem], callback);
 }
 
-public setPublishingMode(publishingEnabled, callback): void {
+public setPublishingMode(publishingEnabled: boolean, callback: ErrorCallback): void {
     assert('function' === typeof callback);
     this.session.setPublishingMode(publishingEnabled, <number>this._subscriptionId, (err, results) => {
         if (err) {
@@ -731,7 +731,7 @@ public setPublishingMode(publishingEnabled, callback): void {
  *  utility function to recreate new subscription
  *  @method recreateSubscriptionAndMonitoredItem
  */
-public recreateSubscriptionAndMonitoredItem(callback) {
+public recreateSubscriptionAndMonitoredItem(callback: ErrorCallback) {
 
     debugLog('ClientSubscription#recreateSubscriptionAndMonitoredItem');
 

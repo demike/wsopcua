@@ -7,7 +7,7 @@ import { MessageSecurityMode } from '../service-secure-channel';
 import { SecurityPolicy, getCryptoFactory, toUri,
             /* **nomsgcrypt** getOptionsForSymmetricSignAndEncrypt,*/ ICryptoFactory } from './security_policy';
 import { MessageBuilder } from './message_builder';
-import { OPCUAClientBase, ErrorCallback } from '../client/client_base';
+import { OPCUAClientBase, ErrorCallback, ResponseCallback } from '../client/client_base';
 
 import * as log from 'loglevel';
 import {doDebug, debugLog, hexDump} from '../common/debug';
@@ -462,7 +462,7 @@ protected _install_security_token_watchdog() {
     }
 
     assert(this._securityTokenTimeoutId === null);
-    this._securityTokenTimeoutId = setTimeout( () => {
+    this._securityTokenTimeoutId = window.setTimeout( () => {
         this._securityTokenTimeoutId = null;
         this._on_security_token_about_to_expire();
 
@@ -816,7 +816,7 @@ public dispose() {
 
 }
 
-public abortConnection(callback) {
+public abortConnection(callback: () => void ) {
     assert('function' === typeof callback);
 
     if (this.__call) {
@@ -918,7 +918,7 @@ public makeRequestId() {
  *    ```
  *
  */
-public performMessageTransaction(requestMessage: any, callback: Function) {
+public performMessageTransaction(requestMessage: any, callback: ResponseCallback<any>) {
     assert('function' === typeof callback);
     this._performMessageTransaction('MSG', requestMessage, callback);
 }
@@ -951,7 +951,7 @@ public isOpened() {
  *
  *
  */
-protected _performMessageTransaction(msgType, requestMessage, callback) {
+protected _performMessageTransaction(msgType, requestMessage, callback: ResponseCallback<any>) {
 
     /* jshint validthis: true */
 
@@ -1386,7 +1386,7 @@ public close(callback: ErrorCallback) {
     protected __in_normal_close_operation = false;
     protected _renew_security_token_requested = 0;
     protected _timedout_request_count = 0;
-    protected _securityTokenTimeoutId = null;
+    protected _securityTokenTimeoutId: number = null;
 
    // protected _transport :
     protected transportTimeout: number;

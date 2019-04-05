@@ -23,6 +23,8 @@ import { MonitoredItemCreateResult } from '../generated/MonitoredItemCreateResul
 
 import { StatusCode,ExtensionObject, NodeId} from '../basic-types';
 import { IReadValueId } from '../generated/ReadValueId';
+import { ResponseCallback, ErrorCallback } from './client_base';
+import { ISetMonitoringModeRequest } from '../generated';
 
 export type MonitoredItemEvents = 'initialized'|'changed'|'terminated'|'err';
 
@@ -188,7 +190,8 @@ protected _after_create(monitoredItemResult : MonitoredItemCreateResult) {
     }
 };
 
-public static _toolbox_monitor(subscription : ClientSubscription, timestampsToReturn, monitoredItems : MonitoredItemBase[], done) {
+public static _toolbox_monitor(subscription : ClientSubscription, 
+    timestampsToReturn: TimestampsToReturn, monitoredItems : MonitoredItemBase[], done: ErrorCallback) {
     assert(('function' === typeof done) && (typeof subscription.subscriptionId === "number"));
     const itemsToCreate : subscription_service.MonitoredItemCreateRequest[] = [];
     for (let i = 0; i < monitoredItems.length; i++) {
@@ -233,7 +236,8 @@ public static _toolbox_monitor(subscription : ClientSubscription, timestampsToRe
     });
 
 };
-public static _toolbox_modify(subscription : ClientSubscription, monitoredItems : MonitoredItemBase[], parameters : IMonitoringParameters , timestampsToReturn : TimestampsToReturn, callback) {
+public static _toolbox_modify(subscription : ClientSubscription, monitoredItems : MonitoredItemBase[], parameters : IMonitoringParameters , 
+    timestampsToReturn: TimestampsToReturn, callback: ResponseCallback<subscription_service.MonitoredItemModifyResult[]>) {
 
     assert(callback === undefined || ('function' === typeof callback));
 
@@ -274,19 +278,19 @@ public static _toolbox_setMonitoringMode(subscription : ClientSubscription, moni
         return monitoredItem._monitoredItemId;
     });
 
-    const setMonitoringModeRequest = {
-        subscriptionId: subscription.subscriptionId,
+    const setMonitoringModeRequest: ISetMonitoringModeRequest = {
+        subscriptionId: <number>subscription.subscriptionId,
         monitoringMode: monitoringMode,
         monitoredItemIds: monitoredItemIds
     };
-    subscription.session.setMonitoringMode(setMonitoringModeRequest, (err, results) => {
+    subscription.session.setMonitoringMode(setMonitoringModeRequest, (err, response) => {
         if (!err) {
             monitoredItems.forEach((monitoredItem) => {
                 monitoredItem._monitoringMode = monitoringMode;
             });
         }
         if (callback) {
-            callback(err, results ? results[0] : null);
+            callback(err, response ? response.results : null);
         }
     });
 

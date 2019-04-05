@@ -100,7 +100,7 @@ function _ask_for_subscription_republish(session: ClientSession, callback: Error
 
     debugLog('_ask_for_subscription_republish ');
     // xx assert(session.getPublishEngine().nbPendingPublishRequests === 0, "at this time, publish request queue shall still be empty");
-    session.getPublishEngine().republish((err) => {
+    session.getPublishEngine().republish((err: Error) => {
         if (session.hasBeenClosed()) {
             return callback(new Error('Cannot complete subscription republish due to session termination'));
         }
@@ -126,7 +126,7 @@ function repair_client_session_by_recreating_a_new_session(client: OPCUAClient, 
     // const listenerCountBefore = session.listenerCount();
 
     async_series([
-        function suspend_old_session_publish_engine(callback) {
+        function suspend_old_session_publish_engine(callback: ErrorCallback) {
             if (session.hasBeenClosed()) {
                 return callback(new Error('Cannot complete subscription republish due to session termination'));
             }
@@ -134,7 +134,7 @@ function repair_client_session_by_recreating_a_new_session(client: OPCUAClient, 
             session.getPublishEngine().suspend(true);
             callback();
         },
-        function create_new_session(callback) {
+        function create_new_session(callback: ErrorCallback) {
             if (session.hasBeenClosed()) {
                 return callback(new Error('Cannot complete subscription republish due to session termination'));
             }
@@ -142,7 +142,7 @@ function repair_client_session_by_recreating_a_new_session(client: OPCUAClient, 
             debugLog('    => creating a new session ....');
             // create new session, based on old session,
             // so we can reuse subscriptions data
-            (<any>client).__createSession_step2(session, function (err, _new_session) {
+            (<any>client).__createSession_step2(session, function (err: Error, _new_session: ClientSession) {
                 debugLog('    => creating a new session (based on old session data).... Done');
                 if (!err) {
                     new_session = _new_session;
@@ -151,20 +151,20 @@ function repair_client_session_by_recreating_a_new_session(client: OPCUAClient, 
                 callback(err);
             });
         },
-        function activate_new_session(callback) {
+        function activate_new_session(callback: ErrorCallback) {
 
             if (session.hasBeenClosed()) {
                 return callback(new Error('Cannot complete subscription republish due to session termination'));
             }
             debugLog('    => activating a new session ....');
 
-            (<any>client)._activateSession(new_session, function (err) {
+            (<any>client)._activateSession(new_session, function (err: Error) {
                 debugLog('    =>  activating a new session .... Done');
                 /// xx self._addSession(new_session);
                 callback(err);
             });
         },
-        function attempt_subscription_transfer(callback) {
+        function attempt_subscription_transfer(callback: ErrorCallback) {
 
             if (session.hasBeenClosed()) {
                 return callback(new Error('Cannot complete subscription republish due to session termination'));
@@ -218,7 +218,7 @@ function repair_client_session_by_recreating_a_new_session(client: OPCUAClient, 
                 }
                 debugLog('  new session subscriptionCount = ', new_session.getPublishEngine().subscriptionCount);
 
-                async_map(subscriptions_to_recreate, function recreate_subscription(subscriptionId, next: Function) {
+                async_map(subscriptions_to_recreate, function recreate_subscription(subscriptionId: number, next: () => void) {
 
                     if (!session.getPublishEngine().hasSubscription(subscriptionId)) {
                         debugLog('          => CANNOT RECREATE SUBSCRIPTION  ', subscriptionId);
@@ -241,7 +241,7 @@ function repair_client_session_by_recreating_a_new_session(client: OPCUAClient, 
 
             });
         },
-        function ask_for_subscription_republish(callback) {
+        function ask_for_subscription_republish(callback: ErrorCallback) {
             if (session.hasBeenClosed()) {
                 return callback(new Error('Cannot complete subscription republish due to session termination'));
             }
@@ -249,7 +249,7 @@ function repair_client_session_by_recreating_a_new_session(client: OPCUAClient, 
             //      call Republish
             return _ask_for_subscription_republish(new_session, callback);
         },
-        function start_publishing_as_normal(callback) {
+        function start_publishing_as_normal(callback: ErrorCallback) {
             if (session.hasBeenClosed()) {
                 return callback(new Error('Cannot complete subscription republish due to session termination'));
             }
@@ -269,7 +269,7 @@ export function repair_client_session(client: OPCUAClient, session: ClientSessio
         debugLog('TRYING TO REACTIVATE EXISTING SESSION ', session.sessionId.toString());
         debugLog('  SubscriptionIds :', session.getPublishEngine().getSubscriptionIds());
     }
-    (<any>client)._activateSession(session, function (err) {
+    (<any>client)._activateSession(session, function (err: Error) {
         //
         // Note: current limitation :
         //  - The reconnection doesn't work yet, if connection break is caused by a server that crashes and restarts.
@@ -290,9 +290,9 @@ export function repair_client_sessions(client: OPCUAClient, callback: ErrorCallb
     debugLog(' Starting sessions reactivation');
     // repair session
     const sessions = client.sessions;
-    async_map(sessions, function (session, next) {
+    async_map(sessions, function (session: ClientSession, next: ErrorCallback) {
         repair_client_session(client, session, next);
-    }, function (err, results) {
+    }, function (err: Error, results: any) {
         return callback(err);
     });
 }

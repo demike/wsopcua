@@ -9,6 +9,8 @@ import { TimestampsToReturn } from "../generated/TimestampsToReturn";
 import {MonitoredItemBase} from './MonitoredItemBase';
 
 import { IReadValueId } from '../generated/ReadValueId';
+import { ErrorCallback, ResponseCallback } from './client_base';
+import { MonitoredItemModifyResult } from '../service-subscription';
 
 /**
  * ClientMonitoredItem
@@ -56,7 +58,7 @@ public toString() : string {
  * @param  done {Function} the done callback
  * @async
  */
-public terminate(done: Function) {
+public terminate(done: ErrorCallback) {
 
     assert(!done || ('function' === typeof done));
     /**
@@ -75,10 +77,10 @@ public terminate(done: Function) {
 /**
  * @method _monitor
  * Creates the monitor item (monitoring mode = Reporting)
- * @param done {Function} callback
+ * @param done {ErrorCallback} callback
  * @private
  */
-public _monitor(done) {
+public _monitor(done: ErrorCallback) {
     assert(done === undefined || ('function' === typeof done));
     
     MonitoredItemBase._toolbox_monitor(this._subscription, this._timestampsToReturn, [this], (err) => {
@@ -100,7 +102,8 @@ public _monitor(done) {
  * @param [timestampsToReturn=null] {TimestampsToReturn}
  * @param callback {Function}
  */
-public modify(parameters, timestampsToReturn : TimestampsToReturn, callback) {
+public modify(parameters: IMonitoringParameters, 
+    timestampsToReturn : TimestampsToReturn, callback: ResponseCallback<MonitoredItemModifyResult>) {
     if ('function' === typeof timestampsToReturn) {
         callback = timestampsToReturn;
         timestampsToReturn = null;
@@ -115,7 +118,7 @@ public modify(parameters, timestampsToReturn : TimestampsToReturn, callback) {
     });
 };
 
-public setMonitoringMode(monitoringMode : MonitoringMode, callback) {
+public setMonitoringMode(monitoringMode: MonitoringMode, callback) {
     MonitoredItemBase._toolbox_setMonitoringMode(this._subscription, [this], monitoringMode, callback);
 };
 

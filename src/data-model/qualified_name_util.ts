@@ -1,6 +1,6 @@
 'use strict';
 
-import {QualifiedName} from '../generated/QualifiedName';
+import {QualifiedName, IQualifiedName} from '../generated/QualifiedName';
 import {assert} from '../assert';
 import { DataStream } from '../basic-types/DataStream';
 /**
@@ -13,11 +13,11 @@ import { DataStream } from '../basic-types/DataStream';
  *  stringToQualifiedName("Hello")   => {namespaceIndex: 0, name: "Hello"}
  *  stringToQualifiedName("3:Hello") => {namespaceIndex: 3, name: "Hello"}
  */
-export function stringToQualifiedName(value) {
+export function stringToQualifiedName(value: string) {
 
     const split_array = value.split(':');
     let namespaceIndex = 0;
-    if (!isNaN(parseFloat(split_array[0])) && isFinite(split_array[0]) &&
+    if (!isNaN(parseFloat(split_array[0])) && isFinite(<number><unknown>split_array[0]) &&
             Number.isInteger(parseFloat(split_array[0])) && split_array.length > 1) {
         namespaceIndex = parseInt(split_array[0]);
         split_array.shift();
@@ -27,13 +27,13 @@ export function stringToQualifiedName(value) {
 }
 
 
-export function coerceQualifyName(value) {
+export function coerceQualifyName(value: string| IQualifiedName) {
 
     if (!value) {
         return null;
     } else if (value instanceof QualifiedName) {
         return value;
-    } else if (typeof value === 'string' || value instanceof String) {
+    } else if (typeof value === 'string') {
         return stringToQualifiedName(value);
     } else {
         assert(value.hasOwnProperty('namespaceIndex'));

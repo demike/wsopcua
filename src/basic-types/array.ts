@@ -5,7 +5,7 @@ import {DataStream} from './DataStream';
  * @method encodeArray
  * @param arr {Array} the array to encode.
  * @param stream {DataStream}  the stream.
- * @param encode_element_func  {Function}  The  function to encode a single array element.
+ * @param encode_element_func  {(obj: any, stream: DataStream) => void}  The  function to encode a single array element.
  * @param encode_element_func.element {object}
  * @param encode_element_func.stream  {DataStream}  the stream.
  */
@@ -35,7 +35,7 @@ export function encodeArray (arr: Array<any>, stream: DataStream, encode_element
  *                      The  function to decode a single array element. This function returns the element decoded from the stream
  * @param decode_element_func.stream {DataStream}  the stream.
  */
-export function decodeArray (stream: DataStream, decode_element_func?: (stream: DataStream) => void ) {
+export function decodeArray<T> (stream: DataStream, decode_element_func?: (stream: DataStream) => T ): T[] {
 
 
     const length = stream.getInt32();

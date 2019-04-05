@@ -86,7 +86,7 @@ public update(options) {
  * @param messageChunkCallback   {Function}
  */
 public chunkSecureMessage(msgType: string, options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader,
-     message, messageChunkCallback) {
+     message, messageChunkCallback: (chunk: DataView) => void) {
 
     options = <any>options || {};
     assert('function' === typeof messageChunkCallback);

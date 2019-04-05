@@ -22,8 +22,7 @@ export function offset_factor_1601() {
 
 }
 
-const offset = offset_factor_1601[0];
-const factor = offset_factor_1601[1];
+const [offset, factor] = offset_factor_1601();
 
 const F = 0x100000000;
 const A = factor / F;
@@ -137,7 +136,7 @@ export function bn_hundredNanoSecondFrom1601ToDate_fast(high: number, low: numbe
 }
 
 
-let last_now_date = null;
+let last_now_date: Date = null;
 let last_picoseconds = 0;
 
 export function getCurrentClock() {
@@ -154,7 +153,7 @@ export function getCurrentClock() {
     };
 }
 
-export function coerceClock(timestamp, picoseconds) {
+export function coerceClock(timestamp: Date , picoseconds: number) {
     if (timestamp) {
         return {
             timestamp: timestamp,

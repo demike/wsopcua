@@ -14,6 +14,7 @@ import { MonitoringMode } from '../generated/MonitoringMode';
 
 import * as subscription_service from '../service-subscription';
 import { DataValue } from '../data-value';
+import { ErrorCallback, ResponseCallback } from './client_base';
 
 export type MonitoredItemGroupEvents = 'initialized'|'terminated'|'changed';
 
@@ -81,7 +82,7 @@ public toString(): string {
  * @param  done {Function} the done callback
  * @async
  */
-public terminate(done: Function): void {
+public terminate(done: ErrorCallback): void {
 
     assert(!done || ('function' === typeof done));
 
@@ -104,7 +105,7 @@ public terminate(done: Function): void {
  * @param done {Function} callback
  * @private
  */
-public _monitor(done): void {
+public _monitor(done: ErrorCallback): void {
     assert(done === undefined || ('function' === typeof done));
 
 
@@ -146,7 +147,8 @@ public _monitor(done): void {
  * @param [timestampsToReturn=null] {TimestampsToReturn}
  * @param callback {Function}
  */
-public modify(parameters: IMonitoringParameters, timestampsToReturn?: TimestampsToReturn, callback?): void {
+public modify(parameters: IMonitoringParameters,
+    timestampsToReturn?: TimestampsToReturn, callback?: ResponseCallback<subscription_service.MonitoredItemModifyResult[]>): void {
 
     this._timestampsToReturn = timestampsToReturn || this._timestampsToReturn;
     MonitoredItemBase._toolbox_modify(this._subscription, this._monitoredItems, parameters, this._timestampsToReturn, callback);

@@ -41,8 +41,6 @@ const UserNameIdentityToken = session_service.UserNameIdentityToken;
 
 import {computeSignature} from '../secure-channel';
 
-import {UserIdentityTokenType} from '../service-endpoints';
-
 import {ClientSession} from './client_session';
 
 import {doDebug, debugLog} from '../common/debug';
@@ -54,13 +52,15 @@ import {makeApplicationUrn} from '../common/applicationurn';
 import { UserIdentityToken } from '../generated/UserIdentityToken';
 import { stringToUint8Array } from '../basic-types/DataStream';
 import { repair_client_sessions } from './reconnection';
+import { UserTokenType, ICreateSubscriptionRequest } from '../generated';
+import { ClientSecureChannelLayer } from '../secure-channel/client_secure_channel_layer';
 
 export interface UserIdentityInfo {
     userName?: string;
     password?: string;
 }
 
-function validateServerNonce(serverNonce) {
+function validateServerNonce(serverNonce: {length: number}) {
     return (serverNonce && serverNonce.length < 32) ? false : true;
 }
 
@@ -172,7 +172,7 @@ protected __resolveEndPoint(): boolean{
     return true;
 }
 
-protected _createSession(callback): void {
+protected _createSession(callback: ResponseCallback<ClientSession>): void {
     assert(typeof callback === 'function');
     assert(this._secureChannel);
     if (!this.__resolveEndPoint() || !this.endpoint) {
@@ -302,8 +302,8 @@ protected async __createSession_step2(session: ClientSession, callback: Response
 
 }
 
-public computeClientSignature(channel, serverCertificate, serverNonce): SignatureData {
-    return computeSignature(serverCertificate, serverNonce, this.getPrivateKey(), channel.messageBuilder.securityPolicy);
+public computeClientSignature(channel: ClientSecureChannelLayer, serverCertificate: Uint8Array, serverNonce: Uint8Array): SignatureData {
+    return computeSignature(serverCertificate, serverNonce, this.getPrivateKey(), (<any>channel).messageBuilder._securityPolicy);
 }
 
 
@@ -450,7 +450,7 @@ protected _activateSession(session: ClientSession, callback: ResponseCallback<Cl
  * @param callback
  * @return {*}
  */
-public reactivateSession(session: ClientSession, callback) {
+public reactivateSession(session: ClientSession, callback: ErrorCallback) {
 
 
     assert(typeof callback === 'function');
@@ -499,7 +499,7 @@ public reactivateSession(session: ClientSession, callback) {
  * @param [userIdentityInfo.userName {String} ]
  * @param [userIdentityInfo.password {String} ]
  *
- * @param callback {Function}
+ * @param callback {ErrorCallback}
  * @param callback.err     {Error|null}   - the Error if the async method has failed
  * @param callback.session {ClientSession} - the created session object.
  *
@@ -550,7 +550,7 @@ public createSession(userIdentityInfo: UserIdentityInfo, callback: (err: Error, 
  * @param callback
  * @async
  */
-public changeSessionIdentity(session: ClientSession, userIdentityInfo: UserIdentityInfo, callback) {
+public changeSessionIdentity(session: ClientSession, userIdentityInfo: UserIdentityInfo, callback: ErrorCallback) {
 
     assert('function' === typeof callback);
 
@@ -609,10 +609,10 @@ protected _closeSession(session: ClientSession,
  * @async
  * @param session  {ClientSession} - the created client session
  * @param deleteSubscriptions  {Boolean} - whether to delete subscriptions or not
- * @param callback {Function} - the callback
+ * @param callback {ErrorCallback} - the callback
  * @param callback.err {Error|null}   - the Error if the async method has failed
  */
-public closeSession(session: ClientSession, deleteSubscriptions: boolean, callback: Function) {
+public closeSession(session: ClientSession, deleteSubscriptions: boolean, callback: ErrorCallback) {
 
 
     // assert(_.isBoolean(deleteSubscriptions));
@@ -635,7 +635,7 @@ public closeSession(session: ClientSession, deleteSubscriptions: boolean, callba
     });
 }
 
-protected _ask_for_subscription_republish(session: ClientSession, callback: Function) {
+protected _ask_for_subscription_republish(session: ClientSession, callback: ErrorCallback) {
 
     debugLog('_ask_for_subscription_republish ');
     // xx assert(session.getPublishEngine().nbPendingPublishRequests === 0, "at this time, publish request queue shall still be empty");
@@ -652,7 +652,7 @@ protected _on_connection_reestablished(callback: ErrorCallback) {
     assert('function' === typeof callback);
 
     // call base class implementation first
-    super._on_connection_reestablished((err) => {
+    super._on_connection_reestablished((err: Error) => {
         repair_client_sessions(this, callback);
     });
 
@@ -673,20 +673,20 @@ public toString() {
  * @param inner_func.callback {function}
  * @param callback {function}
  */
-public withSession(endpointUrl, inner_func, callback) {
+public withSession(endpointUrl: string, inner_func: (sess: ClientSession, cb: ErrorCallback) => void, callback: ErrorCallback) {
 
     assert('function' === typeof inner_func, 'expecting inner function');
     assert('function' === typeof callback, 'expecting callback function');
 
 
 
-    let the_session;
-    let the_error;
+    let the_session: ClientSession;
+    let the_error: Error;
     let need_disconnect = false;
     async_series([
 
         // step 1 : connect to
-        (callback) => {
+        (callback: ErrorCallback) => {
             this.connect(endpointUrl, function (err) {
                 need_disconnect = true;
                 if (err) {
@@ -697,7 +697,7 @@ public withSession(endpointUrl, inner_func, callback) {
         },
 
         // step 2 : createSession
-        (callback) => {
+        (callback: ErrorCallback) => {
             this.createSession(null, (err, session) => {
                 if (!err) {
                     the_session = session;
@@ -706,7 +706,7 @@ public withSession(endpointUrl, inner_func, callback) {
             });
         },
 
-        (callback) => {
+        (callback: () => void) => {
             try {
                 inner_func(the_session, function (err) {
                     the_error = err;
@@ -720,7 +720,7 @@ public withSession(endpointUrl, inner_func, callback) {
         },
 
         // close session
-        (callback) => {
+        (callback: () => void ) => {
             the_session.close(/*deleteSubscriptions=*/true, function (err) {
                 if (err) {
                     console.log('OPCUAClient#withClientSession: session closed failed ?');
@@ -728,7 +728,7 @@ public withSession(endpointUrl, inner_func, callback) {
                 callback();
             });
         },
-        (callback) => {
+        (callback: () => void ) => {
             this.disconnect(function (err) {
                 need_disconnect = false;
                 if (err) {
@@ -738,7 +738,7 @@ public withSession(endpointUrl, inner_func, callback) {
             });
         }
 
-    ], (err1) => {
+    ], (err1: Error) => {
         if (need_disconnect) {
             console.log('Disconnecting client after failure');
             this.disconnect(function (err2) {
@@ -806,7 +806,8 @@ public withSession(endpointUrl, inner_func, callback) {
 // OPCUAClient.prototype.closeSession = thenify.withCallback(OPCUAClient.prototype.closeSession);
 
 
-public withSubscription(endpointUrl, subscriptionParameters, innerFunc, callback) {
+public withSubscription(endpointUrl: string, subscriptionParameters: ICreateSubscriptionRequest, 
+    innerFunc: (arg0: ClientSession, arg1: ClientSubscription, arg2: () => void) => void, callback: ErrorCallback) {
 
     assert('function' === typeof innerFunc);
     assert('function' === typeof callback);
@@ -832,16 +833,16 @@ public withSubscription(endpointUrl, subscriptionParameters, innerFunc, callback
 }
 }
 
-function isAnonymous(userIdentityInfo): boolean {
+function isAnonymous(userIdentityInfo: UserIdentityInfo): boolean {
     return !userIdentityInfo || (!userIdentityInfo.userName && !userIdentityInfo.password);
 }
 
-function isUserNamePassword(userIdentityInfo): boolean {
+function isUserNamePassword(userIdentityInfo: UserIdentityInfo): boolean {
     const res = (userIdentityInfo.userName !== undefined) && (userIdentityInfo.password !== undefined);
     return res;
 }
 
-function findUserTokenPolicy(endpoint_description: endpoints_service.EndpointDescription, userTokenType): endpoints_service.UserTokenPolicy {
+function findUserTokenPolicy(endpoint_description: endpoints_service.EndpointDescription, userTokenType: UserTokenType): endpoints_service.UserTokenPolicy {
     assert(endpoint_description instanceof EndpointDescription);
     const r = endpoint_description.userIdentityTokens.filter( function (userIdentity: endpoints_service.UserTokenPolicy) {
         // assert(userIdentity instanceof UserTokenPolicy)
@@ -856,7 +857,7 @@ function createAnonymousIdentityToken(session: ClientSession): session_service.A
     const endpoint_desc = session.endpoint;
     assert(endpoint_desc instanceof EndpointDescription);
 
-    const userTokenPolicy: endpoints_service.UserTokenPolicy = findUserTokenPolicy(endpoint_desc, UserIdentityTokenType.ANONYMOUS);
+    const userTokenPolicy: endpoints_service.UserTokenPolicy = findUserTokenPolicy(endpoint_desc, UserTokenType.Anonymous);
     if (!userTokenPolicy) {
         throw new Error('Cannot find ANONYMOUS user token policy in end point description');
     }
@@ -880,7 +881,7 @@ function createUserNameIdentityToken(session: ClientSession, userName: string, p
      * is required.
      *
      */
-    const userTokenPolicy = findUserTokenPolicy(endpoint_desc, UserIdentityTokenType.USERNAME);
+    const userTokenPolicy = findUserTokenPolicy(endpoint_desc, UserTokenType.UserName);
 
     // istanbul ignore next
     if (!userTokenPolicy) {

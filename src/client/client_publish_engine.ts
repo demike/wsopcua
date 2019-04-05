@@ -11,6 +11,7 @@ import { RequestHeader } from '../generated/RequestHeader';
 
 import forEachOf from 'async-es/forEachOf';
 import whilst from 'async-es/whilst';
+import { ErrorCallback } from './client_base';
 
 // xx const debugLog = console.log;
 
@@ -416,7 +417,7 @@ protected _receive_publish_response (response: subscription_service.PublishRespo
     }
 }
 
-public republish(callback) {
+public republish(callback: ErrorCallback) {
 
     const self = this;
 

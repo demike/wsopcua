@@ -32,7 +32,7 @@ export {AttributeIds} from '../constants/AttributeIds';
 // generated module.exports.BrowseDirection     = require("node-opcua-data-model").BrowseDirection;
 
 
-export {VariableTypeIds, ObjectTypeIds, DataTypeIds, ReferenceTypeIds} from '../constants/opcua_node_ids';
+export { /*VariableTypeIds, ObjectTypeIds,*/ DataTypeIds, ReferenceTypeIds} from '../constants/opcua_node_ids';
 // is it really necessary to export all these ids?
 export {VariableIds, MethodIds, ObjectIds} from '../constants/opcua_node_ids';
 

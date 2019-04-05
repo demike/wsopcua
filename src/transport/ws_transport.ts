@@ -14,6 +14,7 @@ import {writeTCPMessageHeader} from './tools';
 import {readRawMessageHeader} from './message_builder_base';
 
 import {debugLog, doDebug} from '../common/debug';
+import { ResponseCallback } from '../client/client_base';
 
 let fakeSocket: any = {invalid: true} ;
 
@@ -57,7 +58,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     protected _on_socket_ended_called: boolean;
     protected _pending_buffer: any;
 
-    protected _the_callback: any;
+    protected _the_callback: ResponseCallback<DataView>;
 
     get disconnecting() {
         return this.__disconnecting__;
@@ -366,7 +367,7 @@ protected _install_socket(socket: WebSocket) {
  * @param callback.messageChunk {Buffer|null}
  * @protected
  */
-protected _install_one_time_message_receiver(callback: Function) {
+protected _install_one_time_message_receiver(callback: ResponseCallback<DataView>) {
 
 
     assert(!this._the_callback, 'callback already set');
@@ -384,7 +385,7 @@ protected _install_one_time_message_receiver(callback: Function) {
  * @async
  * @param callback
  */
-public disconnect(callback: Function) {
+public disconnect(callback: () => void) {
 
     assert('function' === typeof callback, 'expecting a callback function, but got ' + callback);
 

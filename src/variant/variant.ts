@@ -202,7 +202,7 @@ public clone(): Variant {
 
 import {register_class_definition} from '../factory/factories_factories';
 import {registerSpecialVariantEncoder} from '../factory/factories_builtin_types_special';
-import { DataTypeNode } from '../generated/DataTypeNode';
+
 register_class_definition('Variant', Variant, makeExpandedNodeId(generate_new_id()));
 registerSpecialVariantEncoder(Variant, 'Variant');
 

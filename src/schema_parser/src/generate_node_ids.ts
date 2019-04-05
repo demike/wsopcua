@@ -7,8 +7,8 @@ import * as fs from 'fs';
 //export var codeMap : {[key:string] : string[]} = {};
 export var metaTypeMap : {[key : string]:{[key : string]:string[]}} = {};
 
-export function generateNodeIds(csvFilePath : string, outFileName : string, callback? : Function) {
-    fs.readFile(csvFilePath,"utf8",(err : Error|null,data : string)=>{
+export function generateNodeIds(csvFilePath : string, outFileName : string, callback?: () => void ) {
+    fs.readFile(csvFilePath, 'utf8', (err: Error|null, data: string) =>{
         if (err) {
             console.log(err);
         } else {
@@ -20,7 +20,7 @@ export function generateNodeIds(csvFilePath : string, outFileName : string, call
     });
 }
 
-function convert(data : string,outFileName : string)
+function convert(data: string, outFileName: string)
 {
     let lines = data.split("\n");
 
