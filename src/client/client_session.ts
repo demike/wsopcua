@@ -64,6 +64,7 @@ import { RegisterNodesResponse } from '../generated/RegisterNodesResponse';
 import { UnregisterNodesRequest } from '../generated/UnregisterNodesRequest';
 import { UnregisterNodesResponse } from '../generated/UnregisterNodesResponse';
 import { TransferSubscriptionsResponse } from '../service-subscription';
+import { IModifySubscriptionRequest, ISetMonitoringModeRequest } from '../generated';
 
 
 
@@ -961,7 +962,8 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.err {Error|null}   - the Error if the async method has failed
      * @param callback.response {DeleteSubscriptionsResponse} - the response
      */
-    deleteSubscriptions(options: IDeleteSubscriptionsRequest, callback) {
+    deleteSubscriptions(options: IDeleteSubscriptionsRequest, 
+        callback: ResponseCallback<subscription_service.DeleteSubscriptionsResponse>) {
         this._defaultRequest(
             subscription_service.DeleteSubscriptionsRequest,
             subscription_service.DeleteSubscriptionsResponse,
@@ -1027,14 +1029,16 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.err {Error|null}   - the Error if the async method has failed
      * @param callback.response {ModifySubscriptionResponse} - the response
      */
-    public modifySubscription(options, callback) {
+    public modifySubscription(options: IModifySubscriptionRequest, 
+        callback: ResponseCallback<subscription_service.ModifySubscriptionResponse>) {
         this._defaultRequest(
             subscription_service.ModifySubscriptionRequest,
             subscription_service.ModifySubscriptionResponse,
             options, callback);
     }
 
-    public setMonitoringMode(options, callback) {
+    public setMonitoringMode(options: ISetMonitoringModeRequest, 
+        callback: ResponseCallback<subscription_service.SetMonitoringModeResponse>) {
         this._defaultRequest(
             subscription_service.SetMonitoringModeRequest,
             subscription_service.SetMonitoringModeResponse,
@@ -1235,13 +1239,15 @@ public evaluateRemainingLifetime(): number {
      * @param [deleteSubscription=true] {Boolean}
      * @param callback {Function}
      */
-    public close(deleteSubscription: boolean = true, callback) {
+    public close(deleteSubscription: boolean = true, callback: ErrorCallback) {
 
+        /*
         if (arguments.length === 1) {
             callback = deleteSubscription;
             deleteSubscription = true;
         }
         assert('function' === typeof callback);
+        */
 
         if (!this._client)  {
             debugLog('ClientSession#close : warning, client is already closed');
@@ -1680,7 +1686,7 @@ public evaluateRemainingLifetime(): number {
         }), (err: Error, dataValue: DataValue) => {
             if (err) { return callback(err); }
 
-            if (dataValue.statusCode !== StatusCodes.Good) {
+            if (dataValue && dataValue.statusCode !== StatusCodes.Good) {
                 return callback(new Error('readNamespaceArray : ' + dataValue.statusCode.toString()));
             }
             assert(dataValue.value.value instanceof Array);
