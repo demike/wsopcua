@@ -315,7 +315,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         this.keepPendingSessionsOnDisconnect = options.keepPendingSessionsOnDisconnect || false;
     }
 
-    closeSession(session: ClientSession, deleteSubscriptions: boolean, callback: Function): any {
+    closeSession(session: ClientSession, deleteSubscriptions: boolean, callback: ErrorCallback): any {
         throw new Error('Method not implemented.');
     }
 
@@ -548,7 +548,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
                 next();
             });
 
-        }, function (err) {
+        }, (err) => {
 
             // istanbul ignore next
             if (this._sessions.length > 0) {
@@ -569,7 +569,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 * @param [options.endpointUrl] {String} the network address that the Client used to access the Discovery Endpoint .
 * @param [options.localeIds} {Array<LocaleId>}  List of locales to use.
 * @param [options.profileUris} {Array<String>}  List of transport profiles that the returned Endpoints shall support.
-* @param callback {Function}
+* @param callback {(err: Error, endpoints?: EndpointDescription[]) => void}
 * @param callback.err {Error|null}
 * @param callback.serverEndpoints {Array<EndpointDescription>} the array of endpoint descriptions
 *
@@ -763,7 +763,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     }
 
 
-    protected _cancel_reconnection(callback: Function) {
+    protected _cancel_reconnection(callback: ErrorCallback) {
         // istanbul ignore next
         if (!this._secureChannel) {
             return callback(null); // nothing to do
@@ -830,7 +830,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
 
 
-    protected _internal_create_secure_channel(callback: Function) {
+    protected _internal_create_secure_channel(callback: ResponseCallback<ClientSecureChannelLayer>) {
 
         let secureChannel: ClientSecureChannelLayer;
         assert(this._secureChannel === null);
