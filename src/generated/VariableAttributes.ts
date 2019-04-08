@@ -7,14 +7,14 @@ import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
 export interface IVariableAttributes extends INodeAttributes {
-		value? : Variant;
-		dataType? : ec.NodeId;
-		valueRank? : ec.Int32;
-		arrayDimensions? : ec.UInt32[];
-		accessLevel? : ec.Byte;
-		userAccessLevel? : ec.Byte;
-		minimumSamplingInterval? : ec.Double;
-		historizing? : boolean;
+		value?: Variant;
+		dataType?: ec.NodeId;
+		valueRank?: ec.Int32;
+		arrayDimensions?: ec.UInt32[];
+		accessLevel?: ec.Byte;
+		userAccessLevel?: ec.Byte;
+		minimumSamplingInterval?: ec.Double;
+		historizing?: boolean;
 }
 
 /**
@@ -22,16 +22,16 @@ The attributes for a variable node.
 */
 
 export class VariableAttributes extends NodeAttributes {
- 		value : Variant;
-		dataType : ec.NodeId;
-		valueRank : ec.Int32;
-		arrayDimensions : ec.UInt32[];
-		accessLevel : ec.Byte;
-		userAccessLevel : ec.Byte;
-		minimumSamplingInterval : ec.Double;
-		historizing : boolean;
+ 		value: Variant;
+		dataType: ec.NodeId;
+		valueRank: ec.Int32;
+		arrayDimensions: ec.UInt32[];
+		accessLevel: ec.Byte;
+		userAccessLevel: ec.Byte;
+		minimumSamplingInterval: ec.Double;
+		historizing: boolean;
 
-	constructor(	options? : IVariableAttributes) { 
+	constructor(	options?: IVariableAttributes) { 
 		options = options || {};
 		super(options);
 		this.value= (options.value) ? options.value:new Variant();
@@ -46,7 +46,7 @@ export class VariableAttributes extends NodeAttributes {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		this.value.encode(out);
 		ec.encodeNodeId(this.dataType,out);
@@ -60,7 +60,7 @@ export class VariableAttributes extends NodeAttributes {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.value.decode(inp);
 		this.dataType = ec.decodeNodeId(inp);
@@ -74,7 +74,7 @@ export class VariableAttributes extends NodeAttributes {
 	}
 
 
-	clone(	target? : VariableAttributes) : VariableAttributes { 
+	clone(	target?: VariableAttributes): VariableAttributes { 
 		if(!target) {
 			target = new VariableAttributes();
 		}
@@ -92,7 +92,7 @@ export class VariableAttributes extends NodeAttributes {
 
 
 }
-export function decodeVariableAttributes(	inp : DataStream) : VariableAttributes { 
+export function decodeVariableAttributes(	inp: DataStream): VariableAttributes { 
 		const obj = new VariableAttributes();
 			obj.decode(inp); 
 			return obj;

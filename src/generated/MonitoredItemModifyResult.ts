@@ -4,10 +4,10 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IMonitoredItemModifyResult {
-		statusCode? : ec.StatusCode;
-		revisedSamplingInterval? : ec.Double;
-		revisedQueueSize? : ec.UInt32;
-		filterResult? : ec.ExtensionObject;
+		statusCode?: ec.StatusCode;
+		revisedSamplingInterval?: ec.Double;
+		revisedQueueSize?: ec.UInt32;
+		filterResult?: ec.ExtensionObject;
 }
 
 /**
@@ -15,12 +15,12 @@ export interface IMonitoredItemModifyResult {
 */
 
 export class MonitoredItemModifyResult {
- 		statusCode : ec.StatusCode;
-		revisedSamplingInterval : ec.Double;
-		revisedQueueSize : ec.UInt32;
-		filterResult : ec.ExtensionObject;
+ 		statusCode: ec.StatusCode;
+		revisedSamplingInterval: ec.Double;
+		revisedQueueSize: ec.UInt32;
+		filterResult: ec.ExtensionObject;
 
-	constructor(	options? : IMonitoredItemModifyResult) { 
+	constructor(	options?: IMonitoredItemModifyResult) { 
 		options = options || {};
 		this.statusCode= (options.statusCode) ? options.statusCode:null;
 		this.revisedSamplingInterval= (options.revisedSamplingInterval) ? options.revisedSamplingInterval:null;
@@ -30,7 +30,7 @@ export class MonitoredItemModifyResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeStatusCode(this.statusCode,out);
 		ec.encodeDouble(this.revisedSamplingInterval,out);
 		ec.encodeUInt32(this.revisedQueueSize,out);
@@ -39,7 +39,7 @@ export class MonitoredItemModifyResult {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.statusCode = ec.decodeStatusCode(inp);
 		this.revisedSamplingInterval = ec.decodeDouble(inp);
 		this.revisedQueueSize = ec.decodeUInt32(inp);
@@ -48,7 +48,7 @@ export class MonitoredItemModifyResult {
 	}
 
 
-	clone(	target? : MonitoredItemModifyResult) : MonitoredItemModifyResult { 
+	clone(	target?: MonitoredItemModifyResult): MonitoredItemModifyResult { 
 		if(!target) {
 			target = new MonitoredItemModifyResult();
 		}
@@ -61,7 +61,7 @@ export class MonitoredItemModifyResult {
 
 
 }
-export function decodeMonitoredItemModifyResult(	inp : DataStream) : MonitoredItemModifyResult { 
+export function decodeMonitoredItemModifyResult(	inp: DataStream): MonitoredItemModifyResult { 
 		const obj = new MonitoredItemModifyResult();
 			obj.decode(inp); 
 			return obj;

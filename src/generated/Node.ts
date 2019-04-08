@@ -11,17 +11,17 @@ import {decodeReferenceNode} from './ReferenceNode';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface INode {
-		nodeId? : ec.NodeId;
-		nodeClass? : NodeClass;
-		browseName? : QualifiedName;
-		displayName? : LocalizedText;
-		description? : LocalizedText;
-		writeMask? : ec.UInt32;
-		userWriteMask? : ec.UInt32;
-		rolePermissions? : RolePermissionType[];
-		userRolePermissions? : RolePermissionType[];
-		accessRestrictions? : ec.UInt16;
-		references? : ReferenceNode[];
+		nodeId?: ec.NodeId;
+		nodeClass?: NodeClass;
+		browseName?: QualifiedName;
+		displayName?: LocalizedText;
+		description?: LocalizedText;
+		writeMask?: ec.UInt32;
+		userWriteMask?: ec.UInt32;
+		rolePermissions?: RolePermissionType[];
+		userRolePermissions?: RolePermissionType[];
+		accessRestrictions?: ec.UInt16;
+		references?: ReferenceNode[];
 }
 
 /**
@@ -29,19 +29,19 @@ Specifies the attributes which belong to all nodes.
 */
 
 export class Node {
- 		nodeId : ec.NodeId;
-		nodeClass : NodeClass;
-		browseName : QualifiedName;
-		displayName : LocalizedText;
-		description : LocalizedText;
-		writeMask : ec.UInt32;
-		userWriteMask : ec.UInt32;
-		rolePermissions : RolePermissionType[];
-		userRolePermissions : RolePermissionType[];
-		accessRestrictions : ec.UInt16;
-		references : ReferenceNode[];
+ 		nodeId: ec.NodeId;
+		nodeClass: NodeClass;
+		browseName: QualifiedName;
+		displayName: LocalizedText;
+		description: LocalizedText;
+		writeMask: ec.UInt32;
+		userWriteMask: ec.UInt32;
+		rolePermissions: RolePermissionType[];
+		userRolePermissions: RolePermissionType[];
+		accessRestrictions: ec.UInt16;
+		references: ReferenceNode[];
 
-	constructor(	options? : INode) { 
+	constructor(	options?: INode) { 
 		options = options || {};
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
 		this.nodeClass= (options.nodeClass) ? options.nodeClass:null;
@@ -58,7 +58,7 @@ export class Node {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.nodeId,out);
 		encodeNodeClass(this.nodeClass,out);
 		this.browseName.encode(out);
@@ -74,7 +74,7 @@ export class Node {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.nodeId = ec.decodeNodeId(inp);
 		this.nodeClass = decodeNodeClass(inp);
 		this.browseName.decode(inp);
@@ -90,7 +90,7 @@ export class Node {
 	}
 
 
-	clone(	target? : Node) : Node { 
+	clone(	target?: Node): Node { 
 		if(!target) {
 			target = new Node();
 		}
@@ -110,7 +110,7 @@ export class Node {
 
 
 }
-export function decodeNode(	inp : DataStream) : Node { 
+export function decodeNode(	inp: DataStream): Node { 
 		const obj = new Node();
 			obj.decode(inp); 
 			return obj;

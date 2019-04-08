@@ -8,8 +8,8 @@ import {HistoryData} from './HistoryData';
 import {IHistoryData} from './HistoryData';
 
 export interface IHistoryModifiedData extends IHistoryData {
-		noOfDataValues? : ec.Int32;
-		modificationInfos? : ModificationInfo[];
+		noOfDataValues?: ec.Int32;
+		modificationInfos?: ModificationInfo[];
 }
 
 /**
@@ -17,10 +17,10 @@ export interface IHistoryModifiedData extends IHistoryData {
 */
 
 export class HistoryModifiedData extends HistoryData {
- 		noOfDataValues : ec.Int32;
-		modificationInfos : ModificationInfo[];
+ 		noOfDataValues: ec.Int32;
+		modificationInfos: ModificationInfo[];
 
-	constructor(	options? : IHistoryModifiedData) { 
+	constructor(	options?: IHistoryModifiedData) { 
 		options = options || {};
 		super(options);
 		this.noOfDataValues= (options.noOfDataValues) ? options.noOfDataValues:null;
@@ -29,7 +29,7 @@ export class HistoryModifiedData extends HistoryData {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeInt32(this.noOfDataValues,out);
 		ec.encodeArray(this.modificationInfos,out);
@@ -37,7 +37,7 @@ export class HistoryModifiedData extends HistoryData {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.noOfDataValues = ec.decodeInt32(inp);
 		this.modificationInfos = ec.decodeArray(inp,decodeModificationInfo);
@@ -45,7 +45,7 @@ export class HistoryModifiedData extends HistoryData {
 	}
 
 
-	clone(	target? : HistoryModifiedData) : HistoryModifiedData { 
+	clone(	target?: HistoryModifiedData): HistoryModifiedData { 
 		if(!target) {
 			target = new HistoryModifiedData();
 		}
@@ -57,7 +57,7 @@ export class HistoryModifiedData extends HistoryData {
 
 
 }
-export function decodeHistoryModifiedData(	inp : DataStream) : HistoryModifiedData { 
+export function decodeHistoryModifiedData(	inp: DataStream): HistoryModifiedData { 
 		const obj = new HistoryModifiedData();
 			obj.decode(inp); 
 			return obj;

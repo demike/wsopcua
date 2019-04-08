@@ -4,18 +4,18 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IServerDiagnosticsSummaryDataType {
-		serverViewCount? : ec.UInt32;
-		currentSessionCount? : ec.UInt32;
-		cumulatedSessionCount? : ec.UInt32;
-		securityRejectedSessionCount? : ec.UInt32;
-		rejectedSessionCount? : ec.UInt32;
-		sessionTimeoutCount? : ec.UInt32;
-		sessionAbortCount? : ec.UInt32;
-		currentSubscriptionCount? : ec.UInt32;
-		cumulatedSubscriptionCount? : ec.UInt32;
-		publishingIntervalCount? : ec.UInt32;
-		securityRejectedRequestsCount? : ec.UInt32;
-		rejectedRequestsCount? : ec.UInt32;
+		serverViewCount?: ec.UInt32;
+		currentSessionCount?: ec.UInt32;
+		cumulatedSessionCount?: ec.UInt32;
+		securityRejectedSessionCount?: ec.UInt32;
+		rejectedSessionCount?: ec.UInt32;
+		sessionTimeoutCount?: ec.UInt32;
+		sessionAbortCount?: ec.UInt32;
+		currentSubscriptionCount?: ec.UInt32;
+		cumulatedSubscriptionCount?: ec.UInt32;
+		publishingIntervalCount?: ec.UInt32;
+		securityRejectedRequestsCount?: ec.UInt32;
+		rejectedRequestsCount?: ec.UInt32;
 }
 
 /**
@@ -23,20 +23,20 @@ export interface IServerDiagnosticsSummaryDataType {
 */
 
 export class ServerDiagnosticsSummaryDataType {
- 		serverViewCount : ec.UInt32;
-		currentSessionCount : ec.UInt32;
-		cumulatedSessionCount : ec.UInt32;
-		securityRejectedSessionCount : ec.UInt32;
-		rejectedSessionCount : ec.UInt32;
-		sessionTimeoutCount : ec.UInt32;
-		sessionAbortCount : ec.UInt32;
-		currentSubscriptionCount : ec.UInt32;
-		cumulatedSubscriptionCount : ec.UInt32;
-		publishingIntervalCount : ec.UInt32;
-		securityRejectedRequestsCount : ec.UInt32;
-		rejectedRequestsCount : ec.UInt32;
+ 		serverViewCount: ec.UInt32;
+		currentSessionCount: ec.UInt32;
+		cumulatedSessionCount: ec.UInt32;
+		securityRejectedSessionCount: ec.UInt32;
+		rejectedSessionCount: ec.UInt32;
+		sessionTimeoutCount: ec.UInt32;
+		sessionAbortCount: ec.UInt32;
+		currentSubscriptionCount: ec.UInt32;
+		cumulatedSubscriptionCount: ec.UInt32;
+		publishingIntervalCount: ec.UInt32;
+		securityRejectedRequestsCount: ec.UInt32;
+		rejectedRequestsCount: ec.UInt32;
 
-	constructor(	options? : IServerDiagnosticsSummaryDataType) { 
+	constructor(	options?: IServerDiagnosticsSummaryDataType) { 
 		options = options || {};
 		this.serverViewCount= (options.serverViewCount) ? options.serverViewCount:null;
 		this.currentSessionCount= (options.currentSessionCount) ? options.currentSessionCount:null;
@@ -54,7 +54,7 @@ export class ServerDiagnosticsSummaryDataType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.serverViewCount,out);
 		ec.encodeUInt32(this.currentSessionCount,out);
 		ec.encodeUInt32(this.cumulatedSessionCount,out);
@@ -71,7 +71,7 @@ export class ServerDiagnosticsSummaryDataType {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.serverViewCount = ec.decodeUInt32(inp);
 		this.currentSessionCount = ec.decodeUInt32(inp);
 		this.cumulatedSessionCount = ec.decodeUInt32(inp);
@@ -88,7 +88,7 @@ export class ServerDiagnosticsSummaryDataType {
 	}
 
 
-	clone(	target? : ServerDiagnosticsSummaryDataType) : ServerDiagnosticsSummaryDataType { 
+	clone(	target?: ServerDiagnosticsSummaryDataType): ServerDiagnosticsSummaryDataType { 
 		if(!target) {
 			target = new ServerDiagnosticsSummaryDataType();
 		}
@@ -109,7 +109,7 @@ export class ServerDiagnosticsSummaryDataType {
 
 
 }
-export function decodeServerDiagnosticsSummaryDataType(	inp : DataStream) : ServerDiagnosticsSummaryDataType { 
+export function decodeServerDiagnosticsSummaryDataType(	inp: DataStream): ServerDiagnosticsSummaryDataType { 
 		const obj = new ServerDiagnosticsSummaryDataType();
 			obj.decode(inp); 
 			return obj;

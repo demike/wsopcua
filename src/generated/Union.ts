@@ -9,7 +9,7 @@ export class Union {
  
 	constructor(){};
 
-	clone(	target? : Union) : Union { 
+	clone(	target?: Union): Union { 
 		if(!target) {
 			target = new Union();
 		}

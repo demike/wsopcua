@@ -7,11 +7,11 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISetTriggeringResponse {
-		responseHeader? : ResponseHeader;
-		addResults? : ec.StatusCode[];
-		addDiagnosticInfos? : DiagnosticInfo[];
-		removeResults? : ec.StatusCode[];
-		removeDiagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		addResults?: ec.StatusCode[];
+		addDiagnosticInfos?: DiagnosticInfo[];
+		removeResults?: ec.StatusCode[];
+		removeDiagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -19,13 +19,13 @@ export interface ISetTriggeringResponse {
 */
 
 export class SetTriggeringResponse {
- 		responseHeader : ResponseHeader;
-		addResults : ec.StatusCode[];
-		addDiagnosticInfos : DiagnosticInfo[];
-		removeResults : ec.StatusCode[];
-		removeDiagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		addResults: ec.StatusCode[];
+		addDiagnosticInfos: DiagnosticInfo[];
+		removeResults: ec.StatusCode[];
+		removeDiagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : ISetTriggeringResponse) { 
+	constructor(	options?: ISetTriggeringResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.addResults= (options.addResults) ? options.addResults:[];
@@ -36,7 +36,7 @@ export class SetTriggeringResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.addResults,out,ec.encodeStatusCode);
 		ec.encodeArray(this.addDiagnosticInfos,out);
@@ -46,7 +46,7 @@ export class SetTriggeringResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.addResults = ec.decodeArray(inp,ec.decodeStatusCode);
 		this.addDiagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -56,7 +56,7 @@ export class SetTriggeringResponse {
 	}
 
 
-	clone(	target? : SetTriggeringResponse) : SetTriggeringResponse { 
+	clone(	target?: SetTriggeringResponse): SetTriggeringResponse { 
 		if(!target) {
 			target = new SetTriggeringResponse();
 		}
@@ -70,7 +70,7 @@ export class SetTriggeringResponse {
 
 
 }
-export function decodeSetTriggeringResponse(	inp : DataStream) : SetTriggeringResponse { 
+export function decodeSetTriggeringResponse(	inp: DataStream): SetTriggeringResponse { 
 		const obj = new SetTriggeringResponse();
 			obj.decode(inp); 
 			return obj;

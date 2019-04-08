@@ -9,9 +9,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IReadResponse {
-		responseHeader? : ResponseHeader;
-		results? : DataValue[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: DataValue[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -19,11 +19,11 @@ export interface IReadResponse {
 */
 
 export class ReadResponse {
- 		responseHeader : ResponseHeader;
-		results : DataValue[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: DataValue[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IReadResponse) { 
+	constructor(	options?: IReadResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -32,7 +32,7 @@ export class ReadResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -40,7 +40,7 @@ export class ReadResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,decodeDataValue);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -48,7 +48,7 @@ export class ReadResponse {
 	}
 
 
-	clone(	target? : ReadResponse) : ReadResponse { 
+	clone(	target?: ReadResponse): ReadResponse { 
 		if(!target) {
 			target = new ReadResponse();
 		}
@@ -60,7 +60,7 @@ export class ReadResponse {
 
 
 }
-export function decodeReadResponse(	inp : DataStream) : ReadResponse { 
+export function decodeReadResponse(	inp: DataStream): ReadResponse { 
 		const obj = new ReadResponse();
 			obj.decode(inp); 
 			return obj;

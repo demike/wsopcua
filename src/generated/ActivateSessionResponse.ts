@@ -7,10 +7,10 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IActivateSessionResponse {
-		responseHeader? : ResponseHeader;
-		serverNonce? : Uint8Array;
-		results? : ec.StatusCode[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		serverNonce?: Uint8Array;
+		results?: ec.StatusCode[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -18,12 +18,12 @@ Activates a session with the server.
 */
 
 export class ActivateSessionResponse {
- 		responseHeader : ResponseHeader;
-		serverNonce : Uint8Array;
-		results : ec.StatusCode[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		serverNonce: Uint8Array;
+		results: ec.StatusCode[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IActivateSessionResponse) { 
+	constructor(	options?: IActivateSessionResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.serverNonce= (options.serverNonce) ? options.serverNonce:null;
@@ -33,7 +33,7 @@ export class ActivateSessionResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeByteString(this.serverNonce,out);
 		ec.encodeArray(this.results,out,ec.encodeStatusCode);
@@ -42,7 +42,7 @@ export class ActivateSessionResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.serverNonce = ec.decodeByteString(inp);
 		this.results = ec.decodeArray(inp,ec.decodeStatusCode);
@@ -51,7 +51,7 @@ export class ActivateSessionResponse {
 	}
 
 
-	clone(	target? : ActivateSessionResponse) : ActivateSessionResponse { 
+	clone(	target?: ActivateSessionResponse): ActivateSessionResponse { 
 		if(!target) {
 			target = new ActivateSessionResponse();
 		}
@@ -64,7 +64,7 @@ export class ActivateSessionResponse {
 
 
 }
-export function decodeActivateSessionResponse(	inp : DataStream) : ActivateSessionResponse { 
+export function decodeActivateSessionResponse(	inp: DataStream): ActivateSessionResponse { 
 		const obj = new ActivateSessionResponse();
 			obj.decode(inp); 
 			return obj;

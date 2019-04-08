@@ -16,12 +16,12 @@ export enum AccessLevelExType {
 
 }
 
-export function encodeAccessLevelExType(	data : AccessLevelExType, 	out : DataStream) { 
+export function encodeAccessLevelExType(	data: AccessLevelExType, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeAccessLevelExType(	inp : DataStream) { 
+export function decodeAccessLevelExType(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

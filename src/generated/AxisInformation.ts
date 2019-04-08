@@ -8,11 +8,11 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IAxisInformation {
-		engineeringUnits? : EUInformation;
-		eURange? : Range;
-		title? : LocalizedText;
-		axisScaleType? : AxisScaleEnumeration;
-		axisSteps? : ec.Double[];
+		engineeringUnits?: EUInformation;
+		eURange?: Range;
+		title?: LocalizedText;
+		axisScaleType?: AxisScaleEnumeration;
+		axisSteps?: ec.Double[];
 }
 
 /**
@@ -20,13 +20,13 @@ export interface IAxisInformation {
 */
 
 export class AxisInformation {
- 		engineeringUnits : EUInformation;
-		eURange : Range;
-		title : LocalizedText;
-		axisScaleType : AxisScaleEnumeration;
-		axisSteps : ec.Double[];
+ 		engineeringUnits: EUInformation;
+		eURange: Range;
+		title: LocalizedText;
+		axisScaleType: AxisScaleEnumeration;
+		axisSteps: ec.Double[];
 
-	constructor(	options? : IAxisInformation) { 
+	constructor(	options?: IAxisInformation) { 
 		options = options || {};
 		this.engineeringUnits= (options.engineeringUnits) ? options.engineeringUnits:new EUInformation();
 		this.eURange= (options.eURange) ? options.eURange:new Range();
@@ -37,7 +37,7 @@ export class AxisInformation {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.engineeringUnits.encode(out);
 		this.eURange.encode(out);
 		this.title.encode(out);
@@ -47,7 +47,7 @@ export class AxisInformation {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.engineeringUnits.decode(inp);
 		this.eURange.decode(inp);
 		this.title.decode(inp);
@@ -57,7 +57,7 @@ export class AxisInformation {
 	}
 
 
-	clone(	target? : AxisInformation) : AxisInformation { 
+	clone(	target?: AxisInformation): AxisInformation { 
 		if(!target) {
 			target = new AxisInformation();
 		}
@@ -71,7 +71,7 @@ export class AxisInformation {
 
 
 }
-export function decodeAxisInformation(	inp : DataStream) : AxisInformation { 
+export function decodeAxisInformation(	inp: DataStream): AxisInformation { 
 		const obj = new AxisInformation();
 			obj.decode(inp); 
 			return obj;

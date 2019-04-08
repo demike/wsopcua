@@ -5,11 +5,11 @@ import {UserTokenType, encodeUserTokenType, decodeUserTokenType} from './UserTok
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IUserTokenPolicy {
-		policyId? : string;
-		tokenType? : UserTokenType;
-		issuedTokenType? : string;
-		issuerEndpointUrl? : string;
-		securityPolicyUri? : string;
+		policyId?: string;
+		tokenType?: UserTokenType;
+		issuedTokenType?: string;
+		issuerEndpointUrl?: string;
+		securityPolicyUri?: string;
 }
 
 /**
@@ -17,13 +17,13 @@ Describes a user token that can be used with a server.
 */
 
 export class UserTokenPolicy {
- 		policyId : string;
-		tokenType : UserTokenType;
-		issuedTokenType : string;
-		issuerEndpointUrl : string;
-		securityPolicyUri : string;
+ 		policyId: string;
+		tokenType: UserTokenType;
+		issuedTokenType: string;
+		issuerEndpointUrl: string;
+		securityPolicyUri: string;
 
-	constructor(	options? : IUserTokenPolicy) { 
+	constructor(	options?: IUserTokenPolicy) { 
 		options = options || {};
 		this.policyId= (options.policyId) ? options.policyId:null;
 		this.tokenType= (options.tokenType) ? options.tokenType:null;
@@ -34,7 +34,7 @@ export class UserTokenPolicy {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.policyId,out);
 		encodeUserTokenType(this.tokenType,out);
 		ec.encodeString(this.issuedTokenType,out);
@@ -44,7 +44,7 @@ export class UserTokenPolicy {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.policyId = ec.decodeString(inp);
 		this.tokenType = decodeUserTokenType(inp);
 		this.issuedTokenType = ec.decodeString(inp);
@@ -54,7 +54,7 @@ export class UserTokenPolicy {
 	}
 
 
-	clone(	target? : UserTokenPolicy) : UserTokenPolicy { 
+	clone(	target?: UserTokenPolicy): UserTokenPolicy { 
 		if(!target) {
 			target = new UserTokenPolicy();
 		}
@@ -68,7 +68,7 @@ export class UserTokenPolicy {
 
 
 }
-export function decodeUserTokenPolicy(	inp : DataStream) : UserTokenPolicy { 
+export function decodeUserTokenPolicy(	inp: DataStream): UserTokenPolicy { 
 		const obj = new UserTokenPolicy();
 			obj.decode(inp); 
 			return obj;

@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IAddNodesResult {
-		statusCode? : ec.StatusCode;
-		addedNodeId? : ec.NodeId;
+		statusCode?: ec.StatusCode;
+		addedNodeId?: ec.NodeId;
 }
 
 /**
@@ -13,10 +13,10 @@ A result of an add node operation.
 */
 
 export class AddNodesResult {
- 		statusCode : ec.StatusCode;
-		addedNodeId : ec.NodeId;
+ 		statusCode: ec.StatusCode;
+		addedNodeId: ec.NodeId;
 
-	constructor(	options? : IAddNodesResult) { 
+	constructor(	options?: IAddNodesResult) { 
 		options = options || {};
 		this.statusCode= (options.statusCode) ? options.statusCode:null;
 		this.addedNodeId= (options.addedNodeId) ? options.addedNodeId:null;
@@ -24,21 +24,21 @@ export class AddNodesResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeStatusCode(this.statusCode,out);
 		ec.encodeNodeId(this.addedNodeId,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.statusCode = ec.decodeStatusCode(inp);
 		this.addedNodeId = ec.decodeNodeId(inp);
 
 	}
 
 
-	clone(	target? : AddNodesResult) : AddNodesResult { 
+	clone(	target?: AddNodesResult): AddNodesResult { 
 		if(!target) {
 			target = new AddNodesResult();
 		}
@@ -49,7 +49,7 @@ export class AddNodesResult {
 
 
 }
-export function decodeAddNodesResult(	inp : DataStream) : AddNodesResult { 
+export function decodeAddNodesResult(	inp: DataStream): AddNodesResult { 
 		const obj = new AddNodesResult();
 			obj.decode(inp); 
 			return obj;

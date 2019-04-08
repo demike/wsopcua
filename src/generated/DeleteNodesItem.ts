@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDeleteNodesItem {
-		nodeId? : ec.NodeId;
-		deleteTargetReferences? : boolean;
+		nodeId?: ec.NodeId;
+		deleteTargetReferences?: boolean;
 }
 
 /**
@@ -13,10 +13,10 @@ A request to delete a node to the server address space.
 */
 
 export class DeleteNodesItem {
- 		nodeId : ec.NodeId;
-		deleteTargetReferences : boolean;
+ 		nodeId: ec.NodeId;
+		deleteTargetReferences: boolean;
 
-	constructor(	options? : IDeleteNodesItem) { 
+	constructor(	options?: IDeleteNodesItem) { 
 		options = options || {};
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
 		this.deleteTargetReferences= (options.deleteTargetReferences) ? options.deleteTargetReferences:null;
@@ -24,21 +24,21 @@ export class DeleteNodesItem {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.nodeId,out);
 		ec.encodeBoolean(this.deleteTargetReferences,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.nodeId = ec.decodeNodeId(inp);
 		this.deleteTargetReferences = ec.decodeBoolean(inp);
 
 	}
 
 
-	clone(	target? : DeleteNodesItem) : DeleteNodesItem { 
+	clone(	target?: DeleteNodesItem): DeleteNodesItem { 
 		if(!target) {
 			target = new DeleteNodesItem();
 		}
@@ -49,7 +49,7 @@ export class DeleteNodesItem {
 
 
 }
-export function decodeDeleteNodesItem(	inp : DataStream) : DeleteNodesItem { 
+export function decodeDeleteNodesItem(	inp: DataStream): DeleteNodesItem { 
 		const obj = new DeleteNodesItem();
 			obj.decode(inp); 
 			return obj;

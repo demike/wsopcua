@@ -6,10 +6,10 @@ import {MonitoringMode, encodeMonitoringMode, decodeMonitoringMode} from './Moni
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISetMonitoringModeRequest {
-		requestHeader? : RequestHeader;
-		subscriptionId? : ec.UInt32;
-		monitoringMode? : MonitoringMode;
-		monitoredItemIds? : ec.UInt32[];
+		requestHeader?: RequestHeader;
+		subscriptionId?: ec.UInt32;
+		monitoringMode?: MonitoringMode;
+		monitoredItemIds?: ec.UInt32[];
 }
 
 /**
@@ -17,12 +17,12 @@ export interface ISetMonitoringModeRequest {
 */
 
 export class SetMonitoringModeRequest {
- 		requestHeader : RequestHeader;
-		subscriptionId : ec.UInt32;
-		monitoringMode : MonitoringMode;
-		monitoredItemIds : ec.UInt32[];
+ 		requestHeader: RequestHeader;
+		subscriptionId: ec.UInt32;
+		monitoringMode: MonitoringMode;
+		monitoredItemIds: ec.UInt32[];
 
-	constructor(	options? : ISetMonitoringModeRequest) { 
+	constructor(	options?: ISetMonitoringModeRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.subscriptionId= (options.subscriptionId) ? options.subscriptionId:null;
@@ -32,7 +32,7 @@ export class SetMonitoringModeRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeUInt32(this.subscriptionId,out);
 		encodeMonitoringMode(this.monitoringMode,out);
@@ -41,7 +41,7 @@ export class SetMonitoringModeRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.subscriptionId = ec.decodeUInt32(inp);
 		this.monitoringMode = decodeMonitoringMode(inp);
@@ -50,7 +50,7 @@ export class SetMonitoringModeRequest {
 	}
 
 
-	clone(	target? : SetMonitoringModeRequest) : SetMonitoringModeRequest { 
+	clone(	target?: SetMonitoringModeRequest): SetMonitoringModeRequest { 
 		if(!target) {
 			target = new SetMonitoringModeRequest();
 		}
@@ -63,7 +63,7 @@ export class SetMonitoringModeRequest {
 
 
 }
-export function decodeSetMonitoringModeRequest(	inp : DataStream) : SetMonitoringModeRequest { 
+export function decodeSetMonitoringModeRequest(	inp: DataStream): SetMonitoringModeRequest { 
 		const obj = new SetMonitoringModeRequest();
 			obj.decode(inp); 
 			return obj;

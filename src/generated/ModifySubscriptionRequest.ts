@@ -5,13 +5,13 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IModifySubscriptionRequest {
-		requestHeader? : RequestHeader;
-		subscriptionId? : ec.UInt32;
-		requestedPublishingInterval? : ec.Double;
-		requestedLifetimeCount? : ec.UInt32;
-		requestedMaxKeepAliveCount? : ec.UInt32;
-		maxNotificationsPerPublish? : ec.UInt32;
-		priority? : ec.Byte;
+		requestHeader?: RequestHeader;
+		subscriptionId?: ec.UInt32;
+		requestedPublishingInterval?: ec.Double;
+		requestedLifetimeCount?: ec.UInt32;
+		requestedMaxKeepAliveCount?: ec.UInt32;
+		maxNotificationsPerPublish?: ec.UInt32;
+		priority?: ec.Byte;
 }
 
 /**
@@ -19,15 +19,15 @@ export interface IModifySubscriptionRequest {
 */
 
 export class ModifySubscriptionRequest {
- 		requestHeader : RequestHeader;
-		subscriptionId : ec.UInt32;
-		requestedPublishingInterval : ec.Double;
-		requestedLifetimeCount : ec.UInt32;
-		requestedMaxKeepAliveCount : ec.UInt32;
-		maxNotificationsPerPublish : ec.UInt32;
-		priority : ec.Byte;
+ 		requestHeader: RequestHeader;
+		subscriptionId: ec.UInt32;
+		requestedPublishingInterval: ec.Double;
+		requestedLifetimeCount: ec.UInt32;
+		requestedMaxKeepAliveCount: ec.UInt32;
+		maxNotificationsPerPublish: ec.UInt32;
+		priority: ec.Byte;
 
-	constructor(	options? : IModifySubscriptionRequest) { 
+	constructor(	options?: IModifySubscriptionRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.subscriptionId= (options.subscriptionId) ? options.subscriptionId:null;
@@ -40,7 +40,7 @@ export class ModifySubscriptionRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeUInt32(this.subscriptionId,out);
 		ec.encodeDouble(this.requestedPublishingInterval,out);
@@ -52,7 +52,7 @@ export class ModifySubscriptionRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.subscriptionId = ec.decodeUInt32(inp);
 		this.requestedPublishingInterval = ec.decodeDouble(inp);
@@ -64,7 +64,7 @@ export class ModifySubscriptionRequest {
 	}
 
 
-	clone(	target? : ModifySubscriptionRequest) : ModifySubscriptionRequest { 
+	clone(	target?: ModifySubscriptionRequest): ModifySubscriptionRequest { 
 		if(!target) {
 			target = new ModifySubscriptionRequest();
 		}
@@ -80,7 +80,7 @@ export class ModifySubscriptionRequest {
 
 
 }
-export function decodeModifySubscriptionRequest(	inp : DataStream) : ModifySubscriptionRequest { 
+export function decodeModifySubscriptionRequest(	inp: DataStream): ModifySubscriptionRequest { 
 		const obj = new ModifySubscriptionRequest();
 			obj.decode(inp); 
 			return obj;

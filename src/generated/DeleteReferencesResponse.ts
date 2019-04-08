@@ -7,9 +7,9 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDeleteReferencesResponse {
-		responseHeader? : ResponseHeader;
-		results? : ec.StatusCode[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: ec.StatusCode[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -17,11 +17,11 @@ Delete one or more references from the server address space.
 */
 
 export class DeleteReferencesResponse {
- 		responseHeader : ResponseHeader;
-		results : ec.StatusCode[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: ec.StatusCode[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IDeleteReferencesResponse) { 
+	constructor(	options?: IDeleteReferencesResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -30,7 +30,7 @@ export class DeleteReferencesResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out,ec.encodeStatusCode);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -38,7 +38,7 @@ export class DeleteReferencesResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,ec.decodeStatusCode);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -46,7 +46,7 @@ export class DeleteReferencesResponse {
 	}
 
 
-	clone(	target? : DeleteReferencesResponse) : DeleteReferencesResponse { 
+	clone(	target?: DeleteReferencesResponse): DeleteReferencesResponse { 
 		if(!target) {
 			target = new DeleteReferencesResponse();
 		}
@@ -58,7 +58,7 @@ export class DeleteReferencesResponse {
 
 
 }
-export function decodeDeleteReferencesResponse(	inp : DataStream) : DeleteReferencesResponse { 
+export function decodeDeleteReferencesResponse(	inp: DataStream): DeleteReferencesResponse { 
 		const obj = new DeleteReferencesResponse();
 			obj.decode(inp); 
 			return obj;

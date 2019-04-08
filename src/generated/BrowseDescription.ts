@@ -5,12 +5,12 @@ import {BrowseDirection, encodeBrowseDirection, decodeBrowseDirection} from './B
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IBrowseDescription {
-		nodeId? : ec.NodeId;
-		browseDirection? : BrowseDirection;
-		referenceTypeId? : ec.NodeId;
-		includeSubtypes? : boolean;
-		nodeClassMask? : ec.UInt32;
-		resultMask? : ec.UInt32;
+		nodeId?: ec.NodeId;
+		browseDirection?: BrowseDirection;
+		referenceTypeId?: ec.NodeId;
+		includeSubtypes?: boolean;
+		nodeClassMask?: ec.UInt32;
+		resultMask?: ec.UInt32;
 }
 
 /**
@@ -18,14 +18,14 @@ A request to browse the the references from a node.
 */
 
 export class BrowseDescription {
- 		nodeId : ec.NodeId;
-		browseDirection : BrowseDirection;
-		referenceTypeId : ec.NodeId;
-		includeSubtypes : boolean;
-		nodeClassMask : ec.UInt32;
-		resultMask : ec.UInt32;
+ 		nodeId: ec.NodeId;
+		browseDirection: BrowseDirection;
+		referenceTypeId: ec.NodeId;
+		includeSubtypes: boolean;
+		nodeClassMask: ec.UInt32;
+		resultMask: ec.UInt32;
 
-	constructor(	options? : IBrowseDescription) { 
+	constructor(	options?: IBrowseDescription) { 
 		options = options || {};
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
 		this.browseDirection= (options.browseDirection) ? options.browseDirection:null;
@@ -37,7 +37,7 @@ export class BrowseDescription {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.nodeId,out);
 		encodeBrowseDirection(this.browseDirection,out);
 		ec.encodeNodeId(this.referenceTypeId,out);
@@ -48,7 +48,7 @@ export class BrowseDescription {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.nodeId = ec.decodeNodeId(inp);
 		this.browseDirection = decodeBrowseDirection(inp);
 		this.referenceTypeId = ec.decodeNodeId(inp);
@@ -59,7 +59,7 @@ export class BrowseDescription {
 	}
 
 
-	clone(	target? : BrowseDescription) : BrowseDescription { 
+	clone(	target?: BrowseDescription): BrowseDescription { 
 		if(!target) {
 			target = new BrowseDescription();
 		}
@@ -74,7 +74,7 @@ export class BrowseDescription {
 
 
 }
-export function decodeBrowseDescription(	inp : DataStream) : BrowseDescription { 
+export function decodeBrowseDescription(	inp: DataStream): BrowseDescription { 
 		const obj = new BrowseDescription();
 			obj.decode(inp); 
 			return obj;

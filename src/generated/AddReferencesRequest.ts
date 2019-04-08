@@ -7,8 +7,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IAddReferencesRequest {
-		requestHeader? : RequestHeader;
-		referencesToAdd? : AddReferencesItem[];
+		requestHeader?: RequestHeader;
+		referencesToAdd?: AddReferencesItem[];
 }
 
 /**
@@ -16,10 +16,10 @@ Adds one or more references to the server address space.
 */
 
 export class AddReferencesRequest {
- 		requestHeader : RequestHeader;
-		referencesToAdd : AddReferencesItem[];
+ 		requestHeader: RequestHeader;
+		referencesToAdd: AddReferencesItem[];
 
-	constructor(	options? : IAddReferencesRequest) { 
+	constructor(	options?: IAddReferencesRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.referencesToAdd= (options.referencesToAdd) ? options.referencesToAdd:[];
@@ -27,21 +27,21 @@ export class AddReferencesRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeArray(this.referencesToAdd,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.referencesToAdd = ec.decodeArray(inp,decodeAddReferencesItem);
 
 	}
 
 
-	clone(	target? : AddReferencesRequest) : AddReferencesRequest { 
+	clone(	target?: AddReferencesRequest): AddReferencesRequest { 
 		if(!target) {
 			target = new AddReferencesRequest();
 		}
@@ -52,7 +52,7 @@ export class AddReferencesRequest {
 
 
 }
-export function decodeAddReferencesRequest(	inp : DataStream) : AddReferencesRequest { 
+export function decodeAddReferencesRequest(	inp: DataStream): AddReferencesRequest { 
 		const obj = new AddReferencesRequest();
 			obj.decode(inp); 
 			return obj;

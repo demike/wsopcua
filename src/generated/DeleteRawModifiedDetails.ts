@@ -6,9 +6,9 @@ import {HistoryUpdateDetails} from './HistoryUpdateDetails';
 import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
 export interface IDeleteRawModifiedDetails extends IHistoryUpdateDetails {
-		isDeleteModified? : boolean;
-		startTime? : Date;
-		endTime? : Date;
+		isDeleteModified?: boolean;
+		startTime?: Date;
+		endTime?: Date;
 }
 
 /**
@@ -16,11 +16,11 @@ export interface IDeleteRawModifiedDetails extends IHistoryUpdateDetails {
 */
 
 export class DeleteRawModifiedDetails extends HistoryUpdateDetails {
- 		isDeleteModified : boolean;
-		startTime : Date;
-		endTime : Date;
+ 		isDeleteModified: boolean;
+		startTime: Date;
+		endTime: Date;
 
-	constructor(	options? : IDeleteRawModifiedDetails) { 
+	constructor(	options?: IDeleteRawModifiedDetails) { 
 		options = options || {};
 		super(options);
 		this.isDeleteModified= (options.isDeleteModified) ? options.isDeleteModified:null;
@@ -30,7 +30,7 @@ export class DeleteRawModifiedDetails extends HistoryUpdateDetails {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeBoolean(this.isDeleteModified,out);
 		ec.encodeDateTime(this.startTime,out);
@@ -39,7 +39,7 @@ export class DeleteRawModifiedDetails extends HistoryUpdateDetails {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.isDeleteModified = ec.decodeBoolean(inp);
 		this.startTime = ec.decodeDateTime(inp);
@@ -48,7 +48,7 @@ export class DeleteRawModifiedDetails extends HistoryUpdateDetails {
 	}
 
 
-	clone(	target? : DeleteRawModifiedDetails) : DeleteRawModifiedDetails { 
+	clone(	target?: DeleteRawModifiedDetails): DeleteRawModifiedDetails { 
 		if(!target) {
 			target = new DeleteRawModifiedDetails();
 		}
@@ -61,7 +61,7 @@ export class DeleteRawModifiedDetails extends HistoryUpdateDetails {
 
 
 }
-export function decodeDeleteRawModifiedDetails(	inp : DataStream) : DeleteRawModifiedDetails { 
+export function decodeDeleteRawModifiedDetails(	inp: DataStream): DeleteRawModifiedDetails { 
 		const obj = new DeleteRawModifiedDetails();
 			obj.decode(inp); 
 			return obj;

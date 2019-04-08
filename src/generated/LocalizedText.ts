@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ILocalizedText {
-		locale? : string;
-		text? : string;
+		locale?: string;
+		text?: string;
 }
 
 /**
@@ -13,10 +13,10 @@ A string qualified with a namespace index.
 */
 
 export class LocalizedText {
- 		locale : string;
-		text : string;
+ 		locale: string;
+		text: string;
 
-	constructor(	options? : ILocalizedText) { 
+	constructor(	options?: ILocalizedText) { 
 		options = options || {};
 		this.locale= (options.locale) ? options.locale:null;
 		this.text= (options.text) ? options.text:null;
@@ -24,7 +24,7 @@ export class LocalizedText {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		let encodingByte = 0;
 		if (this.locale != null) { encodingByte |= 1 << 0;}
 		if (this.text != null) { encodingByte |= 1 << 1;}
@@ -35,7 +35,7 @@ export class LocalizedText {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		let encodingByte = inp.getUint8();
 		let localeSpecified = (encodingByte & 1) != 0;
 		let textSpecified = (encodingByte & 2) != 0;
@@ -50,7 +50,7 @@ export class LocalizedText {
 	}
 
 
-	clone(	target? : LocalizedText) : LocalizedText { 
+	clone(	target?: LocalizedText): LocalizedText { 
 		if(!target) {
 			target = new LocalizedText();
 		}
@@ -61,7 +61,7 @@ export class LocalizedText {
 
 
 }
-export function decodeLocalizedText(	inp : DataStream) : LocalizedText { 
+export function decodeLocalizedText(	inp: DataStream): LocalizedText { 
 		const obj = new LocalizedText();
 			obj.decode(inp); 
 			return obj;

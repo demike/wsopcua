@@ -12,12 +12,12 @@ export enum TrustListMasks {
 
 }
 
-export function encodeTrustListMasks(	data : TrustListMasks, 	out : DataStream) { 
+export function encodeTrustListMasks(	data: TrustListMasks, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeTrustListMasks(	inp : DataStream) { 
+export function decodeTrustListMasks(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

@@ -9,12 +9,12 @@ export enum NamingRuleType {
 
 }
 
-export function encodeNamingRuleType(	data : NamingRuleType, 	out : DataStream) { 
+export function encodeNamingRuleType(	data: NamingRuleType, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeNamingRuleType(	inp : DataStream) { 
+export function decodeNamingRuleType(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

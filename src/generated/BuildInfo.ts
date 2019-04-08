@@ -4,12 +4,12 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IBuildInfo {
-		productUri? : string;
-		manufacturerName? : string;
-		productName? : string;
-		softwareVersion? : string;
-		buildNumber? : string;
-		buildDate? : Date;
+		productUri?: string;
+		manufacturerName?: string;
+		productName?: string;
+		softwareVersion?: string;
+		buildNumber?: string;
+		buildDate?: Date;
 }
 
 /**
@@ -17,14 +17,14 @@ export interface IBuildInfo {
 */
 
 export class BuildInfo {
- 		productUri : string;
-		manufacturerName : string;
-		productName : string;
-		softwareVersion : string;
-		buildNumber : string;
-		buildDate : Date;
+ 		productUri: string;
+		manufacturerName: string;
+		productName: string;
+		softwareVersion: string;
+		buildNumber: string;
+		buildDate: Date;
 
-	constructor(	options? : IBuildInfo) { 
+	constructor(	options?: IBuildInfo) { 
 		options = options || {};
 		this.productUri= (options.productUri) ? options.productUri:null;
 		this.manufacturerName= (options.manufacturerName) ? options.manufacturerName:null;
@@ -36,7 +36,7 @@ export class BuildInfo {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.productUri,out);
 		ec.encodeString(this.manufacturerName,out);
 		ec.encodeString(this.productName,out);
@@ -47,7 +47,7 @@ export class BuildInfo {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.productUri = ec.decodeString(inp);
 		this.manufacturerName = ec.decodeString(inp);
 		this.productName = ec.decodeString(inp);
@@ -58,7 +58,7 @@ export class BuildInfo {
 	}
 
 
-	clone(	target? : BuildInfo) : BuildInfo { 
+	clone(	target?: BuildInfo): BuildInfo { 
 		if(!target) {
 			target = new BuildInfo();
 		}
@@ -73,7 +73,7 @@ export class BuildInfo {
 
 
 }
-export function decodeBuildInfo(	inp : DataStream) : BuildInfo { 
+export function decodeBuildInfo(	inp: DataStream): BuildInfo { 
 		const obj = new BuildInfo();
 			obj.decode(inp); 
 			return obj;

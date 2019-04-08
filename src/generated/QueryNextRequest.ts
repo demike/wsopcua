@@ -5,9 +5,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IQueryNextRequest {
-		requestHeader? : RequestHeader;
-		releaseContinuationPoint? : boolean;
-		continuationPoint? : Uint8Array;
+		requestHeader?: RequestHeader;
+		releaseContinuationPoint?: boolean;
+		continuationPoint?: Uint8Array;
 }
 
 /**
@@ -15,11 +15,11 @@ export interface IQueryNextRequest {
 */
 
 export class QueryNextRequest {
- 		requestHeader : RequestHeader;
-		releaseContinuationPoint : boolean;
-		continuationPoint : Uint8Array;
+ 		requestHeader: RequestHeader;
+		releaseContinuationPoint: boolean;
+		continuationPoint: Uint8Array;
 
-	constructor(	options? : IQueryNextRequest) { 
+	constructor(	options?: IQueryNextRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.releaseContinuationPoint= (options.releaseContinuationPoint) ? options.releaseContinuationPoint:null;
@@ -28,7 +28,7 @@ export class QueryNextRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeBoolean(this.releaseContinuationPoint,out);
 		ec.encodeByteString(this.continuationPoint,out);
@@ -36,7 +36,7 @@ export class QueryNextRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.releaseContinuationPoint = ec.decodeBoolean(inp);
 		this.continuationPoint = ec.decodeByteString(inp);
@@ -44,7 +44,7 @@ export class QueryNextRequest {
 	}
 
 
-	clone(	target? : QueryNextRequest) : QueryNextRequest { 
+	clone(	target?: QueryNextRequest): QueryNextRequest { 
 		if(!target) {
 			target = new QueryNextRequest();
 		}
@@ -56,7 +56,7 @@ export class QueryNextRequest {
 
 
 }
-export function decodeQueryNextRequest(	inp : DataStream) : QueryNextRequest { 
+export function decodeQueryNextRequest(	inp: DataStream): QueryNextRequest { 
 		const obj = new QueryNextRequest();
 			obj.decode(inp); 
 			return obj;

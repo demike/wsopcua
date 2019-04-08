@@ -7,8 +7,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IGetEndpointsResponse {
-		responseHeader? : ResponseHeader;
-		endpoints? : EndpointDescription[];
+		responseHeader?: ResponseHeader;
+		endpoints?: EndpointDescription[];
 }
 
 /**
@@ -16,10 +16,10 @@ Gets the endpoints used by the server.
 */
 
 export class GetEndpointsResponse {
- 		responseHeader : ResponseHeader;
-		endpoints : EndpointDescription[];
+ 		responseHeader: ResponseHeader;
+		endpoints: EndpointDescription[];
 
-	constructor(	options? : IGetEndpointsResponse) { 
+	constructor(	options?: IGetEndpointsResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.endpoints= (options.endpoints) ? options.endpoints:[];
@@ -27,21 +27,21 @@ export class GetEndpointsResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.endpoints,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.endpoints = ec.decodeArray(inp,decodeEndpointDescription);
 
 	}
 
 
-	clone(	target? : GetEndpointsResponse) : GetEndpointsResponse { 
+	clone(	target?: GetEndpointsResponse): GetEndpointsResponse { 
 		if(!target) {
 			target = new GetEndpointsResponse();
 		}
@@ -52,7 +52,7 @@ export class GetEndpointsResponse {
 
 
 }
-export function decodeGetEndpointsResponse(	inp : DataStream) : GetEndpointsResponse { 
+export function decodeGetEndpointsResponse(	inp: DataStream): GetEndpointsResponse { 
 		const obj = new GetEndpointsResponse();
 			obj.decode(inp); 
 			return obj;

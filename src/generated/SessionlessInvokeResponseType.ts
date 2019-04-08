@@ -4,9 +4,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISessionlessInvokeResponseType {
-		namespaceUris? : string[];
-		serverUris? : string[];
-		serviceId? : ec.UInt32;
+		namespaceUris?: string[];
+		serverUris?: string[];
+		serviceId?: ec.UInt32;
 }
 
 /**
@@ -14,11 +14,11 @@ export interface ISessionlessInvokeResponseType {
 */
 
 export class SessionlessInvokeResponseType {
- 		namespaceUris : string[];
-		serverUris : string[];
-		serviceId : ec.UInt32;
+ 		namespaceUris: string[];
+		serverUris: string[];
+		serviceId: ec.UInt32;
 
-	constructor(	options? : ISessionlessInvokeResponseType) { 
+	constructor(	options?: ISessionlessInvokeResponseType) { 
 		options = options || {};
 		this.namespaceUris= (options.namespaceUris) ? options.namespaceUris:[];
 		this.serverUris= (options.serverUris) ? options.serverUris:[];
@@ -27,7 +27,7 @@ export class SessionlessInvokeResponseType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.namespaceUris,out,ec.encodeString);
 		ec.encodeArray(this.serverUris,out,ec.encodeString);
 		ec.encodeUInt32(this.serviceId,out);
@@ -35,7 +35,7 @@ export class SessionlessInvokeResponseType {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.namespaceUris = ec.decodeArray(inp,ec.decodeString);
 		this.serverUris = ec.decodeArray(inp,ec.decodeString);
 		this.serviceId = ec.decodeUInt32(inp);
@@ -43,7 +43,7 @@ export class SessionlessInvokeResponseType {
 	}
 
 
-	clone(	target? : SessionlessInvokeResponseType) : SessionlessInvokeResponseType { 
+	clone(	target?: SessionlessInvokeResponseType): SessionlessInvokeResponseType { 
 		if(!target) {
 			target = new SessionlessInvokeResponseType();
 		}
@@ -55,7 +55,7 @@ export class SessionlessInvokeResponseType {
 
 
 }
-export function decodeSessionlessInvokeResponseType(	inp : DataStream) : SessionlessInvokeResponseType { 
+export function decodeSessionlessInvokeResponseType(	inp: DataStream): SessionlessInvokeResponseType { 
 		const obj = new SessionlessInvokeResponseType();
 			obj.decode(inp); 
 			return obj;

@@ -5,8 +5,8 @@ import {DataValue} from './DataValue';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IMonitoredItemNotification {
-		clientHandle? : ec.UInt32;
-		value? : DataValue;
+		clientHandle?: ec.UInt32;
+		value?: DataValue;
 }
 
 /**
@@ -14,10 +14,10 @@ export interface IMonitoredItemNotification {
 */
 
 export class MonitoredItemNotification {
- 		clientHandle : ec.UInt32;
-		value : DataValue;
+ 		clientHandle: ec.UInt32;
+		value: DataValue;
 
-	constructor(	options? : IMonitoredItemNotification) { 
+	constructor(	options?: IMonitoredItemNotification) { 
 		options = options || {};
 		this.clientHandle= (options.clientHandle) ? options.clientHandle:null;
 		this.value= (options.value) ? options.value:new DataValue();
@@ -25,21 +25,21 @@ export class MonitoredItemNotification {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.clientHandle,out);
 		this.value.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.clientHandle = ec.decodeUInt32(inp);
 		this.value.decode(inp);
 
 	}
 
 
-	clone(	target? : MonitoredItemNotification) : MonitoredItemNotification { 
+	clone(	target?: MonitoredItemNotification): MonitoredItemNotification { 
 		if(!target) {
 			target = new MonitoredItemNotification();
 		}
@@ -50,7 +50,7 @@ export class MonitoredItemNotification {
 
 
 }
-export function decodeMonitoredItemNotification(	inp : DataStream) : MonitoredItemNotification { 
+export function decodeMonitoredItemNotification(	inp: DataStream): MonitoredItemNotification { 
 		const obj = new MonitoredItemNotification();
 			obj.decode(inp); 
 			return obj;

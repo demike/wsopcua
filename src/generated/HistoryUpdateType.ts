@@ -10,12 +10,12 @@ export enum HistoryUpdateType {
 
 }
 
-export function encodeHistoryUpdateType(	data : HistoryUpdateType, 	out : DataStream) { 
+export function encodeHistoryUpdateType(	data: HistoryUpdateType, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeHistoryUpdateType(	inp : DataStream) { 
+export function decodeHistoryUpdateType(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

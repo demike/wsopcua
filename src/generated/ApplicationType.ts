@@ -12,12 +12,12 @@ export enum ApplicationType {
 
 }
 
-export function encodeApplicationType(	data : ApplicationType, 	out : DataStream) { 
+export function encodeApplicationType(	data: ApplicationType, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeApplicationType(	inp : DataStream) { 
+export function decodeApplicationType(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

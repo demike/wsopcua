@@ -5,9 +5,9 @@ import {HistoryUpdateType, encodeHistoryUpdateType, decodeHistoryUpdateType} fro
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IModificationInfo {
-		modificationTime? : Date;
-		updateType? : HistoryUpdateType;
-		userName? : string;
+		modificationTime?: Date;
+		updateType?: HistoryUpdateType;
+		userName?: string;
 }
 
 /**
@@ -15,11 +15,11 @@ export interface IModificationInfo {
 */
 
 export class ModificationInfo {
- 		modificationTime : Date;
-		updateType : HistoryUpdateType;
-		userName : string;
+ 		modificationTime: Date;
+		updateType: HistoryUpdateType;
+		userName: string;
 
-	constructor(	options? : IModificationInfo) { 
+	constructor(	options?: IModificationInfo) { 
 		options = options || {};
 		this.modificationTime= (options.modificationTime) ? options.modificationTime:null;
 		this.updateType= (options.updateType) ? options.updateType:null;
@@ -28,7 +28,7 @@ export class ModificationInfo {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeDateTime(this.modificationTime,out);
 		encodeHistoryUpdateType(this.updateType,out);
 		ec.encodeString(this.userName,out);
@@ -36,7 +36,7 @@ export class ModificationInfo {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.modificationTime = ec.decodeDateTime(inp);
 		this.updateType = decodeHistoryUpdateType(inp);
 		this.userName = ec.decodeString(inp);
@@ -44,7 +44,7 @@ export class ModificationInfo {
 	}
 
 
-	clone(	target? : ModificationInfo) : ModificationInfo { 
+	clone(	target?: ModificationInfo): ModificationInfo { 
 		if(!target) {
 			target = new ModificationInfo();
 		}
@@ -56,7 +56,7 @@ export class ModificationInfo {
 
 
 }
-export function decodeModificationInfo(	inp : DataStream) : ModificationInfo { 
+export function decodeModificationInfo(	inp: DataStream): ModificationInfo { 
 		const obj = new ModificationInfo();
 			obj.decode(inp); 
 			return obj;

@@ -7,8 +7,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDeleteReferencesRequest {
-		requestHeader? : RequestHeader;
-		referencesToDelete? : DeleteReferencesItem[];
+		requestHeader?: RequestHeader;
+		referencesToDelete?: DeleteReferencesItem[];
 }
 
 /**
@@ -16,10 +16,10 @@ Delete one or more references from the server address space.
 */
 
 export class DeleteReferencesRequest {
- 		requestHeader : RequestHeader;
-		referencesToDelete : DeleteReferencesItem[];
+ 		requestHeader: RequestHeader;
+		referencesToDelete: DeleteReferencesItem[];
 
-	constructor(	options? : IDeleteReferencesRequest) { 
+	constructor(	options?: IDeleteReferencesRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.referencesToDelete= (options.referencesToDelete) ? options.referencesToDelete:[];
@@ -27,21 +27,21 @@ export class DeleteReferencesRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeArray(this.referencesToDelete,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.referencesToDelete = ec.decodeArray(inp,decodeDeleteReferencesItem);
 
 	}
 
 
-	clone(	target? : DeleteReferencesRequest) : DeleteReferencesRequest { 
+	clone(	target?: DeleteReferencesRequest): DeleteReferencesRequest { 
 		if(!target) {
 			target = new DeleteReferencesRequest();
 		}
@@ -52,7 +52,7 @@ export class DeleteReferencesRequest {
 
 
 }
-export function decodeDeleteReferencesRequest(	inp : DataStream) : DeleteReferencesRequest { 
+export function decodeDeleteReferencesRequest(	inp: DataStream): DeleteReferencesRequest { 
 		const obj = new DeleteReferencesRequest();
 			obj.decode(inp); 
 			return obj;

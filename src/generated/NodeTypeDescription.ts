@@ -6,9 +6,9 @@ import {decodeQueryDataDescription} from './QueryDataDescription';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface INodeTypeDescription {
-		typeDefinitionNode? : ec.ExpandedNodeId;
-		includeSubTypes? : boolean;
-		dataToReturn? : QueryDataDescription[];
+		typeDefinitionNode?: ec.ExpandedNodeId;
+		includeSubTypes?: boolean;
+		dataToReturn?: QueryDataDescription[];
 }
 
 /**
@@ -16,11 +16,11 @@ export interface INodeTypeDescription {
 */
 
 export class NodeTypeDescription {
- 		typeDefinitionNode : ec.ExpandedNodeId;
-		includeSubTypes : boolean;
-		dataToReturn : QueryDataDescription[];
+ 		typeDefinitionNode: ec.ExpandedNodeId;
+		includeSubTypes: boolean;
+		dataToReturn: QueryDataDescription[];
 
-	constructor(	options? : INodeTypeDescription) { 
+	constructor(	options?: INodeTypeDescription) { 
 		options = options || {};
 		this.typeDefinitionNode= (options.typeDefinitionNode) ? options.typeDefinitionNode:null;
 		this.includeSubTypes= (options.includeSubTypes) ? options.includeSubTypes:null;
@@ -29,7 +29,7 @@ export class NodeTypeDescription {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeExpandedNodeId(this.typeDefinitionNode,out);
 		ec.encodeBoolean(this.includeSubTypes,out);
 		ec.encodeArray(this.dataToReturn,out);
@@ -37,7 +37,7 @@ export class NodeTypeDescription {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.typeDefinitionNode = ec.decodeExpandedNodeId(inp);
 		this.includeSubTypes = ec.decodeBoolean(inp);
 		this.dataToReturn = ec.decodeArray(inp,decodeQueryDataDescription);
@@ -45,7 +45,7 @@ export class NodeTypeDescription {
 	}
 
 
-	clone(	target? : NodeTypeDescription) : NodeTypeDescription { 
+	clone(	target?: NodeTypeDescription): NodeTypeDescription { 
 		if(!target) {
 			target = new NodeTypeDescription();
 		}
@@ -57,7 +57,7 @@ export class NodeTypeDescription {
 
 
 }
-export function decodeNodeTypeDescription(	inp : DataStream) : NodeTypeDescription { 
+export function decodeNodeTypeDescription(	inp: DataStream): NodeTypeDescription { 
 		const obj = new NodeTypeDescription();
 			obj.decode(inp); 
 			return obj;

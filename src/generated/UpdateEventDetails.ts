@@ -10,9 +10,9 @@ import {HistoryUpdateDetails} from './HistoryUpdateDetails';
 import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
 export interface IUpdateEventDetails extends IHistoryUpdateDetails {
-		performInsertReplace? : PerformUpdateType;
-		filter? : EventFilter;
-		eventData? : HistoryEventFieldList[];
+		performInsertReplace?: PerformUpdateType;
+		filter?: EventFilter;
+		eventData?: HistoryEventFieldList[];
 }
 
 /**
@@ -20,11 +20,11 @@ export interface IUpdateEventDetails extends IHistoryUpdateDetails {
 */
 
 export class UpdateEventDetails extends HistoryUpdateDetails {
- 		performInsertReplace : PerformUpdateType;
-		filter : EventFilter;
-		eventData : HistoryEventFieldList[];
+ 		performInsertReplace: PerformUpdateType;
+		filter: EventFilter;
+		eventData: HistoryEventFieldList[];
 
-	constructor(	options? : IUpdateEventDetails) { 
+	constructor(	options?: IUpdateEventDetails) { 
 		options = options || {};
 		super(options);
 		this.performInsertReplace= (options.performInsertReplace) ? options.performInsertReplace:null;
@@ -34,7 +34,7 @@ export class UpdateEventDetails extends HistoryUpdateDetails {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		encodePerformUpdateType(this.performInsertReplace,out);
 		this.filter.encode(out);
@@ -43,7 +43,7 @@ export class UpdateEventDetails extends HistoryUpdateDetails {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.performInsertReplace = decodePerformUpdateType(inp);
 		this.filter.decode(inp);
@@ -52,7 +52,7 @@ export class UpdateEventDetails extends HistoryUpdateDetails {
 	}
 
 
-	clone(	target? : UpdateEventDetails) : UpdateEventDetails { 
+	clone(	target?: UpdateEventDetails): UpdateEventDetails { 
 		if(!target) {
 			target = new UpdateEventDetails();
 		}
@@ -65,7 +65,7 @@ export class UpdateEventDetails extends HistoryUpdateDetails {
 
 
 }
-export function decodeUpdateEventDetails(	inp : DataStream) : UpdateEventDetails { 
+export function decodeUpdateEventDetails(	inp: DataStream): UpdateEventDetails { 
 		const obj = new UpdateEventDetails();
 			obj.decode(inp); 
 			return obj;

@@ -5,7 +5,7 @@ import {DataStream} from '../basic-types/DataStream';
 import * as ec from '../basic-types';
 
 export interface IRegisterServerResponse {
-		responseHeader? : ResponseHeader;
+		responseHeader?: ResponseHeader;
 }
 
 /**
@@ -13,28 +13,28 @@ Registers a server with the discovery server.
 */
 
 export class RegisterServerResponse {
- 		responseHeader : ResponseHeader;
+ 		responseHeader: ResponseHeader;
 
-	constructor(	options? : IRegisterServerResponse) { 
+	constructor(	options?: IRegisterServerResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 
 	}
 
 
-	clone(	target? : RegisterServerResponse) : RegisterServerResponse { 
+	clone(	target?: RegisterServerResponse): RegisterServerResponse { 
 		if(!target) {
 			target = new RegisterServerResponse();
 		}
@@ -44,7 +44,7 @@ export class RegisterServerResponse {
 
 
 }
-export function decodeRegisterServerResponse(	inp : DataStream) : RegisterServerResponse { 
+export function decodeRegisterServerResponse(	inp: DataStream): RegisterServerResponse { 
 		const obj = new RegisterServerResponse();
 			obj.decode(inp); 
 			return obj;

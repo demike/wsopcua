@@ -5,11 +5,11 @@ import {DataStream} from '../basic-types/DataStream';
 import {HistoryReadDetails} from './HistoryReadDetails';
 
 export interface IReadRawModifiedDetails {
-		isReadModified? : boolean;
-		startTime? : Date;
-		endTime? : Date;
-		numValuesPerNode? : ec.UInt32;
-		returnBounds? : boolean;
+		isReadModified?: boolean;
+		startTime?: Date;
+		endTime?: Date;
+		numValuesPerNode?: ec.UInt32;
+		returnBounds?: boolean;
 }
 
 /**
@@ -17,13 +17,13 @@ export interface IReadRawModifiedDetails {
 */
 
 export class ReadRawModifiedDetails extends HistoryReadDetails {
- 		isReadModified : boolean;
-		startTime : Date;
-		endTime : Date;
-		numValuesPerNode : ec.UInt32;
-		returnBounds : boolean;
+ 		isReadModified: boolean;
+		startTime: Date;
+		endTime: Date;
+		numValuesPerNode: ec.UInt32;
+		returnBounds: boolean;
 
-	constructor(	options? : IReadRawModifiedDetails) { 
+	constructor(	options?: IReadRawModifiedDetails) { 
 		options = options || {};
 		super();
 		this.isReadModified= (options.isReadModified) ? options.isReadModified:null;
@@ -35,7 +35,7 @@ export class ReadRawModifiedDetails extends HistoryReadDetails {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeBoolean(this.isReadModified,out);
 		ec.encodeDateTime(this.startTime,out);
 		ec.encodeDateTime(this.endTime,out);
@@ -45,7 +45,7 @@ export class ReadRawModifiedDetails extends HistoryReadDetails {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.isReadModified = ec.decodeBoolean(inp);
 		this.startTime = ec.decodeDateTime(inp);
 		this.endTime = ec.decodeDateTime(inp);
@@ -55,7 +55,7 @@ export class ReadRawModifiedDetails extends HistoryReadDetails {
 	}
 
 
-	clone(	target? : ReadRawModifiedDetails) : ReadRawModifiedDetails { 
+	clone(	target?: ReadRawModifiedDetails): ReadRawModifiedDetails { 
 		if(!target) {
 			target = new ReadRawModifiedDetails();
 		}
@@ -69,7 +69,7 @@ export class ReadRawModifiedDetails extends HistoryReadDetails {
 
 
 }
-export function decodeReadRawModifiedDetails(	inp : DataStream) : ReadRawModifiedDetails { 
+export function decodeReadRawModifiedDetails(	inp: DataStream): ReadRawModifiedDetails { 
 		const obj = new ReadRawModifiedDetails();
 			obj.decode(inp); 
 			return obj;

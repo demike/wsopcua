@@ -6,8 +6,8 @@ import {DataStream} from '../basic-types/DataStream';
 import {NotificationData} from './NotificationData';
 
 export interface IStatusChangeNotification {
-		status? : ec.StatusCode;
-		diagnosticInfo? : DiagnosticInfo;
+		status?: ec.StatusCode;
+		diagnosticInfo?: DiagnosticInfo;
 }
 
 /**
@@ -15,10 +15,10 @@ export interface IStatusChangeNotification {
 */
 
 export class StatusChangeNotification extends NotificationData {
- 		status : ec.StatusCode;
-		diagnosticInfo : DiagnosticInfo;
+ 		status: ec.StatusCode;
+		diagnosticInfo: DiagnosticInfo;
 
-	constructor(	options? : IStatusChangeNotification) { 
+	constructor(	options?: IStatusChangeNotification) { 
 		options = options || {};
 		super();
 		this.status= (options.status) ? options.status:null;
@@ -27,21 +27,21 @@ export class StatusChangeNotification extends NotificationData {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeStatusCode(this.status,out);
 		this.diagnosticInfo.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.status = ec.decodeStatusCode(inp);
 		this.diagnosticInfo.decode(inp);
 
 	}
 
 
-	clone(	target? : StatusChangeNotification) : StatusChangeNotification { 
+	clone(	target?: StatusChangeNotification): StatusChangeNotification { 
 		if(!target) {
 			target = new StatusChangeNotification();
 		}
@@ -52,7 +52,7 @@ export class StatusChangeNotification extends NotificationData {
 
 
 }
-export function decodeStatusChangeNotification(	inp : DataStream) : StatusChangeNotification { 
+export function decodeStatusChangeNotification(	inp: DataStream): StatusChangeNotification { 
 		const obj = new StatusChangeNotification();
 			obj.decode(inp); 
 			return obj;

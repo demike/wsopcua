@@ -6,7 +6,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRelativePath {
-		elements? : RelativePathElement[];
+		elements?: RelativePathElement[];
 }
 
 /**
@@ -14,28 +14,28 @@ A relative path constructed from reference types and browse names.
 */
 
 export class RelativePath {
- 		elements : RelativePathElement[];
+ 		elements: RelativePathElement[];
 
-	constructor(	options? : IRelativePath) { 
+	constructor(	options?: IRelativePath) { 
 		options = options || {};
 		this.elements= (options.elements) ? options.elements:[];
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.elements,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.elements = ec.decodeArray(inp,decodeRelativePathElement);
 
 	}
 
 
-	clone(	target? : RelativePath) : RelativePath { 
+	clone(	target?: RelativePath): RelativePath { 
 		if(!target) {
 			target = new RelativePath();
 		}
@@ -45,7 +45,7 @@ export class RelativePath {
 
 
 }
-export function decodeRelativePath(	inp : DataStream) : RelativePath { 
+export function decodeRelativePath(	inp: DataStream): RelativePath { 
 		const obj = new RelativePath();
 			obj.decode(inp); 
 			return obj;

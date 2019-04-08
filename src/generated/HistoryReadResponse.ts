@@ -9,9 +9,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryReadResponse {
-		responseHeader? : ResponseHeader;
-		results? : HistoryReadResult[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: HistoryReadResult[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -19,11 +19,11 @@ export interface IHistoryReadResponse {
 */
 
 export class HistoryReadResponse {
- 		responseHeader : ResponseHeader;
-		results : HistoryReadResult[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: HistoryReadResult[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IHistoryReadResponse) { 
+	constructor(	options?: IHistoryReadResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -32,7 +32,7 @@ export class HistoryReadResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -40,7 +40,7 @@ export class HistoryReadResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,decodeHistoryReadResult);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -48,7 +48,7 @@ export class HistoryReadResponse {
 	}
 
 
-	clone(	target? : HistoryReadResponse) : HistoryReadResponse { 
+	clone(	target?: HistoryReadResponse): HistoryReadResponse { 
 		if(!target) {
 			target = new HistoryReadResponse();
 		}
@@ -60,7 +60,7 @@ export class HistoryReadResponse {
 
 
 }
-export function decodeHistoryReadResponse(	inp : DataStream) : HistoryReadResponse { 
+export function decodeHistoryReadResponse(	inp: DataStream): HistoryReadResponse { 
 		const obj = new HistoryReadResponse();
 			obj.decode(inp); 
 			return obj;

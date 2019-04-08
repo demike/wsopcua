@@ -6,49 +6,49 @@ import {ServiceCounterDataType} from './ServiceCounterDataType';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISessionDiagnosticsDataType {
-		sessionId? : ec.NodeId;
-		sessionName? : string;
-		clientDescription? : ApplicationDescription;
-		serverUri? : string;
-		endpointUrl? : string;
-		localeIds? : string[];
-		actualSessionTimeout? : ec.Double;
-		maxResponseMessageSize? : ec.UInt32;
-		clientConnectionTime? : Date;
-		clientLastContactTime? : Date;
-		currentSubscriptionsCount? : ec.UInt32;
-		currentMonitoredItemsCount? : ec.UInt32;
-		currentPublishRequestsInQueue? : ec.UInt32;
-		totalRequestCount? : ServiceCounterDataType;
-		unauthorizedRequestCount? : ec.UInt32;
-		readCount? : ServiceCounterDataType;
-		historyReadCount? : ServiceCounterDataType;
-		writeCount? : ServiceCounterDataType;
-		historyUpdateCount? : ServiceCounterDataType;
-		callCount? : ServiceCounterDataType;
-		createMonitoredItemsCount? : ServiceCounterDataType;
-		modifyMonitoredItemsCount? : ServiceCounterDataType;
-		setMonitoringModeCount? : ServiceCounterDataType;
-		setTriggeringCount? : ServiceCounterDataType;
-		deleteMonitoredItemsCount? : ServiceCounterDataType;
-		createSubscriptionCount? : ServiceCounterDataType;
-		modifySubscriptionCount? : ServiceCounterDataType;
-		setPublishingModeCount? : ServiceCounterDataType;
-		publishCount? : ServiceCounterDataType;
-		republishCount? : ServiceCounterDataType;
-		transferSubscriptionsCount? : ServiceCounterDataType;
-		deleteSubscriptionsCount? : ServiceCounterDataType;
-		addNodesCount? : ServiceCounterDataType;
-		addReferencesCount? : ServiceCounterDataType;
-		deleteNodesCount? : ServiceCounterDataType;
-		deleteReferencesCount? : ServiceCounterDataType;
-		browseCount? : ServiceCounterDataType;
-		browseNextCount? : ServiceCounterDataType;
-		translateBrowsePathsToNodeIdsCount? : ServiceCounterDataType;
-		queryFirstCount? : ServiceCounterDataType;
-		queryNextCount? : ServiceCounterDataType;
-		registerNodesCount? : ServiceCounterDataType;
-		unregisterNodesCount? : ServiceCounterDataType;
+		sessionId?: ec.NodeId;
+		sessionName?: string;
+		clientDescription?: ApplicationDescription;
+		serverUri?: string;
+		endpointUrl?: string;
+		localeIds?: string[];
+		actualSessionTimeout?: ec.Double;
+		maxResponseMessageSize?: ec.UInt32;
+		clientConnectionTime?: Date;
+		clientLastContactTime?: Date;
+		currentSubscriptionsCount?: ec.UInt32;
+		currentMonitoredItemsCount?: ec.UInt32;
+		currentPublishRequestsInQueue?: ec.UInt32;
+		totalRequestCount?: ServiceCounterDataType;
+		unauthorizedRequestCount?: ec.UInt32;
+		readCount?: ServiceCounterDataType;
+		historyReadCount?: ServiceCounterDataType;
+		writeCount?: ServiceCounterDataType;
+		historyUpdateCount?: ServiceCounterDataType;
+		callCount?: ServiceCounterDataType;
+		createMonitoredItemsCount?: ServiceCounterDataType;
+		modifyMonitoredItemsCount?: ServiceCounterDataType;
+		setMonitoringModeCount?: ServiceCounterDataType;
+		setTriggeringCount?: ServiceCounterDataType;
+		deleteMonitoredItemsCount?: ServiceCounterDataType;
+		createSubscriptionCount?: ServiceCounterDataType;
+		modifySubscriptionCount?: ServiceCounterDataType;
+		setPublishingModeCount?: ServiceCounterDataType;
+		publishCount?: ServiceCounterDataType;
+		republishCount?: ServiceCounterDataType;
+		transferSubscriptionsCount?: ServiceCounterDataType;
+		deleteSubscriptionsCount?: ServiceCounterDataType;
+		addNodesCount?: ServiceCounterDataType;
+		addReferencesCount?: ServiceCounterDataType;
+		deleteNodesCount?: ServiceCounterDataType;
+		deleteReferencesCount?: ServiceCounterDataType;
+		browseCount?: ServiceCounterDataType;
+		browseNextCount?: ServiceCounterDataType;
+		translateBrowsePathsToNodeIdsCount?: ServiceCounterDataType;
+		queryFirstCount?: ServiceCounterDataType;
+		queryNextCount?: ServiceCounterDataType;
+		registerNodesCount?: ServiceCounterDataType;
+		unregisterNodesCount?: ServiceCounterDataType;
 }
 
 /**
@@ -56,51 +56,51 @@ export interface ISessionDiagnosticsDataType {
 */
 
 export class SessionDiagnosticsDataType {
- 		sessionId : ec.NodeId;
-		sessionName : string;
-		clientDescription : ApplicationDescription;
-		serverUri : string;
-		endpointUrl : string;
-		localeIds : string[];
-		actualSessionTimeout : ec.Double;
-		maxResponseMessageSize : ec.UInt32;
-		clientConnectionTime : Date;
-		clientLastContactTime : Date;
-		currentSubscriptionsCount : ec.UInt32;
-		currentMonitoredItemsCount : ec.UInt32;
-		currentPublishRequestsInQueue : ec.UInt32;
-		totalRequestCount : ServiceCounterDataType;
-		unauthorizedRequestCount : ec.UInt32;
-		readCount : ServiceCounterDataType;
-		historyReadCount : ServiceCounterDataType;
-		writeCount : ServiceCounterDataType;
-		historyUpdateCount : ServiceCounterDataType;
-		callCount : ServiceCounterDataType;
-		createMonitoredItemsCount : ServiceCounterDataType;
-		modifyMonitoredItemsCount : ServiceCounterDataType;
-		setMonitoringModeCount : ServiceCounterDataType;
-		setTriggeringCount : ServiceCounterDataType;
-		deleteMonitoredItemsCount : ServiceCounterDataType;
-		createSubscriptionCount : ServiceCounterDataType;
-		modifySubscriptionCount : ServiceCounterDataType;
-		setPublishingModeCount : ServiceCounterDataType;
-		publishCount : ServiceCounterDataType;
-		republishCount : ServiceCounterDataType;
-		transferSubscriptionsCount : ServiceCounterDataType;
-		deleteSubscriptionsCount : ServiceCounterDataType;
-		addNodesCount : ServiceCounterDataType;
-		addReferencesCount : ServiceCounterDataType;
-		deleteNodesCount : ServiceCounterDataType;
-		deleteReferencesCount : ServiceCounterDataType;
-		browseCount : ServiceCounterDataType;
-		browseNextCount : ServiceCounterDataType;
-		translateBrowsePathsToNodeIdsCount : ServiceCounterDataType;
-		queryFirstCount : ServiceCounterDataType;
-		queryNextCount : ServiceCounterDataType;
-		registerNodesCount : ServiceCounterDataType;
-		unregisterNodesCount : ServiceCounterDataType;
+ 		sessionId: ec.NodeId;
+		sessionName: string;
+		clientDescription: ApplicationDescription;
+		serverUri: string;
+		endpointUrl: string;
+		localeIds: string[];
+		actualSessionTimeout: ec.Double;
+		maxResponseMessageSize: ec.UInt32;
+		clientConnectionTime: Date;
+		clientLastContactTime: Date;
+		currentSubscriptionsCount: ec.UInt32;
+		currentMonitoredItemsCount: ec.UInt32;
+		currentPublishRequestsInQueue: ec.UInt32;
+		totalRequestCount: ServiceCounterDataType;
+		unauthorizedRequestCount: ec.UInt32;
+		readCount: ServiceCounterDataType;
+		historyReadCount: ServiceCounterDataType;
+		writeCount: ServiceCounterDataType;
+		historyUpdateCount: ServiceCounterDataType;
+		callCount: ServiceCounterDataType;
+		createMonitoredItemsCount: ServiceCounterDataType;
+		modifyMonitoredItemsCount: ServiceCounterDataType;
+		setMonitoringModeCount: ServiceCounterDataType;
+		setTriggeringCount: ServiceCounterDataType;
+		deleteMonitoredItemsCount: ServiceCounterDataType;
+		createSubscriptionCount: ServiceCounterDataType;
+		modifySubscriptionCount: ServiceCounterDataType;
+		setPublishingModeCount: ServiceCounterDataType;
+		publishCount: ServiceCounterDataType;
+		republishCount: ServiceCounterDataType;
+		transferSubscriptionsCount: ServiceCounterDataType;
+		deleteSubscriptionsCount: ServiceCounterDataType;
+		addNodesCount: ServiceCounterDataType;
+		addReferencesCount: ServiceCounterDataType;
+		deleteNodesCount: ServiceCounterDataType;
+		deleteReferencesCount: ServiceCounterDataType;
+		browseCount: ServiceCounterDataType;
+		browseNextCount: ServiceCounterDataType;
+		translateBrowsePathsToNodeIdsCount: ServiceCounterDataType;
+		queryFirstCount: ServiceCounterDataType;
+		queryNextCount: ServiceCounterDataType;
+		registerNodesCount: ServiceCounterDataType;
+		unregisterNodesCount: ServiceCounterDataType;
 
-	constructor(	options? : ISessionDiagnosticsDataType) { 
+	constructor(	options?: ISessionDiagnosticsDataType) { 
 		options = options || {};
 		this.sessionId= (options.sessionId) ? options.sessionId:null;
 		this.sessionName= (options.sessionName) ? options.sessionName:null;
@@ -149,7 +149,7 @@ export class SessionDiagnosticsDataType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.sessionId,out);
 		ec.encodeString(this.sessionName,out);
 		this.clientDescription.encode(out);
@@ -197,7 +197,7 @@ export class SessionDiagnosticsDataType {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.sessionId = ec.decodeNodeId(inp);
 		this.sessionName = ec.decodeString(inp);
 		this.clientDescription.decode(inp);
@@ -245,7 +245,7 @@ export class SessionDiagnosticsDataType {
 	}
 
 
-	clone(	target? : SessionDiagnosticsDataType) : SessionDiagnosticsDataType { 
+	clone(	target?: SessionDiagnosticsDataType): SessionDiagnosticsDataType { 
 		if(!target) {
 			target = new SessionDiagnosticsDataType();
 		}
@@ -297,7 +297,7 @@ export class SessionDiagnosticsDataType {
 
 
 }
-export function decodeSessionDiagnosticsDataType(	inp : DataStream) : SessionDiagnosticsDataType { 
+export function decodeSessionDiagnosticsDataType(	inp: DataStream): SessionDiagnosticsDataType { 
 		const obj = new SessionDiagnosticsDataType();
 			obj.decode(inp); 
 			return obj;

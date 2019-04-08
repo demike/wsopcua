@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IGuidNodeId {
-		namespaceIndex? : ec.UInt16;
-		identifier? : ec.Guid;
+		namespaceIndex?: ec.UInt16;
+		identifier?: ec.Guid;
 }
 
 /**
@@ -13,10 +13,10 @@ export interface IGuidNodeId {
 */
 
 export class GuidNodeId {
- 		namespaceIndex : ec.UInt16;
-		identifier : ec.Guid;
+ 		namespaceIndex: ec.UInt16;
+		identifier: ec.Guid;
 
-	constructor(	options? : IGuidNodeId) { 
+	constructor(	options?: IGuidNodeId) { 
 		options = options || {};
 		this.namespaceIndex= (options.namespaceIndex) ? options.namespaceIndex:null;
 		this.identifier= (options.identifier) ? options.identifier:null;
@@ -24,21 +24,21 @@ export class GuidNodeId {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt16(this.namespaceIndex,out);
 		ec.encodeGuid(this.identifier,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.namespaceIndex = ec.decodeUInt16(inp);
 		this.identifier = ec.decodeGuid(inp);
 
 	}
 
 
-	clone(	target? : GuidNodeId) : GuidNodeId { 
+	clone(	target?: GuidNodeId): GuidNodeId { 
 		if(!target) {
 			target = new GuidNodeId();
 		}
@@ -49,7 +49,7 @@ export class GuidNodeId {
 
 
 }
-export function decodeGuidNodeId(	inp : DataStream) : GuidNodeId { 
+export function decodeGuidNodeId(	inp: DataStream): GuidNodeId { 
 		const obj = new GuidNodeId();
 			obj.decode(inp); 
 			return obj;

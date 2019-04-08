@@ -5,7 +5,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {FilterOperand} from './FilterOperand';
 
 export interface ILiteralOperand {
-		value? : Variant;
+		value?: Variant;
 }
 
 /**
@@ -13,9 +13,9 @@ export interface ILiteralOperand {
 */
 
 export class LiteralOperand extends FilterOperand {
- 		value : Variant;
+ 		value: Variant;
 
-	constructor(	options? : ILiteralOperand) { 
+	constructor(	options?: ILiteralOperand) { 
 		options = options || {};
 		super();
 		this.value= (options.value) ? options.value:new Variant();
@@ -23,19 +23,19 @@ export class LiteralOperand extends FilterOperand {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.value.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.value.decode(inp);
 
 	}
 
 
-	clone(	target? : LiteralOperand) : LiteralOperand { 
+	clone(	target?: LiteralOperand): LiteralOperand { 
 		if(!target) {
 			target = new LiteralOperand();
 		}
@@ -45,7 +45,7 @@ export class LiteralOperand extends FilterOperand {
 
 
 }
-export function decodeLiteralOperand(	inp : DataStream) : LiteralOperand { 
+export function decodeLiteralOperand(	inp: DataStream): LiteralOperand { 
 		const obj = new LiteralOperand();
 			obj.decode(inp); 
 			return obj;

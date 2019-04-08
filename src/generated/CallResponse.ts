@@ -9,9 +9,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ICallResponse {
-		responseHeader? : ResponseHeader;
-		results? : CallMethodResult[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: CallMethodResult[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -19,11 +19,11 @@ export interface ICallResponse {
 */
 
 export class CallResponse {
- 		responseHeader : ResponseHeader;
-		results : CallMethodResult[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: CallMethodResult[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : ICallResponse) { 
+	constructor(	options?: ICallResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -32,7 +32,7 @@ export class CallResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -40,7 +40,7 @@ export class CallResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,decodeCallMethodResult);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -48,7 +48,7 @@ export class CallResponse {
 	}
 
 
-	clone(	target? : CallResponse) : CallResponse { 
+	clone(	target?: CallResponse): CallResponse { 
 		if(!target) {
 			target = new CallResponse();
 		}
@@ -60,7 +60,7 @@ export class CallResponse {
 
 
 }
-export function decodeCallResponse(	inp : DataStream) : CallResponse { 
+export function decodeCallResponse(	inp: DataStream): CallResponse { 
 		const obj = new CallResponse();
 			obj.decode(inp); 
 			return obj;

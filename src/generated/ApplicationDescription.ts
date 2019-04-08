@@ -6,13 +6,13 @@ import {ApplicationType, encodeApplicationType, decodeApplicationType} from './A
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IApplicationDescription {
-		applicationUri? : string;
-		productUri? : string;
-		applicationName? : LocalizedText;
-		applicationType? : ApplicationType;
-		gatewayServerUri? : string;
-		discoveryProfileUri? : string;
-		discoveryUrls? : string[];
+		applicationUri?: string;
+		productUri?: string;
+		applicationName?: LocalizedText;
+		applicationType?: ApplicationType;
+		gatewayServerUri?: string;
+		discoveryProfileUri?: string;
+		discoveryUrls?: string[];
 }
 
 /**
@@ -20,15 +20,15 @@ Describes an application and how to find it.
 */
 
 export class ApplicationDescription {
- 		applicationUri : string;
-		productUri : string;
-		applicationName : LocalizedText;
-		applicationType : ApplicationType;
-		gatewayServerUri : string;
-		discoveryProfileUri : string;
-		discoveryUrls : string[];
+ 		applicationUri: string;
+		productUri: string;
+		applicationName: LocalizedText;
+		applicationType: ApplicationType;
+		gatewayServerUri: string;
+		discoveryProfileUri: string;
+		discoveryUrls: string[];
 
-	constructor(	options? : IApplicationDescription) { 
+	constructor(	options?: IApplicationDescription) { 
 		options = options || {};
 		this.applicationUri= (options.applicationUri) ? options.applicationUri:null;
 		this.productUri= (options.productUri) ? options.productUri:null;
@@ -41,7 +41,7 @@ export class ApplicationDescription {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.applicationUri,out);
 		ec.encodeString(this.productUri,out);
 		this.applicationName.encode(out);
@@ -53,7 +53,7 @@ export class ApplicationDescription {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.applicationUri = ec.decodeString(inp);
 		this.productUri = ec.decodeString(inp);
 		this.applicationName.decode(inp);
@@ -65,7 +65,7 @@ export class ApplicationDescription {
 	}
 
 
-	clone(	target? : ApplicationDescription) : ApplicationDescription { 
+	clone(	target?: ApplicationDescription): ApplicationDescription { 
 		if(!target) {
 			target = new ApplicationDescription();
 		}
@@ -81,7 +81,7 @@ export class ApplicationDescription {
 
 
 }
-export function decodeApplicationDescription(	inp : DataStream) : ApplicationDescription { 
+export function decodeApplicationDescription(	inp: DataStream): ApplicationDescription { 
 		const obj = new ApplicationDescription();
 			obj.decode(inp); 
 			return obj;

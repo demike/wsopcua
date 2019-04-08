@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDoubleComplexNumberType {
-		real? : ec.Double;
-		imaginary? : ec.Double;
+		real?: ec.Double;
+		imaginary?: ec.Double;
 }
 
 /**
@@ -13,10 +13,10 @@ export interface IDoubleComplexNumberType {
 */
 
 export class DoubleComplexNumberType {
- 		real : ec.Double;
-		imaginary : ec.Double;
+ 		real: ec.Double;
+		imaginary: ec.Double;
 
-	constructor(	options? : IDoubleComplexNumberType) { 
+	constructor(	options?: IDoubleComplexNumberType) { 
 		options = options || {};
 		this.real= (options.real) ? options.real:null;
 		this.imaginary= (options.imaginary) ? options.imaginary:null;
@@ -24,21 +24,21 @@ export class DoubleComplexNumberType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeDouble(this.real,out);
 		ec.encodeDouble(this.imaginary,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.real = ec.decodeDouble(inp);
 		this.imaginary = ec.decodeDouble(inp);
 
 	}
 
 
-	clone(	target? : DoubleComplexNumberType) : DoubleComplexNumberType { 
+	clone(	target?: DoubleComplexNumberType): DoubleComplexNumberType { 
 		if(!target) {
 			target = new DoubleComplexNumberType();
 		}
@@ -49,7 +49,7 @@ export class DoubleComplexNumberType {
 
 
 }
-export function decodeDoubleComplexNumberType(	inp : DataStream) : DoubleComplexNumberType { 
+export function decodeDoubleComplexNumberType(	inp: DataStream): DoubleComplexNumberType { 
 		const obj = new DoubleComplexNumberType();
 			obj.decode(inp); 
 			return obj;

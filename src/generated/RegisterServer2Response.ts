@@ -7,9 +7,9 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRegisterServer2Response {
-		responseHeader? : ResponseHeader;
-		configurationResults? : ec.StatusCode[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		configurationResults?: ec.StatusCode[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -17,11 +17,11 @@ export interface IRegisterServer2Response {
 */
 
 export class RegisterServer2Response {
- 		responseHeader : ResponseHeader;
-		configurationResults : ec.StatusCode[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		configurationResults: ec.StatusCode[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IRegisterServer2Response) { 
+	constructor(	options?: IRegisterServer2Response) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.configurationResults= (options.configurationResults) ? options.configurationResults:[];
@@ -30,7 +30,7 @@ export class RegisterServer2Response {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.configurationResults,out,ec.encodeStatusCode);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -38,7 +38,7 @@ export class RegisterServer2Response {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.configurationResults = ec.decodeArray(inp,ec.decodeStatusCode);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -46,7 +46,7 @@ export class RegisterServer2Response {
 	}
 
 
-	clone(	target? : RegisterServer2Response) : RegisterServer2Response { 
+	clone(	target?: RegisterServer2Response): RegisterServer2Response { 
 		if(!target) {
 			target = new RegisterServer2Response();
 		}
@@ -58,7 +58,7 @@ export class RegisterServer2Response {
 
 
 }
-export function decodeRegisterServer2Response(	inp : DataStream) : RegisterServer2Response { 
+export function decodeRegisterServer2Response(	inp: DataStream): RegisterServer2Response { 
 		const obj = new RegisterServer2Response();
 			obj.decode(inp); 
 			return obj;

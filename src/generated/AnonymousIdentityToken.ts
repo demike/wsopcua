@@ -13,26 +13,26 @@ A token representing an anonymous user.
 
 export class AnonymousIdentityToken extends UserIdentityToken {
  
-	constructor(	options? : IAnonymousIdentityToken) { 
+	constructor(	options?: IAnonymousIdentityToken) { 
 		options = options || {};
 		super(options);
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 
 	}
 
 
-	clone(	target? : AnonymousIdentityToken) : AnonymousIdentityToken { 
+	clone(	target?: AnonymousIdentityToken): AnonymousIdentityToken { 
 		if(!target) {
 			target = new AnonymousIdentityToken();
 		}
@@ -42,7 +42,7 @@ export class AnonymousIdentityToken extends UserIdentityToken {
 
 
 }
-export function decodeAnonymousIdentityToken(	inp : DataStream) : AnonymousIdentityToken { 
+export function decodeAnonymousIdentityToken(	inp: DataStream): AnonymousIdentityToken { 
 		const obj = new AnonymousIdentityToken();
 			obj.decode(inp); 
 			return obj;

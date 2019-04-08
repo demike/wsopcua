@@ -7,9 +7,9 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDeleteMonitoredItemsResponse {
-		responseHeader? : ResponseHeader;
-		results? : ec.StatusCode[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: ec.StatusCode[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -17,11 +17,11 @@ export interface IDeleteMonitoredItemsResponse {
 */
 
 export class DeleteMonitoredItemsResponse {
- 		responseHeader : ResponseHeader;
-		results : ec.StatusCode[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: ec.StatusCode[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IDeleteMonitoredItemsResponse) { 
+	constructor(	options?: IDeleteMonitoredItemsResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -30,7 +30,7 @@ export class DeleteMonitoredItemsResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out,ec.encodeStatusCode);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -38,7 +38,7 @@ export class DeleteMonitoredItemsResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,ec.decodeStatusCode);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -46,7 +46,7 @@ export class DeleteMonitoredItemsResponse {
 	}
 
 
-	clone(	target? : DeleteMonitoredItemsResponse) : DeleteMonitoredItemsResponse { 
+	clone(	target?: DeleteMonitoredItemsResponse): DeleteMonitoredItemsResponse { 
 		if(!target) {
 			target = new DeleteMonitoredItemsResponse();
 		}
@@ -58,7 +58,7 @@ export class DeleteMonitoredItemsResponse {
 
 
 }
-export function decodeDeleteMonitoredItemsResponse(	inp : DataStream) : DeleteMonitoredItemsResponse { 
+export function decodeDeleteMonitoredItemsResponse(	inp: DataStream): DeleteMonitoredItemsResponse { 
 		const obj = new DeleteMonitoredItemsResponse();
 			obj.decode(inp); 
 			return obj;

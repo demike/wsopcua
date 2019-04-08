@@ -24,12 +24,12 @@ export enum FilterOperator {
 
 }
 
-export function encodeFilterOperator(	data : FilterOperator, 	out : DataStream) { 
+export function encodeFilterOperator(	data: FilterOperator, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeFilterOperator(	inp : DataStream) { 
+export function decodeFilterOperator(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

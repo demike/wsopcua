@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IStringNodeId {
-		namespaceIndex? : ec.UInt16;
-		identifier? : string;
+		namespaceIndex?: ec.UInt16;
+		identifier?: string;
 }
 
 /**
@@ -13,10 +13,10 @@ export interface IStringNodeId {
 */
 
 export class StringNodeId {
- 		namespaceIndex : ec.UInt16;
-		identifier : string;
+ 		namespaceIndex: ec.UInt16;
+		identifier: string;
 
-	constructor(	options? : IStringNodeId) { 
+	constructor(	options?: IStringNodeId) { 
 		options = options || {};
 		this.namespaceIndex= (options.namespaceIndex) ? options.namespaceIndex:null;
 		this.identifier= (options.identifier) ? options.identifier:null;
@@ -24,21 +24,21 @@ export class StringNodeId {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt16(this.namespaceIndex,out);
 		ec.encodeString(this.identifier,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.namespaceIndex = ec.decodeUInt16(inp);
 		this.identifier = ec.decodeString(inp);
 
 	}
 
 
-	clone(	target? : StringNodeId) : StringNodeId { 
+	clone(	target?: StringNodeId): StringNodeId { 
 		if(!target) {
 			target = new StringNodeId();
 		}
@@ -49,7 +49,7 @@ export class StringNodeId {
 
 
 }
-export function decodeStringNodeId(	inp : DataStream) : StringNodeId { 
+export function decodeStringNodeId(	inp: DataStream): StringNodeId { 
 		const obj = new StringNodeId();
 			obj.decode(inp); 
 			return obj;

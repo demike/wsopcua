@@ -7,8 +7,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IWriteRequest {
-		requestHeader? : RequestHeader;
-		nodesToWrite? : WriteValue[];
+		requestHeader?: RequestHeader;
+		nodesToWrite?: WriteValue[];
 }
 
 /**
@@ -16,10 +16,10 @@ export interface IWriteRequest {
 */
 
 export class WriteRequest {
- 		requestHeader : RequestHeader;
-		nodesToWrite : WriteValue[];
+ 		requestHeader: RequestHeader;
+		nodesToWrite: WriteValue[];
 
-	constructor(	options? : IWriteRequest) { 
+	constructor(	options?: IWriteRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.nodesToWrite= (options.nodesToWrite) ? options.nodesToWrite:[];
@@ -27,21 +27,21 @@ export class WriteRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeArray(this.nodesToWrite,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.nodesToWrite = ec.decodeArray(inp,decodeWriteValue);
 
 	}
 
 
-	clone(	target? : WriteRequest) : WriteRequest { 
+	clone(	target?: WriteRequest): WriteRequest { 
 		if(!target) {
 			target = new WriteRequest();
 		}
@@ -52,7 +52,7 @@ export class WriteRequest {
 
 
 }
-export function decodeWriteRequest(	inp : DataStream) : WriteRequest { 
+export function decodeWriteRequest(	inp: DataStream): WriteRequest { 
 		const obj = new WriteRequest();
 			obj.decode(inp); 
 			return obj;

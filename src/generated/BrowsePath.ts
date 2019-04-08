@@ -5,8 +5,8 @@ import {RelativePath} from './RelativePath';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IBrowsePath {
-		startingNode? : ec.NodeId;
-		relativePath? : RelativePath;
+		startingNode?: ec.NodeId;
+		relativePath?: RelativePath;
 }
 
 /**
@@ -14,10 +14,10 @@ A request to translate a path into a node id.
 */
 
 export class BrowsePath {
- 		startingNode : ec.NodeId;
-		relativePath : RelativePath;
+ 		startingNode: ec.NodeId;
+		relativePath: RelativePath;
 
-	constructor(	options? : IBrowsePath) { 
+	constructor(	options?: IBrowsePath) { 
 		options = options || {};
 		this.startingNode= (options.startingNode) ? options.startingNode:null;
 		this.relativePath= (options.relativePath) ? options.relativePath:new RelativePath();
@@ -25,21 +25,21 @@ export class BrowsePath {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.startingNode,out);
 		this.relativePath.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.startingNode = ec.decodeNodeId(inp);
 		this.relativePath.decode(inp);
 
 	}
 
 
-	clone(	target? : BrowsePath) : BrowsePath { 
+	clone(	target?: BrowsePath): BrowsePath { 
 		if(!target) {
 			target = new BrowsePath();
 		}
@@ -50,7 +50,7 @@ export class BrowsePath {
 
 
 }
-export function decodeBrowsePath(	inp : DataStream) : BrowsePath { 
+export function decodeBrowsePath(	inp: DataStream): BrowsePath { 
 		const obj = new BrowsePath();
 			obj.decode(inp); 
 			return obj;

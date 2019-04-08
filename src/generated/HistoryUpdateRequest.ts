@@ -5,8 +5,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryUpdateRequest {
-		requestHeader? : RequestHeader;
-		historyUpdateDetails? : ec.ExtensionObject[];
+		requestHeader?: RequestHeader;
+		historyUpdateDetails?: ec.ExtensionObject[];
 }
 
 /**
@@ -14,10 +14,10 @@ export interface IHistoryUpdateRequest {
 */
 
 export class HistoryUpdateRequest {
- 		requestHeader : RequestHeader;
-		historyUpdateDetails : ec.ExtensionObject[];
+ 		requestHeader: RequestHeader;
+		historyUpdateDetails: ec.ExtensionObject[];
 
-	constructor(	options? : IHistoryUpdateRequest) { 
+	constructor(	options?: IHistoryUpdateRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.historyUpdateDetails= (options.historyUpdateDetails) ? options.historyUpdateDetails:[];
@@ -25,21 +25,21 @@ export class HistoryUpdateRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeArray(this.historyUpdateDetails,out,ec.encodeExtensionObject);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.historyUpdateDetails = ec.decodeArray(inp,ec.decodeExtensionObject);
 
 	}
 
 
-	clone(	target? : HistoryUpdateRequest) : HistoryUpdateRequest { 
+	clone(	target?: HistoryUpdateRequest): HistoryUpdateRequest { 
 		if(!target) {
 			target = new HistoryUpdateRequest();
 		}
@@ -50,7 +50,7 @@ export class HistoryUpdateRequest {
 
 
 }
-export function decodeHistoryUpdateRequest(	inp : DataStream) : HistoryUpdateRequest { 
+export function decodeHistoryUpdateRequest(	inp: DataStream): HistoryUpdateRequest { 
 		const obj = new HistoryUpdateRequest();
 			obj.decode(inp); 
 			return obj;

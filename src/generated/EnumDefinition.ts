@@ -6,7 +6,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IEnumDefinition {
-		fields? : EnumField[];
+		fields?: EnumField[];
 }
 
 /**
@@ -14,28 +14,28 @@ export interface IEnumDefinition {
 */
 
 export class EnumDefinition {
- 		fields : EnumField[];
+ 		fields: EnumField[];
 
-	constructor(	options? : IEnumDefinition) { 
+	constructor(	options?: IEnumDefinition) { 
 		options = options || {};
 		this.fields= (options.fields) ? options.fields:[];
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.fields,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.fields = ec.decodeArray(inp,decodeEnumField);
 
 	}
 
 
-	clone(	target? : EnumDefinition) : EnumDefinition { 
+	clone(	target?: EnumDefinition): EnumDefinition { 
 		if(!target) {
 			target = new EnumDefinition();
 		}
@@ -45,7 +45,7 @@ export class EnumDefinition {
 
 
 }
-export function decodeEnumDefinition(	inp : DataStream) : EnumDefinition { 
+export function decodeEnumDefinition(	inp: DataStream): EnumDefinition { 
 		const obj = new EnumDefinition();
 			obj.decode(inp); 
 			return obj;

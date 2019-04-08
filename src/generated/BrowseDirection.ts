@@ -12,12 +12,12 @@ export enum BrowseDirection {
 
 }
 
-export function encodeBrowseDirection(	data : BrowseDirection, 	out : DataStream) { 
+export function encodeBrowseDirection(	data: BrowseDirection, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeBrowseDirection(	inp : DataStream) { 
+export function decodeBrowseDirection(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

@@ -6,8 +6,8 @@ import {UserIdentityToken} from './UserIdentityToken';
 import {IUserIdentityToken} from './UserIdentityToken';
 
 export interface IIssuedIdentityToken extends IUserIdentityToken {
-		tokenData? : Uint8Array;
-		encryptionAlgorithm? : string;
+		tokenData?: Uint8Array;
+		encryptionAlgorithm?: string;
 }
 
 /**
@@ -15,10 +15,10 @@ A token representing a user identified by a WS-Security XML token.
 */
 
 export class IssuedIdentityToken extends UserIdentityToken {
- 		tokenData : Uint8Array;
-		encryptionAlgorithm : string;
+ 		tokenData: Uint8Array;
+		encryptionAlgorithm: string;
 
-	constructor(	options? : IIssuedIdentityToken) { 
+	constructor(	options?: IIssuedIdentityToken) { 
 		options = options || {};
 		super(options);
 		this.tokenData= (options.tokenData) ? options.tokenData:null;
@@ -27,7 +27,7 @@ export class IssuedIdentityToken extends UserIdentityToken {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeByteString(this.tokenData,out);
 		ec.encodeString(this.encryptionAlgorithm,out);
@@ -35,7 +35,7 @@ export class IssuedIdentityToken extends UserIdentityToken {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.tokenData = ec.decodeByteString(inp);
 		this.encryptionAlgorithm = ec.decodeString(inp);
@@ -43,7 +43,7 @@ export class IssuedIdentityToken extends UserIdentityToken {
 	}
 
 
-	clone(	target? : IssuedIdentityToken) : IssuedIdentityToken { 
+	clone(	target?: IssuedIdentityToken): IssuedIdentityToken { 
 		if(!target) {
 			target = new IssuedIdentityToken();
 		}
@@ -55,7 +55,7 @@ export class IssuedIdentityToken extends UserIdentityToken {
 
 
 }
-export function decodeIssuedIdentityToken(	inp : DataStream) : IssuedIdentityToken { 
+export function decodeIssuedIdentityToken(	inp: DataStream): IssuedIdentityToken { 
 		const obj = new IssuedIdentityToken();
 			obj.decode(inp); 
 			return obj;

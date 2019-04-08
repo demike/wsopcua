@@ -5,8 +5,8 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IStatusResult {
-		statusCode? : ec.StatusCode;
-		diagnosticInfo? : DiagnosticInfo;
+		statusCode?: ec.StatusCode;
+		diagnosticInfo?: DiagnosticInfo;
 }
 
 /**
@@ -14,10 +14,10 @@ export interface IStatusResult {
 */
 
 export class StatusResult {
- 		statusCode : ec.StatusCode;
-		diagnosticInfo : DiagnosticInfo;
+ 		statusCode: ec.StatusCode;
+		diagnosticInfo: DiagnosticInfo;
 
-	constructor(	options? : IStatusResult) { 
+	constructor(	options?: IStatusResult) { 
 		options = options || {};
 		this.statusCode= (options.statusCode) ? options.statusCode:null;
 		this.diagnosticInfo= (options.diagnosticInfo) ? options.diagnosticInfo:new DiagnosticInfo();
@@ -25,21 +25,21 @@ export class StatusResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeStatusCode(this.statusCode,out);
 		this.diagnosticInfo.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.statusCode = ec.decodeStatusCode(inp);
 		this.diagnosticInfo.decode(inp);
 
 	}
 
 
-	clone(	target? : StatusResult) : StatusResult { 
+	clone(	target?: StatusResult): StatusResult { 
 		if(!target) {
 			target = new StatusResult();
 		}
@@ -50,7 +50,7 @@ export class StatusResult {
 
 
 }
-export function decodeStatusResult(	inp : DataStream) : StatusResult { 
+export function decodeStatusResult(	inp: DataStream): StatusResult { 
 		const obj = new StatusResult();
 			obj.decode(inp); 
 			return obj;

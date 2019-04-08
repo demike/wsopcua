@@ -6,9 +6,9 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryUpdateResult {
-		statusCode? : ec.StatusCode;
-		operationResults? : ec.StatusCode[];
-		diagnosticInfos? : DiagnosticInfo[];
+		statusCode?: ec.StatusCode;
+		operationResults?: ec.StatusCode[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -16,11 +16,11 @@ export interface IHistoryUpdateResult {
 */
 
 export class HistoryUpdateResult {
- 		statusCode : ec.StatusCode;
-		operationResults : ec.StatusCode[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		statusCode: ec.StatusCode;
+		operationResults: ec.StatusCode[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IHistoryUpdateResult) { 
+	constructor(	options?: IHistoryUpdateResult) { 
 		options = options || {};
 		this.statusCode= (options.statusCode) ? options.statusCode:null;
 		this.operationResults= (options.operationResults) ? options.operationResults:[];
@@ -29,7 +29,7 @@ export class HistoryUpdateResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeStatusCode(this.statusCode,out);
 		ec.encodeArray(this.operationResults,out,ec.encodeStatusCode);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -37,7 +37,7 @@ export class HistoryUpdateResult {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.statusCode = ec.decodeStatusCode(inp);
 		this.operationResults = ec.decodeArray(inp,ec.decodeStatusCode);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -45,7 +45,7 @@ export class HistoryUpdateResult {
 	}
 
 
-	clone(	target? : HistoryUpdateResult) : HistoryUpdateResult { 
+	clone(	target?: HistoryUpdateResult): HistoryUpdateResult { 
 		if(!target) {
 			target = new HistoryUpdateResult();
 		}
@@ -57,7 +57,7 @@ export class HistoryUpdateResult {
 
 
 }
-export function decodeHistoryUpdateResult(	inp : DataStream) : HistoryUpdateResult { 
+export function decodeHistoryUpdateResult(	inp: DataStream): HistoryUpdateResult { 
 		const obj = new HistoryUpdateResult();
 			obj.decode(inp); 
 			return obj;

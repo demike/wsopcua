@@ -8,11 +8,11 @@ import {decodeHistoryReadValueId} from './HistoryReadValueId';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryReadRequest {
-		requestHeader? : RequestHeader;
-		historyReadDetails? : ec.ExtensionObject;
-		timestampsToReturn? : TimestampsToReturn;
-		releaseContinuationPoints? : boolean;
-		nodesToRead? : HistoryReadValueId[];
+		requestHeader?: RequestHeader;
+		historyReadDetails?: ec.ExtensionObject;
+		timestampsToReturn?: TimestampsToReturn;
+		releaseContinuationPoints?: boolean;
+		nodesToRead?: HistoryReadValueId[];
 }
 
 /**
@@ -20,13 +20,13 @@ export interface IHistoryReadRequest {
 */
 
 export class HistoryReadRequest {
- 		requestHeader : RequestHeader;
-		historyReadDetails : ec.ExtensionObject;
-		timestampsToReturn : TimestampsToReturn;
-		releaseContinuationPoints : boolean;
-		nodesToRead : HistoryReadValueId[];
+ 		requestHeader: RequestHeader;
+		historyReadDetails: ec.ExtensionObject;
+		timestampsToReturn: TimestampsToReturn;
+		releaseContinuationPoints: boolean;
+		nodesToRead: HistoryReadValueId[];
 
-	constructor(	options? : IHistoryReadRequest) { 
+	constructor(	options?: IHistoryReadRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.historyReadDetails= (options.historyReadDetails) ? options.historyReadDetails:null;
@@ -37,7 +37,7 @@ export class HistoryReadRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeExtensionObject(this.historyReadDetails,out);
 		encodeTimestampsToReturn(this.timestampsToReturn,out);
@@ -47,7 +47,7 @@ export class HistoryReadRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.historyReadDetails = ec.decodeExtensionObject(inp);
 		this.timestampsToReturn = decodeTimestampsToReturn(inp);
@@ -57,7 +57,7 @@ export class HistoryReadRequest {
 	}
 
 
-	clone(	target? : HistoryReadRequest) : HistoryReadRequest { 
+	clone(	target?: HistoryReadRequest): HistoryReadRequest { 
 		if(!target) {
 			target = new HistoryReadRequest();
 		}
@@ -71,7 +71,7 @@ export class HistoryReadRequest {
 
 
 }
-export function decodeHistoryReadRequest(	inp : DataStream) : HistoryReadRequest { 
+export function decodeHistoryReadRequest(	inp: DataStream): HistoryReadRequest { 
 		const obj = new HistoryReadRequest();
 			obj.decode(inp); 
 			return obj;

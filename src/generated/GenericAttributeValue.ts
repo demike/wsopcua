@@ -5,8 +5,8 @@ import {Variant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IGenericAttributeValue {
-		attributeId? : ec.UInt32;
-		value? : Variant;
+		attributeId?: ec.UInt32;
+		value?: Variant;
 }
 
 /**
@@ -14,10 +14,10 @@ export interface IGenericAttributeValue {
 */
 
 export class GenericAttributeValue {
- 		attributeId : ec.UInt32;
-		value : Variant;
+ 		attributeId: ec.UInt32;
+		value: Variant;
 
-	constructor(	options? : IGenericAttributeValue) { 
+	constructor(	options?: IGenericAttributeValue) { 
 		options = options || {};
 		this.attributeId= (options.attributeId) ? options.attributeId:null;
 		this.value= (options.value) ? options.value:new Variant();
@@ -25,21 +25,21 @@ export class GenericAttributeValue {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.attributeId,out);
 		this.value.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.attributeId = ec.decodeUInt32(inp);
 		this.value.decode(inp);
 
 	}
 
 
-	clone(	target? : GenericAttributeValue) : GenericAttributeValue { 
+	clone(	target?: GenericAttributeValue): GenericAttributeValue { 
 		if(!target) {
 			target = new GenericAttributeValue();
 		}
@@ -50,7 +50,7 @@ export class GenericAttributeValue {
 
 
 }
-export function decodeGenericAttributeValue(	inp : DataStream) : GenericAttributeValue { 
+export function decodeGenericAttributeValue(	inp: DataStream): GenericAttributeValue { 
 		const obj = new GenericAttributeValue();
 			obj.decode(inp); 
 			return obj;

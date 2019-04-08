@@ -9,9 +9,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ICreateMonitoredItemsResponse {
-		responseHeader? : ResponseHeader;
-		results? : MonitoredItemCreateResult[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: MonitoredItemCreateResult[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -19,11 +19,11 @@ export interface ICreateMonitoredItemsResponse {
 */
 
 export class CreateMonitoredItemsResponse {
- 		responseHeader : ResponseHeader;
-		results : MonitoredItemCreateResult[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: MonitoredItemCreateResult[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : ICreateMonitoredItemsResponse) { 
+	constructor(	options?: ICreateMonitoredItemsResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -32,7 +32,7 @@ export class CreateMonitoredItemsResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -40,7 +40,7 @@ export class CreateMonitoredItemsResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,decodeMonitoredItemCreateResult);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -48,7 +48,7 @@ export class CreateMonitoredItemsResponse {
 	}
 
 
-	clone(	target? : CreateMonitoredItemsResponse) : CreateMonitoredItemsResponse { 
+	clone(	target?: CreateMonitoredItemsResponse): CreateMonitoredItemsResponse { 
 		if(!target) {
 			target = new CreateMonitoredItemsResponse();
 		}
@@ -60,7 +60,7 @@ export class CreateMonitoredItemsResponse {
 
 
 }
-export function decodeCreateMonitoredItemsResponse(	inp : DataStream) : CreateMonitoredItemsResponse { 
+export function decodeCreateMonitoredItemsResponse(	inp: DataStream): CreateMonitoredItemsResponse { 
 		const obj = new CreateMonitoredItemsResponse();
 			obj.decode(inp); 
 			return obj;

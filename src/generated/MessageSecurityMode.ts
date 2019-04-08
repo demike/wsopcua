@@ -12,12 +12,12 @@ export enum MessageSecurityMode {
 
 }
 
-export function encodeMessageSecurityMode(	data : MessageSecurityMode, 	out : DataStream) { 
+export function encodeMessageSecurityMode(	data: MessageSecurityMode, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeMessageSecurityMode(	inp : DataStream) { 
+export function decodeMessageSecurityMode(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

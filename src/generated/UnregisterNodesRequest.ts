@@ -5,8 +5,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IUnregisterNodesRequest {
-		requestHeader? : RequestHeader;
-		nodesToUnregister? : ec.NodeId[];
+		requestHeader?: RequestHeader;
+		nodesToUnregister?: ec.NodeId[];
 }
 
 /**
@@ -14,10 +14,10 @@ Unregisters one or more previously registered nodes.
 */
 
 export class UnregisterNodesRequest {
- 		requestHeader : RequestHeader;
-		nodesToUnregister : ec.NodeId[];
+ 		requestHeader: RequestHeader;
+		nodesToUnregister: ec.NodeId[];
 
-	constructor(	options? : IUnregisterNodesRequest) { 
+	constructor(	options?: IUnregisterNodesRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.nodesToUnregister= (options.nodesToUnregister) ? options.nodesToUnregister:[];
@@ -25,21 +25,21 @@ export class UnregisterNodesRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeArray(this.nodesToUnregister,out,ec.encodeNodeId);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.nodesToUnregister = ec.decodeArray(inp,ec.decodeNodeId);
 
 	}
 
 
-	clone(	target? : UnregisterNodesRequest) : UnregisterNodesRequest { 
+	clone(	target?: UnregisterNodesRequest): UnregisterNodesRequest { 
 		if(!target) {
 			target = new UnregisterNodesRequest();
 		}
@@ -50,7 +50,7 @@ export class UnregisterNodesRequest {
 
 
 }
-export function decodeUnregisterNodesRequest(	inp : DataStream) : UnregisterNodesRequest { 
+export function decodeUnregisterNodesRequest(	inp: DataStream): UnregisterNodesRequest { 
 		const obj = new UnregisterNodesRequest();
 			obj.decode(inp); 
 			return obj;

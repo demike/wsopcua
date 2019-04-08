@@ -6,7 +6,7 @@ import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
 export interface IDataTypeAttributes extends INodeAttributes {
-		isAbstract? : boolean;
+		isAbstract?: boolean;
 }
 
 /**
@@ -14,9 +14,9 @@ The attributes for a data type node.
 */
 
 export class DataTypeAttributes extends NodeAttributes {
- 		isAbstract : boolean;
+ 		isAbstract: boolean;
 
-	constructor(	options? : IDataTypeAttributes) { 
+	constructor(	options?: IDataTypeAttributes) { 
 		options = options || {};
 		super(options);
 		this.isAbstract= (options.isAbstract) ? options.isAbstract:null;
@@ -24,21 +24,21 @@ export class DataTypeAttributes extends NodeAttributes {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeBoolean(this.isAbstract,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.isAbstract = ec.decodeBoolean(inp);
 
 	}
 
 
-	clone(	target? : DataTypeAttributes) : DataTypeAttributes { 
+	clone(	target?: DataTypeAttributes): DataTypeAttributes { 
 		if(!target) {
 			target = new DataTypeAttributes();
 		}
@@ -49,7 +49,7 @@ export class DataTypeAttributes extends NodeAttributes {
 
 
 }
-export function decodeDataTypeAttributes(	inp : DataStream) : DataTypeAttributes { 
+export function decodeDataTypeAttributes(	inp: DataStream): DataTypeAttributes { 
 		const obj = new DataTypeAttributes();
 			obj.decode(inp); 
 			return obj;

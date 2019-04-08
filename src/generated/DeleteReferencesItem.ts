@@ -4,11 +4,11 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDeleteReferencesItem {
-		sourceNodeId? : ec.NodeId;
-		referenceTypeId? : ec.NodeId;
-		isForward? : boolean;
-		targetNodeId? : ec.ExpandedNodeId;
-		deleteBidirectional? : boolean;
+		sourceNodeId?: ec.NodeId;
+		referenceTypeId?: ec.NodeId;
+		isForward?: boolean;
+		targetNodeId?: ec.ExpandedNodeId;
+		deleteBidirectional?: boolean;
 }
 
 /**
@@ -16,13 +16,13 @@ A request to delete a node from the server address space.
 */
 
 export class DeleteReferencesItem {
- 		sourceNodeId : ec.NodeId;
-		referenceTypeId : ec.NodeId;
-		isForward : boolean;
-		targetNodeId : ec.ExpandedNodeId;
-		deleteBidirectional : boolean;
+ 		sourceNodeId: ec.NodeId;
+		referenceTypeId: ec.NodeId;
+		isForward: boolean;
+		targetNodeId: ec.ExpandedNodeId;
+		deleteBidirectional: boolean;
 
-	constructor(	options? : IDeleteReferencesItem) { 
+	constructor(	options?: IDeleteReferencesItem) { 
 		options = options || {};
 		this.sourceNodeId= (options.sourceNodeId) ? options.sourceNodeId:null;
 		this.referenceTypeId= (options.referenceTypeId) ? options.referenceTypeId:null;
@@ -33,7 +33,7 @@ export class DeleteReferencesItem {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.sourceNodeId,out);
 		ec.encodeNodeId(this.referenceTypeId,out);
 		ec.encodeBoolean(this.isForward,out);
@@ -43,7 +43,7 @@ export class DeleteReferencesItem {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.sourceNodeId = ec.decodeNodeId(inp);
 		this.referenceTypeId = ec.decodeNodeId(inp);
 		this.isForward = ec.decodeBoolean(inp);
@@ -53,7 +53,7 @@ export class DeleteReferencesItem {
 	}
 
 
-	clone(	target? : DeleteReferencesItem) : DeleteReferencesItem { 
+	clone(	target?: DeleteReferencesItem): DeleteReferencesItem { 
 		if(!target) {
 			target = new DeleteReferencesItem();
 		}
@@ -67,7 +67,7 @@ export class DeleteReferencesItem {
 
 
 }
-export function decodeDeleteReferencesItem(	inp : DataStream) : DeleteReferencesItem { 
+export function decodeDeleteReferencesItem(	inp: DataStream): DeleteReferencesItem { 
 		const obj = new DeleteReferencesItem();
 			obj.decode(inp); 
 			return obj;

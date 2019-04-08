@@ -6,9 +6,9 @@ import {DataStream} from '../basic-types/DataStream';
 import {MonitoringFilter} from './MonitoringFilter';
 
 export interface IDataChangeFilter {
-		trigger? : DataChangeTrigger;
-		deadbandType? : ec.UInt32;
-		deadbandValue? : ec.Double;
+		trigger?: DataChangeTrigger;
+		deadbandType?: ec.UInt32;
+		deadbandValue?: ec.Double;
 }
 
 /**
@@ -16,11 +16,11 @@ export interface IDataChangeFilter {
 */
 
 export class DataChangeFilter extends MonitoringFilter {
- 		trigger : DataChangeTrigger;
-		deadbandType : ec.UInt32;
-		deadbandValue : ec.Double;
+ 		trigger: DataChangeTrigger;
+		deadbandType: ec.UInt32;
+		deadbandValue: ec.Double;
 
-	constructor(	options? : IDataChangeFilter) { 
+	constructor(	options?: IDataChangeFilter) { 
 		options = options || {};
 		super();
 		this.trigger= (options.trigger) ? options.trigger:null;
@@ -30,7 +30,7 @@ export class DataChangeFilter extends MonitoringFilter {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		encodeDataChangeTrigger(this.trigger,out);
 		ec.encodeUInt32(this.deadbandType,out);
 		ec.encodeDouble(this.deadbandValue,out);
@@ -38,7 +38,7 @@ export class DataChangeFilter extends MonitoringFilter {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.trigger = decodeDataChangeTrigger(inp);
 		this.deadbandType = ec.decodeUInt32(inp);
 		this.deadbandValue = ec.decodeDouble(inp);
@@ -46,7 +46,7 @@ export class DataChangeFilter extends MonitoringFilter {
 	}
 
 
-	clone(	target? : DataChangeFilter) : DataChangeFilter { 
+	clone(	target?: DataChangeFilter): DataChangeFilter { 
 		if(!target) {
 			target = new DataChangeFilter();
 		}
@@ -58,7 +58,7 @@ export class DataChangeFilter extends MonitoringFilter {
 
 
 }
-export function decodeDataChangeFilter(	inp : DataStream) : DataChangeFilter { 
+export function decodeDataChangeFilter(	inp: DataStream): DataChangeFilter { 
 		const obj = new DataChangeFilter();
 			obj.decode(inp); 
 			return obj;

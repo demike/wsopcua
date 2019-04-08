@@ -8,8 +8,8 @@ import {DataStream} from '../basic-types/DataStream';
 import {MonitoringFilter} from './MonitoringFilter';
 
 export interface IEventFilter {
-		selectClauses? : SimpleAttributeOperand[];
-		whereClause? : ContentFilter;
+		selectClauses?: SimpleAttributeOperand[];
+		whereClause?: ContentFilter;
 }
 
 /**
@@ -17,10 +17,10 @@ export interface IEventFilter {
 */
 
 export class EventFilter extends MonitoringFilter {
- 		selectClauses : SimpleAttributeOperand[];
-		whereClause : ContentFilter;
+ 		selectClauses: SimpleAttributeOperand[];
+		whereClause: ContentFilter;
 
-	constructor(	options? : IEventFilter) { 
+	constructor(	options?: IEventFilter) { 
 		options = options || {};
 		super();
 		this.selectClauses= (options.selectClauses) ? options.selectClauses:[];
@@ -29,21 +29,21 @@ export class EventFilter extends MonitoringFilter {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.selectClauses,out);
 		this.whereClause.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.selectClauses = ec.decodeArray(inp,decodeSimpleAttributeOperand);
 		this.whereClause.decode(inp);
 
 	}
 
 
-	clone(	target? : EventFilter) : EventFilter { 
+	clone(	target?: EventFilter): EventFilter { 
 		if(!target) {
 			target = new EventFilter();
 		}
@@ -54,7 +54,7 @@ export class EventFilter extends MonitoringFilter {
 
 
 }
-export function decodeEventFilter(	inp : DataStream) : EventFilter { 
+export function decodeEventFilter(	inp: DataStream): EventFilter { 
 		const obj = new EventFilter();
 			obj.decode(inp); 
 			return obj;

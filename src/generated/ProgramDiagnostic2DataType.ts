@@ -9,18 +9,18 @@ import {StatusResult} from './StatusResult';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IProgramDiagnostic2DataType {
-		createSessionId? : ec.NodeId;
-		createClientName? : string;
-		invocationCreationTime? : Date;
-		lastTransitionTime? : Date;
-		lastMethodCall? : string;
-		lastMethodSessionId? : ec.NodeId;
-		lastMethodInputArguments? : Argument[];
-		lastMethodOutputArguments? : Argument[];
-		lastMethodInputValues? : Variant[];
-		lastMethodOutputValues? : Variant[];
-		lastMethodCallTime? : Date;
-		lastMethodReturnStatus? : StatusResult;
+		createSessionId?: ec.NodeId;
+		createClientName?: string;
+		invocationCreationTime?: Date;
+		lastTransitionTime?: Date;
+		lastMethodCall?: string;
+		lastMethodSessionId?: ec.NodeId;
+		lastMethodInputArguments?: Argument[];
+		lastMethodOutputArguments?: Argument[];
+		lastMethodInputValues?: Variant[];
+		lastMethodOutputValues?: Variant[];
+		lastMethodCallTime?: Date;
+		lastMethodReturnStatus?: StatusResult;
 }
 
 /**
@@ -28,20 +28,20 @@ export interface IProgramDiagnostic2DataType {
 */
 
 export class ProgramDiagnostic2DataType {
- 		createSessionId : ec.NodeId;
-		createClientName : string;
-		invocationCreationTime : Date;
-		lastTransitionTime : Date;
-		lastMethodCall : string;
-		lastMethodSessionId : ec.NodeId;
-		lastMethodInputArguments : Argument[];
-		lastMethodOutputArguments : Argument[];
-		lastMethodInputValues : Variant[];
-		lastMethodOutputValues : Variant[];
-		lastMethodCallTime : Date;
-		lastMethodReturnStatus : StatusResult;
+ 		createSessionId: ec.NodeId;
+		createClientName: string;
+		invocationCreationTime: Date;
+		lastTransitionTime: Date;
+		lastMethodCall: string;
+		lastMethodSessionId: ec.NodeId;
+		lastMethodInputArguments: Argument[];
+		lastMethodOutputArguments: Argument[];
+		lastMethodInputValues: Variant[];
+		lastMethodOutputValues: Variant[];
+		lastMethodCallTime: Date;
+		lastMethodReturnStatus: StatusResult;
 
-	constructor(	options? : IProgramDiagnostic2DataType) { 
+	constructor(	options?: IProgramDiagnostic2DataType) { 
 		options = options || {};
 		this.createSessionId= (options.createSessionId) ? options.createSessionId:null;
 		this.createClientName= (options.createClientName) ? options.createClientName:null;
@@ -59,7 +59,7 @@ export class ProgramDiagnostic2DataType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.createSessionId,out);
 		ec.encodeString(this.createClientName,out);
 		ec.encodeDateTime(this.invocationCreationTime,out);
@@ -76,7 +76,7 @@ export class ProgramDiagnostic2DataType {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.createSessionId = ec.decodeNodeId(inp);
 		this.createClientName = ec.decodeString(inp);
 		this.invocationCreationTime = ec.decodeDateTime(inp);
@@ -93,7 +93,7 @@ export class ProgramDiagnostic2DataType {
 	}
 
 
-	clone(	target? : ProgramDiagnostic2DataType) : ProgramDiagnostic2DataType { 
+	clone(	target?: ProgramDiagnostic2DataType): ProgramDiagnostic2DataType { 
 		if(!target) {
 			target = new ProgramDiagnostic2DataType();
 		}
@@ -114,7 +114,7 @@ export class ProgramDiagnostic2DataType {
 
 
 }
-export function decodeProgramDiagnostic2DataType(	inp : DataStream) : ProgramDiagnostic2DataType { 
+export function decodeProgramDiagnostic2DataType(	inp: DataStream): ProgramDiagnostic2DataType { 
 		const obj = new ProgramDiagnostic2DataType();
 			obj.decode(inp); 
 			return obj;

@@ -4,7 +4,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IUserIdentityToken {
-		policyId? : string;
+		policyId?: string;
 }
 
 /**
@@ -12,28 +12,28 @@ A base type for a user identity token.
 */
 
 export class UserIdentityToken {
- 		policyId : string;
+ 		policyId: string;
 
-	constructor(	options? : IUserIdentityToken) { 
+	constructor(	options?: IUserIdentityToken) { 
 		options = options || {};
 		this.policyId= (options.policyId) ? options.policyId:null;
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.policyId,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.policyId = ec.decodeString(inp);
 
 	}
 
 
-	clone(	target? : UserIdentityToken) : UserIdentityToken { 
+	clone(	target?: UserIdentityToken): UserIdentityToken { 
 		if(!target) {
 			target = new UserIdentityToken();
 		}
@@ -43,7 +43,7 @@ export class UserIdentityToken {
 
 
 }
-export function decodeUserIdentityToken(	inp : DataStream) : UserIdentityToken { 
+export function decodeUserIdentityToken(	inp: DataStream): UserIdentityToken { 
 		const obj = new UserIdentityToken();
 			obj.decode(inp); 
 			return obj;

@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISignedSoftwareCertificate {
-		certificateData? : Uint8Array;
-		signature? : Uint8Array;
+		certificateData?: Uint8Array;
+		signature?: Uint8Array;
 }
 
 /**
@@ -13,10 +13,10 @@ A software certificate with a digital signature.
 */
 
 export class SignedSoftwareCertificate {
- 		certificateData : Uint8Array;
-		signature : Uint8Array;
+ 		certificateData: Uint8Array;
+		signature: Uint8Array;
 
-	constructor(	options? : ISignedSoftwareCertificate) { 
+	constructor(	options?: ISignedSoftwareCertificate) { 
 		options = options || {};
 		this.certificateData= (options.certificateData) ? options.certificateData:null;
 		this.signature= (options.signature) ? options.signature:null;
@@ -24,21 +24,21 @@ export class SignedSoftwareCertificate {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeByteString(this.certificateData,out);
 		ec.encodeByteString(this.signature,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.certificateData = ec.decodeByteString(inp);
 		this.signature = ec.decodeByteString(inp);
 
 	}
 
 
-	clone(	target? : SignedSoftwareCertificate) : SignedSoftwareCertificate { 
+	clone(	target?: SignedSoftwareCertificate): SignedSoftwareCertificate { 
 		if(!target) {
 			target = new SignedSoftwareCertificate();
 		}
@@ -49,7 +49,7 @@ export class SignedSoftwareCertificate {
 
 
 }
-export function decodeSignedSoftwareCertificate(	inp : DataStream) : SignedSoftwareCertificate { 
+export function decodeSignedSoftwareCertificate(	inp: DataStream): SignedSoftwareCertificate { 
 		const obj = new SignedSoftwareCertificate();
 			obj.decode(inp); 
 			return obj;

@@ -7,11 +7,11 @@ import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
 export interface IVariableTypeAttributes extends INodeAttributes {
-		value? : Variant;
-		dataType? : ec.NodeId;
-		valueRank? : ec.Int32;
-		arrayDimensions? : ec.UInt32[];
-		isAbstract? : boolean;
+		value?: Variant;
+		dataType?: ec.NodeId;
+		valueRank?: ec.Int32;
+		arrayDimensions?: ec.UInt32[];
+		isAbstract?: boolean;
 }
 
 /**
@@ -19,13 +19,13 @@ The attributes for a variable type node.
 */
 
 export class VariableTypeAttributes extends NodeAttributes {
- 		value : Variant;
-		dataType : ec.NodeId;
-		valueRank : ec.Int32;
-		arrayDimensions : ec.UInt32[];
-		isAbstract : boolean;
+ 		value: Variant;
+		dataType: ec.NodeId;
+		valueRank: ec.Int32;
+		arrayDimensions: ec.UInt32[];
+		isAbstract: boolean;
 
-	constructor(	options? : IVariableTypeAttributes) { 
+	constructor(	options?: IVariableTypeAttributes) { 
 		options = options || {};
 		super(options);
 		this.value= (options.value) ? options.value:new Variant();
@@ -37,7 +37,7 @@ export class VariableTypeAttributes extends NodeAttributes {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		this.value.encode(out);
 		ec.encodeNodeId(this.dataType,out);
@@ -48,7 +48,7 @@ export class VariableTypeAttributes extends NodeAttributes {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.value.decode(inp);
 		this.dataType = ec.decodeNodeId(inp);
@@ -59,7 +59,7 @@ export class VariableTypeAttributes extends NodeAttributes {
 	}
 
 
-	clone(	target? : VariableTypeAttributes) : VariableTypeAttributes { 
+	clone(	target?: VariableTypeAttributes): VariableTypeAttributes { 
 		if(!target) {
 			target = new VariableTypeAttributes();
 		}
@@ -74,7 +74,7 @@ export class VariableTypeAttributes extends NodeAttributes {
 
 
 }
-export function decodeVariableTypeAttributes(	inp : DataStream) : VariableTypeAttributes { 
+export function decodeVariableTypeAttributes(	inp: DataStream): VariableTypeAttributes { 
 		const obj = new VariableTypeAttributes();
 			obj.decode(inp); 
 			return obj;

@@ -6,9 +6,9 @@ import {UserIdentityToken} from './UserIdentityToken';
 import {IUserIdentityToken} from './UserIdentityToken';
 
 export interface IUserNameIdentityToken extends IUserIdentityToken {
-		userName? : string;
-		password? : Uint8Array;
-		encryptionAlgorithm? : string;
+		userName?: string;
+		password?: Uint8Array;
+		encryptionAlgorithm?: string;
 }
 
 /**
@@ -16,11 +16,11 @@ A token representing a user identified by a user name and password.
 */
 
 export class UserNameIdentityToken extends UserIdentityToken {
- 		userName : string;
-		password : Uint8Array;
-		encryptionAlgorithm : string;
+ 		userName: string;
+		password: Uint8Array;
+		encryptionAlgorithm: string;
 
-	constructor(	options? : IUserNameIdentityToken) { 
+	constructor(	options?: IUserNameIdentityToken) { 
 		options = options || {};
 		super(options);
 		this.userName= (options.userName) ? options.userName:null;
@@ -30,7 +30,7 @@ export class UserNameIdentityToken extends UserIdentityToken {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeString(this.userName,out);
 		ec.encodeByteString(this.password,out);
@@ -39,7 +39,7 @@ export class UserNameIdentityToken extends UserIdentityToken {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.userName = ec.decodeString(inp);
 		this.password = ec.decodeByteString(inp);
@@ -48,7 +48,7 @@ export class UserNameIdentityToken extends UserIdentityToken {
 	}
 
 
-	clone(	target? : UserNameIdentityToken) : UserNameIdentityToken { 
+	clone(	target?: UserNameIdentityToken): UserNameIdentityToken { 
 		if(!target) {
 			target = new UserNameIdentityToken();
 		}
@@ -61,7 +61,7 @@ export class UserNameIdentityToken extends UserIdentityToken {
 
 
 }
-export function decodeUserNameIdentityToken(	inp : DataStream) : UserNameIdentityToken { 
+export function decodeUserNameIdentityToken(	inp: DataStream): UserNameIdentityToken { 
 		const obj = new UserNameIdentityToken();
 			obj.decode(inp); 
 			return obj;

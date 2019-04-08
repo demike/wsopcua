@@ -9,9 +9,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryUpdateResponse {
-		responseHeader? : ResponseHeader;
-		results? : HistoryUpdateResult[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: HistoryUpdateResult[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -19,11 +19,11 @@ export interface IHistoryUpdateResponse {
 */
 
 export class HistoryUpdateResponse {
- 		responseHeader : ResponseHeader;
-		results : HistoryUpdateResult[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: HistoryUpdateResult[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IHistoryUpdateResponse) { 
+	constructor(	options?: IHistoryUpdateResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -32,7 +32,7 @@ export class HistoryUpdateResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -40,7 +40,7 @@ export class HistoryUpdateResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,decodeHistoryUpdateResult);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -48,7 +48,7 @@ export class HistoryUpdateResponse {
 	}
 
 
-	clone(	target? : HistoryUpdateResponse) : HistoryUpdateResponse { 
+	clone(	target?: HistoryUpdateResponse): HistoryUpdateResponse { 
 		if(!target) {
 			target = new HistoryUpdateResponse();
 		}
@@ -60,7 +60,7 @@ export class HistoryUpdateResponse {
 
 
 }
-export function decodeHistoryUpdateResponse(	inp : DataStream) : HistoryUpdateResponse { 
+export function decodeHistoryUpdateResponse(	inp: DataStream): HistoryUpdateResponse { 
 		const obj = new HistoryUpdateResponse();
 			obj.decode(inp); 
 			return obj;

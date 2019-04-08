@@ -6,9 +6,9 @@ import {decodeVariant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ICallMethodRequest {
-		objectId? : ec.NodeId;
-		methodId? : ec.NodeId;
-		inputArguments? : Variant[];
+		objectId?: ec.NodeId;
+		methodId?: ec.NodeId;
+		inputArguments?: Variant[];
 }
 
 /**
@@ -16,11 +16,11 @@ export interface ICallMethodRequest {
 */
 
 export class CallMethodRequest {
- 		objectId : ec.NodeId;
-		methodId : ec.NodeId;
-		inputArguments : Variant[];
+ 		objectId: ec.NodeId;
+		methodId: ec.NodeId;
+		inputArguments: Variant[];
 
-	constructor(	options? : ICallMethodRequest) { 
+	constructor(	options?: ICallMethodRequest) { 
 		options = options || {};
 		this.objectId= (options.objectId) ? options.objectId:null;
 		this.methodId= (options.methodId) ? options.methodId:null;
@@ -29,7 +29,7 @@ export class CallMethodRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.objectId,out);
 		ec.encodeNodeId(this.methodId,out);
 		ec.encodeArray(this.inputArguments,out);
@@ -37,7 +37,7 @@ export class CallMethodRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.objectId = ec.decodeNodeId(inp);
 		this.methodId = ec.decodeNodeId(inp);
 		this.inputArguments = ec.decodeArray(inp,decodeVariant);
@@ -45,7 +45,7 @@ export class CallMethodRequest {
 	}
 
 
-	clone(	target? : CallMethodRequest) : CallMethodRequest { 
+	clone(	target?: CallMethodRequest): CallMethodRequest { 
 		if(!target) {
 			target = new CallMethodRequest();
 		}
@@ -57,7 +57,7 @@ export class CallMethodRequest {
 
 
 }
-export function decodeCallMethodRequest(	inp : DataStream) : CallMethodRequest { 
+export function decodeCallMethodRequest(	inp: DataStream): CallMethodRequest { 
 		const obj = new CallMethodRequest();
 			obj.decode(inp); 
 			return obj;

@@ -9,7 +9,7 @@ export class DiscoveryConfiguration {
  
 	constructor(){};
 
-	clone(	target? : DiscoveryConfiguration) : DiscoveryConfiguration { 
+	clone(	target?: DiscoveryConfiguration): DiscoveryConfiguration { 
 		if(!target) {
 			target = new DiscoveryConfiguration();
 		}

@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDecimalDataType {
-		scale? : ec.Int16;
-		value? : Uint8Array;
+		scale?: ec.Int16;
+		value?: Uint8Array;
 }
 
 /**
@@ -13,10 +13,10 @@ export interface IDecimalDataType {
 */
 
 export class DecimalDataType {
- 		scale : ec.Int16;
-		value : Uint8Array;
+ 		scale: ec.Int16;
+		value: Uint8Array;
 
-	constructor(	options? : IDecimalDataType) { 
+	constructor(	options?: IDecimalDataType) { 
 		options = options || {};
 		this.scale= (options.scale) ? options.scale:null;
 		this.value= (options.value) ? options.value:null;
@@ -24,21 +24,21 @@ export class DecimalDataType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeInt16(this.scale,out);
 		ec.encodeByteString(this.value,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.scale = ec.decodeInt16(inp);
 		this.value = ec.decodeByteString(inp);
 
 	}
 
 
-	clone(	target? : DecimalDataType) : DecimalDataType { 
+	clone(	target?: DecimalDataType): DecimalDataType { 
 		if(!target) {
 			target = new DecimalDataType();
 		}
@@ -49,7 +49,7 @@ export class DecimalDataType {
 
 
 }
-export function decodeDecimalDataType(	inp : DataStream) : DecimalDataType { 
+export function decodeDecimalDataType(	inp: DataStream): DecimalDataType { 
 		const obj = new DecimalDataType();
 			obj.decode(inp); 
 			return obj;

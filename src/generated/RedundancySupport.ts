@@ -12,12 +12,12 @@ export enum RedundancySupport {
 
 }
 
-export function encodeRedundancySupport(	data : RedundancySupport, 	out : DataStream) { 
+export function encodeRedundancySupport(	data: RedundancySupport, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeRedundancySupport(	inp : DataStream) { 
+export function decodeRedundancySupport(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

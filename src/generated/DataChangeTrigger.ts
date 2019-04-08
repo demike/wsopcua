@@ -9,12 +9,12 @@ export enum DataChangeTrigger {
 
 }
 
-export function encodeDataChangeTrigger(	data : DataChangeTrigger, 	out : DataStream) { 
+export function encodeDataChangeTrigger(	data: DataChangeTrigger, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeDataChangeTrigger(	inp : DataStream) { 
+export function decodeDataChangeTrigger(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

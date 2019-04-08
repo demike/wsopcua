@@ -6,7 +6,7 @@ import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
 export interface IObjectTypeAttributes extends INodeAttributes {
-		isAbstract? : boolean;
+		isAbstract?: boolean;
 }
 
 /**
@@ -14,9 +14,9 @@ The attributes for an object type node.
 */
 
 export class ObjectTypeAttributes extends NodeAttributes {
- 		isAbstract : boolean;
+ 		isAbstract: boolean;
 
-	constructor(	options? : IObjectTypeAttributes) { 
+	constructor(	options?: IObjectTypeAttributes) { 
 		options = options || {};
 		super(options);
 		this.isAbstract= (options.isAbstract) ? options.isAbstract:null;
@@ -24,21 +24,21 @@ export class ObjectTypeAttributes extends NodeAttributes {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeBoolean(this.isAbstract,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.isAbstract = ec.decodeBoolean(inp);
 
 	}
 
 
-	clone(	target? : ObjectTypeAttributes) : ObjectTypeAttributes { 
+	clone(	target?: ObjectTypeAttributes): ObjectTypeAttributes { 
 		if(!target) {
 			target = new ObjectTypeAttributes();
 		}
@@ -49,7 +49,7 @@ export class ObjectTypeAttributes extends NodeAttributes {
 
 
 }
-export function decodeObjectTypeAttributes(	inp : DataStream) : ObjectTypeAttributes { 
+export function decodeObjectTypeAttributes(	inp: DataStream): ObjectTypeAttributes { 
 		const obj = new ObjectTypeAttributes();
 			obj.decode(inp); 
 			return obj;

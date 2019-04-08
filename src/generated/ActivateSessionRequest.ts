@@ -8,12 +8,12 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IActivateSessionRequest {
-		requestHeader? : RequestHeader;
-		clientSignature? : SignatureData;
-		clientSoftwareCertificates? : SignedSoftwareCertificate[];
-		localeIds? : string[];
-		userIdentityToken? : ec.ExtensionObject;
-		userTokenSignature? : SignatureData;
+		requestHeader?: RequestHeader;
+		clientSignature?: SignatureData;
+		clientSoftwareCertificates?: SignedSoftwareCertificate[];
+		localeIds?: string[];
+		userIdentityToken?: ec.ExtensionObject;
+		userTokenSignature?: SignatureData;
 }
 
 /**
@@ -21,14 +21,14 @@ Activates a session with the server.
 */
 
 export class ActivateSessionRequest {
- 		requestHeader : RequestHeader;
-		clientSignature : SignatureData;
-		clientSoftwareCertificates : SignedSoftwareCertificate[];
-		localeIds : string[];
-		userIdentityToken : ec.ExtensionObject;
-		userTokenSignature : SignatureData;
+ 		requestHeader: RequestHeader;
+		clientSignature: SignatureData;
+		clientSoftwareCertificates: SignedSoftwareCertificate[];
+		localeIds: string[];
+		userIdentityToken: ec.ExtensionObject;
+		userTokenSignature: SignatureData;
 
-	constructor(	options? : IActivateSessionRequest) { 
+	constructor(	options?: IActivateSessionRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.clientSignature= (options.clientSignature) ? options.clientSignature:new SignatureData();
@@ -40,7 +40,7 @@ export class ActivateSessionRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		this.clientSignature.encode(out);
 		ec.encodeArray(this.clientSoftwareCertificates,out);
@@ -51,7 +51,7 @@ export class ActivateSessionRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.clientSignature.decode(inp);
 		this.clientSoftwareCertificates = ec.decodeArray(inp,decodeSignedSoftwareCertificate);
@@ -62,7 +62,7 @@ export class ActivateSessionRequest {
 	}
 
 
-	clone(	target? : ActivateSessionRequest) : ActivateSessionRequest { 
+	clone(	target?: ActivateSessionRequest): ActivateSessionRequest { 
 		if(!target) {
 			target = new ActivateSessionRequest();
 		}
@@ -77,7 +77,7 @@ export class ActivateSessionRequest {
 
 
 }
-export function decodeActivateSessionRequest(	inp : DataStream) : ActivateSessionRequest { 
+export function decodeActivateSessionRequest(	inp: DataStream): ActivateSessionRequest { 
 		const obj = new ActivateSessionRequest();
 			obj.decode(inp); 
 			return obj;

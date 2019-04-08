@@ -6,15 +6,15 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ICreateSessionRequest {
-		requestHeader? : RequestHeader;
-		clientDescription? : ApplicationDescription;
-		serverUri? : string;
-		endpointUrl? : string;
-		sessionName? : string;
-		clientNonce? : Uint8Array;
-		clientCertificate? : Uint8Array;
-		requestedSessionTimeout? : ec.Double;
-		maxResponseMessageSize? : ec.UInt32;
+		requestHeader?: RequestHeader;
+		clientDescription?: ApplicationDescription;
+		serverUri?: string;
+		endpointUrl?: string;
+		sessionName?: string;
+		clientNonce?: Uint8Array;
+		clientCertificate?: Uint8Array;
+		requestedSessionTimeout?: ec.Double;
+		maxResponseMessageSize?: ec.UInt32;
 }
 
 /**
@@ -22,17 +22,17 @@ Creates a new session with the server.
 */
 
 export class CreateSessionRequest {
- 		requestHeader : RequestHeader;
-		clientDescription : ApplicationDescription;
-		serverUri : string;
-		endpointUrl : string;
-		sessionName : string;
-		clientNonce : Uint8Array;
-		clientCertificate : Uint8Array;
-		requestedSessionTimeout : ec.Double;
-		maxResponseMessageSize : ec.UInt32;
+ 		requestHeader: RequestHeader;
+		clientDescription: ApplicationDescription;
+		serverUri: string;
+		endpointUrl: string;
+		sessionName: string;
+		clientNonce: Uint8Array;
+		clientCertificate: Uint8Array;
+		requestedSessionTimeout: ec.Double;
+		maxResponseMessageSize: ec.UInt32;
 
-	constructor(	options? : ICreateSessionRequest) { 
+	constructor(	options?: ICreateSessionRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.clientDescription= (options.clientDescription) ? options.clientDescription:new ApplicationDescription();
@@ -47,7 +47,7 @@ export class CreateSessionRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		this.clientDescription.encode(out);
 		ec.encodeString(this.serverUri,out);
@@ -61,7 +61,7 @@ export class CreateSessionRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.clientDescription.decode(inp);
 		this.serverUri = ec.decodeString(inp);
@@ -75,7 +75,7 @@ export class CreateSessionRequest {
 	}
 
 
-	clone(	target? : CreateSessionRequest) : CreateSessionRequest { 
+	clone(	target?: CreateSessionRequest): CreateSessionRequest { 
 		if(!target) {
 			target = new CreateSessionRequest();
 		}
@@ -93,7 +93,7 @@ export class CreateSessionRequest {
 
 
 }
-export function decodeCreateSessionRequest(	inp : DataStream) : CreateSessionRequest { 
+export function decodeCreateSessionRequest(	inp: DataStream): CreateSessionRequest { 
 		const obj = new CreateSessionRequest();
 			obj.decode(inp); 
 			return obj;

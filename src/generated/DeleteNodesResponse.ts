@@ -7,9 +7,9 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDeleteNodesResponse {
-		responseHeader? : ResponseHeader;
-		results? : ec.StatusCode[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: ec.StatusCode[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -17,11 +17,11 @@ Delete one or more nodes from the server address space.
 */
 
 export class DeleteNodesResponse {
- 		responseHeader : ResponseHeader;
-		results : ec.StatusCode[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: ec.StatusCode[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IDeleteNodesResponse) { 
+	constructor(	options?: IDeleteNodesResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -30,7 +30,7 @@ export class DeleteNodesResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out,ec.encodeStatusCode);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -38,7 +38,7 @@ export class DeleteNodesResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,ec.decodeStatusCode);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -46,7 +46,7 @@ export class DeleteNodesResponse {
 	}
 
 
-	clone(	target? : DeleteNodesResponse) : DeleteNodesResponse { 
+	clone(	target?: DeleteNodesResponse): DeleteNodesResponse { 
 		if(!target) {
 			target = new DeleteNodesResponse();
 		}
@@ -58,7 +58,7 @@ export class DeleteNodesResponse {
 
 
 }
-export function decodeDeleteNodesResponse(	inp : DataStream) : DeleteNodesResponse { 
+export function decodeDeleteNodesResponse(	inp: DataStream): DeleteNodesResponse { 
 		const obj = new DeleteNodesResponse();
 			obj.decode(inp); 
 			return obj;

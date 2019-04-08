@@ -5,9 +5,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISetPublishingModeRequest {
-		requestHeader? : RequestHeader;
-		publishingEnabled? : boolean;
-		subscriptionIds? : ec.UInt32[];
+		requestHeader?: RequestHeader;
+		publishingEnabled?: boolean;
+		subscriptionIds?: ec.UInt32[];
 }
 
 /**
@@ -15,11 +15,11 @@ export interface ISetPublishingModeRequest {
 */
 
 export class SetPublishingModeRequest {
- 		requestHeader : RequestHeader;
-		publishingEnabled : boolean;
-		subscriptionIds : ec.UInt32[];
+ 		requestHeader: RequestHeader;
+		publishingEnabled: boolean;
+		subscriptionIds: ec.UInt32[];
 
-	constructor(	options? : ISetPublishingModeRequest) { 
+	constructor(	options?: ISetPublishingModeRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.publishingEnabled= (options.publishingEnabled) ? options.publishingEnabled:null;
@@ -28,7 +28,7 @@ export class SetPublishingModeRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeBoolean(this.publishingEnabled,out);
 		ec.encodeArray(this.subscriptionIds,out,ec.encodeUInt32);
@@ -36,7 +36,7 @@ export class SetPublishingModeRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.publishingEnabled = ec.decodeBoolean(inp);
 		this.subscriptionIds = ec.decodeArray(inp,ec.decodeUInt32);
@@ -44,7 +44,7 @@ export class SetPublishingModeRequest {
 	}
 
 
-	clone(	target? : SetPublishingModeRequest) : SetPublishingModeRequest { 
+	clone(	target?: SetPublishingModeRequest): SetPublishingModeRequest { 
 		if(!target) {
 			target = new SetPublishingModeRequest();
 		}
@@ -56,7 +56,7 @@ export class SetPublishingModeRequest {
 
 
 }
-export function decodeSetPublishingModeRequest(	inp : DataStream) : SetPublishingModeRequest { 
+export function decodeSetPublishingModeRequest(	inp: DataStream): SetPublishingModeRequest { 
 		const obj = new SetPublishingModeRequest();
 			obj.decode(inp); 
 			return obj;

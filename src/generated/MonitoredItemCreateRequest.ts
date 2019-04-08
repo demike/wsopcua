@@ -7,9 +7,9 @@ import {DataStream} from '../basic-types/DataStream';
 import * as ec from '../basic-types';
 
 export interface IMonitoredItemCreateRequest {
-		itemToMonitor? : ReadValueId;
-		monitoringMode? : MonitoringMode;
-		requestedParameters? : MonitoringParameters;
+		itemToMonitor?: ReadValueId;
+		monitoringMode?: MonitoringMode;
+		requestedParameters?: MonitoringParameters;
 }
 
 /**
@@ -17,11 +17,11 @@ export interface IMonitoredItemCreateRequest {
 */
 
 export class MonitoredItemCreateRequest {
- 		itemToMonitor : ReadValueId;
-		monitoringMode : MonitoringMode;
-		requestedParameters : MonitoringParameters;
+ 		itemToMonitor: ReadValueId;
+		monitoringMode: MonitoringMode;
+		requestedParameters: MonitoringParameters;
 
-	constructor(	options? : IMonitoredItemCreateRequest) { 
+	constructor(	options?: IMonitoredItemCreateRequest) { 
 		options = options || {};
 		this.itemToMonitor= (options.itemToMonitor) ? options.itemToMonitor:new ReadValueId();
 		this.monitoringMode= (options.monitoringMode) ? options.monitoringMode:null;
@@ -30,7 +30,7 @@ export class MonitoredItemCreateRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.itemToMonitor.encode(out);
 		encodeMonitoringMode(this.monitoringMode,out);
 		this.requestedParameters.encode(out);
@@ -38,7 +38,7 @@ export class MonitoredItemCreateRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.itemToMonitor.decode(inp);
 		this.monitoringMode = decodeMonitoringMode(inp);
 		this.requestedParameters.decode(inp);
@@ -46,7 +46,7 @@ export class MonitoredItemCreateRequest {
 	}
 
 
-	clone(	target? : MonitoredItemCreateRequest) : MonitoredItemCreateRequest { 
+	clone(	target?: MonitoredItemCreateRequest): MonitoredItemCreateRequest { 
 		if(!target) {
 			target = new MonitoredItemCreateRequest();
 		}
@@ -58,7 +58,7 @@ export class MonitoredItemCreateRequest {
 
 
 }
-export function decodeMonitoredItemCreateRequest(	inp : DataStream) : MonitoredItemCreateRequest { 
+export function decodeMonitoredItemCreateRequest(	inp: DataStream): MonitoredItemCreateRequest { 
 		const obj = new MonitoredItemCreateRequest();
 			obj.decode(inp); 
 			return obj;

@@ -9,12 +9,12 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IQueryFirstRequest {
-		requestHeader? : RequestHeader;
-		view? : ViewDescription;
-		nodeTypes? : NodeTypeDescription[];
-		filter? : ContentFilter;
-		maxDataSetsToReturn? : ec.UInt32;
-		maxReferencesToReturn? : ec.UInt32;
+		requestHeader?: RequestHeader;
+		view?: ViewDescription;
+		nodeTypes?: NodeTypeDescription[];
+		filter?: ContentFilter;
+		maxDataSetsToReturn?: ec.UInt32;
+		maxReferencesToReturn?: ec.UInt32;
 }
 
 /**
@@ -22,14 +22,14 @@ export interface IQueryFirstRequest {
 */
 
 export class QueryFirstRequest {
- 		requestHeader : RequestHeader;
-		view : ViewDescription;
-		nodeTypes : NodeTypeDescription[];
-		filter : ContentFilter;
-		maxDataSetsToReturn : ec.UInt32;
-		maxReferencesToReturn : ec.UInt32;
+ 		requestHeader: RequestHeader;
+		view: ViewDescription;
+		nodeTypes: NodeTypeDescription[];
+		filter: ContentFilter;
+		maxDataSetsToReturn: ec.UInt32;
+		maxReferencesToReturn: ec.UInt32;
 
-	constructor(	options? : IQueryFirstRequest) { 
+	constructor(	options?: IQueryFirstRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.view= (options.view) ? options.view:new ViewDescription();
@@ -41,7 +41,7 @@ export class QueryFirstRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		this.view.encode(out);
 		ec.encodeArray(this.nodeTypes,out);
@@ -52,7 +52,7 @@ export class QueryFirstRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.view.decode(inp);
 		this.nodeTypes = ec.decodeArray(inp,decodeNodeTypeDescription);
@@ -63,7 +63,7 @@ export class QueryFirstRequest {
 	}
 
 
-	clone(	target? : QueryFirstRequest) : QueryFirstRequest { 
+	clone(	target?: QueryFirstRequest): QueryFirstRequest { 
 		if(!target) {
 			target = new QueryFirstRequest();
 		}
@@ -78,7 +78,7 @@ export class QueryFirstRequest {
 
 
 }
-export function decodeQueryFirstRequest(	inp : DataStream) : QueryFirstRequest { 
+export function decodeQueryFirstRequest(	inp: DataStream): QueryFirstRequest { 
 		const obj = new QueryFirstRequest();
 			obj.decode(inp); 
 			return obj;

@@ -9,7 +9,7 @@ export class HistoryReadDetails {
  
 	constructor(){};
 
-	clone(	target? : HistoryReadDetails) : HistoryReadDetails { 
+	clone(	target?: HistoryReadDetails): HistoryReadDetails { 
 		if(!target) {
 			target = new HistoryReadDetails();
 		}

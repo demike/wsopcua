@@ -14,22 +14,22 @@ import {TypeNode} from './TypeNode';
 import {ITypeNode} from './TypeNode';
 
 export interface IVariableTypeNode extends ITypeNode {
-		nodeId? : ec.NodeId;
-		nodeClass? : NodeClass;
-		browseName? : QualifiedName;
-		displayName? : LocalizedText;
-		description? : LocalizedText;
-		writeMask? : ec.UInt32;
-		userWriteMask? : ec.UInt32;
-		rolePermissions? : RolePermissionType[];
-		userRolePermissions? : RolePermissionType[];
-		accessRestrictions? : ec.UInt16;
-		references? : ReferenceNode[];
-		value? : Variant;
-		dataType? : ec.NodeId;
-		valueRank? : ec.Int32;
-		arrayDimensions? : ec.UInt32[];
-		isAbstract? : boolean;
+		nodeId?: ec.NodeId;
+		nodeClass?: NodeClass;
+		browseName?: QualifiedName;
+		displayName?: LocalizedText;
+		description?: LocalizedText;
+		writeMask?: ec.UInt32;
+		userWriteMask?: ec.UInt32;
+		rolePermissions?: RolePermissionType[];
+		userRolePermissions?: RolePermissionType[];
+		accessRestrictions?: ec.UInt16;
+		references?: ReferenceNode[];
+		value?: Variant;
+		dataType?: ec.NodeId;
+		valueRank?: ec.Int32;
+		arrayDimensions?: ec.UInt32[];
+		isAbstract?: boolean;
 }
 
 /**
@@ -37,24 +37,24 @@ Specifies the attributes which belong to variable type nodes.
 */
 
 export class VariableTypeNode extends TypeNode {
- 		nodeId : ec.NodeId;
-		nodeClass : NodeClass;
-		browseName : QualifiedName;
-		displayName : LocalizedText;
-		description : LocalizedText;
-		writeMask : ec.UInt32;
-		userWriteMask : ec.UInt32;
-		rolePermissions : RolePermissionType[];
-		userRolePermissions : RolePermissionType[];
-		accessRestrictions : ec.UInt16;
-		references : ReferenceNode[];
-		value : Variant;
-		dataType : ec.NodeId;
-		valueRank : ec.Int32;
-		arrayDimensions : ec.UInt32[];
-		isAbstract : boolean;
+ 		nodeId: ec.NodeId;
+		nodeClass: NodeClass;
+		browseName: QualifiedName;
+		displayName: LocalizedText;
+		description: LocalizedText;
+		writeMask: ec.UInt32;
+		userWriteMask: ec.UInt32;
+		rolePermissions: RolePermissionType[];
+		userRolePermissions: RolePermissionType[];
+		accessRestrictions: ec.UInt16;
+		references: ReferenceNode[];
+		value: Variant;
+		dataType: ec.NodeId;
+		valueRank: ec.Int32;
+		arrayDimensions: ec.UInt32[];
+		isAbstract: boolean;
 
-	constructor(	options? : IVariableTypeNode) { 
+	constructor(	options?: IVariableTypeNode) { 
 		options = options || {};
 		super(options);
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
@@ -77,7 +77,7 @@ export class VariableTypeNode extends TypeNode {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeNodeId(this.nodeId,out);
 		encodeNodeClass(this.nodeClass,out);
@@ -99,7 +99,7 @@ export class VariableTypeNode extends TypeNode {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.nodeId = ec.decodeNodeId(inp);
 		this.nodeClass = decodeNodeClass(inp);
@@ -121,7 +121,7 @@ export class VariableTypeNode extends TypeNode {
 	}
 
 
-	clone(	target? : VariableTypeNode) : VariableTypeNode { 
+	clone(	target?: VariableTypeNode): VariableTypeNode { 
 		if(!target) {
 			target = new VariableTypeNode();
 		}
@@ -147,7 +147,7 @@ export class VariableTypeNode extends TypeNode {
 
 
 }
-export function decodeVariableTypeNode(	inp : DataStream) : VariableTypeNode { 
+export function decodeVariableTypeNode(	inp: DataStream): VariableTypeNode { 
 		const obj = new VariableTypeNode();
 			obj.decode(inp); 
 			return obj;

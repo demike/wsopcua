@@ -12,12 +12,12 @@ import {ContentFilterResult} from './ContentFilterResult';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IQueryFirstResponse {
-		responseHeader? : ResponseHeader;
-		queryDataSets? : QueryDataSet[];
-		continuationPoint? : Uint8Array;
-		parsingResults? : ParsingResult[];
-		diagnosticInfos? : DiagnosticInfo[];
-		filterResult? : ContentFilterResult;
+		responseHeader?: ResponseHeader;
+		queryDataSets?: QueryDataSet[];
+		continuationPoint?: Uint8Array;
+		parsingResults?: ParsingResult[];
+		diagnosticInfos?: DiagnosticInfo[];
+		filterResult?: ContentFilterResult;
 }
 
 /**
@@ -25,14 +25,14 @@ export interface IQueryFirstResponse {
 */
 
 export class QueryFirstResponse {
- 		responseHeader : ResponseHeader;
-		queryDataSets : QueryDataSet[];
-		continuationPoint : Uint8Array;
-		parsingResults : ParsingResult[];
-		diagnosticInfos : DiagnosticInfo[];
-		filterResult : ContentFilterResult;
+ 		responseHeader: ResponseHeader;
+		queryDataSets: QueryDataSet[];
+		continuationPoint: Uint8Array;
+		parsingResults: ParsingResult[];
+		diagnosticInfos: DiagnosticInfo[];
+		filterResult: ContentFilterResult;
 
-	constructor(	options? : IQueryFirstResponse) { 
+	constructor(	options?: IQueryFirstResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.queryDataSets= (options.queryDataSets) ? options.queryDataSets:[];
@@ -44,7 +44,7 @@ export class QueryFirstResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.queryDataSets,out);
 		ec.encodeByteString(this.continuationPoint,out);
@@ -55,7 +55,7 @@ export class QueryFirstResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.queryDataSets = ec.decodeArray(inp,decodeQueryDataSet);
 		this.continuationPoint = ec.decodeByteString(inp);
@@ -66,7 +66,7 @@ export class QueryFirstResponse {
 	}
 
 
-	clone(	target? : QueryFirstResponse) : QueryFirstResponse { 
+	clone(	target?: QueryFirstResponse): QueryFirstResponse { 
 		if(!target) {
 			target = new QueryFirstResponse();
 		}
@@ -81,7 +81,7 @@ export class QueryFirstResponse {
 
 
 }
-export function decodeQueryFirstResponse(	inp : DataStream) : QueryFirstResponse { 
+export function decodeQueryFirstResponse(	inp: DataStream): QueryFirstResponse { 
 		const obj = new QueryFirstResponse();
 			obj.decode(inp); 
 			return obj;

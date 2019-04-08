@@ -18,12 +18,12 @@ export enum BrowseResultMask {
 
 }
 
-export function encodeBrowseResultMask(	data : BrowseResultMask, 	out : DataStream) { 
+export function encodeBrowseResultMask(	data: BrowseResultMask, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeBrowseResultMask(	inp : DataStream) { 
+export function decodeBrowseResultMask(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

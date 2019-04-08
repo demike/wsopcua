@@ -9,8 +9,8 @@ import {DataStream} from '../basic-types/DataStream';
 import {NotificationData} from './NotificationData';
 
 export interface IDataChangeNotification {
-		monitoredItems? : MonitoredItemNotification[];
-		diagnosticInfos? : DiagnosticInfo[];
+		monitoredItems?: MonitoredItemNotification[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -18,10 +18,10 @@ export interface IDataChangeNotification {
 */
 
 export class DataChangeNotification extends NotificationData {
- 		monitoredItems : MonitoredItemNotification[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		monitoredItems: MonitoredItemNotification[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IDataChangeNotification) { 
+	constructor(	options?: IDataChangeNotification) { 
 		options = options || {};
 		super();
 		this.monitoredItems= (options.monitoredItems) ? options.monitoredItems:[];
@@ -30,21 +30,21 @@ export class DataChangeNotification extends NotificationData {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.monitoredItems,out);
 		ec.encodeArray(this.diagnosticInfos,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.monitoredItems = ec.decodeArray(inp,decodeMonitoredItemNotification);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
 
 	}
 
 
-	clone(	target? : DataChangeNotification) : DataChangeNotification { 
+	clone(	target?: DataChangeNotification): DataChangeNotification { 
 		if(!target) {
 			target = new DataChangeNotification();
 		}
@@ -55,7 +55,7 @@ export class DataChangeNotification extends NotificationData {
 
 
 }
-export function decodeDataChangeNotification(	inp : DataStream) : DataChangeNotification { 
+export function decodeDataChangeNotification(	inp: DataStream): DataChangeNotification { 
 		const obj = new DataChangeNotification();
 			obj.decode(inp); 
 			return obj;

@@ -5,9 +5,9 @@ import {ServerState, encodeServerState, decodeServerState} from './ServerState';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRedundantServerDataType {
-		serverId? : string;
-		serviceLevel? : ec.Byte;
-		serverState? : ServerState;
+		serverId?: string;
+		serviceLevel?: ec.Byte;
+		serverState?: ServerState;
 }
 
 /**
@@ -15,11 +15,11 @@ export interface IRedundantServerDataType {
 */
 
 export class RedundantServerDataType {
- 		serverId : string;
-		serviceLevel : ec.Byte;
-		serverState : ServerState;
+ 		serverId: string;
+		serviceLevel: ec.Byte;
+		serverState: ServerState;
 
-	constructor(	options? : IRedundantServerDataType) { 
+	constructor(	options?: IRedundantServerDataType) { 
 		options = options || {};
 		this.serverId= (options.serverId) ? options.serverId:null;
 		this.serviceLevel= (options.serviceLevel) ? options.serviceLevel:null;
@@ -28,7 +28,7 @@ export class RedundantServerDataType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.serverId,out);
 		ec.encodeByte(this.serviceLevel,out);
 		encodeServerState(this.serverState,out);
@@ -36,7 +36,7 @@ export class RedundantServerDataType {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.serverId = ec.decodeString(inp);
 		this.serviceLevel = ec.decodeByte(inp);
 		this.serverState = decodeServerState(inp);
@@ -44,7 +44,7 @@ export class RedundantServerDataType {
 	}
 
 
-	clone(	target? : RedundantServerDataType) : RedundantServerDataType { 
+	clone(	target?: RedundantServerDataType): RedundantServerDataType { 
 		if(!target) {
 			target = new RedundantServerDataType();
 		}
@@ -56,7 +56,7 @@ export class RedundantServerDataType {
 
 
 }
-export function decodeRedundantServerDataType(	inp : DataStream) : RedundantServerDataType { 
+export function decodeRedundantServerDataType(	inp: DataStream): RedundantServerDataType { 
 		const obj = new RedundantServerDataType();
 			obj.decode(inp); 
 			return obj;

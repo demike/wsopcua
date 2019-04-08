@@ -5,7 +5,7 @@ import {DataStream} from '../basic-types/DataStream';
 import * as ec from '../basic-types';
 
 export interface IUnregisterNodesResponse {
-		responseHeader? : ResponseHeader;
+		responseHeader?: ResponseHeader;
 }
 
 /**
@@ -13,28 +13,28 @@ Unregisters one or more previously registered nodes.
 */
 
 export class UnregisterNodesResponse {
- 		responseHeader : ResponseHeader;
+ 		responseHeader: ResponseHeader;
 
-	constructor(	options? : IUnregisterNodesResponse) { 
+	constructor(	options?: IUnregisterNodesResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 
 	}
 
 
-	clone(	target? : UnregisterNodesResponse) : UnregisterNodesResponse { 
+	clone(	target?: UnregisterNodesResponse): UnregisterNodesResponse { 
 		if(!target) {
 			target = new UnregisterNodesResponse();
 		}
@@ -44,7 +44,7 @@ export class UnregisterNodesResponse {
 
 
 }
-export function decodeUnregisterNodesResponse(	inp : DataStream) : UnregisterNodesResponse { 
+export function decodeUnregisterNodesResponse(	inp: DataStream): UnregisterNodesResponse { 
 		const obj = new UnregisterNodesResponse();
 			obj.decode(inp); 
 			return obj;

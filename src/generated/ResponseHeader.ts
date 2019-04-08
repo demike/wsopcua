@@ -5,12 +5,12 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IResponseHeader {
-		timestamp? : Date;
-		requestHandle? : ec.UInt32;
-		serviceResult? : ec.StatusCode;
-		serviceDiagnostics? : DiagnosticInfo;
-		stringTable? : string[];
-		additionalHeader? : ec.ExtensionObject;
+		timestamp?: Date;
+		requestHandle?: ec.UInt32;
+		serviceResult?: ec.StatusCode;
+		serviceDiagnostics?: DiagnosticInfo;
+		stringTable?: string[];
+		additionalHeader?: ec.ExtensionObject;
 }
 
 /**
@@ -18,14 +18,14 @@ The header passed with every server response.
 */
 
 export class ResponseHeader {
- 		timestamp : Date;
-		requestHandle : ec.UInt32;
-		serviceResult : ec.StatusCode;
-		serviceDiagnostics : DiagnosticInfo;
-		stringTable : string[];
-		additionalHeader : ec.ExtensionObject;
+ 		timestamp: Date;
+		requestHandle: ec.UInt32;
+		serviceResult: ec.StatusCode;
+		serviceDiagnostics: DiagnosticInfo;
+		stringTable: string[];
+		additionalHeader: ec.ExtensionObject;
 
-	constructor(	options? : IResponseHeader) { 
+	constructor(	options?: IResponseHeader) { 
 		options = options || {};
 		this.timestamp= (options.timestamp) ? options.timestamp:null;
 		this.requestHandle= (options.requestHandle) ? options.requestHandle:null;
@@ -37,7 +37,7 @@ export class ResponseHeader {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeDateTime(this.timestamp,out);
 		ec.encodeUInt32(this.requestHandle,out);
 		ec.encodeStatusCode(this.serviceResult,out);
@@ -48,7 +48,7 @@ export class ResponseHeader {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.timestamp = ec.decodeDateTime(inp);
 		this.requestHandle = ec.decodeUInt32(inp);
 		this.serviceResult = ec.decodeStatusCode(inp);
@@ -59,7 +59,7 @@ export class ResponseHeader {
 	}
 
 
-	clone(	target? : ResponseHeader) : ResponseHeader { 
+	clone(	target?: ResponseHeader): ResponseHeader { 
 		if(!target) {
 			target = new ResponseHeader();
 		}
@@ -74,7 +74,7 @@ export class ResponseHeader {
 
 
 }
-export function decodeResponseHeader(	inp : DataStream) : ResponseHeader { 
+export function decodeResponseHeader(	inp: DataStream): ResponseHeader { 
 		const obj = new ResponseHeader();
 			obj.decode(inp); 
 			return obj;

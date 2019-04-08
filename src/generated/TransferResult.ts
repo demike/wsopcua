@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ITransferResult {
-		statusCode? : ec.StatusCode;
-		availableSequenceNumbers? : ec.UInt32[];
+		statusCode?: ec.StatusCode;
+		availableSequenceNumbers?: ec.UInt32[];
 }
 
 /**
@@ -13,10 +13,10 @@ export interface ITransferResult {
 */
 
 export class TransferResult {
- 		statusCode : ec.StatusCode;
-		availableSequenceNumbers : ec.UInt32[];
+ 		statusCode: ec.StatusCode;
+		availableSequenceNumbers: ec.UInt32[];
 
-	constructor(	options? : ITransferResult) { 
+	constructor(	options?: ITransferResult) { 
 		options = options || {};
 		this.statusCode= (options.statusCode) ? options.statusCode:null;
 		this.availableSequenceNumbers= (options.availableSequenceNumbers) ? options.availableSequenceNumbers:[];
@@ -24,21 +24,21 @@ export class TransferResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeStatusCode(this.statusCode,out);
 		ec.encodeArray(this.availableSequenceNumbers,out,ec.encodeUInt32);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.statusCode = ec.decodeStatusCode(inp);
 		this.availableSequenceNumbers = ec.decodeArray(inp,ec.decodeUInt32);
 
 	}
 
 
-	clone(	target? : TransferResult) : TransferResult { 
+	clone(	target?: TransferResult): TransferResult { 
 		if(!target) {
 			target = new TransferResult();
 		}
@@ -49,7 +49,7 @@ export class TransferResult {
 
 
 }
-export function decodeTransferResult(	inp : DataStream) : TransferResult { 
+export function decodeTransferResult(	inp: DataStream): TransferResult { 
 		const obj = new TransferResult();
 			obj.decode(inp); 
 			return obj;

@@ -6,8 +6,8 @@ import {DataStream} from '../basic-types/DataStream';
 import * as ec from '../basic-types';
 
 export interface IRegisterServerRequest {
-		requestHeader? : RequestHeader;
-		server? : RegisteredServer;
+		requestHeader?: RequestHeader;
+		server?: RegisteredServer;
 }
 
 /**
@@ -15,10 +15,10 @@ Registers a server with the discovery server.
 */
 
 export class RegisterServerRequest {
- 		requestHeader : RequestHeader;
-		server : RegisteredServer;
+ 		requestHeader: RequestHeader;
+		server: RegisteredServer;
 
-	constructor(	options? : IRegisterServerRequest) { 
+	constructor(	options?: IRegisterServerRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.server= (options.server) ? options.server:new RegisteredServer();
@@ -26,21 +26,21 @@ export class RegisterServerRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		this.server.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.server.decode(inp);
 
 	}
 
 
-	clone(	target? : RegisterServerRequest) : RegisterServerRequest { 
+	clone(	target?: RegisterServerRequest): RegisterServerRequest { 
 		if(!target) {
 			target = new RegisterServerRequest();
 		}
@@ -51,7 +51,7 @@ export class RegisterServerRequest {
 
 
 }
-export function decodeRegisterServerRequest(	inp : DataStream) : RegisterServerRequest { 
+export function decodeRegisterServerRequest(	inp: DataStream): RegisterServerRequest { 
 		const obj = new RegisterServerRequest();
 			obj.decode(inp); 
 			return obj;

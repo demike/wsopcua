@@ -7,9 +7,9 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IAddReferencesResponse {
-		responseHeader? : ResponseHeader;
-		results? : ec.StatusCode[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: ec.StatusCode[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -17,11 +17,11 @@ Adds one or more references to the server address space.
 */
 
 export class AddReferencesResponse {
- 		responseHeader : ResponseHeader;
-		results : ec.StatusCode[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: ec.StatusCode[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IAddReferencesResponse) { 
+	constructor(	options?: IAddReferencesResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -30,7 +30,7 @@ export class AddReferencesResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out,ec.encodeStatusCode);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -38,7 +38,7 @@ export class AddReferencesResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,ec.decodeStatusCode);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -46,7 +46,7 @@ export class AddReferencesResponse {
 	}
 
 
-	clone(	target? : AddReferencesResponse) : AddReferencesResponse { 
+	clone(	target?: AddReferencesResponse): AddReferencesResponse { 
 		if(!target) {
 			target = new AddReferencesResponse();
 		}
@@ -58,7 +58,7 @@ export class AddReferencesResponse {
 
 
 }
-export function decodeAddReferencesResponse(	inp : DataStream) : AddReferencesResponse { 
+export function decodeAddReferencesResponse(	inp: DataStream): AddReferencesResponse { 
 		const obj = new AddReferencesResponse();
 			obj.decode(inp); 
 			return obj;

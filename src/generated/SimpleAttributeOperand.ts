@@ -7,10 +7,10 @@ import {DataStream} from '../basic-types/DataStream';
 import {FilterOperand} from './FilterOperand';
 
 export interface ISimpleAttributeOperand {
-		typeDefinitionId? : ec.NodeId;
-		browsePath? : QualifiedName[];
-		attributeId? : ec.UInt32;
-		indexRange? : string;
+		typeDefinitionId?: ec.NodeId;
+		browsePath?: QualifiedName[];
+		attributeId?: ec.UInt32;
+		indexRange?: string;
 }
 
 /**
@@ -18,12 +18,12 @@ export interface ISimpleAttributeOperand {
 */
 
 export class SimpleAttributeOperand extends FilterOperand {
- 		typeDefinitionId : ec.NodeId;
-		browsePath : QualifiedName[];
-		attributeId : ec.UInt32;
-		indexRange : string;
+ 		typeDefinitionId: ec.NodeId;
+		browsePath: QualifiedName[];
+		attributeId: ec.UInt32;
+		indexRange: string;
 
-	constructor(	options? : ISimpleAttributeOperand) { 
+	constructor(	options?: ISimpleAttributeOperand) { 
 		options = options || {};
 		super();
 		this.typeDefinitionId= (options.typeDefinitionId) ? options.typeDefinitionId:null;
@@ -34,7 +34,7 @@ export class SimpleAttributeOperand extends FilterOperand {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.typeDefinitionId,out);
 		ec.encodeArray(this.browsePath,out);
 		ec.encodeUInt32(this.attributeId,out);
@@ -43,7 +43,7 @@ export class SimpleAttributeOperand extends FilterOperand {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.typeDefinitionId = ec.decodeNodeId(inp);
 		this.browsePath = ec.decodeArray(inp,decodeQualifiedName);
 		this.attributeId = ec.decodeUInt32(inp);
@@ -52,7 +52,7 @@ export class SimpleAttributeOperand extends FilterOperand {
 	}
 
 
-	clone(	target? : SimpleAttributeOperand) : SimpleAttributeOperand { 
+	clone(	target?: SimpleAttributeOperand): SimpleAttributeOperand { 
 		if(!target) {
 			target = new SimpleAttributeOperand();
 		}
@@ -65,7 +65,7 @@ export class SimpleAttributeOperand extends FilterOperand {
 
 
 }
-export function decodeSimpleAttributeOperand(	inp : DataStream) : SimpleAttributeOperand { 
+export function decodeSimpleAttributeOperand(	inp: DataStream): SimpleAttributeOperand { 
 		const obj = new SimpleAttributeOperand();
 			obj.decode(inp); 
 			return obj;

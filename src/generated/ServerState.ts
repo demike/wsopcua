@@ -14,12 +14,12 @@ export enum ServerState {
 
 }
 
-export function encodeServerState(	data : ServerState, 	out : DataStream) { 
+export function encodeServerState(	data: ServerState, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeServerState(	inp : DataStream) { 
+export function decodeServerState(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

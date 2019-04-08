@@ -7,8 +7,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDeleteNodesRequest {
-		requestHeader? : RequestHeader;
-		nodesToDelete? : DeleteNodesItem[];
+		requestHeader?: RequestHeader;
+		nodesToDelete?: DeleteNodesItem[];
 }
 
 /**
@@ -16,10 +16,10 @@ Delete one or more nodes from the server address space.
 */
 
 export class DeleteNodesRequest {
- 		requestHeader : RequestHeader;
-		nodesToDelete : DeleteNodesItem[];
+ 		requestHeader: RequestHeader;
+		nodesToDelete: DeleteNodesItem[];
 
-	constructor(	options? : IDeleteNodesRequest) { 
+	constructor(	options?: IDeleteNodesRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.nodesToDelete= (options.nodesToDelete) ? options.nodesToDelete:[];
@@ -27,21 +27,21 @@ export class DeleteNodesRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeArray(this.nodesToDelete,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.nodesToDelete = ec.decodeArray(inp,decodeDeleteNodesItem);
 
 	}
 
 
-	clone(	target? : DeleteNodesRequest) : DeleteNodesRequest { 
+	clone(	target?: DeleteNodesRequest): DeleteNodesRequest { 
 		if(!target) {
 			target = new DeleteNodesRequest();
 		}
@@ -52,7 +52,7 @@ export class DeleteNodesRequest {
 
 
 }
-export function decodeDeleteNodesRequest(	inp : DataStream) : DeleteNodesRequest { 
+export function decodeDeleteNodesRequest(	inp: DataStream): DeleteNodesRequest { 
 		const obj = new DeleteNodesRequest();
 			obj.decode(inp); 
 			return obj;

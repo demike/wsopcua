@@ -7,8 +7,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ITranslateBrowsePathsToNodeIdsRequest {
-		requestHeader? : RequestHeader;
-		browsePaths? : BrowsePath[];
+		requestHeader?: RequestHeader;
+		browsePaths?: BrowsePath[];
 }
 
 /**
@@ -16,10 +16,10 @@ Translates one or more paths in the server address space.
 */
 
 export class TranslateBrowsePathsToNodeIdsRequest {
- 		requestHeader : RequestHeader;
-		browsePaths : BrowsePath[];
+ 		requestHeader: RequestHeader;
+		browsePaths: BrowsePath[];
 
-	constructor(	options? : ITranslateBrowsePathsToNodeIdsRequest) { 
+	constructor(	options?: ITranslateBrowsePathsToNodeIdsRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.browsePaths= (options.browsePaths) ? options.browsePaths:[];
@@ -27,21 +27,21 @@ export class TranslateBrowsePathsToNodeIdsRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeArray(this.browsePaths,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.browsePaths = ec.decodeArray(inp,decodeBrowsePath);
 
 	}
 
 
-	clone(	target? : TranslateBrowsePathsToNodeIdsRequest) : TranslateBrowsePathsToNodeIdsRequest { 
+	clone(	target?: TranslateBrowsePathsToNodeIdsRequest): TranslateBrowsePathsToNodeIdsRequest { 
 		if(!target) {
 			target = new TranslateBrowsePathsToNodeIdsRequest();
 		}
@@ -52,7 +52,7 @@ export class TranslateBrowsePathsToNodeIdsRequest {
 
 
 }
-export function decodeTranslateBrowsePathsToNodeIdsRequest(	inp : DataStream) : TranslateBrowsePathsToNodeIdsRequest { 
+export function decodeTranslateBrowsePathsToNodeIdsRequest(	inp: DataStream): TranslateBrowsePathsToNodeIdsRequest { 
 		const obj = new TranslateBrowsePathsToNodeIdsRequest();
 			obj.decode(inp); 
 			return obj;

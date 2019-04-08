@@ -17,12 +17,12 @@ export enum NodeClass {
 
 }
 
-export function encodeNodeClass(	data : NodeClass, 	out : DataStream) { 
+export function encodeNodeClass(	data: NodeClass, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeNodeClass(	inp : DataStream) { 
+export function decodeNodeClass(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

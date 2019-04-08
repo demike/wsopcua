@@ -6,7 +6,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryEvent {
-		events? : HistoryEventFieldList[];
+		events?: HistoryEventFieldList[];
 }
 
 /**
@@ -14,28 +14,28 @@ export interface IHistoryEvent {
 */
 
 export class HistoryEvent {
- 		events : HistoryEventFieldList[];
+ 		events: HistoryEventFieldList[];
 
-	constructor(	options? : IHistoryEvent) { 
+	constructor(	options?: IHistoryEvent) { 
 		options = options || {};
 		this.events= (options.events) ? options.events:[];
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.events,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.events = ec.decodeArray(inp,decodeHistoryEventFieldList);
 
 	}
 
 
-	clone(	target? : HistoryEvent) : HistoryEvent { 
+	clone(	target?: HistoryEvent): HistoryEvent { 
 		if(!target) {
 			target = new HistoryEvent();
 		}
@@ -45,7 +45,7 @@ export class HistoryEvent {
 
 
 }
-export function decodeHistoryEvent(	inp : DataStream) : HistoryEvent { 
+export function decodeHistoryEvent(	inp: DataStream): HistoryEvent { 
 		const obj = new HistoryEvent();
 			obj.decode(inp); 
 			return obj;

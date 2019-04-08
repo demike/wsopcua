@@ -5,11 +5,11 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ICreateSubscriptionResponse {
-		responseHeader? : ResponseHeader;
-		subscriptionId? : ec.UInt32;
-		revisedPublishingInterval? : ec.Double;
-		revisedLifetimeCount? : ec.UInt32;
-		revisedMaxKeepAliveCount? : ec.UInt32;
+		responseHeader?: ResponseHeader;
+		subscriptionId?: ec.UInt32;
+		revisedPublishingInterval?: ec.Double;
+		revisedLifetimeCount?: ec.UInt32;
+		revisedMaxKeepAliveCount?: ec.UInt32;
 }
 
 /**
@@ -17,13 +17,13 @@ export interface ICreateSubscriptionResponse {
 */
 
 export class CreateSubscriptionResponse {
- 		responseHeader : ResponseHeader;
-		subscriptionId : ec.UInt32;
-		revisedPublishingInterval : ec.Double;
-		revisedLifetimeCount : ec.UInt32;
-		revisedMaxKeepAliveCount : ec.UInt32;
+ 		responseHeader: ResponseHeader;
+		subscriptionId: ec.UInt32;
+		revisedPublishingInterval: ec.Double;
+		revisedLifetimeCount: ec.UInt32;
+		revisedMaxKeepAliveCount: ec.UInt32;
 
-	constructor(	options? : ICreateSubscriptionResponse) { 
+	constructor(	options?: ICreateSubscriptionResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.subscriptionId= (options.subscriptionId) ? options.subscriptionId:null;
@@ -34,7 +34,7 @@ export class CreateSubscriptionResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeUInt32(this.subscriptionId,out);
 		ec.encodeDouble(this.revisedPublishingInterval,out);
@@ -44,7 +44,7 @@ export class CreateSubscriptionResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.subscriptionId = ec.decodeUInt32(inp);
 		this.revisedPublishingInterval = ec.decodeDouble(inp);
@@ -54,7 +54,7 @@ export class CreateSubscriptionResponse {
 	}
 
 
-	clone(	target? : CreateSubscriptionResponse) : CreateSubscriptionResponse { 
+	clone(	target?: CreateSubscriptionResponse): CreateSubscriptionResponse { 
 		if(!target) {
 			target = new CreateSubscriptionResponse();
 		}
@@ -68,7 +68,7 @@ export class CreateSubscriptionResponse {
 
 
 }
-export function decodeCreateSubscriptionResponse(	inp : DataStream) : CreateSubscriptionResponse { 
+export function decodeCreateSubscriptionResponse(	inp: DataStream): CreateSubscriptionResponse { 
 		const obj = new CreateSubscriptionResponse();
 			obj.decode(inp); 
 			return obj;

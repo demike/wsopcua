@@ -5,10 +5,10 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IGetEndpointsRequest {
-		requestHeader? : RequestHeader;
-		endpointUrl? : string;
-		localeIds? : string[];
-		profileUris? : string[];
+		requestHeader?: RequestHeader;
+		endpointUrl?: string;
+		localeIds?: string[];
+		profileUris?: string[];
 }
 
 /**
@@ -16,12 +16,12 @@ Gets the endpoints used by the server.
 */
 
 export class GetEndpointsRequest {
- 		requestHeader : RequestHeader;
-		endpointUrl : string;
-		localeIds : string[];
-		profileUris : string[];
+ 		requestHeader: RequestHeader;
+		endpointUrl: string;
+		localeIds: string[];
+		profileUris: string[];
 
-	constructor(	options? : IGetEndpointsRequest) { 
+	constructor(	options?: IGetEndpointsRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.endpointUrl= (options.endpointUrl) ? options.endpointUrl:null;
@@ -31,7 +31,7 @@ export class GetEndpointsRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeString(this.endpointUrl,out);
 		ec.encodeArray(this.localeIds,out,ec.encodeString);
@@ -40,7 +40,7 @@ export class GetEndpointsRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.endpointUrl = ec.decodeString(inp);
 		this.localeIds = ec.decodeArray(inp,ec.decodeString);
@@ -49,7 +49,7 @@ export class GetEndpointsRequest {
 	}
 
 
-	clone(	target? : GetEndpointsRequest) : GetEndpointsRequest { 
+	clone(	target?: GetEndpointsRequest): GetEndpointsRequest { 
 		if(!target) {
 			target = new GetEndpointsRequest();
 		}
@@ -62,7 +62,7 @@ export class GetEndpointsRequest {
 
 
 }
-export function decodeGetEndpointsRequest(	inp : DataStream) : GetEndpointsRequest { 
+export function decodeGetEndpointsRequest(	inp: DataStream): GetEndpointsRequest { 
 		const obj = new GetEndpointsRequest();
 			obj.decode(inp); 
 			return obj;

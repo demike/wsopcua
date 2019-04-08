@@ -5,10 +5,10 @@ import {QualifiedName} from './QualifiedName';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IReadValueId {
-		nodeId? : ec.NodeId;
-		attributeId? : ec.UInt32;
-		indexRange? : string;
-		dataEncoding? : QualifiedName;
+		nodeId?: ec.NodeId;
+		attributeId?: ec.UInt32;
+		indexRange?: string;
+		dataEncoding?: QualifiedName;
 }
 
 /**
@@ -16,12 +16,12 @@ export interface IReadValueId {
 */
 
 export class ReadValueId {
- 		nodeId : ec.NodeId;
-		attributeId : ec.UInt32;
-		indexRange : string;
-		dataEncoding : QualifiedName;
+ 		nodeId: ec.NodeId;
+		attributeId: ec.UInt32;
+		indexRange: string;
+		dataEncoding: QualifiedName;
 
-	constructor(	options? : IReadValueId) { 
+	constructor(	options?: IReadValueId) { 
 		options = options || {};
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
 		this.attributeId= (options.attributeId) ? options.attributeId:null;
@@ -31,7 +31,7 @@ export class ReadValueId {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.nodeId,out);
 		ec.encodeUInt32(this.attributeId,out);
 		ec.encodeString(this.indexRange,out);
@@ -40,7 +40,7 @@ export class ReadValueId {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.nodeId = ec.decodeNodeId(inp);
 		this.attributeId = ec.decodeUInt32(inp);
 		this.indexRange = ec.decodeString(inp);
@@ -49,7 +49,7 @@ export class ReadValueId {
 	}
 
 
-	clone(	target? : ReadValueId) : ReadValueId { 
+	clone(	target?: ReadValueId): ReadValueId { 
 		if(!target) {
 			target = new ReadValueId();
 		}
@@ -62,7 +62,7 @@ export class ReadValueId {
 
 
 }
-export function decodeReadValueId(	inp : DataStream) : ReadValueId { 
+export function decodeReadValueId(	inp: DataStream): ReadValueId { 
 		const obj = new ReadValueId();
 			obj.decode(inp); 
 			return obj;

@@ -4,10 +4,10 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface INodeReference {
-		nodeId? : ec.NodeId;
-		referenceTypeId? : ec.NodeId;
-		isForward? : boolean;
-		referencedNodeIds? : ec.NodeId[];
+		nodeId?: ec.NodeId;
+		referenceTypeId?: ec.NodeId;
+		isForward?: boolean;
+		referencedNodeIds?: ec.NodeId[];
 }
 
 /**
@@ -15,12 +15,12 @@ export interface INodeReference {
 */
 
 export class NodeReference {
- 		nodeId : ec.NodeId;
-		referenceTypeId : ec.NodeId;
-		isForward : boolean;
-		referencedNodeIds : ec.NodeId[];
+ 		nodeId: ec.NodeId;
+		referenceTypeId: ec.NodeId;
+		isForward: boolean;
+		referencedNodeIds: ec.NodeId[];
 
-	constructor(	options? : INodeReference) { 
+	constructor(	options?: INodeReference) { 
 		options = options || {};
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
 		this.referenceTypeId= (options.referenceTypeId) ? options.referenceTypeId:null;
@@ -30,7 +30,7 @@ export class NodeReference {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.nodeId,out);
 		ec.encodeNodeId(this.referenceTypeId,out);
 		ec.encodeBoolean(this.isForward,out);
@@ -39,7 +39,7 @@ export class NodeReference {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.nodeId = ec.decodeNodeId(inp);
 		this.referenceTypeId = ec.decodeNodeId(inp);
 		this.isForward = ec.decodeBoolean(inp);
@@ -48,7 +48,7 @@ export class NodeReference {
 	}
 
 
-	clone(	target? : NodeReference) : NodeReference { 
+	clone(	target?: NodeReference): NodeReference { 
 		if(!target) {
 			target = new NodeReference();
 		}
@@ -61,7 +61,7 @@ export class NodeReference {
 
 
 }
-export function decodeNodeReference(	inp : DataStream) : NodeReference { 
+export function decodeNodeReference(	inp: DataStream): NodeReference { 
 		const obj = new NodeReference();
 			obj.decode(inp); 
 			return obj;

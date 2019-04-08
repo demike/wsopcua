@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRolePermissionType {
-		roleId? : ec.NodeId;
-		permissions? : ec.UInt32;
+		roleId?: ec.NodeId;
+		permissions?: ec.UInt32;
 }
 
 /**
@@ -13,10 +13,10 @@ export interface IRolePermissionType {
 */
 
 export class RolePermissionType {
- 		roleId : ec.NodeId;
-		permissions : ec.UInt32;
+ 		roleId: ec.NodeId;
+		permissions: ec.UInt32;
 
-	constructor(	options? : IRolePermissionType) { 
+	constructor(	options?: IRolePermissionType) { 
 		options = options || {};
 		this.roleId= (options.roleId) ? options.roleId:null;
 		this.permissions= (options.permissions) ? options.permissions:null;
@@ -24,21 +24,21 @@ export class RolePermissionType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.roleId,out);
 		ec.encodeUInt32(this.permissions,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.roleId = ec.decodeNodeId(inp);
 		this.permissions = ec.decodeUInt32(inp);
 
 	}
 
 
-	clone(	target? : RolePermissionType) : RolePermissionType { 
+	clone(	target?: RolePermissionType): RolePermissionType { 
 		if(!target) {
 			target = new RolePermissionType();
 		}
@@ -49,7 +49,7 @@ export class RolePermissionType {
 
 
 }
-export function decodeRolePermissionType(	inp : DataStream) : RolePermissionType { 
+export function decodeRolePermissionType(	inp: DataStream): RolePermissionType { 
 		const obj = new RolePermissionType();
 			obj.decode(inp); 
 			return obj;

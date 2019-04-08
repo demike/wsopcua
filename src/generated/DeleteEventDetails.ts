@@ -6,7 +6,7 @@ import {HistoryUpdateDetails} from './HistoryUpdateDetails';
 import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
 export interface IDeleteEventDetails extends IHistoryUpdateDetails {
-		eventIds? : Uint8Array[];
+		eventIds?: Uint8Array[];
 }
 
 /**
@@ -14,9 +14,9 @@ export interface IDeleteEventDetails extends IHistoryUpdateDetails {
 */
 
 export class DeleteEventDetails extends HistoryUpdateDetails {
- 		eventIds : Uint8Array[];
+ 		eventIds: Uint8Array[];
 
-	constructor(	options? : IDeleteEventDetails) { 
+	constructor(	options?: IDeleteEventDetails) { 
 		options = options || {};
 		super(options);
 		this.eventIds= (options.eventIds) ? options.eventIds:[];
@@ -24,21 +24,21 @@ export class DeleteEventDetails extends HistoryUpdateDetails {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeArray(this.eventIds,out,ec.encodeByteString);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.eventIds = ec.decodeArray(inp,ec.decodeByteString);
 
 	}
 
 
-	clone(	target? : DeleteEventDetails) : DeleteEventDetails { 
+	clone(	target?: DeleteEventDetails): DeleteEventDetails { 
 		if(!target) {
 			target = new DeleteEventDetails();
 		}
@@ -49,7 +49,7 @@ export class DeleteEventDetails extends HistoryUpdateDetails {
 
 
 }
-export function decodeDeleteEventDetails(	inp : DataStream) : DeleteEventDetails { 
+export function decodeDeleteEventDetails(	inp: DataStream): DeleteEventDetails { 
 		const obj = new DeleteEventDetails();
 			obj.decode(inp); 
 			return obj;

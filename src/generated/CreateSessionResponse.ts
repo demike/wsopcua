@@ -10,16 +10,16 @@ import {SignatureData} from './SignatureData';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ICreateSessionResponse {
-		responseHeader? : ResponseHeader;
-		sessionId? : ec.NodeId;
-		authenticationToken? : ec.NodeId;
-		revisedSessionTimeout? : ec.Double;
-		serverNonce? : Uint8Array;
-		serverCertificate? : Uint8Array;
-		serverEndpoints? : EndpointDescription[];
-		serverSoftwareCertificates? : SignedSoftwareCertificate[];
-		serverSignature? : SignatureData;
-		maxRequestMessageSize? : ec.UInt32;
+		responseHeader?: ResponseHeader;
+		sessionId?: ec.NodeId;
+		authenticationToken?: ec.NodeId;
+		revisedSessionTimeout?: ec.Double;
+		serverNonce?: Uint8Array;
+		serverCertificate?: Uint8Array;
+		serverEndpoints?: EndpointDescription[];
+		serverSoftwareCertificates?: SignedSoftwareCertificate[];
+		serverSignature?: SignatureData;
+		maxRequestMessageSize?: ec.UInt32;
 }
 
 /**
@@ -27,18 +27,18 @@ Creates a new session with the server.
 */
 
 export class CreateSessionResponse {
- 		responseHeader : ResponseHeader;
-		sessionId : ec.NodeId;
-		authenticationToken : ec.NodeId;
-		revisedSessionTimeout : ec.Double;
-		serverNonce : Uint8Array;
-		serverCertificate : Uint8Array;
-		serverEndpoints : EndpointDescription[];
-		serverSoftwareCertificates : SignedSoftwareCertificate[];
-		serverSignature : SignatureData;
-		maxRequestMessageSize : ec.UInt32;
+ 		responseHeader: ResponseHeader;
+		sessionId: ec.NodeId;
+		authenticationToken: ec.NodeId;
+		revisedSessionTimeout: ec.Double;
+		serverNonce: Uint8Array;
+		serverCertificate: Uint8Array;
+		serverEndpoints: EndpointDescription[];
+		serverSoftwareCertificates: SignedSoftwareCertificate[];
+		serverSignature: SignatureData;
+		maxRequestMessageSize: ec.UInt32;
 
-	constructor(	options? : ICreateSessionResponse) { 
+	constructor(	options?: ICreateSessionResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.sessionId= (options.sessionId) ? options.sessionId:null;
@@ -54,7 +54,7 @@ export class CreateSessionResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeNodeId(this.sessionId,out);
 		ec.encodeNodeId(this.authenticationToken,out);
@@ -69,7 +69,7 @@ export class CreateSessionResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.sessionId = ec.decodeNodeId(inp);
 		this.authenticationToken = ec.decodeNodeId(inp);
@@ -84,7 +84,7 @@ export class CreateSessionResponse {
 	}
 
 
-	clone(	target? : CreateSessionResponse) : CreateSessionResponse { 
+	clone(	target?: CreateSessionResponse): CreateSessionResponse { 
 		if(!target) {
 			target = new CreateSessionResponse();
 		}
@@ -103,7 +103,7 @@ export class CreateSessionResponse {
 
 
 }
-export function decodeCreateSessionResponse(	inp : DataStream) : CreateSessionResponse { 
+export function decodeCreateSessionResponse(	inp: DataStream): CreateSessionResponse { 
 		const obj = new CreateSessionResponse();
 			obj.decode(inp); 
 			return obj;

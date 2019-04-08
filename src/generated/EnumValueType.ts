@@ -5,9 +5,9 @@ import {LocalizedText} from './LocalizedText';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IEnumValueType {
-		value? : ec.Int64;
-		displayName? : LocalizedText;
-		description? : LocalizedText;
+		value?: ec.Int64;
+		displayName?: LocalizedText;
+		description?: LocalizedText;
 }
 
 /**
@@ -15,11 +15,11 @@ A mapping between a value of an enumerated type and a name and description.
 */
 
 export class EnumValueType {
- 		value : ec.Int64;
-		displayName : LocalizedText;
-		description : LocalizedText;
+ 		value: ec.Int64;
+		displayName: LocalizedText;
+		description: LocalizedText;
 
-	constructor(	options? : IEnumValueType) { 
+	constructor(	options?: IEnumValueType) { 
 		options = options || {};
 		this.value= (options.value) ? options.value:null;
 		this.displayName= (options.displayName) ? options.displayName:new LocalizedText();
@@ -28,7 +28,7 @@ export class EnumValueType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeInt64(this.value,out);
 		this.displayName.encode(out);
 		this.description.encode(out);
@@ -36,7 +36,7 @@ export class EnumValueType {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.value = ec.decodeInt64(inp);
 		this.displayName.decode(inp);
 		this.description.decode(inp);
@@ -44,7 +44,7 @@ export class EnumValueType {
 	}
 
 
-	clone(	target? : EnumValueType) : EnumValueType { 
+	clone(	target?: EnumValueType): EnumValueType { 
 		if(!target) {
 			target = new EnumValueType();
 		}
@@ -56,7 +56,7 @@ export class EnumValueType {
 
 
 }
-export function decodeEnumValueType(	inp : DataStream) : EnumValueType { 
+export function decodeEnumValueType(	inp: DataStream): EnumValueType { 
 		const obj = new EnumValueType();
 			obj.decode(inp); 
 			return obj;

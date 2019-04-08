@@ -11,12 +11,12 @@ export enum TimestampsToReturn {
 
 }
 
-export function encodeTimestampsToReturn(	data : TimestampsToReturn, 	out : DataStream) { 
+export function encodeTimestampsToReturn(	data: TimestampsToReturn, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeTimestampsToReturn(	inp : DataStream) { 
+export function decodeTimestampsToReturn(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

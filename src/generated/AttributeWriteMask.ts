@@ -35,12 +35,12 @@ export enum AttributeWriteMask {
 
 }
 
-export function encodeAttributeWriteMask(	data : AttributeWriteMask, 	out : DataStream) { 
+export function encodeAttributeWriteMask(	data: AttributeWriteMask, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeAttributeWriteMask(	inp : DataStream) { 
+export function decodeAttributeWriteMask(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

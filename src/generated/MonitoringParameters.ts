@@ -4,11 +4,11 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IMonitoringParameters {
-		clientHandle? : ec.UInt32;
-		samplingInterval? : ec.Double;
-		filter? : ec.ExtensionObject;
-		queueSize? : ec.UInt32;
-		discardOldest? : boolean;
+		clientHandle?: ec.UInt32;
+		samplingInterval?: ec.Double;
+		filter?: ec.ExtensionObject;
+		queueSize?: ec.UInt32;
+		discardOldest?: boolean;
 }
 
 /**
@@ -16,13 +16,13 @@ export interface IMonitoringParameters {
 */
 
 export class MonitoringParameters {
- 		clientHandle : ec.UInt32;
-		samplingInterval : ec.Double;
-		filter : ec.ExtensionObject;
-		queueSize : ec.UInt32;
-		discardOldest : boolean;
+ 		clientHandle: ec.UInt32;
+		samplingInterval: ec.Double;
+		filter: ec.ExtensionObject;
+		queueSize: ec.UInt32;
+		discardOldest: boolean;
 
-	constructor(	options? : IMonitoringParameters) { 
+	constructor(	options?: IMonitoringParameters) { 
 		options = options || {};
 		this.clientHandle= (options.clientHandle) ? options.clientHandle:null;
 		this.samplingInterval= (options.samplingInterval) ? options.samplingInterval:null;
@@ -33,7 +33,7 @@ export class MonitoringParameters {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.clientHandle,out);
 		ec.encodeDouble(this.samplingInterval,out);
 		ec.encodeExtensionObject(this.filter,out);
@@ -43,7 +43,7 @@ export class MonitoringParameters {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.clientHandle = ec.decodeUInt32(inp);
 		this.samplingInterval = ec.decodeDouble(inp);
 		this.filter = ec.decodeExtensionObject(inp);
@@ -53,7 +53,7 @@ export class MonitoringParameters {
 	}
 
 
-	clone(	target? : MonitoringParameters) : MonitoringParameters { 
+	clone(	target?: MonitoringParameters): MonitoringParameters { 
 		if(!target) {
 			target = new MonitoringParameters();
 		}
@@ -67,7 +67,7 @@ export class MonitoringParameters {
 
 
 }
-export function decodeMonitoringParameters(	inp : DataStream) : MonitoringParameters { 
+export function decodeMonitoringParameters(	inp: DataStream): MonitoringParameters { 
 		const obj = new MonitoringParameters();
 			obj.decode(inp); 
 			return obj;

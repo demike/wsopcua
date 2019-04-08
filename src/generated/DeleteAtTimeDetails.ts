@@ -6,7 +6,7 @@ import {HistoryUpdateDetails} from './HistoryUpdateDetails';
 import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
 export interface IDeleteAtTimeDetails extends IHistoryUpdateDetails {
-		reqTimes? : Date[];
+		reqTimes?: Date[];
 }
 
 /**
@@ -14,9 +14,9 @@ export interface IDeleteAtTimeDetails extends IHistoryUpdateDetails {
 */
 
 export class DeleteAtTimeDetails extends HistoryUpdateDetails {
- 		reqTimes : Date[];
+ 		reqTimes: Date[];
 
-	constructor(	options? : IDeleteAtTimeDetails) { 
+	constructor(	options?: IDeleteAtTimeDetails) { 
 		options = options || {};
 		super(options);
 		this.reqTimes= (options.reqTimes) ? options.reqTimes:[];
@@ -24,21 +24,21 @@ export class DeleteAtTimeDetails extends HistoryUpdateDetails {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeArray(this.reqTimes,out,ec.encodeDateTime);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.reqTimes = ec.decodeArray(inp,ec.decodeDateTime);
 
 	}
 
 
-	clone(	target? : DeleteAtTimeDetails) : DeleteAtTimeDetails { 
+	clone(	target?: DeleteAtTimeDetails): DeleteAtTimeDetails { 
 		if(!target) {
 			target = new DeleteAtTimeDetails();
 		}
@@ -49,7 +49,7 @@ export class DeleteAtTimeDetails extends HistoryUpdateDetails {
 
 
 }
-export function decodeDeleteAtTimeDetails(	inp : DataStream) : DeleteAtTimeDetails { 
+export function decodeDeleteAtTimeDetails(	inp: DataStream): DeleteAtTimeDetails { 
 		const obj = new DeleteAtTimeDetails();
 			obj.decode(inp); 
 			return obj;

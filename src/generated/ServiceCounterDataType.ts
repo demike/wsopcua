@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IServiceCounterDataType {
-		totalCount? : ec.UInt32;
-		errorCount? : ec.UInt32;
+		totalCount?: ec.UInt32;
+		errorCount?: ec.UInt32;
 }
 
 /**
@@ -13,10 +13,10 @@ export interface IServiceCounterDataType {
 */
 
 export class ServiceCounterDataType {
- 		totalCount : ec.UInt32;
-		errorCount : ec.UInt32;
+ 		totalCount: ec.UInt32;
+		errorCount: ec.UInt32;
 
-	constructor(	options? : IServiceCounterDataType) { 
+	constructor(	options?: IServiceCounterDataType) { 
 		options = options || {};
 		this.totalCount= (options.totalCount) ? options.totalCount:null;
 		this.errorCount= (options.errorCount) ? options.errorCount:null;
@@ -24,21 +24,21 @@ export class ServiceCounterDataType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.totalCount,out);
 		ec.encodeUInt32(this.errorCount,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.totalCount = ec.decodeUInt32(inp);
 		this.errorCount = ec.decodeUInt32(inp);
 
 	}
 
 
-	clone(	target? : ServiceCounterDataType) : ServiceCounterDataType { 
+	clone(	target?: ServiceCounterDataType): ServiceCounterDataType { 
 		if(!target) {
 			target = new ServiceCounterDataType();
 		}
@@ -49,7 +49,7 @@ export class ServiceCounterDataType {
 
 
 }
-export function decodeServiceCounterDataType(	inp : DataStream) : ServiceCounterDataType { 
+export function decodeServiceCounterDataType(	inp: DataStream): ServiceCounterDataType { 
 		const obj = new ServiceCounterDataType();
 			obj.decode(inp); 
 			return obj;

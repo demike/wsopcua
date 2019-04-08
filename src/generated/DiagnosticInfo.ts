@@ -4,13 +4,13 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDiagnosticInfo {
-		symbolicId? : ec.Int32;
-		namespaceURI? : ec.Int32;
-		locale? : ec.Int32;
-		localizedText? : ec.Int32;
-		additionalInfo? : string;
-		innerStatusCode? : ec.StatusCode;
-		innerDiagnosticInfo? : DiagnosticInfo;
+		symbolicId?: ec.Int32;
+		namespaceURI?: ec.Int32;
+		locale?: ec.Int32;
+		localizedText?: ec.Int32;
+		additionalInfo?: string;
+		innerStatusCode?: ec.StatusCode;
+		innerDiagnosticInfo?: DiagnosticInfo;
 }
 
 /**
@@ -18,15 +18,15 @@ A recursive structure containing diagnostic information associated with a status
 */
 
 export class DiagnosticInfo {
- 		symbolicId : ec.Int32;
-		namespaceURI : ec.Int32;
-		locale : ec.Int32;
-		localizedText : ec.Int32;
-		additionalInfo : string;
-		innerStatusCode : ec.StatusCode;
-		innerDiagnosticInfo : DiagnosticInfo;
+ 		symbolicId: ec.Int32;
+		namespaceURI: ec.Int32;
+		locale: ec.Int32;
+		localizedText: ec.Int32;
+		additionalInfo: string;
+		innerStatusCode: ec.StatusCode;
+		innerDiagnosticInfo: DiagnosticInfo;
 
-	constructor(	options? : IDiagnosticInfo) { 
+	constructor(	options?: IDiagnosticInfo) { 
 		options = options || {};
 		this.symbolicId= (options.symbolicId) ? options.symbolicId:null;
 		this.namespaceURI= (options.namespaceURI) ? options.namespaceURI:null;
@@ -39,7 +39,7 @@ export class DiagnosticInfo {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		let encodingByte = 0;
 		if (this.symbolicId != null) { encodingByte |= 1 << 0;}
 		if (this.namespaceURI != null) { encodingByte |= 1 << 1;}
@@ -60,7 +60,7 @@ export class DiagnosticInfo {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		let encodingByte = inp.getUint8();
 		let symbolicIdSpecified = (encodingByte & 1) != 0;
 		let namespaceURISpecified = (encodingByte & 2) != 0;
@@ -96,7 +96,7 @@ export class DiagnosticInfo {
 	}
 
 
-	clone(	target? : DiagnosticInfo) : DiagnosticInfo { 
+	clone(	target?: DiagnosticInfo): DiagnosticInfo { 
 		if(!target) {
 			target = new DiagnosticInfo();
 		}
@@ -112,7 +112,7 @@ export class DiagnosticInfo {
 
 
 }
-export function decodeDiagnosticInfo(	inp : DataStream) : DiagnosticInfo { 
+export function decodeDiagnosticInfo(	inp: DataStream): DiagnosticInfo { 
 		const obj = new DiagnosticInfo();
 			obj.decode(inp); 
 			return obj;

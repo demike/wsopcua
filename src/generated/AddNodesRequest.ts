@@ -7,8 +7,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IAddNodesRequest {
-		requestHeader? : RequestHeader;
-		nodesToAdd? : AddNodesItem[];
+		requestHeader?: RequestHeader;
+		nodesToAdd?: AddNodesItem[];
 }
 
 /**
@@ -16,10 +16,10 @@ Adds one or more nodes to the server address space.
 */
 
 export class AddNodesRequest {
- 		requestHeader : RequestHeader;
-		nodesToAdd : AddNodesItem[];
+ 		requestHeader: RequestHeader;
+		nodesToAdd: AddNodesItem[];
 
-	constructor(	options? : IAddNodesRequest) { 
+	constructor(	options?: IAddNodesRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.nodesToAdd= (options.nodesToAdd) ? options.nodesToAdd:[];
@@ -27,21 +27,21 @@ export class AddNodesRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeArray(this.nodesToAdd,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.nodesToAdd = ec.decodeArray(inp,decodeAddNodesItem);
 
 	}
 
 
-	clone(	target? : AddNodesRequest) : AddNodesRequest { 
+	clone(	target?: AddNodesRequest): AddNodesRequest { 
 		if(!target) {
 			target = new AddNodesRequest();
 		}
@@ -52,7 +52,7 @@ export class AddNodesRequest {
 
 
 }
-export function decodeAddNodesRequest(	inp : DataStream) : AddNodesRequest { 
+export function decodeAddNodesRequest(	inp: DataStream): AddNodesRequest { 
 		const obj = new AddNodesRequest();
 			obj.decode(inp); 
 			return obj;

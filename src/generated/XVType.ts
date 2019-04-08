@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IXVType {
-		x? : ec.Double;
-		value? : ec.Float;
+		x?: ec.Double;
+		value?: ec.Float;
 }
 
 /**
@@ -13,10 +13,10 @@ export interface IXVType {
 */
 
 export class XVType {
- 		x : ec.Double;
-		value : ec.Float;
+ 		x: ec.Double;
+		value: ec.Float;
 
-	constructor(	options? : IXVType) { 
+	constructor(	options?: IXVType) { 
 		options = options || {};
 		this.x= (options.x) ? options.x:null;
 		this.value= (options.value) ? options.value:null;
@@ -24,21 +24,21 @@ export class XVType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeDouble(this.x,out);
 		ec.encodeFloat(this.value,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.x = ec.decodeDouble(inp);
 		this.value = ec.decodeFloat(inp);
 
 	}
 
 
-	clone(	target? : XVType) : XVType { 
+	clone(	target?: XVType): XVType { 
 		if(!target) {
 			target = new XVType();
 		}
@@ -49,7 +49,7 @@ export class XVType {
 
 
 }
-export function decodeXVType(	inp : DataStream) : XVType { 
+export function decodeXVType(	inp: DataStream): XVType { 
 		const obj = new XVType();
 			obj.decode(inp); 
 			return obj;

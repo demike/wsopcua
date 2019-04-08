@@ -6,9 +6,9 @@ import {decodeVariant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IQueryDataSet {
-		nodeId? : ec.ExpandedNodeId;
-		typeDefinitionNode? : ec.ExpandedNodeId;
-		values? : Variant[];
+		nodeId?: ec.ExpandedNodeId;
+		typeDefinitionNode?: ec.ExpandedNodeId;
+		values?: Variant[];
 }
 
 /**
@@ -16,11 +16,11 @@ export interface IQueryDataSet {
 */
 
 export class QueryDataSet {
- 		nodeId : ec.ExpandedNodeId;
-		typeDefinitionNode : ec.ExpandedNodeId;
-		values : Variant[];
+ 		nodeId: ec.ExpandedNodeId;
+		typeDefinitionNode: ec.ExpandedNodeId;
+		values: Variant[];
 
-	constructor(	options? : IQueryDataSet) { 
+	constructor(	options?: IQueryDataSet) { 
 		options = options || {};
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
 		this.typeDefinitionNode= (options.typeDefinitionNode) ? options.typeDefinitionNode:null;
@@ -29,7 +29,7 @@ export class QueryDataSet {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeExpandedNodeId(this.nodeId,out);
 		ec.encodeExpandedNodeId(this.typeDefinitionNode,out);
 		ec.encodeArray(this.values,out);
@@ -37,7 +37,7 @@ export class QueryDataSet {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.nodeId = ec.decodeExpandedNodeId(inp);
 		this.typeDefinitionNode = ec.decodeExpandedNodeId(inp);
 		this.values = ec.decodeArray(inp,decodeVariant);
@@ -45,7 +45,7 @@ export class QueryDataSet {
 	}
 
 
-	clone(	target? : QueryDataSet) : QueryDataSet { 
+	clone(	target?: QueryDataSet): QueryDataSet { 
 		if(!target) {
 			target = new QueryDataSet();
 		}
@@ -57,7 +57,7 @@ export class QueryDataSet {
 
 
 }
-export function decodeQueryDataSet(	inp : DataStream) : QueryDataSet { 
+export function decodeQueryDataSet(	inp: DataStream): QueryDataSet { 
 		const obj = new QueryDataSet();
 			obj.decode(inp); 
 			return obj;

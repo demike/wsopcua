@@ -4,11 +4,11 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISessionlessInvokeRequestType {
-		urisVersion? : ec.UInt32[];
-		namespaceUris? : string[];
-		serverUris? : string[];
-		localeIds? : string[];
-		serviceId? : ec.UInt32;
+		urisVersion?: ec.UInt32[];
+		namespaceUris?: string[];
+		serverUris?: string[];
+		localeIds?: string[];
+		serviceId?: ec.UInt32;
 }
 
 /**
@@ -16,13 +16,13 @@ export interface ISessionlessInvokeRequestType {
 */
 
 export class SessionlessInvokeRequestType {
- 		urisVersion : ec.UInt32[];
-		namespaceUris : string[];
-		serverUris : string[];
-		localeIds : string[];
-		serviceId : ec.UInt32;
+ 		urisVersion: ec.UInt32[];
+		namespaceUris: string[];
+		serverUris: string[];
+		localeIds: string[];
+		serviceId: ec.UInt32;
 
-	constructor(	options? : ISessionlessInvokeRequestType) { 
+	constructor(	options?: ISessionlessInvokeRequestType) { 
 		options = options || {};
 		this.urisVersion= (options.urisVersion) ? options.urisVersion:[];
 		this.namespaceUris= (options.namespaceUris) ? options.namespaceUris:[];
@@ -33,7 +33,7 @@ export class SessionlessInvokeRequestType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.urisVersion,out,ec.encodeUInt32);
 		ec.encodeArray(this.namespaceUris,out,ec.encodeString);
 		ec.encodeArray(this.serverUris,out,ec.encodeString);
@@ -43,7 +43,7 @@ export class SessionlessInvokeRequestType {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.urisVersion = ec.decodeArray(inp,ec.decodeUInt32);
 		this.namespaceUris = ec.decodeArray(inp,ec.decodeString);
 		this.serverUris = ec.decodeArray(inp,ec.decodeString);
@@ -53,7 +53,7 @@ export class SessionlessInvokeRequestType {
 	}
 
 
-	clone(	target? : SessionlessInvokeRequestType) : SessionlessInvokeRequestType { 
+	clone(	target?: SessionlessInvokeRequestType): SessionlessInvokeRequestType { 
 		if(!target) {
 			target = new SessionlessInvokeRequestType();
 		}
@@ -67,7 +67,7 @@ export class SessionlessInvokeRequestType {
 
 
 }
-export function decodeSessionlessInvokeRequestType(	inp : DataStream) : SessionlessInvokeRequestType { 
+export function decodeSessionlessInvokeRequestType(	inp: DataStream): SessionlessInvokeRequestType { 
 		const obj = new SessionlessInvokeRequestType();
 			obj.decode(inp); 
 			return obj;

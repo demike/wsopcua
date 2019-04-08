@@ -12,12 +12,12 @@ export enum IdentityCriteriaType {
 
 }
 
-export function encodeIdentityCriteriaType(	data : IdentityCriteriaType, 	out : DataStream) { 
+export function encodeIdentityCriteriaType(	data: IdentityCriteriaType, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeIdentityCriteriaType(	inp : DataStream) { 
+export function decodeIdentityCriteriaType(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

@@ -5,7 +5,7 @@ import {DataStream} from '../basic-types/DataStream';
 import * as ec from '../basic-types';
 
 export interface ICloseSecureChannelRequest {
-		requestHeader? : RequestHeader;
+		requestHeader?: RequestHeader;
 }
 
 /**
@@ -13,28 +13,28 @@ Closes a secure channel.
 */
 
 export class CloseSecureChannelRequest {
- 		requestHeader : RequestHeader;
+ 		requestHeader: RequestHeader;
 
-	constructor(	options? : ICloseSecureChannelRequest) { 
+	constructor(	options?: ICloseSecureChannelRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 
 	}
 
 
-	clone(	target? : CloseSecureChannelRequest) : CloseSecureChannelRequest { 
+	clone(	target?: CloseSecureChannelRequest): CloseSecureChannelRequest { 
 		if(!target) {
 			target = new CloseSecureChannelRequest();
 		}
@@ -44,7 +44,7 @@ export class CloseSecureChannelRequest {
 
 
 }
-export function decodeCloseSecureChannelRequest(	inp : DataStream) : CloseSecureChannelRequest { 
+export function decodeCloseSecureChannelRequest(	inp: DataStream): CloseSecureChannelRequest { 
 		const obj = new CloseSecureChannelRequest();
 			obj.decode(inp); 
 			return obj;

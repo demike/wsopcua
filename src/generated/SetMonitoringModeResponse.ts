@@ -7,9 +7,9 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISetMonitoringModeResponse {
-		responseHeader? : ResponseHeader;
-		results? : ec.StatusCode[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: ec.StatusCode[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -17,11 +17,11 @@ export interface ISetMonitoringModeResponse {
 */
 
 export class SetMonitoringModeResponse {
- 		responseHeader : ResponseHeader;
-		results : ec.StatusCode[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: ec.StatusCode[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : ISetMonitoringModeResponse) { 
+	constructor(	options?: ISetMonitoringModeResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -30,7 +30,7 @@ export class SetMonitoringModeResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out,ec.encodeStatusCode);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -38,7 +38,7 @@ export class SetMonitoringModeResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,ec.decodeStatusCode);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -46,7 +46,7 @@ export class SetMonitoringModeResponse {
 	}
 
 
-	clone(	target? : SetMonitoringModeResponse) : SetMonitoringModeResponse { 
+	clone(	target?: SetMonitoringModeResponse): SetMonitoringModeResponse { 
 		if(!target) {
 			target = new SetMonitoringModeResponse();
 		}
@@ -58,7 +58,7 @@ export class SetMonitoringModeResponse {
 
 
 }
-export function decodeSetMonitoringModeResponse(	inp : DataStream) : SetMonitoringModeResponse { 
+export function decodeSetMonitoringModeResponse(	inp: DataStream): SetMonitoringModeResponse { 
 		const obj = new SetMonitoringModeResponse();
 			obj.decode(inp); 
 			return obj;

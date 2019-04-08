@@ -6,7 +6,7 @@ import {UserIdentityToken} from './UserIdentityToken';
 import {IUserIdentityToken} from './UserIdentityToken';
 
 export interface IX509IdentityToken extends IUserIdentityToken {
-		certificateData? : Uint8Array;
+		certificateData?: Uint8Array;
 }
 
 /**
@@ -14,9 +14,9 @@ A token representing a user identified by an X509 certificate.
 */
 
 export class X509IdentityToken extends UserIdentityToken {
- 		certificateData : Uint8Array;
+ 		certificateData: Uint8Array;
 
-	constructor(	options? : IX509IdentityToken) { 
+	constructor(	options?: IX509IdentityToken) { 
 		options = options || {};
 		super(options);
 		this.certificateData= (options.certificateData) ? options.certificateData:null;
@@ -24,21 +24,21 @@ export class X509IdentityToken extends UserIdentityToken {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeByteString(this.certificateData,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.certificateData = ec.decodeByteString(inp);
 
 	}
 
 
-	clone(	target? : X509IdentityToken) : X509IdentityToken { 
+	clone(	target?: X509IdentityToken): X509IdentityToken { 
 		if(!target) {
 			target = new X509IdentityToken();
 		}
@@ -49,7 +49,7 @@ export class X509IdentityToken extends UserIdentityToken {
 
 
 }
-export function decodeX509IdentityToken(	inp : DataStream) : X509IdentityToken { 
+export function decodeX509IdentityToken(	inp: DataStream): X509IdentityToken { 
 		const obj = new X509IdentityToken();
 			obj.decode(inp); 
 			return obj;

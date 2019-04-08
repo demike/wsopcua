@@ -7,12 +7,12 @@ import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMod
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IOpenSecureChannelRequest {
-		requestHeader? : RequestHeader;
-		clientProtocolVersion? : ec.UInt32;
-		requestType? : SecurityTokenRequestType;
-		securityMode? : MessageSecurityMode;
-		clientNonce? : Uint8Array;
-		requestedLifetime? : ec.UInt32;
+		requestHeader?: RequestHeader;
+		clientProtocolVersion?: ec.UInt32;
+		requestType?: SecurityTokenRequestType;
+		securityMode?: MessageSecurityMode;
+		clientNonce?: Uint8Array;
+		requestedLifetime?: ec.UInt32;
 }
 
 /**
@@ -20,14 +20,14 @@ Creates a secure channel with a server.
 */
 
 export class OpenSecureChannelRequest {
- 		requestHeader : RequestHeader;
-		clientProtocolVersion : ec.UInt32;
-		requestType : SecurityTokenRequestType;
-		securityMode : MessageSecurityMode;
-		clientNonce : Uint8Array;
-		requestedLifetime : ec.UInt32;
+ 		requestHeader: RequestHeader;
+		clientProtocolVersion: ec.UInt32;
+		requestType: SecurityTokenRequestType;
+		securityMode: MessageSecurityMode;
+		clientNonce: Uint8Array;
+		requestedLifetime: ec.UInt32;
 
-	constructor(	options? : IOpenSecureChannelRequest) { 
+	constructor(	options?: IOpenSecureChannelRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.clientProtocolVersion= (options.clientProtocolVersion) ? options.clientProtocolVersion:null;
@@ -39,7 +39,7 @@ export class OpenSecureChannelRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeUInt32(this.clientProtocolVersion,out);
 		encodeSecurityTokenRequestType(this.requestType,out);
@@ -50,7 +50,7 @@ export class OpenSecureChannelRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.clientProtocolVersion = ec.decodeUInt32(inp);
 		this.requestType = decodeSecurityTokenRequestType(inp);
@@ -61,7 +61,7 @@ export class OpenSecureChannelRequest {
 	}
 
 
-	clone(	target? : OpenSecureChannelRequest) : OpenSecureChannelRequest { 
+	clone(	target?: OpenSecureChannelRequest): OpenSecureChannelRequest { 
 		if(!target) {
 			target = new OpenSecureChannelRequest();
 		}
@@ -76,7 +76,7 @@ export class OpenSecureChannelRequest {
 
 
 }
-export function decodeOpenSecureChannelRequest(	inp : DataStream) : OpenSecureChannelRequest { 
+export function decodeOpenSecureChannelRequest(	inp: DataStream): OpenSecureChannelRequest { 
 		const obj = new OpenSecureChannelRequest();
 			obj.decode(inp); 
 			return obj;

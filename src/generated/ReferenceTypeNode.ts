@@ -13,20 +13,20 @@ import {TypeNode} from './TypeNode';
 import {ITypeNode} from './TypeNode';
 
 export interface IReferenceTypeNode extends ITypeNode {
-		nodeId? : ec.NodeId;
-		nodeClass? : NodeClass;
-		browseName? : QualifiedName;
-		displayName? : LocalizedText;
-		description? : LocalizedText;
-		writeMask? : ec.UInt32;
-		userWriteMask? : ec.UInt32;
-		rolePermissions? : RolePermissionType[];
-		userRolePermissions? : RolePermissionType[];
-		accessRestrictions? : ec.UInt16;
-		references? : ReferenceNode[];
-		isAbstract? : boolean;
-		symmetric? : boolean;
-		inverseName? : LocalizedText;
+		nodeId?: ec.NodeId;
+		nodeClass?: NodeClass;
+		browseName?: QualifiedName;
+		displayName?: LocalizedText;
+		description?: LocalizedText;
+		writeMask?: ec.UInt32;
+		userWriteMask?: ec.UInt32;
+		rolePermissions?: RolePermissionType[];
+		userRolePermissions?: RolePermissionType[];
+		accessRestrictions?: ec.UInt16;
+		references?: ReferenceNode[];
+		isAbstract?: boolean;
+		symmetric?: boolean;
+		inverseName?: LocalizedText;
 }
 
 /**
@@ -34,22 +34,22 @@ Specifies the attributes which belong to reference type nodes.
 */
 
 export class ReferenceTypeNode extends TypeNode {
- 		nodeId : ec.NodeId;
-		nodeClass : NodeClass;
-		browseName : QualifiedName;
-		displayName : LocalizedText;
-		description : LocalizedText;
-		writeMask : ec.UInt32;
-		userWriteMask : ec.UInt32;
-		rolePermissions : RolePermissionType[];
-		userRolePermissions : RolePermissionType[];
-		accessRestrictions : ec.UInt16;
-		references : ReferenceNode[];
-		isAbstract : boolean;
-		symmetric : boolean;
-		inverseName : LocalizedText;
+ 		nodeId: ec.NodeId;
+		nodeClass: NodeClass;
+		browseName: QualifiedName;
+		displayName: LocalizedText;
+		description: LocalizedText;
+		writeMask: ec.UInt32;
+		userWriteMask: ec.UInt32;
+		rolePermissions: RolePermissionType[];
+		userRolePermissions: RolePermissionType[];
+		accessRestrictions: ec.UInt16;
+		references: ReferenceNode[];
+		isAbstract: boolean;
+		symmetric: boolean;
+		inverseName: LocalizedText;
 
-	constructor(	options? : IReferenceTypeNode) { 
+	constructor(	options?: IReferenceTypeNode) { 
 		options = options || {};
 		super(options);
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
@@ -70,7 +70,7 @@ export class ReferenceTypeNode extends TypeNode {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeNodeId(this.nodeId,out);
 		encodeNodeClass(this.nodeClass,out);
@@ -90,7 +90,7 @@ export class ReferenceTypeNode extends TypeNode {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.nodeId = ec.decodeNodeId(inp);
 		this.nodeClass = decodeNodeClass(inp);
@@ -110,7 +110,7 @@ export class ReferenceTypeNode extends TypeNode {
 	}
 
 
-	clone(	target? : ReferenceTypeNode) : ReferenceTypeNode { 
+	clone(	target?: ReferenceTypeNode): ReferenceTypeNode { 
 		if(!target) {
 			target = new ReferenceTypeNode();
 		}
@@ -134,7 +134,7 @@ export class ReferenceTypeNode extends TypeNode {
 
 
 }
-export function decodeReferenceTypeNode(	inp : DataStream) : ReferenceTypeNode { 
+export function decodeReferenceTypeNode(	inp: DataStream): ReferenceTypeNode { 
 		const obj = new ReferenceTypeNode();
 			obj.decode(inp); 
 			return obj;

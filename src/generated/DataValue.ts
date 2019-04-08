@@ -5,12 +5,12 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDataValue {
-		value? : Variant;
-		statusCode? : ec.StatusCode;
-		sourceTimestamp? : Date;
-		sourcePicoseconds? : ec.UInt16;
-		serverTimestamp? : Date;
-		serverPicoseconds? : ec.UInt16;
+		value?: Variant;
+		statusCode?: ec.StatusCode;
+		sourceTimestamp?: Date;
+		sourcePicoseconds?: ec.UInt16;
+		serverTimestamp?: Date;
+		serverPicoseconds?: ec.UInt16;
 }
 
 /**
@@ -18,14 +18,14 @@ A value with an associated timestamp, and quality.
 */
 
 export class DataValue {
- 		value : Variant;
-		statusCode : ec.StatusCode;
-		sourceTimestamp : Date;
-		sourcePicoseconds : ec.UInt16;
-		serverTimestamp : Date;
-		serverPicoseconds : ec.UInt16;
+ 		value: Variant;
+		statusCode: ec.StatusCode;
+		sourceTimestamp: Date;
+		sourcePicoseconds: ec.UInt16;
+		serverTimestamp: Date;
+		serverPicoseconds: ec.UInt16;
 
-	constructor(	options? : IDataValue) { 
+	constructor(	options?: IDataValue) { 
 		options = options || {};
 		this.value= (options.value) ? options.value:null;
 		this.statusCode= (options.statusCode) ? options.statusCode:null;
@@ -37,7 +37,7 @@ export class DataValue {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		let encodingByte = 0;
 		if (this.value != null) { encodingByte |= 1 << 0;}
 		if (this.statusCode != null) { encodingByte |= 1 << 1;}
@@ -56,7 +56,7 @@ export class DataValue {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		let encodingByte = inp.getUint8();
 		let valueSpecified = (encodingByte & 1) != 0;
 		let statusCodeSpecified = (encodingByte & 2) != 0;
@@ -88,7 +88,7 @@ export class DataValue {
 	}
 
 
-	clone(	target? : DataValue) : DataValue { 
+	clone(	target?: DataValue): DataValue { 
 		if(!target) {
 			target = new DataValue();
 		}
@@ -103,7 +103,7 @@ export class DataValue {
 
 
 }
-export function decodeDataValue(	inp : DataStream) : DataValue { 
+export function decodeDataValue(	inp: DataStream): DataValue { 
 		const obj = new DataValue();
 			obj.decode(inp); 
 			return obj;

@@ -5,7 +5,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {FilterOperand} from './FilterOperand';
 
 export interface IElementOperand {
-		index? : ec.UInt32;
+		index?: ec.UInt32;
 }
 
 /**
@@ -13,9 +13,9 @@ export interface IElementOperand {
 */
 
 export class ElementOperand extends FilterOperand {
- 		index : ec.UInt32;
+ 		index: ec.UInt32;
 
-	constructor(	options? : IElementOperand) { 
+	constructor(	options?: IElementOperand) { 
 		options = options || {};
 		super();
 		this.index= (options.index) ? options.index:null;
@@ -23,19 +23,19 @@ export class ElementOperand extends FilterOperand {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.index,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.index = ec.decodeUInt32(inp);
 
 	}
 
 
-	clone(	target? : ElementOperand) : ElementOperand { 
+	clone(	target?: ElementOperand): ElementOperand { 
 		if(!target) {
 			target = new ElementOperand();
 		}
@@ -45,7 +45,7 @@ export class ElementOperand extends FilterOperand {
 
 
 }
-export function decodeElementOperand(	inp : DataStream) : ElementOperand { 
+export function decodeElementOperand(	inp: DataStream): ElementOperand { 
 		const obj = new ElementOperand();
 			obj.decode(inp); 
 			return obj;

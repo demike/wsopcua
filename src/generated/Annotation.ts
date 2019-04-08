@@ -4,9 +4,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IAnnotation {
-		message? : string;
-		userName? : string;
-		annotationTime? : Date;
+		message?: string;
+		userName?: string;
+		annotationTime?: Date;
 }
 
 /**
@@ -14,11 +14,11 @@ export interface IAnnotation {
 */
 
 export class Annotation {
- 		message : string;
-		userName : string;
-		annotationTime : Date;
+ 		message: string;
+		userName: string;
+		annotationTime: Date;
 
-	constructor(	options? : IAnnotation) { 
+	constructor(	options?: IAnnotation) { 
 		options = options || {};
 		this.message= (options.message) ? options.message:null;
 		this.userName= (options.userName) ? options.userName:null;
@@ -27,7 +27,7 @@ export class Annotation {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.message,out);
 		ec.encodeString(this.userName,out);
 		ec.encodeDateTime(this.annotationTime,out);
@@ -35,7 +35,7 @@ export class Annotation {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.message = ec.decodeString(inp);
 		this.userName = ec.decodeString(inp);
 		this.annotationTime = ec.decodeDateTime(inp);
@@ -43,7 +43,7 @@ export class Annotation {
 	}
 
 
-	clone(	target? : Annotation) : Annotation { 
+	clone(	target?: Annotation): Annotation { 
 		if(!target) {
 			target = new Annotation();
 		}
@@ -55,7 +55,7 @@ export class Annotation {
 
 
 }
-export function decodeAnnotation(	inp : DataStream) : Annotation { 
+export function decodeAnnotation(	inp: DataStream): Annotation { 
 		const obj = new Annotation();
 			obj.decode(inp); 
 			return obj;

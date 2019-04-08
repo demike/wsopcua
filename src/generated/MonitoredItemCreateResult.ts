@@ -4,11 +4,11 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IMonitoredItemCreateResult {
-		statusCode? : ec.StatusCode;
-		monitoredItemId? : ec.UInt32;
-		revisedSamplingInterval? : ec.Double;
-		revisedQueueSize? : ec.UInt32;
-		filterResult? : ec.ExtensionObject;
+		statusCode?: ec.StatusCode;
+		monitoredItemId?: ec.UInt32;
+		revisedSamplingInterval?: ec.Double;
+		revisedQueueSize?: ec.UInt32;
+		filterResult?: ec.ExtensionObject;
 }
 
 /**
@@ -16,13 +16,13 @@ export interface IMonitoredItemCreateResult {
 */
 
 export class MonitoredItemCreateResult {
- 		statusCode : ec.StatusCode;
-		monitoredItemId : ec.UInt32;
-		revisedSamplingInterval : ec.Double;
-		revisedQueueSize : ec.UInt32;
-		filterResult : ec.ExtensionObject;
+ 		statusCode: ec.StatusCode;
+		monitoredItemId: ec.UInt32;
+		revisedSamplingInterval: ec.Double;
+		revisedQueueSize: ec.UInt32;
+		filterResult: ec.ExtensionObject;
 
-	constructor(	options? : IMonitoredItemCreateResult) { 
+	constructor(	options?: IMonitoredItemCreateResult) { 
 		options = options || {};
 		this.statusCode= (options.statusCode) ? options.statusCode:null;
 		this.monitoredItemId= (options.monitoredItemId) ? options.monitoredItemId:null;
@@ -33,7 +33,7 @@ export class MonitoredItemCreateResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeStatusCode(this.statusCode,out);
 		ec.encodeUInt32(this.monitoredItemId,out);
 		ec.encodeDouble(this.revisedSamplingInterval,out);
@@ -43,7 +43,7 @@ export class MonitoredItemCreateResult {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.statusCode = ec.decodeStatusCode(inp);
 		this.monitoredItemId = ec.decodeUInt32(inp);
 		this.revisedSamplingInterval = ec.decodeDouble(inp);
@@ -53,7 +53,7 @@ export class MonitoredItemCreateResult {
 	}
 
 
-	clone(	target? : MonitoredItemCreateResult) : MonitoredItemCreateResult { 
+	clone(	target?: MonitoredItemCreateResult): MonitoredItemCreateResult { 
 		if(!target) {
 			target = new MonitoredItemCreateResult();
 		}
@@ -67,7 +67,7 @@ export class MonitoredItemCreateResult {
 
 
 }
-export function decodeMonitoredItemCreateResult(	inp : DataStream) : MonitoredItemCreateResult { 
+export function decodeMonitoredItemCreateResult(	inp: DataStream): MonitoredItemCreateResult { 
 		const obj = new MonitoredItemCreateResult();
 			obj.decode(inp); 
 			return obj;

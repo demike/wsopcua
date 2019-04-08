@@ -9,9 +9,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IBrowseNextResponse {
-		responseHeader? : ResponseHeader;
-		results? : BrowseResult[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: BrowseResult[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -19,11 +19,11 @@ Continues one or more browse operations.
 */
 
 export class BrowseNextResponse {
- 		responseHeader : ResponseHeader;
-		results : BrowseResult[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: BrowseResult[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IBrowseNextResponse) { 
+	constructor(	options?: IBrowseNextResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -32,7 +32,7 @@ export class BrowseNextResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -40,7 +40,7 @@ export class BrowseNextResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,decodeBrowseResult);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -48,7 +48,7 @@ export class BrowseNextResponse {
 	}
 
 
-	clone(	target? : BrowseNextResponse) : BrowseNextResponse { 
+	clone(	target?: BrowseNextResponse): BrowseNextResponse { 
 		if(!target) {
 			target = new BrowseNextResponse();
 		}
@@ -60,7 +60,7 @@ export class BrowseNextResponse {
 
 
 }
-export function decodeBrowseNextResponse(	inp : DataStream) : BrowseNextResponse { 
+export function decodeBrowseNextResponse(	inp: DataStream): BrowseNextResponse { 
 		const obj = new BrowseNextResponse();
 			obj.decode(inp); 
 			return obj;

@@ -4,11 +4,11 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IAggregateConfiguration {
-		useServerCapabilitiesDefaults? : boolean;
-		treatUncertainAsBad? : boolean;
-		percentDataBad? : ec.Byte;
-		percentDataGood? : ec.Byte;
-		useSlopedExtrapolation? : boolean;
+		useServerCapabilitiesDefaults?: boolean;
+		treatUncertainAsBad?: boolean;
+		percentDataBad?: ec.Byte;
+		percentDataGood?: ec.Byte;
+		useSlopedExtrapolation?: boolean;
 }
 
 /**
@@ -16,13 +16,13 @@ export interface IAggregateConfiguration {
 */
 
 export class AggregateConfiguration {
- 		useServerCapabilitiesDefaults : boolean;
-		treatUncertainAsBad : boolean;
-		percentDataBad : ec.Byte;
-		percentDataGood : ec.Byte;
-		useSlopedExtrapolation : boolean;
+ 		useServerCapabilitiesDefaults: boolean;
+		treatUncertainAsBad: boolean;
+		percentDataBad: ec.Byte;
+		percentDataGood: ec.Byte;
+		useSlopedExtrapolation: boolean;
 
-	constructor(	options? : IAggregateConfiguration) { 
+	constructor(	options?: IAggregateConfiguration) { 
 		options = options || {};
 		this.useServerCapabilitiesDefaults= (options.useServerCapabilitiesDefaults) ? options.useServerCapabilitiesDefaults:null;
 		this.treatUncertainAsBad= (options.treatUncertainAsBad) ? options.treatUncertainAsBad:null;
@@ -33,7 +33,7 @@ export class AggregateConfiguration {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeBoolean(this.useServerCapabilitiesDefaults,out);
 		ec.encodeBoolean(this.treatUncertainAsBad,out);
 		ec.encodeByte(this.percentDataBad,out);
@@ -43,7 +43,7 @@ export class AggregateConfiguration {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.useServerCapabilitiesDefaults = ec.decodeBoolean(inp);
 		this.treatUncertainAsBad = ec.decodeBoolean(inp);
 		this.percentDataBad = ec.decodeByte(inp);
@@ -53,7 +53,7 @@ export class AggregateConfiguration {
 	}
 
 
-	clone(	target? : AggregateConfiguration) : AggregateConfiguration { 
+	clone(	target?: AggregateConfiguration): AggregateConfiguration { 
 		if(!target) {
 			target = new AggregateConfiguration();
 		}
@@ -67,7 +67,7 @@ export class AggregateConfiguration {
 
 
 }
-export function decodeAggregateConfiguration(	inp : DataStream) : AggregateConfiguration { 
+export function decodeAggregateConfiguration(	inp: DataStream): AggregateConfiguration { 
 		const obj = new AggregateConfiguration();
 			obj.decode(inp); 
 			return obj;

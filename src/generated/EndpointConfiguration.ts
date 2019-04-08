@@ -4,15 +4,15 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IEndpointConfiguration {
-		operationTimeout? : ec.Int32;
-		useBinaryEncoding? : boolean;
-		maxStringLength? : ec.Int32;
-		maxByteStringLength? : ec.Int32;
-		maxArrayLength? : ec.Int32;
-		maxMessageSize? : ec.Int32;
-		maxBufferSize? : ec.Int32;
-		channelLifetime? : ec.Int32;
-		securityTokenLifetime? : ec.Int32;
+		operationTimeout?: ec.Int32;
+		useBinaryEncoding?: boolean;
+		maxStringLength?: ec.Int32;
+		maxByteStringLength?: ec.Int32;
+		maxArrayLength?: ec.Int32;
+		maxMessageSize?: ec.Int32;
+		maxBufferSize?: ec.Int32;
+		channelLifetime?: ec.Int32;
+		securityTokenLifetime?: ec.Int32;
 }
 
 /**
@@ -20,17 +20,17 @@ export interface IEndpointConfiguration {
 */
 
 export class EndpointConfiguration {
- 		operationTimeout : ec.Int32;
-		useBinaryEncoding : boolean;
-		maxStringLength : ec.Int32;
-		maxByteStringLength : ec.Int32;
-		maxArrayLength : ec.Int32;
-		maxMessageSize : ec.Int32;
-		maxBufferSize : ec.Int32;
-		channelLifetime : ec.Int32;
-		securityTokenLifetime : ec.Int32;
+ 		operationTimeout: ec.Int32;
+		useBinaryEncoding: boolean;
+		maxStringLength: ec.Int32;
+		maxByteStringLength: ec.Int32;
+		maxArrayLength: ec.Int32;
+		maxMessageSize: ec.Int32;
+		maxBufferSize: ec.Int32;
+		channelLifetime: ec.Int32;
+		securityTokenLifetime: ec.Int32;
 
-	constructor(	options? : IEndpointConfiguration) { 
+	constructor(	options?: IEndpointConfiguration) { 
 		options = options || {};
 		this.operationTimeout= (options.operationTimeout) ? options.operationTimeout:null;
 		this.useBinaryEncoding= (options.useBinaryEncoding) ? options.useBinaryEncoding:null;
@@ -45,7 +45,7 @@ export class EndpointConfiguration {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeInt32(this.operationTimeout,out);
 		ec.encodeBoolean(this.useBinaryEncoding,out);
 		ec.encodeInt32(this.maxStringLength,out);
@@ -59,7 +59,7 @@ export class EndpointConfiguration {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.operationTimeout = ec.decodeInt32(inp);
 		this.useBinaryEncoding = ec.decodeBoolean(inp);
 		this.maxStringLength = ec.decodeInt32(inp);
@@ -73,7 +73,7 @@ export class EndpointConfiguration {
 	}
 
 
-	clone(	target? : EndpointConfiguration) : EndpointConfiguration { 
+	clone(	target?: EndpointConfiguration): EndpointConfiguration { 
 		if(!target) {
 			target = new EndpointConfiguration();
 		}
@@ -91,7 +91,7 @@ export class EndpointConfiguration {
 
 
 }
-export function decodeEndpointConfiguration(	inp : DataStream) : EndpointConfiguration { 
+export function decodeEndpointConfiguration(	inp: DataStream): EndpointConfiguration { 
 		const obj = new EndpointConfiguration();
 			obj.decode(inp); 
 			return obj;

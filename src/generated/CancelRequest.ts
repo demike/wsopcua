@@ -5,8 +5,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ICancelRequest {
-		requestHeader? : RequestHeader;
-		requestHandle? : ec.UInt32;
+		requestHeader?: RequestHeader;
+		requestHandle?: ec.UInt32;
 }
 
 /**
@@ -14,10 +14,10 @@ Cancels an outstanding request.
 */
 
 export class CancelRequest {
- 		requestHeader : RequestHeader;
-		requestHandle : ec.UInt32;
+ 		requestHeader: RequestHeader;
+		requestHandle: ec.UInt32;
 
-	constructor(	options? : ICancelRequest) { 
+	constructor(	options?: ICancelRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.requestHandle= (options.requestHandle) ? options.requestHandle:null;
@@ -25,21 +25,21 @@ export class CancelRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeUInt32(this.requestHandle,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.requestHandle = ec.decodeUInt32(inp);
 
 	}
 
 
-	clone(	target? : CancelRequest) : CancelRequest { 
+	clone(	target?: CancelRequest): CancelRequest { 
 		if(!target) {
 			target = new CancelRequest();
 		}
@@ -50,7 +50,7 @@ export class CancelRequest {
 
 
 }
-export function decodeCancelRequest(	inp : DataStream) : CancelRequest { 
+export function decodeCancelRequest(	inp: DataStream): CancelRequest { 
 		const obj = new CancelRequest();
 			obj.decode(inp); 
 			return obj;

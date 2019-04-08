@@ -5,8 +5,8 @@ import {DataStream} from '../basic-types/DataStream';
 import {DiscoveryConfiguration} from './DiscoveryConfiguration';
 
 export interface IMdnsDiscoveryConfiguration {
-		mdnsServerName? : string;
-		serverCapabilities? : string[];
+		mdnsServerName?: string;
+		serverCapabilities?: string[];
 }
 
 /**
@@ -14,10 +14,10 @@ The discovery information needed for mDNS registration.
 */
 
 export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
- 		mdnsServerName : string;
-		serverCapabilities : string[];
+ 		mdnsServerName: string;
+		serverCapabilities: string[];
 
-	constructor(	options? : IMdnsDiscoveryConfiguration) { 
+	constructor(	options?: IMdnsDiscoveryConfiguration) { 
 		options = options || {};
 		super();
 		this.mdnsServerName= (options.mdnsServerName) ? options.mdnsServerName:null;
@@ -26,21 +26,21 @@ export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.mdnsServerName,out);
 		ec.encodeArray(this.serverCapabilities,out,ec.encodeString);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.mdnsServerName = ec.decodeString(inp);
 		this.serverCapabilities = ec.decodeArray(inp,ec.decodeString);
 
 	}
 
 
-	clone(	target? : MdnsDiscoveryConfiguration) : MdnsDiscoveryConfiguration { 
+	clone(	target?: MdnsDiscoveryConfiguration): MdnsDiscoveryConfiguration { 
 		if(!target) {
 			target = new MdnsDiscoveryConfiguration();
 		}
@@ -51,7 +51,7 @@ export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
 
 
 }
-export function decodeMdnsDiscoveryConfiguration(	inp : DataStream) : MdnsDiscoveryConfiguration { 
+export function decodeMdnsDiscoveryConfiguration(	inp: DataStream): MdnsDiscoveryConfiguration { 
 		const obj = new MdnsDiscoveryConfiguration();
 			obj.decode(inp); 
 			return obj;

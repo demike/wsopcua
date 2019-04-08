@@ -9,8 +9,8 @@ import {HistoryUpdateDetails} from './HistoryUpdateDetails';
 import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
 export interface IUpdateDataDetails extends IHistoryUpdateDetails {
-		performInsertReplace? : PerformUpdateType;
-		updateValues? : DataValue[];
+		performInsertReplace?: PerformUpdateType;
+		updateValues?: DataValue[];
 }
 
 /**
@@ -18,10 +18,10 @@ export interface IUpdateDataDetails extends IHistoryUpdateDetails {
 */
 
 export class UpdateDataDetails extends HistoryUpdateDetails {
- 		performInsertReplace : PerformUpdateType;
-		updateValues : DataValue[];
+ 		performInsertReplace: PerformUpdateType;
+		updateValues: DataValue[];
 
-	constructor(	options? : IUpdateDataDetails) { 
+	constructor(	options?: IUpdateDataDetails) { 
 		options = options || {};
 		super(options);
 		this.performInsertReplace= (options.performInsertReplace) ? options.performInsertReplace:null;
@@ -30,7 +30,7 @@ export class UpdateDataDetails extends HistoryUpdateDetails {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		encodePerformUpdateType(this.performInsertReplace,out);
 		ec.encodeArray(this.updateValues,out);
@@ -38,7 +38,7 @@ export class UpdateDataDetails extends HistoryUpdateDetails {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.performInsertReplace = decodePerformUpdateType(inp);
 		this.updateValues = ec.decodeArray(inp,decodeDataValue);
@@ -46,7 +46,7 @@ export class UpdateDataDetails extends HistoryUpdateDetails {
 	}
 
 
-	clone(	target? : UpdateDataDetails) : UpdateDataDetails { 
+	clone(	target?: UpdateDataDetails): UpdateDataDetails { 
 		if(!target) {
 			target = new UpdateDataDetails();
 		}
@@ -58,7 +58,7 @@ export class UpdateDataDetails extends HistoryUpdateDetails {
 
 
 }
-export function decodeUpdateDataDetails(	inp : DataStream) : UpdateDataDetails { 
+export function decodeUpdateDataDetails(	inp: DataStream): UpdateDataDetails { 
 		const obj = new UpdateDataDetails();
 			obj.decode(inp); 
 			return obj;

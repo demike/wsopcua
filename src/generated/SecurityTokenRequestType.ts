@@ -10,12 +10,12 @@ export enum SecurityTokenRequestType {
 
 }
 
-export function encodeSecurityTokenRequestType(	data : SecurityTokenRequestType, 	out : DataStream) { 
+export function encodeSecurityTokenRequestType(	data: SecurityTokenRequestType, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeSecurityTokenRequestType(	inp : DataStream) { 
+export function decodeSecurityTokenRequestType(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

@@ -11,12 +11,12 @@ export enum ModelChangeStructureVerbMask {
 
 }
 
-export function encodeModelChangeStructureVerbMask(	data : ModelChangeStructureVerbMask, 	out : DataStream) { 
+export function encodeModelChangeStructureVerbMask(	data: ModelChangeStructureVerbMask, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeModelChangeStructureVerbMask(	inp : DataStream) { 
+export function decodeModelChangeStructureVerbMask(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

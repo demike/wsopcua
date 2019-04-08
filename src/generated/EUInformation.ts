@@ -5,10 +5,10 @@ import {LocalizedText} from './LocalizedText';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IEUInformation {
-		namespaceUri? : string;
-		unitId? : ec.Int32;
-		displayName? : LocalizedText;
-		description? : LocalizedText;
+		namespaceUri?: string;
+		unitId?: ec.Int32;
+		displayName?: LocalizedText;
+		description?: LocalizedText;
 }
 
 /**
@@ -16,12 +16,12 @@ export interface IEUInformation {
 */
 
 export class EUInformation {
- 		namespaceUri : string;
-		unitId : ec.Int32;
-		displayName : LocalizedText;
-		description : LocalizedText;
+ 		namespaceUri: string;
+		unitId: ec.Int32;
+		displayName: LocalizedText;
+		description: LocalizedText;
 
-	constructor(	options? : IEUInformation) { 
+	constructor(	options?: IEUInformation) { 
 		options = options || {};
 		this.namespaceUri= (options.namespaceUri) ? options.namespaceUri:null;
 		this.unitId= (options.unitId) ? options.unitId:null;
@@ -31,7 +31,7 @@ export class EUInformation {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.namespaceUri,out);
 		ec.encodeInt32(this.unitId,out);
 		this.displayName.encode(out);
@@ -40,7 +40,7 @@ export class EUInformation {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.namespaceUri = ec.decodeString(inp);
 		this.unitId = ec.decodeInt32(inp);
 		this.displayName.decode(inp);
@@ -49,7 +49,7 @@ export class EUInformation {
 	}
 
 
-	clone(	target? : EUInformation) : EUInformation { 
+	clone(	target?: EUInformation): EUInformation { 
 		if(!target) {
 			target = new EUInformation();
 		}
@@ -62,7 +62,7 @@ export class EUInformation {
 
 
 }
-export function decodeEUInformation(	inp : DataStream) : EUInformation { 
+export function decodeEUInformation(	inp: DataStream): EUInformation { 
 		const obj = new EUInformation();
 			obj.decode(inp); 
 			return obj;

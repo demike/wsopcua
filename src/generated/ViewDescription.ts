@@ -4,9 +4,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IViewDescription {
-		viewId? : ec.NodeId;
-		timestamp? : Date;
-		viewVersion? : ec.UInt32;
+		viewId?: ec.NodeId;
+		timestamp?: Date;
+		viewVersion?: ec.UInt32;
 }
 
 /**
@@ -14,11 +14,11 @@ The view to browse.
 */
 
 export class ViewDescription {
- 		viewId : ec.NodeId;
-		timestamp : Date;
-		viewVersion : ec.UInt32;
+ 		viewId: ec.NodeId;
+		timestamp: Date;
+		viewVersion: ec.UInt32;
 
-	constructor(	options? : IViewDescription) { 
+	constructor(	options?: IViewDescription) { 
 		options = options || {};
 		this.viewId= (options.viewId) ? options.viewId:null;
 		this.timestamp= (options.timestamp) ? options.timestamp:null;
@@ -27,7 +27,7 @@ export class ViewDescription {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.viewId,out);
 		ec.encodeDateTime(this.timestamp,out);
 		ec.encodeUInt32(this.viewVersion,out);
@@ -35,7 +35,7 @@ export class ViewDescription {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.viewId = ec.decodeNodeId(inp);
 		this.timestamp = ec.decodeDateTime(inp);
 		this.viewVersion = ec.decodeUInt32(inp);
@@ -43,7 +43,7 @@ export class ViewDescription {
 	}
 
 
-	clone(	target? : ViewDescription) : ViewDescription { 
+	clone(	target?: ViewDescription): ViewDescription { 
 		if(!target) {
 			target = new ViewDescription();
 		}
@@ -55,7 +55,7 @@ export class ViewDescription {
 
 
 }
-export function decodeViewDescription(	inp : DataStream) : ViewDescription { 
+export function decodeViewDescription(	inp: DataStream): ViewDescription { 
 		const obj = new ViewDescription();
 			obj.decode(inp); 
 			return obj;

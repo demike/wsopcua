@@ -5,9 +5,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IBrowseNextRequest {
-		requestHeader? : RequestHeader;
-		releaseContinuationPoints? : boolean;
-		continuationPoints? : Uint8Array[];
+		requestHeader?: RequestHeader;
+		releaseContinuationPoints?: boolean;
+		continuationPoints?: Uint8Array[];
 }
 
 /**
@@ -15,11 +15,11 @@ Continues one or more browse operations.
 */
 
 export class BrowseNextRequest {
- 		requestHeader : RequestHeader;
-		releaseContinuationPoints : boolean;
-		continuationPoints : Uint8Array[];
+ 		requestHeader: RequestHeader;
+		releaseContinuationPoints: boolean;
+		continuationPoints: Uint8Array[];
 
-	constructor(	options? : IBrowseNextRequest) { 
+	constructor(	options?: IBrowseNextRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.releaseContinuationPoints= (options.releaseContinuationPoints) ? options.releaseContinuationPoints:null;
@@ -28,7 +28,7 @@ export class BrowseNextRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeBoolean(this.releaseContinuationPoints,out);
 		ec.encodeArray(this.continuationPoints,out,ec.encodeByteString);
@@ -36,7 +36,7 @@ export class BrowseNextRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.releaseContinuationPoints = ec.decodeBoolean(inp);
 		this.continuationPoints = ec.decodeArray(inp,ec.decodeByteString);
@@ -44,7 +44,7 @@ export class BrowseNextRequest {
 	}
 
 
-	clone(	target? : BrowseNextRequest) : BrowseNextRequest { 
+	clone(	target?: BrowseNextRequest): BrowseNextRequest { 
 		if(!target) {
 			target = new BrowseNextRequest();
 		}
@@ -56,7 +56,7 @@ export class BrowseNextRequest {
 
 
 }
-export function decodeBrowseNextRequest(	inp : DataStream) : BrowseNextRequest { 
+export function decodeBrowseNextRequest(	inp: DataStream): BrowseNextRequest { 
 		const obj = new BrowseNextRequest();
 			obj.decode(inp); 
 			return obj;

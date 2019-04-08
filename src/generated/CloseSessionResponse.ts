@@ -5,7 +5,7 @@ import {DataStream} from '../basic-types/DataStream';
 import * as ec from '../basic-types';
 
 export interface ICloseSessionResponse {
-		responseHeader? : ResponseHeader;
+		responseHeader?: ResponseHeader;
 }
 
 /**
@@ -13,28 +13,28 @@ Closes a session with the server.
 */
 
 export class CloseSessionResponse {
- 		responseHeader : ResponseHeader;
+ 		responseHeader: ResponseHeader;
 
-	constructor(	options? : ICloseSessionResponse) { 
+	constructor(	options?: ICloseSessionResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 
 	}
 
 
-	clone(	target? : CloseSessionResponse) : CloseSessionResponse { 
+	clone(	target?: CloseSessionResponse): CloseSessionResponse { 
 		if(!target) {
 			target = new CloseSessionResponse();
 		}
@@ -44,7 +44,7 @@ export class CloseSessionResponse {
 
 
 }
-export function decodeCloseSessionResponse(	inp : DataStream) : CloseSessionResponse { 
+export function decodeCloseSessionResponse(	inp: DataStream): CloseSessionResponse { 
 		const obj = new CloseSessionResponse();
 			obj.decode(inp); 
 			return obj;

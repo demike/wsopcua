@@ -9,9 +9,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IModifyMonitoredItemsResponse {
-		responseHeader? : ResponseHeader;
-		results? : MonitoredItemModifyResult[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: MonitoredItemModifyResult[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -19,11 +19,11 @@ export interface IModifyMonitoredItemsResponse {
 */
 
 export class ModifyMonitoredItemsResponse {
- 		responseHeader : ResponseHeader;
-		results : MonitoredItemModifyResult[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: MonitoredItemModifyResult[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IModifyMonitoredItemsResponse) { 
+	constructor(	options?: IModifyMonitoredItemsResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -32,7 +32,7 @@ export class ModifyMonitoredItemsResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -40,7 +40,7 @@ export class ModifyMonitoredItemsResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,decodeMonitoredItemModifyResult);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -48,7 +48,7 @@ export class ModifyMonitoredItemsResponse {
 	}
 
 
-	clone(	target? : ModifyMonitoredItemsResponse) : ModifyMonitoredItemsResponse { 
+	clone(	target?: ModifyMonitoredItemsResponse): ModifyMonitoredItemsResponse { 
 		if(!target) {
 			target = new ModifyMonitoredItemsResponse();
 		}
@@ -60,7 +60,7 @@ export class ModifyMonitoredItemsResponse {
 
 
 }
-export function decodeModifyMonitoredItemsResponse(	inp : DataStream) : ModifyMonitoredItemsResponse { 
+export function decodeModifyMonitoredItemsResponse(	inp: DataStream): ModifyMonitoredItemsResponse { 
 		const obj = new ModifyMonitoredItemsResponse();
 			obj.decode(inp); 
 			return obj;

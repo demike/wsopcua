@@ -9,12 +9,12 @@ export enum AxisScaleEnumeration {
 
 }
 
-export function encodeAxisScaleEnumeration(	data : AxisScaleEnumeration, 	out : DataStream) { 
+export function encodeAxisScaleEnumeration(	data: AxisScaleEnumeration, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeAxisScaleEnumeration(	inp : DataStream) { 
+export function decodeAxisScaleEnumeration(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

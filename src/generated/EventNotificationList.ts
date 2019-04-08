@@ -7,7 +7,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {NotificationData} from './NotificationData';
 
 export interface IEventNotificationList {
-		events? : EventFieldList[];
+		events?: EventFieldList[];
 }
 
 /**
@@ -15,9 +15,9 @@ export interface IEventNotificationList {
 */
 
 export class EventNotificationList extends NotificationData {
- 		events : EventFieldList[];
+ 		events: EventFieldList[];
 
-	constructor(	options? : IEventNotificationList) { 
+	constructor(	options?: IEventNotificationList) { 
 		options = options || {};
 		super();
 		this.events= (options.events) ? options.events:[];
@@ -25,19 +25,19 @@ export class EventNotificationList extends NotificationData {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.events,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.events = ec.decodeArray(inp,decodeEventFieldList);
 
 	}
 
 
-	clone(	target? : EventNotificationList) : EventNotificationList { 
+	clone(	target?: EventNotificationList): EventNotificationList { 
 		if(!target) {
 			target = new EventNotificationList();
 		}
@@ -47,7 +47,7 @@ export class EventNotificationList extends NotificationData {
 
 
 }
-export function decodeEventNotificationList(	inp : DataStream) : EventNotificationList { 
+export function decodeEventNotificationList(	inp: DataStream): EventNotificationList { 
 		const obj = new EventNotificationList();
 			obj.decode(inp); 
 			return obj;

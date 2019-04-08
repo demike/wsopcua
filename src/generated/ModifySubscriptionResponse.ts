@@ -5,10 +5,10 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IModifySubscriptionResponse {
-		responseHeader? : ResponseHeader;
-		revisedPublishingInterval? : ec.Double;
-		revisedLifetimeCount? : ec.UInt32;
-		revisedMaxKeepAliveCount? : ec.UInt32;
+		responseHeader?: ResponseHeader;
+		revisedPublishingInterval?: ec.Double;
+		revisedLifetimeCount?: ec.UInt32;
+		revisedMaxKeepAliveCount?: ec.UInt32;
 }
 
 /**
@@ -16,12 +16,12 @@ export interface IModifySubscriptionResponse {
 */
 
 export class ModifySubscriptionResponse {
- 		responseHeader : ResponseHeader;
-		revisedPublishingInterval : ec.Double;
-		revisedLifetimeCount : ec.UInt32;
-		revisedMaxKeepAliveCount : ec.UInt32;
+ 		responseHeader: ResponseHeader;
+		revisedPublishingInterval: ec.Double;
+		revisedLifetimeCount: ec.UInt32;
+		revisedMaxKeepAliveCount: ec.UInt32;
 
-	constructor(	options? : IModifySubscriptionResponse) { 
+	constructor(	options?: IModifySubscriptionResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.revisedPublishingInterval= (options.revisedPublishingInterval) ? options.revisedPublishingInterval:null;
@@ -31,7 +31,7 @@ export class ModifySubscriptionResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeDouble(this.revisedPublishingInterval,out);
 		ec.encodeUInt32(this.revisedLifetimeCount,out);
@@ -40,7 +40,7 @@ export class ModifySubscriptionResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.revisedPublishingInterval = ec.decodeDouble(inp);
 		this.revisedLifetimeCount = ec.decodeUInt32(inp);
@@ -49,7 +49,7 @@ export class ModifySubscriptionResponse {
 	}
 
 
-	clone(	target? : ModifySubscriptionResponse) : ModifySubscriptionResponse { 
+	clone(	target?: ModifySubscriptionResponse): ModifySubscriptionResponse { 
 		if(!target) {
 			target = new ModifySubscriptionResponse();
 		}
@@ -62,7 +62,7 @@ export class ModifySubscriptionResponse {
 
 
 }
-export function decodeModifySubscriptionResponse(	inp : DataStream) : ModifySubscriptionResponse { 
+export function decodeModifySubscriptionResponse(	inp: DataStream): ModifySubscriptionResponse { 
 		const obj = new ModifySubscriptionResponse();
 			obj.decode(inp); 
 			return obj;

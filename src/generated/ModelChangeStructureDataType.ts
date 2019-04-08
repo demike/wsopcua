@@ -4,9 +4,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IModelChangeStructureDataType {
-		affected? : ec.NodeId;
-		affectedType? : ec.NodeId;
-		verb? : ec.Byte;
+		affected?: ec.NodeId;
+		affectedType?: ec.NodeId;
+		verb?: ec.Byte;
 }
 
 /**
@@ -14,11 +14,11 @@ export interface IModelChangeStructureDataType {
 */
 
 export class ModelChangeStructureDataType {
- 		affected : ec.NodeId;
-		affectedType : ec.NodeId;
-		verb : ec.Byte;
+ 		affected: ec.NodeId;
+		affectedType: ec.NodeId;
+		verb: ec.Byte;
 
-	constructor(	options? : IModelChangeStructureDataType) { 
+	constructor(	options?: IModelChangeStructureDataType) { 
 		options = options || {};
 		this.affected= (options.affected) ? options.affected:null;
 		this.affectedType= (options.affectedType) ? options.affectedType:null;
@@ -27,7 +27,7 @@ export class ModelChangeStructureDataType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.affected,out);
 		ec.encodeNodeId(this.affectedType,out);
 		ec.encodeByte(this.verb,out);
@@ -35,7 +35,7 @@ export class ModelChangeStructureDataType {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.affected = ec.decodeNodeId(inp);
 		this.affectedType = ec.decodeNodeId(inp);
 		this.verb = ec.decodeByte(inp);
@@ -43,7 +43,7 @@ export class ModelChangeStructureDataType {
 	}
 
 
-	clone(	target? : ModelChangeStructureDataType) : ModelChangeStructureDataType { 
+	clone(	target?: ModelChangeStructureDataType): ModelChangeStructureDataType { 
 		if(!target) {
 			target = new ModelChangeStructureDataType();
 		}
@@ -55,7 +55,7 @@ export class ModelChangeStructureDataType {
 
 
 }
-export function decodeModelChangeStructureDataType(	inp : DataStream) : ModelChangeStructureDataType { 
+export function decodeModelChangeStructureDataType(	inp: DataStream): ModelChangeStructureDataType { 
 		const obj = new ModelChangeStructureDataType();
 			obj.decode(inp); 
 			return obj;

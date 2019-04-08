@@ -5,8 +5,8 @@ import {DataStream} from '../basic-types/DataStream';
 import {HistoryReadDetails} from './HistoryReadDetails';
 
 export interface IReadAtTimeDetails {
-		reqTimes? : Date[];
-		useSimpleBounds? : boolean;
+		reqTimes?: Date[];
+		useSimpleBounds?: boolean;
 }
 
 /**
@@ -14,10 +14,10 @@ export interface IReadAtTimeDetails {
 */
 
 export class ReadAtTimeDetails extends HistoryReadDetails {
- 		reqTimes : Date[];
-		useSimpleBounds : boolean;
+ 		reqTimes: Date[];
+		useSimpleBounds: boolean;
 
-	constructor(	options? : IReadAtTimeDetails) { 
+	constructor(	options?: IReadAtTimeDetails) { 
 		options = options || {};
 		super();
 		this.reqTimes= (options.reqTimes) ? options.reqTimes:[];
@@ -26,21 +26,21 @@ export class ReadAtTimeDetails extends HistoryReadDetails {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.reqTimes,out,ec.encodeDateTime);
 		ec.encodeBoolean(this.useSimpleBounds,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.reqTimes = ec.decodeArray(inp,ec.decodeDateTime);
 		this.useSimpleBounds = ec.decodeBoolean(inp);
 
 	}
 
 
-	clone(	target? : ReadAtTimeDetails) : ReadAtTimeDetails { 
+	clone(	target?: ReadAtTimeDetails): ReadAtTimeDetails { 
 		if(!target) {
 			target = new ReadAtTimeDetails();
 		}
@@ -51,7 +51,7 @@ export class ReadAtTimeDetails extends HistoryReadDetails {
 
 
 }
-export function decodeReadAtTimeDetails(	inp : DataStream) : ReadAtTimeDetails { 
+export function decodeReadAtTimeDetails(	inp: DataStream): ReadAtTimeDetails { 
 		const obj = new ReadAtTimeDetails();
 			obj.decode(inp); 
 			return obj;

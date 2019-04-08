@@ -13,19 +13,19 @@ import {InstanceNode} from './InstanceNode';
 import {IInstanceNode} from './InstanceNode';
 
 export interface IMethodNode extends IInstanceNode {
-		nodeId? : ec.NodeId;
-		nodeClass? : NodeClass;
-		browseName? : QualifiedName;
-		displayName? : LocalizedText;
-		description? : LocalizedText;
-		writeMask? : ec.UInt32;
-		userWriteMask? : ec.UInt32;
-		rolePermissions? : RolePermissionType[];
-		userRolePermissions? : RolePermissionType[];
-		accessRestrictions? : ec.UInt16;
-		references? : ReferenceNode[];
-		executable? : boolean;
-		userExecutable? : boolean;
+		nodeId?: ec.NodeId;
+		nodeClass?: NodeClass;
+		browseName?: QualifiedName;
+		displayName?: LocalizedText;
+		description?: LocalizedText;
+		writeMask?: ec.UInt32;
+		userWriteMask?: ec.UInt32;
+		rolePermissions?: RolePermissionType[];
+		userRolePermissions?: RolePermissionType[];
+		accessRestrictions?: ec.UInt16;
+		references?: ReferenceNode[];
+		executable?: boolean;
+		userExecutable?: boolean;
 }
 
 /**
@@ -33,21 +33,21 @@ Specifies the attributes which belong to method nodes.
 */
 
 export class MethodNode extends InstanceNode {
- 		nodeId : ec.NodeId;
-		nodeClass : NodeClass;
-		browseName : QualifiedName;
-		displayName : LocalizedText;
-		description : LocalizedText;
-		writeMask : ec.UInt32;
-		userWriteMask : ec.UInt32;
-		rolePermissions : RolePermissionType[];
-		userRolePermissions : RolePermissionType[];
-		accessRestrictions : ec.UInt16;
-		references : ReferenceNode[];
-		executable : boolean;
-		userExecutable : boolean;
+ 		nodeId: ec.NodeId;
+		nodeClass: NodeClass;
+		browseName: QualifiedName;
+		displayName: LocalizedText;
+		description: LocalizedText;
+		writeMask: ec.UInt32;
+		userWriteMask: ec.UInt32;
+		rolePermissions: RolePermissionType[];
+		userRolePermissions: RolePermissionType[];
+		accessRestrictions: ec.UInt16;
+		references: ReferenceNode[];
+		executable: boolean;
+		userExecutable: boolean;
 
-	constructor(	options? : IMethodNode) { 
+	constructor(	options?: IMethodNode) { 
 		options = options || {};
 		super(options);
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
@@ -67,7 +67,7 @@ export class MethodNode extends InstanceNode {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeNodeId(this.nodeId,out);
 		encodeNodeClass(this.nodeClass,out);
@@ -86,7 +86,7 @@ export class MethodNode extends InstanceNode {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.nodeId = ec.decodeNodeId(inp);
 		this.nodeClass = decodeNodeClass(inp);
@@ -105,7 +105,7 @@ export class MethodNode extends InstanceNode {
 	}
 
 
-	clone(	target? : MethodNode) : MethodNode { 
+	clone(	target?: MethodNode): MethodNode { 
 		if(!target) {
 			target = new MethodNode();
 		}
@@ -128,7 +128,7 @@ export class MethodNode extends InstanceNode {
 
 
 }
-export function decodeMethodNode(	inp : DataStream) : MethodNode { 
+export function decodeMethodNode(	inp: DataStream): MethodNode { 
 		const obj = new MethodNode();
 			obj.decode(inp); 
 			return obj;

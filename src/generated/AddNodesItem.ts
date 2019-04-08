@@ -6,13 +6,13 @@ import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IAddNodesItem {
-		parentNodeId? : ec.ExpandedNodeId;
-		referenceTypeId? : ec.NodeId;
-		requestedNewNodeId? : ec.ExpandedNodeId;
-		browseName? : QualifiedName;
-		nodeClass? : NodeClass;
-		nodeAttributes? : ec.ExtensionObject;
-		typeDefinition? : ec.ExpandedNodeId;
+		parentNodeId?: ec.ExpandedNodeId;
+		referenceTypeId?: ec.NodeId;
+		requestedNewNodeId?: ec.ExpandedNodeId;
+		browseName?: QualifiedName;
+		nodeClass?: NodeClass;
+		nodeAttributes?: ec.ExtensionObject;
+		typeDefinition?: ec.ExpandedNodeId;
 }
 
 /**
@@ -20,15 +20,15 @@ A request to add a node to the server address space.
 */
 
 export class AddNodesItem {
- 		parentNodeId : ec.ExpandedNodeId;
-		referenceTypeId : ec.NodeId;
-		requestedNewNodeId : ec.ExpandedNodeId;
-		browseName : QualifiedName;
-		nodeClass : NodeClass;
-		nodeAttributes : ec.ExtensionObject;
-		typeDefinition : ec.ExpandedNodeId;
+ 		parentNodeId: ec.ExpandedNodeId;
+		referenceTypeId: ec.NodeId;
+		requestedNewNodeId: ec.ExpandedNodeId;
+		browseName: QualifiedName;
+		nodeClass: NodeClass;
+		nodeAttributes: ec.ExtensionObject;
+		typeDefinition: ec.ExpandedNodeId;
 
-	constructor(	options? : IAddNodesItem) { 
+	constructor(	options?: IAddNodesItem) { 
 		options = options || {};
 		this.parentNodeId= (options.parentNodeId) ? options.parentNodeId:null;
 		this.referenceTypeId= (options.referenceTypeId) ? options.referenceTypeId:null;
@@ -41,7 +41,7 @@ export class AddNodesItem {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeExpandedNodeId(this.parentNodeId,out);
 		ec.encodeNodeId(this.referenceTypeId,out);
 		ec.encodeExpandedNodeId(this.requestedNewNodeId,out);
@@ -53,7 +53,7 @@ export class AddNodesItem {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.parentNodeId = ec.decodeExpandedNodeId(inp);
 		this.referenceTypeId = ec.decodeNodeId(inp);
 		this.requestedNewNodeId = ec.decodeExpandedNodeId(inp);
@@ -65,7 +65,7 @@ export class AddNodesItem {
 	}
 
 
-	clone(	target? : AddNodesItem) : AddNodesItem { 
+	clone(	target?: AddNodesItem): AddNodesItem { 
 		if(!target) {
 			target = new AddNodesItem();
 		}
@@ -81,7 +81,7 @@ export class AddNodesItem {
 
 
 }
-export function decodeAddNodesItem(	inp : DataStream) : AddNodesItem { 
+export function decodeAddNodesItem(	inp: DataStream): AddNodesItem { 
 		const obj = new AddNodesItem();
 			obj.decode(inp); 
 			return obj;

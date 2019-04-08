@@ -10,12 +10,12 @@ export enum OpenFileMode {
 
 }
 
-export function encodeOpenFileMode(	data : OpenFileMode, 	out : DataStream) { 
+export function encodeOpenFileMode(	data: OpenFileMode, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeOpenFileMode(	inp : DataStream) { 
+export function decodeOpenFileMode(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

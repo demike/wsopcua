@@ -5,13 +5,13 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ICreateSubscriptionRequest {
-		requestHeader? : RequestHeader;
-		requestedPublishingInterval? : ec.Double;
-		requestedLifetimeCount? : ec.UInt32;
-		requestedMaxKeepAliveCount? : ec.UInt32;
-		maxNotificationsPerPublish? : ec.UInt32;
-		publishingEnabled? : boolean;
-		priority? : ec.Byte;
+		requestHeader?: RequestHeader;
+		requestedPublishingInterval?: ec.Double;
+		requestedLifetimeCount?: ec.UInt32;
+		requestedMaxKeepAliveCount?: ec.UInt32;
+		maxNotificationsPerPublish?: ec.UInt32;
+		publishingEnabled?: boolean;
+		priority?: ec.Byte;
 }
 
 /**
@@ -19,15 +19,15 @@ export interface ICreateSubscriptionRequest {
 */
 
 export class CreateSubscriptionRequest {
- 		requestHeader : RequestHeader;
-		requestedPublishingInterval : ec.Double;
-		requestedLifetimeCount : ec.UInt32;
-		requestedMaxKeepAliveCount : ec.UInt32;
-		maxNotificationsPerPublish : ec.UInt32;
-		publishingEnabled : boolean;
-		priority : ec.Byte;
+ 		requestHeader: RequestHeader;
+		requestedPublishingInterval: ec.Double;
+		requestedLifetimeCount: ec.UInt32;
+		requestedMaxKeepAliveCount: ec.UInt32;
+		maxNotificationsPerPublish: ec.UInt32;
+		publishingEnabled: boolean;
+		priority: ec.Byte;
 
-	constructor(	options? : ICreateSubscriptionRequest) { 
+	constructor(	options?: ICreateSubscriptionRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.requestedPublishingInterval= (options.requestedPublishingInterval) ? options.requestedPublishingInterval:null;
@@ -40,7 +40,7 @@ export class CreateSubscriptionRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeDouble(this.requestedPublishingInterval,out);
 		ec.encodeUInt32(this.requestedLifetimeCount,out);
@@ -52,7 +52,7 @@ export class CreateSubscriptionRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.requestedPublishingInterval = ec.decodeDouble(inp);
 		this.requestedLifetimeCount = ec.decodeUInt32(inp);
@@ -64,7 +64,7 @@ export class CreateSubscriptionRequest {
 	}
 
 
-	clone(	target? : CreateSubscriptionRequest) : CreateSubscriptionRequest { 
+	clone(	target?: CreateSubscriptionRequest): CreateSubscriptionRequest { 
 		if(!target) {
 			target = new CreateSubscriptionRequest();
 		}
@@ -80,7 +80,7 @@ export class CreateSubscriptionRequest {
 
 
 }
-export function decodeCreateSubscriptionRequest(	inp : DataStream) : CreateSubscriptionRequest { 
+export function decodeCreateSubscriptionRequest(	inp: DataStream): CreateSubscriptionRequest { 
 		const obj = new CreateSubscriptionRequest();
 			obj.decode(inp); 
 			return obj;

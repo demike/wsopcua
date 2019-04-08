@@ -8,9 +8,9 @@ import {DataStream} from '../basic-types/DataStream';
 import {MonitoringFilterResult} from './MonitoringFilterResult';
 
 export interface IEventFilterResult {
-		selectClauseResults? : ec.StatusCode[];
-		selectClauseDiagnosticInfos? : DiagnosticInfo[];
-		whereClauseResult? : ContentFilterResult;
+		selectClauseResults?: ec.StatusCode[];
+		selectClauseDiagnosticInfos?: DiagnosticInfo[];
+		whereClauseResult?: ContentFilterResult;
 }
 
 /**
@@ -18,11 +18,11 @@ export interface IEventFilterResult {
 */
 
 export class EventFilterResult extends MonitoringFilterResult {
- 		selectClauseResults : ec.StatusCode[];
-		selectClauseDiagnosticInfos : DiagnosticInfo[];
-		whereClauseResult : ContentFilterResult;
+ 		selectClauseResults: ec.StatusCode[];
+		selectClauseDiagnosticInfos: DiagnosticInfo[];
+		whereClauseResult: ContentFilterResult;
 
-	constructor(	options? : IEventFilterResult) { 
+	constructor(	options?: IEventFilterResult) { 
 		options = options || {};
 		super();
 		this.selectClauseResults= (options.selectClauseResults) ? options.selectClauseResults:[];
@@ -32,7 +32,7 @@ export class EventFilterResult extends MonitoringFilterResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.selectClauseResults,out,ec.encodeStatusCode);
 		ec.encodeArray(this.selectClauseDiagnosticInfos,out);
 		this.whereClauseResult.encode(out);
@@ -40,7 +40,7 @@ export class EventFilterResult extends MonitoringFilterResult {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.selectClauseResults = ec.decodeArray(inp,ec.decodeStatusCode);
 		this.selectClauseDiagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
 		this.whereClauseResult.decode(inp);
@@ -48,7 +48,7 @@ export class EventFilterResult extends MonitoringFilterResult {
 	}
 
 
-	clone(	target? : EventFilterResult) : EventFilterResult { 
+	clone(	target?: EventFilterResult): EventFilterResult { 
 		if(!target) {
 			target = new EventFilterResult();
 		}
@@ -60,7 +60,7 @@ export class EventFilterResult extends MonitoringFilterResult {
 
 
 }
-export function decodeEventFilterResult(	inp : DataStream) : EventFilterResult { 
+export function decodeEventFilterResult(	inp: DataStream): EventFilterResult { 
 		const obj = new EventFilterResult();
 			obj.decode(inp); 
 			return obj;

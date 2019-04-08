@@ -7,13 +7,13 @@ import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IReferenceDescription {
-		referenceTypeId? : ec.NodeId;
-		isForward? : boolean;
-		nodeId? : ec.ExpandedNodeId;
-		browseName? : QualifiedName;
-		displayName? : LocalizedText;
-		nodeClass? : NodeClass;
-		typeDefinition? : ec.ExpandedNodeId;
+		referenceTypeId?: ec.NodeId;
+		isForward?: boolean;
+		nodeId?: ec.ExpandedNodeId;
+		browseName?: QualifiedName;
+		displayName?: LocalizedText;
+		nodeClass?: NodeClass;
+		typeDefinition?: ec.ExpandedNodeId;
 }
 
 /**
@@ -21,15 +21,15 @@ The description of a reference.
 */
 
 export class ReferenceDescription {
- 		referenceTypeId : ec.NodeId;
-		isForward : boolean;
-		nodeId : ec.ExpandedNodeId;
-		browseName : QualifiedName;
-		displayName : LocalizedText;
-		nodeClass : NodeClass;
-		typeDefinition : ec.ExpandedNodeId;
+ 		referenceTypeId: ec.NodeId;
+		isForward: boolean;
+		nodeId: ec.ExpandedNodeId;
+		browseName: QualifiedName;
+		displayName: LocalizedText;
+		nodeClass: NodeClass;
+		typeDefinition: ec.ExpandedNodeId;
 
-	constructor(	options? : IReferenceDescription) { 
+	constructor(	options?: IReferenceDescription) { 
 		options = options || {};
 		this.referenceTypeId= (options.referenceTypeId) ? options.referenceTypeId:null;
 		this.isForward= (options.isForward) ? options.isForward:null;
@@ -42,7 +42,7 @@ export class ReferenceDescription {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.referenceTypeId,out);
 		ec.encodeBoolean(this.isForward,out);
 		ec.encodeExpandedNodeId(this.nodeId,out);
@@ -54,7 +54,7 @@ export class ReferenceDescription {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.referenceTypeId = ec.decodeNodeId(inp);
 		this.isForward = ec.decodeBoolean(inp);
 		this.nodeId = ec.decodeExpandedNodeId(inp);
@@ -66,7 +66,7 @@ export class ReferenceDescription {
 	}
 
 
-	clone(	target? : ReferenceDescription) : ReferenceDescription { 
+	clone(	target?: ReferenceDescription): ReferenceDescription { 
 		if(!target) {
 			target = new ReferenceDescription();
 		}
@@ -82,7 +82,7 @@ export class ReferenceDescription {
 
 
 }
-export function decodeReferenceDescription(	inp : DataStream) : ReferenceDescription { 
+export function decodeReferenceDescription(	inp: DataStream): ReferenceDescription { 
 		const obj = new ReferenceDescription();
 			obj.decode(inp); 
 			return obj;

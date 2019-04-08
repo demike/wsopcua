@@ -6,8 +6,8 @@ import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
 export interface IViewAttributes extends INodeAttributes {
-		containsNoLoops? : boolean;
-		eventNotifier? : ec.Byte;
+		containsNoLoops?: boolean;
+		eventNotifier?: ec.Byte;
 }
 
 /**
@@ -15,10 +15,10 @@ The attributes for a view node.
 */
 
 export class ViewAttributes extends NodeAttributes {
- 		containsNoLoops : boolean;
-		eventNotifier : ec.Byte;
+ 		containsNoLoops: boolean;
+		eventNotifier: ec.Byte;
 
-	constructor(	options? : IViewAttributes) { 
+	constructor(	options?: IViewAttributes) { 
 		options = options || {};
 		super(options);
 		this.containsNoLoops= (options.containsNoLoops) ? options.containsNoLoops:null;
@@ -27,7 +27,7 @@ export class ViewAttributes extends NodeAttributes {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeBoolean(this.containsNoLoops,out);
 		ec.encodeByte(this.eventNotifier,out);
@@ -35,7 +35,7 @@ export class ViewAttributes extends NodeAttributes {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.containsNoLoops = ec.decodeBoolean(inp);
 		this.eventNotifier = ec.decodeByte(inp);
@@ -43,7 +43,7 @@ export class ViewAttributes extends NodeAttributes {
 	}
 
 
-	clone(	target? : ViewAttributes) : ViewAttributes { 
+	clone(	target?: ViewAttributes): ViewAttributes { 
 		if(!target) {
 			target = new ViewAttributes();
 		}
@@ -55,7 +55,7 @@ export class ViewAttributes extends NodeAttributes {
 
 
 }
-export function decodeViewAttributes(	inp : DataStream) : ViewAttributes { 
+export function decodeViewAttributes(	inp: DataStream): ViewAttributes { 
 		const obj = new ViewAttributes();
 			obj.decode(inp); 
 			return obj;

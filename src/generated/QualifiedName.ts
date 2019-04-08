@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IQualifiedName {
-		namespaceIndex? : ec.UInt16;
-		name? : string;
+		namespaceIndex?: ec.UInt16;
+		name?: string;
 }
 
 /**
@@ -13,10 +13,10 @@ A string qualified with a namespace index.
 */
 
 export class QualifiedName {
- 		namespaceIndex : ec.UInt16;
-		name : string;
+ 		namespaceIndex: ec.UInt16;
+		name: string;
 
-	constructor(	options? : IQualifiedName) { 
+	constructor(	options?: IQualifiedName) { 
 		options = options || {};
 		this.namespaceIndex= (options.namespaceIndex) ? options.namespaceIndex:null;
 		this.name= (options.name) ? options.name:null;
@@ -24,21 +24,21 @@ export class QualifiedName {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt16(this.namespaceIndex,out);
 		ec.encodeString(this.name,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.namespaceIndex = ec.decodeUInt16(inp);
 		this.name = ec.decodeString(inp);
 
 	}
 
 
-	clone(	target? : QualifiedName) : QualifiedName { 
+	clone(	target?: QualifiedName): QualifiedName { 
 		if(!target) {
 			target = new QualifiedName();
 		}
@@ -49,7 +49,7 @@ export class QualifiedName {
 
 
 }
-export function decodeQualifiedName(	inp : DataStream) : QualifiedName { 
+export function decodeQualifiedName(	inp: DataStream): QualifiedName { 
 		const obj = new QualifiedName();
 			obj.decode(inp); 
 			return obj;

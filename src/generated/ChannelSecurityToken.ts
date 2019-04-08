@@ -4,10 +4,10 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IChannelSecurityToken {
-		channelId? : ec.UInt32;
-		tokenId? : ec.UInt32;
-		createdAt? : Date;
-		revisedLifetime? : ec.UInt32;
+		channelId?: ec.UInt32;
+		tokenId?: ec.UInt32;
+		createdAt?: Date;
+		revisedLifetime?: ec.UInt32;
 }
 
 /**
@@ -15,12 +15,12 @@ The token that identifies a set of keys for an active secure channel.
 */
 
 export class ChannelSecurityToken {
- 		channelId : ec.UInt32;
-		tokenId : ec.UInt32;
-		createdAt : Date;
-		revisedLifetime : ec.UInt32;
+ 		channelId: ec.UInt32;
+		tokenId: ec.UInt32;
+		createdAt: Date;
+		revisedLifetime: ec.UInt32;
 
-	constructor(	options? : IChannelSecurityToken) { 
+	constructor(	options?: IChannelSecurityToken) { 
 		options = options || {};
 		this.channelId= (options.channelId) ? options.channelId:null;
 		this.tokenId= (options.tokenId) ? options.tokenId:null;
@@ -30,7 +30,7 @@ export class ChannelSecurityToken {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.channelId,out);
 		ec.encodeUInt32(this.tokenId,out);
 		ec.encodeDateTime(this.createdAt,out);
@@ -39,7 +39,7 @@ export class ChannelSecurityToken {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.channelId = ec.decodeUInt32(inp);
 		this.tokenId = ec.decodeUInt32(inp);
 		this.createdAt = ec.decodeDateTime(inp);
@@ -48,7 +48,7 @@ export class ChannelSecurityToken {
 	}
 
 
-	clone(	target? : ChannelSecurityToken) : ChannelSecurityToken { 
+	clone(	target?: ChannelSecurityToken): ChannelSecurityToken { 
 		if(!target) {
 			target = new ChannelSecurityToken();
 		}
@@ -61,7 +61,7 @@ export class ChannelSecurityToken {
 
 
 }
-export function decodeChannelSecurityToken(	inp : DataStream) : ChannelSecurityToken { 
+export function decodeChannelSecurityToken(	inp: DataStream): ChannelSecurityToken { 
 		const obj = new ChannelSecurityToken();
 			obj.decode(inp); 
 			return obj;

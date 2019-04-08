@@ -8,10 +8,10 @@ import {decodeBrowseDescription} from './BrowseDescription';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IBrowseRequest {
-		requestHeader? : RequestHeader;
-		view? : ViewDescription;
-		requestedMaxReferencesPerNode? : ec.UInt32;
-		nodesToBrowse? : BrowseDescription[];
+		requestHeader?: RequestHeader;
+		view?: ViewDescription;
+		requestedMaxReferencesPerNode?: ec.UInt32;
+		nodesToBrowse?: BrowseDescription[];
 }
 
 /**
@@ -19,12 +19,12 @@ Browse the references for one or more nodes from the server address space.
 */
 
 export class BrowseRequest {
- 		requestHeader : RequestHeader;
-		view : ViewDescription;
-		requestedMaxReferencesPerNode : ec.UInt32;
-		nodesToBrowse : BrowseDescription[];
+ 		requestHeader: RequestHeader;
+		view: ViewDescription;
+		requestedMaxReferencesPerNode: ec.UInt32;
+		nodesToBrowse: BrowseDescription[];
 
-	constructor(	options? : IBrowseRequest) { 
+	constructor(	options?: IBrowseRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.view= (options.view) ? options.view:new ViewDescription();
@@ -34,7 +34,7 @@ export class BrowseRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		this.view.encode(out);
 		ec.encodeUInt32(this.requestedMaxReferencesPerNode,out);
@@ -43,7 +43,7 @@ export class BrowseRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.view.decode(inp);
 		this.requestedMaxReferencesPerNode = ec.decodeUInt32(inp);
@@ -52,7 +52,7 @@ export class BrowseRequest {
 	}
 
 
-	clone(	target? : BrowseRequest) : BrowseRequest { 
+	clone(	target?: BrowseRequest): BrowseRequest { 
 		if(!target) {
 			target = new BrowseRequest();
 		}
@@ -65,7 +65,7 @@ export class BrowseRequest {
 
 
 }
-export function decodeBrowseRequest(	inp : DataStream) : BrowseRequest { 
+export function decodeBrowseRequest(	inp: DataStream): BrowseRequest { 
 		const obj = new BrowseRequest();
 			obj.decode(inp); 
 			return obj;

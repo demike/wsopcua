@@ -13,18 +13,18 @@ import {InstanceNode} from './InstanceNode';
 import {IInstanceNode} from './InstanceNode';
 
 export interface IObjectNode extends IInstanceNode {
-		nodeId? : ec.NodeId;
-		nodeClass? : NodeClass;
-		browseName? : QualifiedName;
-		displayName? : LocalizedText;
-		description? : LocalizedText;
-		writeMask? : ec.UInt32;
-		userWriteMask? : ec.UInt32;
-		rolePermissions? : RolePermissionType[];
-		userRolePermissions? : RolePermissionType[];
-		accessRestrictions? : ec.UInt16;
-		references? : ReferenceNode[];
-		eventNotifier? : ec.Byte;
+		nodeId?: ec.NodeId;
+		nodeClass?: NodeClass;
+		browseName?: QualifiedName;
+		displayName?: LocalizedText;
+		description?: LocalizedText;
+		writeMask?: ec.UInt32;
+		userWriteMask?: ec.UInt32;
+		rolePermissions?: RolePermissionType[];
+		userRolePermissions?: RolePermissionType[];
+		accessRestrictions?: ec.UInt16;
+		references?: ReferenceNode[];
+		eventNotifier?: ec.Byte;
 }
 
 /**
@@ -32,20 +32,20 @@ Specifies the attributes which belong to object nodes.
 */
 
 export class ObjectNode extends InstanceNode {
- 		nodeId : ec.NodeId;
-		nodeClass : NodeClass;
-		browseName : QualifiedName;
-		displayName : LocalizedText;
-		description : LocalizedText;
-		writeMask : ec.UInt32;
-		userWriteMask : ec.UInt32;
-		rolePermissions : RolePermissionType[];
-		userRolePermissions : RolePermissionType[];
-		accessRestrictions : ec.UInt16;
-		references : ReferenceNode[];
-		eventNotifier : ec.Byte;
+ 		nodeId: ec.NodeId;
+		nodeClass: NodeClass;
+		browseName: QualifiedName;
+		displayName: LocalizedText;
+		description: LocalizedText;
+		writeMask: ec.UInt32;
+		userWriteMask: ec.UInt32;
+		rolePermissions: RolePermissionType[];
+		userRolePermissions: RolePermissionType[];
+		accessRestrictions: ec.UInt16;
+		references: ReferenceNode[];
+		eventNotifier: ec.Byte;
 
-	constructor(	options? : IObjectNode) { 
+	constructor(	options?: IObjectNode) { 
 		options = options || {};
 		super(options);
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
@@ -64,7 +64,7 @@ export class ObjectNode extends InstanceNode {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeNodeId(this.nodeId,out);
 		encodeNodeClass(this.nodeClass,out);
@@ -82,7 +82,7 @@ export class ObjectNode extends InstanceNode {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.nodeId = ec.decodeNodeId(inp);
 		this.nodeClass = decodeNodeClass(inp);
@@ -100,7 +100,7 @@ export class ObjectNode extends InstanceNode {
 	}
 
 
-	clone(	target? : ObjectNode) : ObjectNode { 
+	clone(	target?: ObjectNode): ObjectNode { 
 		if(!target) {
 			target = new ObjectNode();
 		}
@@ -122,7 +122,7 @@ export class ObjectNode extends InstanceNode {
 
 
 }
-export function decodeObjectNode(	inp : DataStream) : ObjectNode { 
+export function decodeObjectNode(	inp: DataStream): ObjectNode { 
 		const obj = new ObjectNode();
 			obj.decode(inp); 
 			return obj;

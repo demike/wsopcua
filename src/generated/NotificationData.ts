@@ -9,7 +9,7 @@ export class NotificationData {
  
 	constructor(){};
 
-	clone(	target? : NotificationData) : NotificationData { 
+	clone(	target?: NotificationData): NotificationData { 
 		if(!target) {
 			target = new NotificationData();
 		}

@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRange {
-		low? : ec.Double;
-		high? : ec.Double;
+		low?: ec.Double;
+		high?: ec.Double;
 }
 
 /**
@@ -13,10 +13,10 @@ export interface IRange {
 */
 
 export class Range {
- 		low : ec.Double;
-		high : ec.Double;
+ 		low: ec.Double;
+		high: ec.Double;
 
-	constructor(	options? : IRange) { 
+	constructor(	options?: IRange) { 
 		options = options || {};
 		this.low= (options.low) ? options.low:null;
 		this.high= (options.high) ? options.high:null;
@@ -24,21 +24,21 @@ export class Range {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeDouble(this.low,out);
 		ec.encodeDouble(this.high,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.low = ec.decodeDouble(inp);
 		this.high = ec.decodeDouble(inp);
 
 	}
 
 
-	clone(	target? : Range) : Range { 
+	clone(	target?: Range): Range { 
 		if(!target) {
 			target = new Range();
 		}
@@ -49,7 +49,7 @@ export class Range {
 
 
 }
-export function decodeRange(	inp : DataStream) : Range { 
+export function decodeRange(	inp: DataStream): Range { 
 		const obj = new Range();
 			obj.decode(inp); 
 			return obj;

@@ -6,11 +6,11 @@ import {DataStream} from '../basic-types/DataStream';
 import {FilterOperand} from './FilterOperand';
 
 export interface IAttributeOperand {
-		nodeId? : ec.NodeId;
-		alias? : string;
-		browsePath? : RelativePath;
-		attributeId? : ec.UInt32;
-		indexRange? : string;
+		nodeId?: ec.NodeId;
+		alias?: string;
+		browsePath?: RelativePath;
+		attributeId?: ec.UInt32;
+		indexRange?: string;
 }
 
 /**
@@ -18,13 +18,13 @@ export interface IAttributeOperand {
 */
 
 export class AttributeOperand extends FilterOperand {
- 		nodeId : ec.NodeId;
-		alias : string;
-		browsePath : RelativePath;
-		attributeId : ec.UInt32;
-		indexRange : string;
+ 		nodeId: ec.NodeId;
+		alias: string;
+		browsePath: RelativePath;
+		attributeId: ec.UInt32;
+		indexRange: string;
 
-	constructor(	options? : IAttributeOperand) { 
+	constructor(	options?: IAttributeOperand) { 
 		options = options || {};
 		super();
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
@@ -36,7 +36,7 @@ export class AttributeOperand extends FilterOperand {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.nodeId,out);
 		ec.encodeString(this.alias,out);
 		this.browsePath.encode(out);
@@ -46,7 +46,7 @@ export class AttributeOperand extends FilterOperand {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.nodeId = ec.decodeNodeId(inp);
 		this.alias = ec.decodeString(inp);
 		this.browsePath.decode(inp);
@@ -56,7 +56,7 @@ export class AttributeOperand extends FilterOperand {
 	}
 
 
-	clone(	target? : AttributeOperand) : AttributeOperand { 
+	clone(	target?: AttributeOperand): AttributeOperand { 
 		if(!target) {
 			target = new AttributeOperand();
 		}
@@ -70,7 +70,7 @@ export class AttributeOperand extends FilterOperand {
 
 
 }
-export function decodeAttributeOperand(	inp : DataStream) : AttributeOperand { 
+export function decodeAttributeOperand(	inp: DataStream): AttributeOperand { 
 		const obj = new AttributeOperand();
 			obj.decode(inp); 
 			return obj;

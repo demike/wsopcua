@@ -5,8 +5,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IIdentityMappingRuleType {
-		criteriaType? : IdentityCriteriaType;
-		criteria? : string;
+		criteriaType?: IdentityCriteriaType;
+		criteria?: string;
 }
 
 /**
@@ -14,10 +14,10 @@ export interface IIdentityMappingRuleType {
 */
 
 export class IdentityMappingRuleType {
- 		criteriaType : IdentityCriteriaType;
-		criteria : string;
+ 		criteriaType: IdentityCriteriaType;
+		criteria: string;
 
-	constructor(	options? : IIdentityMappingRuleType) { 
+	constructor(	options?: IIdentityMappingRuleType) { 
 		options = options || {};
 		this.criteriaType= (options.criteriaType) ? options.criteriaType:null;
 		this.criteria= (options.criteria) ? options.criteria:null;
@@ -25,21 +25,21 @@ export class IdentityMappingRuleType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		encodeIdentityCriteriaType(this.criteriaType,out);
 		ec.encodeString(this.criteria,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.criteriaType = decodeIdentityCriteriaType(inp);
 		this.criteria = ec.decodeString(inp);
 
 	}
 
 
-	clone(	target? : IdentityMappingRuleType) : IdentityMappingRuleType { 
+	clone(	target?: IdentityMappingRuleType): IdentityMappingRuleType { 
 		if(!target) {
 			target = new IdentityMappingRuleType();
 		}
@@ -50,7 +50,7 @@ export class IdentityMappingRuleType {
 
 
 }
-export function decodeIdentityMappingRuleType(	inp : DataStream) : IdentityMappingRuleType { 
+export function decodeIdentityMappingRuleType(	inp: DataStream): IdentityMappingRuleType { 
 		const obj = new IdentityMappingRuleType();
 			obj.decode(inp); 
 			return obj;

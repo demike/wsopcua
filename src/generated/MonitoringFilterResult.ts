@@ -9,7 +9,7 @@ export class MonitoringFilterResult {
  
 	constructor(){};
 
-	clone(	target? : MonitoringFilterResult) : MonitoringFilterResult { 
+	clone(	target?: MonitoringFilterResult): MonitoringFilterResult { 
 		if(!target) {
 			target = new MonitoringFilterResult();
 		}

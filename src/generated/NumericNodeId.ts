@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface INumericNodeId {
-		namespaceIndex? : ec.UInt16;
-		identifier? : ec.UInt32;
+		namespaceIndex?: ec.UInt16;
+		identifier?: ec.UInt32;
 }
 
 /**
@@ -13,10 +13,10 @@ export interface INumericNodeId {
 */
 
 export class NumericNodeId {
- 		namespaceIndex : ec.UInt16;
-		identifier : ec.UInt32;
+ 		namespaceIndex: ec.UInt16;
+		identifier: ec.UInt32;
 
-	constructor(	options? : INumericNodeId) { 
+	constructor(	options?: INumericNodeId) { 
 		options = options || {};
 		this.namespaceIndex= (options.namespaceIndex) ? options.namespaceIndex:null;
 		this.identifier= (options.identifier) ? options.identifier:null;
@@ -24,21 +24,21 @@ export class NumericNodeId {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt16(this.namespaceIndex,out);
 		ec.encodeUInt32(this.identifier,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.namespaceIndex = ec.decodeUInt16(inp);
 		this.identifier = ec.decodeUInt32(inp);
 
 	}
 
 
-	clone(	target? : NumericNodeId) : NumericNodeId { 
+	clone(	target?: NumericNodeId): NumericNodeId { 
 		if(!target) {
 			target = new NumericNodeId();
 		}
@@ -49,7 +49,7 @@ export class NumericNodeId {
 
 
 }
-export function decodeNumericNodeId(	inp : DataStream) : NumericNodeId { 
+export function decodeNumericNodeId(	inp: DataStream): NumericNodeId { 
 		const obj = new NumericNodeId();
 			obj.decode(inp); 
 			return obj;

@@ -9,8 +9,8 @@ import {HistoryUpdateDetails} from './HistoryUpdateDetails';
 import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
 export interface IUpdateStructureDataDetails extends IHistoryUpdateDetails {
-		performInsertReplace? : PerformUpdateType;
-		updateValues? : DataValue[];
+		performInsertReplace?: PerformUpdateType;
+		updateValues?: DataValue[];
 }
 
 /**
@@ -18,10 +18,10 @@ export interface IUpdateStructureDataDetails extends IHistoryUpdateDetails {
 */
 
 export class UpdateStructureDataDetails extends HistoryUpdateDetails {
- 		performInsertReplace : PerformUpdateType;
-		updateValues : DataValue[];
+ 		performInsertReplace: PerformUpdateType;
+		updateValues: DataValue[];
 
-	constructor(	options? : IUpdateStructureDataDetails) { 
+	constructor(	options?: IUpdateStructureDataDetails) { 
 		options = options || {};
 		super(options);
 		this.performInsertReplace= (options.performInsertReplace) ? options.performInsertReplace:null;
@@ -30,7 +30,7 @@ export class UpdateStructureDataDetails extends HistoryUpdateDetails {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		encodePerformUpdateType(this.performInsertReplace,out);
 		ec.encodeArray(this.updateValues,out);
@@ -38,7 +38,7 @@ export class UpdateStructureDataDetails extends HistoryUpdateDetails {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.performInsertReplace = decodePerformUpdateType(inp);
 		this.updateValues = ec.decodeArray(inp,decodeDataValue);
@@ -46,7 +46,7 @@ export class UpdateStructureDataDetails extends HistoryUpdateDetails {
 	}
 
 
-	clone(	target? : UpdateStructureDataDetails) : UpdateStructureDataDetails { 
+	clone(	target?: UpdateStructureDataDetails): UpdateStructureDataDetails { 
 		if(!target) {
 			target = new UpdateStructureDataDetails();
 		}
@@ -58,7 +58,7 @@ export class UpdateStructureDataDetails extends HistoryUpdateDetails {
 
 
 }
-export function decodeUpdateStructureDataDetails(	inp : DataStream) : UpdateStructureDataDetails { 
+export function decodeUpdateStructureDataDetails(	inp: DataStream): UpdateStructureDataDetails { 
 		const obj = new UpdateStructureDataDetails();
 			obj.decode(inp); 
 			return obj;

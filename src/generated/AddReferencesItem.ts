@@ -5,12 +5,12 @@ import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IAddReferencesItem {
-		sourceNodeId? : ec.NodeId;
-		referenceTypeId? : ec.NodeId;
-		isForward? : boolean;
-		targetServerUri? : string;
-		targetNodeId? : ec.ExpandedNodeId;
-		targetNodeClass? : NodeClass;
+		sourceNodeId?: ec.NodeId;
+		referenceTypeId?: ec.NodeId;
+		isForward?: boolean;
+		targetServerUri?: string;
+		targetNodeId?: ec.ExpandedNodeId;
+		targetNodeClass?: NodeClass;
 }
 
 /**
@@ -18,14 +18,14 @@ A request to add a reference to the server address space.
 */
 
 export class AddReferencesItem {
- 		sourceNodeId : ec.NodeId;
-		referenceTypeId : ec.NodeId;
-		isForward : boolean;
-		targetServerUri : string;
-		targetNodeId : ec.ExpandedNodeId;
-		targetNodeClass : NodeClass;
+ 		sourceNodeId: ec.NodeId;
+		referenceTypeId: ec.NodeId;
+		isForward: boolean;
+		targetServerUri: string;
+		targetNodeId: ec.ExpandedNodeId;
+		targetNodeClass: NodeClass;
 
-	constructor(	options? : IAddReferencesItem) { 
+	constructor(	options?: IAddReferencesItem) { 
 		options = options || {};
 		this.sourceNodeId= (options.sourceNodeId) ? options.sourceNodeId:null;
 		this.referenceTypeId= (options.referenceTypeId) ? options.referenceTypeId:null;
@@ -37,7 +37,7 @@ export class AddReferencesItem {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.sourceNodeId,out);
 		ec.encodeNodeId(this.referenceTypeId,out);
 		ec.encodeBoolean(this.isForward,out);
@@ -48,7 +48,7 @@ export class AddReferencesItem {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.sourceNodeId = ec.decodeNodeId(inp);
 		this.referenceTypeId = ec.decodeNodeId(inp);
 		this.isForward = ec.decodeBoolean(inp);
@@ -59,7 +59,7 @@ export class AddReferencesItem {
 	}
 
 
-	clone(	target? : AddReferencesItem) : AddReferencesItem { 
+	clone(	target?: AddReferencesItem): AddReferencesItem { 
 		if(!target) {
 			target = new AddReferencesItem();
 		}
@@ -74,7 +74,7 @@ export class AddReferencesItem {
 
 
 }
-export function decodeAddReferencesItem(	inp : DataStream) : AddReferencesItem { 
+export function decodeAddReferencesItem(	inp: DataStream): AddReferencesItem { 
 		const obj = new AddReferencesItem();
 			obj.decode(inp); 
 			return obj;

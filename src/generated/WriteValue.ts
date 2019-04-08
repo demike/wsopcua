@@ -5,10 +5,10 @@ import {DataValue} from './DataValue';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IWriteValue {
-		nodeId? : ec.NodeId;
-		attributeId? : ec.UInt32;
-		indexRange? : string;
-		value? : DataValue;
+		nodeId?: ec.NodeId;
+		attributeId?: ec.UInt32;
+		indexRange?: string;
+		value?: DataValue;
 }
 
 /**
@@ -16,12 +16,12 @@ export interface IWriteValue {
 */
 
 export class WriteValue {
- 		nodeId : ec.NodeId;
-		attributeId : ec.UInt32;
-		indexRange : string;
-		value : DataValue;
+ 		nodeId: ec.NodeId;
+		attributeId: ec.UInt32;
+		indexRange: string;
+		value: DataValue;
 
-	constructor(	options? : IWriteValue) { 
+	constructor(	options?: IWriteValue) { 
 		options = options || {};
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
 		this.attributeId= (options.attributeId) ? options.attributeId:null;
@@ -31,7 +31,7 @@ export class WriteValue {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.nodeId,out);
 		ec.encodeUInt32(this.attributeId,out);
 		ec.encodeString(this.indexRange,out);
@@ -40,7 +40,7 @@ export class WriteValue {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.nodeId = ec.decodeNodeId(inp);
 		this.attributeId = ec.decodeUInt32(inp);
 		this.indexRange = ec.decodeString(inp);
@@ -49,7 +49,7 @@ export class WriteValue {
 	}
 
 
-	clone(	target? : WriteValue) : WriteValue { 
+	clone(	target?: WriteValue): WriteValue { 
 		if(!target) {
 			target = new WriteValue();
 		}
@@ -62,7 +62,7 @@ export class WriteValue {
 
 
 }
-export function decodeWriteValue(	inp : DataStream) : WriteValue { 
+export function decodeWriteValue(	inp: DataStream): WriteValue { 
 		const obj = new WriteValue();
 			obj.decode(inp); 
 			return obj;

@@ -4,7 +4,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryUpdateDetails {
-		nodeId? : ec.NodeId;
+		nodeId?: ec.NodeId;
 }
 
 /**
@@ -12,28 +12,28 @@ export interface IHistoryUpdateDetails {
 */
 
 export class HistoryUpdateDetails {
- 		nodeId : ec.NodeId;
+ 		nodeId: ec.NodeId;
 
-	constructor(	options? : IHistoryUpdateDetails) { 
+	constructor(	options?: IHistoryUpdateDetails) { 
 		options = options || {};
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.nodeId,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.nodeId = ec.decodeNodeId(inp);
 
 	}
 
 
-	clone(	target? : HistoryUpdateDetails) : HistoryUpdateDetails { 
+	clone(	target?: HistoryUpdateDetails): HistoryUpdateDetails { 
 		if(!target) {
 			target = new HistoryUpdateDetails();
 		}
@@ -43,7 +43,7 @@ export class HistoryUpdateDetails {
 
 
 }
-export function decodeHistoryUpdateDetails(	inp : DataStream) : HistoryUpdateDetails { 
+export function decodeHistoryUpdateDetails(	inp: DataStream): HistoryUpdateDetails { 
 		const obj = new HistoryUpdateDetails();
 			obj.decode(inp); 
 			return obj;

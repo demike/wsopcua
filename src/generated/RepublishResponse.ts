@@ -6,8 +6,8 @@ import {DataStream} from '../basic-types/DataStream';
 import * as ec from '../basic-types';
 
 export interface IRepublishResponse {
-		responseHeader? : ResponseHeader;
-		notificationMessage? : NotificationMessage;
+		responseHeader?: ResponseHeader;
+		notificationMessage?: NotificationMessage;
 }
 
 /**
@@ -15,10 +15,10 @@ export interface IRepublishResponse {
 */
 
 export class RepublishResponse {
- 		responseHeader : ResponseHeader;
-		notificationMessage : NotificationMessage;
+ 		responseHeader: ResponseHeader;
+		notificationMessage: NotificationMessage;
 
-	constructor(	options? : IRepublishResponse) { 
+	constructor(	options?: IRepublishResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.notificationMessage= (options.notificationMessage) ? options.notificationMessage:new NotificationMessage();
@@ -26,21 +26,21 @@ export class RepublishResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		this.notificationMessage.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.notificationMessage.decode(inp);
 
 	}
 
 
-	clone(	target? : RepublishResponse) : RepublishResponse { 
+	clone(	target?: RepublishResponse): RepublishResponse { 
 		if(!target) {
 			target = new RepublishResponse();
 		}
@@ -51,7 +51,7 @@ export class RepublishResponse {
 
 
 }
-export function decodeRepublishResponse(	inp : DataStream) : RepublishResponse { 
+export function decodeRepublishResponse(	inp: DataStream): RepublishResponse { 
 		const obj = new RepublishResponse();
 			obj.decode(inp); 
 			return obj;

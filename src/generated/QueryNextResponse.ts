@@ -7,9 +7,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IQueryNextResponse {
-		responseHeader? : ResponseHeader;
-		queryDataSets? : QueryDataSet[];
-		revisedContinuationPoint? : Uint8Array;
+		responseHeader?: ResponseHeader;
+		queryDataSets?: QueryDataSet[];
+		revisedContinuationPoint?: Uint8Array;
 }
 
 /**
@@ -17,11 +17,11 @@ export interface IQueryNextResponse {
 */
 
 export class QueryNextResponse {
- 		responseHeader : ResponseHeader;
-		queryDataSets : QueryDataSet[];
-		revisedContinuationPoint : Uint8Array;
+ 		responseHeader: ResponseHeader;
+		queryDataSets: QueryDataSet[];
+		revisedContinuationPoint: Uint8Array;
 
-	constructor(	options? : IQueryNextResponse) { 
+	constructor(	options?: IQueryNextResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.queryDataSets= (options.queryDataSets) ? options.queryDataSets:[];
@@ -30,7 +30,7 @@ export class QueryNextResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.queryDataSets,out);
 		ec.encodeByteString(this.revisedContinuationPoint,out);
@@ -38,7 +38,7 @@ export class QueryNextResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.queryDataSets = ec.decodeArray(inp,decodeQueryDataSet);
 		this.revisedContinuationPoint = ec.decodeByteString(inp);
@@ -46,7 +46,7 @@ export class QueryNextResponse {
 	}
 
 
-	clone(	target? : QueryNextResponse) : QueryNextResponse { 
+	clone(	target?: QueryNextResponse): QueryNextResponse { 
 		if(!target) {
 			target = new QueryNextResponse();
 		}
@@ -58,7 +58,7 @@ export class QueryNextResponse {
 
 
 }
-export function decodeQueryNextResponse(	inp : DataStream) : QueryNextResponse { 
+export function decodeQueryNextResponse(	inp: DataStream): QueryNextResponse { 
 		const obj = new QueryNextResponse();
 			obj.decode(inp); 
 			return obj;

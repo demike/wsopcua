@@ -6,9 +6,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRegisterServer2Request {
-		requestHeader? : RequestHeader;
-		server? : RegisteredServer;
-		discoveryConfiguration? : ec.ExtensionObject[];
+		requestHeader?: RequestHeader;
+		server?: RegisteredServer;
+		discoveryConfiguration?: ec.ExtensionObject[];
 }
 
 /**
@@ -16,11 +16,11 @@ export interface IRegisterServer2Request {
 */
 
 export class RegisterServer2Request {
- 		requestHeader : RequestHeader;
-		server : RegisteredServer;
-		discoveryConfiguration : ec.ExtensionObject[];
+ 		requestHeader: RequestHeader;
+		server: RegisteredServer;
+		discoveryConfiguration: ec.ExtensionObject[];
 
-	constructor(	options? : IRegisterServer2Request) { 
+	constructor(	options?: IRegisterServer2Request) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.server= (options.server) ? options.server:new RegisteredServer();
@@ -29,7 +29,7 @@ export class RegisterServer2Request {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		this.server.encode(out);
 		ec.encodeArray(this.discoveryConfiguration,out,ec.encodeExtensionObject);
@@ -37,7 +37,7 @@ export class RegisterServer2Request {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.server.decode(inp);
 		this.discoveryConfiguration = ec.decodeArray(inp,ec.decodeExtensionObject);
@@ -45,7 +45,7 @@ export class RegisterServer2Request {
 	}
 
 
-	clone(	target? : RegisterServer2Request) : RegisterServer2Request { 
+	clone(	target?: RegisterServer2Request): RegisterServer2Request { 
 		if(!target) {
 			target = new RegisterServer2Request();
 		}
@@ -57,7 +57,7 @@ export class RegisterServer2Request {
 
 
 }
-export function decodeRegisterServer2Request(	inp : DataStream) : RegisterServer2Request { 
+export function decodeRegisterServer2Request(	inp: DataStream): RegisterServer2Request { 
 		const obj = new RegisterServer2Request();
 			obj.decode(inp); 
 			return obj;

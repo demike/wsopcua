@@ -7,9 +7,9 @@ import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
 export interface IReferenceTypeAttributes extends INodeAttributes {
-		isAbstract? : boolean;
-		symmetric? : boolean;
-		inverseName? : LocalizedText;
+		isAbstract?: boolean;
+		symmetric?: boolean;
+		inverseName?: LocalizedText;
 }
 
 /**
@@ -17,11 +17,11 @@ The attributes for a reference type node.
 */
 
 export class ReferenceTypeAttributes extends NodeAttributes {
- 		isAbstract : boolean;
-		symmetric : boolean;
-		inverseName : LocalizedText;
+ 		isAbstract: boolean;
+		symmetric: boolean;
+		inverseName: LocalizedText;
 
-	constructor(	options? : IReferenceTypeAttributes) { 
+	constructor(	options?: IReferenceTypeAttributes) { 
 		options = options || {};
 		super(options);
 		this.isAbstract= (options.isAbstract) ? options.isAbstract:null;
@@ -31,7 +31,7 @@ export class ReferenceTypeAttributes extends NodeAttributes {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeBoolean(this.isAbstract,out);
 		ec.encodeBoolean(this.symmetric,out);
@@ -40,7 +40,7 @@ export class ReferenceTypeAttributes extends NodeAttributes {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.isAbstract = ec.decodeBoolean(inp);
 		this.symmetric = ec.decodeBoolean(inp);
@@ -49,7 +49,7 @@ export class ReferenceTypeAttributes extends NodeAttributes {
 	}
 
 
-	clone(	target? : ReferenceTypeAttributes) : ReferenceTypeAttributes { 
+	clone(	target?: ReferenceTypeAttributes): ReferenceTypeAttributes { 
 		if(!target) {
 			target = new ReferenceTypeAttributes();
 		}
@@ -62,7 +62,7 @@ export class ReferenceTypeAttributes extends NodeAttributes {
 
 
 }
-export function decodeReferenceTypeAttributes(	inp : DataStream) : ReferenceTypeAttributes { 
+export function decodeReferenceTypeAttributes(	inp: DataStream): ReferenceTypeAttributes { 
 		const obj = new ReferenceTypeAttributes();
 			obj.decode(inp); 
 			return obj;

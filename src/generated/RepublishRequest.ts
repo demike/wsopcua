@@ -5,9 +5,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRepublishRequest {
-		requestHeader? : RequestHeader;
-		subscriptionId? : ec.UInt32;
-		retransmitSequenceNumber? : ec.UInt32;
+		requestHeader?: RequestHeader;
+		subscriptionId?: ec.UInt32;
+		retransmitSequenceNumber?: ec.UInt32;
 }
 
 /**
@@ -15,11 +15,11 @@ export interface IRepublishRequest {
 */
 
 export class RepublishRequest {
- 		requestHeader : RequestHeader;
-		subscriptionId : ec.UInt32;
-		retransmitSequenceNumber : ec.UInt32;
+ 		requestHeader: RequestHeader;
+		subscriptionId: ec.UInt32;
+		retransmitSequenceNumber: ec.UInt32;
 
-	constructor(	options? : IRepublishRequest) { 
+	constructor(	options?: IRepublishRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.subscriptionId= (options.subscriptionId) ? options.subscriptionId:null;
@@ -28,7 +28,7 @@ export class RepublishRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeUInt32(this.subscriptionId,out);
 		ec.encodeUInt32(this.retransmitSequenceNumber,out);
@@ -36,7 +36,7 @@ export class RepublishRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.subscriptionId = ec.decodeUInt32(inp);
 		this.retransmitSequenceNumber = ec.decodeUInt32(inp);
@@ -44,7 +44,7 @@ export class RepublishRequest {
 	}
 
 
-	clone(	target? : RepublishRequest) : RepublishRequest { 
+	clone(	target?: RepublishRequest): RepublishRequest { 
 		if(!target) {
 			target = new RepublishRequest();
 		}
@@ -56,7 +56,7 @@ export class RepublishRequest {
 
 
 }
-export function decodeRepublishRequest(	inp : DataStream) : RepublishRequest { 
+export function decodeRepublishRequest(	inp: DataStream): RepublishRequest { 
 		const obj = new RepublishRequest();
 			obj.decode(inp); 
 			return obj;

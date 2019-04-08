@@ -5,13 +5,13 @@ import {LocalizedText} from './LocalizedText';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IStructureField {
-		name? : string;
-		description? : LocalizedText;
-		dataType? : ec.NodeId;
-		valueRank? : ec.Int32;
-		arrayDimensions? : ec.UInt32[];
-		maxStringLength? : ec.UInt32;
-		isOptional? : boolean;
+		name?: string;
+		description?: LocalizedText;
+		dataType?: ec.NodeId;
+		valueRank?: ec.Int32;
+		arrayDimensions?: ec.UInt32[];
+		maxStringLength?: ec.UInt32;
+		isOptional?: boolean;
 }
 
 /**
@@ -19,15 +19,15 @@ export interface IStructureField {
 */
 
 export class StructureField {
- 		name : string;
-		description : LocalizedText;
-		dataType : ec.NodeId;
-		valueRank : ec.Int32;
-		arrayDimensions : ec.UInt32[];
-		maxStringLength : ec.UInt32;
-		isOptional : boolean;
+ 		name: string;
+		description: LocalizedText;
+		dataType: ec.NodeId;
+		valueRank: ec.Int32;
+		arrayDimensions: ec.UInt32[];
+		maxStringLength: ec.UInt32;
+		isOptional: boolean;
 
-	constructor(	options? : IStructureField) { 
+	constructor(	options?: IStructureField) { 
 		options = options || {};
 		this.name= (options.name) ? options.name:null;
 		this.description= (options.description) ? options.description:new LocalizedText();
@@ -40,7 +40,7 @@ export class StructureField {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.name,out);
 		this.description.encode(out);
 		ec.encodeNodeId(this.dataType,out);
@@ -52,7 +52,7 @@ export class StructureField {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.name = ec.decodeString(inp);
 		this.description.decode(inp);
 		this.dataType = ec.decodeNodeId(inp);
@@ -64,7 +64,7 @@ export class StructureField {
 	}
 
 
-	clone(	target? : StructureField) : StructureField { 
+	clone(	target?: StructureField): StructureField { 
 		if(!target) {
 			target = new StructureField();
 		}
@@ -80,7 +80,7 @@ export class StructureField {
 
 
 }
-export function decodeStructureField(	inp : DataStream) : StructureField { 
+export function decodeStructureField(	inp: DataStream): StructureField { 
 		const obj = new StructureField();
 			obj.decode(inp); 
 			return obj;

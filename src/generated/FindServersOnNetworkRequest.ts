@@ -5,10 +5,10 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IFindServersOnNetworkRequest {
-		requestHeader? : RequestHeader;
-		startingRecordId? : ec.UInt32;
-		maxRecordsToReturn? : ec.UInt32;
-		serverCapabilityFilter? : string[];
+		requestHeader?: RequestHeader;
+		startingRecordId?: ec.UInt32;
+		maxRecordsToReturn?: ec.UInt32;
+		serverCapabilityFilter?: string[];
 }
 
 /**
@@ -16,12 +16,12 @@ export interface IFindServersOnNetworkRequest {
 */
 
 export class FindServersOnNetworkRequest {
- 		requestHeader : RequestHeader;
-		startingRecordId : ec.UInt32;
-		maxRecordsToReturn : ec.UInt32;
-		serverCapabilityFilter : string[];
+ 		requestHeader: RequestHeader;
+		startingRecordId: ec.UInt32;
+		maxRecordsToReturn: ec.UInt32;
+		serverCapabilityFilter: string[];
 
-	constructor(	options? : IFindServersOnNetworkRequest) { 
+	constructor(	options?: IFindServersOnNetworkRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.startingRecordId= (options.startingRecordId) ? options.startingRecordId:null;
@@ -31,7 +31,7 @@ export class FindServersOnNetworkRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeUInt32(this.startingRecordId,out);
 		ec.encodeUInt32(this.maxRecordsToReturn,out);
@@ -40,7 +40,7 @@ export class FindServersOnNetworkRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.startingRecordId = ec.decodeUInt32(inp);
 		this.maxRecordsToReturn = ec.decodeUInt32(inp);
@@ -49,7 +49,7 @@ export class FindServersOnNetworkRequest {
 	}
 
 
-	clone(	target? : FindServersOnNetworkRequest) : FindServersOnNetworkRequest { 
+	clone(	target?: FindServersOnNetworkRequest): FindServersOnNetworkRequest { 
 		if(!target) {
 			target = new FindServersOnNetworkRequest();
 		}
@@ -62,7 +62,7 @@ export class FindServersOnNetworkRequest {
 
 
 }
-export function decodeFindServersOnNetworkRequest(	inp : DataStream) : FindServersOnNetworkRequest { 
+export function decodeFindServersOnNetworkRequest(	inp: DataStream): FindServersOnNetworkRequest { 
 		const obj = new FindServersOnNetworkRequest();
 			obj.decode(inp); 
 			return obj;

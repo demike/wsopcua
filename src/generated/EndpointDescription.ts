@@ -8,14 +8,14 @@ import {decodeUserTokenPolicy} from './UserTokenPolicy';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IEndpointDescription {
-		endpointUrl? : string;
-		server? : ApplicationDescription;
-		serverCertificate? : Uint8Array;
-		securityMode? : MessageSecurityMode;
-		securityPolicyUri? : string;
-		userIdentityTokens? : UserTokenPolicy[];
-		transportProfileUri? : string;
-		securityLevel? : ec.Byte;
+		endpointUrl?: string;
+		server?: ApplicationDescription;
+		serverCertificate?: Uint8Array;
+		securityMode?: MessageSecurityMode;
+		securityPolicyUri?: string;
+		userIdentityTokens?: UserTokenPolicy[];
+		transportProfileUri?: string;
+		securityLevel?: ec.Byte;
 }
 
 /**
@@ -23,16 +23,16 @@ The description of a endpoint that can be used to access a server.
 */
 
 export class EndpointDescription {
- 		endpointUrl : string;
-		server : ApplicationDescription;
-		serverCertificate : Uint8Array;
-		securityMode : MessageSecurityMode;
-		securityPolicyUri : string;
-		userIdentityTokens : UserTokenPolicy[];
-		transportProfileUri : string;
-		securityLevel : ec.Byte;
+ 		endpointUrl: string;
+		server: ApplicationDescription;
+		serverCertificate: Uint8Array;
+		securityMode: MessageSecurityMode;
+		securityPolicyUri: string;
+		userIdentityTokens: UserTokenPolicy[];
+		transportProfileUri: string;
+		securityLevel: ec.Byte;
 
-	constructor(	options? : IEndpointDescription) { 
+	constructor(	options?: IEndpointDescription) { 
 		options = options || {};
 		this.endpointUrl= (options.endpointUrl) ? options.endpointUrl:null;
 		this.server= (options.server) ? options.server:new ApplicationDescription();
@@ -46,7 +46,7 @@ export class EndpointDescription {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.endpointUrl,out);
 		this.server.encode(out);
 		ec.encodeByteString(this.serverCertificate,out);
@@ -59,7 +59,7 @@ export class EndpointDescription {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.endpointUrl = ec.decodeString(inp);
 		this.server.decode(inp);
 		this.serverCertificate = ec.decodeByteString(inp);
@@ -72,7 +72,7 @@ export class EndpointDescription {
 	}
 
 
-	clone(	target? : EndpointDescription) : EndpointDescription { 
+	clone(	target?: EndpointDescription): EndpointDescription { 
 		if(!target) {
 			target = new EndpointDescription();
 		}
@@ -89,7 +89,7 @@ export class EndpointDescription {
 
 
 }
-export function decodeEndpointDescription(	inp : DataStream) : EndpointDescription { 
+export function decodeEndpointDescription(	inp: DataStream): EndpointDescription { 
 		const obj = new EndpointDescription();
 			obj.decode(inp); 
 			return obj;

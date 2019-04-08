@@ -8,10 +8,10 @@ import {decodeVariant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ICallMethodResult {
-		statusCode? : ec.StatusCode;
-		inputArgumentResults? : ec.StatusCode[];
-		inputArgumentDiagnosticInfos? : DiagnosticInfo[];
-		outputArguments? : Variant[];
+		statusCode?: ec.StatusCode;
+		inputArgumentResults?: ec.StatusCode[];
+		inputArgumentDiagnosticInfos?: DiagnosticInfo[];
+		outputArguments?: Variant[];
 }
 
 /**
@@ -19,12 +19,12 @@ export interface ICallMethodResult {
 */
 
 export class CallMethodResult {
- 		statusCode : ec.StatusCode;
-		inputArgumentResults : ec.StatusCode[];
-		inputArgumentDiagnosticInfos : DiagnosticInfo[];
-		outputArguments : Variant[];
+ 		statusCode: ec.StatusCode;
+		inputArgumentResults: ec.StatusCode[];
+		inputArgumentDiagnosticInfos: DiagnosticInfo[];
+		outputArguments: Variant[];
 
-	constructor(	options? : ICallMethodResult) { 
+	constructor(	options?: ICallMethodResult) { 
 		options = options || {};
 		this.statusCode= (options.statusCode) ? options.statusCode:null;
 		this.inputArgumentResults= (options.inputArgumentResults) ? options.inputArgumentResults:[];
@@ -34,7 +34,7 @@ export class CallMethodResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeStatusCode(this.statusCode,out);
 		ec.encodeArray(this.inputArgumentResults,out,ec.encodeStatusCode);
 		ec.encodeArray(this.inputArgumentDiagnosticInfos,out);
@@ -43,7 +43,7 @@ export class CallMethodResult {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.statusCode = ec.decodeStatusCode(inp);
 		this.inputArgumentResults = ec.decodeArray(inp,ec.decodeStatusCode);
 		this.inputArgumentDiagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -52,7 +52,7 @@ export class CallMethodResult {
 	}
 
 
-	clone(	target? : CallMethodResult) : CallMethodResult { 
+	clone(	target?: CallMethodResult): CallMethodResult { 
 		if(!target) {
 			target = new CallMethodResult();
 		}
@@ -65,7 +65,7 @@ export class CallMethodResult {
 
 
 }
-export function decodeCallMethodResult(	inp : DataStream) : CallMethodResult { 
+export function decodeCallMethodResult(	inp: DataStream): CallMethodResult { 
 		const obj = new CallMethodResult();
 			obj.decode(inp); 
 			return obj;

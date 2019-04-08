@@ -7,10 +7,10 @@ import {decodeStructureField} from './StructureField';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IStructureDefinition {
-		defaultEncodingId? : ec.NodeId;
-		baseDataType? : ec.NodeId;
-		structureType? : StructureType;
-		fields? : StructureField[];
+		defaultEncodingId?: ec.NodeId;
+		baseDataType?: ec.NodeId;
+		structureType?: StructureType;
+		fields?: StructureField[];
 }
 
 /**
@@ -18,12 +18,12 @@ export interface IStructureDefinition {
 */
 
 export class StructureDefinition {
- 		defaultEncodingId : ec.NodeId;
-		baseDataType : ec.NodeId;
-		structureType : StructureType;
-		fields : StructureField[];
+ 		defaultEncodingId: ec.NodeId;
+		baseDataType: ec.NodeId;
+		structureType: StructureType;
+		fields: StructureField[];
 
-	constructor(	options? : IStructureDefinition) { 
+	constructor(	options?: IStructureDefinition) { 
 		options = options || {};
 		this.defaultEncodingId= (options.defaultEncodingId) ? options.defaultEncodingId:null;
 		this.baseDataType= (options.baseDataType) ? options.baseDataType:null;
@@ -33,7 +33,7 @@ export class StructureDefinition {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.defaultEncodingId,out);
 		ec.encodeNodeId(this.baseDataType,out);
 		encodeStructureType(this.structureType,out);
@@ -42,7 +42,7 @@ export class StructureDefinition {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.defaultEncodingId = ec.decodeNodeId(inp);
 		this.baseDataType = ec.decodeNodeId(inp);
 		this.structureType = decodeStructureType(inp);
@@ -51,7 +51,7 @@ export class StructureDefinition {
 	}
 
 
-	clone(	target? : StructureDefinition) : StructureDefinition { 
+	clone(	target?: StructureDefinition): StructureDefinition { 
 		if(!target) {
 			target = new StructureDefinition();
 		}
@@ -64,7 +64,7 @@ export class StructureDefinition {
 
 
 }
-export function decodeStructureDefinition(	inp : DataStream) : StructureDefinition { 
+export function decodeStructureDefinition(	inp: DataStream): StructureDefinition { 
 		const obj = new StructureDefinition();
 			obj.decode(inp); 
 			return obj;

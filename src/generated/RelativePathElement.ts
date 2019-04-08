@@ -5,10 +5,10 @@ import {QualifiedName} from './QualifiedName';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRelativePathElement {
-		referenceTypeId? : ec.NodeId;
-		isInverse? : boolean;
-		includeSubtypes? : boolean;
-		targetName? : QualifiedName;
+		referenceTypeId?: ec.NodeId;
+		isInverse?: boolean;
+		includeSubtypes?: boolean;
+		targetName?: QualifiedName;
 }
 
 /**
@@ -16,12 +16,12 @@ An element in a relative path.
 */
 
 export class RelativePathElement {
- 		referenceTypeId : ec.NodeId;
-		isInverse : boolean;
-		includeSubtypes : boolean;
-		targetName : QualifiedName;
+ 		referenceTypeId: ec.NodeId;
+		isInverse: boolean;
+		includeSubtypes: boolean;
+		targetName: QualifiedName;
 
-	constructor(	options? : IRelativePathElement) { 
+	constructor(	options?: IRelativePathElement) { 
 		options = options || {};
 		this.referenceTypeId= (options.referenceTypeId) ? options.referenceTypeId:null;
 		this.isInverse= (options.isInverse) ? options.isInverse:null;
@@ -31,7 +31,7 @@ export class RelativePathElement {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.referenceTypeId,out);
 		ec.encodeBoolean(this.isInverse,out);
 		ec.encodeBoolean(this.includeSubtypes,out);
@@ -40,7 +40,7 @@ export class RelativePathElement {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.referenceTypeId = ec.decodeNodeId(inp);
 		this.isInverse = ec.decodeBoolean(inp);
 		this.includeSubtypes = ec.decodeBoolean(inp);
@@ -49,7 +49,7 @@ export class RelativePathElement {
 	}
 
 
-	clone(	target? : RelativePathElement) : RelativePathElement { 
+	clone(	target?: RelativePathElement): RelativePathElement { 
 		if(!target) {
 			target = new RelativePathElement();
 		}
@@ -62,7 +62,7 @@ export class RelativePathElement {
 
 
 }
-export function decodeRelativePathElement(	inp : DataStream) : RelativePathElement { 
+export function decodeRelativePathElement(	inp: DataStream): RelativePathElement { 
 		const obj = new RelativePathElement();
 			obj.decode(inp); 
 			return obj;

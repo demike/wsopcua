@@ -5,8 +5,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IContentFilterElement {
-		filterOperator? : FilterOperator;
-		filterOperands? : ec.ExtensionObject[];
+		filterOperator?: FilterOperator;
+		filterOperands?: ec.ExtensionObject[];
 }
 
 /**
@@ -14,10 +14,10 @@ export interface IContentFilterElement {
 */
 
 export class ContentFilterElement {
- 		filterOperator : FilterOperator;
-		filterOperands : ec.ExtensionObject[];
+ 		filterOperator: FilterOperator;
+		filterOperands: ec.ExtensionObject[];
 
-	constructor(	options? : IContentFilterElement) { 
+	constructor(	options?: IContentFilterElement) { 
 		options = options || {};
 		this.filterOperator= (options.filterOperator) ? options.filterOperator:null;
 		this.filterOperands= (options.filterOperands) ? options.filterOperands:[];
@@ -25,21 +25,21 @@ export class ContentFilterElement {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		encodeFilterOperator(this.filterOperator,out);
 		ec.encodeArray(this.filterOperands,out,ec.encodeExtensionObject);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.filterOperator = decodeFilterOperator(inp);
 		this.filterOperands = ec.decodeArray(inp,ec.decodeExtensionObject);
 
 	}
 
 
-	clone(	target? : ContentFilterElement) : ContentFilterElement { 
+	clone(	target?: ContentFilterElement): ContentFilterElement { 
 		if(!target) {
 			target = new ContentFilterElement();
 		}
@@ -50,7 +50,7 @@ export class ContentFilterElement {
 
 
 }
-export function decodeContentFilterElement(	inp : DataStream) : ContentFilterElement { 
+export function decodeContentFilterElement(	inp: DataStream): ContentFilterElement { 
 		const obj = new ContentFilterElement();
 			obj.decode(inp); 
 			return obj;

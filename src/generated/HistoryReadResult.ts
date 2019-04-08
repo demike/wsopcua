@@ -4,9 +4,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryReadResult {
-		statusCode? : ec.StatusCode;
-		continuationPoint? : Uint8Array;
-		historyData? : ec.ExtensionObject;
+		statusCode?: ec.StatusCode;
+		continuationPoint?: Uint8Array;
+		historyData?: ec.ExtensionObject;
 }
 
 /**
@@ -14,11 +14,11 @@ export interface IHistoryReadResult {
 */
 
 export class HistoryReadResult {
- 		statusCode : ec.StatusCode;
-		continuationPoint : Uint8Array;
-		historyData : ec.ExtensionObject;
+ 		statusCode: ec.StatusCode;
+		continuationPoint: Uint8Array;
+		historyData: ec.ExtensionObject;
 
-	constructor(	options? : IHistoryReadResult) { 
+	constructor(	options?: IHistoryReadResult) { 
 		options = options || {};
 		this.statusCode= (options.statusCode) ? options.statusCode:null;
 		this.continuationPoint= (options.continuationPoint) ? options.continuationPoint:null;
@@ -27,7 +27,7 @@ export class HistoryReadResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeStatusCode(this.statusCode,out);
 		ec.encodeByteString(this.continuationPoint,out);
 		ec.encodeExtensionObject(this.historyData,out);
@@ -35,7 +35,7 @@ export class HistoryReadResult {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.statusCode = ec.decodeStatusCode(inp);
 		this.continuationPoint = ec.decodeByteString(inp);
 		this.historyData = ec.decodeExtensionObject(inp);
@@ -43,7 +43,7 @@ export class HistoryReadResult {
 	}
 
 
-	clone(	target? : HistoryReadResult) : HistoryReadResult { 
+	clone(	target?: HistoryReadResult): HistoryReadResult { 
 		if(!target) {
 			target = new HistoryReadResult();
 		}
@@ -55,7 +55,7 @@ export class HistoryReadResult {
 
 
 }
-export function decodeHistoryReadResult(	inp : DataStream) : HistoryReadResult { 
+export function decodeHistoryReadResult(	inp: DataStream): HistoryReadResult { 
 		const obj = new HistoryReadResult();
 			obj.decode(inp); 
 			return obj;

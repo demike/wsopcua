@@ -5,7 +5,7 @@ import {DataStream} from '../basic-types/DataStream';
 import * as ec from '../basic-types';
 
 export interface IServiceFault {
-		responseHeader? : ResponseHeader;
+		responseHeader?: ResponseHeader;
 }
 
 /**
@@ -13,28 +13,28 @@ The response returned by all services when there is a service level error.
 */
 
 export class ServiceFault {
- 		responseHeader : ResponseHeader;
+ 		responseHeader: ResponseHeader;
 
-	constructor(	options? : IServiceFault) { 
+	constructor(	options?: IServiceFault) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 
 	}
 
 
-	clone(	target? : ServiceFault) : ServiceFault { 
+	clone(	target?: ServiceFault): ServiceFault { 
 		if(!target) {
 			target = new ServiceFault();
 		}
@@ -44,7 +44,7 @@ export class ServiceFault {
 
 
 }
-export function decodeServiceFault(	inp : DataStream) : ServiceFault { 
+export function decodeServiceFault(	inp: DataStream): ServiceFault { 
 		const obj = new ServiceFault();
 			obj.decode(inp); 
 			return obj;

@@ -13,19 +13,19 @@ import {TypeNode} from './TypeNode';
 import {ITypeNode} from './TypeNode';
 
 export interface IDataTypeNode extends ITypeNode {
-		nodeId? : ec.NodeId;
-		nodeClass? : NodeClass;
-		browseName? : QualifiedName;
-		displayName? : LocalizedText;
-		description? : LocalizedText;
-		writeMask? : ec.UInt32;
-		userWriteMask? : ec.UInt32;
-		rolePermissions? : RolePermissionType[];
-		userRolePermissions? : RolePermissionType[];
-		accessRestrictions? : ec.UInt16;
-		references? : ReferenceNode[];
-		isAbstract? : boolean;
-		dataTypeDefinition? : ec.ExtensionObject;
+		nodeId?: ec.NodeId;
+		nodeClass?: NodeClass;
+		browseName?: QualifiedName;
+		displayName?: LocalizedText;
+		description?: LocalizedText;
+		writeMask?: ec.UInt32;
+		userWriteMask?: ec.UInt32;
+		rolePermissions?: RolePermissionType[];
+		userRolePermissions?: RolePermissionType[];
+		accessRestrictions?: ec.UInt16;
+		references?: ReferenceNode[];
+		isAbstract?: boolean;
+		dataTypeDefinition?: ec.ExtensionObject;
 }
 
 /**
@@ -33,21 +33,21 @@ export interface IDataTypeNode extends ITypeNode {
 */
 
 export class DataTypeNode extends TypeNode {
- 		nodeId : ec.NodeId;
-		nodeClass : NodeClass;
-		browseName : QualifiedName;
-		displayName : LocalizedText;
-		description : LocalizedText;
-		writeMask : ec.UInt32;
-		userWriteMask : ec.UInt32;
-		rolePermissions : RolePermissionType[];
-		userRolePermissions : RolePermissionType[];
-		accessRestrictions : ec.UInt16;
-		references : ReferenceNode[];
-		isAbstract : boolean;
-		dataTypeDefinition : ec.ExtensionObject;
+ 		nodeId: ec.NodeId;
+		nodeClass: NodeClass;
+		browseName: QualifiedName;
+		displayName: LocalizedText;
+		description: LocalizedText;
+		writeMask: ec.UInt32;
+		userWriteMask: ec.UInt32;
+		rolePermissions: RolePermissionType[];
+		userRolePermissions: RolePermissionType[];
+		accessRestrictions: ec.UInt16;
+		references: ReferenceNode[];
+		isAbstract: boolean;
+		dataTypeDefinition: ec.ExtensionObject;
 
-	constructor(	options? : IDataTypeNode) { 
+	constructor(	options?: IDataTypeNode) { 
 		options = options || {};
 		super(options);
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
@@ -67,7 +67,7 @@ export class DataTypeNode extends TypeNode {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeNodeId(this.nodeId,out);
 		encodeNodeClass(this.nodeClass,out);
@@ -86,7 +86,7 @@ export class DataTypeNode extends TypeNode {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.nodeId = ec.decodeNodeId(inp);
 		this.nodeClass = decodeNodeClass(inp);
@@ -105,7 +105,7 @@ export class DataTypeNode extends TypeNode {
 	}
 
 
-	clone(	target? : DataTypeNode) : DataTypeNode { 
+	clone(	target?: DataTypeNode): DataTypeNode { 
 		if(!target) {
 			target = new DataTypeNode();
 		}
@@ -128,7 +128,7 @@ export class DataTypeNode extends TypeNode {
 
 
 }
-export function decodeDataTypeNode(	inp : DataStream) : DataTypeNode { 
+export function decodeDataTypeNode(	inp: DataStream): DataTypeNode { 
 		const obj = new DataTypeNode();
 			obj.decode(inp); 
 			return obj;

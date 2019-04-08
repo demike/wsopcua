@@ -5,8 +5,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ICloseSessionRequest {
-		requestHeader? : RequestHeader;
-		deleteSubscriptions? : boolean;
+		requestHeader?: RequestHeader;
+		deleteSubscriptions?: boolean;
 }
 
 /**
@@ -14,10 +14,10 @@ Closes a session with the server.
 */
 
 export class CloseSessionRequest {
- 		requestHeader : RequestHeader;
-		deleteSubscriptions : boolean;
+ 		requestHeader: RequestHeader;
+		deleteSubscriptions: boolean;
 
-	constructor(	options? : ICloseSessionRequest) { 
+	constructor(	options?: ICloseSessionRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.deleteSubscriptions= (options.deleteSubscriptions) ? options.deleteSubscriptions:null;
@@ -25,21 +25,21 @@ export class CloseSessionRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeBoolean(this.deleteSubscriptions,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.deleteSubscriptions = ec.decodeBoolean(inp);
 
 	}
 
 
-	clone(	target? : CloseSessionRequest) : CloseSessionRequest { 
+	clone(	target?: CloseSessionRequest): CloseSessionRequest { 
 		if(!target) {
 			target = new CloseSessionRequest();
 		}
@@ -50,7 +50,7 @@ export class CloseSessionRequest {
 
 
 }
-export function decodeCloseSessionRequest(	inp : DataStream) : CloseSessionRequest { 
+export function decodeCloseSessionRequest(	inp: DataStream): CloseSessionRequest { 
 		const obj = new CloseSessionRequest();
 			obj.decode(inp); 
 			return obj;

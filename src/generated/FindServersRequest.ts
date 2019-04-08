@@ -5,10 +5,10 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IFindServersRequest {
-		requestHeader? : RequestHeader;
-		endpointUrl? : string;
-		localeIds? : string[];
-		serverUris? : string[];
+		requestHeader?: RequestHeader;
+		endpointUrl?: string;
+		localeIds?: string[];
+		serverUris?: string[];
 }
 
 /**
@@ -16,12 +16,12 @@ Finds the servers known to the discovery server.
 */
 
 export class FindServersRequest {
- 		requestHeader : RequestHeader;
-		endpointUrl : string;
-		localeIds : string[];
-		serverUris : string[];
+ 		requestHeader: RequestHeader;
+		endpointUrl: string;
+		localeIds: string[];
+		serverUris: string[];
 
-	constructor(	options? : IFindServersRequest) { 
+	constructor(	options?: IFindServersRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.endpointUrl= (options.endpointUrl) ? options.endpointUrl:null;
@@ -31,7 +31,7 @@ export class FindServersRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeString(this.endpointUrl,out);
 		ec.encodeArray(this.localeIds,out,ec.encodeString);
@@ -40,7 +40,7 @@ export class FindServersRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.endpointUrl = ec.decodeString(inp);
 		this.localeIds = ec.decodeArray(inp,ec.decodeString);
@@ -49,7 +49,7 @@ export class FindServersRequest {
 	}
 
 
-	clone(	target? : FindServersRequest) : FindServersRequest { 
+	clone(	target?: FindServersRequest): FindServersRequest { 
 		if(!target) {
 			target = new FindServersRequest();
 		}
@@ -62,7 +62,7 @@ export class FindServersRequest {
 
 
 }
-export function decodeFindServersRequest(	inp : DataStream) : FindServersRequest { 
+export function decodeFindServersRequest(	inp: DataStream): FindServersRequest { 
 		const obj = new FindServersRequest();
 			obj.decode(inp); 
 			return obj;

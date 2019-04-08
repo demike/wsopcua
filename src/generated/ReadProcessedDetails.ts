@@ -6,11 +6,11 @@ import {DataStream} from '../basic-types/DataStream';
 import {HistoryReadDetails} from './HistoryReadDetails';
 
 export interface IReadProcessedDetails {
-		startTime? : Date;
-		endTime? : Date;
-		processingInterval? : ec.Double;
-		aggregateType? : ec.NodeId[];
-		aggregateConfiguration? : AggregateConfiguration;
+		startTime?: Date;
+		endTime?: Date;
+		processingInterval?: ec.Double;
+		aggregateType?: ec.NodeId[];
+		aggregateConfiguration?: AggregateConfiguration;
 }
 
 /**
@@ -18,13 +18,13 @@ export interface IReadProcessedDetails {
 */
 
 export class ReadProcessedDetails extends HistoryReadDetails {
- 		startTime : Date;
-		endTime : Date;
-		processingInterval : ec.Double;
-		aggregateType : ec.NodeId[];
-		aggregateConfiguration : AggregateConfiguration;
+ 		startTime: Date;
+		endTime: Date;
+		processingInterval: ec.Double;
+		aggregateType: ec.NodeId[];
+		aggregateConfiguration: AggregateConfiguration;
 
-	constructor(	options? : IReadProcessedDetails) { 
+	constructor(	options?: IReadProcessedDetails) { 
 		options = options || {};
 		super();
 		this.startTime= (options.startTime) ? options.startTime:null;
@@ -36,7 +36,7 @@ export class ReadProcessedDetails extends HistoryReadDetails {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeDateTime(this.startTime,out);
 		ec.encodeDateTime(this.endTime,out);
 		ec.encodeDouble(this.processingInterval,out);
@@ -46,7 +46,7 @@ export class ReadProcessedDetails extends HistoryReadDetails {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.startTime = ec.decodeDateTime(inp);
 		this.endTime = ec.decodeDateTime(inp);
 		this.processingInterval = ec.decodeDouble(inp);
@@ -56,7 +56,7 @@ export class ReadProcessedDetails extends HistoryReadDetails {
 	}
 
 
-	clone(	target? : ReadProcessedDetails) : ReadProcessedDetails { 
+	clone(	target?: ReadProcessedDetails): ReadProcessedDetails { 
 		if(!target) {
 			target = new ReadProcessedDetails();
 		}
@@ -70,7 +70,7 @@ export class ReadProcessedDetails extends HistoryReadDetails {
 
 
 }
-export function decodeReadProcessedDetails(	inp : DataStream) : ReadProcessedDetails { 
+export function decodeReadProcessedDetails(	inp: DataStream): ReadProcessedDetails { 
 		const obj = new ReadProcessedDetails();
 			obj.decode(inp); 
 			return obj;

@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IBrowsePathTarget {
-		targetId? : ec.ExpandedNodeId;
-		remainingPathIndex? : ec.UInt32;
+		targetId?: ec.ExpandedNodeId;
+		remainingPathIndex?: ec.UInt32;
 }
 
 /**
@@ -13,10 +13,10 @@ The target of the translated path.
 */
 
 export class BrowsePathTarget {
- 		targetId : ec.ExpandedNodeId;
-		remainingPathIndex : ec.UInt32;
+ 		targetId: ec.ExpandedNodeId;
+		remainingPathIndex: ec.UInt32;
 
-	constructor(	options? : IBrowsePathTarget) { 
+	constructor(	options?: IBrowsePathTarget) { 
 		options = options || {};
 		this.targetId= (options.targetId) ? options.targetId:null;
 		this.remainingPathIndex= (options.remainingPathIndex) ? options.remainingPathIndex:null;
@@ -24,21 +24,21 @@ export class BrowsePathTarget {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeExpandedNodeId(this.targetId,out);
 		ec.encodeUInt32(this.remainingPathIndex,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.targetId = ec.decodeExpandedNodeId(inp);
 		this.remainingPathIndex = ec.decodeUInt32(inp);
 
 	}
 
 
-	clone(	target? : BrowsePathTarget) : BrowsePathTarget { 
+	clone(	target?: BrowsePathTarget): BrowsePathTarget { 
 		if(!target) {
 			target = new BrowsePathTarget();
 		}
@@ -49,7 +49,7 @@ export class BrowsePathTarget {
 
 
 }
-export function decodeBrowsePathTarget(	inp : DataStream) : BrowsePathTarget { 
+export function decodeBrowsePathTarget(	inp: DataStream): BrowsePathTarget { 
 		const obj = new BrowsePathTarget();
 			obj.decode(inp); 
 			return obj;

@@ -8,8 +8,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IContentFilterResult {
-		elementResults? : ContentFilterElementResult[];
-		elementDiagnosticInfos? : DiagnosticInfo[];
+		elementResults?: ContentFilterElementResult[];
+		elementDiagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -17,10 +17,10 @@ export interface IContentFilterResult {
 */
 
 export class ContentFilterResult {
- 		elementResults : ContentFilterElementResult[];
-		elementDiagnosticInfos : DiagnosticInfo[];
+ 		elementResults: ContentFilterElementResult[];
+		elementDiagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IContentFilterResult) { 
+	constructor(	options?: IContentFilterResult) { 
 		options = options || {};
 		this.elementResults= (options.elementResults) ? options.elementResults:[];
 		this.elementDiagnosticInfos= (options.elementDiagnosticInfos) ? options.elementDiagnosticInfos:[];
@@ -28,21 +28,21 @@ export class ContentFilterResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.elementResults,out);
 		ec.encodeArray(this.elementDiagnosticInfos,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.elementResults = ec.decodeArray(inp,decodeContentFilterElementResult);
 		this.elementDiagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
 
 	}
 
 
-	clone(	target? : ContentFilterResult) : ContentFilterResult { 
+	clone(	target?: ContentFilterResult): ContentFilterResult { 
 		if(!target) {
 			target = new ContentFilterResult();
 		}
@@ -53,7 +53,7 @@ export class ContentFilterResult {
 
 
 }
-export function decodeContentFilterResult(	inp : DataStream) : ContentFilterResult { 
+export function decodeContentFilterResult(	inp: DataStream): ContentFilterResult { 
 		const obj = new ContentFilterResult();
 			obj.decode(inp); 
 			return obj;

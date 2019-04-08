@@ -9,9 +9,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ITransferSubscriptionsResponse {
-		responseHeader? : ResponseHeader;
-		results? : TransferResult[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: TransferResult[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -19,11 +19,11 @@ export interface ITransferSubscriptionsResponse {
 */
 
 export class TransferSubscriptionsResponse {
- 		responseHeader : ResponseHeader;
-		results : TransferResult[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: TransferResult[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : ITransferSubscriptionsResponse) { 
+	constructor(	options?: ITransferSubscriptionsResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -32,7 +32,7 @@ export class TransferSubscriptionsResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -40,7 +40,7 @@ export class TransferSubscriptionsResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,decodeTransferResult);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -48,7 +48,7 @@ export class TransferSubscriptionsResponse {
 	}
 
 
-	clone(	target? : TransferSubscriptionsResponse) : TransferSubscriptionsResponse { 
+	clone(	target?: TransferSubscriptionsResponse): TransferSubscriptionsResponse { 
 		if(!target) {
 			target = new TransferSubscriptionsResponse();
 		}
@@ -60,7 +60,7 @@ export class TransferSubscriptionsResponse {
 
 
 }
-export function decodeTransferSubscriptionsResponse(	inp : DataStream) : TransferSubscriptionsResponse { 
+export function decodeTransferSubscriptionsResponse(	inp: DataStream): TransferSubscriptionsResponse { 
 		const obj = new TransferSubscriptionsResponse();
 			obj.decode(inp); 
 			return obj;

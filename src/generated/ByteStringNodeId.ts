@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IByteStringNodeId {
-		namespaceIndex? : ec.UInt16;
-		identifier? : Uint8Array;
+		namespaceIndex?: ec.UInt16;
+		identifier?: Uint8Array;
 }
 
 /**
@@ -13,10 +13,10 @@ export interface IByteStringNodeId {
 */
 
 export class ByteStringNodeId {
- 		namespaceIndex : ec.UInt16;
-		identifier : Uint8Array;
+ 		namespaceIndex: ec.UInt16;
+		identifier: Uint8Array;
 
-	constructor(	options? : IByteStringNodeId) { 
+	constructor(	options?: IByteStringNodeId) { 
 		options = options || {};
 		this.namespaceIndex= (options.namespaceIndex) ? options.namespaceIndex:null;
 		this.identifier= (options.identifier) ? options.identifier:null;
@@ -24,21 +24,21 @@ export class ByteStringNodeId {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt16(this.namespaceIndex,out);
 		ec.encodeByteString(this.identifier,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.namespaceIndex = ec.decodeUInt16(inp);
 		this.identifier = ec.decodeByteString(inp);
 
 	}
 
 
-	clone(	target? : ByteStringNodeId) : ByteStringNodeId { 
+	clone(	target?: ByteStringNodeId): ByteStringNodeId { 
 		if(!target) {
 			target = new ByteStringNodeId();
 		}
@@ -49,7 +49,7 @@ export class ByteStringNodeId {
 
 
 }
-export function decodeByteStringNodeId(	inp : DataStream) : ByteStringNodeId { 
+export function decodeByteStringNodeId(	inp: DataStream): ByteStringNodeId { 
 		const obj = new ByteStringNodeId();
 			obj.decode(inp); 
 			return obj;

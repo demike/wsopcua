@@ -6,10 +6,10 @@ import {DataStream} from '../basic-types/DataStream';
 import {MonitoringFilter} from './MonitoringFilter';
 
 export interface IAggregateFilter {
-		startTime? : Date;
-		aggregateType? : ec.NodeId;
-		processingInterval? : ec.Double;
-		aggregateConfiguration? : AggregateConfiguration;
+		startTime?: Date;
+		aggregateType?: ec.NodeId;
+		processingInterval?: ec.Double;
+		aggregateConfiguration?: AggregateConfiguration;
 }
 
 /**
@@ -17,12 +17,12 @@ export interface IAggregateFilter {
 */
 
 export class AggregateFilter extends MonitoringFilter {
- 		startTime : Date;
-		aggregateType : ec.NodeId;
-		processingInterval : ec.Double;
-		aggregateConfiguration : AggregateConfiguration;
+ 		startTime: Date;
+		aggregateType: ec.NodeId;
+		processingInterval: ec.Double;
+		aggregateConfiguration: AggregateConfiguration;
 
-	constructor(	options? : IAggregateFilter) { 
+	constructor(	options?: IAggregateFilter) { 
 		options = options || {};
 		super();
 		this.startTime= (options.startTime) ? options.startTime:null;
@@ -33,7 +33,7 @@ export class AggregateFilter extends MonitoringFilter {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeDateTime(this.startTime,out);
 		ec.encodeNodeId(this.aggregateType,out);
 		ec.encodeDouble(this.processingInterval,out);
@@ -42,7 +42,7 @@ export class AggregateFilter extends MonitoringFilter {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.startTime = ec.decodeDateTime(inp);
 		this.aggregateType = ec.decodeNodeId(inp);
 		this.processingInterval = ec.decodeDouble(inp);
@@ -51,7 +51,7 @@ export class AggregateFilter extends MonitoringFilter {
 	}
 
 
-	clone(	target? : AggregateFilter) : AggregateFilter { 
+	clone(	target?: AggregateFilter): AggregateFilter { 
 		if(!target) {
 			target = new AggregateFilter();
 		}
@@ -64,7 +64,7 @@ export class AggregateFilter extends MonitoringFilter {
 
 
 }
-export function decodeAggregateFilter(	inp : DataStream) : AggregateFilter { 
+export function decodeAggregateFilter(	inp: DataStream): AggregateFilter { 
 		const obj = new AggregateFilter();
 			obj.decode(inp); 
 			return obj;

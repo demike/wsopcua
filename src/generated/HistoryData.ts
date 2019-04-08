@@ -6,7 +6,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryData {
-		dataValues? : DataValue[];
+		dataValues?: DataValue[];
 }
 
 /**
@@ -14,28 +14,28 @@ export interface IHistoryData {
 */
 
 export class HistoryData {
- 		dataValues : DataValue[];
+ 		dataValues: DataValue[];
 
-	constructor(	options? : IHistoryData) { 
+	constructor(	options?: IHistoryData) { 
 		options = options || {};
 		this.dataValues= (options.dataValues) ? options.dataValues:[];
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.dataValues,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.dataValues = ec.decodeArray(inp,decodeDataValue);
 
 	}
 
 
-	clone(	target? : HistoryData) : HistoryData { 
+	clone(	target?: HistoryData): HistoryData { 
 		if(!target) {
 			target = new HistoryData();
 		}
@@ -45,7 +45,7 @@ export class HistoryData {
 
 
 }
-export function decodeHistoryData(	inp : DataStream) : HistoryData { 
+export function decodeHistoryData(	inp: DataStream): HistoryData { 
 		const obj = new HistoryData();
 			obj.decode(inp); 
 			return obj;

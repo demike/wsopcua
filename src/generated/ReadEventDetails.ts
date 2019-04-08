@@ -6,10 +6,10 @@ import {DataStream} from '../basic-types/DataStream';
 import {HistoryReadDetails} from './HistoryReadDetails';
 
 export interface IReadEventDetails {
-		numValuesPerNode? : ec.UInt32;
-		startTime? : Date;
-		endTime? : Date;
-		filter? : EventFilter;
+		numValuesPerNode?: ec.UInt32;
+		startTime?: Date;
+		endTime?: Date;
+		filter?: EventFilter;
 }
 
 /**
@@ -17,12 +17,12 @@ export interface IReadEventDetails {
 */
 
 export class ReadEventDetails extends HistoryReadDetails {
- 		numValuesPerNode : ec.UInt32;
-		startTime : Date;
-		endTime : Date;
-		filter : EventFilter;
+ 		numValuesPerNode: ec.UInt32;
+		startTime: Date;
+		endTime: Date;
+		filter: EventFilter;
 
-	constructor(	options? : IReadEventDetails) { 
+	constructor(	options?: IReadEventDetails) { 
 		options = options || {};
 		super();
 		this.numValuesPerNode= (options.numValuesPerNode) ? options.numValuesPerNode:null;
@@ -33,7 +33,7 @@ export class ReadEventDetails extends HistoryReadDetails {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.numValuesPerNode,out);
 		ec.encodeDateTime(this.startTime,out);
 		ec.encodeDateTime(this.endTime,out);
@@ -42,7 +42,7 @@ export class ReadEventDetails extends HistoryReadDetails {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.numValuesPerNode = ec.decodeUInt32(inp);
 		this.startTime = ec.decodeDateTime(inp);
 		this.endTime = ec.decodeDateTime(inp);
@@ -51,7 +51,7 @@ export class ReadEventDetails extends HistoryReadDetails {
 	}
 
 
-	clone(	target? : ReadEventDetails) : ReadEventDetails { 
+	clone(	target?: ReadEventDetails): ReadEventDetails { 
 		if(!target) {
 			target = new ReadEventDetails();
 		}
@@ -64,7 +64,7 @@ export class ReadEventDetails extends HistoryReadDetails {
 
 
 }
-export function decodeReadEventDetails(	inp : DataStream) : ReadEventDetails { 
+export function decodeReadEventDetails(	inp: DataStream): ReadEventDetails { 
 		const obj = new ReadEventDetails();
 			obj.decode(inp); 
 			return obj;

@@ -5,15 +5,15 @@ import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMod
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISessionSecurityDiagnosticsDataType {
-		sessionId? : ec.NodeId;
-		clientUserIdOfSession? : string;
-		clientUserIdHistory? : string[];
-		authenticationMechanism? : string;
-		encoding? : string;
-		transportProtocol? : string;
-		securityMode? : MessageSecurityMode;
-		securityPolicyUri? : string;
-		clientCertificate? : Uint8Array;
+		sessionId?: ec.NodeId;
+		clientUserIdOfSession?: string;
+		clientUserIdHistory?: string[];
+		authenticationMechanism?: string;
+		encoding?: string;
+		transportProtocol?: string;
+		securityMode?: MessageSecurityMode;
+		securityPolicyUri?: string;
+		clientCertificate?: Uint8Array;
 }
 
 /**
@@ -21,17 +21,17 @@ export interface ISessionSecurityDiagnosticsDataType {
 */
 
 export class SessionSecurityDiagnosticsDataType {
- 		sessionId : ec.NodeId;
-		clientUserIdOfSession : string;
-		clientUserIdHistory : string[];
-		authenticationMechanism : string;
-		encoding : string;
-		transportProtocol : string;
-		securityMode : MessageSecurityMode;
-		securityPolicyUri : string;
-		clientCertificate : Uint8Array;
+ 		sessionId: ec.NodeId;
+		clientUserIdOfSession: string;
+		clientUserIdHistory: string[];
+		authenticationMechanism: string;
+		encoding: string;
+		transportProtocol: string;
+		securityMode: MessageSecurityMode;
+		securityPolicyUri: string;
+		clientCertificate: Uint8Array;
 
-	constructor(	options? : ISessionSecurityDiagnosticsDataType) { 
+	constructor(	options?: ISessionSecurityDiagnosticsDataType) { 
 		options = options || {};
 		this.sessionId= (options.sessionId) ? options.sessionId:null;
 		this.clientUserIdOfSession= (options.clientUserIdOfSession) ? options.clientUserIdOfSession:null;
@@ -46,7 +46,7 @@ export class SessionSecurityDiagnosticsDataType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.sessionId,out);
 		ec.encodeString(this.clientUserIdOfSession,out);
 		ec.encodeArray(this.clientUserIdHistory,out,ec.encodeString);
@@ -60,7 +60,7 @@ export class SessionSecurityDiagnosticsDataType {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.sessionId = ec.decodeNodeId(inp);
 		this.clientUserIdOfSession = ec.decodeString(inp);
 		this.clientUserIdHistory = ec.decodeArray(inp,ec.decodeString);
@@ -74,7 +74,7 @@ export class SessionSecurityDiagnosticsDataType {
 	}
 
 
-	clone(	target? : SessionSecurityDiagnosticsDataType) : SessionSecurityDiagnosticsDataType { 
+	clone(	target?: SessionSecurityDiagnosticsDataType): SessionSecurityDiagnosticsDataType { 
 		if(!target) {
 			target = new SessionSecurityDiagnosticsDataType();
 		}
@@ -92,7 +92,7 @@ export class SessionSecurityDiagnosticsDataType {
 
 
 }
-export function decodeSessionSecurityDiagnosticsDataType(	inp : DataStream) : SessionSecurityDiagnosticsDataType { 
+export function decodeSessionSecurityDiagnosticsDataType(	inp: DataStream): SessionSecurityDiagnosticsDataType { 
 		const obj = new SessionSecurityDiagnosticsDataType();
 			obj.decode(inp); 
 			return obj;

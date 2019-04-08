@@ -4,7 +4,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ITwoByteNodeId {
-		identifier? : ec.Byte;
+		identifier?: ec.Byte;
 }
 
 /**
@@ -12,28 +12,28 @@ export interface ITwoByteNodeId {
 */
 
 export class TwoByteNodeId {
- 		identifier : ec.Byte;
+ 		identifier: ec.Byte;
 
-	constructor(	options? : ITwoByteNodeId) { 
+	constructor(	options?: ITwoByteNodeId) { 
 		options = options || {};
 		this.identifier= (options.identifier) ? options.identifier:null;
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeByte(this.identifier,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.identifier = ec.decodeByte(inp);
 
 	}
 
 
-	clone(	target? : TwoByteNodeId) : TwoByteNodeId { 
+	clone(	target?: TwoByteNodeId): TwoByteNodeId { 
 		if(!target) {
 			target = new TwoByteNodeId();
 		}
@@ -43,7 +43,7 @@ export class TwoByteNodeId {
 
 
 }
-export function decodeTwoByteNodeId(	inp : DataStream) : TwoByteNodeId { 
+export function decodeTwoByteNodeId(	inp: DataStream): TwoByteNodeId { 
 		const obj = new TwoByteNodeId();
 			obj.decode(inp); 
 			return obj;

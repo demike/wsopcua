@@ -5,8 +5,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ICancelResponse {
-		responseHeader? : ResponseHeader;
-		cancelCount? : ec.UInt32;
+		responseHeader?: ResponseHeader;
+		cancelCount?: ec.UInt32;
 }
 
 /**
@@ -14,10 +14,10 @@ Cancels an outstanding request.
 */
 
 export class CancelResponse {
- 		responseHeader : ResponseHeader;
-		cancelCount : ec.UInt32;
+ 		responseHeader: ResponseHeader;
+		cancelCount: ec.UInt32;
 
-	constructor(	options? : ICancelResponse) { 
+	constructor(	options?: ICancelResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.cancelCount= (options.cancelCount) ? options.cancelCount:null;
@@ -25,21 +25,21 @@ export class CancelResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeUInt32(this.cancelCount,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.cancelCount = ec.decodeUInt32(inp);
 
 	}
 
 
-	clone(	target? : CancelResponse) : CancelResponse { 
+	clone(	target?: CancelResponse): CancelResponse { 
 		if(!target) {
 			target = new CancelResponse();
 		}
@@ -50,7 +50,7 @@ export class CancelResponse {
 
 
 }
-export function decodeCancelResponse(	inp : DataStream) : CancelResponse { 
+export function decodeCancelResponse(	inp: DataStream): CancelResponse { 
 		const obj = new CancelResponse();
 			obj.decode(inp); 
 			return obj;

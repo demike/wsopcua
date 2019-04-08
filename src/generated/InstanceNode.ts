@@ -6,9 +6,9 @@ import {Node} from './Node';
 import {INode} from './Node';
 
 export interface IInstanceNode extends INode {
-		noOfRolePermissions? : ec.Int32;
-		noOfUserRolePermissions? : ec.Int32;
-		noOfReferences? : ec.Int32;
+		noOfRolePermissions?: ec.Int32;
+		noOfUserRolePermissions?: ec.Int32;
+		noOfReferences?: ec.Int32;
 }
 
 /**
@@ -16,11 +16,11 @@ export interface IInstanceNode extends INode {
 */
 
 export class InstanceNode extends Node {
- 		noOfRolePermissions : ec.Int32;
-		noOfUserRolePermissions : ec.Int32;
-		noOfReferences : ec.Int32;
+ 		noOfRolePermissions: ec.Int32;
+		noOfUserRolePermissions: ec.Int32;
+		noOfReferences: ec.Int32;
 
-	constructor(	options? : IInstanceNode) { 
+	constructor(	options?: IInstanceNode) { 
 		options = options || {};
 		super(options);
 		this.noOfRolePermissions= (options.noOfRolePermissions) ? options.noOfRolePermissions:null;
@@ -30,7 +30,7 @@ export class InstanceNode extends Node {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeInt32(this.noOfRolePermissions,out);
 		ec.encodeInt32(this.noOfUserRolePermissions,out);
@@ -39,7 +39,7 @@ export class InstanceNode extends Node {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.noOfRolePermissions = ec.decodeInt32(inp);
 		this.noOfUserRolePermissions = ec.decodeInt32(inp);
@@ -48,7 +48,7 @@ export class InstanceNode extends Node {
 	}
 
 
-	clone(	target? : InstanceNode) : InstanceNode { 
+	clone(	target?: InstanceNode): InstanceNode { 
 		if(!target) {
 			target = new InstanceNode();
 		}
@@ -61,7 +61,7 @@ export class InstanceNode extends Node {
 
 
 }
-export function decodeInstanceNode(	inp : DataStream) : InstanceNode { 
+export function decodeInstanceNode(	inp: DataStream): InstanceNode { 
 		const obj = new InstanceNode();
 			obj.decode(inp); 
 			return obj;

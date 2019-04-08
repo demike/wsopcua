@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISubscriptionAcknowledgement {
-		subscriptionId? : ec.UInt32;
-		sequenceNumber? : ec.UInt32;
+		subscriptionId?: ec.UInt32;
+		sequenceNumber?: ec.UInt32;
 }
 
 /**
@@ -13,10 +13,10 @@ export interface ISubscriptionAcknowledgement {
 */
 
 export class SubscriptionAcknowledgement {
- 		subscriptionId : ec.UInt32;
-		sequenceNumber : ec.UInt32;
+ 		subscriptionId: ec.UInt32;
+		sequenceNumber: ec.UInt32;
 
-	constructor(	options? : ISubscriptionAcknowledgement) { 
+	constructor(	options?: ISubscriptionAcknowledgement) { 
 		options = options || {};
 		this.subscriptionId= (options.subscriptionId) ? options.subscriptionId:null;
 		this.sequenceNumber= (options.sequenceNumber) ? options.sequenceNumber:null;
@@ -24,21 +24,21 @@ export class SubscriptionAcknowledgement {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.subscriptionId,out);
 		ec.encodeUInt32(this.sequenceNumber,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.subscriptionId = ec.decodeUInt32(inp);
 		this.sequenceNumber = ec.decodeUInt32(inp);
 
 	}
 
 
-	clone(	target? : SubscriptionAcknowledgement) : SubscriptionAcknowledgement { 
+	clone(	target?: SubscriptionAcknowledgement): SubscriptionAcknowledgement { 
 		if(!target) {
 			target = new SubscriptionAcknowledgement();
 		}
@@ -49,7 +49,7 @@ export class SubscriptionAcknowledgement {
 
 
 }
-export function decodeSubscriptionAcknowledgement(	inp : DataStream) : SubscriptionAcknowledgement { 
+export function decodeSubscriptionAcknowledgement(	inp: DataStream): SubscriptionAcknowledgement { 
 		const obj = new SubscriptionAcknowledgement();
 			obj.decode(inp); 
 			return obj;

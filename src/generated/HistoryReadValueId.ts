@@ -5,10 +5,10 @@ import {QualifiedName} from './QualifiedName';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryReadValueId {
-		nodeId? : ec.NodeId;
-		indexRange? : string;
-		dataEncoding? : QualifiedName;
-		continuationPoint? : Uint8Array;
+		nodeId?: ec.NodeId;
+		indexRange?: string;
+		dataEncoding?: QualifiedName;
+		continuationPoint?: Uint8Array;
 }
 
 /**
@@ -16,12 +16,12 @@ export interface IHistoryReadValueId {
 */
 
 export class HistoryReadValueId {
- 		nodeId : ec.NodeId;
-		indexRange : string;
-		dataEncoding : QualifiedName;
-		continuationPoint : Uint8Array;
+ 		nodeId: ec.NodeId;
+		indexRange: string;
+		dataEncoding: QualifiedName;
+		continuationPoint: Uint8Array;
 
-	constructor(	options? : IHistoryReadValueId) { 
+	constructor(	options?: IHistoryReadValueId) { 
 		options = options || {};
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
 		this.indexRange= (options.indexRange) ? options.indexRange:null;
@@ -31,7 +31,7 @@ export class HistoryReadValueId {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeNodeId(this.nodeId,out);
 		ec.encodeString(this.indexRange,out);
 		this.dataEncoding.encode(out);
@@ -40,7 +40,7 @@ export class HistoryReadValueId {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.nodeId = ec.decodeNodeId(inp);
 		this.indexRange = ec.decodeString(inp);
 		this.dataEncoding.decode(inp);
@@ -49,7 +49,7 @@ export class HistoryReadValueId {
 	}
 
 
-	clone(	target? : HistoryReadValueId) : HistoryReadValueId { 
+	clone(	target?: HistoryReadValueId): HistoryReadValueId { 
 		if(!target) {
 			target = new HistoryReadValueId();
 		}
@@ -62,7 +62,7 @@ export class HistoryReadValueId {
 
 
 }
-export function decodeHistoryReadValueId(	inp : DataStream) : HistoryReadValueId { 
+export function decodeHistoryReadValueId(	inp: DataStream): HistoryReadValueId { 
 		const obj = new HistoryReadValueId();
 			obj.decode(inp); 
 			return obj;

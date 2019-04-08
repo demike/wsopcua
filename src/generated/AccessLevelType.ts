@@ -13,12 +13,12 @@ export enum AccessLevelType {
 
 }
 
-export function encodeAccessLevelType(	data : AccessLevelType, 	out : DataStream) { 
+export function encodeAccessLevelType(	data: AccessLevelType, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeAccessLevelType(	inp : DataStream) { 
+export function decodeAccessLevelType(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

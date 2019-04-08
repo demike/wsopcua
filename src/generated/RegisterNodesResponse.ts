@@ -5,8 +5,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRegisterNodesResponse {
-		responseHeader? : ResponseHeader;
-		registeredNodeIds? : ec.NodeId[];
+		responseHeader?: ResponseHeader;
+		registeredNodeIds?: ec.NodeId[];
 }
 
 /**
@@ -14,10 +14,10 @@ Registers one or more nodes for repeated use within a session.
 */
 
 export class RegisterNodesResponse {
- 		responseHeader : ResponseHeader;
-		registeredNodeIds : ec.NodeId[];
+ 		responseHeader: ResponseHeader;
+		registeredNodeIds: ec.NodeId[];
 
-	constructor(	options? : IRegisterNodesResponse) { 
+	constructor(	options?: IRegisterNodesResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.registeredNodeIds= (options.registeredNodeIds) ? options.registeredNodeIds:[];
@@ -25,21 +25,21 @@ export class RegisterNodesResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.registeredNodeIds,out,ec.encodeNodeId);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.registeredNodeIds = ec.decodeArray(inp,ec.decodeNodeId);
 
 	}
 
 
-	clone(	target? : RegisterNodesResponse) : RegisterNodesResponse { 
+	clone(	target?: RegisterNodesResponse): RegisterNodesResponse { 
 		if(!target) {
 			target = new RegisterNodesResponse();
 		}
@@ -50,7 +50,7 @@ export class RegisterNodesResponse {
 
 
 }
-export function decodeRegisterNodesResponse(	inp : DataStream) : RegisterNodesResponse { 
+export function decodeRegisterNodesResponse(	inp: DataStream): RegisterNodesResponse { 
 		const obj = new RegisterNodesResponse();
 			obj.decode(inp); 
 			return obj;

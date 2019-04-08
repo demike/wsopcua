@@ -7,8 +7,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IPublishRequest {
-		requestHeader? : RequestHeader;
-		subscriptionAcknowledgements? : SubscriptionAcknowledgement[];
+		requestHeader?: RequestHeader;
+		subscriptionAcknowledgements?: SubscriptionAcknowledgement[];
 }
 
 /**
@@ -16,10 +16,10 @@ export interface IPublishRequest {
 */
 
 export class PublishRequest {
- 		requestHeader : RequestHeader;
-		subscriptionAcknowledgements : SubscriptionAcknowledgement[];
+ 		requestHeader: RequestHeader;
+		subscriptionAcknowledgements: SubscriptionAcknowledgement[];
 
-	constructor(	options? : IPublishRequest) { 
+	constructor(	options?: IPublishRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.subscriptionAcknowledgements= (options.subscriptionAcknowledgements) ? options.subscriptionAcknowledgements:[];
@@ -27,21 +27,21 @@ export class PublishRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeArray(this.subscriptionAcknowledgements,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.subscriptionAcknowledgements = ec.decodeArray(inp,decodeSubscriptionAcknowledgement);
 
 	}
 
 
-	clone(	target? : PublishRequest) : PublishRequest { 
+	clone(	target?: PublishRequest): PublishRequest { 
 		if(!target) {
 			target = new PublishRequest();
 		}
@@ -52,7 +52,7 @@ export class PublishRequest {
 
 
 }
-export function decodePublishRequest(	inp : DataStream) : PublishRequest { 
+export function decodePublishRequest(	inp: DataStream): PublishRequest { 
 		const obj = new PublishRequest();
 			obj.decode(inp); 
 			return obj;

@@ -7,12 +7,12 @@ import {LocalizedText} from './LocalizedText';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IServerStatusDataType {
-		startTime? : Date;
-		currentTime? : Date;
-		state? : ServerState;
-		buildInfo? : BuildInfo;
-		secondsTillShutdown? : ec.UInt32;
-		shutdownReason? : LocalizedText;
+		startTime?: Date;
+		currentTime?: Date;
+		state?: ServerState;
+		buildInfo?: BuildInfo;
+		secondsTillShutdown?: ec.UInt32;
+		shutdownReason?: LocalizedText;
 }
 
 /**
@@ -20,14 +20,14 @@ export interface IServerStatusDataType {
 */
 
 export class ServerStatusDataType {
- 		startTime : Date;
-		currentTime : Date;
-		state : ServerState;
-		buildInfo : BuildInfo;
-		secondsTillShutdown : ec.UInt32;
-		shutdownReason : LocalizedText;
+ 		startTime: Date;
+		currentTime: Date;
+		state: ServerState;
+		buildInfo: BuildInfo;
+		secondsTillShutdown: ec.UInt32;
+		shutdownReason: LocalizedText;
 
-	constructor(	options? : IServerStatusDataType) { 
+	constructor(	options?: IServerStatusDataType) { 
 		options = options || {};
 		this.startTime= (options.startTime) ? options.startTime:null;
 		this.currentTime= (options.currentTime) ? options.currentTime:null;
@@ -39,7 +39,7 @@ export class ServerStatusDataType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeDateTime(this.startTime,out);
 		ec.encodeDateTime(this.currentTime,out);
 		encodeServerState(this.state,out);
@@ -50,7 +50,7 @@ export class ServerStatusDataType {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.startTime = ec.decodeDateTime(inp);
 		this.currentTime = ec.decodeDateTime(inp);
 		this.state = decodeServerState(inp);
@@ -61,7 +61,7 @@ export class ServerStatusDataType {
 	}
 
 
-	clone(	target? : ServerStatusDataType) : ServerStatusDataType { 
+	clone(	target?: ServerStatusDataType): ServerStatusDataType { 
 		if(!target) {
 			target = new ServerStatusDataType();
 		}
@@ -76,7 +76,7 @@ export class ServerStatusDataType {
 
 
 }
-export function decodeServerStatusDataType(	inp : DataStream) : ServerStatusDataType { 
+export function decodeServerStatusDataType(	inp: DataStream): ServerStatusDataType { 
 		const obj = new ServerStatusDataType();
 			obj.decode(inp); 
 			return obj;

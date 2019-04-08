@@ -6,9 +6,9 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IParsingResult {
-		statusCode? : ec.StatusCode;
-		dataStatusCodes? : ec.StatusCode[];
-		dataDiagnosticInfos? : DiagnosticInfo[];
+		statusCode?: ec.StatusCode;
+		dataStatusCodes?: ec.StatusCode[];
+		dataDiagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -16,11 +16,11 @@ export interface IParsingResult {
 */
 
 export class ParsingResult {
- 		statusCode : ec.StatusCode;
-		dataStatusCodes : ec.StatusCode[];
-		dataDiagnosticInfos : DiagnosticInfo[];
+ 		statusCode: ec.StatusCode;
+		dataStatusCodes: ec.StatusCode[];
+		dataDiagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IParsingResult) { 
+	constructor(	options?: IParsingResult) { 
 		options = options || {};
 		this.statusCode= (options.statusCode) ? options.statusCode:null;
 		this.dataStatusCodes= (options.dataStatusCodes) ? options.dataStatusCodes:[];
@@ -29,7 +29,7 @@ export class ParsingResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeStatusCode(this.statusCode,out);
 		ec.encodeArray(this.dataStatusCodes,out,ec.encodeStatusCode);
 		ec.encodeArray(this.dataDiagnosticInfos,out);
@@ -37,7 +37,7 @@ export class ParsingResult {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.statusCode = ec.decodeStatusCode(inp);
 		this.dataStatusCodes = ec.decodeArray(inp,ec.decodeStatusCode);
 		this.dataDiagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -45,7 +45,7 @@ export class ParsingResult {
 	}
 
 
-	clone(	target? : ParsingResult) : ParsingResult { 
+	clone(	target?: ParsingResult): ParsingResult { 
 		if(!target) {
 			target = new ParsingResult();
 		}
@@ -57,7 +57,7 @@ export class ParsingResult {
 
 
 }
-export function decodeParsingResult(	inp : DataStream) : ParsingResult { 
+export function decodeParsingResult(	inp: DataStream): ParsingResult { 
 		const obj = new ParsingResult();
 			obj.decode(inp); 
 			return obj;

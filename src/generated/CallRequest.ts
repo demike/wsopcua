@@ -7,8 +7,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ICallRequest {
-		requestHeader? : RequestHeader;
-		methodsToCall? : CallMethodRequest[];
+		requestHeader?: RequestHeader;
+		methodsToCall?: CallMethodRequest[];
 }
 
 /**
@@ -16,10 +16,10 @@ export interface ICallRequest {
 */
 
 export class CallRequest {
- 		requestHeader : RequestHeader;
-		methodsToCall : CallMethodRequest[];
+ 		requestHeader: RequestHeader;
+		methodsToCall: CallMethodRequest[];
 
-	constructor(	options? : ICallRequest) { 
+	constructor(	options?: ICallRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.methodsToCall= (options.methodsToCall) ? options.methodsToCall:[];
@@ -27,21 +27,21 @@ export class CallRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeArray(this.methodsToCall,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.methodsToCall = ec.decodeArray(inp,decodeCallMethodRequest);
 
 	}
 
 
-	clone(	target? : CallRequest) : CallRequest { 
+	clone(	target?: CallRequest): CallRequest { 
 		if(!target) {
 			target = new CallRequest();
 		}
@@ -52,7 +52,7 @@ export class CallRequest {
 
 
 }
-export function decodeCallRequest(	inp : DataStream) : CallRequest { 
+export function decodeCallRequest(	inp: DataStream): CallRequest { 
 		const obj = new CallRequest();
 			obj.decode(inp); 
 			return obj;

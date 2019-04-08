@@ -5,8 +5,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRegisterNodesRequest {
-		requestHeader? : RequestHeader;
-		nodesToRegister? : ec.NodeId[];
+		requestHeader?: RequestHeader;
+		nodesToRegister?: ec.NodeId[];
 }
 
 /**
@@ -14,10 +14,10 @@ Registers one or more nodes for repeated use within a session.
 */
 
 export class RegisterNodesRequest {
- 		requestHeader : RequestHeader;
-		nodesToRegister : ec.NodeId[];
+ 		requestHeader: RequestHeader;
+		nodesToRegister: ec.NodeId[];
 
-	constructor(	options? : IRegisterNodesRequest) { 
+	constructor(	options?: IRegisterNodesRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.nodesToRegister= (options.nodesToRegister) ? options.nodesToRegister:[];
@@ -25,21 +25,21 @@ export class RegisterNodesRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeArray(this.nodesToRegister,out,ec.encodeNodeId);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.nodesToRegister = ec.decodeArray(inp,ec.decodeNodeId);
 
 	}
 
 
-	clone(	target? : RegisterNodesRequest) : RegisterNodesRequest { 
+	clone(	target?: RegisterNodesRequest): RegisterNodesRequest { 
 		if(!target) {
 			target = new RegisterNodesRequest();
 		}
@@ -50,7 +50,7 @@ export class RegisterNodesRequest {
 
 
 }
-export function decodeRegisterNodesRequest(	inp : DataStream) : RegisterNodesRequest { 
+export function decodeRegisterNodesRequest(	inp: DataStream): RegisterNodesRequest { 
 		const obj = new RegisterNodesRequest();
 			obj.decode(inp); 
 			return obj;

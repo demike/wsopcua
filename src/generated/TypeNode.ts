@@ -6,9 +6,9 @@ import {Node} from './Node';
 import {INode} from './Node';
 
 export interface ITypeNode extends INode {
-		noOfRolePermissions? : ec.Int32;
-		noOfUserRolePermissions? : ec.Int32;
-		noOfReferences? : ec.Int32;
+		noOfRolePermissions?: ec.Int32;
+		noOfUserRolePermissions?: ec.Int32;
+		noOfReferences?: ec.Int32;
 }
 
 /**
@@ -16,11 +16,11 @@ export interface ITypeNode extends INode {
 */
 
 export class TypeNode extends Node {
- 		noOfRolePermissions : ec.Int32;
-		noOfUserRolePermissions : ec.Int32;
-		noOfReferences : ec.Int32;
+ 		noOfRolePermissions: ec.Int32;
+		noOfUserRolePermissions: ec.Int32;
+		noOfReferences: ec.Int32;
 
-	constructor(	options? : ITypeNode) { 
+	constructor(	options?: ITypeNode) { 
 		options = options || {};
 		super(options);
 		this.noOfRolePermissions= (options.noOfRolePermissions) ? options.noOfRolePermissions:null;
@@ -30,7 +30,7 @@ export class TypeNode extends Node {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeInt32(this.noOfRolePermissions,out);
 		ec.encodeInt32(this.noOfUserRolePermissions,out);
@@ -39,7 +39,7 @@ export class TypeNode extends Node {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.noOfRolePermissions = ec.decodeInt32(inp);
 		this.noOfUserRolePermissions = ec.decodeInt32(inp);
@@ -48,7 +48,7 @@ export class TypeNode extends Node {
 	}
 
 
-	clone(	target? : TypeNode) : TypeNode { 
+	clone(	target?: TypeNode): TypeNode { 
 		if(!target) {
 			target = new TypeNode();
 		}
@@ -61,7 +61,7 @@ export class TypeNode extends Node {
 
 
 }
-export function decodeTypeNode(	inp : DataStream) : TypeNode { 
+export function decodeTypeNode(	inp: DataStream): TypeNode { 
 		const obj = new TypeNode();
 			obj.decode(inp); 
 			return obj;

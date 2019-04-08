@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ITimeZoneDataType {
-		offset? : ec.Int16;
-		daylightSavingInOffset? : boolean;
+		offset?: ec.Int16;
+		daylightSavingInOffset?: boolean;
 }
 
 /**
@@ -13,10 +13,10 @@ export interface ITimeZoneDataType {
 */
 
 export class TimeZoneDataType {
- 		offset : ec.Int16;
-		daylightSavingInOffset : boolean;
+ 		offset: ec.Int16;
+		daylightSavingInOffset: boolean;
 
-	constructor(	options? : ITimeZoneDataType) { 
+	constructor(	options?: ITimeZoneDataType) { 
 		options = options || {};
 		this.offset= (options.offset) ? options.offset:null;
 		this.daylightSavingInOffset= (options.daylightSavingInOffset) ? options.daylightSavingInOffset:null;
@@ -24,21 +24,21 @@ export class TimeZoneDataType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeInt16(this.offset,out);
 		ec.encodeBoolean(this.daylightSavingInOffset,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.offset = ec.decodeInt16(inp);
 		this.daylightSavingInOffset = ec.decodeBoolean(inp);
 
 	}
 
 
-	clone(	target? : TimeZoneDataType) : TimeZoneDataType { 
+	clone(	target?: TimeZoneDataType): TimeZoneDataType { 
 		if(!target) {
 			target = new TimeZoneDataType();
 		}
@@ -49,7 +49,7 @@ export class TimeZoneDataType {
 
 
 }
-export function decodeTimeZoneDataType(	inp : DataStream) : TimeZoneDataType { 
+export function decodeTimeZoneDataType(	inp: DataStream): TimeZoneDataType { 
 		const obj = new TimeZoneDataType();
 			obj.decode(inp); 
 			return obj;

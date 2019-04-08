@@ -13,19 +13,19 @@ import {InstanceNode} from './InstanceNode';
 import {IInstanceNode} from './InstanceNode';
 
 export interface IViewNode extends IInstanceNode {
-		nodeId? : ec.NodeId;
-		nodeClass? : NodeClass;
-		browseName? : QualifiedName;
-		displayName? : LocalizedText;
-		description? : LocalizedText;
-		writeMask? : ec.UInt32;
-		userWriteMask? : ec.UInt32;
-		rolePermissions? : RolePermissionType[];
-		userRolePermissions? : RolePermissionType[];
-		accessRestrictions? : ec.UInt16;
-		references? : ReferenceNode[];
-		containsNoLoops? : boolean;
-		eventNotifier? : ec.Byte;
+		nodeId?: ec.NodeId;
+		nodeClass?: NodeClass;
+		browseName?: QualifiedName;
+		displayName?: LocalizedText;
+		description?: LocalizedText;
+		writeMask?: ec.UInt32;
+		userWriteMask?: ec.UInt32;
+		rolePermissions?: RolePermissionType[];
+		userRolePermissions?: RolePermissionType[];
+		accessRestrictions?: ec.UInt16;
+		references?: ReferenceNode[];
+		containsNoLoops?: boolean;
+		eventNotifier?: ec.Byte;
 }
 
 /**
@@ -33,21 +33,21 @@ export interface IViewNode extends IInstanceNode {
 */
 
 export class ViewNode extends InstanceNode {
- 		nodeId : ec.NodeId;
-		nodeClass : NodeClass;
-		browseName : QualifiedName;
-		displayName : LocalizedText;
-		description : LocalizedText;
-		writeMask : ec.UInt32;
-		userWriteMask : ec.UInt32;
-		rolePermissions : RolePermissionType[];
-		userRolePermissions : RolePermissionType[];
-		accessRestrictions : ec.UInt16;
-		references : ReferenceNode[];
-		containsNoLoops : boolean;
-		eventNotifier : ec.Byte;
+ 		nodeId: ec.NodeId;
+		nodeClass: NodeClass;
+		browseName: QualifiedName;
+		displayName: LocalizedText;
+		description: LocalizedText;
+		writeMask: ec.UInt32;
+		userWriteMask: ec.UInt32;
+		rolePermissions: RolePermissionType[];
+		userRolePermissions: RolePermissionType[];
+		accessRestrictions: ec.UInt16;
+		references: ReferenceNode[];
+		containsNoLoops: boolean;
+		eventNotifier: ec.Byte;
 
-	constructor(	options? : IViewNode) { 
+	constructor(	options?: IViewNode) { 
 		options = options || {};
 		super(options);
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
@@ -67,7 +67,7 @@ export class ViewNode extends InstanceNode {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeNodeId(this.nodeId,out);
 		encodeNodeClass(this.nodeClass,out);
@@ -86,7 +86,7 @@ export class ViewNode extends InstanceNode {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.nodeId = ec.decodeNodeId(inp);
 		this.nodeClass = decodeNodeClass(inp);
@@ -105,7 +105,7 @@ export class ViewNode extends InstanceNode {
 	}
 
 
-	clone(	target? : ViewNode) : ViewNode { 
+	clone(	target?: ViewNode): ViewNode { 
 		if(!target) {
 			target = new ViewNode();
 		}
@@ -128,7 +128,7 @@ export class ViewNode extends InstanceNode {
 
 
 }
-export function decodeViewNode(	inp : DataStream) : ViewNode { 
+export function decodeViewNode(	inp: DataStream): ViewNode { 
 		const obj = new ViewNode();
 			obj.decode(inp); 
 			return obj;

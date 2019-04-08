@@ -9,12 +9,12 @@ export enum DeadbandType {
 
 }
 
-export function encodeDeadbandType(	data : DeadbandType, 	out : DataStream) { 
+export function encodeDeadbandType(	data: DeadbandType, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeDeadbandType(	inp : DataStream) { 
+export function decodeDeadbandType(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

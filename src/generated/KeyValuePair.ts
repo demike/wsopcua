@@ -6,8 +6,8 @@ import {DataStream} from '../basic-types/DataStream';
 import * as ec from '../basic-types';
 
 export interface IKeyValuePair {
-		key? : QualifiedName;
-		value? : Variant;
+		key?: QualifiedName;
+		value?: Variant;
 }
 
 /**
@@ -15,10 +15,10 @@ export interface IKeyValuePair {
 */
 
 export class KeyValuePair {
- 		key : QualifiedName;
-		value : Variant;
+ 		key: QualifiedName;
+		value: Variant;
 
-	constructor(	options? : IKeyValuePair) { 
+	constructor(	options?: IKeyValuePair) { 
 		options = options || {};
 		this.key= (options.key) ? options.key:new QualifiedName();
 		this.value= (options.value) ? options.value:new Variant();
@@ -26,21 +26,21 @@ export class KeyValuePair {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.key.encode(out);
 		this.value.encode(out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.key.decode(inp);
 		this.value.decode(inp);
 
 	}
 
 
-	clone(	target? : KeyValuePair) : KeyValuePair { 
+	clone(	target?: KeyValuePair): KeyValuePair { 
 		if(!target) {
 			target = new KeyValuePair();
 		}
@@ -51,7 +51,7 @@ export class KeyValuePair {
 
 
 }
-export function decodeKeyValuePair(	inp : DataStream) : KeyValuePair { 
+export function decodeKeyValuePair(	inp: DataStream): KeyValuePair { 
 		const obj = new KeyValuePair();
 			obj.decode(inp); 
 			return obj;

@@ -43,12 +43,12 @@ export enum NodeAttributesMask {
 
 }
 
-export function encodeNodeAttributesMask(	data : NodeAttributesMask, 	out : DataStream) { 
+export function encodeNodeAttributesMask(	data: NodeAttributesMask, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeNodeAttributesMask(	inp : DataStream) { 
+export function decodeNodeAttributesMask(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

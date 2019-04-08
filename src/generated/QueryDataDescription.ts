@@ -5,9 +5,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IQueryDataDescription {
-		relativePath? : RelativePath;
-		attributeId? : ec.UInt32;
-		indexRange? : string;
+		relativePath?: RelativePath;
+		attributeId?: ec.UInt32;
+		indexRange?: string;
 }
 
 /**
@@ -15,11 +15,11 @@ export interface IQueryDataDescription {
 */
 
 export class QueryDataDescription {
- 		relativePath : RelativePath;
-		attributeId : ec.UInt32;
-		indexRange : string;
+ 		relativePath: RelativePath;
+		attributeId: ec.UInt32;
+		indexRange: string;
 
-	constructor(	options? : IQueryDataDescription) { 
+	constructor(	options?: IQueryDataDescription) { 
 		options = options || {};
 		this.relativePath= (options.relativePath) ? options.relativePath:new RelativePath();
 		this.attributeId= (options.attributeId) ? options.attributeId:null;
@@ -28,7 +28,7 @@ export class QueryDataDescription {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.relativePath.encode(out);
 		ec.encodeUInt32(this.attributeId,out);
 		ec.encodeString(this.indexRange,out);
@@ -36,7 +36,7 @@ export class QueryDataDescription {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.relativePath.decode(inp);
 		this.attributeId = ec.decodeUInt32(inp);
 		this.indexRange = ec.decodeString(inp);
@@ -44,7 +44,7 @@ export class QueryDataDescription {
 	}
 
 
-	clone(	target? : QueryDataDescription) : QueryDataDescription { 
+	clone(	target?: QueryDataDescription): QueryDataDescription { 
 		if(!target) {
 			target = new QueryDataDescription();
 		}
@@ -56,7 +56,7 @@ export class QueryDataDescription {
 
 
 }
-export function decodeQueryDataDescription(	inp : DataStream) : QueryDataDescription { 
+export function decodeQueryDataDescription(	inp: DataStream): QueryDataDescription { 
 		const obj = new QueryDataDescription();
 			obj.decode(inp); 
 			return obj;

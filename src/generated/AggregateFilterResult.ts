@@ -6,9 +6,9 @@ import {DataStream} from '../basic-types/DataStream';
 import {MonitoringFilterResult} from './MonitoringFilterResult';
 
 export interface IAggregateFilterResult {
-		revisedStartTime? : Date;
-		revisedProcessingInterval? : ec.Double;
-		revisedAggregateConfiguration? : AggregateConfiguration;
+		revisedStartTime?: Date;
+		revisedProcessingInterval?: ec.Double;
+		revisedAggregateConfiguration?: AggregateConfiguration;
 }
 
 /**
@@ -16,11 +16,11 @@ export interface IAggregateFilterResult {
 */
 
 export class AggregateFilterResult extends MonitoringFilterResult {
- 		revisedStartTime : Date;
-		revisedProcessingInterval : ec.Double;
-		revisedAggregateConfiguration : AggregateConfiguration;
+ 		revisedStartTime: Date;
+		revisedProcessingInterval: ec.Double;
+		revisedAggregateConfiguration: AggregateConfiguration;
 
-	constructor(	options? : IAggregateFilterResult) { 
+	constructor(	options?: IAggregateFilterResult) { 
 		options = options || {};
 		super();
 		this.revisedStartTime= (options.revisedStartTime) ? options.revisedStartTime:null;
@@ -30,7 +30,7 @@ export class AggregateFilterResult extends MonitoringFilterResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeDateTime(this.revisedStartTime,out);
 		ec.encodeDouble(this.revisedProcessingInterval,out);
 		this.revisedAggregateConfiguration.encode(out);
@@ -38,7 +38,7 @@ export class AggregateFilterResult extends MonitoringFilterResult {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.revisedStartTime = ec.decodeDateTime(inp);
 		this.revisedProcessingInterval = ec.decodeDouble(inp);
 		this.revisedAggregateConfiguration.decode(inp);
@@ -46,7 +46,7 @@ export class AggregateFilterResult extends MonitoringFilterResult {
 	}
 
 
-	clone(	target? : AggregateFilterResult) : AggregateFilterResult { 
+	clone(	target?: AggregateFilterResult): AggregateFilterResult { 
 		if(!target) {
 			target = new AggregateFilterResult();
 		}
@@ -58,7 +58,7 @@ export class AggregateFilterResult extends MonitoringFilterResult {
 
 
 }
-export function decodeAggregateFilterResult(	inp : DataStream) : AggregateFilterResult { 
+export function decodeAggregateFilterResult(	inp: DataStream): AggregateFilterResult { 
 		const obj = new AggregateFilterResult();
 			obj.decode(inp); 
 			return obj;

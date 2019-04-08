@@ -8,7 +8,7 @@ import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
 export interface IGenericAttributes extends INodeAttributes {
-		attributeValues? : GenericAttributeValue[];
+		attributeValues?: GenericAttributeValue[];
 }
 
 /**
@@ -16,9 +16,9 @@ export interface IGenericAttributes extends INodeAttributes {
 */
 
 export class GenericAttributes extends NodeAttributes {
- 		attributeValues : GenericAttributeValue[];
+ 		attributeValues: GenericAttributeValue[];
 
-	constructor(	options? : IGenericAttributes) { 
+	constructor(	options?: IGenericAttributes) { 
 		options = options || {};
 		super(options);
 		this.attributeValues= (options.attributeValues) ? options.attributeValues:[];
@@ -26,21 +26,21 @@ export class GenericAttributes extends NodeAttributes {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeArray(this.attributeValues,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.attributeValues = ec.decodeArray(inp,decodeGenericAttributeValue);
 
 	}
 
 
-	clone(	target? : GenericAttributes) : GenericAttributes { 
+	clone(	target?: GenericAttributes): GenericAttributes { 
 		if(!target) {
 			target = new GenericAttributes();
 		}
@@ -51,7 +51,7 @@ export class GenericAttributes extends NodeAttributes {
 
 
 }
-export function decodeGenericAttributes(	inp : DataStream) : GenericAttributes { 
+export function decodeGenericAttributes(	inp: DataStream): GenericAttributes { 
 		const obj = new GenericAttributes();
 			obj.decode(inp); 
 			return obj;

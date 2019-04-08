@@ -6,8 +6,8 @@ import {decodeEndpointUrlListDataType} from './EndpointUrlListDataType';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface INetworkGroupDataType {
-		serverUri? : string;
-		networkPaths? : EndpointUrlListDataType[];
+		serverUri?: string;
+		networkPaths?: EndpointUrlListDataType[];
 }
 
 /**
@@ -15,10 +15,10 @@ export interface INetworkGroupDataType {
 */
 
 export class NetworkGroupDataType {
- 		serverUri : string;
-		networkPaths : EndpointUrlListDataType[];
+ 		serverUri: string;
+		networkPaths: EndpointUrlListDataType[];
 
-	constructor(	options? : INetworkGroupDataType) { 
+	constructor(	options?: INetworkGroupDataType) { 
 		options = options || {};
 		this.serverUri= (options.serverUri) ? options.serverUri:null;
 		this.networkPaths= (options.networkPaths) ? options.networkPaths:[];
@@ -26,21 +26,21 @@ export class NetworkGroupDataType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.serverUri,out);
 		ec.encodeArray(this.networkPaths,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.serverUri = ec.decodeString(inp);
 		this.networkPaths = ec.decodeArray(inp,decodeEndpointUrlListDataType);
 
 	}
 
 
-	clone(	target? : NetworkGroupDataType) : NetworkGroupDataType { 
+	clone(	target?: NetworkGroupDataType): NetworkGroupDataType { 
 		if(!target) {
 			target = new NetworkGroupDataType();
 		}
@@ -51,7 +51,7 @@ export class NetworkGroupDataType {
 
 
 }
-export function decodeNetworkGroupDataType(	inp : DataStream) : NetworkGroupDataType { 
+export function decodeNetworkGroupDataType(	inp: DataStream): NetworkGroupDataType { 
 		const obj = new NetworkGroupDataType();
 			obj.decode(inp); 
 			return obj;

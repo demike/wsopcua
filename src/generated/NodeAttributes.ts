@@ -5,11 +5,11 @@ import {LocalizedText} from './LocalizedText';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface INodeAttributes {
-		specifiedAttributes? : ec.UInt32;
-		displayName? : LocalizedText;
-		description? : LocalizedText;
-		writeMask? : ec.UInt32;
-		userWriteMask? : ec.UInt32;
+		specifiedAttributes?: ec.UInt32;
+		displayName?: LocalizedText;
+		description?: LocalizedText;
+		writeMask?: ec.UInt32;
+		userWriteMask?: ec.UInt32;
 }
 
 /**
@@ -17,13 +17,13 @@ The base attributes for all nodes.
 */
 
 export class NodeAttributes {
- 		specifiedAttributes : ec.UInt32;
-		displayName : LocalizedText;
-		description : LocalizedText;
-		writeMask : ec.UInt32;
-		userWriteMask : ec.UInt32;
+ 		specifiedAttributes: ec.UInt32;
+		displayName: LocalizedText;
+		description: LocalizedText;
+		writeMask: ec.UInt32;
+		userWriteMask: ec.UInt32;
 
-	constructor(	options? : INodeAttributes) { 
+	constructor(	options?: INodeAttributes) { 
 		options = options || {};
 		this.specifiedAttributes= (options.specifiedAttributes) ? options.specifiedAttributes:null;
 		this.displayName= (options.displayName) ? options.displayName:new LocalizedText();
@@ -34,7 +34,7 @@ export class NodeAttributes {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.specifiedAttributes,out);
 		this.displayName.encode(out);
 		this.description.encode(out);
@@ -44,7 +44,7 @@ export class NodeAttributes {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.specifiedAttributes = ec.decodeUInt32(inp);
 		this.displayName.decode(inp);
 		this.description.decode(inp);
@@ -54,7 +54,7 @@ export class NodeAttributes {
 	}
 
 
-	clone(	target? : NodeAttributes) : NodeAttributes { 
+	clone(	target?: NodeAttributes): NodeAttributes { 
 		if(!target) {
 			target = new NodeAttributes();
 		}
@@ -68,7 +68,7 @@ export class NodeAttributes {
 
 
 }
-export function decodeNodeAttributes(	inp : DataStream) : NodeAttributes { 
+export function decodeNodeAttributes(	inp: DataStream): NodeAttributes { 
 		const obj = new NodeAttributes();
 			obj.decode(inp); 
 			return obj;

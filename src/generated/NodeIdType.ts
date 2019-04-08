@@ -14,12 +14,12 @@ export enum NodeIdType {
 
 }
 
-export function encodeNodeIdType(	data : NodeIdType, 	out : DataStream) { 
+export function encodeNodeIdType(	data: NodeIdType, 	out: DataStream) { 
 	out.setByte(data);
 	}
 
 
-export function decodeNodeIdType(	inp : DataStream) { 
+export function decodeNodeIdType(	inp: DataStream) { 
 	return inp.getByte();
 	}
 

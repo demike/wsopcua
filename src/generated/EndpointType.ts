@@ -5,10 +5,10 @@ import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMod
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IEndpointType {
-		endpointUrl? : string;
-		securityMode? : MessageSecurityMode;
-		securityPolicyUri? : string;
-		transportProfileUri? : string;
+		endpointUrl?: string;
+		securityMode?: MessageSecurityMode;
+		securityPolicyUri?: string;
+		transportProfileUri?: string;
 }
 
 /**
@@ -16,12 +16,12 @@ export interface IEndpointType {
 */
 
 export class EndpointType {
- 		endpointUrl : string;
-		securityMode : MessageSecurityMode;
-		securityPolicyUri : string;
-		transportProfileUri : string;
+ 		endpointUrl: string;
+		securityMode: MessageSecurityMode;
+		securityPolicyUri: string;
+		transportProfileUri: string;
 
-	constructor(	options? : IEndpointType) { 
+	constructor(	options?: IEndpointType) { 
 		options = options || {};
 		this.endpointUrl= (options.endpointUrl) ? options.endpointUrl:null;
 		this.securityMode= (options.securityMode) ? options.securityMode:null;
@@ -31,7 +31,7 @@ export class EndpointType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.endpointUrl,out);
 		encodeMessageSecurityMode(this.securityMode,out);
 		ec.encodeString(this.securityPolicyUri,out);
@@ -40,7 +40,7 @@ export class EndpointType {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.endpointUrl = ec.decodeString(inp);
 		this.securityMode = decodeMessageSecurityMode(inp);
 		this.securityPolicyUri = ec.decodeString(inp);
@@ -49,7 +49,7 @@ export class EndpointType {
 	}
 
 
-	clone(	target? : EndpointType) : EndpointType { 
+	clone(	target?: EndpointType): EndpointType { 
 		if(!target) {
 			target = new EndpointType();
 		}
@@ -62,7 +62,7 @@ export class EndpointType {
 
 
 }
-export function decodeEndpointType(	inp : DataStream) : EndpointType { 
+export function decodeEndpointType(	inp: DataStream): EndpointType { 
 		const obj = new EndpointType();
 			obj.decode(inp); 
 			return obj;

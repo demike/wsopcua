@@ -9,9 +9,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IAddNodesResponse {
-		responseHeader? : ResponseHeader;
-		results? : AddNodesResult[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: AddNodesResult[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -19,11 +19,11 @@ Adds one or more nodes to the server address space.
 */
 
 export class AddNodesResponse {
- 		responseHeader : ResponseHeader;
-		results : AddNodesResult[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: AddNodesResult[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IAddNodesResponse) { 
+	constructor(	options?: IAddNodesResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -32,7 +32,7 @@ export class AddNodesResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -40,7 +40,7 @@ export class AddNodesResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,decodeAddNodesResult);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -48,7 +48,7 @@ export class AddNodesResponse {
 	}
 
 
-	clone(	target? : AddNodesResponse) : AddNodesResponse { 
+	clone(	target?: AddNodesResponse): AddNodesResponse { 
 		if(!target) {
 			target = new AddNodesResponse();
 		}
@@ -60,7 +60,7 @@ export class AddNodesResponse {
 
 
 }
-export function decodeAddNodesResponse(	inp : DataStream) : AddNodesResponse { 
+export function decodeAddNodesResponse(	inp: DataStream): AddNodesResponse { 
 		const obj = new AddNodesResponse();
 			obj.decode(inp); 
 			return obj;

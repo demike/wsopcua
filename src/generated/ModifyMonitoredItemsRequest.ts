@@ -8,10 +8,10 @@ import {decodeMonitoredItemModifyRequest} from './MonitoredItemModifyRequest';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IModifyMonitoredItemsRequest {
-		requestHeader? : RequestHeader;
-		subscriptionId? : ec.UInt32;
-		timestampsToReturn? : TimestampsToReturn;
-		itemsToModify? : MonitoredItemModifyRequest[];
+		requestHeader?: RequestHeader;
+		subscriptionId?: ec.UInt32;
+		timestampsToReturn?: TimestampsToReturn;
+		itemsToModify?: MonitoredItemModifyRequest[];
 }
 
 /**
@@ -19,12 +19,12 @@ export interface IModifyMonitoredItemsRequest {
 */
 
 export class ModifyMonitoredItemsRequest {
- 		requestHeader : RequestHeader;
-		subscriptionId : ec.UInt32;
-		timestampsToReturn : TimestampsToReturn;
-		itemsToModify : MonitoredItemModifyRequest[];
+ 		requestHeader: RequestHeader;
+		subscriptionId: ec.UInt32;
+		timestampsToReturn: TimestampsToReturn;
+		itemsToModify: MonitoredItemModifyRequest[];
 
-	constructor(	options? : IModifyMonitoredItemsRequest) { 
+	constructor(	options?: IModifyMonitoredItemsRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.subscriptionId= (options.subscriptionId) ? options.subscriptionId:null;
@@ -34,7 +34,7 @@ export class ModifyMonitoredItemsRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeUInt32(this.subscriptionId,out);
 		encodeTimestampsToReturn(this.timestampsToReturn,out);
@@ -43,7 +43,7 @@ export class ModifyMonitoredItemsRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.subscriptionId = ec.decodeUInt32(inp);
 		this.timestampsToReturn = decodeTimestampsToReturn(inp);
@@ -52,7 +52,7 @@ export class ModifyMonitoredItemsRequest {
 	}
 
 
-	clone(	target? : ModifyMonitoredItemsRequest) : ModifyMonitoredItemsRequest { 
+	clone(	target?: ModifyMonitoredItemsRequest): ModifyMonitoredItemsRequest { 
 		if(!target) {
 			target = new ModifyMonitoredItemsRequest();
 		}
@@ -65,7 +65,7 @@ export class ModifyMonitoredItemsRequest {
 
 
 }
-export function decodeModifyMonitoredItemsRequest(	inp : DataStream) : ModifyMonitoredItemsRequest { 
+export function decodeModifyMonitoredItemsRequest(	inp: DataStream): ModifyMonitoredItemsRequest { 
 		const obj = new ModifyMonitoredItemsRequest();
 			obj.decode(inp); 
 			return obj;

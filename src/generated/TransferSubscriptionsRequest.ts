@@ -5,9 +5,9 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ITransferSubscriptionsRequest {
-		requestHeader? : RequestHeader;
-		subscriptionIds? : ec.UInt32[];
-		sendInitialValues? : boolean;
+		requestHeader?: RequestHeader;
+		subscriptionIds?: ec.UInt32[];
+		sendInitialValues?: boolean;
 }
 
 /**
@@ -15,11 +15,11 @@ export interface ITransferSubscriptionsRequest {
 */
 
 export class TransferSubscriptionsRequest {
- 		requestHeader : RequestHeader;
-		subscriptionIds : ec.UInt32[];
-		sendInitialValues : boolean;
+ 		requestHeader: RequestHeader;
+		subscriptionIds: ec.UInt32[];
+		sendInitialValues: boolean;
 
-	constructor(	options? : ITransferSubscriptionsRequest) { 
+	constructor(	options?: ITransferSubscriptionsRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.subscriptionIds= (options.subscriptionIds) ? options.subscriptionIds:[];
@@ -28,7 +28,7 @@ export class TransferSubscriptionsRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeArray(this.subscriptionIds,out,ec.encodeUInt32);
 		ec.encodeBoolean(this.sendInitialValues,out);
@@ -36,7 +36,7 @@ export class TransferSubscriptionsRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.subscriptionIds = ec.decodeArray(inp,ec.decodeUInt32);
 		this.sendInitialValues = ec.decodeBoolean(inp);
@@ -44,7 +44,7 @@ export class TransferSubscriptionsRequest {
 	}
 
 
-	clone(	target? : TransferSubscriptionsRequest) : TransferSubscriptionsRequest { 
+	clone(	target?: TransferSubscriptionsRequest): TransferSubscriptionsRequest { 
 		if(!target) {
 			target = new TransferSubscriptionsRequest();
 		}
@@ -56,7 +56,7 @@ export class TransferSubscriptionsRequest {
 
 
 }
-export function decodeTransferSubscriptionsRequest(	inp : DataStream) : TransferSubscriptionsRequest { 
+export function decodeTransferSubscriptionsRequest(	inp: DataStream): TransferSubscriptionsRequest { 
 		const obj = new TransferSubscriptionsRequest();
 			obj.decode(inp); 
 			return obj;

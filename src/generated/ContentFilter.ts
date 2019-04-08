@@ -6,7 +6,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IContentFilter {
-		elements? : ContentFilterElement[];
+		elements?: ContentFilterElement[];
 }
 
 /**
@@ -14,28 +14,28 @@ export interface IContentFilter {
 */
 
 export class ContentFilter {
- 		elements : ContentFilterElement[];
+ 		elements: ContentFilterElement[];
 
-	constructor(	options? : IContentFilter) { 
+	constructor(	options?: IContentFilter) { 
 		options = options || {};
 		this.elements= (options.elements) ? options.elements:[];
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.elements,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.elements = ec.decodeArray(inp,decodeContentFilterElement);
 
 	}
 
 
-	clone(	target? : ContentFilter) : ContentFilter { 
+	clone(	target?: ContentFilter): ContentFilter { 
 		if(!target) {
 			target = new ContentFilter();
 		}
@@ -45,7 +45,7 @@ export class ContentFilter {
 
 
 }
-export function decodeContentFilter(	inp : DataStream) : ContentFilter { 
+export function decodeContentFilter(	inp: DataStream): ContentFilter { 
 		const obj = new ContentFilter();
 			obj.decode(inp); 
 			return obj;

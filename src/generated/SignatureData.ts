@@ -4,8 +4,8 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISignatureData {
-		algorithm? : string;
-		signature? : Uint8Array;
+		algorithm?: string;
+		signature?: Uint8Array;
 }
 
 /**
@@ -13,10 +13,10 @@ A digital signature.
 */
 
 export class SignatureData {
- 		algorithm : string;
-		signature : Uint8Array;
+ 		algorithm: string;
+		signature: Uint8Array;
 
-	constructor(	options? : ISignatureData) { 
+	constructor(	options?: ISignatureData) { 
 		options = options || {};
 		this.algorithm= (options.algorithm) ? options.algorithm:null;
 		this.signature= (options.signature) ? options.signature:null;
@@ -24,21 +24,21 @@ export class SignatureData {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.algorithm,out);
 		ec.encodeByteString(this.signature,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.algorithm = ec.decodeString(inp);
 		this.signature = ec.decodeByteString(inp);
 
 	}
 
 
-	clone(	target? : SignatureData) : SignatureData { 
+	clone(	target?: SignatureData): SignatureData { 
 		if(!target) {
 			target = new SignatureData();
 		}
@@ -49,7 +49,7 @@ export class SignatureData {
 
 
 }
-export function decodeSignatureData(	inp : DataStream) : SignatureData { 
+export function decodeSignatureData(	inp: DataStream): SignatureData { 
 		const obj = new SignatureData();
 			obj.decode(inp); 
 			return obj;

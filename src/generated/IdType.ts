@@ -12,12 +12,12 @@ export enum IdType {
 
 }
 
-export function encodeIdType(	data : IdType, 	out : DataStream) { 
+export function encodeIdType(	data: IdType, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeIdType(	inp : DataStream) { 
+export function decodeIdType(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

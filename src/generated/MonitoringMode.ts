@@ -9,12 +9,12 @@ export enum MonitoringMode {
 
 }
 
-export function encodeMonitoringMode(	data : MonitoringMode, 	out : DataStream) { 
+export function encodeMonitoringMode(	data: MonitoringMode, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeMonitoringMode(	inp : DataStream) { 
+export function decodeMonitoringMode(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

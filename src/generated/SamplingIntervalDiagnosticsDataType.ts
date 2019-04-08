@@ -4,10 +4,10 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISamplingIntervalDiagnosticsDataType {
-		samplingInterval? : ec.Double;
-		monitoredItemCount? : ec.UInt32;
-		maxMonitoredItemCount? : ec.UInt32;
-		disabledMonitoredItemCount? : ec.UInt32;
+		samplingInterval?: ec.Double;
+		monitoredItemCount?: ec.UInt32;
+		maxMonitoredItemCount?: ec.UInt32;
+		disabledMonitoredItemCount?: ec.UInt32;
 }
 
 /**
@@ -15,12 +15,12 @@ export interface ISamplingIntervalDiagnosticsDataType {
 */
 
 export class SamplingIntervalDiagnosticsDataType {
- 		samplingInterval : ec.Double;
-		monitoredItemCount : ec.UInt32;
-		maxMonitoredItemCount : ec.UInt32;
-		disabledMonitoredItemCount : ec.UInt32;
+ 		samplingInterval: ec.Double;
+		monitoredItemCount: ec.UInt32;
+		maxMonitoredItemCount: ec.UInt32;
+		disabledMonitoredItemCount: ec.UInt32;
 
-	constructor(	options? : ISamplingIntervalDiagnosticsDataType) { 
+	constructor(	options?: ISamplingIntervalDiagnosticsDataType) { 
 		options = options || {};
 		this.samplingInterval= (options.samplingInterval) ? options.samplingInterval:null;
 		this.monitoredItemCount= (options.monitoredItemCount) ? options.monitoredItemCount:null;
@@ -30,7 +30,7 @@ export class SamplingIntervalDiagnosticsDataType {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeDouble(this.samplingInterval,out);
 		ec.encodeUInt32(this.monitoredItemCount,out);
 		ec.encodeUInt32(this.maxMonitoredItemCount,out);
@@ -39,7 +39,7 @@ export class SamplingIntervalDiagnosticsDataType {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.samplingInterval = ec.decodeDouble(inp);
 		this.monitoredItemCount = ec.decodeUInt32(inp);
 		this.maxMonitoredItemCount = ec.decodeUInt32(inp);
@@ -48,7 +48,7 @@ export class SamplingIntervalDiagnosticsDataType {
 	}
 
 
-	clone(	target? : SamplingIntervalDiagnosticsDataType) : SamplingIntervalDiagnosticsDataType { 
+	clone(	target?: SamplingIntervalDiagnosticsDataType): SamplingIntervalDiagnosticsDataType { 
 		if(!target) {
 			target = new SamplingIntervalDiagnosticsDataType();
 		}
@@ -61,7 +61,7 @@ export class SamplingIntervalDiagnosticsDataType {
 
 
 }
-export function decodeSamplingIntervalDiagnosticsDataType(	inp : DataStream) : SamplingIntervalDiagnosticsDataType { 
+export function decodeSamplingIntervalDiagnosticsDataType(	inp: DataStream): SamplingIntervalDiagnosticsDataType { 
 		const obj = new SamplingIntervalDiagnosticsDataType();
 			obj.decode(inp); 
 			return obj;

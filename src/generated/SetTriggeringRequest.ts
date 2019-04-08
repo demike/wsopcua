@@ -5,11 +5,11 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISetTriggeringRequest {
-		requestHeader? : RequestHeader;
-		subscriptionId? : ec.UInt32;
-		triggeringItemId? : ec.UInt32;
-		linksToAdd? : ec.UInt32[];
-		linksToRemove? : ec.UInt32[];
+		requestHeader?: RequestHeader;
+		subscriptionId?: ec.UInt32;
+		triggeringItemId?: ec.UInt32;
+		linksToAdd?: ec.UInt32[];
+		linksToRemove?: ec.UInt32[];
 }
 
 /**
@@ -17,13 +17,13 @@ export interface ISetTriggeringRequest {
 */
 
 export class SetTriggeringRequest {
- 		requestHeader : RequestHeader;
-		subscriptionId : ec.UInt32;
-		triggeringItemId : ec.UInt32;
-		linksToAdd : ec.UInt32[];
-		linksToRemove : ec.UInt32[];
+ 		requestHeader: RequestHeader;
+		subscriptionId: ec.UInt32;
+		triggeringItemId: ec.UInt32;
+		linksToAdd: ec.UInt32[];
+		linksToRemove: ec.UInt32[];
 
-	constructor(	options? : ISetTriggeringRequest) { 
+	constructor(	options?: ISetTriggeringRequest) { 
 		options = options || {};
 		this.requestHeader= (options.requestHeader) ? options.requestHeader:new RequestHeader();
 		this.subscriptionId= (options.subscriptionId) ? options.subscriptionId:null;
@@ -34,7 +34,7 @@ export class SetTriggeringRequest {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
 		ec.encodeUInt32(this.subscriptionId,out);
 		ec.encodeUInt32(this.triggeringItemId,out);
@@ -44,7 +44,7 @@ export class SetTriggeringRequest {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
 		this.subscriptionId = ec.decodeUInt32(inp);
 		this.triggeringItemId = ec.decodeUInt32(inp);
@@ -54,7 +54,7 @@ export class SetTriggeringRequest {
 	}
 
 
-	clone(	target? : SetTriggeringRequest) : SetTriggeringRequest { 
+	clone(	target?: SetTriggeringRequest): SetTriggeringRequest { 
 		if(!target) {
 			target = new SetTriggeringRequest();
 		}
@@ -68,7 +68,7 @@ export class SetTriggeringRequest {
 
 
 }
-export function decodeSetTriggeringRequest(	inp : DataStream) : SetTriggeringRequest { 
+export function decodeSetTriggeringRequest(	inp: DataStream): SetTriggeringRequest { 
 		const obj = new SetTriggeringRequest();
 			obj.decode(inp); 
 			return obj;

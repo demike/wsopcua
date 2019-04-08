@@ -7,9 +7,9 @@ import {decodeServerOnNetwork} from './ServerOnNetwork';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IFindServersOnNetworkResponse {
-		responseHeader? : ResponseHeader;
-		lastCounterResetTime? : Date;
-		servers? : ServerOnNetwork[];
+		responseHeader?: ResponseHeader;
+		lastCounterResetTime?: Date;
+		servers?: ServerOnNetwork[];
 }
 
 /**
@@ -17,11 +17,11 @@ export interface IFindServersOnNetworkResponse {
 */
 
 export class FindServersOnNetworkResponse {
- 		responseHeader : ResponseHeader;
-		lastCounterResetTime : Date;
-		servers : ServerOnNetwork[];
+ 		responseHeader: ResponseHeader;
+		lastCounterResetTime: Date;
+		servers: ServerOnNetwork[];
 
-	constructor(	options? : IFindServersOnNetworkResponse) { 
+	constructor(	options?: IFindServersOnNetworkResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.lastCounterResetTime= (options.lastCounterResetTime) ? options.lastCounterResetTime:null;
@@ -30,7 +30,7 @@ export class FindServersOnNetworkResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeDateTime(this.lastCounterResetTime,out);
 		ec.encodeArray(this.servers,out);
@@ -38,7 +38,7 @@ export class FindServersOnNetworkResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.lastCounterResetTime = ec.decodeDateTime(inp);
 		this.servers = ec.decodeArray(inp,decodeServerOnNetwork);
@@ -46,7 +46,7 @@ export class FindServersOnNetworkResponse {
 	}
 
 
-	clone(	target? : FindServersOnNetworkResponse) : FindServersOnNetworkResponse { 
+	clone(	target?: FindServersOnNetworkResponse): FindServersOnNetworkResponse { 
 		if(!target) {
 			target = new FindServersOnNetworkResponse();
 		}
@@ -58,7 +58,7 @@ export class FindServersOnNetworkResponse {
 
 
 }
-export function decodeFindServersOnNetworkResponse(	inp : DataStream) : FindServersOnNetworkResponse { 
+export function decodeFindServersOnNetworkResponse(	inp: DataStream): FindServersOnNetworkResponse { 
 		const obj = new FindServersOnNetworkResponse();
 			obj.decode(inp); 
 			return obj;

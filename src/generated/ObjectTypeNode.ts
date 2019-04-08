@@ -13,18 +13,18 @@ import {TypeNode} from './TypeNode';
 import {ITypeNode} from './TypeNode';
 
 export interface IObjectTypeNode extends ITypeNode {
-		nodeId? : ec.NodeId;
-		nodeClass? : NodeClass;
-		browseName? : QualifiedName;
-		displayName? : LocalizedText;
-		description? : LocalizedText;
-		writeMask? : ec.UInt32;
-		userWriteMask? : ec.UInt32;
-		rolePermissions? : RolePermissionType[];
-		userRolePermissions? : RolePermissionType[];
-		accessRestrictions? : ec.UInt16;
-		references? : ReferenceNode[];
-		isAbstract? : boolean;
+		nodeId?: ec.NodeId;
+		nodeClass?: NodeClass;
+		browseName?: QualifiedName;
+		displayName?: LocalizedText;
+		description?: LocalizedText;
+		writeMask?: ec.UInt32;
+		userWriteMask?: ec.UInt32;
+		rolePermissions?: RolePermissionType[];
+		userRolePermissions?: RolePermissionType[];
+		accessRestrictions?: ec.UInt16;
+		references?: ReferenceNode[];
+		isAbstract?: boolean;
 }
 
 /**
@@ -32,20 +32,20 @@ Specifies the attributes which belong to object type nodes.
 */
 
 export class ObjectTypeNode extends TypeNode {
- 		nodeId : ec.NodeId;
-		nodeClass : NodeClass;
-		browseName : QualifiedName;
-		displayName : LocalizedText;
-		description : LocalizedText;
-		writeMask : ec.UInt32;
-		userWriteMask : ec.UInt32;
-		rolePermissions : RolePermissionType[];
-		userRolePermissions : RolePermissionType[];
-		accessRestrictions : ec.UInt16;
-		references : ReferenceNode[];
-		isAbstract : boolean;
+ 		nodeId: ec.NodeId;
+		nodeClass: NodeClass;
+		browseName: QualifiedName;
+		displayName: LocalizedText;
+		description: LocalizedText;
+		writeMask: ec.UInt32;
+		userWriteMask: ec.UInt32;
+		rolePermissions: RolePermissionType[];
+		userRolePermissions: RolePermissionType[];
+		accessRestrictions: ec.UInt16;
+		references: ReferenceNode[];
+		isAbstract: boolean;
 
-	constructor(	options? : IObjectTypeNode) { 
+	constructor(	options?: IObjectTypeNode) { 
 		options = options || {};
 		super(options);
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
@@ -64,7 +64,7 @@ export class ObjectTypeNode extends TypeNode {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeNodeId(this.nodeId,out);
 		encodeNodeClass(this.nodeClass,out);
@@ -82,7 +82,7 @@ export class ObjectTypeNode extends TypeNode {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.nodeId = ec.decodeNodeId(inp);
 		this.nodeClass = decodeNodeClass(inp);
@@ -100,7 +100,7 @@ export class ObjectTypeNode extends TypeNode {
 	}
 
 
-	clone(	target? : ObjectTypeNode) : ObjectTypeNode { 
+	clone(	target?: ObjectTypeNode): ObjectTypeNode { 
 		if(!target) {
 			target = new ObjectTypeNode();
 		}
@@ -122,7 +122,7 @@ export class ObjectTypeNode extends TypeNode {
 
 
 }
-export function decodeObjectTypeNode(	inp : DataStream) : ObjectTypeNode { 
+export function decodeObjectTypeNode(	inp: DataStream): ObjectTypeNode { 
 		const obj = new ObjectTypeNode();
 			obj.decode(inp); 
 			return obj;

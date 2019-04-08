@@ -7,9 +7,9 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDeleteSubscriptionsResponse {
-		responseHeader? : ResponseHeader;
-		results? : ec.StatusCode[];
-		diagnosticInfos? : DiagnosticInfo[];
+		responseHeader?: ResponseHeader;
+		results?: ec.StatusCode[];
+		diagnosticInfos?: DiagnosticInfo[];
 }
 
 /**
@@ -17,11 +17,11 @@ export interface IDeleteSubscriptionsResponse {
 */
 
 export class DeleteSubscriptionsResponse {
- 		responseHeader : ResponseHeader;
-		results : ec.StatusCode[];
-		diagnosticInfos : DiagnosticInfo[];
+ 		responseHeader: ResponseHeader;
+		results: ec.StatusCode[];
+		diagnosticInfos: DiagnosticInfo[];
 
-	constructor(	options? : IDeleteSubscriptionsResponse) { 
+	constructor(	options?: IDeleteSubscriptionsResponse) { 
 		options = options || {};
 		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
 		this.results= (options.results) ? options.results:[];
@@ -30,7 +30,7 @@ export class DeleteSubscriptionsResponse {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		this.responseHeader.encode(out);
 		ec.encodeArray(this.results,out,ec.encodeStatusCode);
 		ec.encodeArray(this.diagnosticInfos,out);
@@ -38,7 +38,7 @@ export class DeleteSubscriptionsResponse {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.responseHeader.decode(inp);
 		this.results = ec.decodeArray(inp,ec.decodeStatusCode);
 		this.diagnosticInfos = ec.decodeArray(inp,decodeDiagnosticInfo);
@@ -46,7 +46,7 @@ export class DeleteSubscriptionsResponse {
 	}
 
 
-	clone(	target? : DeleteSubscriptionsResponse) : DeleteSubscriptionsResponse { 
+	clone(	target?: DeleteSubscriptionsResponse): DeleteSubscriptionsResponse { 
 		if(!target) {
 			target = new DeleteSubscriptionsResponse();
 		}
@@ -58,7 +58,7 @@ export class DeleteSubscriptionsResponse {
 
 
 }
-export function decodeDeleteSubscriptionsResponse(	inp : DataStream) : DeleteSubscriptionsResponse { 
+export function decodeDeleteSubscriptionsResponse(	inp: DataStream): DeleteSubscriptionsResponse { 
 		const obj = new DeleteSubscriptionsResponse();
 			obj.decode(inp); 
 			return obj;

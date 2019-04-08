@@ -26,32 +26,32 @@ export class RequestHeader {
 		timeoutHint: ec.UInt32;
 		additionalHeader: ec.ExtensionObject;
 
-	constructor(	options?: IRequestHeader) {
+	constructor(	options?: IRequestHeader) { 
 		options = options || {};
-		this.authenticationToken = (options.authenticationToken) ? options.authenticationToken : null;
-		this.timestamp = (options.timestamp) ? options.timestamp : null;
-		this.requestHandle = (options.requestHandle) ? options.requestHandle : null;
-		this.returnDiagnostics = (options.returnDiagnostics) ? options.returnDiagnostics : null;
-		this.auditEntryId = (options.auditEntryId) ? options.auditEntryId : null;
-		this.timeoutHint = (options.timeoutHint) ? options.timeoutHint : null;
-		this.additionalHeader = (options.additionalHeader) ? options.additionalHeader : null;
+		this.authenticationToken= (options.authenticationToken) ? options.authenticationToken:null;
+		this.timestamp= (options.timestamp) ? options.timestamp:null;
+		this.requestHandle= (options.requestHandle) ? options.requestHandle:null;
+		this.returnDiagnostics= (options.returnDiagnostics) ? options.returnDiagnostics:null;
+		this.auditEntryId= (options.auditEntryId) ? options.auditEntryId:null;
+		this.timeoutHint= (options.timeoutHint) ? options.timeoutHint:null;
+		this.additionalHeader= (options.additionalHeader) ? options.additionalHeader:null;
 
 	}
 
 
-	encode(	out: DataStream) {
-		ec.encodeNodeId(this.authenticationToken, out);
-		ec.encodeDateTime(this.timestamp, out);
-		ec.encodeUInt32(this.requestHandle, out);
-		ec.encodeUInt32(this.returnDiagnostics, out);
-		ec.encodeString(this.auditEntryId, out);
-		ec.encodeUInt32(this.timeoutHint, out);
-		ec.encodeExtensionObject(this.additionalHeader, out);
+	encode(	out: DataStream) { 
+		ec.encodeNodeId(this.authenticationToken,out);
+		ec.encodeDateTime(this.timestamp,out);
+		ec.encodeUInt32(this.requestHandle,out);
+		ec.encodeUInt32(this.returnDiagnostics,out);
+		ec.encodeString(this.auditEntryId,out);
+		ec.encodeUInt32(this.timeoutHint,out);
+		ec.encodeExtensionObject(this.additionalHeader,out);
 
 	}
 
 
-	decode(	inp: DataStream) {
+	decode(	inp: DataStream) { 
 		this.authenticationToken = ec.decodeNodeId(inp);
 		this.timestamp = ec.decodeDateTime(inp);
 		this.requestHandle = ec.decodeUInt32(inp);
@@ -63,8 +63,8 @@ export class RequestHeader {
 	}
 
 
-	clone(	target?: RequestHeader): RequestHeader {
-		if (!target) {
+	clone(	target?: RequestHeader): RequestHeader { 
+		if(!target) {
 			target = new RequestHeader();
 		}
 		target.authenticationToken = this.authenticationToken;
@@ -79,15 +79,15 @@ export class RequestHeader {
 
 
 }
-export function decodeRequestHeader(	inp: DataStream): RequestHeader {
+export function decodeRequestHeader(	inp: DataStream): RequestHeader { 
 		const obj = new RequestHeader();
-			obj.decode(inp);
+			obj.decode(inp); 
 			return obj;
 
 	}
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
+import {register_class_definition} from "../factory/factories_factories";
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RequestHeader', RequestHeader, makeExpandedNodeId(391, 0));
+register_class_definition("RequestHeader",RequestHeader, makeExpandedNodeId(391,0));

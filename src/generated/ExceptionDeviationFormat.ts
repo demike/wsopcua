@@ -11,12 +11,12 @@ export enum ExceptionDeviationFormat {
 
 }
 
-export function encodeExceptionDeviationFormat(	data : ExceptionDeviationFormat, 	out : DataStream) { 
+export function encodeExceptionDeviationFormat(	data: ExceptionDeviationFormat, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeExceptionDeviationFormat(	inp : DataStream) { 
+export function decodeExceptionDeviationFormat(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

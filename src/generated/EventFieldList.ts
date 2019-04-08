@@ -6,8 +6,8 @@ import {decodeVariant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IEventFieldList {
-		clientHandle? : ec.UInt32;
-		eventFields? : Variant[];
+		clientHandle?: ec.UInt32;
+		eventFields?: Variant[];
 }
 
 /**
@@ -15,10 +15,10 @@ export interface IEventFieldList {
 */
 
 export class EventFieldList {
- 		clientHandle : ec.UInt32;
-		eventFields : Variant[];
+ 		clientHandle: ec.UInt32;
+		eventFields: Variant[];
 
-	constructor(	options? : IEventFieldList) { 
+	constructor(	options?: IEventFieldList) { 
 		options = options || {};
 		this.clientHandle= (options.clientHandle) ? options.clientHandle:null;
 		this.eventFields= (options.eventFields) ? options.eventFields:[];
@@ -26,21 +26,21 @@ export class EventFieldList {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.clientHandle,out);
 		ec.encodeArray(this.eventFields,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.clientHandle = ec.decodeUInt32(inp);
 		this.eventFields = ec.decodeArray(inp,decodeVariant);
 
 	}
 
 
-	clone(	target? : EventFieldList) : EventFieldList { 
+	clone(	target?: EventFieldList): EventFieldList { 
 		if(!target) {
 			target = new EventFieldList();
 		}
@@ -51,7 +51,7 @@ export class EventFieldList {
 
 
 }
-export function decodeEventFieldList(	inp : DataStream) : EventFieldList { 
+export function decodeEventFieldList(	inp: DataStream): EventFieldList { 
 		const obj = new EventFieldList();
 			obj.decode(inp); 
 			return obj;

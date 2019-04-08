@@ -9,7 +9,7 @@ export class FilterOperand {
  
 	constructor(){};
 
-	clone(	target? : FilterOperand) : FilterOperand { 
+	clone(	target?: FilterOperand): FilterOperand { 
 		if(!target) {
 			target = new FilterOperand();
 		}

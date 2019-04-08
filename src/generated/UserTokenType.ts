@@ -12,12 +12,12 @@ export enum UserTokenType {
 
 }
 
-export function encodeUserTokenType(	data : UserTokenType, 	out : DataStream) { 
+export function encodeUserTokenType(	data: UserTokenType, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodeUserTokenType(	inp : DataStream) { 
+export function decodeUserTokenType(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

@@ -5,11 +5,11 @@ import {LocalizedText} from './LocalizedText';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IArgument {
-		name? : string;
-		dataType? : ec.NodeId;
-		valueRank? : ec.Int32;
-		arrayDimensions? : ec.UInt32[];
-		description? : LocalizedText;
+		name?: string;
+		dataType?: ec.NodeId;
+		valueRank?: ec.Int32;
+		arrayDimensions?: ec.UInt32[];
+		description?: LocalizedText;
 }
 
 /**
@@ -17,13 +17,13 @@ An argument for a method.
 */
 
 export class Argument {
- 		name : string;
-		dataType : ec.NodeId;
-		valueRank : ec.Int32;
-		arrayDimensions : ec.UInt32[];
-		description : LocalizedText;
+ 		name: string;
+		dataType: ec.NodeId;
+		valueRank: ec.Int32;
+		arrayDimensions: ec.UInt32[];
+		description: LocalizedText;
 
-	constructor(	options? : IArgument) { 
+	constructor(	options?: IArgument) { 
 		options = options || {};
 		this.name= (options.name) ? options.name:null;
 		this.dataType= (options.dataType) ? options.dataType:null;
@@ -34,7 +34,7 @@ export class Argument {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.name,out);
 		ec.encodeNodeId(this.dataType,out);
 		ec.encodeInt32(this.valueRank,out);
@@ -44,7 +44,7 @@ export class Argument {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.name = ec.decodeString(inp);
 		this.dataType = ec.decodeNodeId(inp);
 		this.valueRank = ec.decodeInt32(inp);
@@ -54,7 +54,7 @@ export class Argument {
 	}
 
 
-	clone(	target? : Argument) : Argument { 
+	clone(	target?: Argument): Argument { 
 		if(!target) {
 			target = new Argument();
 		}
@@ -68,7 +68,7 @@ export class Argument {
 
 
 }
-export function decodeArgument(	inp : DataStream) : Argument { 
+export function decodeArgument(	inp: DataStream): Argument { 
 		const obj = new Argument();
 			obj.decode(inp); 
 			return obj;

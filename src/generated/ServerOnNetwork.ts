@@ -4,10 +4,10 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IServerOnNetwork {
-		recordId? : ec.UInt32;
-		serverName? : string;
-		discoveryUrl? : string;
-		serverCapabilities? : string[];
+		recordId?: ec.UInt32;
+		serverName?: string;
+		discoveryUrl?: string;
+		serverCapabilities?: string[];
 }
 
 /**
@@ -15,12 +15,12 @@ export interface IServerOnNetwork {
 */
 
 export class ServerOnNetwork {
- 		recordId : ec.UInt32;
-		serverName : string;
-		discoveryUrl : string;
-		serverCapabilities : string[];
+ 		recordId: ec.UInt32;
+		serverName: string;
+		discoveryUrl: string;
+		serverCapabilities: string[];
 
-	constructor(	options? : IServerOnNetwork) { 
+	constructor(	options?: IServerOnNetwork) { 
 		options = options || {};
 		this.recordId= (options.recordId) ? options.recordId:null;
 		this.serverName= (options.serverName) ? options.serverName:null;
@@ -30,7 +30,7 @@ export class ServerOnNetwork {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.recordId,out);
 		ec.encodeString(this.serverName,out);
 		ec.encodeString(this.discoveryUrl,out);
@@ -39,7 +39,7 @@ export class ServerOnNetwork {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.recordId = ec.decodeUInt32(inp);
 		this.serverName = ec.decodeString(inp);
 		this.discoveryUrl = ec.decodeString(inp);
@@ -48,7 +48,7 @@ export class ServerOnNetwork {
 	}
 
 
-	clone(	target? : ServerOnNetwork) : ServerOnNetwork { 
+	clone(	target?: ServerOnNetwork): ServerOnNetwork { 
 		if(!target) {
 			target = new ServerOnNetwork();
 		}
@@ -61,7 +61,7 @@ export class ServerOnNetwork {
 
 
 }
-export function decodeServerOnNetwork(	inp : DataStream) : ServerOnNetwork { 
+export function decodeServerOnNetwork(	inp: DataStream): ServerOnNetwork { 
 		const obj = new ServerOnNetwork();
 			obj.decode(inp); 
 			return obj;

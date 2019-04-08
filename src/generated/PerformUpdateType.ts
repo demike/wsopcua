@@ -10,12 +10,12 @@ export enum PerformUpdateType {
 
 }
 
-export function encodePerformUpdateType(	data : PerformUpdateType, 	out : DataStream) { 
+export function encodePerformUpdateType(	data: PerformUpdateType, 	out: DataStream) { 
 	out.setUint32(data);
 	}
 
 
-export function decodePerformUpdateType(	inp : DataStream) { 
+export function decodePerformUpdateType(	inp: DataStream) { 
 	return inp.getUint32();
 	}
 

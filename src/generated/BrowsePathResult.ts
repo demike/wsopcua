@@ -6,8 +6,8 @@ import {decodeBrowsePathTarget} from './BrowsePathTarget';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IBrowsePathResult {
-		statusCode? : ec.StatusCode;
-		targets? : BrowsePathTarget[];
+		statusCode?: ec.StatusCode;
+		targets?: BrowsePathTarget[];
 }
 
 /**
@@ -15,10 +15,10 @@ The result of a translate opearation.
 */
 
 export class BrowsePathResult {
- 		statusCode : ec.StatusCode;
-		targets : BrowsePathTarget[];
+ 		statusCode: ec.StatusCode;
+		targets: BrowsePathTarget[];
 
-	constructor(	options? : IBrowsePathResult) { 
+	constructor(	options?: IBrowsePathResult) { 
 		options = options || {};
 		this.statusCode= (options.statusCode) ? options.statusCode:null;
 		this.targets= (options.targets) ? options.targets:[];
@@ -26,21 +26,21 @@ export class BrowsePathResult {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeStatusCode(this.statusCode,out);
 		ec.encodeArray(this.targets,out);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.statusCode = ec.decodeStatusCode(inp);
 		this.targets = ec.decodeArray(inp,decodeBrowsePathTarget);
 
 	}
 
 
-	clone(	target? : BrowsePathResult) : BrowsePathResult { 
+	clone(	target?: BrowsePathResult): BrowsePathResult { 
 		if(!target) {
 			target = new BrowsePathResult();
 		}
@@ -51,7 +51,7 @@ export class BrowsePathResult {
 
 
 }
-export function decodeBrowsePathResult(	inp : DataStream) : BrowsePathResult { 
+export function decodeBrowsePathResult(	inp: DataStream): BrowsePathResult { 
 		const obj = new BrowsePathResult();
 			obj.decode(inp); 
 			return obj;

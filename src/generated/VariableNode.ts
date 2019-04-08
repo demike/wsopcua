@@ -14,26 +14,26 @@ import {InstanceNode} from './InstanceNode';
 import {IInstanceNode} from './InstanceNode';
 
 export interface IVariableNode extends IInstanceNode {
-		nodeId? : ec.NodeId;
-		nodeClass? : NodeClass;
-		browseName? : QualifiedName;
-		displayName? : LocalizedText;
-		description? : LocalizedText;
-		writeMask? : ec.UInt32;
-		userWriteMask? : ec.UInt32;
-		rolePermissions? : RolePermissionType[];
-		userRolePermissions? : RolePermissionType[];
-		accessRestrictions? : ec.UInt16;
-		references? : ReferenceNode[];
-		value? : Variant;
-		dataType? : ec.NodeId;
-		valueRank? : ec.Int32;
-		arrayDimensions? : ec.UInt32[];
-		accessLevel? : ec.Byte;
-		userAccessLevel? : ec.Byte;
-		minimumSamplingInterval? : ec.Double;
-		historizing? : boolean;
-		accessLevelEx? : ec.UInt32;
+		nodeId?: ec.NodeId;
+		nodeClass?: NodeClass;
+		browseName?: QualifiedName;
+		displayName?: LocalizedText;
+		description?: LocalizedText;
+		writeMask?: ec.UInt32;
+		userWriteMask?: ec.UInt32;
+		rolePermissions?: RolePermissionType[];
+		userRolePermissions?: RolePermissionType[];
+		accessRestrictions?: ec.UInt16;
+		references?: ReferenceNode[];
+		value?: Variant;
+		dataType?: ec.NodeId;
+		valueRank?: ec.Int32;
+		arrayDimensions?: ec.UInt32[];
+		accessLevel?: ec.Byte;
+		userAccessLevel?: ec.Byte;
+		minimumSamplingInterval?: ec.Double;
+		historizing?: boolean;
+		accessLevelEx?: ec.UInt32;
 }
 
 /**
@@ -41,28 +41,28 @@ Specifies the attributes which belong to variable nodes.
 */
 
 export class VariableNode extends InstanceNode {
- 		nodeId : ec.NodeId;
-		nodeClass : NodeClass;
-		browseName : QualifiedName;
-		displayName : LocalizedText;
-		description : LocalizedText;
-		writeMask : ec.UInt32;
-		userWriteMask : ec.UInt32;
-		rolePermissions : RolePermissionType[];
-		userRolePermissions : RolePermissionType[];
-		accessRestrictions : ec.UInt16;
-		references : ReferenceNode[];
-		value : Variant;
-		dataType : ec.NodeId;
-		valueRank : ec.Int32;
-		arrayDimensions : ec.UInt32[];
-		accessLevel : ec.Byte;
-		userAccessLevel : ec.Byte;
-		minimumSamplingInterval : ec.Double;
-		historizing : boolean;
-		accessLevelEx : ec.UInt32;
+ 		nodeId: ec.NodeId;
+		nodeClass: NodeClass;
+		browseName: QualifiedName;
+		displayName: LocalizedText;
+		description: LocalizedText;
+		writeMask: ec.UInt32;
+		userWriteMask: ec.UInt32;
+		rolePermissions: RolePermissionType[];
+		userRolePermissions: RolePermissionType[];
+		accessRestrictions: ec.UInt16;
+		references: ReferenceNode[];
+		value: Variant;
+		dataType: ec.NodeId;
+		valueRank: ec.Int32;
+		arrayDimensions: ec.UInt32[];
+		accessLevel: ec.Byte;
+		userAccessLevel: ec.Byte;
+		minimumSamplingInterval: ec.Double;
+		historizing: boolean;
+		accessLevelEx: ec.UInt32;
 
-	constructor(	options? : IVariableNode) { 
+	constructor(	options?: IVariableNode) { 
 		options = options || {};
 		super(options);
 		this.nodeId= (options.nodeId) ? options.nodeId:null;
@@ -89,7 +89,7 @@ export class VariableNode extends InstanceNode {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		super.encode(out);
 		ec.encodeNodeId(this.nodeId,out);
 		encodeNodeClass(this.nodeClass,out);
@@ -115,7 +115,7 @@ export class VariableNode extends InstanceNode {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		super.decode(inp);
 		this.nodeId = ec.decodeNodeId(inp);
 		this.nodeClass = decodeNodeClass(inp);
@@ -141,7 +141,7 @@ export class VariableNode extends InstanceNode {
 	}
 
 
-	clone(	target? : VariableNode) : VariableNode { 
+	clone(	target?: VariableNode): VariableNode { 
 		if(!target) {
 			target = new VariableNode();
 		}
@@ -171,7 +171,7 @@ export class VariableNode extends InstanceNode {
 
 
 }
-export function decodeVariableNode(	inp : DataStream) : VariableNode { 
+export function decodeVariableNode(	inp: DataStream): VariableNode { 
 		const obj = new VariableNode();
 			obj.decode(inp); 
 			return obj;

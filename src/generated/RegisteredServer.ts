@@ -7,14 +7,14 @@ import {ApplicationType, encodeApplicationType, decodeApplicationType} from './A
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRegisteredServer {
-		serverUri? : string;
-		productUri? : string;
-		serverNames? : LocalizedText[];
-		serverType? : ApplicationType;
-		gatewayServerUri? : string;
-		discoveryUrls? : string[];
-		semaphoreFilePath? : string;
-		isOnline? : boolean;
+		serverUri?: string;
+		productUri?: string;
+		serverNames?: LocalizedText[];
+		serverType?: ApplicationType;
+		gatewayServerUri?: string;
+		discoveryUrls?: string[];
+		semaphoreFilePath?: string;
+		isOnline?: boolean;
 }
 
 /**
@@ -22,16 +22,16 @@ The information required to register a server with a discovery server.
 */
 
 export class RegisteredServer {
- 		serverUri : string;
-		productUri : string;
-		serverNames : LocalizedText[];
-		serverType : ApplicationType;
-		gatewayServerUri : string;
-		discoveryUrls : string[];
-		semaphoreFilePath : string;
-		isOnline : boolean;
+ 		serverUri: string;
+		productUri: string;
+		serverNames: LocalizedText[];
+		serverType: ApplicationType;
+		gatewayServerUri: string;
+		discoveryUrls: string[];
+		semaphoreFilePath: string;
+		isOnline: boolean;
 
-	constructor(	options? : IRegisteredServer) { 
+	constructor(	options?: IRegisteredServer) { 
 		options = options || {};
 		this.serverUri= (options.serverUri) ? options.serverUri:null;
 		this.productUri= (options.productUri) ? options.productUri:null;
@@ -45,7 +45,7 @@ export class RegisteredServer {
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeString(this.serverUri,out);
 		ec.encodeString(this.productUri,out);
 		ec.encodeArray(this.serverNames,out);
@@ -58,7 +58,7 @@ export class RegisteredServer {
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.serverUri = ec.decodeString(inp);
 		this.productUri = ec.decodeString(inp);
 		this.serverNames = ec.decodeArray(inp,decodeLocalizedText);
@@ -71,7 +71,7 @@ export class RegisteredServer {
 	}
 
 
-	clone(	target? : RegisteredServer) : RegisteredServer { 
+	clone(	target?: RegisteredServer): RegisteredServer { 
 		if(!target) {
 			target = new RegisteredServer();
 		}
@@ -88,7 +88,7 @@ export class RegisteredServer {
 
 
 }
-export function decodeRegisteredServer(	inp : DataStream) : RegisteredServer { 
+export function decodeRegisteredServer(	inp: DataStream): RegisteredServer { 
 		const obj = new RegisteredServer();
 			obj.decode(inp); 
 			return obj;

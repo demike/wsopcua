@@ -4,7 +4,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IEndpointUrlListDataType {
-		endpointUrlList? : string[];
+		endpointUrlList?: string[];
 }
 
 /**
@@ -12,28 +12,28 @@ export interface IEndpointUrlListDataType {
 */
 
 export class EndpointUrlListDataType {
- 		endpointUrlList : string[];
+ 		endpointUrlList: string[];
 
-	constructor(	options? : IEndpointUrlListDataType) { 
+	constructor(	options?: IEndpointUrlListDataType) { 
 		options = options || {};
 		this.endpointUrlList= (options.endpointUrlList) ? options.endpointUrlList:[];
 
 	}
 
 
-	encode(	out : DataStream) { 
+	encode(	out: DataStream) { 
 		ec.encodeArray(this.endpointUrlList,out,ec.encodeString);
 
 	}
 
 
-	decode(	inp : DataStream) { 
+	decode(	inp: DataStream) { 
 		this.endpointUrlList = ec.decodeArray(inp,ec.decodeString);
 
 	}
 
 
-	clone(	target? : EndpointUrlListDataType) : EndpointUrlListDataType { 
+	clone(	target?: EndpointUrlListDataType): EndpointUrlListDataType { 
 		if(!target) {
 			target = new EndpointUrlListDataType();
 		}
@@ -43,7 +43,7 @@ export class EndpointUrlListDataType {
 
 
 }
-export function decodeEndpointUrlListDataType(	inp : DataStream) : EndpointUrlListDataType { 
+export function decodeEndpointUrlListDataType(	inp: DataStream): EndpointUrlListDataType { 
 		const obj = new EndpointUrlListDataType();
 			obj.decode(inp); 
 			return obj;
