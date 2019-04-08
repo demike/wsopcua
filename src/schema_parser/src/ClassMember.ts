@@ -144,7 +144,7 @@ export class ClassMember {
         if (!required) {
             str += "?";
         }
-        str += " : " + typeName;
+        str += ": " + typeName;
 
         if (this._length > 1 || this._isArray) {
             str += "[]";

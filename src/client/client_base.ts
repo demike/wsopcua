@@ -652,23 +652,27 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
 
 
-    public toString() {
-
-        console.log('  defaultSecureTokenLifetime.... ', this.defaultSecureTokenLifetime);
-        console.log('  securityMode.................. ', this.securityMode.toString());
-        console.log('  securityPolicy................ ', this.securityPolicy.toString());
+    public toString(): string {
+        let str = '';
+        str += '  defaultSecureTokenLifetime.... ' + this.defaultSecureTokenLifetime;
+        str += '  securityMode.................. ' + this.securityMode.toString();
+        str += '  securityPolicy................ ' + this.securityPolicy.toString();
         // xx this.serverCertificate = options.serverCertificate || null;
-        console.log('  keepSessionAlive.............. ', this.keepSessionAlive);
-        console.log('  bytesRead..................... ', this.bytesRead);
-        console.log('  bytesWritten.................. ', this.bytesWritten);
-        console.log('  transactionsPerformed......... ', this.transactionsPerformed);
-        console.log('  timedOutRequestCount.......... ', this.timedOutRequestCount);
-        console.log('  connectionStrategy.');
-        console.log('        .maxRetry............... ', this.connectionStrategy.maxRetry);
-        console.log('        .initialDelay........... ', this.connectionStrategy.initialDelay);
-        console.log('        .maxDelay............... ', this.connectionStrategy.maxDelay);
-        console.log('        .randomisationFactor.... ', this.connectionStrategy.randomisationFactor);
-        console.log('  keepSessionAlive.............. ', this.keepSessionAlive);
+        str += '  keepSessionAlive.............. ' + this.keepSessionAlive;
+        str += '  bytesRead..................... ' + this.bytesRead;
+        str += '  bytesWritten.................. ' + this.bytesWritten;
+        str += '  transactionsPerformed......... ' + this.transactionsPerformed;
+        str += '  timedOutRequestCount.......... ' + this.timedOutRequestCount;
+        str += '  connectionStrategy.';
+        str += '        .maxRetry............... ' + this.connectionStrategy.maxRetry;
+        str += '        .initialDelay........... ' + this.connectionStrategy.initialDelay;
+        str += '        .maxDelay............... ' + this.connectionStrategy.maxDelay;
+        str += '        .randomisationFactor.... ' + this.connectionStrategy.randomisationFactor;
+        str += '  keepSessionAlive.............. ' + this.keepSessionAlive;
+
+        console.log(str);
+
+        return str;
     }
 
 

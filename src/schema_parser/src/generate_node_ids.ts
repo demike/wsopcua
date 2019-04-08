@@ -46,9 +46,12 @@ function convert(data: string, outFileName: string)
 
 
     });
+
+    /*
     var outFile = fs.createWriteStream(path.join(__dirname + "/../../constants",outFileName));
     outFile.write("// this file has been automatically generated\n");
     outFile.write("// using schema_parser/generate_node_ids.ts\n");
+    */
 
     var e;
 /*    if (false) {
@@ -67,9 +70,13 @@ function convert(data: string, outFileName: string)
 
     }
 */
-    var typeMap;
+    let typeMap;
     for(typeName in metaTypeMap) {
         if (metaTypeMap.hasOwnProperty(typeName)) {
+            const fileName = (typeName + 'Ids.ts'); //.split(/(?=[A-Z])/).join('_').toLowerCase();
+            const outFile = fs.createWriteStream(path.join(__dirname + "/../../constants",fileName));
+            outFile.write("// this file has been automatically generated\n");
+            outFile.write("// using schema_parser/generate_node_ids.ts\n");
             typeMap = metaTypeMap[typeName];
             outFile.write(" export var "+ typeName + "Ids = { \n");
 
@@ -91,6 +98,7 @@ function convert(data: string, outFileName: string)
                 }
             }
             outFile.write("};\n");
+            // outFile.close();
         }
     }
 }

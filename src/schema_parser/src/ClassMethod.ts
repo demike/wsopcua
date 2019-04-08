@@ -82,7 +82,7 @@ export class ClassMethod {
         }
         header += ")";
         if (this.returnType) {
-            header += " : " + this.returnType.Name;
+            header += ": " + this.returnType.Name;
         }
         return header;
     }

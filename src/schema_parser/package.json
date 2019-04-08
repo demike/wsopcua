@@ -2,7 +2,6 @@
  "name": "opcua-schema-parser",
  "version": "0.1.0-00",
  "description": "nodejs opcua schema parser",
- "scripts": {},
  "main": "index.ts",
  "dependencies": {
   "@types/jsdom": "~11.0.4",
@@ -35,5 +34,9 @@
   "opc ua",
   "internet of things"
  ],
- "homepage": ""
+ "homepage": "",
+ "scripts": {
+    "start": "tsc -p ./tsconfig.json --watch",
+    "build": "tsc -p ./tsconfig.json"
+  }
 }

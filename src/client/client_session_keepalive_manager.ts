@@ -3,12 +3,12 @@ import {ClientSession} from './client_session';
 import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert';
 import {coerceNodeId} from '../nodeid/nodeid';
-import {VariableIds} from '../constants';
+// import {VariableIds} from '../constants';
 import {StatusCodes} from '../constants';
 import {ServerState} from '../generated/ServerState';
 import { debugLog } from '../common/debug';
 
-const serverStatus_State_Id = coerceNodeId(VariableIds.Server_ServerStatus_State);
+const serverStatus_State_Id = coerceNodeId( /*VariableIds.Server_ServerStatus_State*/ 2259);
 
 export type ClientSessionKeepAliveManagerEvents = 'failure'|'keepalive';
 

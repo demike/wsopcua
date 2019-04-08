@@ -262,12 +262,13 @@ export function makeNodeId(value: Uint8Array|string|number, namespace?: number):
 
 
 const DataTypeIds = constants.DataTypeIds;
-const VariableIds = constants.VariableIds;
-const ObjectIds = constants.ObjectIds;
 const ObjectTypeIds = constants.ObjectTypeIds;
 const VariableTypeIds = constants.VariableTypeIds;
-const MethodIds = constants.MethodIds;
 const ReferenceTypeIds = constants.ReferenceTypeIds;
+// const VariableIds = constants.VariableIds;
+// const ObjectIds = constants.ObjectIds;
+// const MethodIds = constants.MethodIds;
+
 
 // reverse maps
 let _nodeid_to_name_index : {[name: number]: string} = {};
@@ -287,11 +288,11 @@ let _name_to_nodeid_index : {[name: string]: NodeId} = {};
 
     _nodeid_to_name_index = {};
     _name_to_nodeid_index = {};
-    expand_map(ObjectIds);
+//    expand_map(ObjectIds);
     expand_map(ObjectTypeIds);
-    expand_map(VariableIds);
+//    expand_map(VariableIds);
     expand_map(VariableTypeIds);
-    expand_map(MethodIds);
+//    expand_map(MethodIds);
     expand_map(ReferenceTypeIds);
     expand_map(DataTypeIds);
 

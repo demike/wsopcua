@@ -25,6 +25,11 @@ const decode_String = ec.decodeString;
 
 import {generate_new_id} from '../factory';
 
+export interface ITCPErrorMessage {
+    reason?: string;
+    statusCode?: StatusCode;
+}
+
 /**
  *
  * @class TCPErrorMessage
@@ -35,7 +40,7 @@ import {generate_new_id} from '../factory';
  * @param  [options.reason] {String}
  */
 export class TCPErrorMessage extends BaseUAObject {
-constructor(options?) {
+constructor(options?: ITCPErrorMessage) {
     super();
     options = options || {};
 

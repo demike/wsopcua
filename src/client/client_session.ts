@@ -625,7 +625,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.statusCode {StatusCode} - the status code of the write
      * @param callback.diagnosticInfo {DiagnosticInfo} the diagnostic info.
      */
-    writeSingleNode(nodeId: NodeId, value: Variant, callback: Function) {
+    writeSingleNode(nodeId: NodeId, value: Variant, callback: (err: Error, sc?: StatusCode, di?:  DiagnosticInfo ) => void) {
 
         assert('function' === typeof callback);
 
@@ -1239,7 +1239,7 @@ public evaluateRemainingLifetime(): number {
      * @param [deleteSubscription=true] {Boolean}
      * @param callback {Function}
      */
-    public close(deleteSubscription: boolean = true, callback: ErrorCallback) {
+    public close(deleteSubscription: boolean = true, callback: ErrorCallback): void {
 
         /*
         if (arguments.length === 1) {

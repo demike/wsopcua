@@ -659,11 +659,13 @@ protected _on_connection_reestablished(callback: ErrorCallback) {
 }
 
 
-public toString() {
-    super.toString();
-    console.log('  requestedSessionTimeout....... ', this.requestedSessionTimeout);
-    console.log('  endpointUrl................... ', this.endpointUrl);
-    console.log('  serverUri..................... ', this._serverUri);
+public toString(): string {
+    const superStr = super.toString();
+    let str = '  requestedSessionTimeout....... ' + this.requestedSessionTimeout;
+    str += '  endpointUrl................... ' + this.endpointUrl;
+    str += '  serverUri..................... ' + this._serverUri;
+    console.log(str);
+    return superStr + str;
 }
 
 /**
