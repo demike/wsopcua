@@ -341,7 +341,7 @@ export class DataStream {
 * @param offset   {Number}
 * @param length   {Number}
 */
-  public writeArrayBuffer(arrayBuf: ArrayBuffer, offset: number, length: number) {
+  public writeArrayBuffer(arrayBuf: ArrayBuffer, offset: number, length?: number) {
     offset = offset || 0;
 
     /*
@@ -355,7 +355,7 @@ export class DataStream {
     */
    const byteArr = new Uint8Array(arrayBuf, offset, length);
    const viewBuffer = new Uint8Array(this._view.buffer);
-   viewBuffer.set(byteArr,this._pos);
+   viewBuffer.set(byteArr, this._pos);
    this._pos += length;
   }
 

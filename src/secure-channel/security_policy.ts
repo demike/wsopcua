@@ -7,7 +7,8 @@ import {assert} from '../assert';
 import {MessageSecurityMode} from '../generated/MessageSecurityMode';
 import {SignatureData} from '../generated/SignatureData';
 
-import * as crypto_utils from '../crypto/crypto_utils';
+import * as crypto_utils from '../crypto';
+import { generatePublicKeyFromDER, DerivedKeys } from '../crypto';
 /**
  * @class SecurityPolicy
  * @static
@@ -104,23 +105,21 @@ export  function toUri(value: any): SecurityPolicy {
 
 // --------------------
 function RSAPKCS1V15_Decrypt(buffer, privateKey) {
-    const block_size = crypto_utils.rsa_length(privateKey);
-    return crypto_utils.privateDecrypt_long(buffer, privateKey, block_size, crypto_utils.RSA_PKCS1_PADDING);
+    return crypto_utils.privateDecrypt_long(buffer, privateKey, crypto_utils.RSA_PKCS1_PADDING);
 }
 function RSAOAEP_Decrypt(buffer, privateKey) {
-    const block_size = crypto_utils.rsa_length(privateKey);
-    return crypto_utils.privateDecrypt_long(buffer, privateKey, block_size, crypto_utils.RSA_PKCS1_OAEP_PADDING);
+    return crypto_utils.privateDecrypt_long(buffer, privateKey, crypto_utils.RSA_PKCS1_OAEP_PADDING);
 }
 // --------------------
 
-function asymmetricVerifyChunk(chunk: Uint8Array, certificate: Uint8Array) {
+function asymmetricVerifyChunk(chunk: Uint8Array, certificate: Uint8Array) : PromiseLike<boolean> {
 
-    const crypto_factory = this;
+    const crypto_factory: ICryptoFactory = this;
     assert(chunk instanceof Uint8Array);
     assert(certificate instanceof Uint8Array);
     // let's get the signatureLength by checking the size
     // of the certificate's public key
-    const cert = crypto_utils.exploreCertificate(certificate);
+    const cert = crypto_utils.exploreCertificateInfo(certificate);
 
     const signatureLength = cert.publicKeyLength; // 1024 bits = 128Bytes or 2048=256Bytes
     const block_to_verify = chunk.slice(0, chunk.length - signatureLength);
@@ -129,44 +128,40 @@ function asymmetricVerifyChunk(chunk: Uint8Array, certificate: Uint8Array) {
 
 }
 
-function RSAPKCS1V15SHA1_Verify(buffer: Uint8Array, signature, certificate: Uint8Array) {
-    const options = {
-        algorithm: 'RSA-SHA1',
-        publicKey: crypto_utils.toPem(certificate, 'CERTIFICATE')
-    };
-    return crypto_utils.verifyMessageChunkSignature(buffer, signature, options);
+function RSAPKCS1V15SHA1_Verify(buffer: Uint8Array, signature: Uint8Array, certificate: Uint8Array): PromiseLike<boolean> {
+    return generatePublicKeyFromDER(certificate)
+    .then( (pubKey) => {
+        return {
+            algorithm: 'RSA-SHA1',
+            publicKey: pubKey
+        };
+    }).then( opts => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
 }
 const RSAPKCS1OAEPSHA1_Verify = RSAPKCS1V15SHA1_Verify;
 
-function RSAPKCS1OAEPSHA256_Verify(buffer, signature, certificate: Uint8Array) {
-    const options = {
-        algorithm: 'RSA-SHA256',
-        publicKey: crypto_utils.toPem(certificate, 'CERTIFICATE')
-    };
-    return crypto_utils.verifyMessageChunkSignature(buffer, signature, options);
+function RSAPKCS1OAEPSHA256_Verify(buffer: Uint8Array, signature: Uint8Array, certificate: Uint8Array): PromiseLike<boolean> {
+    return generatePublicKeyFromDER(certificate)
+    .then( (pubKey) => {
+        return {
+            algorithm: 'RSA-SHA256',
+            publicKey: pubKey
+        };
+    }).then( opts => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
+ 
 }
 
 
-function RSAPKCS1V15SHA1_Sign(buffer, privateKey: Uint8Array | string) {
+function RSAPKCS1V15SHA1_Sign(buffer: Uint8Array, privateKey: CryptoKey): Promise<ArrayBuffer> {
 
-    if (privateKey instanceof Uint8Array) {
-        privateKey = crypto_utils.toPem(privateKey, 'RSA PRIVATE KEY');
-    }
     const params = {
-        signatureLength: crypto_utils.rsa_length(privateKey),
         algorithm: 'RSA-SHA1',
         privateKey: privateKey
     };
     return crypto_utils.makeMessageChunkSignature(buffer, params);
 }
 
-function RSAPKCS1V15SHA256_Sign(buffer, privateKey: Uint8Array | string) {
-
-    if (privateKey instanceof Uint8Array) {
-        privateKey = crypto_utils.toPem(privateKey, 'RSA PRIVATE KEY');
-    }
+function RSAPKCS1V15SHA256_Sign(buffer: Uint8Array, privateKey: CryptoKey): Promise<ArrayBuffer> {
     const params = {
-        signatureLength: crypto_utils.rsa_length(privateKey),
         algorithm: 'RSA-SHA256',
         privateKey: privateKey
     };
@@ -175,15 +170,12 @@ function RSAPKCS1V15SHA256_Sign(buffer, privateKey: Uint8Array | string) {
 
 const RSAPKCS1OAEPSHA1_Sign = RSAPKCS1V15SHA1_Sign;
 
-function RSAPKCS1V15_Encrypt(buffer, publicKey) {
-
-    const key_length = crypto_utils.rsa_length(publicKey);
-    return crypto_utils.publicEncrypt_long(buffer, publicKey, key_length, 11, crypto_utils.RSA_PKCS1_PADDING);
+function RSAPKCS1V15_Encrypt(buffer: Uint8Array, publicKey: /*Uint8Array |*/ CryptoKey): Promise<Uint8Array> {
+    return crypto_utils.publicEncrypt_long(buffer, publicKey, 11, crypto_utils.RSA_PKCS1_PADDING);
 }
 
-function RSAOAEP_Encrypt(buffer, publicKey) {
-    const key_length = crypto_utils.rsa_length(publicKey);
-    return crypto_utils.publicEncrypt_long(buffer, publicKey, key_length, 42, crypto_utils.RSA_PKCS1_OAEP_PADDING);
+function RSAOAEP_Encrypt(buffer: Uint8Array, publicKey: CryptoKey): Promise<Uint8Array> {
+    return crypto_utils.publicEncrypt_long(buffer, publicKey, 42, crypto_utils.RSA_PKCS1_OAEP_PADDING);
 }
 
 
@@ -227,14 +219,14 @@ export interface ICryptoFactory {
     maximumAsymmetricKeyLength: number;
 
     /* asymmetric signature algorithm */
-    asymmetricVerifyChunk: Function;
-    asymmetricSign: Function;
-    asymmetricVerify: Function;
+    asymmetricVerifyChunk: (chunk: Uint8Array, certificate: Uint8Array) => PromiseLike<boolean>;
+    asymmetricSign: (chunk: Uint8Array, key: CryptoKey) => Promise<ArrayBuffer>;
+    asymmetricVerify: (block_to_verify: Uint8Array, signature: Uint8Array, certificate: Uint8Array) => PromiseLike<boolean>;
     asymmetricSignatureAlgorithm: string;
 
     /* asymmetric encryption algorithm */
-    asymmetricEncrypt: Function;
-    asymmetricDecrypt: Function;
+    asymmetricEncrypt: (block: ArrayBuffer, publicKey: CryptoKey) => PromiseLike<ArrayBuffer>;
+    asymmetricDecrypt: (block: ArrayBuffer, privateKey: string) => Promise<ArrayBuffer>;
     asymmetricEncryptionAlgorithm: string;
     blockPaddingSize: number;
     symmetricEncryptionAlgorithm: string;
@@ -245,7 +237,7 @@ export interface ICryptoFactory {
 }
 
 
-const _Basic128Rsa15 = {
+const _Basic128Rsa15: ICryptoFactory = {
     securityPolicy: SecurityPolicy.Basic128Rsa15,
 
     symmetricKeyLength: 16,
@@ -261,7 +253,7 @@ const _Basic128Rsa15 = {
     asymmetricVerifyChunk: asymmetricVerifyChunk,
     asymmetricSign: RSAPKCS1V15SHA1_Sign,
     asymmetricVerify: RSAPKCS1V15SHA1_Verify,
-    asymmetricSignatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
+    asymmetricSignatureAlgorithm: 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
 
     /* asymmetric encryption algorithm */
     asymmetricEncrypt: RSAPKCS1V15_Encrypt,
@@ -270,14 +262,14 @@ const _Basic128Rsa15 = {
 
     blockPaddingSize: 11,
 
-    symmetricEncryptionAlgorithm: 'aes-128-cbc',
+    symmetricEncryptionAlgorithm: 'AES-128-CBC',
 
-    sha1or256: 'SHA1',
+    sha1or256: 'SHA-1',
     compute_derived_keys: compute_derived_keys
 
 };
 
-const _Basic256 = {
+const _Basic256: ICryptoFactory = {
     securityPolicy: SecurityPolicy.Basic256,
     symmetricKeyLength: 32,
     derivedEncryptionKeyLength: 32,
@@ -291,7 +283,7 @@ const _Basic256 = {
     asymmetricVerifyChunk: asymmetricVerifyChunk,
     asymmetricSign: RSAPKCS1OAEPSHA1_Sign,
     asymmetricVerify: RSAPKCS1OAEPSHA1_Verify,
-    asymmetricSignatureAlgorithm: 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
+    asymmetricSignatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig#rsa-sha1',
 
     /* asymmetric encryption algorithm */
     asymmetricEncrypt: RSAOAEP_Encrypt,
@@ -301,13 +293,13 @@ const _Basic256 = {
     blockPaddingSize: 42,
 
     // "aes-256-cbc"
-    symmetricEncryptionAlgorithm: 'aes-256-cbc',
-    sha1or256: 'SHA1',
+    symmetricEncryptionAlgorithm: 'AES-256-CBC',
+    sha1or256: 'SHA-1',
     compute_derived_keys: compute_derived_keys
 };
 
 
-const _Basic256Sha256 = {
+const _Basic256Sha256: ICryptoFactory = {
     securityPolicy: SecurityPolicy.Basic256Sha256,
 
     symmetricKeyLength: 32,
@@ -322,7 +314,7 @@ const _Basic256Sha256 = {
     asymmetricVerifyChunk: asymmetricVerifyChunk,
     asymmetricSign: RSAPKCS1V15SHA256_Sign,
     asymmetricVerify: RSAPKCS1OAEPSHA256_Verify,
-    asymmetricSignatureAlgorithm: 'http://www.w3.org/2000/09/xmldsig#rsa-sha256',
+    asymmetricSignatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
 
     /* asymmetric encryption algorithm */
     asymmetricEncrypt: RSAOAEP_Encrypt,
@@ -332,8 +324,8 @@ const _Basic256Sha256 = {
     blockPaddingSize: 42,
 
     // "aes-256-cbc"
-    symmetricEncryptionAlgorithm: 'aes-256-cbc',
-    sha1or256: 'SHA256',
+    symmetricEncryptionAlgorithm: 'AES-256-CBC',
+    sha1or256: 'SHA-256',
     compute_derived_keys: compute_derived_keys
 };
 
@@ -353,7 +345,8 @@ export function getCryptoFactory(securityPolicy: SecurityPolicy): ICryptoFactory
     }
 }
 
-export function computeSignature(senderCertificate: Uint8Array, senderNonce: Uint8Array, receiverPrivatekey, securityPolicy) {
+export function computeSignature(senderCertificate: Uint8Array, senderNonce: Uint8Array, receiverPrivatekey, securityPolicy): 
+            Promise<SignatureData> {
 
     if (!senderNonce || !senderCertificate) {
         return null;
@@ -364,21 +357,22 @@ export function computeSignature(senderCertificate: Uint8Array, senderNonce: Uin
         return null;
     }
     // This parameter is calculated by appending the clientNonce to the clientCertificate
-    const buffer = new Uint8Array(senderCertificate.byteLength + senderNonce.byteLength);  // Buffer.concat([senderCertificate, senderNonce]);
+    const buffer = new Uint8Array(senderCertificate.byteLength + senderNonce.byteLength);  
+    //= Buffer.concat([senderCertificate, senderNonce]);
     buffer.set(senderCertificate);
     buffer.set(senderNonce, senderCertificate.byteLength);
 
     // ... and signing the resulting sequence of bytes.
-    const signature = crypto_factory.asymmetricSign(buffer, receiverPrivatekey);
-
-    return new SignatureData({
-        // This is a signature generated with the private key associated with a Certificate
-        signature: signature,
-        // A string containing the URI of the algorithm.
-        // The URI string values are defined as part of the security profiles specified in Part 7.
-        // (The SignatureAlgorithm shall be the AsymmetricSignatureAlgorithm specified in the
-        // SecurityPolicy for the Endpoint)
-        algorithm: crypto_factory.asymmetricSignatureAlgorithm // "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
+    return crypto_factory.asymmetricSign(buffer, receiverPrivatekey).then( (signature) => {
+        return new SignatureData({
+            // This is a signature generated with the private key associated with a Certificate
+            signature: new Uint8Array(signature),
+            // A string containing the URI of the algorithm.
+            // The URI string values are defined as part of the security profiles specified in Part 7.
+            // (The SignatureAlgorithm shall be the AsymmetricSignatureAlgorithm specified in the
+            // SecurityPolicy for the Endpoint)
+            algorithm: crypto_factory.asymmetricSignatureAlgorithm // "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
+        });
     });
 }
 
@@ -410,7 +404,7 @@ export function verifySignature(receiverCertificate: Uint8Array, receiverNonce: 
     return crypto_factory.asymmetricVerify(buffer, signature.signature, senderCertificate);
 }
 
-export function getOptionsForSymmetricSignAndEncrypt(securityMode, derivedKeys) {
+export function getOptionsForSymmetricSignAndEncrypt(securityMode: MessageSecurityMode, derivedKeys: DerivedKeys) {
     assert(derivedKeys.hasOwnProperty('signatureLength'));
     assert(securityMode !== MessageSecurityMode.None && securityMode !== MessageSecurityMode.Invalid);
 

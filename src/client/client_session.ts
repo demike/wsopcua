@@ -64,7 +64,8 @@ import { RegisterNodesResponse } from '../generated/RegisterNodesResponse';
 import { UnregisterNodesRequest } from '../generated/UnregisterNodesRequest';
 import { UnregisterNodesResponse } from '../generated/UnregisterNodesResponse';
 import { TransferSubscriptionsResponse } from '../service-subscription';
-import { IModifySubscriptionRequest, ISetMonitoringModeRequest } from '../generated';
+import { IModifySubscriptionRequest, ISetMonitoringModeRequest, SignatureData } from '../generated';
+import { buf2base64, buf2hex } from '../crypto';
 
 
 
@@ -156,10 +157,10 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         return k !== 'INVALID';
     });
 
-    serverCertificate: any;
-    serverNonce: any;
-    serverSignature: any;
-    authenticationToken: any;
+    serverCertificate: Uint8Array;
+    serverNonce: Uint8Array;
+    serverSignature: SignatureData;
+    authenticationToken: NodeId /*| ExpandedNodeId*/;
     sessionId: any;
     name: any;
     protected _closeEventHasBeenEmmitted: boolean;
@@ -1586,8 +1587,8 @@ public evaluateRemainingLifetime(): number {
         console.log(' sessionId................ ', this.sessionId.toString());
         console.log(' authenticationToken...... ', this.authenticationToken.toString());
         console.log(' timeout.................. ', this.timeout, 'ms');
-        console.log(' serverNonce.............. ', this.serverNonce.toString('hex'));
-        console.log(' serverCertificate........ ', this.serverCertificate.toString('base64'));
+        console.log(' serverNonce.............. ', buf2hex(this.serverNonce.buffer));
+        console.log(' serverCertificate........ ', buf2base64( this.serverCertificate.buffer));
         console.log(' serverSignature.......... ', this.serverSignature);
         console.log(' lastRequestSentTime...... ', new Date(this.lastRequestSentTime).toISOString(), now - this.lastRequestSentTime);
         console.log(' lastResponseReceivedTime. ',

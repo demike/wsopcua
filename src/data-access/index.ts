@@ -1,3 +1,5 @@
+import { EUInformation, LocalizedText } from '../generated';
+
 // part 8
 
 export {EUInformation} from '../generated/EUInformation';
@@ -52,10 +54,10 @@ export function commonCodeToUInt (code: string) {
 
 export function makeEUInformation(symbol: string , shortName: string, longName: string) {
 
-    return new exports.EUInformation({
-        unitId: exports.commonCodeToUInt(symbol),
-        displayName: {text: shortName},
-        description: {text: longName}
+    return new EUInformation({
+        unitId: commonCodeToUInt(symbol),
+        displayName: new LocalizedText({text: shortName}),
+        description: new LocalizedText({text: longName})
     });
 }
 

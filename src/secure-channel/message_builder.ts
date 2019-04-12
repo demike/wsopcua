@@ -9,7 +9,7 @@ import * as securityPolicy_m from './security_policy';
 import {MessageBuilderBase} from '../transport/message_builder_base';
 import { MessageSecurityMode } from '../generated/MessageSecurityMode';
 
-import {SymmetricAlgorithmSecurityHeader, SequenceHeader} from '../service-secure-channel';
+import {SequenceHeader} from '../service-secure-channel';
 import {chooseSecurityHeader} from './secure_message_chunk_manager';
 
 const decodeString = ec.decodeString;
@@ -21,6 +21,7 @@ import {doDebug, debugLog, hexDump} from '../common/debug';
 import { DataStream } from '../basic-types/DataStream';
 
 import * as factory from '../factory';
+import * as crypto_utils from '../crypto';
 
 const decodeStatusCode = ec.decodeStatusCode;
 
@@ -120,8 +121,9 @@ protected _validateSequenceNumber(sequenceNumber: number) {
     this._previous_sequenceNumber = sequenceNumber;
 }
 
-/* **nomsgcrypt**
-protected _decrypt_OPN(binaryStream : DataStream) {
+/* **msgcrypt** */
+// TODO: efficient buffer handling
+protected async _decrypt_OPN(binaryStream: DataStream) {
 
     assert(this._securityPolicy !== SecurityPolicy.None);
     assert(this._securityPolicy !== SecurityPolicy.Invalid);
@@ -129,7 +131,7 @@ protected _decrypt_OPN(binaryStream : DataStream) {
     //xx assert(this.securityMode !== MessageSecurityMode.INVALID);
 
     if (doDebug) {
-        debugLog("securityHeader", JSON.stringify(this._securityHeader, null, " "));
+        debugLog("securityHeader", JSON.stringify(this._securityHeader, null, ' '));
     }
 
     // OpcUA part 2 V 1.02 page 15
@@ -145,67 +147,68 @@ protected _decrypt_OPN(binaryStream : DataStream) {
 
     if (doDebug) {
         debugLog("EN------------------------------");
-        debugLog(hexDump(binaryStream.buffer));
+        debugLog(hexDump(binaryStream.view));
         debugLog("---------------------- SENDER CERTIFICATE");
         debugLog(hexDump(this._securityHeader.senderCertificate));
     }
 
 
     if (!this._cryptoFactory) {
-        this._report_error(" Security Policy " + this._securityPolicy + " is not implemented yet");
+        this._report_error(' Security Policy ' + this._securityPolicy + ' is not implemented yet');
         return false;
     }
 
     // The message has been signed  with sender private key and has been encrypted with receiver public key.
     // We shall decrypt it with the receiver private key.
-    var buf = binaryStream.buffer.slice(binaryStream.pos);
+    const buf = binaryStream.view.buffer.slice(binaryStream.pos);
 
     if (this._securityHeader.receiverCertificateThumbprint) { // this mean that the message has been encrypted ....
 
         assert(typeof this._privateKey === "string", "expecting valid key");
 
-        var decryptedBuffer = this._cryptoFactory.asymmetricDecrypt(buf, this._privateKey);
+        const decryptedBuffer = new Uint8Array(await this._cryptoFactory.asymmetricDecrypt(buf, this._privateKey));
 
-        // replace decrypted buffer in initial buffer
-        decryptedBuffer.copy(binaryStream.buffer, binaryStream.pos);
+        // replace decrypted buffer in initial buffer#
+        (new Uint8Array(binaryStream.view.buffer )).set(decryptedBuffer, binaryStream.pos);
+
 
         // adjust length
-        binaryStream.buffer = binaryStream.buffer.slice(0, binaryStream.pos + decryptedBuffer.length);
+        binaryStream.view = new DataView(binaryStream.view.buffer, 0, binaryStream.pos + decryptedBuffer.length);
 
         if (doDebug) {
             debugLog("DE-----------------------------");
-            debugLog(hexDump(binaryStream.buffer));
+            debugLog(hexDump(binaryStream.view));
             debugLog("-------------------------------");
             debugLog("Certificate :", hexDump(this._securityHeader.senderCertificate));
         }
     }
 
-    var cert = crypto_utils.exploreCertificate(this._securityHeader.senderCertificate);
+    const cert = crypto_utils.exploreCertificateInfo(this._securityHeader.senderCertificate);
     // then verify the signature
-    var signatureLength = cert.publicKeyLength; // 1024 bits = 128Bytes or 2048=256Bytes
-    assert(signatureLength === 128 || signatureLength === 256);
+    const signatureLength = cert.publicKeyLength; // 1024 bits = 128Bytes or 2048=256Bytes
+    assert(signatureLength === 128 || signatureLength === 256 || signatureLength === 384 || signatureLength === 512 );
 
-    var chunk = binaryStream.buffer;
+    const chunk = new Uint8Array(binaryStream.view.buffer);
 
-    var signatureIsOK = this._cryptoFactory.asymmetricVerifyChunk(chunk, this._securityHeader.senderCertificate);
+    const signatureIsOK = await this._cryptoFactory.asymmetricVerifyChunk(chunk, this._securityHeader.senderCertificate);
 
     if (!signatureIsOK) {
-        console.log(hexDump(binaryStream.buffer));
+        console.log(hexDump(binaryStream.view));
         this._report_error("SIGN and ENCRYPT asymmetricVerify : Invalid packet signature");
         return false;
     }
 
     // remove signature
-    binaryStream.buffer = crypto_utils.reduceLength(binaryStream.buffer, signatureLength);
+    binaryStream.view = new DataView(crypto_utils.reduceLength(binaryStream.view.buffer, signatureLength));
 
     // remove padding
     if (this._securityHeader.receiverCertificateThumbprint) {
-        binaryStream.buffer = crypto_utils.removePadding(binaryStream.buffer);
+        binaryStream.view = new DataView(crypto_utils.removePadding(binaryStream.view.buffer));
     }
 
     return true; // success
-};
-*/
+}
+
 
 public pushNewToken(securityToken, derivedKeys) {
 

@@ -15,6 +15,8 @@ import {StatusCodes} from '../constants';
 import * as session_service from '../service-session';
 import {ClientSubscription} from './ClientSubscription';
 
+import * as crypto_utils from '../crypto/crypto_utils';
+
 const AnonymousIdentityToken = session_service.AnonymousIdentityToken;
 const CreateSessionRequest = session_service.CreateSessionRequest;
 const CreateSessionResponse = session_service.CreateSessionResponse;
@@ -33,7 +35,7 @@ const ApplicationType = endpoints_service.ApplicationType;
 const EndpointDescription = endpoints_service.EndpointDescription;
 
 import {MessageSecurityMode, SignatureData} from '../service-secure-channel';
-import {SecurityPolicy, fromURI} from '../secure-channel/security_policy';
+import {SecurityPolicy, fromURI, getCryptoFactory} from '../secure-channel/security_policy';
 import { LocalizedText } from '../generated/LocalizedText';
 
 // **nomsgcrypt** var crypto_utils = require("node-opcua-crypto").crypto_utils;
@@ -54,6 +56,8 @@ import { stringToUint8Array } from '../basic-types/DataStream';
 import { repair_client_sessions } from './reconnection';
 import { UserTokenType, ICreateSubscriptionRequest } from '../generated';
 import { ClientSecureChannelLayer } from '../secure-channel/client_secure_channel_layer';
+import { concatArrayBuffers } from '../wsopcua';
+import { exploreCertificate } from '../crypto';
 
 export interface UserIdentityInfo {
     userName?: string;
@@ -118,23 +122,23 @@ protected _getApplicationUri(): Promise<string> {
 
     // get applicationURI from certificate
 
-/**nomsgcrypt**
+/**msgcrypt**/
     const certificate = this.getCertificate();
     let applicationUri;
     if (certificate) {
         const e = exploreCertificate(certificate);
         if (!e.tbsCertificate.extensions  || !e.tbsCertificate.extensions.subjectAltName) {
-            console.log(" Warning: client certificate is invalid : subjectAltName is missing"));
-            applicationUri = makeApplicationUrn(hostname, this.applicationName);
+            console.log(' Warning: client certificate is invalid : subjectAltName is missing');
+            applicationUri = makeApplicationUrn(window.location.hostname, this.applicationName);
         } else {
             applicationUri = e.tbsCertificate.extensions.subjectAltName.uniformResourceIdentifier[0];
+            return Promise.resolve(applicationUri);
         }
     } else {
-        applicationUri = makeApplicationUrn(hostname, this.applicationName);
+        applicationUri = makeApplicationUrn(window.location.hostname, this.applicationName);
     }
     return applicationUri;
-*/
-    return  makeApplicationUrn(window.location.hostname, this.applicationName);
+
 
 }
 
@@ -302,7 +306,7 @@ protected async __createSession_step2(session: ClientSession, callback: Response
 
 }
 
-public computeClientSignature(channel: ClientSecureChannelLayer, serverCertificate: Uint8Array, serverNonce: Uint8Array): SignatureData {
+public computeClientSignature(channel: ClientSecureChannelLayer, serverCertificate: Uint8Array, serverNonce: Uint8Array): Promise<SignatureData> {
     return computeSignature(serverCertificate, serverNonce, this.getPrivateKey(), (<any>channel).messageBuilder._securityPolicy);
 }
 
@@ -329,8 +333,11 @@ public createUserIdentityToken(session: ClientSession, userIdentityToken: UserId
         const password = this._userIdentityInfo.password;
 
         try {
-            userIdentityToken = createUserNameIdentityToken(session, userName, password);
-            return callback(null, userIdentityToken);
+            createUserNameIdentityToken(session, userName, password).then ((token) => {
+                userIdentityToken = token;
+                callback(null, userIdentityToken);
+            });
+            return;
         } catch (err) {
             // xx console.log(err.stack);
             return callback(err);
@@ -364,7 +371,7 @@ protected _activateSession(session: ClientSession, callback: ResponseCallback<Cl
     const _old_client = session.client;
     session.client = this;
 
-    this.createUserIdentityToken(session, this._userIdentityInfo, (err, userIdentityToken) => {
+    this.createUserIdentityToken(session, this._userIdentityInfo, async (err, userIdentityToken) => {
 
         if (err) {
             session.client = _old_client;
@@ -379,7 +386,7 @@ protected _activateSession(session: ClientSession, callback: ResponseCallback<Cl
             // clientCertificate. The SignatureAlgorithm shall be the AsymmetricSignatureAlgorithm
             // specified in the SecurityPolicy for the Endpoint. The SignatureData type is defined in 7.30.
 
-            clientSignature: this.computeClientSignature(this._secureChannel, serverCertificate, serverNonce),
+            clientSignature: await this.computeClientSignature(this._secureChannel, serverCertificate, serverNonce),
 
             // These are the SoftwareCertificates which have been issued to the Client application. The productUri contained
             // in the SoftwareCertificates shall match the productUri in the ApplicationDescription passed by the Client in
@@ -866,7 +873,7 @@ function createAnonymousIdentityToken(session: ClientSession): session_service.A
     return new AnonymousIdentityToken({policyId: userTokenPolicy.policyId});
 }
 
-function createUserNameIdentityToken(session: ClientSession, userName: string, password: string): session_service.UserNameIdentityToken {
+async function createUserNameIdentityToken(session: ClientSession, userName: string, password: string): Promise<session_service.UserNameIdentityToken> {
 
     // assert(endpoint instanceof EndpointDescription);
     assert(userName === null || typeof userName === 'string');
@@ -898,16 +905,84 @@ function createUserNameIdentityToken(session: ClientSession, userName: string, p
         assert(securityPolicy);
     }
 
+    let identityToken: session_service.UserNameIdentityToken;
     // if server does not provide certificate use unencrypted password (no server certificate !!!)
-        const identityToken = new UserNameIdentityToken({
+    if (!session.serverCertificate ) {
+            identityToken = new UserNameIdentityToken({
             userName: userName,
             password: stringToUint8Array(password), // Buffer.from(password, "utf-8"),
             encryptionAlgorithm: null,
             policyId: userTokenPolicy.policyId
         });
         return identityToken;
-
+    }
         // **nomsgcrypt**
+
+    let serverNonce = session.serverNonce || new Uint8Array(0);
+    // assert(serverNonce instanceof Uint8Array);
+
+    // If None is specified for the UserTokenPolicy and SecurityPolicy is None
+    // then the password only contains the UTF-8 encoded password.
+    // note: this means that password is sent in clear text to the server
+    // note: OPCUA specification discourages use of unencrypted password
+    //       but some old OPCUA server may only provide this policy and we
+    //       still have to support in the client?
+    if (securityPolicy === SecurityPolicy.None) {
+        identityToken = new UserNameIdentityToken({
+            encryptionAlgorithm: null,
+            password: stringToUint8Array(password),
+            policyId: userTokenPolicy.policyId,
+            userName
+        });
+        return identityToken;
+    }
+    // see Release 1.02 155 OPC Unified Architecture, Part 4
+    const cryptoFactory = getCryptoFactory(securityPolicy);
+
+    // istanbul ignore next
+    if (!cryptoFactory) {
+        throw new Error(" Unsupported security Policy");
+    }
+
+    identityToken = new UserNameIdentityToken({
+        encryptionAlgorithm: cryptoFactory.asymmetricEncryptionAlgorithm,
+        password: stringToUint8Array(password),
+        policyId: userTokenPolicy.policyId,
+        userName: userName,
+    });
+
+
+    // now encrypt password as requested
+    
+    assert(session.serverCertificate instanceof Uint8Array);
+    /*
+    const strServerCertificate = crypto_utils.toPem(session.serverCertificate, "CERTIFICATE");
+    const publicKey = crypto_utils.extractPublicKeyFromCertificateSync(strServerCertificate);
+
+    const lenBuf = new Uint32Array(1);
+    lenBuf[0] = identityToken.password.length + serverNonce.length;
+    const block = concatArrayBuffers([lenBuf.buffer, identityToken.password.buffer, serverNonce.buffer]);
+
+    return cryptoFactory.asymmetricEncrypt(block, publicKey).then( (encPW) => {
+        identityToken.password = new Uint8Array( encPW );
+        return identityToken;
+    });
+    */
+
+   
+   const lenBuf = new Uint32Array(1);
+   lenBuf[0] = identityToken.password.length + serverNonce.length;
+   const block = concatArrayBuffers([lenBuf.buffer, identityToken.password.buffer, serverNonce.buffer]);
+
+  // let ci = exploreCertificate(session.serverCertificate);
+   try {
+    const publicKey = await crypto_utils.generatePublicKeyFromDER(session.serverCertificate);
+    const buffer = await cryptoFactory.asymmetricEncrypt(block, publicKey);
+    identityToken.password = new Uint8Array(buffer);
+   } catch( err) {
+       console.log(err.message);
+   }
+    return identityToken;
 }
 
 
