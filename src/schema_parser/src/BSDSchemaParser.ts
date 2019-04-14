@@ -2,7 +2,7 @@ import {JSDOM} from 'jsdom';
 
 
 import * as fs from 'fs';
-import { ClassMethod, BSDClassFileParser, BSDStructTypeFileParser,StructTypeFile, BSDEnumTypeFileParser, EnumTypeFile, SimpleType} from './SchemaParser.module';
+import { ClassMethod, BSDClassFileParser, BSDStructTypeFileParser,StructTypeFile, BSDEnumTypeFileParser, EnumTypeFile} from './SchemaParser.module';
 import { TypeRegistry } from './TypeRegistry';
 import { ClassFile } from './ClassFile';
 
@@ -13,7 +13,7 @@ export class BSDSchemaParser {
 
     public clsIncompleteTypes : BSDClassFileParser[];
 
-    protected outPath? : string;
+    protected outPath: string = ".";
     protected inPath? : string;
 
     protected metaTypeMap : {[key : string]:{[key : string]:string[]}} = {};
@@ -23,20 +23,48 @@ export class BSDSchemaParser {
         this.clsIncompleteTypes = [];
     }
 
-    public parse(inpath : string, outpath : string,metaTypeMap : {[key : string]:{[key : string]:string[]}},namespace : string) {
+    public async parse(inpath : string, outpath : string, 
+            metaTypeMap: {[key : string]:{[key : string]:string[]}}, namespace: string): Promise<void> {
         this.inPath = inpath;
         this.outPath = outpath;
         this.metaTypeMap = metaTypeMap;
         this.namespace = namespace;
-        
+
         if (!fs.existsSync(outpath)) {
             fs.mkdirSync(outpath);
         } 
-        fs.readFile(inpath, 'utf8', (err, data) => {
+        await fs.readFile(inpath, 'utf8', (err, data) => {
             if (err) throw err;
             //console.log(data);
-            let doc = new JSDOM(data,{ contentType : "text/xml"});
-            this.fixSchemaFaults(doc)
+            let doc = new JSDOM(data, { contentType : 'text/xml'});
+            if (inpath.endsWith('.bsd')) {
+                return this.parseBSDDoc(doc);
+            } else {
+                return this.parseNodeSet2XmlDoc(doc);
+            }
+        });
+        return;
+    }
+
+    public parseNodeSet2XmlDoc(doc: JSDOM) {
+        let elements = doc.window.document.querySelectorAll('ByteString[xmlns="http://opcfoundation.org/UA/2008/02/Types.xsd"]');
+        for (let i=0; i < elements.length; i++) {
+            const el = elements.item(i);
+            let parent: HTMLElement| null;
+            if (el && (parent = el.parentElement) && (parent = parent.parentElement)  ) {
+                const name = parent.getAttribute('SymbolicName');
+                if (name && name.endsWith('BinarySchema')) {
+                    let docdata =  Buffer.from(el.innerHTML, 'base64').toString()
+                    this.parseBSDDoc(new JSDOM(docdata, { contentType : 'text/xml'}));
+                    return;
+                }
+            }
+            
+        }
+    }
+
+    public parseBSDDoc(doc: JSDOM) {
+        this.fixSchemaFaults(doc)
             for (let i=0; i < doc.window.document.childNodes.length; i++) {
                 let el : HTMLElement = <HTMLElement>(doc.window.document.childNodes.item(i));
                 this.parseBSDElement(el);
@@ -45,8 +73,6 @@ export class BSDSchemaParser {
             this.parseSecondPass();
             this.writeIndexFile();
             this.writeFiles();
-            
-        });
     }
 
     public parseBSDElement(el : HTMLElement) {
@@ -76,7 +102,7 @@ export class BSDSchemaParser {
     }
 
     public parseBSDStruct(el : HTMLElement) : void {
-        let file = new StructTypeFile();
+        let file = new StructTypeFile(this.outPath);
         let parser = new BSDStructTypeFileParser(el,file);
         let at = el.attributes.getNamedItem(ClassFile.ATTR_NAME);
         if (at && TypeRegistry.getType(at.value)) {
@@ -91,7 +117,7 @@ export class BSDSchemaParser {
     }
 
     public parseBSDEnum(el : HTMLElement) : void {
-        let file = new EnumTypeFile();
+        let file = new EnumTypeFile(this.outPath);
         let parser = new BSDEnumTypeFileParser(el,file);
         parser.parse();
         //this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);   

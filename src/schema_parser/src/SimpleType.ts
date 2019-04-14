@@ -11,8 +11,8 @@ export class SimpleType extends ClassFile {
      */
     _jsType? :  string;
 
-    constructor(name? : string, baseClass? : string|ClassFile , members? : ClassMember[], methods? : ClassMethod[]) {
-        super(name,baseClass,members,methods);
+    constructor(destPath: string, name?: string, baseClass? : string|ClassFile , members? : ClassMember[], methods? : ClassMethod[]) {
+        super(destPath, name, baseClass, members, methods);
         this.complete = true;
         this.written = true;
     }

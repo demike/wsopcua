@@ -8,6 +8,8 @@ import { IncompleteTypeDefException } from './IncompleteTypeDefException';
 import { ClassMember } from './ClassMember';
 import { SimpleType } from './SimpleType';
 
+import * as path from 'path';
+
 export abstract class BSDClassFileParser {
 
     public static readonly ATTR_BASE_CLASS = "BaseType";
@@ -125,7 +127,7 @@ export abstract class BSDClassFileParser {
         }
 
         if (blnHasArrayMember) {
-            this.cls.addImport("import * as ec from '../basic-types';");
+            this.cls.addImport("import * as ec from " + this.cls.getRelativePath(PathGenUtil.ProjRoot) + "'/basic-types';");
         }
 
         //iterate over methods, ignore self
@@ -159,16 +161,16 @@ export abstract class BSDClassFileParser {
             return;
         }
         if (cls.Path != this.cls.Path ) {
-            this.cls.addImport(cls.getImportSrc());
+            this.cls.addImport(cls.getImportSrc(this.cls.Path));
             if (importInterface) {
-                let str = cls.getInterfaceImportSrc();
+                let str = cls.getInterfaceImportSrc(this.cls.Path);
                 if (str) {
                     this.cls.addImport(str);
                 }
             }
 
             if (importDecodeMethod) {
-                let str = cls.getDecodeFnImportSrc();
+                let str = cls.getDecodeFnImportSrc(this.cls.Path);
                 if (str) {
                     this.cls.addImport(str);
                 }

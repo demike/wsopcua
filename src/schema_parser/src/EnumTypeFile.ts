@@ -57,12 +57,16 @@ export class EnumTypeFile extends ClassFile {
         return str;
     }
 
-    public getImportSrc() : string {
+      /**
+     * return the code to import this class
+     * @param targetClassFile the file the returned import should be placed in (needed to build the relative path)
+     */
+    public getImportSrc(targetClassFile: string) : string {
         if (this.importAs) {
-            return "import * as " + this.importAs + " from '" + this.Path + "';";
+            return "import * as " + this.importAs + " from '" + this.getRelativePath(targetClassFile) + this.name + "';";
                 
         }
-        return "import {" + this.Name + ", encode" + this.Name + ", decode" + this.Name + "} from '" + this.Path + "';";
+        return "import {" + this.Name + ", encode" + this.Name + ", decode" + this.Name + "} from '" + this.getRelativePath(targetClassFile) + this.name + "';";
     }
     
 

@@ -3,6 +3,7 @@ import {ClassMember} from './ClassMember';
 import {TypeRegistry} from './TypeRegistry';
 */
 import {ClassMember, ClassMethod, TypeRegistry,SimpleType} from './SchemaParser.module';
+import * as path from 'path';
 
 export declare class Set< Value > {
 	add( value : Value ) : Set< Value >
@@ -64,9 +65,9 @@ export class ClassFile {
 
     public get Path() : string {
         if (!this.path) {
-            this.path = "./" + this.Name;
+            return "./" + this.name;
         }
-        return this.path;
+        return this.path + "/" + this.name;
     }
 
     public set Path(p : string ) {
@@ -142,7 +143,9 @@ export class ClassFile {
         this.id = id;
     }
 
-    constructor(name? : string, baseClass? : string|ClassFile , members? : ClassMember[], methods? : ClassMethod[]) {
+    constructor(destPath: string, name? : string, baseClass? : string|ClassFile , members? : ClassMember[], methods? : ClassMethod[]) {
+        this.path = destPath;
+        
         this.imports = new Set();
         this.members = (members)?members:[];
         this.methods = (methods)?methods:[];
@@ -297,30 +300,41 @@ export class ClassFile {
         this.utilityFunctions = [];
     }
 
+    
+    public getRelativePath(pathToCompare: string) {
+        let relPath = path.relative(pathToCompare, this.Path);
+        relPath = relPath.replace("\\","/");
+        return relPath;
+    }
+
     /**
      * return the code to import this class
+     * @param targetClassFile the file the returned import should be placed in (needed to build the relative path)
      */
-    public getImportSrc() : string {
+    public getImportSrc(targetClassFile: string) : string {
         if (this.importAs) {
-            return "import * as " + this.importAs + " from '" + this.Path + "';";       
+            return "import * as " + this.importAs + " from '" + this.getRelativePath(targetClassFile) + this.name + "';";       
         }
-        return "import {" + this.Name + "} from '" + this.Path + "';";
+        return "import {" + this.Name + "} from '" + this.getRelativePath(targetClassFile) + this.name + "';";
     }
-    
 
-    public getInterfaceImportSrc() : string|null {
+    /**
+     *
+     * @param targetClassFile the file the returned import should be placed (needed to build the relative path)
+     */
+    public getInterfaceImportSrc(targetClassFile: string) : string|null {
         if (this.importAs || !this.hasAnyMembers()) {
             return null;
         }
-        return "import {I" + this.Name + "} from '" + this.Path + "';"
+        return "import {I" + this.Name + "} from '" + this.getRelativePath(targetClassFile) + this.name + "';"
     }
 
-    public getDecodeFnImportSrc() : string|null {
+    public getDecodeFnImportSrc(targetClassFile: string) : string|null {
         if (this.importAs) {
             return null;
         }
 
-        return "import {decode" + this.Name + "} from '" + this.Path + "';"
+        return "import {decode" + this.Name + "} from '" + this.getRelativePath(targetClassFile) + this.name + "';"
     }
 
     public addImport(imp : string) {
