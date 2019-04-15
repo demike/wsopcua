@@ -32,7 +32,7 @@ export interface ProjectImportConfig {
     /**
      * the schema files to import
      */
-    importedSchemas: SchemaImportConfig[]
+    schemaImports: SchemaImportConfig[]
 }
 
 export interface SchemaParserConfig {
@@ -72,7 +72,7 @@ export function sanitizeProjectImportConfig(conf: ProjectImportConfig) {
         conf.protjectSrcPath = path.join(__dirname, conf.protjectSrcPath);
     }
 
-    for (const schemaConf of conf.importedSchemas) {
+    for (const schemaConf of conf.schemaImports) {
         if (schemaConf.pathToSchema.startsWith('.')) {
             //it's a relative path
             schemaConf.pathToSchema = path.join(__dirname, schemaConf.pathToSchema);

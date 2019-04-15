@@ -28,7 +28,7 @@ export class BSDSchemaParser {
     public async parse(importConfig: ProjectImportConfig,
             metaTypeMap: {[key: string]: {[key: string]: string[]}}): Promise<void> {
         this.metaTypeMap = metaTypeMap;
-        for (const schema of importConfig.importedSchemas) {
+        for (const schema of importConfig.schemaImports) {
             this.outPath = importConfig.protjectSrcPath + schema.modulePath;
             if (schema.namespace) {
                 this.namespace = schema.namespace;
