@@ -139,7 +139,7 @@ export abstract class BSDClassFileParser {
             for (let arg of args) {
                 this.createImport(arg.Type);
             }
-            this.createImport(met.ReturnType); 
+            this.createImport(met.ReturnType);
         }
         //iterate over functions, ignore self
         for(let fn of this.cls.UtilityFunctions) {

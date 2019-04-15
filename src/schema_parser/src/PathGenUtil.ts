@@ -1,7 +1,11 @@
+import { ProjectModulePath } from "./SchemaParserConfig";
+
 export class PathGenUtil {
+    public static readonly PROJECT_NAME = "wsopcua";
     private static _genPath : string;
     private static _projectRootPath : string;
-    private static _simpleTypePath : string;
+   
+    private static readonly _simpleTypeModulePath = new ProjectModulePath(PathGenUtil.PROJECT_NAME, "/basic-types");
 
 
     public static get GenPath() : string {
@@ -20,8 +24,12 @@ export class PathGenUtil {
         this._projectRootPath = path;
     }
 
+    public static get SimpleTypesModulePath(): ProjectModulePath {
+        return this._simpleTypeModulePath;
+    }
+
     public static get SimpleTypes() : string {
-        return this._projectRootPath + "basic-types/";
+        return "/basic-types";
     }
 
 

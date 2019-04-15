@@ -3,6 +3,7 @@ import { ClassMethod } from "./ClassMethod";
 import { ClassMember } from "./ClassMember";
 */
 import {ClassFile, ClassMethod, ClassMember} from './SchemaParser.module';
+import { ProjectModulePath } from './SchemaParserConfig';
 
 export class SimpleType extends ClassFile {
 
@@ -11,8 +12,9 @@ export class SimpleType extends ClassFile {
      */
     _jsType? :  string;
 
-    constructor(destPath: string, name?: string, baseClass? : string|ClassFile , members? : ClassMember[], methods? : ClassMethod[]) {
-        super(destPath, name, baseClass, members, methods);
+    constructor(modulePath: ProjectModulePath, name?: string, baseClass?: string|ClassFile ,
+            members?: ClassMember[], methods?: ClassMethod[]) {
+        super(modulePath, name, baseClass, members, methods);
         this.complete = true;
         this.written = true;
     }

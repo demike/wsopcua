@@ -4,10 +4,11 @@ import { SimpleType } from "./SimpleType";
 */
 import {ClassFile,SimpleType,StructTypeFile} from './SchemaParser.module';
 import { PathGenUtil } from './PathGenUtil';
+import { ProjectModulePath } from './SchemaParserConfig';
 
 export class TypeRegistry {
 
-    protected static readonly BASIC_TYPES_PATH : string = PathGenUtil.SimpleTypes;
+    protected static readonly BASIC_TYPES_PATH  = PathGenUtil.SimpleTypesModulePath;
 
     public static typeMap : { [key:string]:ClassFile} = {}
 
@@ -34,12 +35,12 @@ export class TypeRegistry {
     public static init() {
         let type : SimpleType;
 
-        type = new SimpleType(this.BASIC_TYPES_PATH + "/DataStream", "DataStream");
+        type = new SimpleType(this.BASIC_TYPES_PATH.add("/DataStream"), "DataStream");
         this.addType(type.Name,type);
         type.Written = true;
         type.Complete = true;
 
-        let structtype = new StructTypeFile("../variant", "Variant");
+        let structtype = new StructTypeFile(new ProjectModulePath(PathGenUtil.PROJECT_NAME, "/variant"), "Variant");
         structtype.Complete = true;
         structtype.Written = true;
         this.addType(structtype.Name,structtype);
@@ -76,7 +77,7 @@ export class TypeRegistry {
             //TODO
 
        //Bit
-       type = new SimpleType(this.BASIC_TYPES_PATH + "/boolean", "Bit");
+       type = new SimpleType(this.BASIC_TYPES_PATH.add("/boolean"), "Bit");
        type.JsType = "boolean";
        this.addType(type.Name,type);
         
@@ -219,7 +220,7 @@ export class TypeRegistry {
         this.addType(type.Name,type);
 
         //XmlElement: 8.39
-        type = new SimpleType(this.BASIC_TYPES_PATH + "/xml_element", "XmlElement");
+        type = new SimpleType(this.BASIC_TYPES_PATH.add("/xml_element"), "XmlElement");
         type.ImportAs = "ec";
         this.addType(type.Name,type); 
 

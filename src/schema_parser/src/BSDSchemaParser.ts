@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import { ClassMethod, BSDClassFileParser, BSDStructTypeFileParser,StructTypeFile, BSDEnumTypeFileParser, EnumTypeFile} from './SchemaParser.module';
 import { TypeRegistry } from './TypeRegistry';
 import { ClassFile } from './ClassFile';
+import { ProjectImportConfig, ProjectModulePath } from './SchemaParserConfig';
 
 export class BSDSchemaParser {
     public static readonly TAG_TYPE_DICT = "opc:TypeDictionary";
@@ -14,35 +15,41 @@ export class BSDSchemaParser {
     public clsIncompleteTypes : BSDClassFileParser[];
 
     protected outPath: string = ".";
-    protected inPath? : string;
+    protected conf?: ProjectImportConfig;
+    protected currentModulePath: ProjectModulePath = new ProjectModulePath('wsopcua', '/generated');
 
-    protected metaTypeMap : {[key : string]:{[key : string]:string[]}} = {};
-    protected namespace : string  = "0";
+    protected metaTypeMap: {[key: string]: {[key: string]: string[]}} = {};
+    protected namespace: string | number  = -1;
 
     constructor() {
         this.clsIncompleteTypes = [];
     }
 
-    public async parse(inpath : string, outpath : string, 
-            metaTypeMap: {[key : string]:{[key : string]:string[]}}, namespace: string): Promise<void> {
-        this.inPath = inpath;
-        this.outPath = outpath;
+    public async parse(importConfig: ProjectImportConfig,
+            metaTypeMap: {[key: string]: {[key: string]: string[]}}): Promise<void> {
         this.metaTypeMap = metaTypeMap;
-        this.namespace = namespace;
-
-        if (!fs.existsSync(outpath)) {
-            fs.mkdirSync(outpath);
-        } 
-        await fs.readFile(inpath, 'utf8', (err, data) => {
-            if (err) throw err;
-            //console.log(data);
-            let doc = new JSDOM(data, { contentType : 'text/xml'});
-            if (inpath.endsWith('.bsd')) {
-                return this.parseBSDDoc(doc);
-            } else {
-                return this.parseNodeSet2XmlDoc(doc);
+        for (const schema of importConfig.importedSchemas) {
+            this.outPath = importConfig.protjectSrcPath + schema.modulePath;
+            if (schema.namespace) {
+                this.namespace = schema.namespace;
             }
-        });
+            this.currentModulePath = new ProjectModulePath(importConfig.projectName, schema.modulePath);
+
+            if (!fs.existsSync(this.outPath)) {
+                fs.mkdirSync(this.outPath);
+            }
+
+            await fs.readFile(schema.pathToSchema, 'utf8', (err, data) => {
+                if (err) throw err;
+                //console.log(data);
+                let doc = new JSDOM(data, { contentType : 'text/xml'});
+                if (schema.pathToSchema.endsWith('.bsd')) {
+                    this.parseBSDDoc(doc);
+                } else {
+                    this.parseNodeSet2XmlDoc(doc);
+                }
+            });
+        }
         return;
     }
 
@@ -96,13 +103,18 @@ export class BSDSchemaParser {
     }
 
     public parseBSDTypeDict(el : HTMLElement) {
-        for (let i=0; i < el.childNodes.length; i++) {
+        if (this.namespace === -1) {
+            //namespace not yet defined --> get it from the BSD Type dictonary
+            this.namespace = el.getAttribute('TargetNamespace') || -1;
+        }
+
+        for (let i = 0; i < el.childNodes.length; i++) {
             this.parseBSDElement(<HTMLElement>(el.childNodes.item(i)));
         } 
     }
 
-    public parseBSDStruct(el : HTMLElement) : void {
-        let file = new StructTypeFile(this.outPath);
+    public parseBSDStruct(el : HTMLElement): void {
+        let file = new StructTypeFile(this.currentModulePath);
         let parser = new BSDStructTypeFileParser(el,file);
         let at = el.attributes.getNamedItem(ClassFile.ATTR_NAME);
         if (at && TypeRegistry.getType(at.value)) {
@@ -117,7 +129,7 @@ export class BSDSchemaParser {
     }
 
     public parseBSDEnum(el : HTMLElement) : void {
-        let file = new EnumTypeFile(this.outPath);
+        let file = new EnumTypeFile(this.currentModulePath);
         let parser = new BSDEnumTypeFileParser(el,file);
         parser.parse();
         //this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);   

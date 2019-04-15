@@ -1,0 +1,20 @@
+{
+    "projects" : [
+        {
+            "projectName": "wsopcua",
+            "protjectSrcPath": "../../",
+            "schemaImports": [
+                {
+                    "pathToSchema" : "../schemas/Opc.Ua.Types.bsd",
+                    "destinationModulePath": "/generated/",
+                    "namespace": 0
+                },
+                {
+                    "pathToSchema" : "../schemas/Opc.Ua.Di.NodeSet2.xml",
+                    "destinationModulePath": "/generated/DI/",
+                    "namespace": 1
+                }
+            ]
+        }
+    ]   
+}

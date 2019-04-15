@@ -4,36 +4,38 @@ import {TypeRegistry} from './TypeRegistry';
 */
 import {ClassMember, ClassMethod, TypeRegistry,SimpleType} from './SchemaParser.module';
 import * as path from 'path';
+import { ProjectModulePath } from './SchemaParserConfig';
 
 export declare class Set< Value > {
-	add( value : Value ) : Set< Value >
-	clear() : void
-	delete( value : Value ) : boolean
-	forEach< Context = any >( handler : ( this : Context , value : Value , key : Value , map : Set< Value > ) => void , context? : Context ) : void
-	has( value : Value ) : boolean
-	size : number
+	add( value: Value ): Set< Value >
+	clear(): void
+	delete( value: Value ): boolean
+	forEach< Context = any >( handler: ( this: Context , value: Value , key: Value , map: Set< Value > ) => void , context?: Context ): void
+	has( value: Value ): boolean
+	size: number
 }
 
 
 export class ClassFile {
-    protected id : string;
-    protected namespace : string;
+    protected id: string;
+    protected namespace: string|number;
 
-    protected name : string;
-    protected baseClass? : ClassFile|null = null;
-    protected fileHeader : string;
-    protected imports : Set<string>;
-    protected defines : string;
-    protected documentation : string;
-    protected classHeader : string;
-    protected members : ClassMember[];
-    protected methods : ClassMethod[];
-    protected utilityFunctions : ClassMethod[];
-    protected path? : string;
-    protected importAs? : string;
+    protected name: string;
+    protected baseClass?: ClassFile|null = null;
+    protected fileHeader: string;
+    protected imports: Set<string>;
+    protected defines: string;
+    protected documentation: string;
+    protected classHeader: string;
+    protected members: ClassMember[];
+    protected methods: ClassMethod[];
+    protected utilityFunctions: ClassMethod[];
+    protected path?: string;
+    protected modulePath: ProjectModulePath;
+    protected importAs?: string;
 
-    protected complete : boolean = false;
-    protected written : boolean = false;
+    protected complete: boolean = false;
+    protected written: boolean = false;
 
     public static readonly ATTR_NAME = "Name";
     public static readonly ATTR_VALUE = "Value";
@@ -44,11 +46,11 @@ export class ClassFile {
     public static readonly DEFAULT_ENCODE_METHOD = "encode";
     public static readonly DEFAULT_DECODE_METHOD = "decode";
 
-    public set Name(n : string) {
+    public set Name(n: string) {
         this.name = n;
     }
 
-    public get Name() : string {
+    public get Name(): string {
         return this.name;
     }
 
@@ -56,73 +58,73 @@ export class ClassFile {
     return the full name including potential import as
     i.e: ec.ExtensionObject
     */
-    public get FullName() : string {
+    public get FullName(): string {
         if (!this.importAs) {
             return this.name;
         }
         return this.importAs + "." + this.name;
     }
 
-    public get Path() : string {
-        if (!this.path) {
+    public get Path(): string {
+        if (!this.modulePath) {
             return "./" + this.name;
         }
-        return this.path + "/" + this.name;
+        return this.modulePath + "/" + this.name;
     }
 
-    public set Path(p : string ) {
-        this.path = p;
+    public get ModulePath(): ProjectModulePath {
+        return this.modulePath;
     }
 
     public get Written() {
         return this.written;
     }
 
-    public set Written(w : boolean) {
+    public set Written(w: boolean) {
         this.written = w;
     }
 
-    public get BaseClass() : ClassFile |null | undefined {
+    public get BaseClass(): ClassFile |null | undefined {
         return this.baseClass;
     }
 
-    public set BaseClass(cls : ClassFile|null|undefined) {
+    public set BaseClass(cls: ClassFile|null|undefined) {
            this.baseClass = cls;
     }
 
-    public setBaseClassByName(cls : string) {
+    public setBaseClassByName(cls: string) {
         this.baseClass = TypeRegistry.getType(cls);
     }
 
-    public get Documentation() : string {
+    public get Documentation(): string {
         return this.documentation;
     }
 
-    public set Documentation(doc : string) {
+    public set Documentation(doc: string) {
         this.documentation = doc;
     }
 
-    public get Complete() : boolean {
+    public get Complete(): boolean {
         return this.complete;
     }
 
-    public set Complete(c : boolean) {
+    public set Complete(c: boolean) {
         this.complete = c;
     }
 
-    public get ImportAs() : string|undefined{
+    public get ImportAs(): string|undefined{
         return this.importAs;
     }
 
-    public set ImportAs(name : string|undefined) {
+    public set ImportAs(name: string|undefined) {
         this.importAs = name;
     }
 
-    public get Defines() : string {
+    public get Defines(): string {
         return this.defines;
     }
 
-    public set Defines(def : string) {
+    public set Defines(def: string) {
         this.defines = def;
     }
 
@@ -138,13 +140,13 @@ export class ClassFile {
         return this.utilityFunctions;
     }
 
-    public setTypeId(id : string,namespace : string) {
+    public setTypeId(id: string,namespace: string|number) {
         this.namespace = namespace;
         this.id = id;
     }
 
-    constructor(destPath: string, name? : string, baseClass? : string|ClassFile , members? : ClassMember[], methods? : ClassMethod[]) {
-        this.path = destPath;
+    constructor(modulePath: ProjectModulePath, name?: string, baseClass?: string|ClassFile , members?: ClassMember[], methods?: ClassMethod[]) {
+        this.modulePath = modulePath;
         
         this.imports = new Set();
         this.members = (members)?members:[];
@@ -161,7 +163,7 @@ export class ClassFile {
         this.namespace = "";
     }
 
-    public getMemberByName(name : string) : ClassMember | null{
+    public getMemberByName(name: string): ClassMember | null{
         for (let mem of this.members) {
             if (mem.Name == name) {
                 return mem;
@@ -170,7 +172,7 @@ export class ClassFile {
         return null;
     }
 
-    public removeMember(name : string) : ClassMember | null {
+    public removeMember(name: string): ClassMember | null {
 
         let ii;
         let mem = null;
@@ -188,7 +190,7 @@ export class ClassFile {
     }
 
 
-    protected getClassHeader() : string {
+    protected getClassHeader(): string {
         let str = "export class " + this.name;
         if (this.baseClass && !(this.baseClass instanceof SimpleType)) {
             str += " extends " + this.baseClass.FullName;
@@ -196,8 +198,8 @@ export class ClassFile {
         return str;
     }
 
-    public toString() : string {
-        let str : string = "";
+    public toString(): string {
+        let str: string = "";
         str += this.fileHeader;
         str += "\n\n";
         this.imports.forEach((im) => {
@@ -235,7 +237,7 @@ export class ClassFile {
         return str;
     }
 
-    public getMethodByName( name : string) : ClassMethod|null {
+    public getMethodByName( name: string): ClassMethod|null {
         for (let m of this.methods) {
             if (m.Name == name) {
                 return m;
@@ -251,10 +253,10 @@ export class ClassFile {
 
     }
 
-    public getEncodeMethod() : ClassMethod|null { return this.getMethodByName(ClassFile.DEFAULT_ENCODE_METHOD); }
-    public getDecodeMethod() : ClassMethod|null { return this.getMethodByName(ClassFile.DEFAULT_DECODE_METHOD); }
+    public getEncodeMethod(): ClassMethod|null { return this.getMethodByName(ClassFile.DEFAULT_ENCODE_METHOD); }
+    public getDecodeMethod(): ClassMethod|null { return this.getMethodByName(ClassFile.DEFAULT_DECODE_METHOD); }
 
-    public static getTypeByName(typeName : string) : ClassFile {
+    public static getTypeByName(typeName: string): ClassFile {
         let i = typeName.indexOf(':');
         if (i > 0) {
             typeName = typeName.substr(i+1);
@@ -262,16 +264,16 @@ export class ClassFile {
         return TypeRegistry.getType(typeName);
     }
 
-    public removeAllMethods() : void {
+    public removeAllMethods(): void {
         this.methods = [];
     }
 
-    public addMethod(m : ClassMethod) : void {
+    public addMethod(m: ClassMethod): void {
         this.methods.push(m);
     }
 
 
-    protected getFactoryCode() : string {
+    protected getFactoryCode(): string {
 
         if (this.id === '-1') {
             return '';
@@ -283,16 +285,16 @@ export class ClassFile {
         return str;
     }
 
-    public addMemberVariable(m : ClassMember) {
+    public addMemberVariable(m: ClassMember) {
         this.members.push(m);
     }
 
 
-    public removeAllMembers() : void {
+    public removeAllMembers(): void {
         this.members = [];
     }
 
-    public addUtilityFunction(f : ClassMethod) {
+    public addUtilityFunction(f: ClassMethod) {
         this.utilityFunctions.push(f);
     }
 
@@ -303,7 +305,7 @@ export class ClassFile {
     
     public getRelativePath(pathToCompare: string) {
         let relPath = path.relative(pathToCompare, this.Path);
-        relPath = relPath.replace("\\","/");
+        relPath = relPath.replace('\\', '/');
         return relPath;
     }
 
@@ -311,7 +313,7 @@ export class ClassFile {
      * return the code to import this class
      * @param targetClassFile the file the returned import should be placed in (needed to build the relative path)
      */
-    public getImportSrc(targetClassFile: string) : string {
+    public getImportSrc(targetClassFile: string): string {
         if (this.importAs) {
             return "import * as " + this.importAs + " from '" + this.getRelativePath(targetClassFile) + this.name + "';";       
         }
@@ -322,14 +324,14 @@ export class ClassFile {
      *
      * @param targetClassFile the file the returned import should be placed (needed to build the relative path)
      */
-    public getInterfaceImportSrc(targetClassFile: string) : string|null {
+    public getInterfaceImportSrc(targetClassFile: string): string|null {
         if (this.importAs || !this.hasAnyMembers()) {
             return null;
         }
         return "import {I" + this.Name + "} from '" + this.getRelativePath(targetClassFile) + this.name + "';"
     }
 
-    public getDecodeFnImportSrc(targetClassFile: string) : string|null {
+    public getDecodeFnImportSrc(targetClassFile: string): string|null {
         if (this.importAs) {
             return null;
         }
@@ -337,7 +339,7 @@ export class ClassFile {
         return "import {decode" + this.Name + "} from '" + this.getRelativePath(targetClassFile) + this.name + "';"
     }
 
-    public addImport(imp : string) {
+    public addImport(imp: string) {
         this.imports.add(imp);
     }
 
@@ -345,8 +347,8 @@ export class ClassFile {
         this.imports.clear();
     }
 
-    public hasAnyMembers() : boolean {
-        let obj : any = <ClassFile>this;
+    public hasAnyMembers(): boolean {
+        let obj: any = <ClassFile>this;
         while(obj) {
             if (obj.members.length > 0) {
                 return true;
@@ -357,10 +359,10 @@ export class ClassFile {
         return false;
     }
 
-    public hasBaseClass(cls : string) {
+    public hasBaseClass(cls: string) {
         let obj  = this.baseClass;
         while(obj) {
-            if(obj.name == cls) {
+            if(obj.name === cls) {
                 return true;
             } 
             obj = obj.baseClass;

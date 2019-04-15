@@ -3,9 +3,11 @@ import { TypeRegistry } from "./TypeRegistry";
 */
 import {ClassFile, TypeRegistry, SimpleType, EnumTypeFile} from './SchemaParser.module';
 import { IncompleteTypeDefException } from './IncompleteTypeDefException';
+import { ProjectModulePath } from './SchemaParserConfig';
 
 export class ClassMember {
-    public static readonly UNKNOWN_TYPE : ClassFile = new ClassFile("UnknownType");
+    public static readonly UNKNOWN_MODULE_PATH = new ProjectModulePath( "Unknown","Unknown");
+    public static readonly UNKNOWN_TYPE: ClassFile = new ClassFile(ClassMember.UNKNOWN_MODULE_PATH, "UnknownType");
     protected _name : string = "";
     protected _type : ClassFile = ClassMember.UNKNOWN_TYPE;
     protected _length : number; //for array types
