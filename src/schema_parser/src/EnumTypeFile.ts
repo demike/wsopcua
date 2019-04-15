@@ -65,10 +65,10 @@ export class EnumTypeFile extends ClassFile {
     public getImportSrc(targetClassFile: ClassFile) : string {
         if (this.importAs) {
             return "import * as " + this.importAs + " from '" + 
-                getModuleImportPath(targetClassFile.ModulePath,this.ModulePath) + this.name + "';"
+                getModuleImportPath(targetClassFile.ModulePath,this.ModulePath, this.name) + "';"
         }
         return "import {" + this.Name + ", encode" + this.Name + ", decode" + this.Name + "} from '" + 
-            getModuleImportPath(targetClassFile.ModulePath,this.ModulePath) + this.name + "';"
+            getModuleImportPath(targetClassFile.ModulePath,this.ModulePath, this.name) + "';"
     }
 
     public getInterfaceImportSrc() : string|null {
@@ -76,7 +76,7 @@ export class EnumTypeFile extends ClassFile {
     }
 
     protected getFactoryCode() : string {
-        let str = "import {registerEnumeration} from \"../factory/factories_enumerations\";\n";
+        let str = "import {registerEnumeration} from '" + getModuleImportPath(this.modulePath, PathGenUtil.FactoryModulePath) + "/factories_enumerations';\n";
         str += "registerEnumeration(\"" + this.name + "\"," + this.name + ",encode" + this.name + " ,decode" + this.name + " ,null);";
         return str;
     }

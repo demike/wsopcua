@@ -35,15 +35,15 @@ export class TypeRegistry {
     public static init() {
         let type : SimpleType;
 
-        type = new SimpleType(this.BASIC_TYPES_PATH.add("/DataStream"), "DataStream");
-        this.addType(type.Name,type);
+        type = new SimpleType(this.BASIC_TYPES_PATH, "DataStream");
+        this.addType(type.Name, type);
         type.Written = true;
         type.Complete = true;
 
-        let structtype = new StructTypeFile(new ProjectModulePath(PathGenUtil.PROJECT_NAME, "/variant"), "Variant");
+        let structtype = new StructTypeFile(new ProjectModulePath(PathGenUtil.PROJECT_NAME, "/variant", false), "Variant");
         structtype.Complete = true;
         structtype.Written = true;
-        this.addType(structtype.Name,structtype);
+        this.addType(structtype.Name, structtype);
 
         //OPC-UA Standard Data Types - OPC-UA Specification Part 3: 8.*
         //NodeId 8.2

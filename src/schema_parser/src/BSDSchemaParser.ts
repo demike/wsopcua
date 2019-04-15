@@ -1,5 +1,5 @@
 import {JSDOM} from 'jsdom';
-
+import * as path from 'path';
 
 import * as fs from 'fs';
 import { ClassMethod, BSDClassFileParser, BSDStructTypeFileParser,StructTypeFile, BSDEnumTypeFileParser, EnumTypeFile} from './SchemaParser.module';
@@ -25,12 +25,12 @@ export class BSDSchemaParser {
         this.clsIncompleteTypes = [];
     }
 
-    public async parse(importConfig: ProjectImportConfig,
-            metaTypeMap: {[key: string]: {[key: string]: string[]}}): Promise<void> {
+    public parse(importConfig: ProjectImportConfig,
+            metaTypeMap: {[key: string]: {[key: string]: string[]}}): void {
         this.metaTypeMap = metaTypeMap;
         for (const schema of importConfig.schemaImports) {
             this.outPath = importConfig.protjectSrcPath + schema.modulePath;
-            if (schema.namespace) {
+            if (schema.namespace !== undefined) {
                 this.namespace = schema.namespace;
             }
             this.currentModulePath = new ProjectModulePath(importConfig.projectName, schema.modulePath);
@@ -39,8 +39,8 @@ export class BSDSchemaParser {
                 fs.mkdirSync(this.outPath);
             }
 
-            await fs.readFile(schema.pathToSchema, 'utf8', (err, data) => {
-                if (err) throw err;
+            try {
+                const data = fs.readFileSync(schema.pathToSchema, 'utf8');
                 //console.log(data);
                 let doc = new JSDOM(data, { contentType : 'text/xml'});
                 if (schema.pathToSchema.endsWith('.bsd')) {
@@ -48,13 +48,29 @@ export class BSDSchemaParser {
                 } else {
                     this.parseNodeSet2XmlDoc(doc);
                 }
-            });
+            } catch (err) {
+                throw err;
+            }
         }
-        return;
+    }
+
+    protected addTypeIdsFromNodeSet(doc: JSDOM) {
+        const elements = doc.window.document.querySelectorAll('UADataType');
+
+        for (let i = 0; i < elements.length; i++) {
+            const el = elements.item(i);
+            const nodeId = el.getAttribute('NodeId');
+            let browseName = el.getAttribute('BrowseName');
+            if (nodeId && browseName) {
+                browseName = browseName.split(':')[1];
+                this.metaTypeMap['DataType'][browseName] = [browseName, nodeId.split('i=')[1], 'DataType'];
+            }
+        }
     }
 
     public parseNodeSet2XmlDoc(doc: JSDOM) {
-        let elements = doc.window.document.querySelectorAll('ByteString[xmlns="http://opcfoundation.org/UA/2008/02/Types.xsd"]');
+        this.addTypeIdsFromNodeSet(doc);
+        let elements = doc.window.document.querySelectorAll('ByteString');
         for (let i=0; i < elements.length; i++) {
             const el = elements.item(i);
             let parent: HTMLElement| null;
@@ -136,13 +152,12 @@ export class BSDSchemaParser {
     }
 
     public writeToFile(path : string,cls : ClassFile) {
-        fs.writeFile(path,cls.toString(),"utf8", (err) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                console.log("file written: " + path);
-            }
-        });
+        try {
+            fs.writeFileSync(path,cls.toString(),"utf8");
+            console.log("file written: " + path);
+        } catch (err) {
+            console.log(err.message);
+        }
     }
 
     public insertIntoFile(path : string, cls : ClassFile) {
@@ -161,8 +176,7 @@ export class BSDSchemaParser {
     }
 
     protected parseSecondPass() {
-        let incomplete = 0;
-        let ar : BSDClassFileParser[] = [];
+        let ar: BSDClassFileParser[] = [];
 
         for (let iterations=0; iterations < 10; iterations++) {
             for (let t of this.clsIncompleteTypes) {
@@ -205,7 +219,7 @@ export class BSDSchemaParser {
                 if (arParams) {
                     file.setTypeId(arParams[1],this.namespace);
                 }
-                this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
+                this.writeToFile(path.resolve(this.outPath, file.Name + ".ts"), file);
                 file.Written = true;
             }
         }
@@ -222,14 +236,13 @@ export class BSDSchemaParser {
             }
             strFileContent += 'export * from \'./' + file.Name + '\';\n';
         }
-
-        fs.writeFile(this.outPath + '/index.ts' , strFileContent, 'utf8', (err) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                console.log('file written: ' + this.outPath + '/index.ts');
-            }
-        });
+        try {
+            let indexFilePath = path.resolve(this.outPath, 'index.ts');
+            fs.writeFileSync(indexFilePath , strFileContent, 'utf8');
+            console.log('file written: ' + indexFilePath);
+        } catch (err) {
+            console.log(err.message);
+        }
     }
 
     public parseComplexType() {

@@ -14,7 +14,7 @@ var code_list : {name : string, value : number, description : string}[] = [];
 
 var datafolder = path.join(__dirname,"../schemas");
 
-fs.readFile(path.join(datafolder,'/StatusCodes.csv'),"utf8",(err : Error|null,data : string)=>{
+fs.readFile(path.join(datafolder, '/StatusCodes.csv'),"utf8",(err: Error|null, data: string) => {
     if (err) {
         console.log(err);
     } else {

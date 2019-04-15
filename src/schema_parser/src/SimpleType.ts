@@ -19,11 +19,11 @@ export class SimpleType extends ClassFile {
         this.written = true;
     }
 
-    public get JsType () : string | undefined {
+    public get JsType (): string | undefined {
         return this._jsType;
     }
 
-    public set JsType (jsType : string | undefined) {
+    public set JsType (jsType: string | undefined) {
         this._jsType = jsType;
     }
     // protected createDecodeMethod() : void {

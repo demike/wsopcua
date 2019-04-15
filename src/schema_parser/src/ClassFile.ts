@@ -5,6 +5,7 @@ import {TypeRegistry} from './TypeRegistry';
 import {ClassMember, ClassMethod, TypeRegistry,SimpleType} from './SchemaParser.module';
 import * as path from 'path';
 import { ProjectModulePath, getModuleImportPath } from './SchemaParserConfig';
+import { PathGenUtil } from './PathGenUtil';
 
 export declare class Set< Value > {
 	add( value: Value ): Set< Value >
@@ -279,9 +280,10 @@ export class ClassFile {
             return '';
         }
 
-        let str = "import {register_class_definition} from \"../factory/factories_factories\";\n";
-        str += "import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';\n"
-        str += "register_class_definition(\"" + this.name + "\"," + this.name + ", makeExpandedNodeId("+ this.id + "," + this.namespace + "));";
+        let str = "import {register_class_definition} from '" + getModuleImportPath(this.modulePath,PathGenUtil.FactoryModulePath) + "/factories_factories';\n";
+        str += "import { makeExpandedNodeId } from '" + getModuleImportPath(this.modulePath,PathGenUtil.NodeIdModulePath) +  "/expanded_nodeid';\n"
+        let ns = (typeof this.namespace === "number") ? this.namespace : (' null, \'' + this.namespace + '\''); 
+        str += "register_class_definition(\"" + this.name + "\"," + this.name + ", makeExpandedNodeId("+ this.id + "," + ns + "));";
         return str;
     }
 
@@ -302,13 +304,6 @@ export class ClassFile {
         this.utilityFunctions = [];
     }
 
-    
-    public getRelativePath(pathToCompare: string) {
-        let relPath = path.relative(pathToCompare, this.Path);
-        relPath = relPath.replace('\\', '/');
-        return relPath;
-    }
-
     /**
      * return the code to import this class
      * @param targetClassFile the file the returned import should be placed in (needed to build the relative path)
@@ -316,12 +311,11 @@ export class ClassFile {
     public getImportSrc(targetClassFile: ClassFile): string {
         let ret: string;
         if (this.importAs) {
-            ret = "import * as " + this.importAs + " from '";
-        } else {
-            ret = "import {" + this.Name + "} from '";
-        }
-        ret += getModuleImportPath(targetClassFile.ModulePath, this.ModulePath) + this.name + "';";
-        return ret;
+            return "import * as " + this.importAs + " from '" +
+                 getModuleImportPath(targetClassFile.ModulePath, this.ModulePath) + "';";
+        } 
+            return "import {" + this.Name + "} from '" +
+                 getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + "';";
     }
 
     /**
@@ -333,7 +327,7 @@ export class ClassFile {
             return null;
         }
         return "import {I" + this.Name + "} from '" +
-                getModuleImportPath(targetClassFile.ModulePath, this.ModulePath) + this.name + "';"
+                getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + "';"
     }
 
     public getDecodeFnImportSrc(targetClassFile: ClassFile): string|null {
@@ -342,7 +336,7 @@ export class ClassFile {
         }
 
         return "import {decode" + this.Name + "} from '" + 
-                getModuleImportPath(targetClassFile.ModulePath, this.ModulePath) + this.name + "';"
+                getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + "';"
     }
 
     public addImport(imp: string) {

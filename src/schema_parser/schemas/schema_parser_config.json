@@ -6,12 +6,12 @@
             "schemaImports": [
                 {
                     "pathToSchema" : "../schemas/Opc.Ua.Types.bsd",
-                    "destinationModulePath": "/generated/",
+                    "modulePath": "/generated/",
                     "namespace": 0
                 },
                 {
                     "pathToSchema" : "../schemas/Opc.Ua.Di.NodeSet2.xml",
-                    "destinationModulePath": "/generated/DI/",
+                    "modulePath": "/generated/DI/",
                     "namespace": 1
                 }
             ]

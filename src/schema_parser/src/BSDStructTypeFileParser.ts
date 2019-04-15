@@ -100,7 +100,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
         }
         let args = [];
         if (this.cls.hasAnyMembers()) {
-            args.push(new ClassMember("options", new SimpleType("I" + this.cls.Name), false));
+            args.push(new ClassMember("options", new SimpleType(this.cls.ModulePath, "I" + this.cls.Name), false));
         }
         let met: ClassMethod = new ClassMethod(null, null, "constructor", args, null, body);
 

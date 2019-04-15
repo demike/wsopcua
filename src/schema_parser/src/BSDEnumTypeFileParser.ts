@@ -4,6 +4,7 @@ import { PathGenUtil } from './PathGenUtil';
 //import { EnumItem } from './EnumItem';
 //import { ClassMember } from './ClassMember';
 import {ClassMember, ClassMethod, BSDClassFileParser, EnumItem,ClassFile, EnumTypeFile} from './SchemaParser.module';
+import { getModuleImportPath } from './SchemaParserConfig';
 
 export class BSDEnumTypeFileParser extends BSDClassFileParser {
     public static readonly ATTR_LENGTH = "LengthInBits";
@@ -69,7 +70,8 @@ export class BSDEnumTypeFileParser extends BSDClassFileParser {
 
     protected createImports() : void {
         if (this.cls) {
-            this.cls.addImport("import {" + ClassFile.IO_TYPE + "} from '" + PathGenUtil.SimpleTypes + ClassFile.IO_TYPE + "';");
+            this.cls.addImport("import {" + ClassFile.IO_TYPE + "} from '" + 
+                getModuleImportPath(this.cls.ModulePath, PathGenUtil.SimpleTypesModulePath, ClassFile.IO_TYPE) + "';");
         }
     }
 

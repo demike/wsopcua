@@ -9,6 +9,7 @@ import { ClassMember } from './ClassMember';
 import { SimpleType } from './SimpleType';
 
 import * as path from 'path';
+import { getModuleImportPath } from './SchemaParserConfig';
 
 export abstract class BSDClassFileParser {
 
@@ -127,7 +128,8 @@ export abstract class BSDClassFileParser {
         }
 
         if (blnHasArrayMember) {
-            this.cls.addImport("import * as ec from " + this.cls.getRelativePath(PathGenUtil.ProjRoot) + "'/basic-types';");
+            this.cls.addImport("import * as ec from '" +
+                    getModuleImportPath(this.cls.ModulePath, PathGenUtil.SimpleTypesModulePath ) + '\';');
         }
 
         //iterate over methods, ignore self

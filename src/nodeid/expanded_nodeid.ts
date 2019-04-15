@@ -88,14 +88,13 @@ export class ExpandedNodeId extends NodeId {
  * @param [namespace=0] {Integer} the namespace
  * @return {ExpandedNodeId}
  */
-export function makeExpandedNodeId(value: any, namespace?: number) {
+export function makeExpandedNodeId(value: any, namespace?: number, namespaceUri: string = null) {
 
     if (value === undefined && namespace === undefined) {
         return new ExpandedNodeId(NodeIdType.NUMERIC, 0, 0, null, 0);
     }
     const serverIndex = 0;
     let n;
-    const namespaceUri = null;
 
     if (value instanceof ExpandedNodeId) {
         // construct from a ExpandedNodeId => copy
