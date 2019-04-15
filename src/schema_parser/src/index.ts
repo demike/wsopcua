@@ -6,12 +6,13 @@ import {generateNodeIds,metaTypeMap} from './generate_node_ids';
 import * as fs from 'fs';
 import { SchemaParserConfig } from './SchemaParserConfig';
 
-var datafolder = path.join(__dirname,"../schemas");
+let datafolder = path.join(__dirname,"../schemas");
+let configFilePath = path.join(__dirname, '../schemas/schema_parser_config.json');
 
-let importConfig: SchemaParserConfig = JSON.parse( fs.readFileSync('..schemas/schema_parser_config.json').toString() );
+let importConfig: SchemaParserConfig = JSON.parse( fs.readFileSync(configFilePath).toString() );
 
 generateNodeIds(path.join(datafolder,'/NodeIds.csv'),"opcua_node_ids.ts", () => {
-generate_data_types(importConfig, metaTypeMap);
+    generate_data_types(importConfig, metaTypeMap);
 });
 
 /*

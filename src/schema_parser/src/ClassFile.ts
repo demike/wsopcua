@@ -4,7 +4,7 @@ import {TypeRegistry} from './TypeRegistry';
 */
 import {ClassMember, ClassMethod, TypeRegistry,SimpleType} from './SchemaParser.module';
 import * as path from 'path';
-import { ProjectModulePath } from './SchemaParserConfig';
+import { ProjectModulePath, getModuleImportPath } from './SchemaParserConfig';
 
 export declare class Set< Value > {
 	add( value: Value ): Set< Value >
@@ -313,30 +313,36 @@ export class ClassFile {
      * return the code to import this class
      * @param targetClassFile the file the returned import should be placed in (needed to build the relative path)
      */
-    public getImportSrc(targetClassFile: string): string {
+    public getImportSrc(targetClassFile: ClassFile): string {
+        let ret: string;
         if (this.importAs) {
-            return "import * as " + this.importAs + " from '" + this.getRelativePath(targetClassFile) + this.name + "';";       
+            ret = "import * as " + this.importAs + " from '";
+        } else {
+            ret = "import {" + this.Name + "} from '";
         }
-        return "import {" + this.Name + "} from '" + this.getRelativePath(targetClassFile) + this.name + "';";
+        ret += getModuleImportPath(targetClassFile.ModulePath, this.ModulePath) + this.name + "';";
+        return ret;
     }
 
     /**
      *
      * @param targetClassFile the file the returned import should be placed (needed to build the relative path)
      */
-    public getInterfaceImportSrc(targetClassFile: string): string|null {
+    public getInterfaceImportSrc(targetClassFile: ClassFile): string|null {
         if (this.importAs || !this.hasAnyMembers()) {
             return null;
         }
-        return "import {I" + this.Name + "} from '" + this.getRelativePath(targetClassFile) + this.name + "';"
+        return "import {I" + this.Name + "} from '" +
+                getModuleImportPath(targetClassFile.ModulePath, this.ModulePath) + this.name + "';"
     }
 
-    public getDecodeFnImportSrc(targetClassFile: string): string|null {
+    public getDecodeFnImportSrc(targetClassFile: ClassFile): string|null {
         if (this.importAs) {
             return null;
         }
 
-        return "import {decode" + this.Name + "} from '" + this.getRelativePath(targetClassFile) + this.name + "';"
+        return "import {decode" + this.Name + "} from '" + 
+                getModuleImportPath(targetClassFile.ModulePath, this.ModulePath) + this.name + "';"
     }
 
     public addImport(imp: string) {

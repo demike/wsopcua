@@ -130,7 +130,7 @@ export class BSDSchemaParser {
 
     public parseBSDEnum(el : HTMLElement) : void {
         let file = new EnumTypeFile(this.currentModulePath);
-        let parser = new BSDEnumTypeFileParser(el,file);
+        let parser = new BSDEnumTypeFileParser(el, file);
         parser.parse();
         //this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);   
     }

@@ -4,6 +4,7 @@ import { PathGenUtil } from './PathGenUtil';
 //import { EnumItem } from './EnumItem';
 //import { ClassMember } from './ClassMember';
 import {ClassMember, ClassMethod, ClassFile, EnumItem} from './SchemaParser.module';
+import { getModuleImportPath } from './SchemaParserConfig';
 
 export class EnumTypeFile extends ClassFile {
     protected lengthInBits : number = 0;
@@ -61,14 +62,14 @@ export class EnumTypeFile extends ClassFile {
      * return the code to import this class
      * @param targetClassFile the file the returned import should be placed in (needed to build the relative path)
      */
-    public getImportSrc(targetClassFile: string) : string {
+    public getImportSrc(targetClassFile: ClassFile) : string {
         if (this.importAs) {
-            return "import * as " + this.importAs + " from '" + this.getRelativePath(targetClassFile) + this.name + "';";
-                
+            return "import * as " + this.importAs + " from '" + 
+                getModuleImportPath(targetClassFile.ModulePath,this.ModulePath) + this.name + "';"
         }
-        return "import {" + this.Name + ", encode" + this.Name + ", decode" + this.Name + "} from '" + this.getRelativePath(targetClassFile) + this.name + "';";
+        return "import {" + this.Name + ", encode" + this.Name + ", decode" + this.Name + "} from '" + 
+            getModuleImportPath(targetClassFile.ModulePath,this.ModulePath) + this.name + "';"
     }
-    
 
     public getInterfaceImportSrc() : string|null {
         return null;

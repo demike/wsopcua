@@ -161,16 +161,16 @@ export abstract class BSDClassFileParser {
             return;
         }
         if (cls.Path != this.cls.Path ) {
-            this.cls.addImport(cls.getImportSrc(this.cls.Path));
+            this.cls.addImport(cls.getImportSrc(this.cls));
             if (importInterface) {
-                let str = cls.getInterfaceImportSrc(this.cls.Path);
+                let str = cls.getInterfaceImportSrc(this.cls);
                 if (str) {
                     this.cls.addImport(str);
                 }
             }
 
             if (importDecodeMethod) {
-                let str = cls.getDecodeFnImportSrc(this.cls.Path);
+                const str = cls.getDecodeFnImportSrc(this.cls);
                 if (str) {
                     this.cls.addImport(str);
                 }
