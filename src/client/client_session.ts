@@ -284,7 +284,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
         this.performMessageTransaction(request, (err, response: browse_service.BrowseResponse) => {
 
-            let i, r;
+            let i: number, r: browse_service.BrowseResult;
 
             /* istanbul ignore next */
             if (err) {

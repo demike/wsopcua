@@ -345,6 +345,7 @@ function encodeVariantArray(dataType: DataType, stream: DataStream, value: any) 
             console.log('DATATYPE: ' + dataType);
             console.log('value: ' + value.length);
         }
+        return;
     }
     return encodeGeneralArray(dataType, stream, value);
 }
