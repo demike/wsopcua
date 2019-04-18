@@ -311,20 +311,68 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
                 r = response.results[i];
                 r.references = r.references || [];
             }
-            // detect unsupported case :
-            // todo implement proper support for r.continuationPoint
-            for (i = 0; i < response.results.length; i++) {
-                r = response.results[i];
 
-                if (r.continuationPoint !== null) {
-                    // tslint:disable-next-line:max-line-length
-                    console.log(' warning: BrowseResponse : server didn\'t send all references and has provided a continuationPoint. Unfortunately we do not support this yet');
-                    console.log('           self.requestedMaxReferencesPerNode = ', this._requestedMaxReferencesPerNode);
-                    console.log('           continuationPoint ', r.continuationPoint);
-                }
-            }
             return callback(null, response.results, response.diagnosticInfos);
         });
+    }
+
+    /**
+     * This Service is used to request the next set of Browse or BrowseNext 
+     * response information that is too large to be sent in a single response
+     * @param continuationPoints  A list of Server-defined opaque values that represent continuation points. 
+     *                            The value for a continuation point was returned to the Client in a previous Browse or BrowseNext response.
+     * @param releaseContinuationPoints
+     *                              TRUE passed continuationPoints shall be reset to free resources in the Server. 
+     *                                   The continuation points are released and the results and diagnosticInfos arrays are empty.
+     *                              FALSE passed continuationPoints shall be used to get the next set of browse information.
+     *
+     *                              After receiving the last browse results with browseNext the resources on 
+     *                              the server are freed automatically, no additional browseNext call with FALSE is necessary
+     * @param callback 
+     */
+    browseNext(continuationPoints: Uint8Array | Uint8Array[], releaseContinuationPoints: boolean= false,
+        callback: (err: Error, results: browse_service.BrowseResult[],
+           diagnostInfos: DiagnosticInfo[] | browse_service.BrowseNextResponse) => void) {
+
+            assert('function' === typeof callback);
+
+            if (!Array.isArray(continuationPoints)) {
+                (<any>continuationPoints) = [continuationPoints];
+            }
+
+            const request = new browse_service.BrowseNextRequest({
+                continuationPoints: continuationPoints as Uint8Array[],
+                releaseContinuationPoints: releaseContinuationPoints
+            });
+
+            this.performMessageTransaction(request, (err, response: browse_service.BrowseNextResponse) => {
+
+                let i: number, r: browse_service.BrowseResult;
+                if (err) {
+                    return callback(err, null, response);
+                }
+
+                assert(response instanceof browse_service.BrowseNextResponse);
+ 
+                if (this._requestedMaxReferencesPerNode > 0) {
+                    for (i = 0; i < response.results.length; i++) {
+                        r = response.results[i];
+
+                        if (r.references && r.references.length > this._requestedMaxReferencesPerNode) {
+                            console.log('warning BrowseResponse : server didn\'t take into account our requestedMaxReferencesPerNode ');
+                            console.log('        self.requestedMaxReferencesPerNode= ' + this._requestedMaxReferencesPerNode);
+                            console.log('        got ' + r.references.length + 'for continuation point');
+                            console.log('        continuationPoint ', r.continuationPoint);
+                        }
+                    }
+                }
+                for (i = 0; i < response.results.length; i++) {
+                    r = response.results[i];
+                    r.references = r.references || [];
+                }
+
+                return callback(null, response.results, response.diagnosticInfos);
+            });
     }
 
 
