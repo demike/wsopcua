@@ -19,7 +19,7 @@ import { async_series} from 'async-es/series';
 const hasPropertyRefId = resolveNodeId('HasProperty');
 /* NodeId  ns=0;i=46*/
 
-function browsePathPropertyRequest(nodeId, propertyName) {
+function browsePathPropertyRequest(nodeId: NodeId, propertyName: string) {
 
     return new BrowsePath({
         startingNode: /* NodeId  */ nodeId,
@@ -36,6 +36,91 @@ function browsePathPropertyRequest(nodeId, propertyName) {
     });
 
 }
+
+/**
+ * reads all properties of a variable object
+ * per convention the object members should start with lower case i.e.: 'engineeringUnits'
+ * the capitalized version of this member (i.e.: 'EngineeringUnits') is then used as a browsePath
+ */
+function readVariableProperties(session: ClientSession, nodeId: NodeId, varObj: Object, callback) {
+
+    const browsePaths: BrowsePath[] = [];
+    for (const key of Object.keys(varObj) ) {
+        browsePaths.push(browsePathPropertyRequest(nodeId, key.charAt(0).toUpperCase() + key.slice(1)));
+    }
+
+    session.translateBrowsePath(browsePaths, function (err, browsePathResults) {
+
+        if (err) {
+            return callback(err);
+        }
+        // xx console.log("xxxx ",browsePathResults.toString());
+
+        const actions = [];
+        const nodesToRead = [];
+
+        function processProperty(browsePathIndex, propertyName) {
+            if (browsePathResults[browsePathIndex].statusCode === StatusCodes.Good) {
+
+                nodesToRead.push({
+                    nodeId: browsePathResults[browsePathIndex].targets[0].targetId,
+                    attributeId: AttributeIds.Value
+                });
+                actions.push(function (readResult) {
+                    // to do assert is
+                    varObj[propertyName] = readResult.value.value;
+                });
+            }
+        }
+
+        let ii = 0;
+        for (const key of Object.keys(varObj) ) {
+            processProperty(ii, key);
+            ii++;
+        }
+
+        session.read(nodesToRead, function (err, dataValues) {
+            if (err) {
+                return callback(err);
+            }
+            dataValues.forEach(function (result, index) {
+                actions[index].call(null, result);
+            });
+            callback(err, varObj);
+
+            // console.log("analogItemData = ",analogItemData);
+
+        });
+    });
+}
+
+export function readUAMultiStateValueDiscreteType(session: ClientSession, nodeId: NodeId, callback) {
+    const discreteItemData = {
+        enumValues: null,
+        valueAsText: null,
+        valuePrecision: null,
+        definition: null
+    };
+    return readVariableProperties(session, nodeId, discreteItemData, callback );
+}
+
+export function readUAMultiStateDiscreteType(session: ClientSession, nodeId: NodeId, callback) {
+    const discreteItemData = {
+        enumStrings: null,
+        valuePrecision: null,
+        definition: null
+    };
+    return readVariableProperties(session, nodeId, discreteItemData, callback );
+}
+
+export function readUADataItemType(session: ClientSession, nodeId: NodeId, callback) {
+    const discreteItemData = {
+        valuePrecision: null,
+        definition: null
+    };
+    return readVariableProperties(session, nodeId, discreteItemData, callback );
+}
+
 
 /**
  * @method readUAAnalogItem
