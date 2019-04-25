@@ -317,7 +317,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     }
 
     /**
-     * This Service is used to request the next set of Browse or BrowseNext 
+     * This Service is used to request the next set of Browse or BrowseNext
      * response information that is too large to be sent in a single response
      * @param continuationPoints  A list of Server-defined opaque values that represent continuation points. 
      *                            The value for a continuation point was returned to the Client in a previous Browse or BrowseNext response.
@@ -417,8 +417,14 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      *
      *
     */
-    readVariableValue(nodes: string | string[] | NodeId | NodeId[] | read_service.ReadValueId | read_service.ReadValueId[],
-        callback: (err: Error, results?: DataValue[]|DataValue, diagInf?: DiagnosticInfo[]| DiagnosticInfo) => void) {
+
+    
+    public readVariableValue(nodes: string | NodeId | read_service.ReadValueId,
+        callback: ResponseCallback<DataValue, DiagnosticInfo>): void;
+    public readVariableValue(nodes: string[] | NodeId[] | read_service.ReadValueId[],
+        callback: ResponseCallback<DataValue[], DiagnosticInfo[]>): void;
+    public readVariableValue(nodes: string | string[] | NodeId | NodeId[] | read_service.ReadValueId | read_service.ReadValueId[],
+        callback: ResponseCallback<DataValue, DiagnosticInfo> | ResponseCallback<DataValue[], DiagnosticInfo[]>): void {
 
         assert('function' === typeof callback);
 
@@ -469,11 +475,12 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
             response.results = response.results || [];
             response.diagnosticInfos = response.diagnosticInfos || [];
-            const results = isArr ? response.results : response.results[0];
-            const diags = isArr ? response.diagnosticInfos : response.diagnosticInfos[0];
 
-            callback(null, results, diags);
-
+            if ( isArr ) {
+                (callback as ResponseCallback<DataValue[], DiagnosticInfo[]> )(null, response.results, response.diagnosticInfos);
+            } else {
+                (callback as ResponseCallback<DataValue, DiagnosticInfo> )(null, response.results[0], response.diagnosticInfos[0]);
+            }
         });
 
     }
