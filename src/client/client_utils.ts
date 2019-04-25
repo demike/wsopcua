@@ -57,15 +57,15 @@ function readVariableProperties(session: ClientSession, nodeId: NodeId, varObj: 
         // xx console.log("xxxx ",browsePathResults.toString());
 
         const actions = [];
-        const nodesToRead = [];
+        const nodesToRead: ReadValueId[] = [];
 
         function processProperty(browsePathIndex, propertyName) {
             if (browsePathResults[browsePathIndex].statusCode === StatusCodes.Good) {
 
-                nodesToRead.push({
+                nodesToRead.push(new ReadValueId({
                     nodeId: browsePathResults[browsePathIndex].targets[0].targetId,
                     attributeId: AttributeIds.Value
-                });
+                }));
                 actions.push(function (readResult) {
                     // to do assert is
                     varObj[propertyName] = readResult.value.value;
@@ -128,7 +128,7 @@ export function readUADataItemType(session: ClientSession, nodeId: NodeId, callb
  * @param nodeId
  * @param callback
  */
-export function readUAAnalogItem(session, nodeId, callback) {
+export function readUAAnalogItem(session: ClientSession, nodeId, callback) {
 
     assert('function' === typeof callback);
 
@@ -157,15 +157,15 @@ export function readUAAnalogItem(session, nodeId, callback) {
         // xx console.log("xxxx ",browsePathResults.toString());
 
         const actions = [];
-        const nodesToRead = [];
+        const nodesToRead: ReadValueId[] = [];
 
         function processProperty(browsePathIndex, propertyName) {
             if (browsePathResults[browsePathIndex].statusCode === StatusCodes.Good) {
 
-                nodesToRead.push({
+                nodesToRead.push(new ReadValueId({
                     nodeId: browsePathResults[browsePathIndex].targets[0].targetId,
                     attributeId: AttributeIds.Value
-                });
+                }));
                 actions.push(function (readResult) {
                     // to do assert is
                     analogItemData[propertyName] = readResult.value.value;
