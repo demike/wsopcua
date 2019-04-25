@@ -6,7 +6,7 @@ export class PathGenUtil {
    
     private static readonly _simpleTypeModulePath = new ProjectModulePath(PathGenUtil.PROJECT_NAME, "/basic-types");
     private static readonly _factoryModulePath = new ProjectModulePath(PathGenUtil.PROJECT_NAME, "/factory" );
-    private static readonly _nodeIdModulePath = new ProjectModulePath(PathGenUtil.PROJECT_NAME, "/nodeId");
+    private static readonly _nodeIdModulePath = new ProjectModulePath(PathGenUtil.PROJECT_NAME, "/nodeid");
 
     /**
      * the root project path relative to the folder of generated classes
