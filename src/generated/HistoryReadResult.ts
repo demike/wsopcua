@@ -1,12 +1,13 @@
 
 
 import * as ec from '../basic-types';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryReadResult {
 		statusCode?: ec.StatusCode;
 		continuationPoint?: Uint8Array;
-		historyData?: ec.ExtensionObject;
+		historyData?: ExtensionObject;
 }
 
 /**
@@ -16,7 +17,7 @@ export interface IHistoryReadResult {
 export class HistoryReadResult {
  		statusCode: ec.StatusCode;
 		continuationPoint: Uint8Array;
-		historyData: ec.ExtensionObject;
+		historyData: ExtensionObject;
 
 	constructor(	options?: IHistoryReadResult) { 
 		options = options || {};
@@ -30,7 +31,7 @@ export class HistoryReadResult {
 	encode(	out: DataStream) { 
 		ec.encodeStatusCode(this.statusCode,out);
 		ec.encodeByteString(this.continuationPoint,out);
-		ec.encodeExtensionObject(this.historyData,out);
+		encodeExtensionObject(this.historyData,out);
 
 	}
 
@@ -38,7 +39,7 @@ export class HistoryReadResult {
 	decode(	inp: DataStream) { 
 		this.statusCode = ec.decodeStatusCode(inp);
 		this.continuationPoint = ec.decodeByteString(inp);
-		this.historyData = ec.decodeExtensionObject(inp);
+		this.historyData = decodeExtensionObject(inp);
 
 	}
 
@@ -64,6 +65,6 @@ export function decodeHistoryReadResult(	inp: DataStream): HistoryReadResult {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("HistoryReadResult",HistoryReadResult, makeExpandedNodeId(640,0));

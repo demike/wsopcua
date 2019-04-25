@@ -67,6 +67,6 @@ export function decodeUpdateDataDetails(	inp: DataStream): UpdateDataDetails {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("UpdateDataDetails",UpdateDataDetails, makeExpandedNodeId(682,0));

@@ -71,6 +71,6 @@ export function decodeFindServersOnNetworkRequest(	inp: DataStream): FindServers
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("FindServersOnNetworkRequest",FindServersOnNetworkRequest, makeExpandedNodeId(12208,0));

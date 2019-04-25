@@ -74,6 +74,6 @@ export function decodeCreateMonitoredItemsRequest(	inp: DataStream): CreateMonit
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("CreateMonitoredItemsRequest",CreateMonitoredItemsRequest, makeExpandedNodeId(751,0));

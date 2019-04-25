@@ -71,6 +71,6 @@ export function decodeHistoryReadValueId(	inp: DataStream): HistoryReadValueId {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("HistoryReadValueId",HistoryReadValueId, makeExpandedNodeId(637,0));

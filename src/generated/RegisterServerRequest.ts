@@ -3,7 +3,6 @@
 import {RequestHeader} from './RequestHeader';
 import {RegisteredServer} from './RegisteredServer';
 import {DataStream} from '../basic-types/DataStream';
-import * as ec from '../basic-types';
 
 export interface IRegisterServerRequest {
 		requestHeader?: RequestHeader;
@@ -60,6 +59,6 @@ export function decodeRegisterServerRequest(	inp: DataStream): RegisterServerReq
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("RegisterServerRequest",RegisterServerRequest, makeExpandedNodeId(437,0));

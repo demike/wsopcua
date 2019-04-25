@@ -1,10 +1,6 @@
-import { combine_der, getSPKIFromCertificate } from './crypto_explore_certificate';
-import { Certificate, CertificatePEM, PublicKeyPEM, PEM, DER, Signature, PrivateKeyPEM, PublicKey } from './common';
+
+import { Signature } from './common';
 import { assert } from '../assert';
-
-const PEM_REGEX = /^(-----BEGIN (.*)-----\r?\n([\/+=a-zA-Z0-9\r\n]*)\r?\n-----END \2-----\r?\n)/mg;
-const PEM_TYPE_REGEX = /^(-----BEGIN (.*)-----)/m;
-
 
 export function buf2base64(buffer: ArrayBuffer): string {
     return btoa(String.fromCharCode(...new Uint8Array(buffer)));
@@ -49,42 +45,6 @@ export function string2buf(str: string) {
      bufView[i] = str.charCodeAt(i);
    }
    return buf;
-}
-
-
-
-export function generatePublicKeyFromDER(der_certificate: Uint8Array): PromiseLike<CryptoKey>{
-
-    if ( (der_certificate as any)._publicKey) {
-        return Promise.resolve((der_certificate as any)._publicKey);
-    }
-
-    let spki = getSPKIFromCertificate(der_certificate);
-
-    return crypto.subtle.importKey('spki', spki,
-    { name: 'RSA-OAEP', hash: 'SHA-1' },
-    true, ['encrypt']).then( (key) => {
-        (der_certificate as any)._publicKey  = key;
-        return key;
-    } );
-}
-
-export function convertPEMtoDER(raw_key: PEM): DER {
-
-    let match: any;
-    let pemType;
-    let base64str;
-
-    const parts: DER[] = [];
-    // tslint:disable-next-line:no-conditional-assignment
-    while ((match = PEM_REGEX.exec(raw_key)) !== null) {
-        pemType = match[2];
-        // pemType shall be "RSA PRIVATE KEY" , "PUBLIC KEY", "CERTIFICATE"
-        base64str = match[3];
-        base64str = base64str.replace(/\r?\n/g, '');
-        parts.push(base64ToBuf(base64str));
-    }
-    return combine_der(parts);
 }
 
 /**

@@ -8,6 +8,7 @@ import {RolePermissionType} from './RolePermissionType';
 import {decodeRolePermissionType} from './RolePermissionType';
 import {ReferenceNode} from './ReferenceNode';
 import {decodeReferenceNode} from './ReferenceNode';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 import {TypeNode} from './TypeNode';
 import {ITypeNode} from './TypeNode';
@@ -25,7 +26,7 @@ export interface IDataTypeNode extends ITypeNode {
 		accessRestrictions?: ec.UInt16;
 		references?: ReferenceNode[];
 		isAbstract?: boolean;
-		dataTypeDefinition?: ec.ExtensionObject;
+		dataTypeDefinition?: ExtensionObject;
 }
 
 /**
@@ -45,7 +46,7 @@ export class DataTypeNode extends TypeNode {
 		accessRestrictions: ec.UInt16;
 		references: ReferenceNode[];
 		isAbstract: boolean;
-		dataTypeDefinition: ec.ExtensionObject;
+		dataTypeDefinition: ExtensionObject;
 
 	constructor(	options?: IDataTypeNode) { 
 		options = options || {};
@@ -81,7 +82,7 @@ export class DataTypeNode extends TypeNode {
 		ec.encodeUInt16(this.accessRestrictions,out);
 		ec.encodeArray(this.references,out);
 		ec.encodeBoolean(this.isAbstract,out);
-		ec.encodeExtensionObject(this.dataTypeDefinition,out);
+		encodeExtensionObject(this.dataTypeDefinition,out);
 
 	}
 
@@ -100,7 +101,7 @@ export class DataTypeNode extends TypeNode {
 		this.accessRestrictions = ec.decodeUInt16(inp);
 		this.references = ec.decodeArray(inp,decodeReferenceNode);
 		this.isAbstract = ec.decodeBoolean(inp);
-		this.dataTypeDefinition = ec.decodeExtensionObject(inp);
+		this.dataTypeDefinition = decodeExtensionObject(inp);
 
 	}
 
@@ -137,6 +138,6 @@ export function decodeDataTypeNode(	inp: DataStream): DataTypeNode {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("DataTypeNode",DataTypeNode, makeExpandedNodeId(284,0));

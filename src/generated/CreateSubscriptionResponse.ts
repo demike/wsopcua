@@ -77,6 +77,6 @@ export function decodeCreateSubscriptionResponse(	inp: DataStream): CreateSubscr
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("CreateSubscriptionResponse",CreateSubscriptionResponse, makeExpandedNodeId(790,0));

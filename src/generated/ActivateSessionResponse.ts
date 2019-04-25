@@ -73,6 +73,6 @@ export function decodeActivateSessionResponse(	inp: DataStream): ActivateSession
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ActivateSessionResponse",ActivateSessionResponse, makeExpandedNodeId(470,0));

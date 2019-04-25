@@ -1,12 +1,13 @@
 
 
 import * as ec from '../basic-types';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface INotificationMessage {
 		sequenceNumber?: ec.UInt32;
 		publishTime?: Date;
-		notificationData?: ec.ExtensionObject[];
+		notificationData?: ExtensionObject[];
 }
 
 /**
@@ -16,7 +17,7 @@ export interface INotificationMessage {
 export class NotificationMessage {
  		sequenceNumber: ec.UInt32;
 		publishTime: Date;
-		notificationData: ec.ExtensionObject[];
+		notificationData: ExtensionObject[];
 
 	constructor(	options?: INotificationMessage) { 
 		options = options || {};
@@ -30,7 +31,7 @@ export class NotificationMessage {
 	encode(	out: DataStream) { 
 		ec.encodeUInt32(this.sequenceNumber,out);
 		ec.encodeDateTime(this.publishTime,out);
-		ec.encodeArray(this.notificationData,out,ec.encodeExtensionObject);
+		ec.encodeArray(this.notificationData,out,encodeExtensionObject);
 
 	}
 
@@ -38,7 +39,7 @@ export class NotificationMessage {
 	decode(	inp: DataStream) { 
 		this.sequenceNumber = ec.decodeUInt32(inp);
 		this.publishTime = ec.decodeDateTime(inp);
-		this.notificationData = ec.decodeArray(inp,ec.decodeExtensionObject);
+		this.notificationData = ec.decodeArray(inp,decodeExtensionObject);
 
 	}
 
@@ -64,6 +65,6 @@ export function decodeNotificationMessage(	inp: DataStream): NotificationMessage
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("NotificationMessage",NotificationMessage, makeExpandedNodeId(805,0));

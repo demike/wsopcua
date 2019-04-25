@@ -80,6 +80,6 @@ export function decodeAxisInformation(	inp: DataStream): AxisInformation {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("AxisInformation",AxisInformation, makeExpandedNodeId(12089,0));

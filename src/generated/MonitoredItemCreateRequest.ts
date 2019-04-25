@@ -4,7 +4,6 @@ import {ReadValueId} from './ReadValueId';
 import {MonitoringMode, encodeMonitoringMode, decodeMonitoringMode} from './MonitoringMode';
 import {MonitoringParameters} from './MonitoringParameters';
 import {DataStream} from '../basic-types/DataStream';
-import * as ec from '../basic-types';
 
 export interface IMonitoredItemCreateRequest {
 		itemToMonitor?: ReadValueId;
@@ -67,6 +66,6 @@ export function decodeMonitoredItemCreateRequest(	inp: DataStream): MonitoredIte
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("MonitoredItemCreateRequest",MonitoredItemCreateRequest, makeExpandedNodeId(745,0));

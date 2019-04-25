@@ -33,12 +33,13 @@ export class TypeRegistry {
     }
 
     public static init() {
-        let type : SimpleType;
+        let type: SimpleType;
 
         type = new SimpleType(this.BASIC_TYPES_PATH, "DataStream");
         this.addType(type.Name, type);
         type.Written = true;
         type.Complete = true;
+        type.hasEnDeCodeFunctions = false;
 
         let structtype = new StructTypeFile(new ProjectModulePath(PathGenUtil.PROJECT_NAME, "/variant", false), "Variant");
         structtype.Complete = true;
@@ -190,7 +191,7 @@ export class TypeRegistry {
         type = new SimpleType(this.BASIC_TYPES_PATH, "String");
 //        type.Path = this.BASIC_TYPES_PATH + "string";
         type.ImportAs = "ec";
-        type._jsType = "string";
+        type.JsType = "string";
         this.addType(type.Name,type); 
         //Time
         this.addType("Time",type);
@@ -268,10 +269,14 @@ export class TypeRegistry {
 //        type.Path = this.BASIC_TYPES_PATH + "/status_code";
         type.ImportAs = "ec";
         this.addType(type.Name,type);
-        
+
         //ExtensionObject:
-        type = new SimpleType(this.BASIC_TYPES_PATH, "ExtensionObject");
-        type.ImportAs = "ec";
+
+
+        let extensionObjectPath = this.BASIC_TYPES_PATH.add("/extension_object");
+        extensionObjectPath.isDirectory = false;
+        type = new SimpleType(extensionObjectPath, "ExtensionObject");
+        //type.ImportAs = "ec";
         this.addType(type.Name,type);
         /*
 QualifiedName:     20 , 

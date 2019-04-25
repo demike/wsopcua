@@ -1,6 +1,5 @@
 
 
-import * as ec from '../basic-types';
 /**
 
 */
@@ -18,6 +17,6 @@ export class HistoryReadDetails {
 
 
 }
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("HistoryReadDetails",HistoryReadDetails, makeExpandedNodeId(643,0));

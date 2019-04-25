@@ -82,6 +82,6 @@ export function decodeBuildInfo(	inp: DataStream): BuildInfo {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("BuildInfo",BuildInfo, makeExpandedNodeId(340,0));

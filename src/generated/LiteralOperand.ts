@@ -54,6 +54,6 @@ export function decodeLiteralOperand(	inp: DataStream): LiteralOperand {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("LiteralOperand",LiteralOperand, makeExpandedNodeId(597,0));

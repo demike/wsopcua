@@ -20,5 +20,5 @@ export function decodeAxisScaleEnumeration(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("AxisScaleEnumeration",AxisScaleEnumeration,encodeAxisScaleEnumeration ,decodeAxisScaleEnumeration ,null);

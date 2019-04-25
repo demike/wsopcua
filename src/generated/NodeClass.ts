@@ -28,5 +28,5 @@ export function decodeNodeClass(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("NodeClass",NodeClass,encodeNodeClass ,decodeNodeClass ,null);

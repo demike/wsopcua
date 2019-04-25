@@ -2,7 +2,6 @@
 
 import {ResponseHeader} from './ResponseHeader';
 import {DataStream} from '../basic-types/DataStream';
-import * as ec from '../basic-types';
 
 export interface IUnregisterNodesResponse {
 		responseHeader?: ResponseHeader;
@@ -53,6 +52,6 @@ export function decodeUnregisterNodesResponse(	inp: DataStream): UnregisterNodes
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("UnregisterNodesResponse",UnregisterNodesResponse, makeExpandedNodeId(569,0));

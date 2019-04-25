@@ -21,10 +21,11 @@ import { MonitoringParameters, IMonitoringParameters } from '../generated/Monito
 import { MonitoringMode } from '../generated/MonitoringMode';
 import { MonitoredItemCreateResult } from '../generated/MonitoredItemCreateResult';
 
-import { StatusCode,ExtensionObject, NodeId} from '../basic-types';
+import { StatusCode, NodeId} from '../basic-types';
 import { IReadValueId } from '../generated/ReadValueId';
 import { ResponseCallback, ErrorCallback } from './client_base';
 import { ISetMonitoringModeRequest } from '../generated';
+import { ExtensionObject } from '../basic-types/extension_object';
 
 export type MonitoredItemEvents = 'initialized'|'changed'|'terminated'|'err';
 

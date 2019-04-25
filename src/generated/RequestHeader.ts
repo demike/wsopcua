@@ -1,6 +1,7 @@
 
 
 import * as ec from '../basic-types';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRequestHeader {
@@ -10,7 +11,7 @@ export interface IRequestHeader {
 		returnDiagnostics?: ec.UInt32;
 		auditEntryId?: string;
 		timeoutHint?: ec.UInt32;
-		additionalHeader?: ec.ExtensionObject;
+		additionalHeader?: ExtensionObject;
 }
 
 /**
@@ -24,7 +25,7 @@ export class RequestHeader {
 		returnDiagnostics: ec.UInt32;
 		auditEntryId: string;
 		timeoutHint: ec.UInt32;
-		additionalHeader: ec.ExtensionObject;
+		additionalHeader: ExtensionObject;
 
 	constructor(	options?: IRequestHeader) { 
 		options = options || {};
@@ -46,7 +47,7 @@ export class RequestHeader {
 		ec.encodeUInt32(this.returnDiagnostics,out);
 		ec.encodeString(this.auditEntryId,out);
 		ec.encodeUInt32(this.timeoutHint,out);
-		ec.encodeExtensionObject(this.additionalHeader,out);
+		encodeExtensionObject(this.additionalHeader,out);
 
 	}
 
@@ -58,7 +59,7 @@ export class RequestHeader {
 		this.returnDiagnostics = ec.decodeUInt32(inp);
 		this.auditEntryId = ec.decodeString(inp);
 		this.timeoutHint = ec.decodeUInt32(inp);
-		this.additionalHeader = ec.decodeExtensionObject(inp);
+		this.additionalHeader = decodeExtensionObject(inp);
 
 	}
 
@@ -88,6 +89,6 @@ export function decodeRequestHeader(	inp: DataStream): RequestHeader {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("RequestHeader",RequestHeader, makeExpandedNodeId(391,0));

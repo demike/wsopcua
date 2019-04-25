@@ -3,7 +3,6 @@
 import {ResponseHeader} from './ResponseHeader';
 import {NotificationMessage} from './NotificationMessage';
 import {DataStream} from '../basic-types/DataStream';
-import * as ec from '../basic-types';
 
 export interface IRepublishResponse {
 		responseHeader?: ResponseHeader;
@@ -60,6 +59,6 @@ export function decodeRepublishResponse(	inp: DataStream): RepublishResponse {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("RepublishResponse",RepublishResponse, makeExpandedNodeId(835,0));

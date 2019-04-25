@@ -1,13 +1,14 @@
 
 
 import * as ec from '../basic-types';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IMonitoredItemModifyResult {
 		statusCode?: ec.StatusCode;
 		revisedSamplingInterval?: ec.Double;
 		revisedQueueSize?: ec.UInt32;
-		filterResult?: ec.ExtensionObject;
+		filterResult?: ExtensionObject;
 }
 
 /**
@@ -18,7 +19,7 @@ export class MonitoredItemModifyResult {
  		statusCode: ec.StatusCode;
 		revisedSamplingInterval: ec.Double;
 		revisedQueueSize: ec.UInt32;
-		filterResult: ec.ExtensionObject;
+		filterResult: ExtensionObject;
 
 	constructor(	options?: IMonitoredItemModifyResult) { 
 		options = options || {};
@@ -34,7 +35,7 @@ export class MonitoredItemModifyResult {
 		ec.encodeStatusCode(this.statusCode,out);
 		ec.encodeDouble(this.revisedSamplingInterval,out);
 		ec.encodeUInt32(this.revisedQueueSize,out);
-		ec.encodeExtensionObject(this.filterResult,out);
+		encodeExtensionObject(this.filterResult,out);
 
 	}
 
@@ -43,7 +44,7 @@ export class MonitoredItemModifyResult {
 		this.statusCode = ec.decodeStatusCode(inp);
 		this.revisedSamplingInterval = ec.decodeDouble(inp);
 		this.revisedQueueSize = ec.decodeUInt32(inp);
-		this.filterResult = ec.decodeExtensionObject(inp);
+		this.filterResult = decodeExtensionObject(inp);
 
 	}
 
@@ -70,6 +71,6 @@ export function decodeMonitoredItemModifyResult(	inp: DataStream): MonitoredItem
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("MonitoredItemModifyResult",MonitoredItemModifyResult, makeExpandedNodeId(760,0));

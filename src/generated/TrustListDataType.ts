@@ -76,6 +76,6 @@ export function decodeTrustListDataType(	inp: DataStream): TrustListDataType {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("TrustListDataType",TrustListDataType, makeExpandedNodeId(12680,0));

@@ -12,7 +12,7 @@
                 {
                     "pathToSchema" : "../schemas/Opc.Ua.Di.NodeSet2.xml",
                     "modulePath": "/generated/DI/",
-                    "namespace": 1
+                    "namespace": 2
                 }
             ]
         }

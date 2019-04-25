@@ -23,5 +23,5 @@ export function decodeRedundancySupport(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("RedundancySupport",RedundancySupport,encodeRedundancySupport ,decodeRedundancySupport ,null);

@@ -123,6 +123,6 @@ export function decodeProgramDiagnostic2DataType(	inp: DataStream): ProgramDiagn
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ProgramDiagnostic2DataType",ProgramDiagnostic2DataType, makeExpandedNodeId(15397,0));

@@ -5,17 +5,27 @@
 import {assert} from '../assert';
 import {makeNodeId,coerceNodeId} from '../nodeid/nodeid';
 import { ExpandedNodeId,makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-import * as ec from '../basic-types';
-import {encodeBoolean} from '../basic-types';
+
+import {encodeBoolean, decodeBoolean, coerceBoolean} from '../basic-types/boolean';
+import {encodeStatusCode, decodeStatusCode, coerceStatusCode} from '../basic-types/status_code';
+import {encodeNodeId, decodeNodeId, encodeExpandedNodeId, decodeExpandedNodeId} from '../basic-types/nodeid';
+import {encodeByteString, decodeByteString, coerceByteString} from '../basic-types/byte_string';
+import {encodeGuid, decodeGuid, emptyGuid} from '../basic-types/guid';
+import {encodeDateTime, decodeDateTime, coerceDateTime} from '../basic-types/date_time';
+import { encodeString, decodeString} from '../basic-types/string';
+import {encodeDouble, decodeDouble, encodeFloat, decodeFloat, coerceFloat} from '../basic-types/floats';
+import {encodeInt8, decodeInt8, coerceInt8, encodeUInt8, decodeUInt8, coerceUInt8, coerceSByte, coerceByte,
+    encodeInt16, decodeInt16, coerceInt16, encodeUInt16, decodeUInt16, coerceUInt16, encodeInt32, decodeInt32, coerceInt32,
+    encodeUInt32, decodeUInt32, coerceUInt32, encodeUInt64, decodeUInt64,
+    coerceUInt64 as coerceInt64, coerceUInt64} from '../basic-types/integers';
+
 import {StatusCodes} from '../constants/raw_status_codes';
 
 import { enocdeQualifiedName, coerceQualifyName } from '../data-model/qualified_name_util';
 import { decodeQualifiedName } from '../generated/QualifiedName';
 import { decodeLocalizedText } from '../generated/LocalizedText';
 import { enocdeLocalizedText,coerceLocalizedText } from '../data-model/localized_text_util';
- 
 
-var emptyGuid = ec.emptyGuid;
 
 
 export var minDate = new Date(Date.UTC(1601, 0, 1, 0, 0));
@@ -51,53 +61,53 @@ var _defaultType = [
     {
         name: "Boolean",
         encode: encodeBoolean,
-        decode: ec.decodeBoolean,
+        decode: decodeBoolean,
         defaultValue: false,
-        coerce: ec.coerceBoolean
+        coerce: coerceBoolean
     },
-    {name: "Int8", encode: ec.encodeInt8, decode: ec.decodeInt8, defaultValue: 0, coerce: ec.coerceInt8},
-    {name: "UInt8", encode: ec.encodeUInt8, decode: ec.decodeUInt8, defaultValue: 0, coerce: ec.coerceUInt8},
-    {name: "SByte", encode: ec.encodeInt8, decode: ec.decodeInt8, defaultValue: 0, coerce: ec.coerceSByte},
-    {name: "Byte", encode: ec.encodeUInt8, decode: ec.decodeUInt8, defaultValue: 0, coerce: ec.coerceByte},
-    {name: "Int16", encode: ec.encodeInt16, decode: ec.decodeInt16, defaultValue: 0, coerce: ec.coerceInt16},
-    {name: "UInt16", encode: ec.encodeUInt16, decode: ec.decodeUInt16, defaultValue: 0, coerce: ec.coerceUInt16},
-    {name: "Int32", encode: ec.encodeInt32, decode: ec.decodeInt32, defaultValue: 0, coerce: ec.coerceInt32},
-    {name: "UInt32", encode: ec.encodeUInt32, decode: ec.decodeUInt32, defaultValue: 0, coerce: ec.coerceUInt32},
+    {name: "Int8", encode: encodeInt8, decode: decodeInt8, defaultValue: 0, coerce: coerceInt8},
+    {name: "UInt8", encode: encodeUInt8, decode: decodeUInt8, defaultValue: 0, coerce: coerceUInt8},
+    {name: "SByte", encode: encodeInt8, decode: decodeInt8, defaultValue: 0, coerce: coerceSByte},
+    {name: "Byte", encode: encodeUInt8, decode: decodeUInt8, defaultValue: 0, coerce: coerceByte},
+    {name: "Int16", encode: encodeInt16, decode: decodeInt16, defaultValue: 0, coerce: coerceInt16},
+    {name: "UInt16", encode: encodeUInt16, decode: decodeUInt16, defaultValue: 0, coerce: coerceUInt16},
+    {name: "Int32", encode: encodeInt32, decode: decodeInt32, defaultValue: 0, coerce: coerceInt32},
+    {name: "UInt32", encode: encodeUInt32, decode: decodeUInt32, defaultValue: 0, coerce: coerceUInt32},
     {
         name: "Int64",
-        encode: ec.encodeUInt64,//ec.encodeInt64,
-        decode: ec.decodeUInt64,//ec.decodeInt64,
-        defaultValue: 0,//ec.coerceInt64(0),
-        coerce: ec.coerceInt64
+        encode: encodeUInt64,//encodeInt64,
+        decode: decodeUInt64,//decodeInt64,
+        defaultValue: 0,//coerceInt64(0),
+        coerce: coerceInt64
     },
     {
         name: "UInt64",
-        encode: ec.encodeUInt64,
-        decode: ec.decodeUInt64,
-        defaultValue: 0,//ec.coerceUInt64(0),
-        coerce: ec.coerceUInt64
+        encode: encodeUInt64,
+        decode: decodeUInt64,
+        defaultValue: 0,//coerceUInt64(0),
+        coerce: coerceUInt64
     },
-    {name: "Float", encode: ec.encodeFloat, decode: ec.decodeFloat, defaultValue: 0.0, coerce: ec.coerceFloat},
-    {name: "Double", encode: ec.encodeDouble, decode: ec.decodeDouble, defaultValue: 0.0, coerce: ec.coerceFloat},
-    {name: "String", encode: ec.encodeString, decode: ec.decodeString, defaultValue: ""},
+    {name: "Float", encode: encodeFloat, decode: decodeFloat, defaultValue: 0.0, coerce: coerceFloat},
+    {name: "Double", encode: encodeDouble, decode: decodeDouble, defaultValue: 0.0, coerce: coerceFloat},
+    {name: "String", encode: encodeString, decode: decodeString, defaultValue: ""},
     // OPC Unified Architecture, part 3.0 $8.26 page 67
     {
         name: "DateTime",
-        encode: ec.encodeDateTime,
-        decode: ec.decodeDateTime,
+        encode: encodeDateTime,
+        decode: decodeDateTime,
         defaultValue: minDate,
-        coerce: ec.coerceDateTime
+        coerce: coerceDateTime
     },
-    {name: "Guid", encode: ec.encodeGuid, decode: ec.decodeGuid, defaultValue: emptyGuid},
+    {name: "Guid", encode: encodeGuid, decode: decodeGuid, defaultValue: emptyGuid},
 
     {
-        name: "ByteString", encode: ec.encodeByteString, decode: ec.decodeByteString,
+        name: "ByteString", encode: encodeByteString, decode: decodeByteString,
 
         defaultValue: function () {
             return new ArrayBuffer(0);
         },
 
-        coerce: ec.coerceByteString,
+        coerce: coerceByteString,
 
         toJSON: function (value) {
             if (typeof value === "string") {
@@ -107,12 +117,12 @@ var _defaultType = [
             return btoa(String.fromCharCode.apply(String,new Uint8Array(value)));
         }
     },
-    {name: "XmlElement", encode: ec.encodeString, decode: ec.decodeString, defaultValue: defaultXmlElement},
+    {name: "XmlElement", encode: encodeString, decode: decodeString, defaultValue: defaultXmlElement},
 
     // see OPCUA Part 3 - V1.02 $8.2.1
     {
         name: "NodeId",
-        encode: ec.encodeNodeId, decode: ec.decodeNodeId,
+        encode: encodeNodeId, decode: decodeNodeId,
         defaultValue: makeNodeId,
         coerce: coerceNodeId
     },
@@ -135,7 +145,7 @@ var _defaultType = [
 
     {
         name: "ExpandedNodeId",
-        encode: ec.encodeExpandedNodeId, decode: ec.decodeExpandedNodeId,
+        encode: encodeExpandedNodeId, decode: decodeExpandedNodeId,
         defaultValue: makeExpandedNodeId,
         coerce: ExpandedNodeId.coerceExpandedNodeId
     },
@@ -156,7 +166,7 @@ var _defaultType = [
     // OPC Unified Architecture, part 4.0 $7.13
     // IntegerID: This primitive data type is an UInt32 that is used as an identifier, such as a handle. All values,
     // except for 0, are valid.
-    {name: "IntegerId", encode: ec.encodeUInt32, decode: ec.decodeUInt32, defaultValue: 0xFFFFFFFF},
+    {name: "IntegerId", encode: encodeUInt32, decode: decodeUInt32, defaultValue: 0xFFFFFFFF},
 
 
     //The StatusCode is a 32-bit unsigned integer. The top 16 bits represent the numeric value of the
@@ -165,10 +175,10 @@ var _defaultType = [
     // 7.33 Part 4 - P 143
     {
         name: "StatusCode",
-        encode: ec.encodeStatusCode,
-        decode: ec.decodeStatusCode,
+        encode: encodeStatusCode,
+        decode: decodeStatusCode,
         defaultValue: StatusCodes.Good,
-        coerce: ec.coerceStatusCode,
+        coerce: coerceStatusCode,
     }
 
 ];

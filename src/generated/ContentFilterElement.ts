@@ -1,12 +1,13 @@
 
 
 import {FilterOperator, encodeFilterOperator, decodeFilterOperator} from './FilterOperator';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IContentFilterElement {
 		filterOperator?: FilterOperator;
-		filterOperands?: ec.ExtensionObject[];
+		filterOperands?: ExtensionObject[];
 }
 
 /**
@@ -15,7 +16,7 @@ export interface IContentFilterElement {
 
 export class ContentFilterElement {
  		filterOperator: FilterOperator;
-		filterOperands: ec.ExtensionObject[];
+		filterOperands: ExtensionObject[];
 
 	constructor(	options?: IContentFilterElement) { 
 		options = options || {};
@@ -27,14 +28,14 @@ export class ContentFilterElement {
 
 	encode(	out: DataStream) { 
 		encodeFilterOperator(this.filterOperator,out);
-		ec.encodeArray(this.filterOperands,out,ec.encodeExtensionObject);
+		ec.encodeArray(this.filterOperands,out,encodeExtensionObject);
 
 	}
 
 
 	decode(	inp: DataStream) { 
 		this.filterOperator = decodeFilterOperator(inp);
-		this.filterOperands = ec.decodeArray(inp,ec.decodeExtensionObject);
+		this.filterOperands = ec.decodeArray(inp,decodeExtensionObject);
 
 	}
 
@@ -59,6 +60,6 @@ export function decodeContentFilterElement(	inp: DataStream): ContentFilterEleme
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ContentFilterElement",ContentFilterElement, makeExpandedNodeId(585,0));

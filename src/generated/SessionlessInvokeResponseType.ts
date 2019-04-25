@@ -64,6 +64,6 @@ export function decodeSessionlessInvokeResponseType(	inp: DataStream): Sessionle
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("SessionlessInvokeResponseType",SessionlessInvokeResponseType, makeExpandedNodeId(21001,0));

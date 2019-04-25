@@ -25,5 +25,5 @@ export function decodeNodeIdType(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("NodeIdType",NodeIdType,encodeNodeIdType ,decodeNodeIdType ,null);

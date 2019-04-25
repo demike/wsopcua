@@ -54,5 +54,5 @@ export function decodeNodeAttributesMask(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("NodeAttributesMask",NodeAttributesMask,encodeNodeAttributesMask ,decodeNodeAttributesMask ,null);

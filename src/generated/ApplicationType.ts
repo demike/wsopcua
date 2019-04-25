@@ -23,5 +23,5 @@ export function decodeApplicationType(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("ApplicationType",ApplicationType,encodeApplicationType ,decodeApplicationType ,null);

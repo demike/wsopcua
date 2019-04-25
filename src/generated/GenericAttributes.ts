@@ -60,6 +60,6 @@ export function decodeGenericAttributes(	inp: DataStream): GenericAttributes {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("GenericAttributes",GenericAttributes, makeExpandedNodeId(17611,0));

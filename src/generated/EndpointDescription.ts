@@ -98,6 +98,6 @@ export function decodeEndpointDescription(	inp: DataStream): EndpointDescription
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("EndpointDescription",EndpointDescription, makeExpandedNodeId(314,0));

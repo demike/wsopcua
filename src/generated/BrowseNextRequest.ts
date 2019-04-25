@@ -65,6 +65,6 @@ export function decodeBrowseNextRequest(	inp: DataStream): BrowseNextRequest {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("BrowseNextRequest",BrowseNextRequest, makeExpandedNodeId(533,0));

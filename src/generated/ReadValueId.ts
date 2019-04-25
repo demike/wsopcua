@@ -71,6 +71,6 @@ export function decodeReadValueId(	inp: DataStream): ReadValueId {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ReadValueId",ReadValueId, makeExpandedNodeId(628,0));

@@ -58,6 +58,6 @@ export function decodeDeleteNodesItem(	inp: DataStream): DeleteNodesItem {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("DeleteNodesItem",DeleteNodesItem, makeExpandedNodeId(384,0));

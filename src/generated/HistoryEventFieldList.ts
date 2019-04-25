@@ -54,6 +54,6 @@ export function decodeHistoryEventFieldList(	inp: DataStream): HistoryEventField
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("HistoryEventFieldList",HistoryEventFieldList, makeExpandedNodeId(922,0));

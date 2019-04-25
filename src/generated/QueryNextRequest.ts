@@ -65,6 +65,6 @@ export function decodeQueryNextRequest(	inp: DataStream): QueryNextRequest {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("QueryNextRequest",QueryNextRequest, makeExpandedNodeId(621,0));

@@ -70,6 +70,6 @@ export function decodeServerOnNetwork(	inp: DataStream): ServerOnNetwork {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ServerOnNetwork",ServerOnNetwork, makeExpandedNodeId(12207,0));

@@ -35,5 +35,5 @@ export function decodeFilterOperator(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("FilterOperator",FilterOperator,encodeFilterOperator ,decodeFilterOperator ,null);

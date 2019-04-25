@@ -102,6 +102,6 @@ export function decodeCreateSessionRequest(	inp: DataStream): CreateSessionReque
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("CreateSessionRequest",CreateSessionRequest, makeExpandedNodeId(461,0));

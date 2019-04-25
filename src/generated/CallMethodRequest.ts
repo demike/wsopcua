@@ -66,6 +66,6 @@ export function decodeCallMethodRequest(	inp: DataStream): CallMethodRequest {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("CallMethodRequest",CallMethodRequest, makeExpandedNodeId(706,0));

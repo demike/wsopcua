@@ -65,6 +65,6 @@ export function decodeRepublishRequest(	inp: DataStream): RepublishRequest {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("RepublishRequest",RepublishRequest, makeExpandedNodeId(832,0));

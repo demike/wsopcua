@@ -12,7 +12,7 @@ export * from './status_code';
 export * from './guid';
 export * from './localeid';
 export * from './array';
-export * from './extension_object';
+// export * from './extension_object';
 
 
 export {coerceUInt64 as coerceInt64, encodeUInt64 as encodeInt64,

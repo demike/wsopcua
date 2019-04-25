@@ -59,6 +59,6 @@ export function decodeIdentityMappingRuleType(	inp: DataStream): IdentityMapping
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("IdentityMappingRuleType",IdentityMappingRuleType, makeExpandedNodeId(15736,0));

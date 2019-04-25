@@ -1,12 +1,13 @@
 
 
 import {RequestHeader} from './RequestHeader';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryUpdateRequest {
 		requestHeader?: RequestHeader;
-		historyUpdateDetails?: ec.ExtensionObject[];
+		historyUpdateDetails?: ExtensionObject[];
 }
 
 /**
@@ -15,7 +16,7 @@ export interface IHistoryUpdateRequest {
 
 export class HistoryUpdateRequest {
  		requestHeader: RequestHeader;
-		historyUpdateDetails: ec.ExtensionObject[];
+		historyUpdateDetails: ExtensionObject[];
 
 	constructor(	options?: IHistoryUpdateRequest) { 
 		options = options || {};
@@ -27,14 +28,14 @@ export class HistoryUpdateRequest {
 
 	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
-		ec.encodeArray(this.historyUpdateDetails,out,ec.encodeExtensionObject);
+		ec.encodeArray(this.historyUpdateDetails,out,encodeExtensionObject);
 
 	}
 
 
 	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
-		this.historyUpdateDetails = ec.decodeArray(inp,ec.decodeExtensionObject);
+		this.historyUpdateDetails = ec.decodeArray(inp,decodeExtensionObject);
 
 	}
 
@@ -59,6 +60,6 @@ export function decodeHistoryUpdateRequest(	inp: DataStream): HistoryUpdateReque
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("HistoryUpdateRequest",HistoryUpdateRequest, makeExpandedNodeId(700,0));

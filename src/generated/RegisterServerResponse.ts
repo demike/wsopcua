@@ -2,7 +2,6 @@
 
 import {ResponseHeader} from './ResponseHeader';
 import {DataStream} from '../basic-types/DataStream';
-import * as ec from '../basic-types';
 
 export interface IRegisterServerResponse {
 		responseHeader?: ResponseHeader;
@@ -53,6 +52,6 @@ export function decodeRegisterServerResponse(	inp: DataStream): RegisterServerRe
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("RegisterServerResponse",RegisterServerResponse, makeExpandedNodeId(440,0));

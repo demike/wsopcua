@@ -90,6 +90,6 @@ export function decodeQueryFirstResponse(	inp: DataStream): QueryFirstResponse {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("QueryFirstResponse",QueryFirstResponse, makeExpandedNodeId(618,0));

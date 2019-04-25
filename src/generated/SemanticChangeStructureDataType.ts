@@ -58,6 +58,6 @@ export function decodeSemanticChangeStructureDataType(	inp: DataStream): Semanti
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("SemanticChangeStructureDataType",SemanticChangeStructureDataType, makeExpandedNodeId(899,0));

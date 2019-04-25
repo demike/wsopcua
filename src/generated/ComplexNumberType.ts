@@ -58,6 +58,6 @@ export function decodeComplexNumberType(	inp: DataStream): ComplexNumberType {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ComplexNumberType",ComplexNumberType, makeExpandedNodeId(12181,0));

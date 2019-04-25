@@ -29,5 +29,5 @@ export function decodeBrowseResultMask(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("BrowseResultMask",BrowseResultMask,encodeBrowseResultMask ,decodeBrowseResultMask ,null);

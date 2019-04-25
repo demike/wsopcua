@@ -5,6 +5,7 @@ import {SignatureData} from './SignatureData';
 import {SignedSoftwareCertificate} from './SignedSoftwareCertificate';
 import {decodeSignedSoftwareCertificate} from './SignedSoftwareCertificate';
 import * as ec from '../basic-types';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IActivateSessionRequest {
@@ -12,7 +13,7 @@ export interface IActivateSessionRequest {
 		clientSignature?: SignatureData;
 		clientSoftwareCertificates?: SignedSoftwareCertificate[];
 		localeIds?: string[];
-		userIdentityToken?: ec.ExtensionObject;
+		userIdentityToken?: ExtensionObject;
 		userTokenSignature?: SignatureData;
 }
 
@@ -25,7 +26,7 @@ export class ActivateSessionRequest {
 		clientSignature: SignatureData;
 		clientSoftwareCertificates: SignedSoftwareCertificate[];
 		localeIds: string[];
-		userIdentityToken: ec.ExtensionObject;
+		userIdentityToken: ExtensionObject;
 		userTokenSignature: SignatureData;
 
 	constructor(	options?: IActivateSessionRequest) { 
@@ -45,7 +46,7 @@ export class ActivateSessionRequest {
 		this.clientSignature.encode(out);
 		ec.encodeArray(this.clientSoftwareCertificates,out);
 		ec.encodeArray(this.localeIds,out,ec.encodeString);
-		ec.encodeExtensionObject(this.userIdentityToken,out);
+		encodeExtensionObject(this.userIdentityToken,out);
 		this.userTokenSignature.encode(out);
 
 	}
@@ -56,7 +57,7 @@ export class ActivateSessionRequest {
 		this.clientSignature.decode(inp);
 		this.clientSoftwareCertificates = ec.decodeArray(inp,decodeSignedSoftwareCertificate);
 		this.localeIds = ec.decodeArray(inp,ec.decodeString);
-		this.userIdentityToken = ec.decodeExtensionObject(inp);
+		this.userIdentityToken = decodeExtensionObject(inp);
 		this.userTokenSignature.decode(inp);
 
 	}
@@ -86,6 +87,6 @@ export function decodeActivateSessionRequest(	inp: DataStream): ActivateSessionR
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ActivateSessionRequest",ActivateSessionRequest, makeExpandedNodeId(467,0));

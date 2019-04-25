@@ -56,8 +56,8 @@ import { stringToUint8Array } from '../basic-types/DataStream';
 import { repair_client_sessions } from './reconnection';
 import { UserTokenType, ICreateSubscriptionRequest } from '../generated';
 import { ClientSecureChannelLayer } from '../secure-channel/client_secure_channel_layer';
-import { concatArrayBuffers } from '../wsopcua';
-import { exploreCertificate } from '../crypto';
+import { exploreCertificate, generatePublicKeyFromDER } from '../crypto';
+import { concatArrayBuffers } from '../basic-types/array';
 
 export interface UserIdentityInfo {
     userName?: string;
@@ -976,7 +976,7 @@ async function createUserNameIdentityToken(session: ClientSession, userName: str
 
   // let ci = exploreCertificate(session.serverCertificate);
    try {
-    const publicKey = await crypto_utils.generatePublicKeyFromDER(session.serverCertificate);
+    const publicKey = await generatePublicKeyFromDER(session.serverCertificate);
     const buffer = await cryptoFactory.asymmetricEncrypt(block, publicKey);
     identityToken.password = new Uint8Array(buffer);
    } catch( err) {

@@ -1,15 +1,16 @@
 
 
 import {RequestHeader} from './RequestHeader';
-import * as ec from '../basic-types';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
 import {TimestampsToReturn, encodeTimestampsToReturn, decodeTimestampsToReturn} from './TimestampsToReturn';
+import * as ec from '../basic-types';
 import {HistoryReadValueId} from './HistoryReadValueId';
 import {decodeHistoryReadValueId} from './HistoryReadValueId';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryReadRequest {
 		requestHeader?: RequestHeader;
-		historyReadDetails?: ec.ExtensionObject;
+		historyReadDetails?: ExtensionObject;
 		timestampsToReturn?: TimestampsToReturn;
 		releaseContinuationPoints?: boolean;
 		nodesToRead?: HistoryReadValueId[];
@@ -21,7 +22,7 @@ export interface IHistoryReadRequest {
 
 export class HistoryReadRequest {
  		requestHeader: RequestHeader;
-		historyReadDetails: ec.ExtensionObject;
+		historyReadDetails: ExtensionObject;
 		timestampsToReturn: TimestampsToReturn;
 		releaseContinuationPoints: boolean;
 		nodesToRead: HistoryReadValueId[];
@@ -39,7 +40,7 @@ export class HistoryReadRequest {
 
 	encode(	out: DataStream) { 
 		this.requestHeader.encode(out);
-		ec.encodeExtensionObject(this.historyReadDetails,out);
+		encodeExtensionObject(this.historyReadDetails,out);
 		encodeTimestampsToReturn(this.timestampsToReturn,out);
 		ec.encodeBoolean(this.releaseContinuationPoints,out);
 		ec.encodeArray(this.nodesToRead,out);
@@ -49,7 +50,7 @@ export class HistoryReadRequest {
 
 	decode(	inp: DataStream) { 
 		this.requestHeader.decode(inp);
-		this.historyReadDetails = ec.decodeExtensionObject(inp);
+		this.historyReadDetails = decodeExtensionObject(inp);
 		this.timestampsToReturn = decodeTimestampsToReturn(inp);
 		this.releaseContinuationPoints = ec.decodeBoolean(inp);
 		this.nodesToRead = ec.decodeArray(inp,decodeHistoryReadValueId);
@@ -80,6 +81,6 @@ export function decodeHistoryReadRequest(	inp: DataStream): HistoryReadRequest {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("HistoryReadRequest",HistoryReadRequest, makeExpandedNodeId(664,0));

@@ -83,6 +83,6 @@ export function decodeVariableTypeAttributes(	inp: DataStream): VariableTypeAttr
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("VariableTypeAttributes",VariableTypeAttributes, makeExpandedNodeId(366,0));

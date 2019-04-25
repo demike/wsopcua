@@ -90,6 +90,6 @@ export function decodeApplicationDescription(	inp: DataStream): ApplicationDescr
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ApplicationDescription",ApplicationDescription, makeExpandedNodeId(310,0));

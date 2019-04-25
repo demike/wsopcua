@@ -45,9 +45,9 @@ export abstract class BSDClassFileParser {
         at = this.el.attributes.getNamedItem(ClassFile.ATTR_BASE_CLASS);
         if (at != null) {
             let baseCls = TypeRegistry.getType(at.value);
-     //       if (! (baseCls instanceof SimpleType)) { //<-- this would remove ExtensionObject
+            if (! (baseCls instanceof SimpleType)) { //<-- this would remove ExtensionObject
                 this.cls.BaseClass = baseCls;
-     //       }
+            }
         }
 
         TypeRegistry.addType(this.cls.Name,this.cls)

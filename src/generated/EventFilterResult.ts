@@ -69,6 +69,6 @@ export function decodeEventFilterResult(	inp: DataStream): EventFilterResult {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("EventFilterResult",EventFilterResult, makeExpandedNodeId(736,0));

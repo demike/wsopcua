@@ -70,6 +70,6 @@ export function decodeSamplingIntervalDiagnosticsDataType(	inp: DataStream): Sam
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("SamplingIntervalDiagnosticsDataType",SamplingIntervalDiagnosticsDataType, makeExpandedNodeId(858,0));

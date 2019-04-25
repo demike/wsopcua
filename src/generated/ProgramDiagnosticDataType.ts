@@ -109,6 +109,6 @@ export function decodeProgramDiagnosticDataType(	inp: DataStream): ProgramDiagno
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ProgramDiagnosticDataType",ProgramDiagnosticDataType, makeExpandedNodeId(896,0));

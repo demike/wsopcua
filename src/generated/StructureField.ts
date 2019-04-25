@@ -89,6 +89,6 @@ export function decodeStructureField(	inp: DataStream): StructureField {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("StructureField",StructureField, makeExpandedNodeId(14844,0));

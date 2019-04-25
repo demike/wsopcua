@@ -89,6 +89,6 @@ export function decodeModifySubscriptionRequest(	inp: DataStream): ModifySubscri
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ModifySubscriptionRequest",ModifySubscriptionRequest, makeExpandedNodeId(793,0));

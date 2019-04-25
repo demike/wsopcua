@@ -4,7 +4,7 @@
 
 import {Certificate, CertificatePEM} from "./common";
 import {exploreCertificate, DirectoryName, SubjectPublicKeyInfo} from "./crypto_explore_certificate";
-import {convertPEMtoDER} from "./crypto_utils";
+import {convertPEMtoDER} from "./crypto_explore_certificate";
 
 import { assert } from "../assert";
 

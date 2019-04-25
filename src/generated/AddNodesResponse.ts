@@ -69,6 +69,6 @@ export function decodeAddNodesResponse(	inp: DataStream): AddNodesResponse {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("AddNodesResponse",AddNodesResponse, makeExpandedNodeId(491,0));

@@ -64,6 +64,6 @@ export function decodeMethodAttributes(	inp: DataStream): MethodAttributes {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("MethodAttributes",MethodAttributes, makeExpandedNodeId(360,0));

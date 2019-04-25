@@ -3,14 +3,15 @@ import { ClassMethod } from "./ClassMethod";
 import { ClassMember } from "./ClassMember";
 */
 import {ClassFile, ClassMethod, ClassMember} from './SchemaParser.module';
-import { ProjectModulePath } from './SchemaParserConfig';
+import { ProjectModulePath, getModuleImportPath } from './SchemaParserConfig';
 
 export class SimpleType extends ClassFile {
 
     /**
      * the type used in javascript (i.e.: UInt32 --> number )
      */
-    _jsType? :  string;
+    protected _jsType?:  string;
+    private _hasEnDeCodeFunctions = true;
 
     constructor(modulePath: ProjectModulePath, name?: string, baseClass?: string|ClassFile ,
             members?: ClassMember[], methods?: ClassMethod[]) {
@@ -26,6 +27,15 @@ export class SimpleType extends ClassFile {
     public set JsType (jsType: string | undefined) {
         this._jsType = jsType;
     }
+
+    public get hasEnDeCodeFunctions() {
+        return this._hasEnDeCodeFunctions;
+    }
+    public set hasEnDeCodeFunctions(value) {
+        this._hasEnDeCodeFunctions = value;
+    }
+
+
     // protected createDecodeMethod() : void {
     //     let enc = new ClassMethod(null,new ClassFile(this.name),"decode" + this.name,
     //     [   new ClassMember("in",ClassFile.IO_TYPE)], 
@@ -50,5 +60,28 @@ export class SimpleType extends ClassFile {
 
     public getDecodeMethod() : ClassMethod|null { return this.getMethodByName('decode' + this.name)}
     public getEncodeMethod() : ClassMethod|null { return this.getMethodByName('encode' + this.name)}
+
+        /**
+     * return the code to import this class
+     * @param targetClassFile the file the returned import should be placed in (needed to build the relative path)
+     */
+    public getImportSrc(targetClassFile: ClassFile): string {
+        let ret: string;
+        if (this.importAs) {
+            return "import * as " + this.importAs + " from '" +
+                 getModuleImportPath(targetClassFile.ModulePath, this.ModulePath) + "';";
+        } 
+        if (this._hasEnDeCodeFunctions) {
+            return "import {" + this.Name + ", encode" + this.Name + ", decode" + this.Name + "} from '" +
+                 getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + "';";
+        }
+        return "import {" + this.Name + "} from '" +
+        getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + "';";
+    }
+
+    public getDecodeFnImportSrc(targetClassFile: ClassFile): string|null {
+        //nothing to do, the encode/decode functions are already imported
+      return null;
+    }
 
 } 

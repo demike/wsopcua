@@ -74,6 +74,6 @@ export function decodeReadRequest(	inp: DataStream): ReadRequest {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ReadRequest",ReadRequest, makeExpandedNodeId(631,0));

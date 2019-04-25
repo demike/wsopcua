@@ -69,6 +69,6 @@ export function decodeCallResponse(	inp: DataStream): CallResponse {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("CallResponse",CallResponse, makeExpandedNodeId(715,0));

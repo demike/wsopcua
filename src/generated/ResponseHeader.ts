@@ -2,6 +2,7 @@
 
 import * as ec from '../basic-types';
 import {DiagnosticInfo} from './DiagnosticInfo';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IResponseHeader {
@@ -10,7 +11,7 @@ export interface IResponseHeader {
 		serviceResult?: ec.StatusCode;
 		serviceDiagnostics?: DiagnosticInfo;
 		stringTable?: string[];
-		additionalHeader?: ec.ExtensionObject;
+		additionalHeader?: ExtensionObject;
 }
 
 /**
@@ -23,7 +24,7 @@ export class ResponseHeader {
 		serviceResult: ec.StatusCode;
 		serviceDiagnostics: DiagnosticInfo;
 		stringTable: string[];
-		additionalHeader: ec.ExtensionObject;
+		additionalHeader: ExtensionObject;
 
 	constructor(	options?: IResponseHeader) { 
 		options = options || {};
@@ -43,7 +44,7 @@ export class ResponseHeader {
 		ec.encodeStatusCode(this.serviceResult,out);
 		this.serviceDiagnostics.encode(out);
 		ec.encodeArray(this.stringTable,out,ec.encodeString);
-		ec.encodeExtensionObject(this.additionalHeader,out);
+		encodeExtensionObject(this.additionalHeader,out);
 
 	}
 
@@ -54,7 +55,7 @@ export class ResponseHeader {
 		this.serviceResult = ec.decodeStatusCode(inp);
 		this.serviceDiagnostics.decode(inp);
 		this.stringTable = ec.decodeArray(inp,ec.decodeString);
-		this.additionalHeader = ec.decodeExtensionObject(inp);
+		this.additionalHeader = decodeExtensionObject(inp);
 
 	}
 
@@ -83,6 +84,6 @@ export function decodeResponseHeader(	inp: DataStream): ResponseHeader {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ResponseHeader",ResponseHeader, makeExpandedNodeId(394,0));

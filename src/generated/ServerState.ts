@@ -25,5 +25,5 @@ export function decodeServerState(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("ServerState",ServerState,encodeServerState ,decodeServerState ,null);

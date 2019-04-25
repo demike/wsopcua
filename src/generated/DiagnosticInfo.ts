@@ -121,6 +121,6 @@ export function decodeDiagnosticInfo(	inp: DataStream): DiagnosticInfo {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("DiagnosticInfo",DiagnosticInfo, makeExpandedNodeId(25,0));

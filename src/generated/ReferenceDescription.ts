@@ -91,6 +91,6 @@ export function decodeReferenceDescription(	inp: DataStream): ReferenceDescripti
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ReferenceDescription",ReferenceDescription, makeExpandedNodeId(520,0));

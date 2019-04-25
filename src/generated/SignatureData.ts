@@ -58,6 +58,6 @@ export function decodeSignatureData(	inp: DataStream): SignatureData {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("SignatureData",SignatureData, makeExpandedNodeId(458,0));

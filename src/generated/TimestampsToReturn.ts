@@ -22,5 +22,5 @@ export function decodeTimestampsToReturn(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("TimestampsToReturn",TimestampsToReturn,encodeTimestampsToReturn ,decodeTimestampsToReturn ,null);

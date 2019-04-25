@@ -52,11 +52,11 @@
 //  - http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art030
 //  openssl can be also used to discover the content of a DER file
 //  $ openssl asn1parse -in cert.pem
-import {Certificate} from "./common";
+import {Certificate, PEM, DER} from "./common";
 import {PublicKeyLength} from "./explore_certificate";
-import { concatArrayBuffers, concatTypedArrays } from "../wsopcua";
-import { buf2hex, buf2string } from "./crypto_utils";
+import { buf2hex, buf2string, base64ToBuf } from "./crypto_utils";
 import { assert } from "../assert";
+import { concatTypedArrays } from "../basic-types/array";
 
 // Converted from: https://www.cs.auckland.ac.nz/~pgut001/dumpasn1.cfg
 // which is made by Peter Gutmann and whose license states:
@@ -311,6 +311,10 @@ const oid_map: any = {
     "2.5.29.69": {d: "holderNameConstraints", c: "X.509 extension", w: false},
     "done": {}
 };
+
+const PEM_REGEX = /^(-----BEGIN (.*)-----\r?\n([\/+=a-zA-Z0-9\r\n]*)\r?\n-----END \2-----\r?\n)/mg;
+const PEM_TYPE_REGEX = /^(-----BEGIN (.*)-----)/m;
+
 
 interface BlockInfo {
     tag: number;
@@ -1087,4 +1091,38 @@ export function split_der(certificateChain: Certificate): Certificate[] {
         certificateChain = certificateChain.slice(length);
     } while (certificateChain.byteLength > 0);
     return certificate_chain;
+}
+
+export function convertPEMtoDER(raw_key: PEM): DER {
+
+    let match: any;
+    let pemType;
+    let base64str;
+
+    const parts: DER[] = [];
+    // tslint:disable-next-line:no-conditional-assignment
+    while ((match = PEM_REGEX.exec(raw_key)) !== null) {
+        pemType = match[2];
+        // pemType shall be "RSA PRIVATE KEY" , "PUBLIC KEY", "CERTIFICATE"
+        base64str = match[3];
+        base64str = base64str.replace(/\r?\n/g, '');
+        parts.push(base64ToBuf(base64str));
+    }
+    return combine_der(parts);
+}
+
+export function generatePublicKeyFromDER(der_certificate: Uint8Array): PromiseLike<CryptoKey>{
+
+    if ( (der_certificate as any)._publicKey) {
+        return Promise.resolve((der_certificate as any)._publicKey);
+    }
+
+    let spki = getSPKIFromCertificate(der_certificate);
+
+    return crypto.subtle.importKey('spki', spki,
+    { name: 'RSA-OAEP', hash: 'SHA-1' },
+    true, ['encrypt']).then( (key) => {
+        (der_certificate as any)._publicKey  = key;
+        return key;
+    } );
 }

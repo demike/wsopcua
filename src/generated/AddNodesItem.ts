@@ -3,6 +3,7 @@
 import * as ec from '../basic-types';
 import {QualifiedName} from './QualifiedName';
 import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IAddNodesItem {
@@ -11,7 +12,7 @@ export interface IAddNodesItem {
 		requestedNewNodeId?: ec.ExpandedNodeId;
 		browseName?: QualifiedName;
 		nodeClass?: NodeClass;
-		nodeAttributes?: ec.ExtensionObject;
+		nodeAttributes?: ExtensionObject;
 		typeDefinition?: ec.ExpandedNodeId;
 }
 
@@ -25,7 +26,7 @@ export class AddNodesItem {
 		requestedNewNodeId: ec.ExpandedNodeId;
 		browseName: QualifiedName;
 		nodeClass: NodeClass;
-		nodeAttributes: ec.ExtensionObject;
+		nodeAttributes: ExtensionObject;
 		typeDefinition: ec.ExpandedNodeId;
 
 	constructor(	options?: IAddNodesItem) { 
@@ -47,7 +48,7 @@ export class AddNodesItem {
 		ec.encodeExpandedNodeId(this.requestedNewNodeId,out);
 		this.browseName.encode(out);
 		encodeNodeClass(this.nodeClass,out);
-		ec.encodeExtensionObject(this.nodeAttributes,out);
+		encodeExtensionObject(this.nodeAttributes,out);
 		ec.encodeExpandedNodeId(this.typeDefinition,out);
 
 	}
@@ -59,7 +60,7 @@ export class AddNodesItem {
 		this.requestedNewNodeId = ec.decodeExpandedNodeId(inp);
 		this.browseName.decode(inp);
 		this.nodeClass = decodeNodeClass(inp);
-		this.nodeAttributes = ec.decodeExtensionObject(inp);
+		this.nodeAttributes = decodeExtensionObject(inp);
 		this.typeDefinition = ec.decodeExpandedNodeId(inp);
 
 	}
@@ -90,6 +91,6 @@ export function decodeAddNodesItem(	inp: DataStream): AddNodesItem {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("AddNodesItem",AddNodesItem, makeExpandedNodeId(378,0));

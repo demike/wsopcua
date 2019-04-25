@@ -4,12 +4,15 @@
  */
 
 
-import {constructObject, is_internal_id, registerBuiltInType} from '../factory';
+// import {constructObject, is_internal_id, registerBuiltInType} from '../factory';
 
 import {makeNodeId} from '../nodeid/nodeid';
 import { encodeNodeId, decodeNodeId } from './nodeid';
 import { DataStream } from './DataStream';
 import { ExpandedNodeId } from '../wsopcua';
+import { constructObject } from '../factory/factories_factories';
+import { is_internal_id } from '../factory/factories_id_generator';
+import { registerType } from '../factory/factories_builtin_types';
 
 export class ExtensionObject {
 
@@ -124,7 +127,8 @@ export function decodeExtensionObject(stream: DataStream) {
     return object;
 }
 
-registerBuiltInType({
+// register builtin type
+registerType({
     name: 'ExtensionObject',
     encode: encodeExtensionObject,
     decode: decodeExtensionObject,

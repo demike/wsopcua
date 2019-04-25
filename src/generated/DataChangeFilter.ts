@@ -67,6 +67,6 @@ export function decodeDataChangeFilter(	inp: DataStream): DataChangeFilter {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("DataChangeFilter",DataChangeFilter, makeExpandedNodeId(724,0));

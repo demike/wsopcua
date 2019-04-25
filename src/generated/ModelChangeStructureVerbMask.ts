@@ -22,5 +22,5 @@ export function decodeModelChangeStructureVerbMask(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("ModelChangeStructureVerbMask",ModelChangeStructureVerbMask,encodeModelChangeStructureVerbMask ,decodeModelChangeStructureVerbMask ,null);

@@ -46,5 +46,5 @@ export function decodeAttributeWriteMask(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("AttributeWriteMask",AttributeWriteMask,encodeAttributeWriteMask ,decodeAttributeWriteMask ,null);

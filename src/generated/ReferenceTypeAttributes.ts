@@ -71,6 +71,6 @@ export function decodeReferenceTypeAttributes(	inp: DataStream): ReferenceTypeAt
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ReferenceTypeAttributes",ReferenceTypeAttributes, makeExpandedNodeId(369,0));

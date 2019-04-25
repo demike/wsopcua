@@ -83,6 +83,6 @@ export function decodeAddReferencesItem(	inp: DataStream): AddReferencesItem {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("AddReferencesItem",AddReferencesItem, makeExpandedNodeId(381,0));

@@ -66,6 +66,6 @@ export function decodeParsingResult(	inp: DataStream): ParsingResult {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ParsingResult",ParsingResult, makeExpandedNodeId(612,0));

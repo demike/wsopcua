@@ -23,5 +23,5 @@ export function decodeUserTokenType(	inp: DataStream) {
 
 
 
-import {registerEnumeration} from "../factory/factories_enumerations";
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration("UserTokenType",UserTokenType,encodeUserTokenType ,decodeUserTokenType ,null);

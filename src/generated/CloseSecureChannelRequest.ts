@@ -2,7 +2,6 @@
 
 import {RequestHeader} from './RequestHeader';
 import {DataStream} from '../basic-types/DataStream';
-import * as ec from '../basic-types';
 
 export interface ICloseSecureChannelRequest {
 		requestHeader?: RequestHeader;
@@ -53,6 +52,6 @@ export function decodeCloseSecureChannelRequest(	inp: DataStream): CloseSecureCh
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("CloseSecureChannelRequest",CloseSecureChannelRequest, makeExpandedNodeId(452,0));

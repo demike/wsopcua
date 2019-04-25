@@ -60,6 +60,6 @@ export function decodeReadAtTimeDetails(	inp: DataStream): ReadAtTimeDetails {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ReadAtTimeDetails",ReadAtTimeDetails, makeExpandedNodeId(655,0));

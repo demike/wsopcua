@@ -65,6 +65,6 @@ export function decodeModificationInfo(	inp: DataStream): ModificationInfo {
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("ModificationInfo",ModificationInfo, makeExpandedNodeId(11226,0));

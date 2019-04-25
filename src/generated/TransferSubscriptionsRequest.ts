@@ -65,6 +65,6 @@ export function decodeTransferSubscriptionsRequest(	inp: DataStream): TransferSu
 
 
 
-import {register_class_definition} from "../factory/factories_factories";
+import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition("TransferSubscriptionsRequest",TransferSubscriptionsRequest, makeExpandedNodeId(841,0));

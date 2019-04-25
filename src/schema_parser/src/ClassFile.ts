@@ -57,7 +57,7 @@ export class ClassFile {
 
     /*
     return the full name including potential import as
-    i.e: ec.ExtensionObject
+    i.e: ec.UInt16
     */
     public get FullName(): string {
         if (!this.importAs) {
