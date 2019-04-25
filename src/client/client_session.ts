@@ -888,7 +888,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             timestampsToReturn: read_service.TimestampsToReturn.Both
         });
 
-        this.performMessageTransaction(request, (err, response) => {
+        this.performMessageTransaction(request, (err, response: read_service.ReadResponse) => {
 
             /* istanbul ignore next */
             if (err) {

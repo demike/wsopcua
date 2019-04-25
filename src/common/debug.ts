@@ -10,7 +10,7 @@ export function debugLog(str : String) {
     console.log(str);
 } 
 */
-var _fillUp = function (value, count, fillWith) {
+var _fillUp = function (value: string, count: number, fillWith: string) {
     var l = count - value.length;
     var ret = "";
     while (--l > -1)

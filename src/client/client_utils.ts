@@ -128,7 +128,7 @@ export function readUADataItemType(session: ClientSession, nodeId: NodeId, callb
  * @param nodeId
  * @param callback
  */
-export function readUAAnalogItem(session: ClientSession, nodeId, callback) {
+export function readUAAnalogItem(session: ClientSession, nodeId: NodeId, callback) {
 
     assert('function' === typeof callback);
 
@@ -140,7 +140,7 @@ export function readUAAnalogItem(session: ClientSession, nodeId, callback) {
         browsePathPropertyRequest(nodeId, 'Definition')
     ];
 
-    const analogItemData = {
+    const analogItemData: Object = {
         engineeringUnits: null,
         engineeringUnitsRange: null,
         instrumentRange: null,

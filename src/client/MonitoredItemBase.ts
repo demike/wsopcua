@@ -272,7 +272,8 @@ public static _toolbox_modify(subscription : ClientSubscription, monitoredItems 
         callback(null, response.results);
     });
 };
-public static _toolbox_setMonitoringMode(subscription : ClientSubscription, monitoredItems : MonitoredItemBase[], monitoringMode : MonitoringMode, callback) {
+public static _toolbox_setMonitoringMode(subscription: ClientSubscription, monitoredItems: MonitoredItemBase[],
+        monitoringMode: MonitoringMode, callback: ResponseCallback<StatusCode[]>) {
 
     const monitoredItemIds = monitoredItems.map(function (monitoredItem) {
         return monitoredItem._monitoredItemId;

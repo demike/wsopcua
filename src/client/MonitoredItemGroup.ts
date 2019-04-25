@@ -15,6 +15,7 @@ import { MonitoringMode } from '../generated/MonitoringMode';
 import * as subscription_service from '../service-subscription';
 import { DataValue } from '../data-value';
 import { ErrorCallback, ResponseCallback } from './client_base';
+import { StatusCode } from '../basic-types';
 
 export type MonitoredItemGroupEvents = 'initialized'|'terminated'|'changed';
 
@@ -154,7 +155,7 @@ public modify(parameters: IMonitoringParameters,
     MonitoredItemBase._toolbox_modify(this._subscription, this._monitoredItems, parameters, this._timestampsToReturn, callback);
 }
 
-public setMonitoringMode(monitoringMode: MonitoringMode, callback): void {
+public setMonitoringMode(monitoringMode: MonitoringMode, callback: ResponseCallback<StatusCode[]>): void {
 
     MonitoredItemBase._toolbox_setMonitoringMode(this._subscription, this._monitoredItems, monitoringMode, callback);
 }
