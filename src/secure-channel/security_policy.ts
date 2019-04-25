@@ -104,10 +104,10 @@ export  function toUri(value: any): SecurityPolicy {
 
 
 // --------------------
-function RSAPKCS1V15_Decrypt(buffer, privateKey) {
+function RSAPKCS1V15_Decrypt(buffer: ArrayBuffer, privateKey: CryptoKey) {
     return crypto_utils.privateDecrypt_long(buffer, privateKey, crypto_utils.RSA_PKCS1_PADDING);
 }
-function RSAOAEP_Decrypt(buffer, privateKey) {
+function RSAOAEP_Decrypt(buffer: ArrayBuffer, privateKey: CryptoKey) {
     return crypto_utils.privateDecrypt_long(buffer, privateKey, crypto_utils.RSA_PKCS1_OAEP_PADDING);
 }
 // --------------------
@@ -180,7 +180,7 @@ function RSAOAEP_Encrypt(buffer: Uint8Array, publicKey: CryptoKey): Promise<Uint
 
 
 
-export function compute_derived_keys(serverNonce, clientNonce) {
+export function compute_derived_keys(serverNonce: Uint8Array, clientNonce: Uint8Array) {
 
     const self = this;
 
@@ -226,7 +226,7 @@ export interface ICryptoFactory {
 
     /* asymmetric encryption algorithm */
     asymmetricEncrypt: (block: ArrayBuffer, publicKey: CryptoKey) => PromiseLike<ArrayBuffer>;
-    asymmetricDecrypt: (block: ArrayBuffer, privateKey: string) => Promise<ArrayBuffer>;
+    asymmetricDecrypt: (block: ArrayBuffer, privateKey: CryptoKey) => Promise<ArrayBuffer>;
     asymmetricEncryptionAlgorithm: string;
     blockPaddingSize: number;
     symmetricEncryptionAlgorithm: string;
@@ -345,7 +345,7 @@ export function getCryptoFactory(securityPolicy: SecurityPolicy): ICryptoFactory
     }
 }
 
-export function computeSignature(senderCertificate: Uint8Array, senderNonce: Uint8Array, receiverPrivatekey, securityPolicy): 
+export function computeSignature(senderCertificate: Uint8Array, senderNonce: Uint8Array, receiverPrivatekey: CryptoKey, securityPolicy: SecurityPolicy): 
             Promise<SignatureData> {
 
     if (!senderNonce || !senderCertificate) {
@@ -376,7 +376,8 @@ export function computeSignature(senderCertificate: Uint8Array, senderNonce: Uin
     });
 }
 
-export function verifySignature(receiverCertificate: Uint8Array, receiverNonce: Uint8Array, signature: SignatureData, senderCertificate: Uint8Array, securityPolicy) {
+export function verifySignature(receiverCertificate: Uint8Array, receiverNonce: Uint8Array,
+        signature: SignatureData, senderCertificate: Uint8Array, securityPolicy: SecurityPolicy) {
 
     if (securityPolicy === SecurityPolicy.None) {
         return true;
@@ -410,7 +411,7 @@ export function getOptionsForSymmetricSignAndEncrypt(securityMode: MessageSecuri
 
     const options = {
         signatureLength: derivedKeys.signatureLength,
-        signingFunc: function (chunk) {
+        signingFunc: function (chunk: ArrayBuffer) {
             return crypto_utils.makeMessageChunkSignatureWithDerivedKeys(chunk, derivedKeys);
         }
     };
@@ -419,7 +420,7 @@ export function getOptionsForSymmetricSignAndEncrypt(securityMode: MessageSecuri
         const ext = {
             plainBlockSize: derivedKeys.encryptingBlockSize,
             cipherBlockSize: derivedKeys.encryptingBlockSize,
-            encrypt_buffer: function (chunk) {
+            encrypt_buffer: function (chunk: ArrayBuffer) {
                 return crypto_utils.encryptBufferWithDerivedKeys(chunk, derivedKeys);
             }
         };

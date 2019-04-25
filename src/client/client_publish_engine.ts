@@ -82,7 +82,7 @@ public get session() {
 }
 
 
-public suspend(flag) {
+public suspend(flag: boolean) {
     assert(this.isSuspended !== !!flag, 'invalid state');
     this.isSuspended = !!flag;
     if (this.isSuspended) {
@@ -294,7 +294,7 @@ public registerSubscription(subscription: ClientSubscription) {
     assert(Number.isFinite(subscription.timeoutHint));
 
     this.activeSubscriptionCount += 1;
-    this.subscriptionMap[subscription.subscriptionId] = subscription;
+    this.subscriptionMap[subscription.subscriptionId as number] = subscription;
 
     this.timeoutHint = Math.max(this.timeoutHint, subscription.timeoutHint);
     debugLog('                       setting timeoutHint = ' + this.timeoutHint + subscription.timeoutHint);
@@ -335,9 +335,9 @@ public unregisterSubscription(subscriptionId: number | string) {
     //        a session shutdown ... in this case it is pssoble that subscriptionId is already
     //        removed
     if (this.subscriptionMap.hasOwnProperty(subscriptionId)) {
-        delete this.subscriptionMap[subscriptionId];
+        delete this.subscriptionMap[subscriptionId as number];
     } else {
-        debugLog('ClientSidePublishEngine#unregisterSubscription cannot find subscription  ', subscriptionId);
+        debugLog('ClientSidePublishEngine#unregisterSubscription cannot find subscription  ', (subscriptionId as number).toString());
     }
 
 }
@@ -433,16 +433,16 @@ public republish(callback: ErrorCallback) {
      * @param _i_callback
      * @private
      */
-    function _republish(subscription, subscriptionId, _i_callback) {
+    function _republish(subscription: ClientSubscription, subscriptionId: number, _i_callback: ErrorCallback) {
 
-        assert(subscription.subscriptionId === +subscriptionId);
+        assert(subscription.subscriptionId === +subscriptionId); // <-- is a number
 
         let is_done = false;
 
-        function _send_republish(_b_callback) {
+        function _send_republish(_b_callback: ErrorCallback) {
             assert(Number.isFinite(subscription.lastSequenceNumber) && subscription.lastSequenceNumber + 1 >= 0);
             const request = new subscription_service.RepublishRequest({
-                subscriptionId: subscription.subscriptionId,
+                subscriptionId: subscription.subscriptionId as number,
                 retransmitSequenceNumber: subscription.lastSequenceNumber + 1
             });
 
@@ -476,7 +476,7 @@ public republish(callback: ErrorCallback) {
         setImmediate(function() {
 
             assert('function' === typeof _i_callback);
-            whilst(function () { return !is_done; }, _send_republish, function(err) {
+            whilst(function () { return !is_done; }, _send_republish, function(err: Error) {
 
                 debugLog('nbPendingPublishRequest = ' + self.nbPendingPublishRequests);
                 debugLog(' _republish ends with ' + (err ? err.message : 'null'));
@@ -485,7 +485,7 @@ public republish(callback: ErrorCallback) {
         });
     }
 
-    function repairSubscription(subscription: ClientSubscription, subscriptionId, _the_callback) {
+    function repairSubscription(subscription: ClientSubscription, subscriptionId: number, _the_callback: ErrorCallback) {
 
         _republish(subscription, subscriptionId, function (err) {
 

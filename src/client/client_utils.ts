@@ -13,7 +13,7 @@ import { ApplicationDescription, EndpointDescription } from '../service-endpoint
 import { ClientSession } from './client_session';
 import { ReadValueId } from '../service-read';
 import { lowerFirstLetter } from '../utils/string_utils';
-import { ServerOnNetwork } from '../generated';
+import { ServerOnNetwork, DataValue, ReadResponse } from '../generated';
 import { async_series} from 'async-es/series';
 
 const hasPropertyRefId = resolveNodeId('HasProperty');
@@ -42,7 +42,7 @@ function browsePathPropertyRequest(nodeId: NodeId, propertyName: string) {
  * per convention the object members should start with lower case i.e.: 'engineeringUnits'
  * the capitalized version of this member (i.e.: 'EngineeringUnits') is then used as a browsePath
  */
-function readVariableProperties(session: ClientSession, nodeId: NodeId, varObj: Object, callback) {
+function readVariableProperties(session: ClientSession, nodeId: NodeId, varObj: Object, callback: ResponseCallback<Object>) {
 
     const browsePaths: BrowsePath[] = [];
     for (const key of Object.keys(varObj) ) {
@@ -56,17 +56,17 @@ function readVariableProperties(session: ClientSession, nodeId: NodeId, varObj: 
         }
         // xx console.log("xxxx ",browsePathResults.toString());
 
-        const actions = [];
+        const actions: ((readResult: DataValue) => void)[] = [];
         const nodesToRead: ReadValueId[] = [];
 
-        function processProperty(browsePathIndex, propertyName) {
+        function processProperty(browsePathIndex: number, propertyName: string) {
             if (browsePathResults[browsePathIndex].statusCode === StatusCodes.Good) {
 
                 nodesToRead.push(new ReadValueId({
                     nodeId: browsePathResults[browsePathIndex].targets[0].targetId,
                     attributeId: AttributeIds.Value
                 }));
-                actions.push(function (readResult) {
+                actions.push(function (readResult: DataValue) {
                     // to do assert is
                     varObj[propertyName] = readResult.value.value;
                 });
@@ -79,7 +79,7 @@ function readVariableProperties(session: ClientSession, nodeId: NodeId, varObj: 
             ii++;
         }
 
-        session.read(nodesToRead, function (err, dataValues) {
+        session.read(nodesToRead, function (err: Error, dataValues: DataValue[]) {
             if (err) {
                 return callback(err);
             }
@@ -94,8 +94,8 @@ function readVariableProperties(session: ClientSession, nodeId: NodeId, varObj: 
     });
 }
 
-export function readUAMultiStateValueDiscreteType(session: ClientSession, nodeId: NodeId, callback) {
-    const discreteItemData = {
+export function readUAMultiStateValueDiscreteType(session: ClientSession, nodeId: NodeId, callback: ResponseCallback<Object>) {
+    const discreteItemData: Object = {
         enumValues: null,
         valueAsText: null,
         valuePrecision: null,
@@ -104,8 +104,8 @@ export function readUAMultiStateValueDiscreteType(session: ClientSession, nodeId
     return readVariableProperties(session, nodeId, discreteItemData, callback );
 }
 
-export function readUAMultiStateDiscreteType(session: ClientSession, nodeId: NodeId, callback) {
-    const discreteItemData = {
+export function readUAMultiStateDiscreteType(session: ClientSession, nodeId: NodeId, callback: ResponseCallback<Object>) {
+    const discreteItemData: Object = {
         enumStrings: null,
         valuePrecision: null,
         definition: null
@@ -113,8 +113,8 @@ export function readUAMultiStateDiscreteType(session: ClientSession, nodeId: Nod
     return readVariableProperties(session, nodeId, discreteItemData, callback );
 }
 
-export function readUADataItemType(session: ClientSession, nodeId: NodeId, callback) {
-    const discreteItemData = {
+export function readUADataItemType(session: ClientSession, nodeId: NodeId, callback: ResponseCallback<Object>) {
+    const discreteItemData: Object = {
         valuePrecision: null,
         definition: null
     };
@@ -128,7 +128,7 @@ export function readUADataItemType(session: ClientSession, nodeId: NodeId, callb
  * @param nodeId
  * @param callback
  */
-export function readUAAnalogItem(session: ClientSession, nodeId: NodeId, callback) {
+export function readUAAnalogItem(session: ClientSession, nodeId: NodeId, callback: ResponseCallback<Object>) {
 
     assert('function' === typeof callback);
 
@@ -156,10 +156,10 @@ export function readUAAnalogItem(session: ClientSession, nodeId: NodeId, callbac
         }
         // xx console.log("xxxx ",browsePathResults.toString());
 
-        const actions = [];
+        const actions: ((readResult: DataValue) => void)[] = [];
         const nodesToRead: ReadValueId[] = [];
 
-        function processProperty(browsePathIndex, propertyName) {
+        function processProperty(browsePathIndex: number, propertyName: string) {
             if (browsePathResults[browsePathIndex].statusCode === StatusCodes.Good) {
 
                 nodesToRead.push(new ReadValueId({
@@ -179,7 +179,7 @@ export function readUAAnalogItem(session: ClientSession, nodeId: NodeId, callbac
         processProperty(3, 'valuePrecision');
         processProperty(4, 'definition');
 
-        session.read(nodesToRead, function (err, dataValues) {
+        session.read(nodesToRead, function (err: Error, dataValues: DataValue[]) {
             if (err) {
                 return callback(err);
             }
@@ -207,8 +207,8 @@ export function perform_findServers(discovery_server_endpointUrl: string,
 
     const client = new OPCUAClientBase({});
 
-    let servers = [];
-    let endpoints = [];
+    let servers: ApplicationDescription[] = [];
+    let endpoints: EndpointDescription[] = [];
 
     async_series([
         function (cb: ErrorCallback) {
@@ -319,7 +319,7 @@ export function readHistoryServerCapabilities(the_session: ClientSession,
             });
 
             const data = {};
-            the_session.read(nodesToRead, function(err, dataValues) {
+            the_session.read(nodesToRead, function(err: Error, dataValues: DataValue[]) {
                 if (err) { return callback(err); }
 
                 for (let i = 0; i < dataValues.length; i++ ) {

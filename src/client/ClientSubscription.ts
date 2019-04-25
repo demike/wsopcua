@@ -73,7 +73,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
     protected monitoredItems: { [key: number]: MonitoredItemBase};
 
     protected _timeoutHint: number;
-    protected lastSequenceNumber: number;
+    protected _lastSequenceNumber: number;
     protected lastRequestSentTime: number;
 
     /**
@@ -91,6 +91,10 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
 
     public get timeoutHint() {
         return this._timeoutHint;
+    }
+
+    public get lastSequenceNumber() {
+        return this._lastSequenceNumber;
     }
 
 
@@ -130,7 +134,7 @@ constructor (session: ClientSession, options: ICreateSubscriptionRequest) {
     this.priority = options.priority;
 
     this._subscriptionId = 'pending';
-    this.lastSequenceNumber = -1;
+    this._lastSequenceNumber = -1;
 
     this._next_client_handle = 0;
     this.monitoredItems = {};
@@ -298,7 +302,7 @@ public onNotificationMessage(notificationMessage: subscription_service.Notificat
     this.lastRequestSentTime = Date.now();
     assert(notificationMessage.hasOwnProperty('sequenceNumber'));
 
-    this.lastSequenceNumber = notificationMessage.sequenceNumber;
+    this._lastSequenceNumber = notificationMessage.sequenceNumber;
 
     this.emit('raw_notification', notificationMessage);
 

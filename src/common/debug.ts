@@ -18,7 +18,7 @@ var _fillUp = function (value: string, count: number, fillWith: string) {
     return ret + value;
 }
 
-export function hexDump (view : DataView | ArrayBuffer, offset?, length?) {
+export function hexDump (view : DataView | ArrayBuffer, offset?: number, length?: number) {
 
     //var view = new DataView(arrayBuffer);
     view = (view instanceof DataView) ? view : new DataView(view);

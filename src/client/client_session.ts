@@ -64,7 +64,7 @@ import { RegisterNodesResponse } from '../generated/RegisterNodesResponse';
 import { UnregisterNodesRequest } from '../generated/UnregisterNodesRequest';
 import { UnregisterNodesResponse } from '../generated/UnregisterNodesResponse';
 import { TransferSubscriptionsResponse } from '../service-subscription';
-import { IModifySubscriptionRequest, ISetMonitoringModeRequest, SignatureData } from '../generated';
+import { IModifySubscriptionRequest, ISetMonitoringModeRequest, SignatureData, IReadValueId } from '../generated';
 import { buf2base64, buf2hex } from '../crypto';
 
 
@@ -175,15 +175,15 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     protected _timeout: number;
     protected _namespaceArray: string[] | undefined;
 
-    public static coerceBrowseDescription(data) {
+    public static coerceBrowseDescription(data: string|NodeId|IBrowseDescription): BrowseDescription {
         if (typeof data === 'string' || data instanceof NodeId) {
             return ClientSession.coerceBrowseDescription({
-                nodeId: data,
+                nodeId: coerceNodeId(data as string),
                 includeSubtypes: true,
                 browseDirection: BrowseDirection.Forward,
                 nodeClassMask: 0,
                 resultMask: 63,
-                referenceTypeId: 'HierarchicalReferences'
+                referenceTypeId: new NodeId(NodeIdType.NUMERIC, ReferenceTypeIds.HierarchicalReferences)
             });
         } else {
             data.nodeId = resolveNodeId(data.nodeId);
@@ -302,7 +302,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
                     if (r.references && r.references.length > this._requestedMaxReferencesPerNode) {
                         console.log('warning BrowseResponse : server didn\'t take into account our requestedMaxReferencesPerNode ');
                         console.log('        self.requestedMaxReferencesPerNode= ' + this._requestedMaxReferencesPerNode);
-                        console.log('        got ' + r.references.length + 'for ' + nodesToBrowse[i].nodeId.toString());
+                        console.log('        got ' + r.references.length + 'for ' + (nodesToBrowse as any[])[i].nodeId.toString());
                         console.log('        continuationPoint ', r.continuationPoint);
                     }
                 }
@@ -436,7 +436,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
         let nodesToRead = [];
 
-        function coerceReadValueId(node) {
+        function coerceReadValueId(node: string| NodeId | IReadValueId) {
 
             if (typeof node === 'string' || node instanceof NodeId) {
                 return new read_service.ReadValueId({
@@ -447,7 +447,6 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
                 });
 
             } else {
-                assert(node instanceof Object);
                 return new read_service.ReadValueId(node);
             }
         }
@@ -501,21 +500,21 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.results {DataValue[]} - an array of dataValue each read
      * @param callback.diagnosticInfos {DiagnosticInfo[]} - the diagnostic infos.
      */
-    readHistoryValue(nodes, start, end, callback) {
+    readHistoryValue(nodes: string | string[] | NodeId | NodeId[], start: Date, end: Date, callback) {
         assert('function' === typeof callback);
         const isArr = Array.isArray(nodes);
         if (!isArr) {
-            nodes = [nodes];
+            nodes = [<any>nodes];
         }
 
         const nodesToRead = [];
-        for (const node of nodes) {
-            nodesToRead.push({
+        for (const node of nodes as any[]) {
+            nodesToRead.push(new historizing_service.HistoryReadValueId({
                 nodeId: resolveNodeId(node),
                 indexRange: null,
-                dataEncoding: { namespaceIndex: 0, name: null },
+                dataEncoding: new QualifiedName({ namespaceIndex: 0, name: null }),
                 continuationPoint: null
-            });
+            }));
         }
 
         const ReadRawModifiedDetails = new historizing_service.ReadRawModifiedDetails({
@@ -533,7 +532,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             releaseContinuationPoints: false
         });
 
-        assert(nodes.length === request.nodesToRead.length);
+        assert((nodes as any[]).length === request.nodesToRead.length);
         this.performMessageTransaction(request, (err, response: historizing_service.HistoryReadResponse) => {
 
             if (err) {
@@ -545,7 +544,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             }
 
             assert(response instanceof historizing_service.HistoryReadResponse);
-            assert(nodes.length === response.results.length);
+            assert( (nodes as any[]).length === response.results.length);
 
             callback(null, isArr ? response.results : response.results[0],
                 isArr ? response.diagnosticInfos : response.diagnosticInfos[0]);
@@ -693,7 +692,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             indexRange: null,
             value: new DataValue({ value: value })
         }));
-        this.write(nodesToWrite, function (err, statusCodes, diagnosticInfos) {
+        this.write(nodesToWrite, function (err: Error, statusCodes: StatusCode[], diagnosticInfos: DiagnosticInfo[]) {
 
             /* istanbul ignore next */
             if (err) {
@@ -707,7 +706,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         });
     }
 
-    protected composeResult(nodes, nodesToRead: read_service.ReadValueId[], dataValues: DataValue[]) {
+    protected composeResult(nodes: NodeId[], nodesToRead: read_service.ReadValueId[], dataValues: DataValue[]) {
         assert(nodesToRead.length === dataValues.length);
         let i = 0, c = 0;
         const results = [];
@@ -774,7 +773,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         }
 
 
-        const nodesToRead = [];
+        const nodesToRead: read_service.ReadValueId[] = [];
 
         for (const node of <NodeId[]>nodes) {
             const nodeId = resolveNodeId(node);
@@ -782,7 +781,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
                 throw new Error('cannot coerce ' + node + ' to a valid NodeId');
             }
             for (let i = 0; i < ClientSession.keys.length; i++) {
-                const attributeId = read_service.AttributeIds[ClientSession.keys[i]];
+                const attributeId: AttributeIds = read_service.AttributeIds[ClientSession.keys[i]];
                 nodesToRead.push(new read_service.ReadValueId({
                     nodeId: nodeId,
                     attributeId: attributeId,
@@ -794,9 +793,9 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         }
 
 
-        this.read(nodesToRead, (err, dataValues /*, diagnosticInfos */) => {
+        this.read(nodesToRead, (err: Error, dataValues: DataValue[] /*, diagnosticInfos */) => {
             if (err) { return callback(err); }
-            const results = this.composeResult(nodes, nodesToRead, dataValues);
+            const results = this.composeResult(nodes as NodeId[], nodesToRead, dataValues);
             callback(err, isArray ? results : results[0]);
         });
 
@@ -909,7 +908,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         }
     }
 
-    protected _defaultRequest(SomeRequest, SomeResponse, options, callback) {
+    protected _defaultRequest(SomeRequest, SomeResponse, options, callback: ResponseCallback<unknown>) {
 
         assert('function' === typeof callback);
 
@@ -931,7 +930,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         this.performMessageTransaction(request, (err, response) => {
 
             if (this._closeEventHasBeenEmmitted) {
-                debugLog('ClientSession#_defaultRequest ... err =', err, response ? response.toString() : ' null');
+                debugLog('ClientSession#_defaultRequest ... err =', err.message, response ? response.toString() : ' null');
             }
             /* istanbul ignore next */
             if (err) {
@@ -1193,8 +1192,12 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      *
      *
      */
+    public translateBrowsePath(browsePath: translate_service.BrowsePath[],
+        callback: ResponseCallback<translate_service.BrowsePathResult[]>): void;
+    public translateBrowsePath(browsePath: translate_service.BrowsePath,
+        callback: ResponseCallback<translate_service.BrowsePathResult>): void;
     public translateBrowsePath(browsePath: translate_service.BrowsePath | translate_service.BrowsePath[],
-            callback: (err: Error | null, results: translate_service.BrowsePathResult | translate_service.BrowsePathResult[]) => void) {
+            callback: ResponseCallback<translate_service.BrowsePathResult> | ResponseCallback<translate_service.BrowsePathResult[]>): void {
         assert('function' === typeof callback);
 
         const has_single_element = !Array.isArray(browsePath);
@@ -1391,7 +1394,13 @@ public evaluateRemainingLifetime(): number {
      * @param callback.monitoredItems the monitored Items
      * @param callback.monitoredItems the monitored Items
      */
-    public getMonitoredItems(subscriptionId: UInt32, callback) {
+    public getMonitoredItems(subscriptionId: UInt32, callback: {
+        (err: Error, response?: CallMethodResult[], diag?: DiagnosticInfo ): void; 
+        (err: null, response: {
+            serverHandles: Uint32Array; //
+            clientHandles: Uint32Array;
+        }, diag: DiagnosticInfo[]): void;
+        } ) {
 
         // <UAObject NodeId="i=2253"  BrowseName="Server">
         // <UAMethod NodeId="i=11492" BrowseName="GetMonitoredItems" ParentNodeId="i=2253" MethodDeclarationId="i=11489">
@@ -1496,23 +1505,23 @@ public evaluateRemainingLifetime(): number {
             // xx console.log("xxxx argument", util.inspect(argument, {colors: true, depth: 10}));
             // xx console.log("xxxx argument nodeId", argument.nodeId.toString());
 
-            let inputArguments = [], outputArguments = [];
+            let inputArguments: Argument[] = [], outputArguments: Argument[] = [];
 
             const nodesToRead = [];
-            const actions = [];
+            const actions: ((result: DataValue) => void)[] = [];
 
             if (inputArgumentRef) {
-                nodesToRead.push({
+                nodesToRead.push(new read_service.ReadValueId({
                     nodeId: (<ReferenceDescription><any>inputArgumentRef).nodeId,
                     attributeId: read_service.AttributeIds.Value
-                });
-                actions.push(function (result) { inputArguments = result.value.value; });
+                }));
+                actions.push(function (result: DataValue) { inputArguments = result.value.value; });
             }
             if (outputArgumentRef) {
-                nodesToRead.push({
+                nodesToRead.push(new read_service.ReadValueId({
                     nodeId: (<ReferenceDescription><any>outputArgumentRef).nodeId,
                     attributeId: read_service.AttributeIds.Value
-                });
+                }));
                 actions.push(function (result) { outputArguments = result.value.value; });
             }
 
@@ -1520,7 +1529,7 @@ public evaluateRemainingLifetime(): number {
                 return callback(null, inputArguments, outputArguments);
             }
             // now read the variable
-            this.read(nodesToRead, (error: Error|null, dataValues) => {
+            this.read(nodesToRead, (error: Error|null, dataValues: DataValue[]) => {
 
                 /* istanbul ignore next */
                 if (error) {
@@ -1582,18 +1591,18 @@ public evaluateRemainingLifetime(): number {
      * @param callback.response {queryFirstResponse}
      *
      */
-    public queryFirst(queryFirstRequest, callback) {
+    public queryFirst(queryFirstRequest: query_service.QueryFirstRequest, callback: ResponseCallback<query_service.QueryFirstResponse>) {
         assert('function' === typeof callback);
 
         const request = new query_service.QueryFirstRequest(queryFirstRequest);
 
-        this.performMessageTransaction(request, (err, response) => {
+        this.performMessageTransaction(request, (err: Error, response: query_service.QueryFirstResponse) => {
             /* istanbul ignore next */
             if (err) {
                 return callback(err);
             }
             assert(response instanceof query_service.QueryFirstResponse);
-            callback(null, response.results);
+            callback(null, response);
         });
     }
 
@@ -1650,13 +1659,13 @@ public evaluateRemainingLifetime(): number {
                 new Date(this.lastResponseReceivedTime).toISOString(), now - this.lastResponseReceivedTime);
     }
 
-    protected __findBasicDataType(session, dataTypeId, callback) {
+    protected __findBasicDataType(session: ClientSession, dataTypeId: NodeId, callback: ResponseCallback<DataType>) {
 
         assert(dataTypeId instanceof NodeId);
 
         if (dataTypeId.value <= 25) {
             // we have a well-known DataType
-            const dataType = DataType[dataTypeId.value];
+            const dataType = dataTypeId.value as number;
             callback(null, dataType);
         } else {
 
@@ -1700,7 +1709,7 @@ public evaluateRemainingLifetime(): number {
      *     });
      *
      */
-    public getBuiltInDataType(nodeId, callback: (err: Error | null, result?: DataType) => void) {
+    public getBuiltInDataType(nodeId: NodeId, callback: (err: Error | null, result?: DataType) => void) {
 
         let dataTypeId = null;
         const session = this;
@@ -1710,7 +1719,7 @@ public evaluateRemainingLifetime(): number {
                 attributeId: AttributeIds.DataType
             })
         ];
-        session.read(nodes_to_read, 0, (err, nodesToRead, dataValues?: DataValue[]) => {
+        session.read(nodes_to_read, 0, (err: Error, dataValues?: DataValue[]) => {
             if (err) { return callback(err); }
             if (dataValues[0].statusCode.isNot(StatusCodes.Good)) {
                 return callback(new Error('cannot read DataType Attribute ' + dataValues[0].statusCode.toString()));
@@ -1735,7 +1744,7 @@ public evaluateRemainingLifetime(): number {
  * @param callback.err            {null|Error}
  * @param callback.namespaceArray {Array<String>}
  */
-    public readNamespaceArray(callback) {
+    public readNamespaceArray(callback: ResponseCallback<string[]>) {
         this.read(new read_service.ReadValueId({
             nodeId:   new NodeId(NodeIdType.NUMERIC, /*VariableIds.Server_NamespaceArray*/2255, 0), // resolveNodeId('Server_NamespaceArray'),
             attributeId: AttributeIds.Value

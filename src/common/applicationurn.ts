@@ -30,17 +30,18 @@ export function makeApplicationUrn(hostname : string, suffix : string) : Promise
 }
 
 function str2arraybuffer (str : String ) : ArrayBuffer {
-	var array = new Uint8Array(str.length);
-	for(var i = 0; i < str.length; i++) {
+	let array = new Uint8Array(str.length);
+	for(let i = 0; i < str.length; i++) {
 		array[i] = str.charCodeAt(i);
 	}
 	return array.buffer
 }
 
 function arraybuffer2str(buf : ArrayBuffer) : string {
-    var str = "";
-    for (var i=0; i < buf.byteLength; i++) {
-        str += buf[i];
+    let str = '';
+    const array = new Uint8Array(buf);
+    for (let i = 0; i < buf.byteLength; i++) {
+        str += array[i];
     }
 
     return str;

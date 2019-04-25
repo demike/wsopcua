@@ -11,6 +11,7 @@ import {MonitoredItemBase} from './MonitoredItemBase';
 import { IReadValueId } from '../generated/ReadValueId';
 import { ErrorCallback, ResponseCallback } from './client_base';
 import { MonitoredItemModifyResult } from '../service-subscription';
+import { StatusCode } from '../basic-types/status_code';
 
 /**
  * ClientMonitoredItem
@@ -118,7 +119,7 @@ public modify(parameters: IMonitoringParameters,
     });
 };
 
-public setMonitoringMode(monitoringMode: MonitoringMode, callback) {
+public setMonitoringMode(monitoringMode: MonitoringMode, callback: ResponseCallback<StatusCode[]>) {
     MonitoredItemBase._toolbox_setMonitoringMode(this._subscription, [this], monitoringMode, callback);
 };
 

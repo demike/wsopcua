@@ -289,7 +289,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
          * @type {SecurityPolicy}
          */
         this.securityPolicy = options.securityPolicy || toUri('None');
-        this.securityPolicy = SecurityPolicy[this.securityPolicy];
+        this.securityPolicy = SecurityPolicy[this.securityPolicy];    // TODO CHECK IF THIS IS RIGHT!!!
 
         /**
          * @property serverCertificate
@@ -703,7 +703,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         }
     }
 
-    private static __findEndpoint(endpointUrl, params, callback) {
+    private static __findEndpoint(endpointUrl: string, params: OPCUAClientOptions, callback) {
 
         const securityMode = params.securityMode;
         const securityPolicy = params.securityPolicy;
@@ -721,7 +721,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         let selected_endpoint = null;
         const all_endpoints = null;
         const tasks = [
-            function (cb) {
+            function (cb: ErrorCallback) {
                 client.on('backoff', function () {
                     console.log('finding Endpoint => reconnecting ');
                 });
@@ -732,12 +732,12 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
                     return cb(err);
                 });
             },
-            function (cb) {
+            function (cb: ErrorCallback) {
                 client.getEndpoints(null, (err, endpoints) => {
 
                     if (!err) {
                         endpoints.forEach(function (endpoint) {
-                            if (endpoint.securityMode === securityMode && endpoint.securityPolicyUri === securityPolicy.value) {
+                            if (endpoint.securityMode === securityMode && endpoint.securityPolicyUri === securityPolicy) {
                                 selected_endpoint = endpoint; // found it
                             }
                         });
@@ -745,12 +745,12 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
                     cb(err);
                 });
             },
-            function (cb) {
+            function (cb: ErrorCallback) {
                 client.disconnect(cb);
             }
         ];
 
-        async_series(tasks, function (err) {
+        async_series(tasks, function (err: Error) {
             if (err) { return callback(err); }
             if (!selected_endpoint) {
                 callback(new Error(' Cannot find an Endpoint matching ' +
