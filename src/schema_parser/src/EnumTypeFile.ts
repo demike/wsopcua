@@ -1,37 +1,37 @@
-//import {BSDClassFile} from './BSDClassFile';
-//import { ClassMethod } from './ClassMethod';
+// import {BSDClassFile} from './BSDClassFile';
+// import { ClassMethod } from './ClassMethod';
 import { PathGenUtil } from './PathGenUtil';
-//import { EnumItem } from './EnumItem';
-//import { ClassMember } from './ClassMember';
+// import { EnumItem } from './EnumItem';
+// import { ClassMember } from './ClassMember';
 import {ClassMember, ClassMethod, ClassFile, EnumItem} from './SchemaParser.module';
 import { getModuleImportPath } from './SchemaParserConfig';
 
 export class EnumTypeFile extends ClassFile {
-    protected lengthInBits : number = 0;
+    protected lengthInBits = 0;
 
     public get LenghInBits() {
         return this.lengthInBits;
     }
 
-    public set LengthInBits(length : number) {
+    public set LengthInBits(length: number) {
         this.lengthInBits = length;
     }
 
-    
+
 
     protected getEnumHeader() {
-        return "export enum " + this.name;
+        return 'export enum ' + this.name;
     }
 
-    //@Override
-    public toString() : string {
-        let str : string = "";
+    // @Override
+    public toString(): string {
+        let str = '';
         str += this.fileHeader;
-        str += "\n\n";
+        str += '\n\n';
         this.imports.forEach( (im) => {
             str += im;
-            str += "\n\n";
-        })
+            str += '\n\n';
+        });
 
         /*
         for (let im of this.imports) {
@@ -40,21 +40,21 @@ export class EnumTypeFile extends ClassFile {
         }
         */
         if (this.documentation) {
-            str +=  "/**\n" + this.documentation + "*/\n";
+            str +=  '/**\n' + this.documentation + '*/\n';
         }
         str += this.getEnumHeader();
-        str += " {\n ";
-        for (let mem of this.members) {
-            str += "\t" + mem + "\n";
+        str += ' {\n ';
+        for (const mem of this.members) {
+            str += ' ' + mem + '\n';
         }
-        str += "\n";
-        str += "}"
-        str += "\n\n";
-        for (let met of this.utilityFunctions) {
-            str += "export function " + met.toString() + "\n";
+        str += '\n';
+        str += '}';
+        str += '\n\n';
+        for (const met of this.utilityFunctions) {
+            str += 'export function ' + met.toString() + '\n';
         }
 
-        str += "\n" + this.getFactoryCode();
+        str += '\n' + this.getFactoryCode();
         return str;
     }
 
@@ -62,23 +62,24 @@ export class EnumTypeFile extends ClassFile {
      * return the code to import this class
      * @param targetClassFile the file the returned import should be placed in (needed to build the relative path)
      */
-    public getImportSrc(targetClassFile: ClassFile) : string {
+    public getImportSrc(targetClassFile: ClassFile): string {
         if (this.importAs) {
-            return "import * as " + this.importAs + " from '" + 
-                getModuleImportPath(targetClassFile.ModulePath,this.ModulePath, this.name) + "';"
+            return 'import * as ' + this.importAs + ' from \'' +
+                getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + '\';';
         }
-        return "import {" + this.Name + ", encode" + this.Name + ", decode" + this.Name + "} from '" + 
-            getModuleImportPath(targetClassFile.ModulePath,this.ModulePath, this.name) + "';"
+        return 'import {' + this.Name + ', encode' + this.Name + ', decode' + this.Name + '} from \'' +
+            getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + '\';';
     }
 
-    public getInterfaceImportSrc() : string|null {
+    public getInterfaceImportSrc(): string|null {
         return null;
     }
 
-    protected getFactoryCode() : string {
-        let str = "import {registerEnumeration} from '" + getModuleImportPath(this.modulePath, PathGenUtil.FactoryModulePath) + "/factories_enumerations';\n";
-        str += "registerEnumeration(\"" + this.name + "\"," + this.name + ",encode" + this.name + " ,decode" + this.name + " ,null);";
+    protected getFactoryCode(): string {
+        let str = 'import {registerEnumeration} from \'' +
+            getModuleImportPath(this.modulePath, PathGenUtil.FactoryModulePath) + '/factories_enumerations\';\n';
+        str += 'registerEnumeration(\'' + this.name + '\', ' + this.name + ', encode' + this.name + ' , decode' + this.name + ' , null);\n';
         return str;
     }
-   
+
 }

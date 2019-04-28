@@ -128,10 +128,10 @@ protected async _decrypt_OPN(binaryStream: DataStream) {
     assert(this._securityPolicy !== SecurityPolicy.None);
     assert(this._securityPolicy !== SecurityPolicy.Invalid);
     assert(this.securityMode !== MessageSecurityMode.None);
-    //xx assert(this.securityMode !== MessageSecurityMode.INVALID);
+    // xx assert(this.securityMode !== MessageSecurityMode.INVALID);
 
     if (doDebug) {
-        debugLog("securityHeader", JSON.stringify(this._securityHeader, null, ' '));
+        debugLog('securityHeader', JSON.stringify(this._securityHeader, null, ' '));
     }
 
     // OpcUA part 2 V 1.02 page 15
@@ -146,9 +146,9 @@ protected async _decrypt_OPN(binaryStream: DataStream) {
     //
 
     if (doDebug) {
-        debugLog("EN------------------------------");
+        debugLog('EN------------------------------');
         debugLog(hexDump(binaryStream.view));
-        debugLog("---------------------- SENDER CERTIFICATE");
+        debugLog('---------------------- SENDER CERTIFICATE');
         debugLog(hexDump(this._securityHeader.senderCertificate));
     }
 
@@ -164,7 +164,7 @@ protected async _decrypt_OPN(binaryStream: DataStream) {
 
     if (this._securityHeader.receiverCertificateThumbprint) { // this mean that the message has been encrypted ....
 
-        assert(typeof this._privateKey === "string", "expecting valid key");
+        assert(typeof this._privateKey === 'string', 'expecting valid key');
 
         const decryptedBuffer = new Uint8Array(await this._cryptoFactory.asymmetricDecrypt(buf, this._privateKey));
 
@@ -176,10 +176,10 @@ protected async _decrypt_OPN(binaryStream: DataStream) {
         binaryStream.view = new DataView(binaryStream.view.buffer, 0, binaryStream.pos + decryptedBuffer.length);
 
         if (doDebug) {
-            debugLog("DE-----------------------------");
+            debugLog('DE-----------------------------');
             debugLog(hexDump(binaryStream.view));
-            debugLog("-------------------------------");
-            debugLog("Certificate :", hexDump(this._securityHeader.senderCertificate));
+            debugLog('-------------------------------');
+            debugLog('Certificate :', hexDump(this._securityHeader.senderCertificate));
         }
     }
 
@@ -194,7 +194,7 @@ protected async _decrypt_OPN(binaryStream: DataStream) {
 
     if (!signatureIsOK) {
         console.log(hexDump(binaryStream.view));
-        this._report_error("SIGN and ENCRYPT asymmetricVerify : Invalid packet signature");
+        this._report_error('SIGN and ENCRYPT asymmetricVerify : Invalid packet signature');
         return false;
     }
 

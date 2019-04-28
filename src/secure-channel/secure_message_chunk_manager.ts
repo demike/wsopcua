@@ -61,8 +61,8 @@ export class SecureMessageChunkManager extends EventEmitter<SecureMessageChunkMa
     protected _chunkSize: number;
     protected _aborted: boolean;
     protected _headerSize: number;
-constructor (msgType: string, options: SecureMessageChunkManagerOptions, 
-    securityHeader: AsymmetricAlgorithmSecurityHeader | SymmetricAlgorithmSecurityHeader, 
+constructor (msgType: string, options: SecureMessageChunkManagerOptions,
+    securityHeader: AsymmetricAlgorithmSecurityHeader | SymmetricAlgorithmSecurityHeader,
     sequenceNumberGenerator: SequenceNumberGenerator) {
 
     super();

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * @module services.query
  */
@@ -6,19 +6,19 @@
 /**
  * @class QueryFirstRequest
  */
-export {QueryFirstRequest} from "../generated/QueryFirstRequest";
+export {QueryFirstRequest} from '../generated/QueryFirstRequest';
 /**
  * @class QueryFirstResponse
  */
-export {QueryFirstResponse}  from "../generated/QueryFirstResponse";
+export {QueryFirstResponse}  from '../generated/QueryFirstResponse';
 /**
  * @class QueryNextRequest
  */
-export {QueryNextRequest}    from "../generated/QueryNextRequest";
+export {QueryNextRequest}    from '../generated/QueryNextRequest';
 /**
  * @class QueryNextResponse
  */
-export {QueryNextResponse}  from "../generated/QueryNextResponse";
+export {QueryNextResponse}  from '../generated/QueryNextResponse';
 
 export {QueryDataDescription} from '../generated/QueryDataDescription';
 

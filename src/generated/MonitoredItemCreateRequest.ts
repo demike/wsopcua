@@ -6,9 +6,9 @@ import {MonitoringParameters} from './MonitoringParameters';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IMonitoredItemCreateRequest {
-		itemToMonitor?: ReadValueId;
-		monitoringMode?: MonitoringMode;
-		requestedParameters?: MonitoringParameters;
+  itemToMonitor?: ReadValueId;
+  monitoringMode?: MonitoringMode;
+  requestedParameters?: MonitoringParameters;
 }
 
 /**
@@ -16,56 +16,56 @@ export interface IMonitoredItemCreateRequest {
 */
 
 export class MonitoredItemCreateRequest {
- 		itemToMonitor: ReadValueId;
-		monitoringMode: MonitoringMode;
-		requestedParameters: MonitoringParameters;
+  itemToMonitor: ReadValueId;
+  monitoringMode: MonitoringMode;
+  requestedParameters: MonitoringParameters;
 
-	constructor(	options?: IMonitoredItemCreateRequest) { 
-		options = options || {};
-		this.itemToMonitor= (options.itemToMonitor) ? options.itemToMonitor:new ReadValueId();
-		this.monitoringMode= (options.monitoringMode) ? options.monitoringMode:null;
-		this.requestedParameters= (options.requestedParameters) ? options.requestedParameters:new MonitoringParameters();
+ constructor( options?: IMonitoredItemCreateRequest) {
+  options = options || {};
+  this.itemToMonitor = (options.itemToMonitor) ? options.itemToMonitor : new ReadValueId();
+  this.monitoringMode = (options.monitoringMode) ? options.monitoringMode : null;
+  this.requestedParameters = (options.requestedParameters) ? options.requestedParameters : new MonitoringParameters();
 
-	}
-
-
-	encode(	out: DataStream) { 
-		this.itemToMonitor.encode(out);
-		encodeMonitoringMode(this.monitoringMode,out);
-		this.requestedParameters.encode(out);
-
-	}
+ }
 
 
-	decode(	inp: DataStream) { 
-		this.itemToMonitor.decode(inp);
-		this.monitoringMode = decodeMonitoringMode(inp);
-		this.requestedParameters.decode(inp);
+ encode( out: DataStream) {
+  this.itemToMonitor.encode(out);
+  encodeMonitoringMode(this.monitoringMode, out);
+  this.requestedParameters.encode(out);
 
-	}
+ }
 
 
-	clone(	target?: MonitoredItemCreateRequest): MonitoredItemCreateRequest { 
-		if(!target) {
-			target = new MonitoredItemCreateRequest();
-		}
-		if (this.itemToMonitor) { target.itemToMonitor = this.itemToMonitor.clone();}
-		target.monitoringMode = this.monitoringMode;
-		if (this.requestedParameters) { target.requestedParameters = this.requestedParameters.clone();}
-		return target;
-	}
+ decode( inp: DataStream) {
+  this.itemToMonitor.decode(inp);
+  this.monitoringMode = decodeMonitoringMode(inp);
+  this.requestedParameters.decode(inp);
+
+ }
+
+
+ clone( target?: MonitoredItemCreateRequest): MonitoredItemCreateRequest {
+  if (!target) {
+   target = new MonitoredItemCreateRequest();
+  }
+  if (this.itemToMonitor) { target.itemToMonitor = this.itemToMonitor.clone(); }
+  target.monitoringMode = this.monitoringMode;
+  if (this.requestedParameters) { target.requestedParameters = this.requestedParameters.clone(); }
+  return target;
+ }
 
 
 }
-export function decodeMonitoredItemCreateRequest(	inp: DataStream): MonitoredItemCreateRequest { 
-		const obj = new MonitoredItemCreateRequest();
-			obj.decode(inp); 
-			return obj;
+export function decodeMonitoredItemCreateRequest( inp: DataStream): MonitoredItemCreateRequest {
+  const obj = new MonitoredItemCreateRequest();
+   obj.decode(inp);
+   return obj;
 
-	}
+ }
 
 
 
 import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition("MonitoredItemCreateRequest",MonitoredItemCreateRequest, makeExpandedNodeId(745,0));
+register_class_definition('MonitoredItemCreateRequest', MonitoredItemCreateRequest, makeExpandedNodeId(745, 0));

@@ -16,12 +16,12 @@ enum FunctionCallState {
     COMPLETED = 2,
     // The call was aborted.
     ABORTED = 3
-  };
+  }
 
 export type FunctionCallEvents = 'abort'|'backoff';
 
 // Wraps a function to be called in a backoff loop.
-export class FunctionCall extends EventEmitter<FunctionCallEvents>{
+export class FunctionCall extends EventEmitter<FunctionCallEvents> {
 
     private state_: FunctionCallState;
     protected retryPredicate_: (err: any) => boolean;
@@ -33,7 +33,7 @@ export class FunctionCall extends EventEmitter<FunctionCallEvents>{
     protected function_: Function;
     protected failAfter_: number;
     protected strategy_: BackoffStrategy;
-constructor(fn : Function, args : any[], callback : Function) {
+constructor(fn: Function, args: any[], callback: Function) {
     super();
 
 
@@ -52,39 +52,39 @@ constructor(fn : Function, args : any[], callback : Function) {
 }
 
 // The default retry predicate which considers any error as retriable.
-public static DEFAULT_RETRY_PREDICATE_(err) : boolean {
+public static DEFAULT_RETRY_PREDICATE_(err): boolean {
   return true;
-};
+}
 
 // Checks whether the call is pending.
-public isPending() : boolean{
+public isPending(): boolean {
     return this.state_ == FunctionCallState.PENDING;
-};
+}
 
 // Checks whether the call is in progress.
-public isRunning() : boolean{
+public isRunning(): boolean {
     return this.state_ == FunctionCallState.RUNNING;
-};
+}
 
 // Checks whether the call is completed.
-public isCompleted() : boolean{
+public isCompleted(): boolean {
     return this.state_ == FunctionCallState.COMPLETED;
-};
+}
 
 // Checks whether the call is aborted.
-public isAborted() : boolean {
+public isAborted(): boolean {
     return this.state_ == FunctionCallState.ABORTED;
-};
+}
 
 // Sets the backoff strategy to use. Can only be called before the call is
 // started otherwise an exception will be thrown.
-public setStrategy(strategy : BackoffStrategy) {
+public setStrategy(strategy: BackoffStrategy) {
     if (!this.isPending()) {
-        throw new Error('FunctionCall in progress.')
+        throw new Error('FunctionCall in progress.');
     }
     this.strategy_ = strategy;
     return this; // Return this for chaining.
-};
+}
 
 // Sets the predicate which will be used to determine whether the errors
 // returned from the wrapped function should be retried or not, e.g. a
@@ -92,31 +92,31 @@ public setStrategy(strategy : BackoffStrategy) {
 // function call.
 public retryIf(retryPredicate) {
     if (!this.isPending()) {
-        throw new Error('FunctionCall in progress.')
+        throw new Error('FunctionCall in progress.');
     }
     this.retryPredicate_ = retryPredicate;
     return this;
-};
+}
 
 // Returns all intermediary results returned by the wrapped function since
 // the initial call.
 public getLastResult() {
     return this.lastResult_.concat();
-};
+}
 
 // Returns the number of times the wrapped function call was retried.
 public getNumRetries() {
     return this.numRetries_;
-};
+}
 
 // Sets the backoff limit.
-public failAfter(maxNumberOfRetry : number) {
+public failAfter(maxNumberOfRetry: number) {
     if (!this.isPending()) {
-        throw new Error('FunctionCall in progress.')
+        throw new Error('FunctionCall in progress.');
     }
     this.failAfter_ = maxNumberOfRetry;
     return this; // Return this for chaining.
-};
+}
 
 // Aborts the call.
 public abort() {
@@ -132,7 +132,7 @@ public abort() {
     this.lastResult_ = [new Error('Backoff aborted.')];
     this.emit('abort');
     this.doCallback_();
-};
+}
 
 // Initiates the call to the wrapped function. Accepts an optional factory
 // function used to create the backoff instance; used when testing.
@@ -144,7 +144,7 @@ public start(backoffFactory) {
         throw new Error('FunctionCall is aborted.');
     }
 
-    var strategy = this.strategy_ || new FibonacciBackoffStrategy();
+    let strategy = this.strategy_ || new FibonacciBackoffStrategy();
 
     this.backoff_ = backoffFactory ?
         backoffFactory(strategy) :
@@ -160,24 +160,24 @@ public start(backoffFactory) {
 
     this.state_ = FunctionCallState.RUNNING;
     this.doCall_(false /* isRetry */);
-};
+}
 
 // Calls the wrapped function.
-protected doCall_(isRetry : boolean) {
+protected doCall_(isRetry: boolean) {
     if (isRetry) {
         this.numRetries_++;
     }
-    var eventArgs = ['call'].concat(this.arguments_);
+    let eventArgs = ['call'].concat(this.arguments_);
     this.emit(<any>eventArgs);
-    var callback = this.handleFunctionCallback_.bind(this);
+    let callback = this.handleFunctionCallback_.bind(this);
     this.function_.apply(null, this.arguments_.concat(callback));
-};
+}
 
 // Calls the wrapped function's callback with the last result returned by the
 // wrapped function.
 protected doCallback_() {
     this.callback_.apply(null, this.lastResult_);
-};
+}
 
 // Handles wrapped function's completion. This method acts as a replacement
 // for the original callback function.
@@ -186,21 +186,21 @@ protected handleFunctionCallback_() {
         return;
     }
 
-    var args = Array.prototype.slice.call(arguments);
+    let args = Array.prototype.slice.call(arguments);
     this.lastResult_ = args; // Save last callback arguments.
     this.emit( <any>['callback'].concat(args));
 
-    var err = args[0];
+    let err = args[0];
     if (err && this.retryPredicate_(err)) {
         this.backoff_.backoff(err);
     } else {
         this.state_ = FunctionCallState.COMPLETED;
         this.doCallback_();
     }
-};
+}
 
 // Handles the backoff event by reemitting it.
 protected handleBackoff_(number, delay, err) {
     this.emit('backoff', number, delay, err);
-};
+}
 }

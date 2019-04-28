@@ -94,7 +94,8 @@ export function coerceVariantType(dataType: DataType, value: any) {
 
 function isValidScalarVariant(dataType: DataType, value: any) {
 
-    assert(value === null || DataType.Int64 === dataType || DataType.ByteString === dataType || DataType.UInt64 === dataType || !(value instanceof Array));
+    assert(value === null || DataType.Int64 === dataType || DataType.ByteString === dataType
+        || DataType.UInt64 === dataType || !(value instanceof Array));
     assert(value === null || !(value instanceof Int32Array));
     assert(value === null || !(value instanceof Uint32Array));
     switch (dataType) {
@@ -157,7 +158,7 @@ function isValidArrayVariant(dataType: DataType, value: any) {
 }
 
 /*istanbul ignore next*/
-function isValidMatrixVariant(dataType: DataType, value: any, dimensions?:number[]) {
+function isValidMatrixVariant(dataType: DataType, value: any, dimensions?: number[]) {
 
     if (!dimensions) {
         return false;

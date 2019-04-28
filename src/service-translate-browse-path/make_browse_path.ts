@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 import {BrowsePath} from '../generated/BrowsePath';
 import {makeRelativePath} from './make_relative_path';
@@ -12,7 +12,7 @@ function _get_nodeId(node: string|INode|number|NodeId): NodeId {
     return resolveNodeId(<string>node);
 }
 
-export function makeBrowsePath(rootNode: string|INode|number|NodeId,relativePathBNF: string): BrowsePath {
+export function makeBrowsePath(rootNode: string|INode|number|NodeId, relativePathBNF: string): BrowsePath {
     return new BrowsePath({
         startingNode: _get_nodeId(rootNode),
         relativePath: makeRelativePath(relativePathBNF)

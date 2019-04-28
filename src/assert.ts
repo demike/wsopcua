@@ -1,6 +1,6 @@
 
 // UTILITY
-var util = {
+const util = {
     isArray: function (ar) {
         return Array.isArray(ar);
     },
@@ -66,14 +66,14 @@ export interface AssertionErrorOpt {
     actual: any;
     expected: any;
     operator?: any;
-    stackStartFunction? : Function;
+    stackStartFunction?: Function;
 }
 
 export class AssertionError extends Error {
 
     actual: any;
     expected: any;
-    operator: any
+    operator: any;
     generatedMessage: boolean;
     constructor(options: AssertionErrorOpt) {
         super();
@@ -88,7 +88,7 @@ export class AssertionError extends Error {
             this.message = getMessage(this);
             this.generatedMessage = true;
         }
-        var stackStartFunction = options.stackStartFunction || fail;
+        const stackStartFunction = options.stackStartFunction || fail;
         if ((<any>Error).captureStackTrace) {
             (<any>Error).captureStackTrace(this, stackStartFunction);
         } else {
@@ -98,7 +98,7 @@ export class AssertionError extends Error {
                 this.stack = (new Error).stack.toString();
             } catch (e) { }
         }
-    };
+    }
 }
 
 function replacer(key, value) {
@@ -114,7 +114,7 @@ function replacer(key, value) {
     return value;
 }
 
-function truncate(s, n) {
+function truncate(s, n: number) {
     if (util.isString(s)) {
         return s.length < n ? s : s.slice(0, n);
     } else {
@@ -158,7 +158,7 @@ function fail(actual, expected, message, operator, stackStartFunction) {
 // message_opt);. To test strictly for the value true, use
 // assert.strictEqual(true, guard, message_opt);.
 
-export function assert(value:any, message?:any) {
-    if (!value) fail(value, true, message, '==', assert);
+export function assert(value: any, message?: any) {
+    if (!value) { fail(value, true, message, '==', assert); }
 }
 

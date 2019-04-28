@@ -1,16 +1,16 @@
-"use strict";
+'use strict';
 import {assert} from '../assert';
 
 import {DeadbandType} from '../generated/DeadbandType';
-import {DataType,VariantArrayType, Variant} from '../variant';
+import {DataType, VariantArrayType, Variant} from '../variant';
 
-function _differenceScalar(value1 : number,value2 : number,dataType : DataType,absoluteDeadband : number) {
+function _differenceScalar(value1: number, value2: number, dataType: DataType, absoluteDeadband: number) {
 
-    var diff;
+    let diff;
     if (dataType === DataType.UInt64 || dataType === DataType.Int64) {
 
-        var h1 = value1[0]; // high
-        var h2 = value2[0];
+        const h1 = value1[0]; // high
+        const h2 = value2[0];
         if (h1 !== h2 ) {
             diff = (h1 - h2) * 4294967295;
             if (Math.abs(diff) > absoluteDeadband) {
@@ -21,14 +21,14 @@ function _differenceScalar(value1 : number,value2 : number,dataType : DataType,a
         assert(Number.isFinite(diff));
         return Math.abs(diff) > absoluteDeadband;
     }
-    diff =  value2 -value1;
+    diff =  value2 - value1;
     assert(Number.isFinite(diff));
 
     return Math.abs(diff) > absoluteDeadband;
 
 }
 
-function difference(v1 : Variant ,v2 : Variant,absoluteDeadband : number) {
+function difference(v1: Variant , v2: Variant, absoluteDeadband: number) {
 
     assert(Number.isFinite(absoluteDeadband));
 
@@ -41,10 +41,10 @@ function difference(v1 : Variant ,v2 : Variant,absoluteDeadband : number) {
             return true;
         }
 
-        var n = v1.value.length;
-        var i =0;
-        for (i=0;i<n;i++) {
-            if (_differenceScalar(v1.value[i],v2.value[i],v1.dataType,absoluteDeadband)) {
+        const n = v1.value.length;
+        let i = 0;
+        for (i = 0; i < n; i++) {
+            if (_differenceScalar(v1.value[i], v2.value[i], v1.dataType, absoluteDeadband)) {
                 return true;
             }
         }
@@ -53,7 +53,7 @@ function difference(v1 : Variant ,v2 : Variant,absoluteDeadband : number) {
     } else {
         assert(v1.arrayType === VariantArrayType.Scalar);
         assert(v1.dataType === v2.dataType);
-        return _differenceScalar(v1.value,v2.value,v1.dataType,absoluteDeadband);
+        return _differenceScalar(v1.value, v2.value, v1.dataType, absoluteDeadband);
     }
 }
 
@@ -66,7 +66,8 @@ function difference(v1 : Variant ,v2 : Variant,absoluteDeadband : number) {
  * @param valueRange    {Float}
  * @return {boolean}
  */
-export function check_deadband(variant1 : Variant,variant2 : Variant,deadbandType : DeadbandType,deadbandValue : number,valueRange? : number): boolean {
+export function check_deadband(variant1: Variant, variant2: Variant, deadbandType: DeadbandType,
+    deadbandValue: number, valueRange?: number): boolean {
 
 
     switch (deadbandType) {
@@ -77,7 +78,7 @@ export function check_deadband(variant1 : Variant,variant2 : Variant,deadbandTyp
 
         case DeadbandType.Absolute:
             // AbsoluteDeadband
-            return difference(variant1,variant2,deadbandValue);
+            return difference(variant1, variant2, deadbandValue);
 
         default:
             // Percent_2    PercentDeadband (This type is specified in Part 8).
@@ -100,9 +101,9 @@ export function check_deadband(variant1 : Variant,variant2 : Variant,deadbandTyp
             // If the Value of the MonitoredItem is an array, then the deadband calculation logic shall be applied to
             // each element of the array. If an element that requires a DataChange is found, then no further
             // deadband checking is necessary and the entire array shall be returned.
-            //assert(false, "Not implemented yet");
+            // assert(false, "Not implemented yet");
             assert(typeof valueRange === 'number');
-            return check_deadband(variant1,variant2,DeadbandType.Absolute,valueRange * deadbandValue /100);
+            return check_deadband(variant1, variant2, DeadbandType.Absolute, valueRange * deadbandValue / 100);
     }
 }
 

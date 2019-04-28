@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /**
  * @module services.register-server
@@ -15,7 +15,7 @@ export {RegisterServerRequest} from '../generated/RegisterServerRequest';
 /**
  * @class RegisterServerResponse
  */
-export {RegisterServerResponse}  from "../generated/RegisterServerResponse";
+export {RegisterServerResponse}  from '../generated/RegisterServerResponse';
 
 // ----------------------------------------------------
 // Discovery :  FindServers
@@ -24,12 +24,12 @@ export {RegisterServerResponse}  from "../generated/RegisterServerResponse";
 /**
  * @class FindServersRequest
  */
-export {FindServersRequest}  from "../generated/FindServersRequest";
+export {FindServersRequest}  from '../generated/FindServersRequest';
 
 /**
  * @class FindServersResponse
  */
-export {FindServersResponse} from "../generated/FindServersResponse";
+export {FindServersResponse} from '../generated/FindServersResponse';
 
 export {FindServersOnNetworkRequest} from '../generated/FindServersOnNetworkRequest';
 export {FindServersOnNetworkResponse} from '../generated/FindServersOnNetworkResponse';

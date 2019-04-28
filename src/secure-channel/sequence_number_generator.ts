@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.miscellaneous
  */
@@ -22,18 +22,7 @@ import {assert} from '../assert';
  */
 export class SequenceNumberGenerator {
 
-private _counter : number;
-
-// spec Part 3 says:
-// The same sequence number shall not be reused on a Subscription until over
-// four billion NotificationMessages have been sent.
-// At a continuous rate of one thousand NotificationMessages per second on a given Subscription, it would
-// take roughly fifty days for the same sequence number to be reused. This allows Clients to safely treat
-// sequence numbers as unique.
-public static readonly MAXVALUE : number = 4294966271;
-
-constructor()
-{
+constructor() {
     this._set(1);
 }
 
@@ -41,28 +30,38 @@ constructor()
  * @method next
  * @return {number}
  */
-next() : number {
-    var current = this._counter;
+next(): number {
+    const current = this._counter;
     this._counter += 1;
     if (this._counter > SequenceNumberGenerator.MAXVALUE) {
         this._set(1);
     }
     return current;
-};
+}
 /**
  * @method future
  * @return {Number}
  */
-future() : number {
+future(): number {
     return this._counter;
-};
+}
 
 /**
  * @method _set
  * @private
  */
-_set(value : number) : void {
+_set(value: number): void {
     this._counter = value;
-};
+}
+
+// spec Part 3 says:
+// The same sequence number shall not be reused on a Subscription until over
+// four billion NotificationMessages have been sent.
+// At a continuous rate of one thousand NotificationMessages per second on a given Subscription, it would
+// take roughly fifty days for the same sequence number to be reused. This allows Clients to safely treat
+// sequence numbers as unique.
+public static readonly MAXVALUE: number = 4294966271;
+
+private _counter: number;
 
 }

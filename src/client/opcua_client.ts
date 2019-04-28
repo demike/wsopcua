@@ -294,7 +294,8 @@ protected async __createSession_step2(session: ClientSession, callback: Response
                // TODO: xx session.serverEndpoints = response.serverEndpoints;
 
             } else {
-                err = new Error('Error ' + response.responseHeader.serviceResult.name + ' ' + response.responseHeader.serviceResult.description);
+                err = new Error('Error ' + response.responseHeader.serviceResult.name +
+                        ' ' + response.responseHeader.serviceResult.description);
             }
         }
         if (err) {
@@ -851,7 +852,8 @@ function isUserNamePassword(userIdentityInfo: UserIdentityInfo): boolean {
     return res;
 }
 
-function findUserTokenPolicy(endpoint_description: endpoints_service.EndpointDescription, userTokenType: UserTokenType): endpoints_service.UserTokenPolicy {
+function findUserTokenPolicy(endpoint_description: endpoints_service.EndpointDescription, userTokenType: UserTokenType):
+        endpoints_service.UserTokenPolicy {
     assert(endpoint_description instanceof EndpointDescription);
     const r = endpoint_description.userIdentityTokens.filter( function (userIdentity: endpoints_service.UserTokenPolicy) {
         // assert(userIdentity instanceof UserTokenPolicy)
@@ -953,7 +955,7 @@ async function createUserNameIdentityToken(session: ClientSession, userName: str
 
 
     // now encrypt password as requested
-    
+
     assert(session.serverCertificate instanceof Uint8Array);
     /*
     const strServerCertificate = crypto_utils.toPem(session.serverCertificate, "CERTIFICATE");
@@ -969,7 +971,7 @@ async function createUserNameIdentityToken(session: ClientSession, userName: str
     });
     */
 
-   
+
    const lenBuf = new Uint32Array(1);
    lenBuf[0] = identityToken.password.length + serverNonce.length;
    const block = concatArrayBuffers([lenBuf.buffer, identityToken.password.buffer, serverNonce.buffer]);

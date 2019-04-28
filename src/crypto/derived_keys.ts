@@ -293,8 +293,8 @@ export function decryptBufferWithDerivedKeys(buffer: ArrayBuffer, derivedKeys: D
         iv: initVector
       };
       return crypto.importKey('raw', key, 'AES-GCM',
-      true, ['decrypt']).then(function (key) {
-        return crypto.decrypt(opts, key, buffer);
+      true, ['decrypt']).then(function (the_key) {
+        return crypto.decrypt(opts, the_key, buffer);
       }).then(function (resp) {
         return resp;
       });

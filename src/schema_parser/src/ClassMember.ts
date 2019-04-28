@@ -6,45 +6,29 @@ import { IncompleteTypeDefException } from './IncompleteTypeDefException';
 import { ProjectModulePath } from './SchemaParserConfig';
 
 export class ClassMember {
-    public static readonly UNKNOWN_MODULE_PATH = new ProjectModulePath( "Unknown","Unknown");
-    public static readonly UNKNOWN_TYPE: ClassFile = new ClassFile(ClassMember.UNKNOWN_MODULE_PATH, "UnknownType");
-    protected _name : string = "";
-    protected _type : ClassFile = ClassMember.UNKNOWN_TYPE;
-    protected _length : number; //for array types
-    protected _visibility? : string|null; //public protected ""
-    protected _required? : boolean = true;
-    protected _bitPos = 0; //only used by bit types
-    protected _isArray = false;
-    protected _defaultValue : string|null = null;
 
 
-    public get Length() : number {
+    public get Length(): number {
         return this._length;
     }
 
-    public get DefaultValue() : string | null {
+    public get DefaultValue(): string | null {
         return this._defaultValue;
     }
 
-    public set DefaultValue(val : string|null ) {
+    public set DefaultValue(val: string|null ) {
         this._defaultValue = val;
     }
-
-    /**
-     * utility counter for bit fields
-     * 
-     */
-    protected static bitCounter = 0;
     public static resetBitCounter() {
         this.bitCounter = 0;
     }
 
 
-    protected nameToLowerCase() : void{
+    protected nameToLowerCase(): void {
         this._name = this._name.charAt(0).toLowerCase() + this._name.slice(1);
     }
 
-    constructor(name? : string|null,type?: string|ClassFile|null,required:boolean=true,visibility?: string|null,length:number=1,isArray:boolean=false) {
+    constructor(name?: string|null, type?: string|ClassFile|null, required: boolean= true, visibility?: string|null, length: number= 1, isArray: boolean= false) {
         if (name) {
             this._name = name;
             this.nameToLowerCase();
@@ -56,13 +40,13 @@ export class ClassMember {
         if (type) {
             this._type = (type instanceof ClassFile) ? type : ClassFile.getTypeByName(type);
             if (!this._type) {
-                throw new IncompleteTypeDefException("Member '" +  this._name + "' has no type");
+                throw new IncompleteTypeDefException('Member \'' +  this._name + '\' has no type');
             }
-            if (this._type.Name == "Bit") {
+            if (this._type.Name == 'Bit') {
                 this._bitPos = ClassMember.bitCounter;
                 ClassMember.bitCounter++;
-            } else if(this._type instanceof EnumTypeFile) {
-                let bitCnt = this._type.LengthInBits;
+            } else if (this._type instanceof EnumTypeFile) {
+                const bitCnt = this._type.LengthInBits;
                 if (bitCnt % 8 != 0 || ClassMember.bitCounter != 0) {
                     ClassMember.bitCounter += bitCnt;
                 }
@@ -77,24 +61,24 @@ export class ClassMember {
         this._required = required;
     }
 
-    public set Name(name : string) {
+    public set Name(name: string) {
         this._name = name;
         this.nameToLowerCase();
     }
 
-    public get Name() : string {
+    public get Name(): string {
         return this._name;
     }
 
-    public set Type(type : ClassFile) {
+    public set Type(type: ClassFile) {
         this._type = type;
     }
 
-    public get Type() : ClassFile {
+    public get Type(): ClassFile {
         return this._type;
     }
 
-    public setTypeByName(typeName : string) {
+    public setTypeByName(typeName: string) {
         this._type = ClassFile.getTypeByName(typeName);
     }
 
@@ -102,35 +86,35 @@ export class ClassMember {
         return this._bitPos;
     }
 
-    public set BitPos(pos : number) {
+    public set BitPos(pos: number) {
         this._bitPos = pos;
     }
 
-    public get IsArray() : boolean {
-        return this._isArray
+    public get IsArray(): boolean {
+        return this._isArray;
     }
 
     /**
-     * 
+     *
      * @param option {required : boolean, typePrefix : string}
      */
-    public toString(option?:any) : string {
-        let required = (!option || option.required === undefined) ? this._required : option.required;
-        if (this._name.toLowerCase().indexOf("reserved") == 0) {
-            return "";
+    public toString(option?: any): string {
+        const required = (!option || option.required === undefined) ? this._required : option.required;
+        if (this._name.toLowerCase().indexOf('reserved') == 0) {
+            return '';
         }
-        let blnCommentOut : boolean = this._type.Name == "Bit";
+        const blnCommentOut: boolean = this._type.Name == 'Bit';
 
-        let str = "\t";
+        let str = ' ';
 
         if (blnCommentOut) {
-            str += "//";
+            str += '//';
         }
         if (this._visibility) {
-            str += this._visibility + " ";
+            str += this._visibility + ' ';
         }
 
-        //find the type name
+        // find the type name
         let typeName = this._type.Name;
         if ((option && option.typePrefix !== undefined)) {
             typeName = option.typePrefix + typeName;
@@ -139,40 +123,56 @@ export class ClassMember {
         if (this._type instanceof SimpleType && this._type.JsType) {
             typeName = this._type.JsType;
         } else if (this._type.ImportAs) {
-            typeName = this._type.ImportAs + "." + typeName;
+            typeName = this._type.ImportAs + '.' + typeName;
         }
 
         str += this._name;
         if (!required) {
-            str += "?";
+            str += '?';
         }
-        str += ": " + typeName;
+        str += ': ' + typeName;
 
         if (this._length > 1 || this._isArray) {
-            str += "[]";
+            str += '[]';
         }
 
         if (this._defaultValue) {
-            str += " = " + this._defaultValue;
+            str += ' = ' + this._defaultValue;
         }
 
         return str;
     }
 
-    writeToEncodingByteSrc(value : number|boolean,encodingByteName : string) : string {
+    writeToEncodingByteSrc(value: number|boolean, encodingByteName: string): string {
         let encodingByte;
-        if(length < 2) {
-            let mask = 1 << this._bitPos;
+        if (length < 2) {
+            const mask = 1 << this._bitPos;
             if (value) {
-                return encodingByteName + "|= 1 << " + this._bitPos + ";";
+                return encodingByteName + '|= 1 << ' + this._bitPos + ';';
             } else {
-                return encodingByteName + "&= ~(1 << " + this._bitPos + ");";
+                return encodingByteName + '&= ~(1 << ' + this._bitPos + ');';
             }
         } else {
 
         }
 
-        return "";
+        return '';
     }
+    public static readonly UNKNOWN_MODULE_PATH = new ProjectModulePath( 'Unknown', 'Unknown');
+    public static readonly UNKNOWN_TYPE: ClassFile = new ClassFile(ClassMember.UNKNOWN_MODULE_PATH, 'UnknownType');
+
+    /**
+     * utility counter for bit fields
+     *
+     */
+    protected static bitCounter = 0;
+    protected _name = '';
+    protected _type: ClassFile = ClassMember.UNKNOWN_TYPE;
+    protected _length: number; // for array types
+    protected _visibility?: string|null; // public protected ""
+    protected _required = true;
+    protected _bitPos = 0; // only used by bit types
+    protected _isArray = false;
+    protected _defaultValue: string|null = null;
 
 }

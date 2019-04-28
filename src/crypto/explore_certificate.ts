@@ -2,11 +2,11 @@
  * @module node_opcua_crypto
  */
 
-import {Certificate, CertificatePEM} from "./common";
-import {exploreCertificate, DirectoryName, SubjectPublicKeyInfo} from "./crypto_explore_certificate";
-import {convertPEMtoDER} from "./crypto_explore_certificate";
+import {Certificate, CertificatePEM} from './common';
+import {exploreCertificate, DirectoryName} from './crypto_explore_certificate';
+import {convertPEMtoDER} from './crypto_explore_certificate';
 
-import { assert } from "../assert";
+import { assert } from '../assert';
 
 export type PublicKeyLength = 128 | 256 | 384 | 512 ;
 
@@ -25,7 +25,7 @@ export interface CertificateInfo {
 }
 
 export function coerceCertificate(certificate: Certificate | CertificatePEM): Certificate {
-    if (typeof certificate === "string") {
+    if (typeof certificate === 'string') {
         certificate = convertPEMtoDER(certificate);
     }
     assert(certificate instanceof Uint8Array);
@@ -51,7 +51,7 @@ export function exploreCertificateInfo(certificate: Certificate | CertificatePEM
 
     };
     if (!(data.publicKeyLength  === 512 || data.publicKeyLength === 384 || data.publicKeyLength === 256 || data.publicKeyLength === 128)) {
-        throw new Error("Invalid public key length (expecting 128,256,384 or 512)" + data.publicKeyLength);
+        throw new Error('Invalid public key length (expecting 128,256,384 or 512)' + data.publicKeyLength);
     }
     return data;
 }

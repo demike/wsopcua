@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 /**
  * @module services.secure-channel
  */
-import {ChannelSecurityToken as ChannelSecurityTokenGen}  from "../generated/ChannelSecurityToken";
+import {ChannelSecurityToken as ChannelSecurityTokenGen} from '../generated/ChannelSecurityToken';
 /**
  * @property expired
  * @type {Boolean} - True if the security token has expired.
@@ -10,7 +10,7 @@ import {ChannelSecurityToken as ChannelSecurityTokenGen}  from "../generated/Cha
 export class ChannelSecurityToken extends ChannelSecurityTokenGen {
     public get expired() {
         return (this.createdAt.getTime() + this.revisedLifetime) < Date.now();
-    };
+    }
 }
 
 export {OpenSecureChannelRequest} from '../generated/OpenSecureChannelRequest';

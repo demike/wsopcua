@@ -1,8 +1,6 @@
 //      Copyright (c) 2012 Mathieu Turcotte
 //      Licensed under the MIT license.
 
-import {EventEmitter} from 'eventemitter3';
-
 function isDef(value) {
     return value !== undefined && value !== null;
 }
@@ -48,36 +46,36 @@ constructor(options) {
 // Gets the maximal backoff delay.
 public getMaxDelay() {
     return this.maxDelay_;
-};
+}
 
 // Gets the initial backoff delay.
 public getInitialDelay() {
     return this.initialDelay_;
-};
+}
 
 // Template method that computes and returns the next backoff delay in
 // milliseconds.
-public next() : number{
-    let backoffDelay = this.next_();
-    let randomisationMultiple = 1 + Math.random() * this.randomisationFactor_;
-    let randomizedDelay = Math.round(backoffDelay * randomisationMultiple);
+public next(): number {
+    const backoffDelay = this.next_();
+    const randomisationMultiple = 1 + Math.random() * this.randomisationFactor_;
+    const randomizedDelay = Math.round(backoffDelay * randomisationMultiple);
     return randomizedDelay;
-};
+}
 
 // Computes and returns the next backoff delay. Intended to be overridden by
 // subclasses.
-protected next_() : number {
+protected next_(): number {
     throw new Error('BackoffStrategy.next_() unimplemented.');
-};
+}
 
 // Template method that resets the backoff delay to its initial value.
 public reset() {
     this.reset_();
-};
+}
 
 // Resets the backoff delay to its initial value. Intended to be overridden by
 // subclasses.
 protected reset_() {
     throw new Error('BackoffStrategy.reset_() unimplemented.');
-};
+}
 }

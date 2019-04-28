@@ -7,16 +7,16 @@ import {StatusResult} from './StatusResult';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IProgramDiagnosticDataType {
-		createSessionId?: ec.NodeId;
-		createClientName?: string;
-		invocationCreationTime?: Date;
-		lastTransitionTime?: Date;
-		lastMethodCall?: string;
-		lastMethodSessionId?: ec.NodeId;
-		lastMethodInputArguments?: Argument[];
-		lastMethodOutputArguments?: Argument[];
-		lastMethodCallTime?: Date;
-		lastMethodReturnStatus?: StatusResult;
+  createSessionId?: ec.NodeId;
+  createClientName?: string;
+  invocationCreationTime?: Date;
+  lastTransitionTime?: Date;
+  lastMethodCall?: string;
+  lastMethodSessionId?: ec.NodeId;
+  lastMethodInputArguments?: Argument[];
+  lastMethodOutputArguments?: Argument[];
+  lastMethodCallTime?: Date;
+  lastMethodReturnStatus?: StatusResult;
 }
 
 /**
@@ -24,91 +24,91 @@ export interface IProgramDiagnosticDataType {
 */
 
 export class ProgramDiagnosticDataType {
- 		createSessionId: ec.NodeId;
-		createClientName: string;
-		invocationCreationTime: Date;
-		lastTransitionTime: Date;
-		lastMethodCall: string;
-		lastMethodSessionId: ec.NodeId;
-		lastMethodInputArguments: Argument[];
-		lastMethodOutputArguments: Argument[];
-		lastMethodCallTime: Date;
-		lastMethodReturnStatus: StatusResult;
+  createSessionId: ec.NodeId;
+  createClientName: string;
+  invocationCreationTime: Date;
+  lastTransitionTime: Date;
+  lastMethodCall: string;
+  lastMethodSessionId: ec.NodeId;
+  lastMethodInputArguments: Argument[];
+  lastMethodOutputArguments: Argument[];
+  lastMethodCallTime: Date;
+  lastMethodReturnStatus: StatusResult;
 
-	constructor(	options?: IProgramDiagnosticDataType) { 
-		options = options || {};
-		this.createSessionId= (options.createSessionId) ? options.createSessionId:null;
-		this.createClientName= (options.createClientName) ? options.createClientName:null;
-		this.invocationCreationTime= (options.invocationCreationTime) ? options.invocationCreationTime:null;
-		this.lastTransitionTime= (options.lastTransitionTime) ? options.lastTransitionTime:null;
-		this.lastMethodCall= (options.lastMethodCall) ? options.lastMethodCall:null;
-		this.lastMethodSessionId= (options.lastMethodSessionId) ? options.lastMethodSessionId:null;
-		this.lastMethodInputArguments= (options.lastMethodInputArguments) ? options.lastMethodInputArguments:[];
-		this.lastMethodOutputArguments= (options.lastMethodOutputArguments) ? options.lastMethodOutputArguments:[];
-		this.lastMethodCallTime= (options.lastMethodCallTime) ? options.lastMethodCallTime:null;
-		this.lastMethodReturnStatus= (options.lastMethodReturnStatus) ? options.lastMethodReturnStatus:new StatusResult();
+ constructor( options?: IProgramDiagnosticDataType) {
+  options = options || {};
+  this.createSessionId = (options.createSessionId) ? options.createSessionId : null;
+  this.createClientName = (options.createClientName) ? options.createClientName : null;
+  this.invocationCreationTime = (options.invocationCreationTime) ? options.invocationCreationTime : null;
+  this.lastTransitionTime = (options.lastTransitionTime) ? options.lastTransitionTime : null;
+  this.lastMethodCall = (options.lastMethodCall) ? options.lastMethodCall : null;
+  this.lastMethodSessionId = (options.lastMethodSessionId) ? options.lastMethodSessionId : null;
+  this.lastMethodInputArguments = (options.lastMethodInputArguments) ? options.lastMethodInputArguments : [];
+  this.lastMethodOutputArguments = (options.lastMethodOutputArguments) ? options.lastMethodOutputArguments : [];
+  this.lastMethodCallTime = (options.lastMethodCallTime) ? options.lastMethodCallTime : null;
+  this.lastMethodReturnStatus = (options.lastMethodReturnStatus) ? options.lastMethodReturnStatus : new StatusResult();
 
-	}
-
-
-	encode(	out: DataStream) { 
-		ec.encodeNodeId(this.createSessionId,out);
-		ec.encodeString(this.createClientName,out);
-		ec.encodeDateTime(this.invocationCreationTime,out);
-		ec.encodeDateTime(this.lastTransitionTime,out);
-		ec.encodeString(this.lastMethodCall,out);
-		ec.encodeNodeId(this.lastMethodSessionId,out);
-		ec.encodeArray(this.lastMethodInputArguments,out);
-		ec.encodeArray(this.lastMethodOutputArguments,out);
-		ec.encodeDateTime(this.lastMethodCallTime,out);
-		this.lastMethodReturnStatus.encode(out);
-
-	}
+ }
 
 
-	decode(	inp: DataStream) { 
-		this.createSessionId = ec.decodeNodeId(inp);
-		this.createClientName = ec.decodeString(inp);
-		this.invocationCreationTime = ec.decodeDateTime(inp);
-		this.lastTransitionTime = ec.decodeDateTime(inp);
-		this.lastMethodCall = ec.decodeString(inp);
-		this.lastMethodSessionId = ec.decodeNodeId(inp);
-		this.lastMethodInputArguments = ec.decodeArray(inp,decodeArgument);
-		this.lastMethodOutputArguments = ec.decodeArray(inp,decodeArgument);
-		this.lastMethodCallTime = ec.decodeDateTime(inp);
-		this.lastMethodReturnStatus.decode(inp);
+ encode( out: DataStream) {
+  ec.encodeNodeId(this.createSessionId, out);
+  ec.encodeString(this.createClientName, out);
+  ec.encodeDateTime(this.invocationCreationTime, out);
+  ec.encodeDateTime(this.lastTransitionTime, out);
+  ec.encodeString(this.lastMethodCall, out);
+  ec.encodeNodeId(this.lastMethodSessionId, out);
+  ec.encodeArray(this.lastMethodInputArguments, out);
+  ec.encodeArray(this.lastMethodOutputArguments, out);
+  ec.encodeDateTime(this.lastMethodCallTime, out);
+  this.lastMethodReturnStatus.encode(out);
 
-	}
+ }
 
 
-	clone(	target?: ProgramDiagnosticDataType): ProgramDiagnosticDataType { 
-		if(!target) {
-			target = new ProgramDiagnosticDataType();
-		}
-		target.createSessionId = this.createSessionId;
-		target.createClientName = this.createClientName;
-		target.invocationCreationTime = this.invocationCreationTime;
-		target.lastTransitionTime = this.lastTransitionTime;
-		target.lastMethodCall = this.lastMethodCall;
-		target.lastMethodSessionId = this.lastMethodSessionId;
-		if (this.lastMethodInputArguments) { target.lastMethodInputArguments = ec.cloneComplexArray(this.lastMethodInputArguments);}
-		if (this.lastMethodOutputArguments) { target.lastMethodOutputArguments = ec.cloneComplexArray(this.lastMethodOutputArguments);}
-		target.lastMethodCallTime = this.lastMethodCallTime;
-		if (this.lastMethodReturnStatus) { target.lastMethodReturnStatus = this.lastMethodReturnStatus.clone();}
-		return target;
-	}
+ decode( inp: DataStream) {
+  this.createSessionId = ec.decodeNodeId(inp);
+  this.createClientName = ec.decodeString(inp);
+  this.invocationCreationTime = ec.decodeDateTime(inp);
+  this.lastTransitionTime = ec.decodeDateTime(inp);
+  this.lastMethodCall = ec.decodeString(inp);
+  this.lastMethodSessionId = ec.decodeNodeId(inp);
+  this.lastMethodInputArguments = ec.decodeArray(inp, decodeArgument);
+  this.lastMethodOutputArguments = ec.decodeArray(inp, decodeArgument);
+  this.lastMethodCallTime = ec.decodeDateTime(inp);
+  this.lastMethodReturnStatus.decode(inp);
+
+ }
+
+
+ clone( target?: ProgramDiagnosticDataType): ProgramDiagnosticDataType {
+  if (!target) {
+   target = new ProgramDiagnosticDataType();
+  }
+  target.createSessionId = this.createSessionId;
+  target.createClientName = this.createClientName;
+  target.invocationCreationTime = this.invocationCreationTime;
+  target.lastTransitionTime = this.lastTransitionTime;
+  target.lastMethodCall = this.lastMethodCall;
+  target.lastMethodSessionId = this.lastMethodSessionId;
+  if (this.lastMethodInputArguments) { target.lastMethodInputArguments = ec.cloneComplexArray(this.lastMethodInputArguments); }
+  if (this.lastMethodOutputArguments) { target.lastMethodOutputArguments = ec.cloneComplexArray(this.lastMethodOutputArguments); }
+  target.lastMethodCallTime = this.lastMethodCallTime;
+  if (this.lastMethodReturnStatus) { target.lastMethodReturnStatus = this.lastMethodReturnStatus.clone(); }
+  return target;
+ }
 
 
 }
-export function decodeProgramDiagnosticDataType(	inp: DataStream): ProgramDiagnosticDataType { 
-		const obj = new ProgramDiagnosticDataType();
-			obj.decode(inp); 
-			return obj;
+export function decodeProgramDiagnosticDataType( inp: DataStream): ProgramDiagnosticDataType {
+  const obj = new ProgramDiagnosticDataType();
+   obj.decode(inp);
+   return obj;
 
-	}
+ }
 
 
 
 import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition("ProgramDiagnosticDataType",ProgramDiagnosticDataType, makeExpandedNodeId(896,0));
+register_class_definition('ProgramDiagnosticDataType', ProgramDiagnosticDataType, makeExpandedNodeId(896, 0));

@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-import {assert} from "../assert";
+import {assert} from '../assert';
 
-import  {registerType as registerBuiltInType} from './factories_builtin_types';
+import {registerType as registerBuiltInType} from './factories_builtin_types';
 
 function _self_encode(Type) {
     assert('function' === typeof Type);
@@ -17,13 +17,13 @@ function _self_decode(Type) {
     assert('function' === typeof Type);
 
     return function (stream) {
-        var value = new Type();
+        const value = new Type();
         value.decode(stream);
         return value;
     };
 }
 
-export function registerSpecialVariantEncoder(ConstructorFunc,name : string) {
+export function registerSpecialVariantEncoder(ConstructorFunc, name: string) {
 
     assert('function' === typeof ConstructorFunc);
 
@@ -34,5 +34,5 @@ export function registerSpecialVariantEncoder(ConstructorFunc,name : string) {
         defaultValue: null
     });
 
-};
+}
 

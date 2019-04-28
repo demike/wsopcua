@@ -319,16 +319,16 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     /**
      * This Service is used to request the next set of Browse or BrowseNext
      * response information that is too large to be sent in a single response
-     * @param continuationPoints  A list of Server-defined opaque values that represent continuation points. 
+     * @param continuationPoints  A list of Server-defined opaque values that represent continuation points.
      *                            The value for a continuation point was returned to the Client in a previous Browse or BrowseNext response.
      * @param releaseContinuationPoints
-     *                              TRUE passed continuationPoints shall be reset to free resources in the Server. 
+     *                              TRUE passed continuationPoints shall be reset to free resources in the Server.
      *                                   The continuation points are released and the results and diagnosticInfos arrays are empty.
      *                              FALSE passed continuationPoints shall be used to get the next set of browse information.
      *
-     *                              After receiving the last browse results with browseNext the resources on 
+     *                              After receiving the last browse results with browseNext the resources on
      *                              the server are freed automatically, no additional browseNext call with FALSE is necessary
-     * @param callback 
+     * @param callback
      */
     browseNext(continuationPoints: Uint8Array | Uint8Array[], releaseContinuationPoints: boolean= false,
         callback: (err: Error, results: browse_service.BrowseResult[],
@@ -353,7 +353,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
                 }
 
                 assert(response instanceof browse_service.BrowseNextResponse);
- 
+
                 if (this._requestedMaxReferencesPerNode > 0) {
                     for (i = 0; i < response.results.length; i++) {
                         r = response.results[i];
@@ -418,7 +418,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      *
     */
 
-    
+
     public readVariableValue(nodes: string | NodeId | read_service.ReadValueId,
         callback: ResponseCallback<DataValue, DiagnosticInfo>): void;
     public readVariableValue(nodes: string[] | NodeId[] | read_service.ReadValueId[],
@@ -1017,7 +1017,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.err {Error|null}   - the Error if the async method has failed
      * @param callback.response {DeleteSubscriptionsResponse} - the response
      */
-    deleteSubscriptions(options: IDeleteSubscriptionsRequest, 
+    deleteSubscriptions(options: IDeleteSubscriptionsRequest,
         callback: ResponseCallback<subscription_service.DeleteSubscriptionsResponse>) {
         this._defaultRequest(
             subscription_service.DeleteSubscriptionsRequest,
@@ -1084,7 +1084,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.err {Error|null}   - the Error if the async method has failed
      * @param callback.response {ModifySubscriptionResponse} - the response
      */
-    public modifySubscription(options: IModifySubscriptionRequest, 
+    public modifySubscription(options: IModifySubscriptionRequest,
         callback: ResponseCallback<subscription_service.ModifySubscriptionResponse>) {
         this._defaultRequest(
             subscription_service.ModifySubscriptionRequest,
@@ -1092,7 +1092,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             options, callback);
     }
 
-    public setMonitoringMode(options: ISetMonitoringModeRequest, 
+    public setMonitoringMode(options: ISetMonitoringModeRequest,
         callback: ResponseCallback<subscription_service.SetMonitoringModeResponse>) {
         this._defaultRequest(
             subscription_service.SetMonitoringModeRequest,
@@ -1395,7 +1395,7 @@ public evaluateRemainingLifetime(): number {
      * @param callback.monitoredItems the monitored Items
      */
     public getMonitoredItems(subscriptionId: UInt32, callback: {
-        (err: Error, response?: CallMethodResult[], diag?: DiagnosticInfo ): void; 
+        (err: Error, response?: CallMethodResult[], diag?: DiagnosticInfo ): void;
         (err: null, response: {
             serverHandles: Uint32Array; //
             clientHandles: Uint32Array;
@@ -1746,7 +1746,8 @@ public evaluateRemainingLifetime(): number {
  */
     public readNamespaceArray(callback: ResponseCallback<string[]>) {
         this.read(new read_service.ReadValueId({
-            nodeId:   new NodeId(NodeIdType.NUMERIC, /*VariableIds.Server_NamespaceArray*/2255, 0), // resolveNodeId('Server_NamespaceArray'),
+            nodeId:   new NodeId(NodeIdType.NUMERIC, /*VariableIds.Server_NamespaceArray*/2255, 0),
+             // resolveNodeId('Server_NamespaceArray'),
             attributeId: AttributeIds.Value
         }), (err: Error, dataValue: DataValue) => {
             if (err) { return callback(err); }

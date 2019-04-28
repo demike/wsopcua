@@ -15,7 +15,7 @@ import {register_class_definition} from '../factory/factories_factories';
 import { DataStream } from '../basic-types/DataStream';
 import { UInt32 } from '../basic-types';
 
-import {BaseUAObject} from  '../factory/factories_baseobject';
+import {BaseUAObject} from '../factory/factories_baseobject';
 
 
 export interface ISequenceHeader {

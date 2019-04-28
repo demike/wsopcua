@@ -12,7 +12,7 @@ import { ExpandedNodeId } from '../basic-types';
 
 const constructorMap: {[key: string]: Function} = {};
 
-const _global_factories : {[key: string]: Function} = {};
+const _global_factories: {[key: string]: Function} = {};
 
 export function getFactory(type_name: string ) {
     return _global_factories[type_name];

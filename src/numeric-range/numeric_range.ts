@@ -1,5 +1,5 @@
 /* global NumericRange*/
-"use strict";
+'use strict';
 /**
  * @module opcua.datamodel
  */
@@ -31,7 +31,7 @@ import * as ec from '../basic-types';
 // dimension.
 
 
-const NumericRangeEmpty_str = "NumericRange:<Empty>";
+const NumericRangeEmpty_str = 'NumericRange:<Empty>';
 
 // BNF of NumericRange
 // The following BNF describes the syntax of the NumericRange parameter type.
@@ -41,8 +41,8 @@ const NumericRangeEmpty_str = "NumericRange:<Empty>";
 //         <digit>    ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' |9'
 //
 const NumericRange_Schema = {
-    name: "NumericRange",
-    subtype: "UAString",
+    name: 'NumericRange',
+    subtype: 'UAString',
     defaultValue: function () {
         return new NumericRange();
     },
@@ -69,7 +69,7 @@ const NumericRange_Schema = {
         if (value === NumericRangeEmpty_str) {
             return new NumericRange();
         }
-        assert(typeof value === "string" || Array.isArray(value));
+        assert(typeof value === 'string' || Array.isArray(value));
         return new NumericRange(value);
     },
 
@@ -96,18 +96,18 @@ enum NumericRangeType {
 
 const regexNumericRange = /^[0-9:,]*$/;
 
-function _valid_range(low : number, high : number) {
+function _valid_range(low: number, high: number) {
     return !((low >= high) || (low < 0 || high < 0));
 }
 
-function construct_numeric_range_bit_from_string(str : string) : NumericRange {
+function construct_numeric_range_bit_from_string(str: string): NumericRange {
 
-    const values = str.split(":");
+    const values = str.split(':');
     const range = new NumericRange();
 
     if (values.length === 1) {
         range.type = NumericRangeType.SingleValue;
-        range.value = parseInt(values[0], 10)
+        range.value = parseInt(values[0], 10);
         return range;
     } else if (values.length === 2) {
 
@@ -133,8 +133,8 @@ function _normalize(e: NumericRange): [number, number] {
     return e.type === NumericRangeType.SingleValue ? [<number>e.value, <number>e.value] : e.value;
 }
 
-function construct_numeric_range_from_string(str : string): NumericRange {
-    const range : NumericRange = new NumericRange();
+function construct_numeric_range_from_string(str: string): NumericRange {
+    const range: NumericRange = new NumericRange();
     if (!regexNumericRange.test(str)) {
         range.type = NumericRangeType.InvalidRange;
         range.value = str;
@@ -142,7 +142,7 @@ function construct_numeric_range_from_string(str : string): NumericRange {
     }
 
     /* detect multi dim range*/
-    const values = str.split(",");
+    const values = str.split(',');
 
     if (values.length === 1) {
         return construct_numeric_range_bit_from_string(values[0]);
@@ -162,7 +162,7 @@ function construct_numeric_range_from_string(str : string): NumericRange {
         rowRange = _normalize(rowRange);
         colRange = _normalize(colRange);
         range.type = NumericRangeType.MatrixRange;
-        range.value = [rowRange,colRange];
+        range.value = [rowRange, colRange];
         return range;
     } else {
         // not supported yet
@@ -180,45 +180,45 @@ function _construct_from_string(self: NumericRange, value: string) {
     self.value = nr.value;
 }
 
-function _construct_from_values(self : NumericRange, value: number, second_value?: number) {
+function _construct_from_values(self: NumericRange, value: number, second_value?: number) {
     if (second_value === void.0 /*is undefined*/) {
         (<any>self)._set_single_value(value);
 
     } else {
 
         if (!Number.isFinite(second_value)) {
-            throw new Error(" invalid second argument, expecting a number");
+            throw new Error(' invalid second argument, expecting a number');
         }
         (<any>self)._set_range_value(value, second_value);
     }
 
 }
 
-function _construct_from_array(self : NumericRange, value : number[]) {
+function _construct_from_array(self: NumericRange, value: number[]) {
     assert(value.length === 2);
     if (Number.isFinite(value[0])) {
         if (!Number.isFinite(value[1])) {
-            throw new Error(" invalid range in " + value);
+            throw new Error(' invalid range in ' + value);
         }
         (<any>self)._set_range_value(value[0], value[1]);
     }
 }
 
-function _construct_from_NumericRange(self : NumericRange, value : NumericRange) {
-    self.value = value.value; //TODO: clone me
+function _construct_from_NumericRange(self: NumericRange, value: NumericRange) {
+    self.value = value.value; // TODO: clone me
     self.type = value.type;
 }
 
 export class NumericRange {
-    value: any;//[number, number]|number|string| [[number, number],[number, number]];
-    type : NumericRangeType;
+    value: any; // [number, number]|number|string| [[number, number],[number, number]];
+    type: NumericRangeType;
 constructor(value?: string|NumericRange|[number, number]|number, second_value?: number) {
 
     const self = this;
 
-    assert(!value || !(value instanceof NumericRange), "use coerce to create a NumericRange");
+    assert(!value || !(value instanceof NumericRange), 'use coerce to create a NumericRange');
 
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
         _construct_from_string(self, value);
     } else if (Number.isFinite(<number>value) && !(value === void 0)) {
         _construct_from_values(self, <number>value, second_value);
@@ -229,7 +229,7 @@ constructor(value?: string|NumericRange|[number, number]|number, second_value?: 
     } else if (value instanceof NumericRange) {
         _construct_from_NumericRange(self, value);
     } else {
-        this.value = "<invalid>";
+        this.value = '<invalid>';
         this.type = NumericRangeType.Empty;
     }
 
@@ -243,9 +243,9 @@ protected _set_single_value(value: number) {
     if (this.value < 0) {
         this.type = NumericRangeType.InvalidRange;
     }
-};
+}
 
-protected _set_range_value(low : number, high : number) {
+protected _set_range_value(low: number, high: number) {
     assert(Number.isFinite(low));
     assert(Number.isFinite(high));
     this.value = [low, high];
@@ -254,15 +254,15 @@ protected _set_range_value(low : number, high : number) {
     if (!this._check_range()) {
         this.type = NumericRangeType.InvalidRange;
     }
-};
+}
 
-public isValid() : boolean {
+public isValid(): boolean {
     return this.type !== NumericRangeType.InvalidRange;
-};
+}
 
 public isEmpty() {
     return this.type === NumericRangeType.Empty;
-};
+}
 
 
 protected _check_range() {
@@ -283,7 +283,7 @@ protected _check_range() {
 
     }
     return true;
-};
+}
 
 
 public toEncodeableString (): string {
@@ -297,24 +297,24 @@ public toEncodeableString (): string {
         default:
             return null;
     }
-};
+}
 
 public toString () {
 
-    function array_range_to_string(values : number[]) {
+    function array_range_to_string(values: number[]) {
         assert(Array.isArray(values));
         if (values.length === 2 && values[0] === values[1]) {
             return values[0].toString();
         }
         return values.map(function (value) {
             return value.toString(10);
-        }).join(":");
+        }).join(':');
     }
 
     function matrix_range_to_string(values: any[]) {
         return values.map(function (value) {
             return (Array.isArray(value)) ? array_range_to_string(value) : value.toString(10);
-        }).join(",");
+        }).join(',');
     }
 
     switch (this.type) {
@@ -332,17 +332,17 @@ public toString () {
 
         default:
             assert(this.type === NumericRangeType.InvalidRange);
-            return "NumericRange:<Invalid>";
+            return 'NumericRange:<Invalid>';
     }
-};
+}
 
 public toJSON () {
     return this.toString();
-};
+}
 
 public isDefined () {
     return this.type !== NumericRangeType.Empty && this.type !== NumericRangeType.InvalidRange;
-};
+}
 
 /**
  * @method extract_values
@@ -350,7 +350,7 @@ public isDefined () {
  * @param [dimensions = null ]{Array<Number>} dimension of the matrix if data is a matrix
  * @return {*}
  */
-public extract_values (array : any[], dimensions: number[]) {
+public extract_values (array: any[], dimensions: number[]) {
 
     if (!array) {
         return {
@@ -379,7 +379,7 @@ public extract_values (array : any[], dimensions: number[]) {
         default:
             return {array: [], statusCode: StatusCodes.BadIndexRangeInvalid};
     }
-};
+}
 
 
 public set_values(arrayToAlter, newValues) {
@@ -417,42 +417,42 @@ public set_values(arrayToAlter, newValues) {
     }
 
 
-    const insertInPlace = (Array.isArray(arrayToAlter) ? insertInPlaceStandardArray : (arrayToAlter instanceof Buffer ? insertInPlaceBuffer : insertInPlaceTypedArray));
+    const insertInPlace = (Array.isArray(arrayToAlter) ? insertInPlaceStandardArray : insertInPlaceTypedArray);
     return {
         array: insertInPlace(arrayToAlter, low_index, high_index, newValues),
         statusCode: StatusCodes.Good
     };
 
-};
+}
 
 
 
-} 
+}
 
 
 function slice(arr, start: number, end: number) {
 
-    assert(arr, "expecting value to slice");
+    assert(arr, 'expecting value to slice');
 
-    if (start===0 && end === (arr as any).length) {
+    if (start === 0 && end === (arr as any).length) {
         return arr;
     }
 
     let res;
-    //xx console.log("arr",arr.constructor.name,arr.length,start,end);
+    // xx console.log("arr",arr.constructor.name,arr.length,start,end);
     if (arr.buffer instanceof ArrayBuffer) {
-        //xx console.log("XXXX ERN ERN ERN 2");
+        // xx console.log("XXXX ERN ERN ERN 2");
         res = arr.subarray(start, end);
     } else {
-        //xx console.log("XXXX ERN ERN ERN 3");
+        // xx console.log("XXXX ERN ERN ERN 3");
 
         assert(typeof arr.slice === 'function');
-        assert(arr instanceof Array || typeof arr === "string");
+        assert(arr instanceof Array || typeof arr === 'string');
         res = arr.slice(start, end);
     }
     if (res instanceof Uint8Array && arr instanceof ArrayBuffer) {
 
-        //TODO: ???
+        // TODO: ???
         res = res.buffer;
     }
     return res;
@@ -466,7 +466,7 @@ function extract_empty(array: any[], dimensions: number[]) {
     };
 }
 
-function extract_single_value(array : any[], index: number) {
+function extract_single_value(array: any[], index: number) {
     if (index >= array.length) {
         return {array: [], statusCode: StatusCodes.BadIndexRangeNoData};
     }
@@ -476,7 +476,7 @@ function extract_single_value(array : any[], index: number) {
     };
 }
 
-function extract_array_range(array : any[], low_index: number, high_index: number) {
+function extract_array_range(array: any[], low_index: number, high_index: number) {
     assert(Number.isFinite(low_index) && Number.isFinite(high_index));
     assert(low_index >= 0);
     assert(low_index <= high_index);
@@ -494,10 +494,10 @@ function extract_array_range(array : any[], low_index: number, high_index: numbe
 }
 
 function isArrayLike(value: any) {
-    return Number.isFinite(value.length) || value.hasOwnProperty("length");
+    return Number.isFinite(value.length) || value.hasOwnProperty('length');
 }
 
-function extract_matrix_range(array : any[], rowRange: [number, number], colRange: [number, number], dimension: number[]) {
+function extract_matrix_range(array: any[], rowRange: [number, number], colRange: [number, number], dimension: number[]) {
     assert(Array.isArray(rowRange) && Array.isArray(colRange));
     if (array.length === 0) {
         return {
@@ -521,7 +521,7 @@ function extract_matrix_range(array : any[], rowRange: [number, number], colRang
         };
     }
 
-    assert(dimension, "expecting dimension to know the shape of the matrix represented by the flat array");
+    assert(dimension, 'expecting dimension to know the shape of the matrix represented by the flat array');
 
     //
     const rowLow = rowRange[0];
@@ -598,7 +598,7 @@ function _overlap(l1: number, h1: number, l2: number, h2: number) {
 }
 
 const empty = new NumericRange();
-export function numericRange_overlap(nr1 : NumericRange, nr2 : NumericRange) {
+export function numericRange_overlap(nr1: NumericRange, nr2: NumericRange) {
     nr1 = nr1 || empty;
     nr2 = nr2 || empty;
     assert(nr1 instanceof NumericRange);
@@ -619,7 +619,7 @@ export function numericRange_overlap(nr1 : NumericRange, nr2 : NumericRange) {
         const h2 = nr2.value[1];
         return _overlap(l1, h1, l2, h2);
     }
-    console.log(" NR1 = ", nr1.toEncodeableString());
-    console.log(" NR2 = ", nr2.toEncodeableString());
-    assert(false, "not implemented yet "); // TODO
-};
+    console.log(' NR1 = ', nr1.toEncodeableString());
+    console.log(' NR2 = ', nr2.toEncodeableString());
+    assert(false, 'not implemented yet '); // TODO
+}

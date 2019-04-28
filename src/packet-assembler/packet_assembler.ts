@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.transport
  */
@@ -8,7 +8,7 @@ import {EventEmitter} from 'eventemitter3';
 import {assert} from '../assert';
 import { concatDataViews } from '../basic-types/array';
 
-var doDebug = false;
+const doDebug = false;
 
 export type PacketAssemblerEvents = 'newMessage'|'message';
 
@@ -36,13 +36,13 @@ constructor (options: { readMessageFunc: (buf: DataView) => any; minimumSizeInBy
     this.readMessageFunc = options.readMessageFunc;
     this.minimumSizeInBytes = options.minimumSizeInBytes || 8;
 
-    assert('function' === typeof this.readMessageFunc, "packet assembler requires a readMessageFunc");
+    assert('function' === typeof this.readMessageFunc, 'packet assembler requires a readMessageFunc');
 
-};
+}
 
 protected _read_packet_info(data: DataView) {
     return this.readMessageFunc(data);
-};
+}
 
 protected _build_data(data: DataView) {
     if (data && this._stack.length === 0) {
@@ -57,16 +57,16 @@ protected _build_data(data: DataView) {
     data = concatDataViews(this._stack);
     this._stack.length = 0;
     return data;
-};
+}
 
-public feed(data : DataView) {
+public feed(data: DataView) {
 
-    var self = this;
+    const self = this;
 
-    var messageChunk;
-    //xx assert(data instanceof Buffer);
+    let messageChunk;
+    // xx assert(data instanceof Buffer);
     // xx assert(data.length > 0, "PacketAssembler expects a no-zero size data block");
-    //xx assert(this.expectedLength === 0 || this.currentLength <= this.expectedLength);
+    // xx assert(this.expectedLength === 0 || this.currentLength <= this.expectedLength);
 
     if (this.expectedLength === 0 && this.currentLength + data.byteLength >= this.minimumSizeInBytes) {
 
@@ -104,7 +104,7 @@ public feed(data : DataView) {
 
         // istanbul ignore next
         if (doDebug) {
-            var packet_info = this._read_packet_info(messageChunk);
+            const packet_info = this._read_packet_info(messageChunk);
             assert(this.packet_info.length === packet_info.length);
             assert(messageChunk.byteLength === packet_info.length);
         }
@@ -112,26 +112,26 @@ public feed(data : DataView) {
         this.currentLength = 0;
         this.expectedLength = 0;
 
-        this.emit("message", messageChunk);
+        this.emit('message', messageChunk);
 
     } else {
 
         assert(this.expectedLength > 0);
         // there is more data in this chunk than expected...
         // the chunk need to be split
-        var size1 = this.expectedLength - this.currentLength;
+        const size1 = this.expectedLength - this.currentLength;
         if (size1 > 0) {
            // var chunk1 = new DataView(data.buffer,0,size1);
-           var chunk1 = new DataView(data.buffer.slice(0,size1));//.slice(0, size1);
+           const chunk1 = new DataView(data.buffer.slice(0, size1)); // .slice(0, size1);
             self.feed(chunk1);
         }
-        var chunk2 = new DataView(data.buffer.slice(size1));
+        const chunk2 = new DataView(data.buffer.slice(size1));
         // var chunk2 = new DataView(data.buffer,size1);
         if (chunk2.byteLength > 0) {
             self.feed(chunk2);
         }
     }
-};
+}
 }
 
 

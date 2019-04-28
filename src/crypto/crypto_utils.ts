@@ -92,12 +92,13 @@ export interface VerifyMessageChunkSignatureOptions {
  * @param options.publicKey {Buffer}*
  * @return {Boolean} - true if the signature is valid
  */
-export function verifyMessageChunkSignature(blockToVerify: ArrayBuffer, signature: Signature, options: VerifyMessageChunkSignatureOptions) : PromiseLike<boolean> {
+export function verifyMessageChunkSignature(blockToVerify: ArrayBuffer, signature: Signature, options: VerifyMessageChunkSignatureOptions):
+        PromiseLike<boolean> {
 
     assert(blockToVerify instanceof ArrayBuffer);
     assert(signature instanceof ArrayBuffer);
 
-    return crypto.subtle.verify(options.algorithm, options.publicKey , signature, blockToVerify)
+    return crypto.subtle.verify(options.algorithm, options.publicKey , signature, blockToVerify);
 }
 
 export function makeSHA1Thumbprint(buffer: ArrayBuffer): PromiseLike<Signature> {

@@ -8,13 +8,15 @@ import { BackoffStrategy } from './strategy';
 // Exponential backoff strategy.
 export class ExponentialBackoffStrategy extends BackoffStrategy {
 
-    protected factor_: number;
-    protected nextBackoffDelay_: number;
-    protected backoffDelay_: number;
     // Default multiplication factor used to compute the next backoff delay from
     // the current one. The value can be overridden by passing a custom factor as
     // part of the options.
     public static readonly DEFAULT_FACTOR: number = 2;
+
+    protected factor_: number;
+    protected nextBackoffDelay_: number;
+    protected backoffDelay_: number;
+
     constructor(options) {
         super(options);
         this.backoffDelay_ = 0;
@@ -34,10 +36,10 @@ export class ExponentialBackoffStrategy extends BackoffStrategy {
         this.backoffDelay_ = Math.min(this.nextBackoffDelay_, this.getMaxDelay());
         this.nextBackoffDelay_ = this.backoffDelay_ * this.factor_;
         return this.backoffDelay_;
-    };
+    }
 
     protected reset_() {
         this.backoffDelay_ = 0;
         this.nextBackoffDelay_ = this.getInitialDelay();
-    };
+    }
 }

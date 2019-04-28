@@ -4,7 +4,7 @@ import {ResponseHeader} from './ResponseHeader';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IServiceFault {
-		responseHeader?: ResponseHeader;
+  responseHeader?: ResponseHeader;
 }
 
 /**
@@ -12,46 +12,46 @@ The response returned by all services when there is a service level error.
 */
 
 export class ServiceFault {
- 		responseHeader: ResponseHeader;
+  responseHeader: ResponseHeader;
 
-	constructor(	options?: IServiceFault) { 
-		options = options || {};
-		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
+ constructor( options?: IServiceFault) {
+  options = options || {};
+  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
 
-	}
-
-
-	encode(	out: DataStream) { 
-		this.responseHeader.encode(out);
-
-	}
+ }
 
 
-	decode(	inp: DataStream) { 
-		this.responseHeader.decode(inp);
+ encode( out: DataStream) {
+  this.responseHeader.encode(out);
 
-	}
+ }
 
 
-	clone(	target?: ServiceFault): ServiceFault { 
-		if(!target) {
-			target = new ServiceFault();
-		}
-		if (this.responseHeader) { target.responseHeader = this.responseHeader.clone();}
-		return target;
-	}
+ decode( inp: DataStream) {
+  this.responseHeader.decode(inp);
+
+ }
+
+
+ clone( target?: ServiceFault): ServiceFault {
+  if (!target) {
+   target = new ServiceFault();
+  }
+  if (this.responseHeader) { target.responseHeader = this.responseHeader.clone(); }
+  return target;
+ }
 
 
 }
-export function decodeServiceFault(	inp: DataStream): ServiceFault { 
-		const obj = new ServiceFault();
-			obj.decode(inp); 
-			return obj;
+export function decodeServiceFault( inp: DataStream): ServiceFault {
+  const obj = new ServiceFault();
+   obj.decode(inp);
+   return obj;
 
-	}
+ }
 
 
 
 import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition("ServiceFault",ServiceFault, makeExpandedNodeId(397,0));
+register_class_definition('ServiceFault', ServiceFault, makeExpandedNodeId(397, 0));

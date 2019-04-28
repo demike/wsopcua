@@ -7,9 +7,9 @@ import {decodeServerOnNetwork} from './ServerOnNetwork';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IFindServersOnNetworkResponse {
-		responseHeader?: ResponseHeader;
-		lastCounterResetTime?: Date;
-		servers?: ServerOnNetwork[];
+  responseHeader?: ResponseHeader;
+  lastCounterResetTime?: Date;
+  servers?: ServerOnNetwork[];
 }
 
 /**
@@ -17,56 +17,56 @@ export interface IFindServersOnNetworkResponse {
 */
 
 export class FindServersOnNetworkResponse {
- 		responseHeader: ResponseHeader;
-		lastCounterResetTime: Date;
-		servers: ServerOnNetwork[];
+  responseHeader: ResponseHeader;
+  lastCounterResetTime: Date;
+  servers: ServerOnNetwork[];
 
-	constructor(	options?: IFindServersOnNetworkResponse) { 
-		options = options || {};
-		this.responseHeader= (options.responseHeader) ? options.responseHeader:new ResponseHeader();
-		this.lastCounterResetTime= (options.lastCounterResetTime) ? options.lastCounterResetTime:null;
-		this.servers= (options.servers) ? options.servers:[];
+ constructor( options?: IFindServersOnNetworkResponse) {
+  options = options || {};
+  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
+  this.lastCounterResetTime = (options.lastCounterResetTime) ? options.lastCounterResetTime : null;
+  this.servers = (options.servers) ? options.servers : [];
 
-	}
-
-
-	encode(	out: DataStream) { 
-		this.responseHeader.encode(out);
-		ec.encodeDateTime(this.lastCounterResetTime,out);
-		ec.encodeArray(this.servers,out);
-
-	}
+ }
 
 
-	decode(	inp: DataStream) { 
-		this.responseHeader.decode(inp);
-		this.lastCounterResetTime = ec.decodeDateTime(inp);
-		this.servers = ec.decodeArray(inp,decodeServerOnNetwork);
+ encode( out: DataStream) {
+  this.responseHeader.encode(out);
+  ec.encodeDateTime(this.lastCounterResetTime, out);
+  ec.encodeArray(this.servers, out);
 
-	}
+ }
 
 
-	clone(	target?: FindServersOnNetworkResponse): FindServersOnNetworkResponse { 
-		if(!target) {
-			target = new FindServersOnNetworkResponse();
-		}
-		if (this.responseHeader) { target.responseHeader = this.responseHeader.clone();}
-		target.lastCounterResetTime = this.lastCounterResetTime;
-		if (this.servers) { target.servers = ec.cloneComplexArray(this.servers);}
-		return target;
-	}
+ decode( inp: DataStream) {
+  this.responseHeader.decode(inp);
+  this.lastCounterResetTime = ec.decodeDateTime(inp);
+  this.servers = ec.decodeArray(inp, decodeServerOnNetwork);
+
+ }
+
+
+ clone( target?: FindServersOnNetworkResponse): FindServersOnNetworkResponse {
+  if (!target) {
+   target = new FindServersOnNetworkResponse();
+  }
+  if (this.responseHeader) { target.responseHeader = this.responseHeader.clone(); }
+  target.lastCounterResetTime = this.lastCounterResetTime;
+  if (this.servers) { target.servers = ec.cloneComplexArray(this.servers); }
+  return target;
+ }
 
 
 }
-export function decodeFindServersOnNetworkResponse(	inp: DataStream): FindServersOnNetworkResponse { 
-		const obj = new FindServersOnNetworkResponse();
-			obj.decode(inp); 
-			return obj;
+export function decodeFindServersOnNetworkResponse( inp: DataStream): FindServersOnNetworkResponse {
+  const obj = new FindServersOnNetworkResponse();
+   obj.decode(inp);
+   return obj;
 
-	}
+ }
 
 
 
 import {register_class_definition} from '../factory/factories_factories';
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition("FindServersOnNetworkResponse",FindServersOnNetworkResponse, makeExpandedNodeId(12209,0));
+register_class_definition('FindServersOnNetworkResponse', FindServersOnNetworkResponse, makeExpandedNodeId(12209, 0));

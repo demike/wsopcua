@@ -1,5 +1,5 @@
-import { IEncodable } from "../factory/factories_baseobject";
-import { Int8, UInt8, Int16, UInt32, UInt16 } from "./integers";
+import { IEncodable } from '../factory/factories_baseobject';
+import { Int8, UInt8, Int16, UInt32, UInt16 } from './integers';
 
 // import {assert} from '../assert';
 
