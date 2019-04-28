@@ -116,7 +116,7 @@ export {parseEndpointUrl, is_valid_endpointUrl} from '../transport/tools';
 export * from '../basic-types';
 
 // version
-export var version = 0.1;          //     = require("./package.json").version;
+export let version = 0.1;          //     = require("./package.json").version;
 
 
 // filtering tools

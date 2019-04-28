@@ -143,7 +143,7 @@ protected _getApplicationUri(): Promise<string> {
 }
 
 
-protected __resolveEndPoint(): boolean{
+protected __resolveEndPoint(): boolean {
 
     this.securityPolicy = this.securityPolicy || SecurityPolicy.None;
 
@@ -307,7 +307,8 @@ protected async __createSession_step2(session: ClientSession, callback: Response
 
 }
 
-public computeClientSignature(channel: ClientSecureChannelLayer, serverCertificate: Uint8Array, serverNonce: Uint8Array): Promise<SignatureData> {
+public computeClientSignature(channel: ClientSecureChannelLayer, serverCertificate: Uint8Array, serverNonce: Uint8Array):
+        Promise<SignatureData> {
     return computeSignature(serverCertificate, serverNonce, this.getPrivateKey(), (<any>channel).messageBuilder._securityPolicy);
 }
 
@@ -816,7 +817,7 @@ public withSession(endpointUrl: string, inner_func: (sess: ClientSession, cb: Er
 // OPCUAClient.prototype.closeSession = thenify.withCallback(OPCUAClient.prototype.closeSession);
 
 
-public withSubscription(endpointUrl: string, subscriptionParameters: ICreateSubscriptionRequest, 
+public withSubscription(endpointUrl: string, subscriptionParameters: ICreateSubscriptionRequest,
     innerFunc: (arg0: ClientSession, arg1: ClientSubscription, arg2: () => void) => void, callback: ErrorCallback) {
 
     assert('function' === typeof innerFunc);
@@ -875,7 +876,8 @@ function createAnonymousIdentityToken(session: ClientSession): session_service.A
     return new AnonymousIdentityToken({policyId: userTokenPolicy.policyId});
 }
 
-async function createUserNameIdentityToken(session: ClientSession, userName: string, password: string): Promise<session_service.UserNameIdentityToken> {
+async function createUserNameIdentityToken(session: ClientSession, userName: string, password: string):
+        Promise<session_service.UserNameIdentityToken> {
 
     // assert(endpoint instanceof EndpointDescription);
     assert(userName === null || typeof userName === 'string');
@@ -920,7 +922,7 @@ async function createUserNameIdentityToken(session: ClientSession, userName: str
     }
         // **nomsgcrypt**
 
-    let serverNonce = session.serverNonce || new Uint8Array(0);
+    const serverNonce = session.serverNonce || new Uint8Array(0);
     // assert(serverNonce instanceof Uint8Array);
 
     // If None is specified for the UserTokenPolicy and SecurityPolicy is None
@@ -943,7 +945,7 @@ async function createUserNameIdentityToken(session: ClientSession, userName: str
 
     // istanbul ignore next
     if (!cryptoFactory) {
-        throw new Error(" Unsupported security Policy");
+        throw new Error(' Unsupported security Policy');
     }
 
     identityToken = new UserNameIdentityToken({
@@ -981,7 +983,7 @@ async function createUserNameIdentityToken(session: ClientSession, userName: str
     const publicKey = await generatePublicKeyFromDER(session.serverCertificate);
     const buffer = await cryptoFactory.asymmetricEncrypt(block, publicKey);
     identityToken.password = new Uint8Array(buffer);
-   } catch( err) {
+   } catch ( err) {
        console.log(err.message);
    }
     return identityToken;

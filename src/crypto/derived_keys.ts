@@ -11,7 +11,7 @@ import { assert } from '../assert';
 const crypto: SubtleCrypto = window.crypto.subtle;
 
 async function HMAC_HASH(sha1or256: 'SHA-1' | 'SHA-256', secret: ArrayBuffer, message: ArrayBuffer) {
-    //return crypto.sign('HMAC', CryptoKey. sha1or256, secret);
+    // return crypto.sign('HMAC', CryptoKey. sha1or256, secret);
     const key = await crypto.importKey(
         'raw', // raw format of the key - should be Uint8Array
         secret,
@@ -27,8 +27,8 @@ async function HMAC_HASH(sha1or256: 'SHA-1' | 'SHA-256', secret: ArrayBuffer, me
 }
 
 function plus(buf1: ArrayBuffer, buf2: ArrayBuffer): ArrayBuffer {
-    const tmp = new Uint8Array(buf1.byteLength + buf2.byteLength)
-    tmp.set(new Uint8Array(buf1), 0)
+    const tmp = new Uint8Array(buf1.byteLength + buf2.byteLength);
+    tmp.set(new Uint8Array(buf1), 0);
     tmp.set(new Uint8Array(buf2), buf1.byteLength);
     return tmp;
 }
