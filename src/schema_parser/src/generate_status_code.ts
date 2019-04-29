@@ -44,7 +44,8 @@ function parseStatusCodeXML() {
     outFile.write('// this file has been automatically generated\n');
     outFile.write('// tslint:disable: max-line-length\n');
     outFile.write('// tslint:disable: quotemark\n');
-    outFile.write(' export const StatusCodes = { \n');
+    outFile.write('import { IStatusCodeOptions } from \'../basic-types/status_code\';\n');
+    outFile.write(' export const StatusCodes: {[key: string]: IStatusCodeOptions} = { \n');
     outFile.write('  Good: { name: \'Good\', value: 0, description: "No Error" }\n');
 
     const sep = ',';

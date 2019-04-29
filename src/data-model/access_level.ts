@@ -9,6 +9,8 @@
 
 import {registerBasicType} from '../factory/factories_basic_type';
 import * as utils from '../utils';
+import { DataStream } from '../basic-types/DataStream';
+import { Variant } from '../variant';
 
 export enum AccessLevelFlag {
     CurrentRead =    0x01, // bit 0 : Indicate if the current value is readable (0 means not readable, 1 means readable).
@@ -25,12 +27,12 @@ export enum AccessLevelFlag {
 
 // @example
 //      makeAccessLevel("CurrentRead | CurrentWrite").should.eql(0x03);
-export function makeAccessLevel(str): AccessLevelFlag {
-    let accessFlag;
-    if (str === '' || str === 0 ) {
+export function makeAccessLevel(str: string): AccessLevelFlag {
+    let accessFlag: AccessLevelFlag;
+    if (str === '' /*|| str === 0*/ ) {
         accessFlag = AccessLevelFlag.NONE;
     } else {
-        accessFlag = AccessLevelFlag[str];
+        accessFlag = AccessLevelFlag[str as keyof typeof AccessLevelFlag];
     }
 
     if (utils.isNullOrUndefined(accessFlag)) {
@@ -46,12 +48,12 @@ registerBasicType({
     defaultValue: function () {
         return makeAccessLevel('CurrentRead | CurrentWrite');
     },
-    encode: function (value, stream) {
+    encode: function (value: Variant, stream: DataStream) {
         // tslint:disable-next-line:no-bitwise
-        stream.writeUInt8(value.value & 0x8f);
+        stream.setUint8(value.value & 0x8f);
     },
-    decode: function (stream) {
-        const code = stream.readUInt8();
+    decode: function (stream: DataStream) {
+        const code = stream.getUint8();
         return code ? code : AccessLevelFlag.NONE;
     },
     coerce: function (value) {

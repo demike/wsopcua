@@ -171,9 +171,13 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     protected _keepAliveManager: ClientSessionKeepAliveManager;
 
     protected lastRequestSentTime: number;
-    protected lastResponseReceivedTime: number;
+    protected _lastResponseReceivedTime: number;
     protected _timeout: number;
     protected _namespaceArray: string[] | undefined;
+
+    get lastResponseReceivedTime() {
+        return this._lastResponseReceivedTime;
+    }
 
     public static coerceBrowseDescription(data: string|NodeId|IBrowseDescription): BrowseDescription {
         if (typeof data === 'string' || data instanceof NodeId) {
@@ -1245,7 +1249,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
         this._client.performMessageTransaction(request, (err: Error, response: OpcUaResponse) => {
 
-            this.lastResponseReceivedTime = Date.now();
+            this._lastResponseReceivedTime = Date.now();
 
             /* istanbul ignore next */
             if (err) {

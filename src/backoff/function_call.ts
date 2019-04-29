@@ -52,28 +52,28 @@ constructor(fn: Function, args: any[], callback: Function) {
 }
 
 // The default retry predicate which considers any error as retriable.
-public static DEFAULT_RETRY_PREDICATE_(err): boolean {
+public static DEFAULT_RETRY_PREDICATE_(err: Error): boolean {
   return true;
 }
 
 // Checks whether the call is pending.
 public isPending(): boolean {
-    return this.state_ == FunctionCallState.PENDING;
+    return this.state_ === FunctionCallState.PENDING;
 }
 
 // Checks whether the call is in progress.
 public isRunning(): boolean {
-    return this.state_ == FunctionCallState.RUNNING;
+    return this.state_ === FunctionCallState.RUNNING;
 }
 
 // Checks whether the call is completed.
 public isCompleted(): boolean {
-    return this.state_ == FunctionCallState.COMPLETED;
+    return this.state_ === FunctionCallState.COMPLETED;
 }
 
 // Checks whether the call is aborted.
 public isAborted(): boolean {
-    return this.state_ == FunctionCallState.ABORTED;
+    return this.state_ === FunctionCallState.ABORTED;
 }
 
 // Sets the backoff strategy to use. Can only be called before the call is
@@ -90,7 +90,7 @@ public setStrategy(strategy: BackoffStrategy) {
 // returned from the wrapped function should be retried or not, e.g. a
 // network error would be retriable while a type error would stop the
 // function call.
-public retryIf(retryPredicate) {
+public retryIf(retryPredicate: (err: any) => boolean) {
     if (!this.isPending()) {
         throw new Error('FunctionCall in progress.');
     }
@@ -136,7 +136,7 @@ public abort() {
 
 // Initiates the call to the wrapped function. Accepts an optional factory
 // function used to create the backoff instance; used when testing.
-public start(backoffFactory) {
+public start(backoffFactory: (arg0: BackoffStrategy) => Backoff) {
     if (!this.isPending()) {
         throw new Error('FunctionCall already started.');
     }
@@ -144,7 +144,7 @@ public start(backoffFactory) {
         throw new Error('FunctionCall is aborted.');
     }
 
-    let strategy = this.strategy_ || new FibonacciBackoffStrategy();
+    const strategy = this.strategy_ || new FibonacciBackoffStrategy();
 
     this.backoff_ = backoffFactory ?
         backoffFactory(strategy) :
@@ -167,9 +167,9 @@ protected doCall_(isRetry: boolean) {
     if (isRetry) {
         this.numRetries_++;
     }
-    let eventArgs = ['call'].concat(this.arguments_);
+    const eventArgs = ['call'].concat(this.arguments_);
     this.emit(<any>eventArgs);
-    let callback = this.handleFunctionCallback_.bind(this);
+    const callback = this.handleFunctionCallback_.bind(this);
     this.function_.apply(null, this.arguments_.concat(callback));
 }
 
@@ -186,11 +186,11 @@ protected handleFunctionCallback_() {
         return;
     }
 
-    let args = Array.prototype.slice.call(arguments);
+    const args = Array.prototype.slice.call(arguments);
     this.lastResult_ = args; // Save last callback arguments.
     this.emit( <any>['callback'].concat(args));
 
-    let err = args[0];
+    const err = args[0];
     if (err && this.retryPredicate_(err)) {
         this.backoff_.backoff(err);
     } else {
@@ -200,7 +200,7 @@ protected handleFunctionCallback_() {
 }
 
 // Handles the backoff event by reemitting it.
-protected handleBackoff_(number, delay, err) {
+protected handleBackoff_(number: number, delay: number, err: Error) {
     this.emit('backoff', number, delay, err);
 }
 }

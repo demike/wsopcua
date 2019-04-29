@@ -2,15 +2,16 @@
 /**
  * @module services.secure-channel
  */
-import {ChannelSecurityToken as ChannelSecurityTokenGen} from '../generated/ChannelSecurityToken';
+
+import {ChannelSecurityToken} from '../generated/ChannelSecurityToken';
+export {ChannelSecurityToken} from '../generated/ChannelSecurityToken';
+
 /**
  * @property expired
  * @type {Boolean} - True if the security token has expired.
  */
-export class ChannelSecurityToken extends ChannelSecurityTokenGen {
-    public get expired() {
-        return (this.createdAt.getTime() + this.revisedLifetime) < Date.now();
-    }
+export function isExpired(token: ChannelSecurityToken): boolean {
+    return (this.createdAt.getTime() + this.revisedLifetime) < Date.now();
 }
 
 export {OpenSecureChannelRequest} from '../generated/OpenSecureChannelRequest';

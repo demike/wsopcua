@@ -7,7 +7,6 @@
 import {assert} from '../assert';
 
 const crypto: Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
-import async_map from 'async-es/map';
 import async_series from 'async-es/series';
 // **nomsgcrypt** var exploreCertificate = require("node-opcua-crypto").crypto_explore_certificate.exploreCertificate;
 

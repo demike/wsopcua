@@ -7,7 +7,7 @@ import {assert} from '../assert';
 import {StatusCodes} from '../constants';
 import { DataStream } from './DataStream';
 
-const extraStatusCodeBits = {
+const extraStatusCodeBits: {[key: string]: number} = {
 
 // StatusCode Special bits
 //
@@ -112,7 +112,7 @@ StatusCodes['Uncertain'] = {
 
 
 
-interface IStatusCodeOptions {
+export interface IStatusCodeOptions {
     value: number;
     description: string;
     name: string;
@@ -158,7 +158,7 @@ public toString(): string {
     return this.name + ' (0x' + ('0000' + this.value.toString(16)).substr(-8) + ')';
 }
 
-public checkBit(mask): boolean {
+public checkBit(mask: number): boolean {
     return (this.value  & mask  ) === mask ;
 }
 
@@ -189,18 +189,21 @@ public equals(other: IStatusCodeOptions) {
 }
 
 class ConstantStatusCode extends StatusCode {
-    constructor(options) {
+    constructor(options: IStatusCodeOptions) {
         super(options);
     }
 }
 
+/* construct status codes fast search indexes */
+const StatusCodes_reverse_map: {[key: number]: ConstantStatusCode} = {};
 
-export const encodeStatusCode = function (statusCode, stream: DataStream) {
-    assert(statusCode instanceof StatusCode || statusCode instanceof ConstantStatusCode);
+
+export const encodeStatusCode = function (statusCode: StatusCode, stream: DataStream) {
+    assert(statusCode instanceof StatusCode);
     stream.setUint32(statusCode.value);
 };
 
-function b(c) {
+function b(c: number) {
     const tmp = '0000000000000000000000' + (c >>> 0).toString(2);
     return tmp.substr(-32);
 }
@@ -215,7 +218,7 @@ export const decodeStatusCode = function (stream: DataStream) {
     // xx console.log(b(code_without_info_bits));
     let sc = StatusCodes_reverse_map[code_without_info_bits];
     if (!sc) {
-        sc = StatusCodes['Bad'];
+        sc = <ConstantStatusCode>StatusCodes['Bad'];
         console.warn('expecting a known StatusCode but got 0x' + code_without_info_bits.toString(16));
     }
     if (info_bits) {
@@ -226,8 +229,6 @@ export const decodeStatusCode = function (stream: DataStream) {
     return sc;
 };
 
-/* construct status codes fast search indexes */
-const StatusCodes_reverse_map = {};
 // tslint:disable-next-line:forin
 for (const codeName in StatusCodes) {
      const csc = new ConstantStatusCode(StatusCodes[codeName]);
@@ -332,7 +333,7 @@ unset(bit) {
 }
 
 // return a status code that can be modified
-StatusCodes['makeStatusCode'] = function(statusCode, optionalBits) {
+function makeStatusCode(statusCode: IStatusCodeOptions, optionalBits) {
     const tmp = new ModifiableStatusCode({
         _base: statusCode
     });
@@ -343,7 +344,7 @@ StatusCodes['makeStatusCode'] = function(statusCode, optionalBits) {
 };
 
 
-StatusCodes['GoodWithOverflowBit'] = (<any>StatusCodes).makeStatusCode(StatusCodes.Good, 'Overflow | InfoTypeDataValue');
+StatusCodes['GoodWithOverflowBit'] = makeStatusCode(StatusCodes.Good, 'Overflow | InfoTypeDataValue');
 
 export function coerceStatusCode(statusCode) {
     if (statusCode instanceof StatusCode) {

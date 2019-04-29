@@ -100,7 +100,7 @@ export function randomNodeId() {
 }
 
 
-function _encodeNodeId(encoding_byte: number, nodeId, stream: DataStream) {
+function _encodeNodeId(encoding_byte: number, nodeId: NodeId, stream: DataStream) {
 
     stream.setUint8(encoding_byte); // encoding byte
 
@@ -109,28 +109,28 @@ function _encodeNodeId(encoding_byte: number, nodeId, stream: DataStream) {
 
     switch (encoding_byte) {
         case EnumNodeIdEncoding.TwoBytes:
-            stream.setUint8(nodeId ? nodeId.value : 0);
+            stream.setUint8(nodeId ? nodeId.value as number : 0);
             break;
         case EnumNodeIdEncoding.FourBytes:
             stream.setUint8(nodeId.namespace);
-            stream.setUint16(nodeId.value);
+            stream.setUint16(nodeId.value as number);
             break;
         case EnumNodeIdEncoding.Numeric:
             stream.setUint16(nodeId.namespace);
-            stream.setUint32(nodeId.value);
+            stream.setUint32(nodeId.value as number);
             break;
         case EnumNodeIdEncoding.String:
             stream.setUint16(nodeId.namespace);
-            encodeString(nodeId.value, stream);
+            encodeString(nodeId.value as string, stream);
             break;
         case EnumNodeIdEncoding.ByteString:
             stream.setUint16(nodeId.namespace);
-            encodeByteString(nodeId.value, stream);
+            encodeByteString(nodeId.value as Uint8Array, stream);
             break;
         default:
             assert(encoding_byte === EnumNodeIdEncoding.Guid);
             stream.setUint16(nodeId.namespace);
-            encodeGuid(nodeId.value, stream);
+            encodeGuid(nodeId.value as string, stream);
             break;
     }
 
@@ -157,7 +157,7 @@ export function encodeExpandedNodeId(expandedNodeId: ExpandedNodeId, stream: Dat
     }
 }
 
-const _decodeNodeId = function (encoding_byte, stream: DataStream) {
+const _decodeNodeId = function (encoding_byte: EnumNodeIdEncoding, stream: DataStream) {
 
     let value, namespace, nodeIdType;
     // tslint:disable-next-line:no-bitwise

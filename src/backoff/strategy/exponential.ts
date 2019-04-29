@@ -2,7 +2,7 @@
 //      Licensed under the MIT license.
 
 
-import { BackoffStrategy } from './strategy';
+import { BackoffStrategy, IBackoffStrategyOptions } from './strategy';
 
 
 // Exponential backoff strategy.
@@ -17,7 +17,7 @@ export class ExponentialBackoffStrategy extends BackoffStrategy {
     protected nextBackoffDelay_: number;
     protected backoffDelay_: number;
 
-    constructor(options) {
+    constructor(options: IBackoffStrategyOptions & {factor?: number}) {
         super(options);
         this.backoffDelay_ = 0;
         this.nextBackoffDelay_ = this.getInitialDelay();

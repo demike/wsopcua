@@ -39,6 +39,14 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
     protected _tick1: number;
     sequenceHeader: any;
 
+    get tick0() {
+        return this._tick0;
+    }
+ 
+    get tick1() {
+        return this._tick1;
+    }
+
     constructor(options?: any) {
         super();
         options = options || {};
@@ -128,7 +136,7 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
      * @method feed
      * @param data
      */
-    feed(data) {
+    feed(data: DataView) {
         if (!this.security_defeated && !this.status_error) {
             this.packetAssembler.feed(data);
         }
@@ -169,7 +177,7 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
             return this._append(messageChunk);
         }
     }
-    _report_error(errorMessage) {
+    _report_error(errorMessage: string) {
         this.status_error = true;
         // console.log("MESSAGE BUILDER ERROR".yellow, errorMessage.red);
         /**
@@ -185,5 +193,5 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
         this.removeAllListeners();
     }
 
-    protected abstract _decode_message_body(full_message_body);
+    protected abstract _decode_message_body(full_message_body: ArrayBuffer): boolean;
 }

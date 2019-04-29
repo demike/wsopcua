@@ -2,12 +2,12 @@ import { DataStream } from './DataStream';
 
 export type Guid = string;
 
-function toHex(i, nb) {
+function toHex(i: number, nb: number) {
     return ('000000000000000' + i.toString(16)).substr(-nb);
 }
 
 
-function getRandomInt(min, max) {
+function getRandomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -52,7 +52,7 @@ export function encodeGuid(guid: string, stream: DataStream): void {
         // |        |    |    | |  | | | | | |
         // 12345678-1234-1234-ABCD-0123456789AB
         // 00000000-0000-0000-0000-000000000000";
-        function write_UInt32(starts) {
+        function write_UInt32(starts: number[]) {
             let start;
             let i;
             const n = starts.length;
@@ -62,7 +62,7 @@ export function encodeGuid(guid: string, stream: DataStream): void {
             }
         }
 
-        function write_UInt16(starts) {
+        function write_UInt16(starts: number[]) {
             let start;
             let i;
             const n = starts.length;
@@ -72,7 +72,7 @@ export function encodeGuid(guid: string, stream: DataStream): void {
             }
         }
 
-        function write_UInt8(starts) {
+        function write_UInt8(starts: number[]) {
             let start;
             let i;
             const n = starts.length;
@@ -102,7 +102,7 @@ export function encodeGuid(guid: string, stream: DataStream): void {
             return toHex(stream.getUint8(), 2);
         }
 
-        function read_many(func, nb) {
+        function read_many(func: () => string, nb: number) {
             let result = '';
             let i: number;
             for (i = 0; i < nb; i++) {

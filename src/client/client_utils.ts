@@ -68,7 +68,7 @@ function readVariableProperties(session: ClientSession, nodeId: NodeId, varObj: 
                 }));
                 actions.push(function (readResult: DataValue) {
                     // to do assert is
-                    varObj[propertyName] = readResult.value.value;
+                    (<any>varObj)[propertyName] = readResult.value.value;
                 });
             }
         }
@@ -140,7 +140,7 @@ export function readUAAnalogItem(session: ClientSession, nodeId: NodeId, callbac
         browsePathPropertyRequest(nodeId, 'Definition')
     ];
 
-    const analogItemData: Object = {
+    const analogItemData: {[key: string]: any} = {
         engineeringUnits: null,
         engineeringUnitsRange: null,
         instrumentRange: null,
@@ -326,7 +326,7 @@ export function readHistoryServerCapabilities(the_session: ClientSession,
                     // xx console.log(properties[i] , "=",
                     // xx     dataValues[i].value ? dataValues[i].value.toString() :"<null>" + dataValues[i].statusCode.toString());
                     const propName = lowerFirstLetter(properties[i]);
-                    data[propName] = dataValues[i].value.value;
+                    (<any>data)[propName] = dataValues[i].value.value;
                 }
                 callback(null, data);
             });

@@ -13,6 +13,13 @@ import { SignatureData } from '../generated/SignatureData';
 import {AsymmetricAlgorithmSecurityHeader, SymmetricAlgorithmSecurityHeader} from '../service-secure-channel';
 import {SecureMessageChunkManager, SecureMessageChunkManagerOptions} from './secure_message_chunk_manager';
 import { ISymmetricAlgortihmSecurityHeader } from '../service-secure-channel/SymmetricAlgorithmSecurityHeader';
+import { DerivedKeys, computeDerivedKeys } from '../crypto';
+import { IEncodable } from '../factory/factories_baseobject';
+
+export interface IMessageChunkerOptions {
+    securityHeader?: AsymmetricAlgorithmSecurityHeader|SymmetricAlgorithmSecurityHeader;
+    derivedKeys?: DerivedKeys;
+}
 
 /**
  * @class MessageChunker
@@ -24,8 +31,8 @@ import { ISymmetricAlgortihmSecurityHeader } from '../service-secure-channel/Sym
 export class MessageChunker {
 
     protected _sequenceNumberGenerator: SequenceNumberGenerator;
-    protected _securityHeader;
-    protected _derivedKeys;
+    protected _securityHeader: AsymmetricAlgorithmSecurityHeader|SymmetricAlgorithmSecurityHeader;
+    protected _derivedKeys: DerivedKeys;
     protected _stream: DataStream;
 
     get securityHeader() {
@@ -36,7 +43,7 @@ export class MessageChunker {
         this._securityHeader = header;
     }
 
-    constructor(options) {
+    constructor(options: IMessageChunkerOptions) {
 
         this._sequenceNumberGenerator = new SequenceNumberGenerator();
         this.update(options);
@@ -58,7 +65,7 @@ export class MessageChunker {
  * @param [options.derivedKeys] {Object} derivedKeys
  *
  */
-public update(options) {
+public update(options: IMessageChunkerOptions) {
 
     options = options || {};
     options.securityHeader = options.securityHeader ||
@@ -86,7 +93,7 @@ public update(options) {
  * @param messageChunkCallback   {Function}
  */
 public chunkSecureMessage(msgType: string, options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader,
-     message, messageChunkCallback: (chunk: DataView) => void) {
+     message: IEncodable, messageChunkCallback: (chunk: DataView) => void) {
 
     options = <any>options || {};
     assert('function' === typeof messageChunkCallback);

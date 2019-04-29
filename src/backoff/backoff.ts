@@ -10,10 +10,10 @@ export type BackoffEvents = 'fail' | 'backoff' | 'ready';
 export class Backoff extends EventEmitter<BackoffEvents> {
     handlers: { backoff: any; };
     timeoutID_: number;
-    backoffDelay_: any;
-    maxNumberOfRetry_: any;
-    backoffNumber_: any;
-    backoffStrategy_: any;
+    backoffDelay_: number;
+    maxNumberOfRetry_: number;
+    backoffNumber_: number;
+    backoffStrategy_: BackoffStrategy;
     constructor(backoffStrategy: BackoffStrategy) {
         super();
 
@@ -41,7 +41,7 @@ export class Backoff extends EventEmitter<BackoffEvents> {
 
     // Starts a backoff operation. Accepts an optional parameter to let the
     // listeners know why the backoff operation was started.
-    public backoff(err) {
+    public backoff(err: Error) {
         if (this.timeoutID_ !== -1) {
             throw new Error('Backoff in progress.');
         }

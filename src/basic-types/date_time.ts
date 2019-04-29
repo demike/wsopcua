@@ -5,7 +5,7 @@ import { DataStream } from './DataStream';
 
 
 //  Date(year, month [, day, hours, minutes, seconds, ms])
-export function isValidDateTime(value): boolean {
+export function isValidDateTime(value: any): boolean {
     return value instanceof Date;
 }
 
@@ -17,7 +17,7 @@ export function isValidDateTime(value): boolean {
  * @return {*}
  * @private
  */
-function getRandomInt(min, max) {
+function getRandomInt(min: number, max: number) {
     // note : Math.random() returns a random number between 0 (inclusive) and 1 (exclusive):
     return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -56,7 +56,7 @@ export function decodeDateTime(stream: DataStream) {
 }
 
 
-export function coerceDateTime(value) {
+export function coerceDateTime(value: string | number | Date) {
     return new Date(value);
 }
 
@@ -171,7 +171,7 @@ export function bn_dateToHundredNanoSecondFrom1601(date: Date) {
     return high_low;
 }
 
-export function bn_hundredNanoSecondFrom1601ToDate(high, low) {
+export function bn_hundredNanoSecondFrom1601ToDate(high: number, low: number) {
     // xx assert(_.isFinite(high), _.isFinite(low));
 
     //   (h * F + l)/f    - o=
@@ -192,7 +192,7 @@ export function bn_hundredNanoSecondFrom1601ToDate(high, low) {
     return date;
 }
 
-let last_now_date = null;
+let last_now_date: Date = null;
 let last_picoseconds = 0;
 
 export function getCurrentClock() {
@@ -209,7 +209,7 @@ export function getCurrentClock() {
     };
 }
 
-export function coerceClock(timestamp, picoseconds) {
+export function coerceClock(timestamp: Date, picoseconds: number) {
     if (timestamp) {
         return {
             timestamp: timestamp,

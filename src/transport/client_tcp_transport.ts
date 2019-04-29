@@ -126,7 +126,7 @@ constructor() {
     this._connected = false;
 }
 
-public on_socket_ended(err) {
+public on_socket_ended(err: Error) {
     if (this._connected) {
         super.on_socket_ended(err);
     }
@@ -167,13 +167,13 @@ public connect(endpointUrl: string, callback: ErrorCallback, options?) {
     this._socket.name = 'CLIENT';
     this._install_socket(this._socket);
 
-    const _on_socket_error_for_connect = (err) => {
+    const _on_socket_error_for_connect = (err: Error) => {
         // this handler will catch attempt to connect to an inaccessible address.
         assert(err instanceof Error);
         _remove_connect_listeners();
         callback(err);
     };
-    function _on_socket_end_for_connect(err) {
+    function _on_socket_end_for_connect(err: Error) {
         console.log('Socket has been closed by server', err);
     }
 
@@ -182,7 +182,7 @@ public connect(endpointUrl: string, callback: ErrorCallback, options?) {
         this._socket.removeListener('end'  , _on_socket_end_for_connect);
     };
 
-    const _on_socket_error_after_connection = (err) => {
+    const _on_socket_error_after_connection = (err: Error) => {
         debugLog(' ClientTCP_transport Socket Error', err.message);
 
         // EPIPE : EPIPE (Broken pipe): A write on a pipe, socket, or FIFO for which there is no process to read the
@@ -233,7 +233,7 @@ public connect(endpointUrl: string, callback: ErrorCallback, options?) {
 }
 
 
-protected _handle_ACK_response(message_chunk, callback) {
+protected _handle_ACK_response(message_chunk: DataView, callback: ErrorCallback) {
 
     const _stream = new DataStream(message_chunk);
     const messageHeader = readMessageHeader(_stream);
@@ -289,7 +289,7 @@ protected _send_HELLO_request() {
 }
 
 
-protected _perform_HEL_ACK_transaction(callback) {
+protected _perform_HEL_ACK_transaction(callback: ErrorCallback) {
 
 
     assert(this._socket);
@@ -297,7 +297,7 @@ protected _perform_HEL_ACK_transaction(callback) {
 
     let counter = 0;
 
-    this._install_one_time_message_receiver(function on_ACK_response(err, data) {
+    this._install_one_time_message_receiver( (err, data) => {
 
         assert(counter === 0);
         counter += 1;

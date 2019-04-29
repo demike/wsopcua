@@ -51,7 +51,7 @@ function roundToFloat2(float: number) {
 }
 
 const r = new Float32Array(1);
-function roundToFloat(float) {
+function roundToFloat(float: number) {
     r[0] = float;
     const float_r = r[0];
     return float_r;
@@ -61,7 +61,7 @@ export function randomFloat() {
     return roundToFloat(getRandomDouble(-1000, 1000));
 }
 
-export function encodeFloat(value, stream: DataStream) {
+export function encodeFloat(value: number, stream: DataStream) {
     stream.setFloat32(value);
 }
 
@@ -71,7 +71,7 @@ export function decodeFloat(stream: DataStream) {
     // xx return roundToFloat(float);
 }
 
-export function isValidDouble(value) {
+export function isValidDouble(value: number) {
     if (!Number.isFinite(value)) {
         return false;
     }
@@ -90,13 +90,13 @@ export function decodeDouble(stream: DataStream) {
     return stream.getFloat64();
 }
 
-export function coerceFloat(value) {
+export function coerceFloat(value: string) {
     if (value === null || value === undefined) {
         return value;
     }
     return parseFloat(value);
 }
-export function coerceDouble(value) {
+export function coerceDouble(value: string) {
     if (value === null || value === undefined) {
         return value;
     }

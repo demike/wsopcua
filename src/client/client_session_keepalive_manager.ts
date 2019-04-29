@@ -14,10 +14,10 @@ export type ClientSessionKeepAliveManagerEvents = 'failure'|'keepalive';
 
 export class ClientSessionKeepAliveManager extends EventEmitter<ClientSessionKeepAliveManagerEvents> {
 
-    protected timerId;
-    protected session;
+    protected timerId: number;
+    protected session: ClientSession;
     protected pingTimeout: number;
-    protected lastKnownState: any;
+    protected lastKnownState;
     protected checkInterval: number;
 
 constructor ( session: ClientSession) {
@@ -94,7 +94,7 @@ public start() {
 
     this.pingTimeout   =  this.session.timeout * 2 / 3;
     this.checkInterval =  this.pingTimeout  / 3;
-    this.timerId = setInterval(this.ping_server.bind(this), this.checkInterval);
+    this.timerId = window.setInterval(this.ping_server.bind(this), this.checkInterval);
 }
 
 public stop(): void {

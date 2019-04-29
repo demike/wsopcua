@@ -43,9 +43,9 @@ export type TcpTransportEvents = 'connect'|'message'|'connection_break'|'close'|
 export class TCP_transport extends EventEmitter<TcpTransportEvents> {
 
 
-    packetAssembler: any;
+    packetAssembler: PacketAssembler;
     name: string;
-    _timerId: any;
+    _timerId: number;
     protected _socket: any;
     timeout: number;
     headerSize: number;
@@ -58,9 +58,9 @@ export class TCP_transport extends EventEmitter<TcpTransportEvents> {
     protected __disconnecting__: boolean;
     protected _on_socket_closed_called: boolean;
     protected _on_socket_ended_called: boolean;
-    protected _pending_buffer: any;
+    protected _pending_buffer: ArrayBuffer;
 
-    protected _the_callback: any;
+    protected _the_callback: ResponseCallback<DataView>;
 
     get disconnecting() {
         return this.__disconnecting__;
@@ -177,7 +177,7 @@ public write(message_chunk: ArrayBuffer) {
 }
 
 
-protected _fulfill_pending_promises(err, data?) {
+protected _fulfill_pending_promises(err: Error, data?: DataView) {
 
     this._cleanup_timers();
 
@@ -192,7 +192,7 @@ protected _fulfill_pending_promises(err, data?) {
 
 }
 
-protected _on_message_received(message_chunk) {
+protected _on_message_received(message_chunk: DataView) {
     const has_callback = this._fulfill_pending_promises(null, message_chunk);
     this.chunkReadCount ++;
 
@@ -220,14 +220,14 @@ protected _start_timeout_timer() {
 
 
     assert(!this._timerId, 'timer already started');
-    this._timerId = setTimeout( () => {
+    this._timerId = window.setTimeout( () => {
         this._timerId = null;
         this._fulfill_pending_promises(new Error('Timeout in waiting for data on socket ( timeout was = ' + this.timeout + ' ms )'));
     }, this.timeout);
 
 }
 
-public on_socket_closed(err) {
+public on_socket_closed(err: Error) {
 
     if (this._on_socket_closed_called) {
         return;
@@ -242,7 +242,7 @@ public on_socket_closed(err) {
     this.emit('socket_closed', err || null);
 }
 
-public on_socket_ended(err) {
+public on_socket_ended(err: Error) {
 
     assert(!this._on_socket_ended_called);
     this._on_socket_ended_called = true; // we don't want to send close event twice ...
@@ -254,14 +254,12 @@ public on_socket_ended(err) {
     this.emit('close', err || null);
 }
 
-protected _on_socket_ended_message =  function(err) {
+protected _on_socket_ended_message(err: Error) {
 
 
     if (this.__disconnecting__) {
         return;
     }
-    this._on_socket_ended = null;
-    this._on_data_received = null;
 
     debugLog('Transport Connection ended ' + self.name);
     assert(!this.__disconnecting__);
@@ -309,7 +307,7 @@ protected _install_socket(socket) {
             this.packetAssembler.feed(data);
         }
 
-    }).on('close', (had_error) => {
+    }).on('close', (had_error: any) => {
         // istanbul ignore next
         if (doDebug) {
             debugLog(' SOCKET CLOSE : had_error =' + had_error.toString() + this.name);
@@ -325,7 +323,7 @@ protected _install_socket(socket) {
         const err = had_error ? new Error('ERROR IN SOCKET') : null;
         this.on_socket_closed(err);
 
-    }).on('end', (err) => {
+    }).on('end', (err: Error) => {
 
         // istanbul ignore next
         if (doDebug) {
@@ -333,7 +331,7 @@ protected _install_socket(socket) {
         }
         this._on_socket_ended_message(err);
 
-    }).on('error', (err) => {
+    }).on('error', (err: Error) => {
         // istanbul ignore next
         if (doDebug) {
             debugLog(' SOCKET ERROR : ' + err.message + this._socket.name + this.name);
@@ -391,7 +389,7 @@ protected _install_one_time_message_receiver(callback: ResponseCallback<DataView
  * @async
  * @param callback
  */
-public disconnect(callback) {
+public disconnect(callback: () => void ) {
 
     assert('function' === typeof callback, 'expecting a callback function, but got ' + callback);
 

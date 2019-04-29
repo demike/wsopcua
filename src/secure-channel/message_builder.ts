@@ -22,13 +22,15 @@ import { DataStream } from '../basic-types/DataStream';
 
 import * as factory from '../factory';
 import * as crypto_utils from '../crypto';
+import { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
+import { DerivedKeys } from '../crypto';
 
 const decodeStatusCode = ec.decodeStatusCode;
 
 
 export class MessageBuilder extends MessageBuilderBase {
-    protected _tokenStack: any;
-    protected _privateKey: any;
+    protected _tokenStack: { securityToken: ChannelSecurityToken; derivedKeys: crypto_utils.DerivedKeys; }[];
+    protected _privateKey: string | CryptoKey;
     protected _cryptoFactory?: ICryptoFactory;
     protected _securityHeader: any;
     protected _previous_sequenceNumber: number;
@@ -166,7 +168,7 @@ protected async _decrypt_OPN(binaryStream: DataStream) {
 
         assert(typeof this._privateKey === 'string', 'expecting valid key');
 
-        const decryptedBuffer = new Uint8Array(await this._cryptoFactory.asymmetricDecrypt(buf, this._privateKey));
+        const decryptedBuffer = new Uint8Array(await this._cryptoFactory.asymmetricDecrypt(buf, this._privateKey as CryptoKey));
 
         // replace decrypted buffer in initial buffer#
         (new Uint8Array(binaryStream.view.buffer )).set(decryptedBuffer, binaryStream.pos);
@@ -210,19 +212,19 @@ protected async _decrypt_OPN(binaryStream: DataStream) {
 }
 
 
-public pushNewToken(securityToken, derivedKeys) {
+public pushNewToken(securityToken: ChannelSecurityToken, derivedKeys: DerivedKeys) {
 
     assert(securityToken.hasOwnProperty('tokenId'));
     // xx assert(derivedKeys ); in fact, can be null
 
     // TODO: make sure this list doesn't grow indefinitly
     this._tokenStack = this._tokenStack || [];
-    assert(this._tokenStack.length === 0 || this._tokenStack[0].tokenId !== securityToken.tokenId);
+    assert(this._tokenStack.length === 0 || this._tokenStack[0].securityToken.tokenId !== securityToken.tokenId);
     this._tokenStack.push({securityToken: securityToken, derivedKeys: derivedKeys});
 
 }
 
-protected _select_matching_token(tokenId) {
+protected _select_matching_token(tokenId: ec.UInt32) {
 
     let got_new_token = false;
     this._tokenStack = this._tokenStack || [];
@@ -400,7 +402,7 @@ protected _read_headers(binaryStream: DataStream) {
 }
 
 
-protected _safe_decode_message_body(full_message_body, objMessage  /*ExtensionObject*/, binaryStream) {
+protected _safe_decode_message_body(full_message_body: ArrayBuffer, objMessage  /*ExtensionObject*/, binaryStream: DataStream) {
     try {
         // de-serialize the object from the binary stream
         const options = this._objectFactory;
@@ -409,7 +411,7 @@ protected _safe_decode_message_body(full_message_body, objMessage  /*ExtensionOb
         console.log(err);
         console.log(err.stack);
         console.log(hexDump(full_message_body));
-        packet_analyzer(full_message_body);
+        packet_analyzer(new DataView(full_message_body));
 
         let i = 0;
         console.log(' ---------------- block');
@@ -422,7 +424,7 @@ protected _safe_decode_message_body(full_message_body, objMessage  /*ExtensionOb
     return true;
 }
 
-protected _decode_message_body(full_message_body) {
+protected _decode_message_body(full_message_body: ArrayBuffer): boolean {
 
     const binaryStream = new DataStream(full_message_body);
     const msgType = this.messageHeader.msgType;

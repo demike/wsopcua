@@ -56,7 +56,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     protected __disconnecting__: boolean;
     protected _on_socket_closed_called: boolean;
     protected _on_socket_ended_called: boolean;
-    protected _pending_buffer: any;
+    protected _pending_buffer: ArrayBuffer;
 
     protected _the_callback: ResponseCallback<DataView>;
 
@@ -291,7 +291,7 @@ protected _install_socket(socket: WebSocket) {
         minimumSizeInBytes: this.headerSize
     });
 
-    this.packetAssembler.on('message', (message_chunk) => {
+    this.packetAssembler.on('message', (message_chunk: DataView) => {
         this._on_message_received( message_chunk);
     });
 

@@ -17,6 +17,15 @@ import { UInt32 } from '../basic-types';
 const encode_UInt32 = ec.encodeUInt32;
 const decode_UInt32 = ec.decodeUInt32;
 
+export interface IAcknowledgeMessage {
+  protocolVersion?: UInt32;
+  receiveBufferSize?: UInt32;
+  sendBufferSize?: UInt32;
+  maxMessageSize?: UInt32;
+  maxChunkCount?: UInt32;
+
+}
+
 /**
  * @class AcknowledgeMessage
  * @constructor
@@ -29,7 +38,7 @@ const decode_UInt32 = ec.decodeUInt32;
  * @param  [options.maxChunkCount] {UInt32} The maximum number of chunks in any request message.
  */
 export class AcknowledgeMessage extends BaseUAObject {
-  constructor(options) {
+  constructor(options: IAcknowledgeMessage) {
     super();
     options = options || {};
     /* istanbul ignore next */

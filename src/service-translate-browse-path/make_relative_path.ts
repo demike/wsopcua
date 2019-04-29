@@ -89,7 +89,7 @@ const regRelativePath = new RegExp('(' + regReferenceType.source + ')(' + regBro
 function unescape(str: string): string {
     return str.replace(/&/g, '');
 }
-function makeQualifiedName(mm) {
+function makeQualifiedName(mm: RegExpMatchArray) {
     const strName = mm[10];
     if (!strName || strName.length === 0) {
         return new QualifiedName();

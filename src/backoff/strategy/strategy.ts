@@ -1,8 +1,14 @@
 //      Copyright (c) 2012 Mathieu Turcotte
 //      Licensed under the MIT license.
 
-function isDef(value) {
+function isDef(value: any) {
     return value !== undefined && value !== null;
+}
+
+export interface IBackoffStrategyOptions {
+    randomisationFactor?: number;
+    maxDelay?: number;
+    initialDelay?: number;
 }
 
 // Abstract class defining the skeleton for the backoff strategies. Accepts an
@@ -18,7 +24,7 @@ export class BackoffStrategy {
     protected randomisationFactor_: number;
     protected maxDelay_: number;
     protected initialDelay_: number;
-constructor(options) {
+constructor(options?: IBackoffStrategyOptions) {
     options = options || {};
 
     if (isDef(options.initialDelay) && options.initialDelay < 1) {

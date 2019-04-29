@@ -2,7 +2,7 @@
 import {getRandomInt} from './utils';
 import {DataStream} from './DataStream';
 
-export function isValidString(value) {
+export function isValidString(value: any) {
     return typeof value === 'string';
 }
 export function randomString() {

@@ -27,6 +27,7 @@ import {readMessageHeader} from '../chunkmanager';
 
 import {decodeMessage} from './tools';
 import { ErrorCallback } from '../client/client_base';
+import { IEncodableConstructor } from '../factory/factories_baseobject';
 
 function createClientSocket(endpointUrl: string): WebSocket {
     // create a socket based on Url
@@ -132,7 +133,7 @@ constructor() {
     this._connected = false;
 }
 
-public on_socket_ended(err) {
+public on_socket_ended(err: Error) {
     if (this._connected) {
         super.on_socket_ended(err);
     }
@@ -211,7 +212,7 @@ public connect(endpointUrl: string, callback: ErrorCallback, options?) {
 }
 
 
-protected _handle_ACK_response(message_chunk, callback) {
+protected _handle_ACK_response(message_chunk: DataView | ArrayBuffer, callback: ErrorCallback) {
 
     const _stream = new DataStream(message_chunk);
     const messageHeader = readMessageHeader(_stream);
@@ -223,12 +224,13 @@ protected _handle_ACK_response(message_chunk, callback) {
         return;
     }
 
-    let responseClass, response;
+    let responseClass;
+    let response;
 
     if (messageHeader.msgType === 'ERR') {
         responseClass = TCPErrorMessage;
         _stream.rewind();
-        response = decodeMessage(_stream, responseClass);
+        response = <TCPErrorMessage>decodeMessage(_stream, responseClass);
 
         const err = new Error('ACK: ERR received ' + response.statusCode.toString() + ' : ' + response.reason);
         (<any>err).statusCode =  response.statusCode;
@@ -268,7 +270,7 @@ protected _send_HELLO_request() {
 }
 
 
-protected _perform_HEL_ACK_transaction(callback) {
+protected _perform_HEL_ACK_transaction(callback: ErrorCallback) {
 
 
     assert(this._socket);

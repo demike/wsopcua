@@ -4,12 +4,14 @@
  */
 
 import {BinaryStreamSizeCalculator, DataStream} from '../basic-types/DataStream';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 
 
 
 export interface IEncodable {
     encode(stream: DataStream|BinaryStreamSizeCalculator): void;
     decode(stream: DataStream): void;
+    encodingDefaultBinary?: ExpandedNodeId;
 }
 
 export interface IEncodableConstructor {

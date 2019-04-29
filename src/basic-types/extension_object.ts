@@ -13,6 +13,7 @@ import { ExpandedNodeId } from '../wsopcua';
 import { constructObject } from '../factory/factories_factories';
 import { is_internal_id } from '../factory/factories_id_generator';
 import { registerType } from '../factory/factories_builtin_types';
+import { IEncodable } from '../factory/factories_baseobject';
 
 export class ExtensionObject {
 

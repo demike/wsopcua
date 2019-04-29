@@ -530,12 +530,12 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     }
 
 
-    protected _close_pending_sessions(callback) {
+    protected _close_pending_sessions(callback: ErrorCallback) {
 
         assert('function' === typeof callback);
 
         const sessions = this._sessions.slice(); // _.clone(this._sessions);
-        async_map(sessions, (session: ClientSession, next) => {
+        async_map(sessions, (session: ClientSession, next: () => void) => {
 
             assert(session.client === this);
             session.close(true, function (err) {
@@ -548,7 +548,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
                 next();
             });
 
-        }, (err) => {
+        }, (err: Error) => {
 
             // istanbul ignore next
             if (this._sessions.length > 0) {
@@ -607,15 +607,15 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
 
     // override me !
-    protected _on_connection_reestablished(callback) {
+    protected _on_connection_reestablished(callback: ErrorCallback) {
         callback();
     }
 
 
-    protected _addSession(session) {
-        assert(!session._client || session._client === this);
+    protected _addSession(session: ClientSession) {
+        assert(!session.client || session.client === this);
         assert(this._sessions.indexOf(session) < 0, 'session already added');
-        session._client = this;
+        session.client = this;
         this._sessions.push(session);
 
         if (this.keepSessionAlive) {
@@ -641,7 +641,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 * @method findEndpoint
 * @return {EndPoint}
 */
-    public findEndpoint(endpointUrl, securityMode, securityPolicy) {
+    public findEndpoint(endpointUrl: string, securityMode: MessageSecurityMode, securityPolicy: string) {
         assert(this.knowsServerEndpoint, 'Server end point are not known yet');
         return this._server_endpoints.find(function (endpoint) {
             return endpoint.endpointUrl === endpointUrl &&
@@ -703,7 +703,8 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         }
     }
 
-    private static __findEndpoint(endpointUrl: string, params: OPCUAClientOptions, callback) {
+    private static __findEndpoint(endpointUrl: string, params: OPCUAClientOptions, callback:
+        ResponseCallback<{selectedEndpoint: endpoints_service.EndpointDescription, endpoints: endpoints_service.EndpointDescription[]}>) {
 
         const securityMode = params.securityMode;
         const securityPolicy = params.securityPolicy;
@@ -718,8 +719,8 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
         const client = new OPCUAClientBase(options);
 
-        let selected_endpoint = null;
-        const all_endpoints = null;
+        let selected_endpoint: endpoints_service.EndpointDescription = null;
+        let all_endpoints: endpoints_service.EndpointDescription[] = null;
         const tasks = [
             function (cb: ErrorCallback) {
                 client.on('backoff', function () {
@@ -734,7 +735,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
             },
             function (cb: ErrorCallback) {
                 client.getEndpoints(null, (err, endpoints) => {
-
+                    all_endpoints = endpoints;
                     if (!err) {
                         endpoints.forEach(function (endpoint) {
                             if (endpoint.securityMode === securityMode && endpoint.securityPolicyUri === securityPolicy) {
@@ -843,7 +844,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         async_series([
 
             // ------------------------------------------------- STEP 2 : OpenSecureChannel
-            (_inner_callback) => {
+            (_inner_callback: ErrorCallback) => {
 
                 secureChannel = new ClientSecureChannelLayer({
                     defaultSecureTokenLifeTime: this.defaultSecureTokenLifetime,
@@ -886,7 +887,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
             },
             // ------------------------------------------------- STEP 3 : GetEndpointsRequest
-            (_inner_callback) => {
+            (_inner_callback: ErrorCallback) => {
 
                 if (!this.knowsServerEndpoint) {
                     assert(this._secureChannel !== null);
@@ -899,7 +900,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
                 }
             }
 
-        ], (err) => {
+        ], (err: Error) => {
 
             if (err) {
                 // xx this.disconnect(function () {

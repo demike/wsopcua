@@ -86,7 +86,7 @@ export function fromURI(uri: String): SecurityPolicy {
     if (a.length < 2) {
         return SecurityPolicy.Invalid;
     }
-    const v = SecurityPolicy[a[1]];
+    const v = SecurityPolicy[a[1] as keyof typeof SecurityPolicy];
     return v || SecurityPolicy.Invalid;
 }
 
@@ -179,7 +179,7 @@ function RSAOAEP_Encrypt(buffer: Uint8Array, publicKey: CryptoKey): Promise<Uint
 }
 
 
-
+//TODO: this should return a promise (async)
 export function compute_derived_keys(serverNonce: Uint8Array, clientNonce: Uint8Array) {
 
     const self = this;

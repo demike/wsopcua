@@ -18,6 +18,16 @@ const decode_UInt32 = ec.decodeUInt32;
 const encode_UAString = ec.encodeString;
 const decode_UAString = ec.decodeString;
 
+export interface IHelloMessage {
+  endpointUrl?: string;
+  maxChunkCount?: number;
+  maxMessageSize?: number;
+  sendBufferSize?: number;
+  receiveBufferSize?: number;
+  protocolVersion?: number;
+
+}
+
 /**
  * @class HelloMessage
  * @constructor
@@ -41,7 +51,7 @@ export class HelloMessage extends BaseUAObject {
   receiveBufferSize: number;
   protocolVersion: number;
 
-  constructor(options) {
+  constructor(options: IHelloMessage) {
   super();
     options = options || {};
 

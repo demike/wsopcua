@@ -15,34 +15,38 @@ import {SequenceHeader} from '../service-secure-channel';
  * @param messageChunk {DataStream}
  * @return {string}
  */
-export function messageHeaderToString(messageChunk) : string {
+export function messageHeaderToString(messageChunk: DataView | ArrayBuffer): string {
 
-    var stream = new DataStream(messageChunk);
+    const stream = new DataStream(messageChunk);
 
-    var messageHeader = readMessageHeader(stream);
-    if (messageHeader.msgType === "ERR" || messageHeader.msgType === "HEL") {
-        return messageHeader.msgType + " " + messageHeader.isFinal + " length   = " + messageHeader.length;
+    const messageHeader = readMessageHeader(stream);
+    if (messageHeader.msgType === 'ERR' || messageHeader.msgType === 'HEL') {
+        return messageHeader.msgType + ' ' + messageHeader.isFinal + ' length   = ' + messageHeader.length;
     }
 
 
-    var securityHeader = chooseSecurityHeader(messageHeader.msgType);
+    const securityHeader = chooseSecurityHeader(messageHeader.msgType);
 
-    var sequenceHeader = new SequenceHeader();
+    const sequenceHeader = new SequenceHeader();
     assert(stream.length === 8);
 
-    var secureChannelId = stream.getUint32();
+    const secureChannelId = stream.getUint32();
     securityHeader.decode(stream);
     sequenceHeader.decode(stream);
 
-    var slice = messageChunk.slice(0, stream.length);
+    let slice: ArrayBuffer;
+    if (messageChunk instanceof DataView) {
+        slice = messageChunk.buffer.slice(0, stream.length);
+    } else {
+        slice = messageChunk.slice(0, stream.length);
+    }
 
-
-    return messageHeader.msgType + " " +
+    return messageHeader.msgType + ' ' +
         messageHeader.isFinal +
-        " length   = " + messageHeader.length +
-        " channel  = " + secureChannelId +
-        " seqNum   = " + sequenceHeader.sequenceNumber +
-        " req ID   = " + sequenceHeader.requestId +
-        " security   = " + JSON.stringify(securityHeader) +
-        "\n\n" + hexDump(slice);
+        ' length   = ' + messageHeader.length +
+        ' channel  = ' + secureChannelId +
+        ' seqNum   = ' + sequenceHeader.sequenceNumber +
+        ' req ID   = ' + sequenceHeader.requestId +
+        ' security   = ' + JSON.stringify(securityHeader) +
+        '\n\n' + hexDump(slice);
 }

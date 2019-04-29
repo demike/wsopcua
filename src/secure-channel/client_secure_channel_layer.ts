@@ -31,6 +31,8 @@ import * as secure_channel_service from '../service-secure-channel';
 import { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
 import { ClientWSTransport } from '../transport/client_ws_transport';
 import { ConnectionStrategy } from '../common/client_options';
+import { IEncodable } from '../factory/factories_baseobject';
+import { IRequestHeader } from '../generated/RequestHeader';
 
 const OpenSecureChannelRequest = secure_channel_service.OpenSecureChannelRequest;
 const CloseSecureChannelRequest = secure_channel_service.CloseSecureChannelRequest;
@@ -41,87 +43,6 @@ const SecurityTokenRequestType = secure_channel_service.SecurityTokenRequestType
 
 const do_trace_message = false;
 const do_trace_statistics = false;
-
-function process_request_callback(request_data, err: Error, response) {
-
-    assert('function' === typeof request_data.callback);
-
-    if (!response && !err && request_data.msgType !== 'CLO') {
-        // this case happens when CLO is called and when some pending transactions
-        // remains in the queue...
-        err = new Error(' Connection has been closed by client , but this transaction cannot be honored');
-    }
-    if (response && response instanceof ServiceFault) {
-
-        response.responseHeader.stringTable = response.responseHeader.stringTable || [];
-        response.responseHeader.stringTable = [response.responseHeader.stringTable.join('\n')];
-        err = new Error(' ServiceFault returned by server ' + JSON.stringify(response));
-        (<any>err).response = response;
-        response = null;
-    }
-
-    assert((request_data.msgType === 'CLO') || ((err && !response) || (!err && response)));
-
-    const the_callback_func = request_data.callback;
-    request_data.callback = null;
-    the_callback_func(err, response);
-}
-
-function _on_message_received(response, msgType: string, requestId: number) {
-
-    /* jshint validthis: true */
-
-    assert(msgType !== 'ERR');
-
-    /* istanbul ignore next */
-    if (do_trace_message) {
-        console.log('xxxxx  <<<<<< _on_message_received ', requestId, response.constructor.name);
-    }
-
-    const request_data = this._request_data[requestId];
-    if (!request_data) {
-        console.log('xxxxx  <<<<<< _on_message_received ', requestId, response.constructor.name);
-        throw new Error(' =>  invalid requestId =' + requestId);
-    }
-
-    log.debug(' Deleting this._request_data', requestId);
-    delete this._request_data[requestId];
-
-    /* istanbul ignore next */
-    if (response.responseHeader.requestHandle !== request_data.request.requestHeader.requestHandle) {
-        const expected = request_data.request.requestHeader.requestHandle;
-        const actual = response.responseHeader.requestHandle;
-        const moreinfo = 'Class = ' + response.constructor.name;
-        console.log((' WARNING SERVER responseHeader.requestHandle is invalid' +
-          ': expecting 0x' + expected.toString(16) +
-          '  but got 0x' + actual.toString(16) + ' '), moreinfo);
-    }
-
-    request_data.response = response;
-
-    /* istanbul ignore next */
-    if (doDebug) {
-        log.debug(' RESPONSE ');
-        log.debug(response.toString());
-    }
-    // record tick2 : after response message has been received, before message processing
-    request_data._tick2 = this.messageBuilder._tick1;
-    request_data.bytesRead = this.messageBuilder.total_message_size;
-
-    // record tick3 : after response message has been received, before message processing
-    request_data._tick3 = get_clock_tick();
-    process_request_callback(request_data, null, response);
-
-
-    // record tick4 after callback
-    request_data._tick4 = get_clock_tick();
-    // store some statistics
-    this._record_transaction_statistics(request_data);
-
-    // notify that transaction is completed
-    this.on_transaction_completed(this.last_transaction_stats);
-
-}
 
 let g_channelId = 0;
 const defaultTransactionTimeout = 60 * 1000; // 1 minute
@@ -137,6 +58,29 @@ export interface ITransactionStats {
     lap_processing_response: number;
     lap_transaction: number;
 }
+
+interface RequestData {
+    request?: IEncodable & {requestHeader: IRequestHeader};
+    response?: IEncodable;
+    msgType?: string;
+    callback?;
+
+    bytesWritten_before?: number;
+    bytesWritten_after?: number;
+
+    // record tick0 : before request is being sent to server
+    _tick0?: number;
+    // record tick1:  after request has been sent to server
+    _tick1?: number;
+    // record tick2 : after response message has been received, before message processing
+    _tick2?: number;
+    // record tick3 : after response message has been received, before message processing
+    _tick3?: number;
+    // record tick4 after callback
+    _tick4?: number;
+    chunk_count?: number;
+    bytesRead?: number;
+};
 
 export function dump_transaction_statistics(stats: ITransactionStats ) {
 
@@ -277,23 +221,23 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     this.messageBuilder.securityMode = this._securityMode;
     this.messageBuilder.privateKey = this.getPrivateKey();
 
-    this._request_data = {};
+    this._request_data = new Map();
 
     this.messageBuilder
-    .on('message', _on_message_received.bind(this))
+    .on('message', (response, msgType: string, requestId: number) => this._on_message_received(response, msgType, requestId))
     .on('start_chunk', function () {
         // record tick2: when the first response chunk is received
         // request_data._tick2 = get_clock_tick();
     }).on('error', (err, requestId) => {
         //
         debugLog('request id = ' + requestId + err);
-        let request_data = this._request_data[requestId];
+        let request_data = this._request_data.get(requestId);
         if (doDebug) {
             console.log(' message was ');
             console.log(request_data);
         }
         if (!request_data) {
-            request_data = this._request_data[requestId + 1];
+            request_data = this._request_data.get(requestId + 1);
             if (doDebug) {
                 console.log(' message was 2:', request_data ? request_data.request.toString() : '<null>');
             }
@@ -336,6 +280,32 @@ public getCertificateChain() {
     return this.parent ? this.parent.getCertificateChain() : null;
 }
 
+protected process_request_callback(request_data: RequestData, err: Error, response) {
+
+    assert('function' === typeof request_data.callback);
+
+    if (!response && !err && request_data.msgType !== 'CLO') {
+        // this case happens when CLO is called and when some pending transactions
+        // remains in the queue...
+        err = new Error(' Connection has been closed by client , but this transaction cannot be honored');
+    }
+    if (response && response instanceof ServiceFault) {
+
+        response.responseHeader.stringTable = response.responseHeader.stringTable || [];
+        response.responseHeader.stringTable = [response.responseHeader.stringTable.join('\n')];
+        err = new Error(' ServiceFault returned by server ' + JSON.stringify(response));
+        (<any>err).response = response;
+        response = null;
+    }
+
+    assert((request_data.msgType === 'CLO') || ((err && !response) || (!err && response)));
+
+    const the_callback_func = request_data.callback;
+    request_data.callback = null;
+    the_callback_func(err, response);
+}
+
+
 
 protected on_transaction_completed(transaction_stats: ITransactionStats) {
     /* istanbul ignore next */
@@ -346,7 +316,7 @@ protected on_transaction_completed(transaction_stats: ITransactionStats) {
     this.emit('end_transaction', transaction_stats);
 }
 
-protected _record_transaction_statistics(request_data) {
+protected _record_transaction_statistics(request_data: RequestData) {
 
     // ---------------------------------------------------------------------------------------------------------|-
     //      _tick0                _tick1                         _tick2                       _tick3          _tick4
@@ -377,7 +347,7 @@ protected _record_transaction_statistics(request_data) {
 
 public isTransactionInProgress() {
 
-    return Object.keys(this._request_data).length > 0;
+    return this._request_data.size > 0;
 }
 
 protected _cancel_pending_transactions(err: Error) {
@@ -387,13 +357,13 @@ protected _cancel_pending_transactions(err: Error) {
          + Object.keys(this._request_data) +  (this._transport ? this._transport.name : 'no transport'));
 
     assert(typeof err === 'object', 'expecting valid error');
-    Object.keys(this._request_data).forEach((key) => {
-        const request_data = this._request_data[key];
-        debugLog('xxxx Cancelling pending transaction ' + request_data.key + request_data.msgType + request_data.request.constructor.name);
-        process_request_callback(request_data, err, null);
-    });
 
-    this._request_data = {};
+    for (const [key, request_data] of this._request_data) {
+        debugLog('xxxx Cancelling pending transaction ' + key + ' ' +  request_data.msgType + request_data.request.constructor.name);
+        this.process_request_callback(request_data, err, null);
+    }
+
+    this._request_data = new Map();
 
 }
 
@@ -417,6 +387,62 @@ protected _on_transport_closed(error: Error) {
     this._cancel_pending_transactions(error);
 
     this._transport = null;
+
+}
+
+protected _on_message_received(response, msgType: string, requestId: number) {
+
+    /* jshint validthis: true */
+
+    assert(msgType !== 'ERR');
+
+    /* istanbul ignore next */
+    if (do_trace_message) {
+        console.log('xxxxx  <<<<<< _on_message_received ', requestId, response.constructor.name);
+    }
+
+    const request_data = this._request_data.get(requestId);
+    if (!request_data) {
+        console.log('xxxxx  <<<<<< _on_message_received ', requestId, response.constructor.name);
+        throw new Error(' =>  invalid requestId =' + requestId);
+    }
+
+    log.debug(' Deleting this._request_data', requestId);
+    this._request_data.delete(requestId);
+
+    /* istanbul ignore next */
+    if (response.responseHeader.requestHandle !== request_data.request.requestHeader.requestHandle) {
+        const expected = request_data.request.requestHeader.requestHandle;
+        const actual = response.responseHeader.requestHandle;
+        const moreinfo = 'Class = ' + response.constructor.name;
+        console.log((' WARNING SERVER responseHeader.requestHandle is invalid' +
+          ': expecting 0x' + expected.toString(16) +
+          '  but got 0x' + actual.toString(16) + ' '), moreinfo);
+    }
+
+    request_data.response = response;
+
+    /* istanbul ignore next */
+    if (doDebug) {
+        log.debug(' RESPONSE ');
+        log.debug(response.toString());
+    }
+    // record tick2 : after response message has been received, before message processing
+    request_data._tick2 = this.messageBuilder.tick1;
+    request_data.bytesRead = this.messageBuilder.total_message_size;
+
+    // record tick3 : after response message has been received, before message processing
+    request_data._tick3 = get_clock_tick();
+    this.process_request_callback(request_data, null, response);
+
+
+    // record tick4 after callback
+    request_data._tick4 = get_clock_tick();
+    // store some statistics
+    this._record_transaction_statistics(request_data);
+
+    // notify that transaction is completed
+    this.on_transaction_completed(this.last_transaction_stats);
 
 }
 
@@ -594,7 +620,7 @@ protected _on_connection(transport: ClientWSTransport, callback: ErrorCallback, 
 
         this._transport = transport;
 
-        this._transport.on('message', (message_chunk) => {
+        this._transport.on('message', (message_chunk: DataView) => {
             /**
              * notify the observers that ClientSecureChannelLayer has received a message chunk
              * @event receive_chunk
@@ -864,7 +890,7 @@ protected _renew_security_token() {
     }
 }
 
-protected _on_receive_message_chunk(message_chunk) {
+protected _on_receive_message_chunk(message_chunk: DataView) {
 
 
 
@@ -951,7 +977,7 @@ public isOpened() {
  *
  *
  */
-protected _performMessageTransaction(msgType, requestMessage, callback: ResponseCallback<any>) {
+protected _performMessageTransaction(msgType: string, requestMessage: any, callback: ResponseCallback<any>) {
 
     /* jshint validthis: true */
 
@@ -968,11 +994,11 @@ protected _performMessageTransaction(msgType, requestMessage, callback: Response
     let timeout = requestMessage.requestHeader.timeoutHint || defaultTransactionTimeout;
     timeout = Math.max(ClientSecureChannelLayer.minTransactionTimeout, timeout);
 
-    let timerId = null;
+    let timerId: number = null;
 
     let hasTimedOut = false;
 
-    const  modified_callback = (err, response) => {
+    const  modified_callback = (err: Error, response) => {
 
         /* istanbul ignore next */
         if (doDebug) {
@@ -988,7 +1014,7 @@ protected _performMessageTransaction(msgType, requestMessage, callback: Response
         }
         // when response === null we are processing the timeout , therefore there is no need to clearTimeout
         if (!hasTimedOut && timerId) {
-            clearTimeout(timerId);
+            window.clearTimeout(timerId);
         }
         timerId = null;
 
@@ -1016,7 +1042,7 @@ protected _performMessageTransaction(msgType, requestMessage, callback: Response
         }
     };
 
-    timerId = setTimeout( () => {
+    timerId = window.setTimeout( () => {
         timerId = null;
         console.log(' Timeout .... waiting for response for ', requestMessage.constructor.name, requestMessage.requestHeader.toString());
 
@@ -1049,9 +1075,8 @@ protected _performMessageTransaction(msgType, requestMessage, callback: Response
  * @param transaction_data.callback {Function}
  * @private
  */
-protected _internal_perform_transaction(transaction_data) {
-
-
+protected _internal_perform_transaction(transaction_data: { timerId?: number; msgType: string; request: any;
+        callback: ResponseCallback<any>; }) {
 
     assert('function' === typeof transaction_data.callback);
 
@@ -1076,7 +1101,7 @@ protected _internal_perform_transaction(transaction_data) {
     if (do_trace_message) {
         console.log('xxxxx   >>>>>>                     ' + requestId + requestMessage.constructor.name);
     }
-    this._request_data[requestId] = {
+    this._request_data.set(requestId, {
         request: requestMessage,
         msgType: msgType,
         callback: transaction_data.callback,
@@ -1095,15 +1120,15 @@ protected _internal_perform_transaction(transaction_data) {
         // record tick4 after callback
         _tick4: null,
         chunk_count: 0
-    };
+    });
 
     this._sendSecureOpcUARequest(msgType, requestMessage, requestId);
 
 }
 
-protected _send_chunk(requestId, messageChunk?) {
+protected _send_chunk(requestId: number, messageChunk?: ArrayBuffer) {
 
-    const request_data = this._request_data[requestId];
+    const request_data = this._request_data.get(requestId);
 
     if (messageChunk) {
 
@@ -1154,7 +1179,7 @@ protected _construct_security_header() {
         case MessageSecurityMode.SignAndEncrypt:
             assert(this.securityPolicy !== SecurityPolicy.None);
             // get the thumbprint of the client certificate
-            const thumbprint = /* **nomsgcrypt** this._receiverCertificate ? crypto_utils.makeSHA1Thumbprint(this._receiverCertificate) :*/
+            const thumbprint: Uint8Array = /* **nomsgcrypt** this._receiverCertificate ? crypto_utils.makeSHA1Thumbprint(this._receiverCertificate) :*/
                             null;
             securityHeader = new AsymmetricAlgorithmSecurityHeader({
                 securityPolicyUri: toUri(this.securityPolicy),
@@ -1233,7 +1258,7 @@ protected _get_security_options_for_MSG() {
 };
 */
 
-protected _sendSecureOpcUARequest(msgType, requestMessage, requestId) {
+protected _sendSecureOpcUARequest(msgType: string, requestMessage: IEncodable & {requestHeader: IRequestHeader}, requestId: number) {
 
 
 
@@ -1287,13 +1312,12 @@ public cancelPendingTransactions(callback: () => void ) {
     if (doDebug) {
         debugLog(' PENDING TRANSACTION = ',
              this.getDisplayName(),
-             Object.keys(this._request_data)
-                 .map(k => this._request_data[k].request.constructor.name).join(''));
+             Array.from(this._request_data.values())
+                 .map(d => d.request.constructor.name).join(''));
     }
 
-    for ( const key of Object.keys(this._request_data)) {
+    for ( const transaction of this._request_data.values()) {
         // kill timer id
-        const transaction = this._request_data[key];
         if (transaction.callback) {
             transaction.callback(new Error('Transaction has been canceled because client channel  is beeing closed'));
         }
@@ -1382,7 +1406,7 @@ public close(callback: ErrorCallback) {
     protected serverCertificate: string;
     protected messageBuilder: MessageBuilder;
 
-    protected _request_data: any;
+    protected _request_data: Map<number, RequestData>;;
     protected __in_normal_close_operation = false;
     protected _renew_security_token_requested = 0;
     protected _timedout_request_count = 0;
