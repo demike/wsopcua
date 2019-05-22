@@ -22,14 +22,14 @@ import {MonitoredItemGroup} from './MonitoredItemGroup';
 import {doDebug, debugLog} from '../common/debug';
 import {ClientSidePublishEngine} from './client_publish_engine';
 
-import 'setimmediate';
-
 import series from 'async-es/series';
 import { IMonitoringParameters } from '../generated/MonitoringParameters';
 
 import { ICreateSubscriptionRequest } from '../generated/CreateSubscriptionRequest';
 import { MonitoredItemBase } from './MonitoredItemBase';
 import { ErrorCallback } from './client_base';
+
+import {setImmediate} from 'setimmediate';
 
 export type ClientSubscriptionEvents = 'started'|'internal_error'|'status_changed'|'raw_notification'|'keepalive'|'received_notifications'|'terminated'|'item_added';
 

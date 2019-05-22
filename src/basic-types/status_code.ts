@@ -333,7 +333,7 @@ unset(bit) {
 }
 
 // return a status code that can be modified
-function makeStatusCode(statusCode: IStatusCodeOptions, optionalBits) {
+export function makeStatusCode(statusCode: IStatusCodeOptions, optionalBits?) {
     const tmp = new ModifiableStatusCode({
         _base: statusCode
     });

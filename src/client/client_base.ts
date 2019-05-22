@@ -17,8 +17,11 @@ import { ObjectRegistry } from '../object-registry/objectRegistry';
 import { doDebug } from '../common/debug';
 import * as endpoints_service from '../service-endpoints';
 
+import {setImmediate} from 'setimmediate';
+
 const GetEndpointsRequest = endpoints_service.GetEndpointsRequest;
 const GetEndpointsResponse = endpoints_service.GetEndpointsResponse;
+
 
 /**
  *

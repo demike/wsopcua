@@ -26,8 +26,15 @@ export function stringToQualifiedName(value: string) {
     return new QualifiedName({namespaceIndex: namespaceIndex, name: value});
 }
 
+export function qualifiedNameToString(qn: QualifiedName): string {
+    if (qn.namespaceIndex > 0) {
+        return qn.namespaceIndex + ':' + qn.name;
+    }
+    return qn.name;
 
-export function coerceQualifyName(value: string| IQualifiedName) {
+}
+
+export function coerceQualifiedName(value: string| IQualifiedName) {
 
     if (!value) {
         return null;

@@ -12,6 +12,9 @@ import { OPCUAClientBase, ErrorCallback, ResponseCallback } from '../client/clie
 import * as log from 'loglevel';
 import {doDebug, debugLog, hexDump} from '../common/debug';
 import {StatusCodes} from '../constants/raw_status_codes';
+
+import setImmediate from 'setimmediate';
+
 /* global Buffer*/
 /**
  * @module opcua.client
@@ -33,6 +36,8 @@ import { ClientWSTransport } from '../transport/client_ws_transport';
 import { ConnectionStrategy } from '../common/client_options';
 import { IEncodable } from '../factory/factories_baseobject';
 import { IRequestHeader } from '../generated/RequestHeader';
+import { SecureMessageChunkManagerOptions } from './secure_message_chunk_manager';
+import { ISymmetricAlgortihmSecurityHeader } from '../service-secure-channel/SymmetricAlgorithmSecurityHeader';
 
 const OpenSecureChannelRequest = secure_channel_service.OpenSecureChannelRequest;
 const CloseSecureChannelRequest = secure_channel_service.CloseSecureChannelRequest;
@@ -1262,7 +1267,7 @@ protected _sendSecureOpcUARequest(msgType: string, requestMessage: IEncodable & 
 
 
 
-    const options: any = {
+    const options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader = {
         requestId: requestId,
         secureChannelId: this._securityToken ? this._securityToken.channelId /*.secureChannelId*/ : 0,
         tokenId: this._securityToken ? this._securityToken.tokenId : 0,

@@ -7,7 +7,7 @@
 
 
 import {assert} from '../assert';
-import { ExpandedNodeId } from '../basic-types';
+import { ExpandedNodeId, NodeId } from '../basic-types';
 
 
 const constructorMap: {[key: string]: Function} = {};
@@ -47,7 +47,7 @@ export function callConstructor(constructor: Function ) {
 }
 
 
-export function getConstructor(expandedId: ExpandedNodeId) {
+export function getConstructor(expandedId: NodeId) {
 
     if (!(expandedId && (expandedId.value in constructorMap))) {
         console.log('#getConstructor : cannot find constructor for expandedId ', expandedId.toString());
@@ -56,7 +56,7 @@ export function getConstructor(expandedId: ExpandedNodeId) {
     return constructorMap[<string|number>expandedId.value];
 }
 
-export function hasConstructor(expandedId: ExpandedNodeId) {
+export function hasConstructor(expandedId: NodeId) {
     if (!expandedId) { return false; }
     assert(expandedId.hasOwnProperty('value'));
     // only namespace 0 can be in constructorMap
@@ -64,7 +64,7 @@ export function hasConstructor(expandedId: ExpandedNodeId) {
     return !!constructorMap[<string|number>expandedId.value];
 }
 
-export function constructObject(expandedNodeId: ExpandedNodeId) {
+export function constructObject(expandedNodeId: NodeId) {
     const constructor = getConstructor(expandedNodeId);
     if (!constructor) { return null; }
     return callConstructor(constructor);

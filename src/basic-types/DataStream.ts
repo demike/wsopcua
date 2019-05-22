@@ -6,12 +6,14 @@ import { Int8, UInt8, Int16, UInt32, UInt16 } from './integers';
 const txtEncoder = new TextEncoder();
 const txtDecoder = new TextDecoder();
 export class DataStream {
-  constructor(data: DataView | ArrayBuffer | number) {
+  constructor(data: DataView | ArrayBuffer | ArrayBufferView | number) {
     this._pos = 0;
     if (data instanceof DataView) {
       this._view = data;
     } else if (data instanceof ArrayBuffer) {
       this._view = new DataView(data);
+    } else if ( ArrayBuffer.isView(data) ) {
+      this._view = new DataView(data.buffer);
     } else {
       this._view = new DataView(new ArrayBuffer(data));
     }

@@ -1,0 +1,27 @@
+'use strict';
+
+import {makeMessageChunkSignatureForTest, verifyMessageChunkSignatureForTest, performMessageChunkManagerTest} from './test_helpers';
+
+
+describe('MessageChunkManager', function () {
+
+
+    it('should split a message in chunk and produce a header ( NO SIGN & NO ENCRYPT).', function () {
+
+        performMessageChunkManagerTest(null);
+
+    });
+
+    it('should split a message in chunk and produce a header (  SIGN & NO ENCRYPT).', function () {
+
+
+        performMessageChunkManagerTest({
+            signatureLength: 128,
+            signBufferFunc:   makeMessageChunkSignatureForTest,
+            verifyBufferFunc: verifyMessageChunkSignatureForTest,
+        });
+
+    });
+
+
+});

@@ -156,6 +156,9 @@ function make_tracer(buffer: DataView, padding: number, offset: number): any {
 }
 
 import * as factories from '../factory/factories_factories';
+import { decodeExpandedNodeId } from '../basic-types';
+import { constructObject } from '../factory/factories_factories';
+import { buf2hex } from '../crypto';
 /**
  * @method packet_analyzer
  * @param {DataView} buffer
@@ -196,6 +199,52 @@ export function packet_analyzer(buffer: DataView, id?, padding?: number, offset?
 
     try {
         objMessage.decode_debug(stream, options);
+    } catch (err) {
+        console.log(' Error in ', err);
+        console.log(' Error in ', err.stack);
+        console.log(' objMessage ', objMessage);
+    }
+}
+
+interface AnalyzePacketOptions {
+
+}
+
+export function analyzePacket(buffer: ArrayBuffer, objMessage: any,
+        padding: number, offset?: number, customOptions?: AnalyzePacketOptions) {
+    const stream = new DataStream(buffer);
+    _internalAnalyzePacket(buffer, stream, objMessage, padding, customOptions, offset);
+}
+
+export function analyseExtensionObject(buffer: ArrayBuffer, padding: number, offset: number, customOptions?: AnalyzePacketOptions) {
+
+    const stream = new DataStream(buffer);
+    let id;
+    let objMessage;
+    try {
+
+        id = decodeExpandedNodeId(stream);
+        objMessage = constructObject(id);
+    } catch (err) {
+        console.log(id);
+        console.log(err);
+        console.log('Cannot read decodeExpandedNodeId  on stream ' + buf2hex(stream.view.buffer));
+    }
+    _internalAnalyzePacket(buffer, stream, objMessage, padding, customOptions, offset);
+}
+
+function _internalAnalyzePacket(buffer: ArrayBufferLike, stream: DataStream, objMessage: any,
+        padding: number, customOptions?: AnalyzePacketOptions, offset?: number) {
+
+    let options: any = make_tracer(new DataView(buffer), padding, offset);
+    options.name = 'message';
+    options = { ...options, customOptions};
+    try {
+        if (objMessage) {
+//            objMessage.decodeDebug(stream, options);
+        } else {
+            console.log(' Invalid object', objMessage);
+        }
     } catch (err) {
         console.log(' Error in ', err);
         console.log(' Error in ', err.stack);

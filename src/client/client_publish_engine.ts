@@ -13,6 +13,8 @@ import forEachOf from 'async-es/forEachOf';
 import whilst from 'async-es/whilst';
 import { ErrorCallback } from './client_base';
 
+declare function setImmediate(callback: Function): any;
+
 // xx const debugLog = console.log;
 
 /**
@@ -142,8 +144,8 @@ public send_publish_request() {
         }, 100);
     } else {
         setImmediate( () => {
-            if (!this.session || this.isSuspended) {
-                // session has been terminated or suspended
+            if (!this.session || this.isSuspended || !this.subscriptionCount) {
+                // session has been terminated or suspended or no subscription is available
                 return;
             }
             this._send_publish_request();
@@ -289,7 +291,7 @@ public registerSubscription(subscription: ClientSubscription) {
 
     assert(arguments.length === 1);
     assert(Number.isFinite(<any>subscription.subscriptionId));
-    assert(!this.subscriptionMap.hasOwnProperty(subscription.toString())); // already registered ?
+    assert(!this.subscriptionMap.hasOwnProperty(subscription.subscriptionId)); // already registered ?
     assert('function' === typeof subscription.onNotificationMessage);
     assert(Number.isFinite(subscription.timeoutHint));
 

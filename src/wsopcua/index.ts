@@ -23,7 +23,7 @@ export {NumericRange} from '../numeric-range/numeric_range';
 // generated module.exports.LocalizedText       = require("node-opcua-data-model").LocalizedText;
 
 // generated module.exports.QualifiedName       = require("node-opcua-data-model").QualifiedName;
-export {coerceQualifyName, stringToQualifiedName, coerceLocalizedText} from '../data-model';
+export {coerceQualifiedName, stringToQualifiedName, coerceLocalizedText} from '../data-model';
 // generated module.exports.NodeClass           = require("node-opcua-data-model").NodeClass;
 // not used? module.exports.NodeClassMask       = require("node-opcua-data-model").NodeClassMask;
 

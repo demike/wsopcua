@@ -28,11 +28,23 @@ export enum AccessLevelFlag {
 // @example
 //      makeAccessLevel("CurrentRead | CurrentWrite").should.eql(0x03);
 export function makeAccessLevel(str: string): AccessLevelFlag {
+
+    if (typeof str === 'number') {
+        const value = str as number;
+        if (value === 0) { return AccessLevelFlag.NONE; }
+        return value as AccessLevelFlag;
+    }
+
     let accessFlag: AccessLevelFlag;
-    if (str === '' /*|| str === 0*/ ) {
+    if (str === '' || str === null ) {
         accessFlag = AccessLevelFlag.NONE;
     } else {
-        accessFlag = AccessLevelFlag[str as keyof typeof AccessLevelFlag];
+    //    accessFlag = AccessLevelFlag[str as keyof typeof AccessLevelFlag];
+        const flags = str.split(' | ');
+        accessFlag = 0;
+        for (const flag of flags) {
+            accessFlag |= (AccessLevelFlag as any)[flag];
+        }
     }
 
     if (utils.isNullOrUndefined(accessFlag)) {
@@ -46,7 +58,7 @@ registerBasicType({
     name: 'AccessLevelFlag',
     subtype: 'Byte',
     defaultValue: function () {
-        return makeAccessLevel('CurrentRead | CurrentWrite');
+        return AccessLevelFlag.CurrentRead | AccessLevelFlag.CurrentWrite;
     },
     encode: function (value: Variant, stream: DataStream) {
         // tslint:disable-next-line:no-bitwise

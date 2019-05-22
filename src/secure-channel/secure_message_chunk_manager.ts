@@ -25,15 +25,15 @@ export function chooseSecurityHeader(msgType: string) {
 
 
 export interface SecureMessageChunkManagerOptions {
-    sequenceHeaderSize: number;
-    secureChannelId: number;
+    sequenceHeaderSize?: number;
+    secureChannelId?: number;
     chunkSize?: number;
     requestId?: number;
-    signatureLength: number;
-    signingFunc: Function;
-    plainBlockSize: number;
-    cipherBlockSize: number;
-    encrypt_buffer: ArrayBuffer;
+    signatureLength?: number;
+    signingFunc?: Function;
+    plainBlockSize?: number;
+    cipherBlockSize?: number;
+    encrypt_buffer?: ArrayBuffer;
 }
 
 /**
@@ -128,7 +128,7 @@ constructor (msgType: string, options: SecureMessageChunkManagerOptions,
 
     this._chunkManager = new ChunkManager(params);
 
-    this._chunkManager.on('chunk', (chunk, is_last) => {
+    this._chunkManager.on('chunk', (chunk: ArrayBuffer, is_last) => {
         /**
          * @event chunk
          * @param chunk {Buffer}

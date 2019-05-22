@@ -4,19 +4,17 @@ import {assert} from '../assert';
 
 import {DataType} from './DataTypeEnum';
 import {VariantArrayType} from './VariantArrayTypeEnum';
-import {makeNodeId} from '../nodeid/nodeid';
 import {makeExpandedNodeId} from '../nodeid/expanded_nodeid';
 
 import {_defaultTypeMap} from '../factory/factories_builtin_types';
 import * as ec from '../basic-types';
-const encodeArray = ec.encodeArray;
-const decodeArray = ec.decodeArray;
 
-import {getFactory} from '../factory/factories_factories';
 import {BaseUAObject} from '../factory/factories_baseobject';
 import { DataStream } from '../basic-types/DataStream';
 import { UInt32 } from '../basic-types';
 
+import {findBuiltInType} from '../factory/factories_builtin_types';
+import { generate_new_id } from '../factory';
 
 const Variant_ArrayMask = 0x80;
 const Variant_ArrayDimensionsMask = 0x40;
@@ -300,9 +298,6 @@ function isValidMatrixVariant(dataType: DataType, value: any, dimensions?: numbe
     return true;
 }
 
-
-import {findBuiltInType} from '../factory/factories_builtin_types';
-import { generate_new_id } from '../factory';
 function get_encoder(dataType: DataType) {
     const encode = findBuiltInType(DataType[dataType]).encode;
     /* istanbul ignore next */

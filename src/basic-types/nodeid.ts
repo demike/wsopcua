@@ -157,7 +157,14 @@ export function encodeExpandedNodeId(expandedNodeId: ExpandedNodeId, stream: Dat
     }
 }
 
-const _decodeNodeId = function (encoding_byte: EnumNodeIdEncoding, stream: DataStream) {
+/**
+ * 
+ * @param encoding_byte 
+ * @param stream 
+ * @param createExpandedNodeId  if false (default) a NodeId is returned, true: a ExpandedNodeId is returned
+ */
+const _decodeNodeId = function (encoding_byte: EnumNodeIdEncoding, stream: DataStream, createExpandedNodeId: boolean = false): 
+            NodeId |ExpandedNodeId {
 
     let value, namespace, nodeIdType;
     // tslint:disable-next-line:no-bitwise
@@ -202,7 +209,12 @@ const _decodeNodeId = function (encoding_byte: EnumNodeIdEncoding, stream: DataS
             assert(isValidGuid(value));
             break;
     }
-    return new ExpandedNodeId(nodeIdType, value, namespace);
+    if (createExpandedNodeId) {
+        return new ExpandedNodeId(nodeIdType, value, namespace);
+    } else {
+        return new NodeId(nodeIdType, value, namespace);
+    }
+    
 };
 
 export function decodeNodeId(stream: DataStream) {
@@ -214,7 +226,7 @@ export function decodeNodeId(stream: DataStream) {
 export function decodeExpandedNodeId(stream: DataStream) {
 
     const encoding_byte = stream.getUint8();
-    const expandedNodeId = _decodeNodeId(encoding_byte, stream);
+    const expandedNodeId = _decodeNodeId(encoding_byte, stream, true) as ExpandedNodeId;
     expandedNodeId.namespaceUri = null;
     expandedNodeId.serverIndex = 0;
 

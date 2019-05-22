@@ -16,6 +16,8 @@ import {readRawMessageHeader} from './message_builder_base';
 import {debugLog, doDebug} from '../common/debug';
 import { ResponseCallback } from '../client/client_base';
 
+import {setImmediate} from 'setimmediate';
+
 let fakeSocket = {invalid: true};
 
 export function setFakeTransport(socket_like_mock) {

@@ -28,6 +28,8 @@ import {readMessageHeader} from '../chunkmanager';
 import {decodeMessage} from './tools';
 import { ErrorCallback } from '../client/client_base';
 
+declare const process: any; // <-- node process
+
 function createClientSocket(endpointUrl: string) {
     // create a socket based on Url
     const ep = parseEndpointUrl(endpointUrl);

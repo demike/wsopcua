@@ -7,7 +7,7 @@ export { LocalizedText } from '../generated/LocalizedText';
 
 export { QualifiedName } from '../generated/QualifiedName';
 
-export { coerceQualifyName, stringToQualifiedName } from './qualified_name_util';
+export { coerceQualifiedName, stringToQualifiedName } from './qualified_name_util';
 
 export { DiagnosticInfo } from '../generated/DiagnosticInfo';
 

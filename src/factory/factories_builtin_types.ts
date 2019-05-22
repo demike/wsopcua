@@ -4,7 +4,7 @@
  */
 import {assert} from '../assert';
 import {makeNodeId,coerceNodeId} from '../nodeid/nodeid';
-import { ExpandedNodeId,makeExpandedNodeId } from '../nodeid/expanded_nodeid';
+import { ExpandedNodeId,makeExpandedNodeId, coerceExpandedNodeId } from '../nodeid/expanded_nodeid';
 
 import {encodeBoolean, decodeBoolean, coerceBoolean} from '../basic-types/boolean';
 import {encodeStatusCode, decodeStatusCode, coerceStatusCode} from '../basic-types/status_code';
@@ -21,10 +21,10 @@ import {encodeInt8, decodeInt8, coerceInt8, encodeUInt8, decodeUInt8, coerceUInt
 
 import {StatusCodes} from '../constants/raw_status_codes';
 
-import { enocdeQualifiedName, coerceQualifyName } from '../data-model/qualified_name_util';
+import { enocdeQualifiedName, coerceQualifiedName } from '../data-model/qualified_name_util';
 import { decodeQualifiedName } from '../generated/QualifiedName';
 import { decodeLocalizedText } from '../generated/LocalizedText';
-import { enocdeLocalizedText,coerceLocalizedText } from '../data-model/localized_text_util';
+import { enocdeLocalizedText, coerceLocalizedText } from '../data-model/localized_text_util';
 
 
 
@@ -131,7 +131,7 @@ var _defaultType = [
         name: "QualifiedName",
         encode: enocdeQualifiedName,
         decode: decodeQualifiedName,
-        coerce: coerceQualifyName,
+        coerce: coerceQualifiedName,
         defaultValue: null
     },
 
@@ -147,7 +147,7 @@ var _defaultType = [
         name: "ExpandedNodeId",
         encode: encodeExpandedNodeId, decode: decodeExpandedNodeId,
         defaultValue: makeExpandedNodeId,
-        coerce: ExpandedNodeId.coerceExpandedNodeId
+        coerce: coerceExpandedNodeId
     },
 
     // ----------------------------------------------------------------------------------------

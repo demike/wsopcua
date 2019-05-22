@@ -1,10 +1,7 @@
-import { IStatusCodeOptions } from '../basic-types/status_code';
-
-
 // this file has been automatically generated
 // tslint:disable: max-line-length
 // tslint:disable: quotemark
- export const StatusCodes: {[key: string]: IStatusCodeOptions} = {
+ export const StatusCodes = { 
   Good: { name: 'Good', value: 0, description: "No Error" }
 , BadUnexpectedError: { name: 'BadUnexpectedError' , value: 0x80010000 , description: "An unexpected error occurred." }
 , BadInternalError: { name: 'BadInternalError' , value: 0x80020000 , description: "An internal error occurred as a result of a programming or configuration error." }

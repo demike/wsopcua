@@ -130,7 +130,8 @@ toString(options?: any): string {
         default:
             assert(this.identifierType === NodeIdType.BYTESTRING, 'invalid identifierType in NodeId : ' + this.identifierType);
             if (this.value)  {
-                str = 'ns=' + this.namespace + ';b=' + (this.value as number).toString(16);
+                str = 'ns=' + this.namespace + ';b=' + 
+                    Array.prototype.map.call(new Uint8Array(this.value as Uint8Array), x => (x.toString(16)).slice(-2)).join('');
             } else {
                 str = 'ns=' + this.namespace + ';b=<null>';
             }
@@ -274,17 +275,18 @@ const ReferenceTypeIds = constants.ReferenceTypeIds;
 let _nodeid_to_name_index : {[name: number]: string} = {};
 let _name_to_nodeid_index : {[name: string]: NodeId} = {};
 
-(function build_standard_nodeid_indexes() {
-
-    function expand_map(direct_index: {[name: string]: number}) {
-        for (const name in direct_index) {
-            if (direct_index.hasOwnProperty(name)) {
-                const value = direct_index[name];
-                _nodeid_to_name_index[value] = name;
-                _name_to_nodeid_index[name] = new NodeId(NodeIdType.NUMERIC, value, 0);
-            }
+function expand_map(direct_index: {[name: string]: number}) {
+    for (const name in direct_index) {
+        if (direct_index.hasOwnProperty(name)) {
+            const value = direct_index[name];
+            _nodeid_to_name_index[value] = name;
+            _name_to_nodeid_index[name] = new NodeId(NodeIdType.NUMERIC, value, 0);
         }
     }
+}
+
+(function build_standard_nodeid_indexes() {
+
 
     _nodeid_to_name_index = {};
     _name_to_nodeid_index = {};
@@ -297,6 +299,10 @@ let _name_to_nodeid_index : {[name: string]: NodeId} = {};
     expand_map(DataTypeIds);
 
 })();
+
+export function build_nodid_indexes_for_map(map: {[name: string]: number}) {
+    expand_map(map);
+}
 
 function reverse_map(nodeId: number) {
     return _nodeid_to_name_index[nodeId];
@@ -323,7 +329,7 @@ export function resolveNodeId(node_or_string: NodeId | string): NodeId {
 }
 
 
-function from_hex(str: string): Uint8Array {
+export function from_hex(str: string): Uint8Array {
     const size = str.length / 2
       , buf = new Uint8Array(size);
     let character = '';

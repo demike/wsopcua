@@ -8,7 +8,7 @@ function getRandomInt(min: number, max: number) {
 
 
 export function isValidByteString(value) {
-    return value === null || value instanceof ArrayBuffer;
+    return value === null || value instanceof Uint8Array;
 }
 export function randomByteString(value, len: number) {
     len = len || getRandomInt(1, 200);
@@ -27,8 +27,14 @@ export function decodeByteString(stream: DataStream): Uint8Array {
 
 export function coerceByteString(value): Uint8Array {
 
-    if (Array.isArray(value)) {
+    if (value instanceof Uint8Array) {
+        return value;
+    }
+    if (Array.isArray(value) || value instanceof ArrayBuffer ) {
         return new Uint8Array(value);
+    }
+    if (ArrayBuffer.isView(value)) {
+        return new Uint8Array(value.buffer, value.byteOffset, value.byteLength );
     }
     if (typeof value === 'string') {
         const str = window.btoa(value);

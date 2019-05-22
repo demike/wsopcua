@@ -90,7 +90,7 @@ import {registerBasicType} from '../factory/factories_basic_type';
 import { DataStream } from '../basic-types/DataStream';
 registerBasicType(NumericRange_Schema);
 
-enum NumericRangeType {
+export enum NumericRangeType {
     Empty, SingleValue, ArrayRange, MatrixRange, InvalidRange
 }
 
@@ -350,7 +350,7 @@ public isDefined () {
  * @param [dimensions = null ]{Array<Number>} dimension of the matrix if data is a matrix
  * @return {*}
  */
-public extract_values (array: any[], dimensions: number[]) {
+public extract_values (array: any[]|string|Uint8Array, dimensions?: number[]) {
 
     if (!array) {
         return {
@@ -458,7 +458,7 @@ function slice(arr, start: number, end: number) {
     return res;
 }
 
-function extract_empty(array: any[], dimensions: number[]) {
+function extract_empty(array: any[]|string|Uint8Array, dimensions?: number[]) {
     return {
         array: slice(array, 0, array.length),
         dimensions: dimensions,
@@ -466,7 +466,7 @@ function extract_empty(array: any[], dimensions: number[]) {
     };
 }
 
-function extract_single_value(array: any[], index: number) {
+function extract_single_value(array: any[]|string|Uint8Array, index: number) {
     if (index >= array.length) {
         return {array: [], statusCode: StatusCodes.BadIndexRangeNoData};
     }
@@ -476,7 +476,7 @@ function extract_single_value(array: any[], index: number) {
     };
 }
 
-function extract_array_range(array: any[], low_index: number, high_index: number) {
+function extract_array_range(array: any[]|string|Uint8Array, low_index: number, high_index: number) {
     assert(Number.isFinite(low_index) && Number.isFinite(high_index));
     assert(low_index >= 0);
     assert(low_index <= high_index);
@@ -497,7 +497,8 @@ function isArrayLike(value: any) {
     return Number.isFinite(value.length) || value.hasOwnProperty('length');
 }
 
-function extract_matrix_range(array: any[], rowRange: [number, number], colRange: [number, number], dimension: number[]) {
+function extract_matrix_range(array: any[]|string|Uint8Array, rowRange: [number, number],
+        colRange: [number, number], dimension?: number[]) {
     assert(Array.isArray(rowRange) && Array.isArray(colRange));
     if (array.length === 0) {
         return {
@@ -563,7 +564,7 @@ function extract_matrix_range(array: any[], rowRange: [number, number], colRange
 
 
 function assert_array_or_buffer(array: any) {
-    assert(Array.isArray(array) || (array.buffer instanceof ArrayBuffer) || array instanceof Buffer);
+    assert(Array.isArray(array) || (array.buffer instanceof ArrayBuffer) /*|| array instanceof Buffer*/);
 }
 
 function insertInPlaceStandardArray(arrayToAlter: any[], low: number, high: number, newValues: any[]) {
@@ -582,6 +583,7 @@ function insertInPlaceTypedArray(arrayToAlter, low: number, high: number, newVal
     return arrayToAlter;
 }
 
+/*
 function insertInPlaceBuffer(bufferToAlter, low: number, high: number, newValues) {
     if (low === 0 && high === bufferToAlter.length - 1) {
         return Buffer.from(newValues);
@@ -592,6 +594,7 @@ function insertInPlaceBuffer(bufferToAlter, low: number, high: number, newValues
     }
     return bufferToAlter;
 }
+*/
 
 function _overlap(l1: number, h1: number, l2: number, h2: number) {
     return Math.max(l1, l2) <= Math.min(h1, h2);

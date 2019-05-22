@@ -49,12 +49,6 @@ export class ExpandedNodeId extends NodeId {
         this.serverIndex = serverIndex || 0;
     }
 
-    static coerceExpandedNodeId(value): ExpandedNodeId {
-        const n = coerceNodeId(value);
-        return new ExpandedNodeId(n.identifierType, n.value, n.namespace, /*namespaceUri*/null, /*serverIndex*/0);
-
-    }
-
     /**
  * @method toString
  * @return {string}
@@ -80,6 +74,11 @@ export class ExpandedNodeId extends NodeId {
         return this.toString();
     }
 
+}
+
+export function coerceExpandedNodeId(value): ExpandedNodeId {
+    const n = coerceNodeId(value);
+    return new ExpandedNodeId(n.identifierType, n.value, n.namespace, /*namespaceUri*/null, /*serverIndex*/0);
 }
 
 /**
