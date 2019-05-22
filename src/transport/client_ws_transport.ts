@@ -285,7 +285,9 @@ protected _perform_HEL_ACK_transaction(callback: ErrorCallback) {
 
         if (err) {
             callback(err);
-            this._socket.close(1000, 'OPC-UA: HELLO - ACK failed');
+            if (this._socket) {
+                this._socket.close(1000, 'OPC-UA: HELLO - ACK failed');
+            }
         } else {
             this._handle_ACK_response(data, function (inner_err) {
                 callback(inner_err);

@@ -15,7 +15,7 @@ export interface IEncodable {
 }
 
 export interface IEncodableConstructor {
-    new(): IEncodable;
+    new(options?:any): IEncodable;
 }
 
 export abstract class BaseUAObject implements IEncodable{

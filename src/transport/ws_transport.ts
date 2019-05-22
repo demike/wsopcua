@@ -249,12 +249,10 @@ public on_socket_ended(err: Error) {
     this.emit('close', err || null);
 }
 
-protected _on_socket_ended_message =  function(err: Error) {
+protected _on_socket_ended_message(err: Error) {
     if (this.__disconnecting__) {
         return;
     }
-    this._on_socket_ended = null;
-    this._on_data_received = null;
 
     debugLog('Transport Connection ended ' + self.name);
     assert(!this.__disconnecting__);
@@ -344,6 +342,7 @@ protected _install_socket(socket: WebSocket) {
             debugLog(' SOCKET ERROR : ' + this.name);
         }
 
+        this._on_socket_ended_message(new Error('Connection aborted'));
         // note: The "close" event will be called directly following this event.
     });
 
@@ -406,8 +405,9 @@ public disconnect(callback: () => void) {
             this.on_socket_ended(null);
             callback();
         };
-        this._socket.close();
+        const sock = this._socket;
         this._socket = null;
+        sock.close();
     }
 
 }
