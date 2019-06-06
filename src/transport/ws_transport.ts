@@ -389,7 +389,7 @@ public disconnect(callback: () => void) {
     assert('function' === typeof callback, 'expecting a callback function, but got ' + callback);
 
 
-    if (this.__disconnecting__) {
+    if (this.__disconnecting__ || !this._socket) {
         callback();
         return;
     }
@@ -405,6 +405,7 @@ public disconnect(callback: () => void) {
             this.on_socket_ended(null);
             callback();
         };
+
         const sock = this._socket;
         this._socket = null;
         sock.close();

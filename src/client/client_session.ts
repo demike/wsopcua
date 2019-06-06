@@ -37,7 +37,6 @@ import { DataType } from '../variant/DataTypeEnum';
 import { DataValue } from '../data-value';
 import { Variant } from '../variant';
 
-import {setImmediate} from 'setimmediate';
 
 // var makeNodeClassMask = require("node-opcua-data-model").makeNodeClassMask;
 

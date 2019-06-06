@@ -34,7 +34,7 @@ module.exports = function (config) {
       },
 
       coverageOptions: {
-        exclude: [/\.(d|spec)\.ts$/i,/(generated)/]
+        exclude: [/\.(d|spec)\.ts$/i,/(generated)/,/(tcp_transport)/]
       },
       
 

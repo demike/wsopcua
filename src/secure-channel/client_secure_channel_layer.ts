@@ -733,7 +733,7 @@ public create(endpoint_url: string , callback: ErrorCallback) {
 
         const _connect = (_i_callback: ErrorCallback) => {
 
-            if (this.__call && this.__call._cancelBackoff) {
+            if (this.__call && (this.__call as any)._cancelBackoff) {
                 return;
             }
 
@@ -775,7 +775,7 @@ public create(endpoint_url: string , callback: ErrorCallback) {
 
         // No backoff required -> call the _connect function directly
         if (this.connectionStrategy.maxRetry <= 0) {
-            this.__call = 0;
+            this.__call = null;
             return _connect(cb);
         }
 
@@ -805,7 +805,7 @@ public create(endpoint_url: string , callback: ErrorCallback) {
 
         this.__call.on('backoff', (number: number, delay: number) => {
 
-            debugLog(' Backoff #' + number + 'delay = ' + delay + this.__call.maxNumberOfRetry_);
+            debugLog(' Backoff #' + number + 'delay = ' + delay + this.__call.getMaxNumOfRetries());
             // Do something when backoff starts, e.g. show to the
             // user the delay before next reconnection attempt.
             /**
@@ -855,7 +855,7 @@ public abortConnection(callback: () => void ) {
             setTimeout(callback, 20);
         });
         // xx console.log("_cancelBackoff !!!");
-        this.__call._cancelBackoff = true;
+        (this.__call as any)._cancelBackoff = true;
         this.__call.abort();
 
     } else {
@@ -1422,7 +1422,7 @@ public close(callback: ErrorCallback) {
     protected channelId: number;
     protected connectionStrategy: any;
 
-    protected __call: any;
+    protected __call: backoff.FunctionCall;
 
     // transaction stats
     request: any;

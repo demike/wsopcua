@@ -1,5 +1,5 @@
 import { BackoffStrategy } from './strategy/strategy';
-import { Backoff, fibonacci, exponential } from '.';
+import { Backoff, fibonacci, exponential, call } from '.';
 import { FibonacciBackoffStrategy } from './strategy/fibonacci';
 import { ExponentialBackoffStrategy } from './strategy/exponential';
 
@@ -139,8 +139,8 @@ describe('Backoff', function() {
             actualNumbers.push(arg0);
         });
 
-        let expectedNumbers = [0, 1, 2, 3, 4];
-        let actualNumbers = [];
+        const expectedNumbers = [0, 1, 2, 3, 4];
+        const actualNumbers = [];
 
         for (let i = 0; i < expectedNumbers.length; i++) {
             backoff.backoff(null);
@@ -152,16 +152,161 @@ describe('Backoff', function() {
     });
 
     it('should create a finocacci backoff', function() {
-        let bo: Backoff = fibonacci({});
+        const bo: Backoff = fibonacci({});
         expect(bo instanceof Backoff).toBeTruthy();
         expect(bo.backoffStrategy_ instanceof FibonacciBackoffStrategy );
     });
-    
+
     it('should create an exponential backoff', function() {
-        let bo: Backoff = exponential({});
+        const bo: Backoff = exponential({});
         expect(bo instanceof Backoff).toBeTruthy();
         expect(bo.backoffStrategy_ instanceof ExponentialBackoffStrategy );
 
     });
-    
+
 });
+
+describe('BackoffStrategy', function() {
+  it('should throw an error if one of the delay options is not bigger than 0', () => {
+
+        expect(() => new ExponentialBackoffStrategy({initialDelay: -1, maxDelay: 1000})).toThrowError();
+        expect(() => new ExponentialBackoffStrategy({initialDelay: 10, maxDelay: -2})).toThrowError();
+
+        expect(() => new FibonacciBackoffStrategy({initialDelay: -1, maxDelay: 1000})).toThrowError();
+        expect(() => new FibonacciBackoffStrategy({initialDelay: 10, maxDelay: -2})).toThrowError();
+  });
+
+  it('should throw an error if max delay is smaller than initial delay', () => {
+    expect(() => new ExponentialBackoffStrategy({initialDelay: 1000, maxDelay: 500})).toThrowError();
+    expect(() => new FibonacciBackoffStrategy({initialDelay: 1000, maxDelay: 500})).toThrowError();
+  });
+
+  it('should return the next backoff delay, that should be bigger than the previous one', () => {
+
+    let bs: BackoffStrategy = new ExponentialBackoffStrategy({initialDelay: 200, maxDelay: 10000});
+    let delay = bs.next();
+    expect(bs.next() - delay).toBeGreaterThanOrEqual(0);
+
+    bs = new FibonacciBackoffStrategy({initialDelay: 200, maxDelay: 10000});
+    delay = bs.next();
+    expect(bs.next() - delay).toBeGreaterThanOrEqual(0);
+
+
+  });
+
+  it('should throw an error if the randomization factor is > 1 or < 0', () => {
+    expect(() => new ExponentialBackoffStrategy({initialDelay: 100, maxDelay: 1000, randomisationFactor: 1.2})).toThrowError();
+    expect(() => new ExponentialBackoffStrategy({initialDelay: 100, maxDelay: 1000, randomisationFactor: -0.3})).toThrowError();
+    expect(() => new ExponentialBackoffStrategy({initialDelay: 100, maxDelay: 1000, randomisationFactor: 0.7})).not.toThrowError();
+
+    expect(() => new FibonacciBackoffStrategy({initialDelay: 100, maxDelay: 1000, randomisationFactor: 1.2})).toThrowError();
+    expect(() => new FibonacciBackoffStrategy({initialDelay: 100, maxDelay: 1000, randomisationFactor: -0.3})).toThrowError();
+    expect(() => new FibonacciBackoffStrategy({initialDelay: 100, maxDelay: 1000, randomisationFactor: 0.7})).not.toThrowError();
+  });
+
+  it('should respect the max delay', () => {
+    const maxDelay = 1000;
+    let bs: BackoffStrategy = new ExponentialBackoffStrategy({initialDelay: 200, maxDelay: maxDelay});
+    let delay: number;
+
+    delay = bs.next();
+    expect(delay).toBeLessThan(maxDelay);
+    for (let i = 0; i < 100; i++) {
+        delay = bs.next();
+    }
+    expect(delay).toBe(maxDelay);
+
+    bs = new FibonacciBackoffStrategy({initialDelay: 200, maxDelay: maxDelay});
+    delay = bs.next();
+    expect(delay).toBeLessThan(maxDelay);
+    for (let i = 0; i < 100; i++) {
+        delay = bs.next();
+    }
+    expect(delay).toBe(maxDelay);
+
+  });
+
+});
+
+describe('call', () => {
+
+    beforeEach( function() {
+        jasmine.clock().install();
+        jasmine.clock().mockDate();
+    });
+
+    afterEach( function() {
+        jasmine.clock().uninstall();
+    });
+
+    it ('should call the a function with the right parameters', () => {
+        let callCnt = 0;
+
+        const fn = (a: number, b: number, onerror: (err?: Error) => void) => {
+            expect(a).toBe(10);
+            expect(b).toBe(20);
+            callCnt += 1;
+            onerror(new Error('test error'));
+        };
+
+        const c = (call as any)(fn, 10, 20, null);
+        c.setStrategy(new ExponentialBackoffStrategy({initialDelay: 100, maxDelay: 10000}));
+        c.start();
+
+        jasmine.clock().tick(10000);
+        expect(c.isRunning()).toBe(true);
+        expect(callCnt).toBeGreaterThan(0);
+
+    });
+
+    it ('should perform a defined number of calls', () => {
+        let callCnt = 0;
+
+        const fn = (onerror: (err?: Error) => void) => {
+            callCnt += 1;
+            onerror(new Error('test error'));
+        };
+
+        const c = call(fn);
+        c.setStrategy(new ExponentialBackoffStrategy({initialDelay: 100, maxDelay: 10000}));
+        c.start();
+
+        jasmine.clock().tick(1000);
+        expect(c.isRunning()).toBe(true);
+        expect(callCnt).toBe(4);
+
+    });
+
+    it ('should respect the max number of retries', () => {
+        let callCnt = 0;
+
+        const fn = (onerror: (err?: Error) => void) => {
+            
+            if (onerror instanceof Error) {
+                //it failed after 5 retries
+                //expect(onerror.message).toContain('test error');
+
+                c.abort();
+                return;
+            }
+            callCnt += 1;
+            onerror(new Error('test error'));
+        };
+
+        const c = call(fn);
+        c.failAfter(5);
+        c.setStrategy(new ExponentialBackoffStrategy({initialDelay: 100, maxDelay: 1000}));
+        c.start();
+
+        jasmine.clock().tick(100000);
+        expect(c.isAborted()).toBeTruthy();
+        expect(callCnt).toBe(7); // why 7?
+
+    });
+
+
+});
+
+
+
+

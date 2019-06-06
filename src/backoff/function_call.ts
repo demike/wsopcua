@@ -109,6 +109,10 @@ public getNumRetries() {
     return this.numRetries_;
 }
 
+public getMaxNumOfRetries() {
+    return this.failAfter_;
+}
+
 // Sets the backoff limit.
 public failAfter(maxNumberOfRetry: number) {
     if (!this.isPending()) {
@@ -136,7 +140,7 @@ public abort() {
 
 // Initiates the call to the wrapped function. Accepts an optional factory
 // function used to create the backoff instance; used when testing.
-public start(backoffFactory: (arg0: BackoffStrategy) => Backoff) {
+public start(backoffFactory?: (arg0: BackoffStrategy) => Backoff) {
     if (!this.isPending()) {
         throw new Error('FunctionCall already started.');
     }

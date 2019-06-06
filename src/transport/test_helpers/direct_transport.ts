@@ -5,7 +5,6 @@ import { EventEmitter } from 'eventemitter3';
 import { assert } from '../../assert';
 import { setFakeTransport } from '../ws_transport';
 
-import {setImmediate} from 'setimmediate';
 
 export class DirectTransport extends EventEmitter {
 

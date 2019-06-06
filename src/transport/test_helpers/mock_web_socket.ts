@@ -6,6 +6,7 @@ export interface WebSocketMock {
     _message(msg: string | ArrayBufferLike | Blob | ArrayBufferView): void;
     _error();
     _close();
+    addEventListener(type: string, listener: () => void );
     send: jasmine.Spy;
     close: jasmine.Spy;
 }
@@ -48,7 +49,7 @@ export function installMockWebSocket() {
           socketMock.readyState = WebSocket.CLOSED;
           socketMock.onclose && socketMock.onclose({code});
           if (socketMock.listeners['close']) {
-            socketMock.listener['close'].forEach(listener => { listener({code: code}); });
+            socketMock.listeners['close'].forEach(listener => { listener({code: code}); });
           }
         },
         addEventListener: function (type, listener) {

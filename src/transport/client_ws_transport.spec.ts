@@ -80,6 +80,26 @@ describe('testing ClientWS_transport', function () {
 
     });
 
+    it('should throw an exception when specifying an invalid protocol', function () {
+        let exc = null;
+     //   expect( () => {
+        try {
+            transport.connect('invalid://hohoho', function (err) {
+            });
+        } catch(e) {
+            exc = e;
+        }
+        expect(exc).not.toBeNull();
+
+        try {
+            transport.connect('fake://hohoho', function (err) {
+            });
+        } catch(e) {
+            exc = e;
+        }
+        expect(exc).not.toBeNull();
+    });
+
 
 
     it('should report a time out error if trying to connect to a non responding server', function (done) {
@@ -196,69 +216,50 @@ describe('testing ClientWS_transport', function () {
 
     });
 
-/*
+
     it('should connect and forward subsequent message chunks after a valid HEL/ACK transaction', function (done) {
 
         // lets build the subsequent message
-        const message1 = Buffer.alloc(10);
-        message1.writeUInt32BE(0xDEADBEEF, 0);
-        message1.writeUInt32BE(0xFEFEFEFE, 4);
-        message1.writeUInt16BE(0xFFFF, 8);
-
-
-        let counter = 1;
-        const spyOnServerWrite = sinon.spy(function (socket, data) {
-            debugLog('\ncounter = ', counter);
-            debugLog(hexDump(data));
-            if (counter === 1) {
-                // HEL/ACK transaction
-                const messageChunk = packTcpMessage('ACK', fakeAcknowledgeMessage);
-                counter += 1;
-                socket.write(messageChunk);
-
-            } else if (counter === 2) {
-
-                counter += 1;
-                data.length.should.equal(18);
-
-                compare_buffers(data.slice(8), message1);
-                socket.write(data);
-
-            } else {
-                console.log(' UNWANTED PACKET');
-            }
-            counter.should.be.lessThan(4);
-        });
-        fakeServer.pushResponse(spyOnServerWrite);
-        fakeServer.pushResponse(spyOnServerWrite);
-        fakeServer.pushResponse(spyOnServerWrite);
-
+        const message1 = new DataView(new ArrayBuffer(10));
+        message1.setUint32(0, 0xDEADBEEF, false);
+        message1.setUint32(4, 0xFEFEFEFE, false);
+        message1.setUint16(8, 0xFFFF, false);
 
         transport.timeout = 1000; // very short timeout;
 
-        transport.on('message', function (message_chunk) {
+        transport.on('message', function (message_chunk: DataView) {
             debugLog(hexDump(message_chunk));
-            compare_buffers(message_chunk.slice(8), message1);
+            expect(new DataView(message_chunk.buffer, 8)).toEqual(message1);
 
-            spyOnConnect.calls.count(); ).toBe(1);
-            spyOnClose.calls.count(); ).toBe(0);
-            spyOnConnectionBreak.calls.count(); ).toBe(0);
-
-            spyOnServerWrite.calls.count(); ).toBe(2);
+            expect(spyOnConnect.calls.count()).toBe(1);
+            expect(spyOnClose.calls.count()).toBe(0);
+            expect(spyOnConnectionBreak.calls.count() ).toBe(0);
 
             done();
-        })
+        });
 
         transport.connect(url, function (err) {
             if (err) {
                 console.log(' err = ', err.message);
             }
             assert(!err);
-            const buf = transport.createChunk('MSG', 'F', message1.length);
-            message1.copy(buf, transport.headerSize, 0, message1.length);
+            const buf = transport.createChunk('MSG', 'F', message1.byteLength);
+            (new Uint8Array(buf)).set( new Uint8Array(message1.buffer) , transport.headerSize);
             transport.write(buf);
         });
-    })
+
+        const sock: WebSocketMock = (transport as any)._socket;
+        sock._open();
+
+        // send Fake ACK response
+        sock._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
+
+        //let's receife a message1
+        const buf = transport.createChunk('MSG', 'F', message1.byteLength);
+        (new Uint8Array(buf)).set( new Uint8Array(message1.buffer) , transport.headerSize);
+        sock._message(buf);
+
+    });
 
     it('should close the socket and emit a close event when disconnect() is called', function (done) {
 
@@ -267,7 +268,7 @@ describe('testing ClientWS_transport', function () {
 
         let server_confirms_that_server_socket_has_been_closed = false;
         let transport_confirms_that_close_event_has_been_processed = false;
-
+/*
         const spyOnServerWrite = sinon.spy(function (socket, data) {
             debugLog('\ncounter = ', counter);
             debugLog(hexDump(data));
@@ -286,13 +287,13 @@ describe('testing ClientWS_transport', function () {
         fakeServer.on('end', function () {
             server_confirms_that_server_socket_has_been_closed = true;
         });
-
+*/
         transport.timeout = 1000; // very short timeout;
 
         transport.on('close', function (err) {
-            transport_confirms_that_close_event_has_been_processed; ).toBe(false, 'close event shall only be received once');
+            expect(transport_confirms_that_close_event_has_been_processed).toBe(false, 'close event shall only be received once');
             transport_confirms_that_close_event_has_been_processed = true;
-            should(err).be.eql(null, 'close event shall have err===null, when disconnection is initiated by the client itself');
+            expect(err).toBe(null, 'close event shall have err===null, when disconnection is initiated by the client itself');
         });
 
         transport.connect(url, function (err) {
@@ -300,21 +301,32 @@ describe('testing ClientWS_transport', function () {
                 console.log(' err = ', err.message);
             }
             assert(!err);
-            server_confirms_that_server_socket_has_been_closed.should.equal(false);
-            transport_confirms_that_close_event_has_been_processed.should.equal(false);
-            transport.disconnect(function (err) {
-                if (err) {
-                    console.log(' err = ', err.message);
-                }
-                assert(!err);
+            expect(server_confirms_that_server_socket_has_been_closed).toBe(false);
+            expect(transport_confirms_that_close_event_has_been_processed).toBe(false);
+            transport.disconnect(function () {
+
                 setImmediate(function () {
-                    server_confirms_that_server_socket_has_been_closed.should.equal(true);
-                    transport_confirms_that_close_event_has_been_processed.should.equal(true);
+                    expect(server_confirms_that_server_socket_has_been_closed).toBe(true);
+                    expect(transport_confirms_that_close_event_has_been_processed).toBe(true);
                     done();
                 });
             });
         });
-    })
+
+
+        const sock: WebSocketMock = (transport as any)._socket;
+
+        sock.addEventListener('close', () => {
+            server_confirms_that_server_socket_has_been_closed = true;
+        });
+
+        sock._open();
+
+        // send Fake ACK response
+        sock._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
+
+    });
+
 
     it('should dispose the socket and emit a close event when socket is closed by the other end', function (done) {
 
@@ -323,6 +335,7 @@ describe('testing ClientWS_transport', function () {
         let server_confirms_that_server_socket_has_been_closed = false;
         let transport_confirms_that_close_event_has_been_processed = false;
 
+/*
         const spyOnServerWrite = sinon.spy(function (socket, data) {
 
             debugLog('\ncounter = ', counter);
@@ -349,17 +362,17 @@ describe('testing ClientWS_transport', function () {
         fakeServer.on('end', function () {
             server_confirms_that_server_socket_has_been_closed = true;
         });
-
+*/
 
         transport.timeout = 1000; // very short timeout;
         transport.on('close', function (err) {
 
 
-            transport_confirms_that_close_event_has_been_processed; ).toBe(false, 'close event shall only be received once');
+            expect(transport_confirms_that_close_event_has_been_processed ).toBe(false, 'close event shall only be received once');
 
             transport_confirms_that_close_event_has_been_processed = true;
 
-            should(err).be.instanceOf(Error,
+            expect(err instanceof Error).toBe(true,
                 'the close event should pass a valid Error object because disconnection is caused by external event');
 
             done();
@@ -370,14 +383,28 @@ describe('testing ClientWS_transport', function () {
             assert(!err);
         });
 
-    })
+        const sock: WebSocketMock = (transport as any)._socket;
 
+        sock.addEventListener('close', () => {
+            server_confirms_that_server_socket_has_been_closed = true;
+        });
+
+        sock._open();
+
+        // send Fake ACK response
+        sock._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
+
+        //server closing
+        sock._error();
+
+    })
+/*
 
     it('should returns an error if url has invalid port', function (done) {
 
-        transport.connect('opc.tcp://localhost:XXXXX/SomeAddress', function (err) {
+        transport.connect('ws://localhost:XXXXX/SomeAddress', function (err) {
             if (err) {
-		console.log(err);
+                console.log(err);
                 const regexp_1 = /EADDRNOTAVAIL|ECONNREFUSED/; // node v0.10
                 const regexp_2 = /port(" option)* should be/; // node >v0.10 < 9.000
                 const regexp_3 = /Port should be > 0 and < 65536. Received NaN/; // node >= 9.00
@@ -386,15 +413,15 @@ describe('testing ClientWS_transport', function () {
                 const test2 = !!err.message.match(regexp_2);
                 const test3 = !!err.message.match(regexp_3);
                 const test4 = !!err.message.match(regexp_4);
-                (test1 || test2 || test3 || test4); ).toBe(true, 'expecting one of those error message. got: ' + err.message);
+                expect(test1 || test2 || test3 || test4 ).toBe(true, 'expecting one of those error message. got: ' + err.message);
                 done();
             } else {
                 throw new Error('Should have raised a connection error');
                 // done();
             }
         });
-    })
+    });
+*/
 
-    */
 });
 
