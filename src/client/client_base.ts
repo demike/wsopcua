@@ -7,7 +7,7 @@ import { assert } from '../assert';
 import * as log from 'loglevel';
 import async_series from 'async-es/series';
 import async_map from 'async-es/map';
-import { EventEmitter } from 'eventemitter3';
+import { EventEmitter } from '../eventemitter';
 import { SecurityPolicy, toUri } from '../secure-channel/security_policy';
 import { MessageSecurityMode } from '../secure-channel';
 import { once } from '../utils/once';
@@ -49,7 +49,8 @@ import { RequestHeader, ResponseHeader } from '../service-secure-channel';
 import { ClientSession } from './client_session';
 import { EndpointDescription } from '../service-endpoints';
 import { IGetEndpointsRequest } from '../generated/GetEndpointsRequest';
-import { FindServersOnNetworkRequest, IFindServersOnNetworkRequest, FindServersOnNetworkResponse, ServerOnNetwork } from '../generated';
+import { FindServersOnNetworkRequest, IFindServersOnNetworkRequest, FindServersOnNetworkResponse, ServerOnNetwork, IRequestHeader, ChannelSecurityToken } from '../generated';
+import { IEncodable } from '../factory/factories_baseobject';
 
 const defaultConnectionStrategy = {
     maxRetry: 10000000, // almost infinite
@@ -100,9 +101,23 @@ export interface IFindServersOptions {
     serverUris?: string[];
 }
 
-export type OPCUAClientEvents = 'close'|'backoff'|'abort'|'start_reconnection'|'send_chunk'|'after_reconnection'
-                                    |'send_request'|'receive_chunk'|'receive_response'|'lifetime_75'
-                                    |'security_token_renewed'|'connection_lost'|'connection_reestablished'|'timed_out_request';
+export interface OPCUAClientEvents {
+
+ 'close': ErrorCallback;
+ 'backoff': (number: number, delay: number) => void;
+ 'abort': () => void;
+ 'start_reconnection': () => void;
+ 'send_chunk': (messageChunk: ArrayBuffer) => void;
+ 'after_reconnection': ErrorCallback;
+ 'send_request': (requestMessage: IEncodable & {requestHeader: IRequestHeader}) => void;
+ 'receive_chunk': (message_chunk: DataView) => void;
+ 'receive_response'
+ 'lifetime_75': (token: ChannelSecurityToken) => void;
+ 'security_token_renewed': () => void;
+ 'connection_lost': () => void;
+ 'connection_reestablished': () => void;
+ 'timed_out_request': (requestMessage: IEncodable & {requestHeader: IRequestHeader}) => void;
+}
 
 /**
  * @class OPCUAClientBase

@@ -1,7 +1,8 @@
 'use strict';
 
 import {DataStream} from '../basic-types/DataStream';
-export function readMessageHeader(stream: DataStream) {
+import { MessageHeader } from '../packet-assembler/packet_assembler';
+export function readMessageHeader(stream: DataStream): MessageHeader {
     const msgType = String.fromCharCode(stream.getUint8()) +
       String.fromCharCode(stream.getUint8()) +
       String.fromCharCode(stream.getUint8());

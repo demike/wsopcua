@@ -1,7 +1,7 @@
 'use strict';
 
 import {assert} from '../assert';
-import {EventEmitter} from 'eventemitter3';
+import {EventEmitter} from '../eventemitter';
 import {DataStream} from '../basic-types/DataStream';
 import { MessageSecurityMode } from '../service-secure-channel';
 import { SecurityPolicy, getCryptoFactory, toUri,
@@ -111,9 +111,19 @@ export function dump_transaction_statistics(stats: ITransactionStats ) {
 
 }
 
-export type ClientSecureChannelLayerEvents = 'end_transaction'|'close'|'receive_chunk'
-                    |'abort'|'lifetime_75'|'backoff'|'security_token_renewed'|'receive_response'
-                    |'timed_out_request'|'send_chunk'|'send_request';
+export interface ClientSecureChannelLayerEvents {
+ 'end_transaction': (transaction_stats: ITransactionStats) => void;
+ 'close': ErrorCallback;
+ 'receive_chunk': (message_chunk: DataView) => void;
+ 'abort': () => void;
+ 'lifetime_75': (securityToken: ChannelSecurityToken) => void;
+ 'backoff': ( number: number, delay: number) => void;
+ 'security_token_renewed': () => void;
+ 'receive_response': (response: any) => void;
+ 'timed_out_request':  (requestMessage: IEncodable & {requestHeader: IRequestHeader}) => void;
+ 'send_chunk': (messageChunk: ArrayBuffer) => void;
+ 'send_request': (requestMessage: IEncodable & {requestHeader: IRequestHeader}) => void;
+}
 
 export interface ClientSecureChannelLayerOptions {
     defaultSecureTokenLifeTime?: number;
@@ -982,7 +992,8 @@ public isOpened() {
  *
  *
  */
-protected _performMessageTransaction(msgType: string, requestMessage: any, callback: ResponseCallback<any>) {
+protected _performMessageTransaction(msgType: string, requestMessage: IEncodable & {requestHeader: IRequestHeader}, 
+    callback: ResponseCallback<any>) {
 
     /* jshint validthis: true */
 

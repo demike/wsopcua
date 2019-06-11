@@ -1,10 +1,10 @@
-import { EventEmitter } from 'eventemitter3';
+import { EventEmitter } from '../../eventemitter';
 import { assert } from '../../assert';
 
 // tslint:disable:no-empty
 // tslint:disable:unused-variable
 
-export class HalfComChannel extends EventEmitter {
+export class HalfComChannel extends EventEmitter<any> {
     public _hasEnded: boolean;
     protected _te: TextEncoder;
 

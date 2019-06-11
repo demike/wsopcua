@@ -4,9 +4,9 @@
  */
 
 
-import {EventEmitter} from 'eventemitter3';
+import {EventEmitter} from '../eventemitter';
 import {StatusCodes} from '../constants';
-import {assert} from '../assert'
+import {assert} from '../assert';
 
 import * as subscription_service from "../service-subscription";
 import * as read_service from '../service-read';
@@ -24,10 +24,17 @@ import { MonitoredItemCreateResult } from '../generated/MonitoredItemCreateResul
 import { StatusCode, NodeId} from '../basic-types';
 import { IReadValueId } from '../generated/ReadValueId';
 import { ResponseCallback, ErrorCallback } from './client_base';
-import { ISetMonitoringModeRequest } from '../generated';
+import { ISetMonitoringModeRequest, DataValue } from '../generated';
 import { ExtensionObject } from '../basic-types/extension_object';
+import { Variant } from '../variant/variant';
+import { debugLog } from '../common/debug';
 
-export type MonitoredItemEvents = 'initialized'|'changed'|'terminated'|'err';
+export interface MonitoredItemEvents { 
+    'initialized': () => void;
+    'changed': (value: DataValue /* a value change */ | Variant[] /* an event */) => void;
+    'terminated': () => void;
+    'err': (errorMessage: string) => void;
+}
 
 //import {MonitoredItemsModifyRequest} from '../generated/MonitoredItemsModifyRequest';
 const MonitoredItemModifyRequest = subscription_service.MonitoredItemModifyRequest;
@@ -82,7 +89,7 @@ public get statusCode() : StatusCode {
 }
 
 
-public _notify_value_change(value) {
+public _notify_value_change(value: DataValue) {
     /**
      * Notify the observers that the MonitoredItem value has changed on the server side.
      * @event changed
@@ -96,6 +103,25 @@ public _notify_value_change(value) {
        console.log("Please verify the application using this node-opcua client");
      }
 };
+
+    /**
+     * @internal
+     * @param eventFields
+     * @private
+     */
+    public _notify_event(eventFields: Variant[]) {
+        /**
+         * Notify the observers that the MonitoredItem value has changed on the server side.
+         * @event changed
+         * @param value
+         */
+        try {
+            this.emit("changed", eventFields);
+        } catch (err) {
+            debugLog("Exception raised inside the event handler called by ClientMonitoredItem.on('change')", err);
+            debugLog("Please verify the application using this node-opcua client");
+        }
+    }
 
 protected _prepare_for_monitoring () : subscription_service.MonitoredItemCreateRequest | Error{
 

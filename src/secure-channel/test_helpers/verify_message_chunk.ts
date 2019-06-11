@@ -19,7 +19,7 @@ export function verify_multi_chunk_message(packets: ArrayBufferView[]) {
         analyseExtensionObject(fullMessageBody, 0, 0);
     });
     messageBuilder.on('start_chunk', (info) => {
-        console.log(' starting new chunk ', info.messageHeader);
+        console.log(' starting new chunk ', info);
     });
 
     messageBuilder.on('chunk', (messageChunk) => {

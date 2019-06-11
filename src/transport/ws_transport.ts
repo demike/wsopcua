@@ -4,7 +4,7 @@
  */
 
  // system requires
-import {EventEmitter} from 'eventemitter3';
+import {EventEmitter} from '../eventemitter';
 import {assert} from '../assert';
 
 // opcua requires
@@ -14,7 +14,7 @@ import {writeTCPMessageHeader} from './tools';
 import {readRawMessageHeader} from './message_builder_base';
 
 import {debugLog, doDebug} from '../common/debug';
-import { ResponseCallback } from '../client/client_base';
+import { ResponseCallback, ErrorCallback } from '../client/client_base';
 
 let fakeSocket: any = {invalid: true} ;
 
@@ -31,7 +31,15 @@ export function getFakeTransport() {
 
 let counter = 0;
 
-export type WSTransportEvents = 'connect'|'message'|'socket_closed'|'close'|'socket_error'|'connection_break'|'error';
+interface WSTransportEvents {
+    'connect': () => void;
+    'message': (message_chunk: DataView) => void;
+    'socket_closed': ErrorCallback;
+    'close': ErrorCallback;
+    'socket_error': (evt: CloseEvent) => void;
+    'connection_break': () => void;
+    'error': ErrorCallback;
+}
 
 /**
  * WSTransport

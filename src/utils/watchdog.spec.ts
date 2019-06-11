@@ -1,10 +1,10 @@
 'use strict';
 
-import { EventEmitter } from 'eventemitter3';
+import { EventEmitter } from '../eventemitter';
 import { WatchDog, ISubscriber, IWatchdogData2 } from './watchdog';
 
 
-class MyObject extends EventEmitter implements ISubscriber {
+class MyObject extends EventEmitter<any> implements ISubscriber {
     _watchDog: WatchDog;
     _watchDogData: IWatchdogData2;
     public watchdogReset(): void {

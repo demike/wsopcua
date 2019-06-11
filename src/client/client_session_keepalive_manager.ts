@@ -1,6 +1,6 @@
 
 import {ClientSession} from './client_session';
-import {EventEmitter} from 'eventemitter3';
+import {EventEmitter} from '../eventemitter';
 import {assert} from '../assert';
 import {coerceNodeId} from '../nodeid/nodeid';
 // import {VariableIds} from '../constants';
@@ -10,14 +10,17 @@ import { debugLog } from '../common/debug';
 
 const serverStatus_State_Id = coerceNodeId( /*VariableIds.Server_ServerStatus_State*/ 2259);
 
-export type ClientSessionKeepAliveManagerEvents = 'failure'|'keepalive';
+export interface ClientSessionKeepAliveManagerEvents {
+    'failure': () => void;
+    'keepalive': (lastKnownState: ServerState) => void;
+}
 
 export class ClientSessionKeepAliveManager extends EventEmitter<ClientSessionKeepAliveManagerEvents> {
 
     protected timerId: number;
     protected session: ClientSession;
     protected pingTimeout: number;
-    protected lastKnownState;
+    protected lastKnownState: ServerState;
     protected checkInterval: number;
 
 constructor ( session: ClientSession) {
@@ -72,7 +75,7 @@ public ping_server(callback: () => void) {
 
         } else {
             if (dataValue.statusCode === StatusCodes.Good) {
-                const newState = ServerState[dataValue.value.value];
+                const newState = dataValue.value.value;//ServerState[dataValue.value.value];
                 // istanbul ignore next
                 if (newState !== this.lastKnownState) {
                     console.log(' Server State = ', newState.toString());

@@ -2,7 +2,7 @@
 /**
  * @module opcua.client
  */
-import { EventEmitter } from 'eventemitter3';
+import { EventEmitter } from '../eventemitter';
 import { assert } from '../assert';
 import { resolveNodeId, coerceNodeId, makeNodeId, NodeId, NodeIdType } from '../nodeid/nodeid';
 import { OPCUAClientBase, OpcUaResponse, ErrorCallback, ResponseCallback } from './client_base';
@@ -25,7 +25,7 @@ import { TransferSubscriptionsRequest } from '../generated/TransferSubscriptions
 import { ClientSidePublishEngine } from './client_publish_engine';
 import { ClientSessionKeepAliveManager } from './client_session_keepalive_manager';
 
-import { UInt32, StatusCode } from '../basic-types';
+import { UInt32, StatusCode, IStatusCodeOptions } from '../basic-types';
 import { CallMethodRequest } from '../generated/CallMethodRequest';
 import { CallMethodResult } from '../generated/CallMethodResult';
 import { Argument } from '../generated/Argument';
@@ -63,7 +63,7 @@ import { RegisterNodesResponse } from '../generated/RegisterNodesResponse';
 import { UnregisterNodesRequest } from '../generated/UnregisterNodesRequest';
 import { UnregisterNodesResponse } from '../generated/UnregisterNodesResponse';
 import { TransferSubscriptionsResponse } from '../service-subscription';
-import { IModifySubscriptionRequest, ISetMonitoringModeRequest, SignatureData, IReadValueId } from '../generated';
+import { IModifySubscriptionRequest, ISetMonitoringModeRequest, SignatureData, IReadValueId, ServerState } from '../generated';
 import { buf2base64, buf2hex } from '../crypto';
 
 
@@ -91,7 +91,11 @@ export interface BrowseDescription {
 
 
 
-export type ClientSessionEvent = 'session_closed'|'keepalive'|'keepalive_failure';
+export interface ClientSessionEvent {
+    'session_closed': (status: IStatusCodeOptions) => void;
+    'keepalive': (state: ServerState) => void;
+    'keepalive_failure': () => void;
+}
 
 /**
  * @class ClientSession
@@ -903,7 +907,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         });
     }
 
-    public emitCloseEvent(statusCode?: any) {
+    public emitCloseEvent(statusCode?: IStatusCodeOptions) {
         if (!this._closeEventHasBeenEmmitted) {
             debugLog('ClientSession#emitCloseEvent');
             this._closeEventHasBeenEmmitted = true;

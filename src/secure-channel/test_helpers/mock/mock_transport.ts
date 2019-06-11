@@ -8,7 +8,7 @@ import { OpenSecureChannelResponse } from '../../../generated/OpenSecureChannelR
 import { GetEndpointsResponse } from '../../../generated/GetEndpointsResponse';
 import { CreateSessionResponse } from '../../../generated/CreateSessionResponse';
 import { ActivateSessionResponse } from '../../../generated/ActivateSessionResponse';
-import { EventEmitter } from 'eventemitter3';
+import { EventEmitter } from '../../../eventemitter';
 import { ChannelSecurityToken } from '../../../wsopcua';
 import { EndpointDescription } from '../../../generated';
 import { debugLog, hexDump } from '../../../common/debug';
@@ -47,7 +47,7 @@ export const fakeGetEndpointsResponse = new GetEndpointsResponse({
 export const fakeCreateSessionResponse = new CreateSessionResponse({});
 export const fakeActivateSessionResponse = new ActivateSessionResponse({});
 
-export class MockServerTransport extends EventEmitter {
+export class MockServerTransport extends EventEmitter<any> {
 
     private _replies: any;
     private _mockTransport: DirectTransport;

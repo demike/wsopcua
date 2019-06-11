@@ -3,7 +3,7 @@
  * @module opcua.client
  */
 
-import {EventEmitter} from 'eventemitter3';
+import {EventEmitter} from '../eventemitter';
 import {assert} from '../assert';
 import {MonitoredItemBase} from './MonitoredItemBase';
 import { ClientSubscription } from '../client/ClientSubscription';
@@ -16,8 +16,13 @@ import * as subscription_service from '../service-subscription';
 import { DataValue } from '../data-value';
 import { ErrorCallback, ResponseCallback } from './client_base';
 import { StatusCode } from '../basic-types';
+import { Variant } from '../variant';
 
-export type MonitoredItemGroupEvents = 'initialized'|'terminated'|'changed';
+export interface MonitoredItemGroupEvents {
+    'initialized': () => void;
+    'terminated': ()=> void;
+    'changed': (item: MonitoredItemBase, dataValue: DataValue /* a value change */| Variant[] /* an event */, index: number) => void;
+}
 
 /**
  * ClientMonitoredItemGroup

@@ -1,12 +1,12 @@
 
 
 import { HalfComChannel } from './half_com_channel';
-import { EventEmitter } from 'eventemitter3';
+import { EventEmitter } from '../../eventemitter';
 import { assert } from '../../assert';
 import { setFakeTransport } from '../ws_transport';
 
 
-export class DirectTransport extends EventEmitter {
+export class DirectTransport extends EventEmitter<any> {
 
     public client: HalfComChannel;
     public server: HalfComChannel;

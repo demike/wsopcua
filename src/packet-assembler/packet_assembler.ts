@@ -4,13 +4,30 @@
  */
 
 
-import {EventEmitter} from 'eventemitter3';
+import {EventEmitter} from '../eventemitter';
 import {assert} from '../assert';
 import { concatDataViews } from '../basic-types/array';
 
 const doDebug = false;
 
-export type PacketAssemblerEvents = 'newMessage'|'message';
+export interface MessageHeader {
+    msgType: string;
+    isFinal: string;
+    length: number;
+}
+
+export interface PacketInfo {
+    length: number;
+    messageHeader: MessageHeader;
+    extra: string;
+}
+
+export type ReadMessageFuncType = (data: DataView) => PacketInfo;
+
+export interface PacketAssemblerEvents {
+    'newMessage': (packetInfo: PacketInfo, data: DataView) => void;
+    'message':  (messageChunk: DataView) => void;
+}
 
 /***
  * @class PacketAssembler
@@ -21,13 +38,13 @@ export type PacketAssemblerEvents = 'newMessage'|'message';
  * @constructor
  */
 export class PacketAssembler extends EventEmitter<PacketAssemblerEvents> {
-    packet_info: string;
+    private packet_info: PacketInfo;
     minimumSizeInBytes: number;
-    readMessageFunc: (buf: DataView) => string;
+    readMessageFunc: ReadMessageFuncType;
     currentLength: number;
     expectedLength: number;
     protected _stack: DataView[];
-constructor (options: { readMessageFunc: (buf: DataView) => any; minimumSizeInBytes?: number; }) {
+constructor (options: { readMessageFunc: ReadMessageFuncType; minimumSizeInBytes?: number; }) {
     super();
     this._stack = [];
     this.expectedLength = 0;
@@ -63,7 +80,7 @@ public feed(data: DataView) {
 
     const self = this;
 
-    let messageChunk;
+    let messageChunk: DataView;
     // xx assert(data instanceof Buffer);
     // xx assert(data.length > 0, "PacketAssembler expects a no-zero size data block");
     // xx assert(this.expectedLength === 0 || this.currentLength <= this.expectedLength);

@@ -1,4 +1,4 @@
-import { PacketAssembler } from './packet_assembler';
+import { PacketAssembler, PacketInfo } from './packet_assembler';
 import { concatArrayBuffers } from '../wsopcua';
 
 function makeMessage(msgType, length) {
@@ -18,10 +18,10 @@ function makeMessage(msgType, length) {
 
     return buf;
 }
-function readerHeader(data: DataView) {
+function readerHeader(data: DataView): PacketInfo {
     const msgType = String.fromCharCode(data.getUint8(0));
     const length = data.getUint32(1, true);
-    return {length: length, extra: msgType};
+    return {length: length, extra: msgType, messageHeader: {isFinal: 'f', length: length, msgType: msgType}};
 }
 
 function message_slice(packet: DataView, begin: number, end?: number) {

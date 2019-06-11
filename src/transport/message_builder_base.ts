@@ -2,24 +2,38 @@
 /**
  * @module opcua.miscellaneous
  */
-import {EventEmitter} from 'eventemitter3';
+import {EventEmitter} from '../eventemitter';
 import {DataStream} from '../basic-types/DataStream';
 import {assert} from '../assert';
 import {get_clock_tick} from '../utils';
 
-import {PacketAssembler} from '../packet-assembler/packet_assembler';
+import {PacketAssembler, PacketInfo} from '../packet-assembler/packet_assembler';
 import {readMessageHeader} from '../chunkmanager';
 import { concatArrayBuffers } from '../basic-types/array';
+import {SequenceHeader} from '../service-secure-channel';
+import { IEncodable } from '../factory/factories_baseobject';
 
-export function readRawMessageHeader(data: DataView | ArrayBuffer ) {
+const doPerfMonitoring = false;
+
+export function readRawMessageHeader(data: DataView | ArrayBuffer ): PacketInfo {
     const messageHeader = readMessageHeader(new DataStream(data));
     return {
+        extra: '',
         length: messageHeader.length,
         messageHeader: messageHeader
     };
 }
 
-export type MessageBuilderEvents = 'start_chunk'|'chunk'|'new_token'|'full_message_body'|'message'|'error'|'invalid_sequence_number';
+export interface MessageBuilderEvents {
+    'start_chunk': (info: PacketInfo, data: DataView) => void;
+    'chunk': (messageChunk: ArrayBuffer | DataView) => void;
+    'new_token': (tokenId: number) => void;
+    'full_message_body': (full_message_body: ArrayBuffer) => void;
+    'message': (objMessage: IEncodable, msgType: string, requestId: number, secureChannelId: number) => void;
+      'error': (err: Error, requestId?: number) => void;
+    'invalid_sequence_number': ( expectedSequenceNumber: number, sequenceNumber: number) => void;
+
+}
 
 export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEvents> {
     signatureLength: number;
@@ -32,12 +46,12 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
     blocks: any[];
     message_chunks: DataView[];
     messageHeader: any;
-    secureChannelId: any;
-    expected_secureChannelId: boolean;
+    secureChannelId: number;
+    expected_secureChannelId: number;
 
     protected _tick0: number;
     protected _tick1: number;
-    sequenceHeader: any;
+    sequenceHeader: SequenceHeader;
 
     get tick0() {
         return this._tick0;
@@ -59,7 +73,9 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
         });
         this.packetAssembler.on('newMessage',  (info, data) => {
             // record tick 0: when the first data is received
-            this._tick0 = get_clock_tick();
+            if (doPerfMonitoring) {
+                this._tick0 = get_clock_tick();
+            }
             /**
              *
              * notify the observers that a new message is being built
@@ -106,7 +122,7 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
         }
 
      //   message_chunk = (message_chunk instanceof ArrayBuffer) ? message_chunk : message_chunk.buffer;
-     message_chunk = (message_chunk instanceof ArrayBuffer) ? new DataView(message_chunk) : message_chunk;
+        message_chunk = (message_chunk instanceof ArrayBuffer) ? new DataView(message_chunk) : message_chunk;
 
 
         this.message_chunks.push(message_chunk);

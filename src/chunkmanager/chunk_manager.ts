@@ -4,7 +4,7 @@
  */
 
 
-import { EventEmitter } from 'eventemitter3';
+import { EventEmitter } from '../eventemitter';
 import { assert } from '../assert';
 
 import { readMessageHeader } from './read_message_header';
@@ -75,7 +75,9 @@ export interface IChunkManagerOptions {
     writeHeaderFunc?: WriteHeaderFunc; // write header must be specified if headerSize !=0
 }
 
-export type ChunkManagerEvents = 'chunk';
+export interface ChunkManagerEvents {
+     'chunk': (pendingChunk: ArrayBuffer, isLast: boolean) => void;
+}
 
 /**
  * @class ChunkManager
@@ -256,7 +258,7 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
             l -= nb_to_write;
         }
     }
-    _write_padding_bytes(nbPaddingByteTotal) {
+    _write_padding_bytes(nbPaddingByteTotal: number) {
         const nbPaddingByte = nbPaddingByteTotal % 256;
         const extraNbPaddingByte = Math.floor(nbPaddingByteTotal / 256);
         assert(extraNbPaddingByte === 0 || this.plainBlockSize > 256, 'extraNbPaddingByte only requested when key size > 2048');

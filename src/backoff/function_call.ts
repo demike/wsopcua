@@ -1,6 +1,6 @@
 //      Copyright (c) 2012 Mathieu Turcotte
 //      Licensed under the MIT license.
-import {EventEmitter} from 'eventemitter3';
+import {EventEmitter} from '../eventemitter';
 import {Backoff} from './backoff';
 import {FibonacciBackoffStrategy} from './strategy/fibonacci';
 import { BackoffStrategy } from './strategy/strategy';
@@ -18,7 +18,10 @@ enum FunctionCallState {
     ABORTED = 3
   }
 
-export type FunctionCallEvents = 'abort'|'backoff';
+export interface FunctionCallEvents {
+    'abort': () => void;
+    'backoff': (number: number, delay: number, err: Error) => void;
+}  
 
 // Wraps a function to be called in a backoff loop.
 export class FunctionCall extends EventEmitter<FunctionCallEvents> {

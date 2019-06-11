@@ -93,7 +93,7 @@ public update(options: IMessageChunkerOptions) {
  * @param messageChunkCallback   {Function}
  */
 public chunkSecureMessage(msgType: string, options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader,
-     message: IEncodable, messageChunkCallback: (chunk: DataView) => void) {
+     message: IEncodable, messageChunkCallback: (chunk: ArrayBuffer) => void) {
 
     options = <any>options || {};
     assert('function' === typeof messageChunkCallback);
@@ -117,7 +117,7 @@ public chunkSecureMessage(msgType: string, options: SecureMessageChunkManagerOpt
     const secure_chunker = new SecureMessageChunkManager(
         msgType, options, securityHeader, this._sequenceNumberGenerator
     )
-        .on('chunk', function (messageChunk: DataView) {
+        .on('chunk', function (messageChunk: ArrayBuffer) {
             messageChunkCallback(messageChunk);
         })
         .on('finished', function () {

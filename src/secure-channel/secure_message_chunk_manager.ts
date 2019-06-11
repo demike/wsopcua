@@ -5,7 +5,7 @@
 
 
 import {assert} from '../assert';
-import {EventEmitter} from 'eventemitter3';
+import {EventEmitter} from '../eventemitter';
 
 import {ChunkManager} from '../chunkmanager';
 import {DataStream} from '../basic-types/DataStream';
@@ -13,7 +13,11 @@ import {DataStream} from '../basic-types/DataStream';
 import {SequenceHeader, AsymmetricAlgorithmSecurityHeader, SymmetricAlgorithmSecurityHeader} from '../service-secure-channel';
 import { SequenceNumberGenerator } from './sequence_number_generator';
 
-export type SecureMessageChunkManagerEvents = 'chunk'|'finished';
+export interface SecureMessageChunkManagerEvents {
+    'chunk': (chunk: ArrayBuffer, is_last: boolean) => void;
+    'finished': () => void;
+
+}
 
 export function chooseSecurityHeader(msgType: string) {
 

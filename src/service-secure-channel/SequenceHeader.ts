@@ -19,7 +19,7 @@ import {BaseUAObject} from '../factory/factories_baseobject';
 
 
 export interface ISequenceHeader {
-  requestId?: any;
+  requestId?: number;
   sequenceNumber?: UInt32;
 }
 
@@ -35,7 +35,7 @@ export interface ISequenceHeader {
 export class SequenceHeader extends BaseUAObject {
 
   public static encodingDefaultBinary: ec.ExpandedNodeId = makeExpandedNodeId(generate_new_id());
-  public requestId: any;
+  public requestId: UInt32;
   public sequenceNumber: UInt32;
 constructor(options?: ISequenceHeader ) {
     super();

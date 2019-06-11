@@ -98,7 +98,7 @@ protected _validateSequenceNumber(sequenceNumber: number) {
     assert(Number.isFinite(this._previous_sequenceNumber));
     assert(Number.isFinite(sequenceNumber) && sequenceNumber >= 0);
 
-    let expectedSequenceNumber;
+    let expectedSequenceNumber: number;
     if (this._previous_sequenceNumber !== -1) {
 
         expectedSequenceNumber = this._previous_sequenceNumber + 1;

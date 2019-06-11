@@ -1,5 +1,5 @@
 import { assert } from '../assert';
-import { EventEmitter } from 'eventemitter3';
+import { EventEmitter } from '../eventemitter';
 
 
 export interface IWatchdogData2 {
@@ -39,7 +39,7 @@ function keepAliveFunc(this: ISubscriber) {
     }
 }
 
-export class WatchDog extends EventEmitter {
+export class WatchDog extends EventEmitter<any> {
     /**
      * returns the number of subscribers using the WatchDog object.
      */

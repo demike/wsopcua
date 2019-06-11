@@ -1,9 +1,14 @@
 //      Copyright (c) 2012 Mathieu Turcotte
 //      Licensed under the MIT license.
-import { EventEmitter } from 'eventemitter3';
+import { EventEmitter } from '../eventemitter';
 import { BackoffStrategy } from './strategy/strategy';
+import { ErrorCallback } from '../client/client_base';
 
-export type BackoffEvents = 'fail' | 'backoff' | 'ready';
+export interface BackoffEvents {
+    'fail': ErrorCallback;
+    'backoff': (backoffNumber: number, backoffDelay: number, err: Error) => void;
+    'ready': (backoffNumber: number, backoffDelay: number) => void;
+}
 
 // A class to hold the state of a backoff operation. Accepts a backoff strategy
 // to generate the backoff delays.

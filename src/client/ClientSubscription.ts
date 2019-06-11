@@ -3,7 +3,7 @@
  * @module opcua.client
  */
 
-import {EventEmitter} from 'eventemitter3';
+import {EventEmitter} from '../eventemitter';
 import {StatusCodes} from '../constants';
 import {assert} from '../assert';
 
@@ -28,8 +28,20 @@ import { IMonitoringParameters } from '../generated/MonitoringParameters';
 import { ICreateSubscriptionRequest } from '../generated/CreateSubscriptionRequest';
 import { MonitoredItemBase } from './MonitoredItemBase';
 import { ErrorCallback } from './client_base';
+import { StatusCode } from '../basic-types';
+import { DiagnosticInfo } from '../data-model';
 
-export type ClientSubscriptionEvents = 'started'|'internal_error'|'status_changed'|'raw_notification'|'keepalive'|'received_notifications'|'terminated'|'item_added';
+interface ClientSubscriptionEvents {
+    'started': ( subscription_id: number) => void;
+    'terminated': () => void;
+    'item_added': (mi: MonitoredItemBase) => void;
+    'keepalive': () => void;
+    'internal_error': (err: Error) => void;
+    'raw_notification': (nm: subscription_service.NotificationMessage) => void;
+    'received_notifications': (nm: subscription_service.NotificationMessage) => void;
+    'status_changed': (/*status:*/ StatusCode, /*diagnosticInfo:*/ DiagnosticInfo) => void;
+}
+
 
 /**
  * a object to manage a subscription on the client side.
@@ -157,7 +169,7 @@ constructor (session: ClientSession, options: ICreateSubscriptionRequest) {
                      * notify the observers that the subscription has now started
                      * @event started
                      */
-                    this.emit('started', this.subscriptionId);
+                    this.emit('started', <number>this.subscriptionId);
                 });
             }
         });
@@ -286,14 +298,12 @@ protected __on_publish_response_StatusChangeNotification(notification: subscript
 
 protected __on_publish_response_EventNotificationList (notification: subscription_service.EventNotificationList) {
     assert(notification instanceof subscription_service.EventNotificationList);
-
-    notification.events.forEach((event) => {
+    const events = notification.events || [];
+    for (const event of events) {
         const monitorItemObj = this.monitoredItems[event.clientHandle];
-        assert(monitorItemObj, 'Expecting a monitored item');
-
-
-        monitorItemObj._notify_value_change(event.eventFields);
-    });
+        assert(monitorItemObj, "Expecting a monitored item");
+        monitorItemObj._notify_event(event.eventFields || []);
+    }
 }
 
 public onNotificationMessage(notificationMessage: subscription_service.NotificationMessage) {
