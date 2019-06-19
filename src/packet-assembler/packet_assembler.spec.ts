@@ -21,7 +21,7 @@ function makeMessage(msgType, length) {
 function readerHeader(data: DataView): PacketInfo {
     const msgType = String.fromCharCode(data.getUint8(0));
     const length = data.getUint32(1, true);
-    return {length: length, extra: msgType, messageHeader: {isFinal: 'f', length: length, msgType: msgType}};
+    return {length: length, extra: msgType, messageHeader: {isFinal: 'F', length: length, msgType: msgType}};
 }
 
 function message_slice(packet: DataView, begin: number, end?: number) {

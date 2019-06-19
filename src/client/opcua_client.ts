@@ -14,7 +14,7 @@ import {StatusCodes} from '../constants';
 import * as session_service from '../service-session';
 import {ClientSubscription} from './ClientSubscription';
 
-import * as crypto_utils from '../crypto/crypto_utils';
+import 'setimmediate';
 
 const AnonymousIdentityToken = session_service.AnonymousIdentityToken;
 const CreateSessionRequest = session_service.CreateSessionRequest;

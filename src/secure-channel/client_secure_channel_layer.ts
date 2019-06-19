@@ -13,8 +13,6 @@ import * as log from 'loglevel';
 import {doDebug, debugLog, hexDump} from '../common/debug';
 import {StatusCodes} from '../constants/raw_status_codes';
 
-import setImmediate from 'setimmediate';
-
 /* global Buffer*/
 /**
  * @module opcua.client
