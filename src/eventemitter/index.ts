@@ -63,7 +63,9 @@ function addListener(emitter, event, fn, once) {
   const listener = new EE(fn, once)
     , evt = prefix ? prefix + event : event;
 
-  if (!emitter._events[evt]) { emitter._events[evt] = listener, emitter._eventsCount++; } else if (!emitter._events[evt].fn) { emitter._events[evt].push(listener); } else { emitter._events[evt] = [emitter._events[evt], listener]; }
+  if (!emitter._events[evt]) { emitter._events[evt] = listener, emitter._eventsCount++; } 
+  else if (!emitter._events[evt].fn) { emitter._events[evt].push(listener); } 
+  else { emitter._events[evt] = [emitter._events[evt], listener]; }
 
   return emitter;
 }
@@ -179,8 +181,10 @@ public emit<MessageType extends keyof EventTypesMap>(
     const length = listeners.length;
 
     for (let i = 0; i < length; i++) {
-      if (listeners[i].once) { this.removeListener(event, listeners[i].fn, true); }
-      listeners.fn(...message);
+      if (listeners[i].once) {
+        this.removeListener(event, listeners[i].fn, true);
+      }
+      listeners[i].fn(...message);
     }
   }
 
