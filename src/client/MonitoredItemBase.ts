@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.client
  */
@@ -8,7 +8,7 @@ import {EventEmitter} from '../eventemitter';
 import {StatusCodes} from '../constants';
 import {assert} from '../assert';
 
-import * as subscription_service from "../service-subscription";
+import * as subscription_service from '../service-subscription';
 import * as read_service from '../service-read';
 
 import {TimestampsToReturn} from '../generated/TimestampsToReturn';
@@ -29,31 +29,31 @@ import { ExtensionObject } from '../basic-types/extension_object';
 import { Variant } from '../variant/variant';
 import { debugLog } from '../common/debug';
 
-export interface MonitoredItemEvents { 
+export interface MonitoredItemEvents {
     'initialized': () => void;
     'changed': (value: DataValue /* a value change */ | Variant[] /* an event */) => void;
     'terminated': () => void;
     'err': (errorMessage: string) => void;
 }
 
-//import {MonitoredItemsModifyRequest} from '../generated/MonitoredItemsModifyRequest';
+// import {MonitoredItemsModifyRequest} from '../generated/MonitoredItemsModifyRequest';
 const MonitoredItemModifyRequest = subscription_service.MonitoredItemModifyRequest;
 
-export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents>{
+export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
 
-    protected _itemToMonitor : read_service.ReadValueId;
-    protected _monitoringParameters : MonitoringParameters;
-    protected _subscription : ClientSubscription;
-    protected _monitoringMode : MonitoringMode ;
-    protected _statusCode : StatusCode;
-    protected _result : MonitoredItemCreateResult;
-    protected _monitoredItemId : number;
-    protected _filterResult : ExtensionObject;
+    protected _itemToMonitor: read_service.ReadValueId;
+    protected _monitoringParameters: MonitoringParameters;
+    protected _subscription: ClientSubscription;
+    protected _monitoringMode: MonitoringMode ;
+    protected _statusCode: StatusCode;
+    protected _result: MonitoredItemCreateResult;
+    protected _monitoredItemId: number;
+    protected _filterResult: ExtensionObject;
 
 
-constructor(subscription : ClientSubscription, itemToMonitor : IReadValueId, monitoringParameters : IMonitoringParameters) {
+constructor(subscription: ClientSubscription, itemToMonitor: IReadValueId, monitoringParameters: IMonitoringParameters) {
     super();
-    //assert(subscription.constructor.name === "ClientSubscription");
+    // assert(subscription.constructor.name === "ClientSubscription");
 
 
 
@@ -61,7 +61,7 @@ constructor(subscription : ClientSubscription, itemToMonitor : IReadValueId, mon
     this._monitoringParameters = new MonitoringParameters(monitoringParameters);
     this._subscription = subscription;
     this._monitoringMode = subscription_service.MonitoringMode.Reporting;
-    assert(this._monitoringParameters.clientHandle === null/*4294967295*/, "should not have a client handle yet");
+    assert(this._monitoringParameters.clientHandle === null/*4294967295*/, 'should not have a client handle yet');
 }
 
 public get monitoringParameters() {
@@ -72,7 +72,7 @@ public get itemToMonitor() {
     return this._itemToMonitor;
 }
 
-public get nodeId() : NodeId{
+public get nodeId(): NodeId {
     return this._itemToMonitor.nodeId;
 }
 
@@ -84,8 +84,12 @@ public get monitoredItemId() {
     return this._monitoredItemId;
 }
 
-public get statusCode() : StatusCode {
+public get statusCode(): StatusCode {
     return this._statusCode;
+}
+
+public get subscription(): ClientSubscription {
+    return this._subscription;
 }
 
 
@@ -96,13 +100,12 @@ public _notify_value_change(value: DataValue) {
      * @param value
      */
      try {
-       this.emit("changed", value);
+       this.emit('changed', value);
+     } catch (err) {
+       console.log('Exception raised inside the event handler called by ClientMonitoredItem.on(\'change\')', err);
+       console.log('Please verify the application using this node-opcua client');
      }
-     catch(err) {
-       console.log("Exception raised inside the event handler called by ClientMonitoredItem.on('change')",err);
-       console.log("Please verify the application using this node-opcua client");
-     }
-};
+}
 
     /**
      * @internal
@@ -116,17 +119,17 @@ public _notify_value_change(value: DataValue) {
          * @param value
          */
         try {
-            this.emit("changed", eventFields);
+            this.emit('changed', eventFields);
         } catch (err) {
-            debugLog("Exception raised inside the event handler called by ClientMonitoredItem.on('change')", err);
-            debugLog("Please verify the application using this node-opcua client");
+            debugLog('Exception raised inside the event handler called by ClientMonitoredItem.on(\'change\')', err);
+            debugLog('Please verify the application using this node-opcua client');
         }
     }
 
-protected _prepare_for_monitoring () : subscription_service.MonitoredItemCreateRequest | Error{
+protected _prepare_for_monitoring (): subscription_service.MonitoredItemCreateRequest | Error {
 
-    assert(this._subscription.subscriptionId !== "pending");
-    assert(this._monitoringParameters.clientHandle === /*4294967295*/null, "should not have a client handle yet");
+    assert(this._subscription.subscriptionId !== 'pending');
+    assert(this._monitoringParameters.clientHandle === /*4294967295*/null, 'should not have a client handle yet');
     this._monitoringParameters.clientHandle = this._subscription.nextClientHandle();
     assert(this._monitoringParameters.clientHandle > 0 && this._monitoringParameters.clientHandle !== null/*4294967295*/);
 
@@ -152,11 +155,11 @@ protected _prepare_for_monitoring () : subscription_service.MonitoredItemCreateR
         // note : the EventFilter is used when monitoring Events.
         this._monitoringParameters.filter = this._monitoringParameters.filter || new subscription_service.EventFilter({});
 
-        const filter : ExtensionObject = this._monitoringParameters.filter;
+        const filter: ExtensionObject = this._monitoringParameters.filter;
         if (!(filter instanceof subscription_service.EventFilter)) {
             return new Error(
-                "Mismatch between attributeId and filter in monitoring parameters : " +
-                "An EventFilter object is required when itemToMonitor.attributeId== AttributeIds.EventNotifier"
+                'Mismatch between attributeId and filter in monitoring parameters : ' +
+                'An EventFilter object is required when itemToMonitor.attributeId== AttributeIds.EventNotifier'
             );
         }
 
@@ -170,8 +173,8 @@ protected _prepare_for_monitoring () : subscription_service.MonitoredItemCreateR
     } else {
         if (this._monitoringParameters.filter) {
             return new Error(
-                "Mismatch between attributeId and filter in monitoring parameters : " +
-                "no filter expected when attributeId is not Value  or  EventNotifier"
+                'Mismatch between attributeId and filter in monitoring parameters : ' +
+                'no filter expected when attributeId is not Value  or  EventNotifier'
             );
         }
     }
@@ -181,7 +184,7 @@ protected _prepare_for_monitoring () : subscription_service.MonitoredItemCreateR
         requestedParameters: this._monitoringParameters
     });
 
-};
+}
 
 protected _after_create(monitoredItemResult: MonitoredItemCreateResult) {
 
@@ -202,7 +205,7 @@ protected _after_create(monitoredItemResult: MonitoredItemCreateResult) {
          * Notify the observers that the monitored item is now fully initialized.
          * @event initialized
          */
-        this.emit("initialized");
+        this.emit('initialized');
 
     } else {
 
@@ -212,15 +215,15 @@ protected _after_create(monitoredItemResult: MonitoredItemCreateResult) {
          * @param statusCode {StatusCode}
          */
         const err = new Error(monitoredItemResult.statusCode.toString());
-        this.emit("err", err.message);
-        this.emit("terminated");
+        this.emit('err', err.message);
+        this.emit('terminated');
     }
-};
+}
 
-public static _toolbox_monitor(subscription : ClientSubscription, 
-    timestampsToReturn: TimestampsToReturn, monitoredItems : MonitoredItemBase[], done: ErrorCallback) {
-    assert(('function' === typeof done) && (typeof subscription.subscriptionId === "number"));
-    const itemsToCreate : subscription_service.MonitoredItemCreateRequest[] = [];
+public static _toolbox_monitor(subscription: ClientSubscription,
+    timestampsToReturn: TimestampsToReturn, monitoredItems: MonitoredItemBase[], done: ErrorCallback) {
+    assert(('function' === typeof done) && (typeof subscription.subscriptionId === 'number'));
+    const itemsToCreate: subscription_service.MonitoredItemCreateRequest[] = [];
     for (let i = 0; i < monitoredItems.length; i++) {
 
         const monitoredItem = monitoredItems[i];
@@ -231,9 +234,9 @@ public static _toolbox_monitor(subscription : ClientSubscription,
         itemsToCreate.push(itemToCreate);
     }
 
-    if(typeof subscription.subscriptionId === "string") {
-        //subscription either pending or terminated
-        throw new Error("subscription either pending or terminated - subscription.subscriptionId: " + subscription.subscriptionId );
+    if (typeof subscription.subscriptionId === 'string') {
+        // subscription either pending or terminated
+        throw new Error('subscription either pending or terminated - subscription.subscriptionId: ' + subscription.subscriptionId );
     }
 
     const createMonitorItemsRequest = new subscription_service.CreateMonitoredItemsRequest({
@@ -247,9 +250,9 @@ public static _toolbox_monitor(subscription : ClientSubscription,
 
         /* istanbul ignore next */
         if (err) {
-            //xx console.log("ClientMonitoredItemBase#_toolbox_monitor:  ERROR in createMonitoredItems ".red, err.message);
-            //xx  console.log("ClientMonitoredItemBase#_toolbox_monitor:  ERROR in createMonitoredItems ".red, err);
-            //xx  console.log(createMonitorItemsRequest.toString());
+            // xx console.log("ClientMonitoredItemBase#_toolbox_monitor:  ERROR in createMonitoredItems ".red, err.message);
+            // xx  console.log("ClientMonitoredItemBase#_toolbox_monitor:  ERROR in createMonitoredItems ".red, err);
+            // xx  console.log(createMonitorItemsRequest.toString());
         } else {
             assert(response instanceof subscription_service.CreateMonitoredItemsResponse);
 
@@ -262,14 +265,14 @@ public static _toolbox_monitor(subscription : ClientSubscription,
         done(err);
     });
 
-};
-public static _toolbox_modify(subscription : ClientSubscription, monitoredItems : MonitoredItemBase[], parameters : IMonitoringParameters , 
+}
+public static _toolbox_modify(subscription: ClientSubscription, monitoredItems: MonitoredItemBase[], parameters: IMonitoringParameters ,
     timestampsToReturn: TimestampsToReturn, callback: ResponseCallback<subscription_service.MonitoredItemModifyResult[]>) {
 
     assert(callback === undefined || ('function' === typeof callback));
 
     const itemsToModify = monitoredItems.map(function (monitoredItem) {
-        let monParams = new MonitoringParameters(parameters);
+        const monParams = new MonitoringParameters(parameters);
         monParams.clientHandle = monitoredItem.monitoringParameters.clientHandle;
         return new MonitoredItemModifyRequest({
             monitoredItemId: monitoredItem._monitoredItemId,
@@ -294,11 +297,11 @@ public static _toolbox_modify(subscription : ClientSubscription, monitoredItems 
 
         /* istanbul ignore next */
         if (response.results.length === 1 && res.statusCode !== StatusCodes.Good) {
-            return callback(new Error("Error" + res.statusCode.toString()));
+            return callback(new Error('Error' + res.statusCode.toString()));
         }
         callback(null, response.results);
     });
-};
+}
 public static _toolbox_setMonitoringMode(subscription: ClientSubscription, monitoredItems: MonitoredItemBase[],
         monitoringMode: MonitoringMode, callback: ResponseCallback<StatusCode[]>) {
 
@@ -322,5 +325,5 @@ public static _toolbox_setMonitoringMode(subscription: ClientSubscription, monit
         }
     });
 
-};
+}
 }

@@ -71,6 +71,10 @@ public get monitoredItems(): MonitoredItemBase[] {
     return this._monitoredItems;
 }
 
+public get subscription(): ClientSubscription {
+    return this._subscription;
+}
+
 public toString(): string {
     let ret = 'ClientMonitoredItemGroup : \n';
     ret += 'itemsToMonitor:       = [\n ' + this._monitoredItems.map(function (monitoredItem) {
