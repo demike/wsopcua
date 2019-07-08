@@ -191,7 +191,7 @@ describe('DataValue', function () {
             })
         });
         const dataValue1 = extractRange(dataValue, new NumericRange('20:30'));
-        dataValue1.value.value.length.should.eql(0);
+        expect(dataValue1.value.value.length).toEqual(0);
         expect(dataValue1.value.value).toEqual('');
         expect(dataValue1.value.dataType).toEqual(DataType.String);
         expect(dataValue1.value.arrayType).toEqual(VariantArrayType.Scalar);
