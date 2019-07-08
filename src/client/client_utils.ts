@@ -60,7 +60,8 @@ function readVariableProperties(session: ClientSession, nodeId: NodeId, varObj: 
         const nodesToRead: ReadValueId[] = [];
 
         function processProperty(browsePathIndex: number, propertyName: string) {
-            if (browsePathResults[browsePathIndex].statusCode === StatusCodes.Good) {
+            const statusCode = browsePathResults[browsePathIndex].statusCode;
+            if (!statusCode || statusCode === StatusCodes.Good) {
 
                 nodesToRead.push(new ReadValueId({
                     nodeId: browsePathResults[browsePathIndex].targets[0].targetId,
@@ -160,7 +161,8 @@ export function readUAAnalogItem(session: ClientSession, nodeId: NodeId, callbac
         const nodesToRead: ReadValueId[] = [];
 
         function processProperty(browsePathIndex: number, propertyName: string) {
-            if (browsePathResults[browsePathIndex].statusCode === StatusCodes.Good) {
+            const statusCode = browsePathResults[browsePathIndex].statusCode;
+            if (!statusCode || statusCode === StatusCodes.Good) {
 
                 nodesToRead.push(new ReadValueId({
                     nodeId: browsePathResults[browsePathIndex].targets[0].targetId,
@@ -311,7 +313,7 @@ export function readHistoryServerCapabilities(the_session: ClientSession,
                 return callback();
             }
             const nodeIds = results.map(function(result) {
-                return (result.statusCode === StatusCodes.Good) ? result.targets[0].targetId : NodeId.NullNodeId;
+                return (!result.statusCode || result.statusCode === StatusCodes.Good) ? result.targets[0].targetId : NodeId.NullNodeId;
             });
 
             const nodesToRead = nodeIds.map(function(nodeId) {

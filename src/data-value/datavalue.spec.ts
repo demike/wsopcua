@@ -161,6 +161,44 @@ describe('DataValue', function () {
         expect(dataValue1.value.arrayType).toBe(VariantArrayType.Scalar);
 
     });
+
+    it('DataValue - extractRange on a String with StatusCode != Good - issue #635', function () {
+
+        const dataValue = new DataValue({
+            statusCode: StatusCodes.BadEntryExists as StatusCode,
+            value: new Variant({
+                dataType: DataType.String,
+                arrayType: VariantArrayType.Scalar,
+                value: '1234567890'
+            })
+        });
+        const dataValue1 = extractRange(dataValue, new NumericRange('2:3'));
+        expect(dataValue1.value.value.length).toEqual(2);
+        expect(dataValue1.value.value).toEqual('34');
+        expect(dataValue1.value.dataType).toEqual(DataType.String);
+        expect(dataValue1.value.arrayType).toEqual(VariantArrayType.Scalar);
+
+        expect(dataValue1.statusCode).toEqual(StatusCodes.BadEntryExists);
+    });
+    it('DataValue - extractRange on a String with StatusCode != Good and invalid range - issue #635', function () {
+
+        const dataValue = new DataValue({
+            statusCode: StatusCodes.BadEntryExists as StatusCode,
+            value: new Variant({
+                dataType: DataType.String,
+                arrayType: VariantArrayType.Scalar,
+                value: '1234567890'
+            })
+        });
+        const dataValue1 = extractRange(dataValue, new NumericRange('20:30'));
+        dataValue1.value.value.length.should.eql(0);
+        expect(dataValue1.value.value).toEqual('');
+        expect(dataValue1.value.dataType).toEqual(DataType.String);
+        expect(dataValue1.value.arrayType).toEqual(VariantArrayType.Scalar);
+
+        expect(dataValue1.statusCode).toEqual(StatusCodes.BadIndexRangeNoData);
+    });
+
     it('DataValue - extractRange on a ByteString', function () {
 
         const dataValue = new DataValue({
@@ -444,7 +482,7 @@ describe('apply_timestamps', function() {
     });
 
     it('should apply source timestamp only', function() {
-        let now = getCurrentClock();
+        const now = getCurrentClock();
         dataValue.sourceTimestamp = now.timestamp;
         dataValue.sourcePicoseconds = now.picoseconds;
         const cloneDataValue = apply_timestamps(dataValue, TimestampsToReturn.Source , 13 /* value */);

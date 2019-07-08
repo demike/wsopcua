@@ -74,7 +74,7 @@ public ping_server(callback: () => void) {
             this.emit('failure');
 
         } else {
-            if (dataValue.statusCode === StatusCodes.Good) {
+            if (!dataValue.statusCode || dataValue.statusCode === StatusCodes.Good) {
                 const newState = dataValue.value.value;//ServerState[dataValue.value.value];
                 // istanbul ignore next
                 if (newState !== this.lastKnownState) {

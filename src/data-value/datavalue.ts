@@ -5,6 +5,8 @@ import {assert} from '../assert';
 import {DataValue} from '../generated/DataValue';
 import {DataType} from '../variant/DataTypeEnum';
 
+import {StatusCodes} from '../constants';
+
 
 import {TimestampsToReturn} from '../generated/TimestampsToReturn';
 
@@ -88,8 +90,10 @@ export function apply_timestamps(dataValue: DataValue, timestampsToReturn: Times
  */
 function _clone_with_array_replacement(dataValue: DataValue, result) {
 
+    const statusCode = (!result.statuCode || result.statusCode === StatusCodes.Good) ? dataValue.statusCode : result.statusCode;
+
     return new DataValue({
-        statusCode: result.statusCode,
+        statusCode: statusCode,
         serverTimestamp: dataValue.serverTimestamp,
         serverPicoseconds: dataValue.serverPicoseconds,
         sourceTimestamp: dataValue.sourceTimestamp,

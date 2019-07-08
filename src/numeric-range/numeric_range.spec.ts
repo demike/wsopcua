@@ -201,6 +201,27 @@ describe('Testing numerical range', function () {
             expect(referenceString.length).toBe(11);
         });
 
+        it('it should return a statusCode and empty string if numeric range is out of bound - issue #635', function () {
+            const nr = new NumericRange(20, 40);
+            expect(referenceString.length).toEqual(11);
+            const r = nr.extract_values(referenceString);
+            expect(r.array).toEqual('');
+            expect(r.statusCode).toEqual(StatusCodes.BadIndexRangeNoData);
+            expect(referenceString.length).toEqual(11);
+
+        });
+        it('it should return a statusCode and empty string if numeric range (single element) is out of bound - issue #635', function () {
+            const nr = new NumericRange(20);
+            expect(referenceString.length).toEqual(11);
+            const r = nr.extract_values(referenceString);
+            expect(r.array).toEqual('');
+            expect(r.statusCode).toEqual(StatusCodes.BadIndexRangeNoData);
+            expect(referenceString.length).toEqual(11);
+
+        });
+
+
+
         it('it should extract a sub matrix when indexRange is a NumericRange.Matrix', function () {
 
             const matrixString = [
@@ -366,7 +387,7 @@ describe('Testing numerical range', function () {
             expect(matrix).toEqual([11, 12, 13, 21, 22, 23, 31, 32, 33]);
         });
         afterEach(function () {
-            expect(matrix.length).toBe(9,'original array should not be affected');
+            expect(matrix.length).toBe(9, 'original array should not be affected');
             expect(matrix).toEqual([11, 12, 13, 21, 22, 23, 31, 32, 33]);
         });
 

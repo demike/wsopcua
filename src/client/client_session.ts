@@ -751,7 +751,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      *
      *    ``` javascript
      *    session.readAllAttributes("ns=2;s=Furnace_1.Temperature",function(err,data) {
-     *       if(data.statusCode === StatusCode.Good) {
+     *       if(!data.statusCode || data.statusCode === StatusCode.Good) {
      *          console.log(" nodeId      = ",data.nodeId.toString());
      *          console.log(" browseName  = ",data.browseName.toString());
      *          console.log(" description = ",data.description.toString());
@@ -1757,9 +1757,15 @@ public evaluateRemainingLifetime(): number {
              // resolveNodeId('Server_NamespaceArray'),
             attributeId: AttributeIds.Value
         }), (err: Error, dataValue: DataValue) => {
-            if (err) { return callback(err); }
+            if (err) {
+                return callback(err);
+            }
 
-            if (dataValue && dataValue.statusCode !== StatusCodes.Good) {
+            if (!dataValue) {
+                return callback(new Error('Internal Error'));
+            }
+
+            if (dataValue.statusCode && dataValue.statusCode !== StatusCodes.Good) {
                 return callback(new Error('readNamespaceArray : ' + dataValue.statusCode.toString()));
             }
             assert(dataValue.value.value instanceof Array);

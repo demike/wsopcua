@@ -183,9 +183,9 @@ protected _prepare_for_monitoring () : subscription_service.MonitoredItemCreateR
 
 };
 
-protected _after_create(monitoredItemResult : MonitoredItemCreateResult) {
+protected _after_create(monitoredItemResult: MonitoredItemCreateResult) {
 
-    this._statusCode = monitoredItemResult.statusCode;
+    this._statusCode = monitoredItemResult.statusCode || StatusCodes.Good as StatusCode;
     /* istanbul ignore else */
     if (monitoredItemResult.statusCode === StatusCodes.Good) {
 

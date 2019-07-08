@@ -468,6 +468,9 @@ function extract_empty(array: any[]|string|Uint8Array, dimensions?: number[]) {
 
 function extract_single_value(array: any[]|string|Uint8Array, index: number) {
     if (index >= array.length) {
+        if (typeof array  === 'string') {
+            return {array: '', statusCode: StatusCodes.BadIndexRangeNoData};
+        }
         return {array: [], statusCode: StatusCodes.BadIndexRangeNoData};
     }
     return {
@@ -481,6 +484,9 @@ function extract_array_range(array: any[]|string|Uint8Array, low_index: number, 
     assert(low_index >= 0);
     assert(low_index <= high_index);
     if (low_index >= array.length) {
+        if (typeof array  === 'string') {
+            return {array: '', statusCode: StatusCodes.BadIndexRangeNoData};
+        }
         return {array: [], statusCode: StatusCodes.BadIndexRangeNoData};
     }
     // clamp high index
