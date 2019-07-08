@@ -687,7 +687,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         str += '        .randomisationFactor.... ' + this.connectionStrategy.randomisationFactor;
         str += '  keepSessionAlive.............. ' + this.keepSessionAlive;
 
-        console.log(str);
+        // console.log(str);
 
         return str;
     }

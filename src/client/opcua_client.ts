@@ -672,7 +672,7 @@ public toString(): string {
     let str = '  requestedSessionTimeout....... ' + this.requestedSessionTimeout;
     str += '  endpointUrl................... ' + this.endpointUrl;
     str += '  serverUri..................... ' + this._serverUri;
-    console.log(str);
+    // console.log(str);
     return superStr + str;
 }
 

@@ -1650,20 +1650,22 @@ public evaluateRemainingLifetime(): number {
         this.removeAllListeners();
     }
 
-    public toString(): void {
+    public toString(): string {
 
         const now = Date.now();
+        let str = '';
+        str += '\n name..................... ' + this.name;
+        str += '\n sessionId................ ' + this.sessionId.toString();
+        str += '\n authenticationToken...... ' + this.authenticationToken.toString();
+        str += '\n timeout.................. ' + this.timeout + 'ms';
+        str += '\n serverNonce.............. ' + buf2hex(this.serverNonce.buffer);
+        str += '\n serverCertificate........ ' + buf2base64( this.serverCertificate.buffer);
+        str += '\n serverSignature.......... ' + this.serverSignature;
+        str += '\n lastRequestSentTime...... ' + new Date(this.lastRequestSentTime).toISOString() + (now - this.lastRequestSentTime);
+        str += '\n lastResponseReceivedTime. ' +
+                new Date(this.lastResponseReceivedTime).toISOString() + (now - this.lastResponseReceivedTime);
 
-        console.log(' name..................... ', this.name);
-        console.log(' sessionId................ ', this.sessionId.toString());
-        console.log(' authenticationToken...... ', this.authenticationToken.toString());
-        console.log(' timeout.................. ', this.timeout, 'ms');
-        console.log(' serverNonce.............. ', buf2hex(this.serverNonce.buffer));
-        console.log(' serverCertificate........ ', buf2base64( this.serverCertificate.buffer));
-        console.log(' serverSignature.......... ', this.serverSignature);
-        console.log(' lastRequestSentTime...... ', new Date(this.lastRequestSentTime).toISOString(), now - this.lastRequestSentTime);
-        console.log(' lastResponseReceivedTime. ',
-                new Date(this.lastResponseReceivedTime).toISOString(), now - this.lastResponseReceivedTime);
+        return str;
     }
 
     protected __findBasicDataType(session: ClientSession, dataTypeId: NodeId, callback: ResponseCallback<DataType>) {
