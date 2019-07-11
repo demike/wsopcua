@@ -525,7 +525,7 @@ public reactivateSession(session: ClientSession, callback: ErrorCallback) {
  *     });
  *
  */
-public createSession(userIdentityInfo: UserIdentityInfo, callback: (err: Error, session?: ClientSession) => void) {
+public createSession(userIdentityInfo: UserIdentityInfo | null, callback: (err: Error, session?: ClientSession) => void) {
 
     if ('function' === typeof userIdentityInfo) {
         (<any>callback) = userIdentityInfo;
@@ -554,11 +554,11 @@ public createSession(userIdentityInfo: UserIdentityInfo, callback: (err: Error, 
 /**
  * @method changeSessionIdentity
  * @param session
- * @param userIdentityInfo
+ * @param userIdentityInfo //set to null to go back to anonymous user
  * @param callback
  * @async
  */
-public changeSessionIdentity(session: ClientSession, userIdentityInfo: UserIdentityInfo, callback: ErrorCallback) {
+public changeSessionIdentity(session: ClientSession | null, userIdentityInfo: UserIdentityInfo | null, callback: ErrorCallback) {
 
     assert('function' === typeof callback);
 
