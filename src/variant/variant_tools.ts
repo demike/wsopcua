@@ -192,7 +192,7 @@ export function isValidVariant(arrayType: VariantArrayType, dataType: DataType, 
  * @param nbElements
  * @param defaultValue
  */
-export function buildVariantArray(dataType: DataType, nbElements: Iterable<number>, defaultValue: number) {
+export function buildVariantArray(dataType: DataType, nbElements: number, defaultValue: number) {
 
     let value;
     switch (dataType) {
@@ -221,12 +221,13 @@ export function buildVariantArray(dataType: DataType, nbElements: Iterable<numbe
             value = new Int8Array(nbElements);
             break;
         default:
-            // xx console.log("xxxx DataType = ",dataType ? dataType.toString(): null,"nb Elements =",nbElements);
             value = new Array(nbElements);
-            for (let i = 0; i < value.length; i++) {
-                (value as Array<any>)[i] = defaultValue;
-            }
         // xx console.log("xxx done");
+    }
+    if (defaultValue !== undefined) {
+        for (let i = 0; i < nbElements; i++) {
+            value[i] = defaultValue;
+        }
     }
     return value;
 }

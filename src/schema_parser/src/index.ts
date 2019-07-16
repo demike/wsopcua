@@ -1,4 +1,4 @@
-// #!/usr/bin/env node
+
 
 
 import * as path from 'path';
@@ -11,7 +11,7 @@ import { SchemaParserConfig } from './SchemaParserConfig';
 import * as program from 'commander';
 
 const pkg = require('../package.json');
-const appName = 'wsopcua-schema-gen'; //Object.keys(pkg.bin)[0];
+const appName = 'wsopcua-schema-gen'; // Object.keys(pkg.bin)[0];
 
 const datafolder = path.join(__dirname, '../schemas');
 const defaultConfigFilePath = path.join(__dirname, '../schemas/schema_parser_config.json');
@@ -34,12 +34,12 @@ if (program.config) {
     try {
         const customConfig: SchemaParserConfig = JSON.parse( fs.readFileSync(program.config).toString());
         importConfig.projects = [...importConfig.projects, ...customConfig.projects];
-    } catch(err) {
-        console.log("Error reading the config file: ", program.config, err );
+    } catch (err) {
+        console.log('Error reading the config file: ', program.config, err );
     }
 }
 
-generateNodeIds(path.join(datafolder, '/NodeIds.csv'),'opcua_node_ids.ts', () => {
+generateNodeIds(path.join(datafolder, '/NodeIds.csv'), 'opcua_node_ids.ts', () => {
     generate_data_types(importConfig, metaTypeMap);
 });
 

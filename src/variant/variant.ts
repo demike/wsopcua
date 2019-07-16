@@ -16,9 +16,11 @@ import { UInt32 } from '../basic-types';
 import {findBuiltInType} from '../factory/factories_builtin_types';
 import { generate_new_id } from '../factory';
 
-const Variant_ArrayMask = 0x80;
-const Variant_ArrayDimensionsMask = 0x40;
-const Variant_TypeMask = 0x3F;
+
+export const VARIANT_ARRAY_MASK = 0x80;
+export const VARIANT_ARRAY_DIMENSIONS_MASK = 0x40;
+export const VARIANT_TYPE_MASK = 0x3f;
+
 
 export interface IVariant {
     dataType?: DataType;
@@ -109,6 +111,13 @@ public setArrayType(value: number| VariantArrayType) {
    this.arrayType = value;
 }
 
+public toString() {
+    return variantToString(this);
+}
+public isValid(): boolean {
+    return isValidVariant(this.arrayType, this.dataType, this.value, this.dimensions);
+}
+
 
 // Variant.prototype.encodingDefaultBinary = makeExpandedNodeId(schema.id);
 // Variant.prototype._schema = schema;
@@ -125,10 +134,10 @@ public encode(out: DataStream) {
     let encodingByte = this.dataType;
 
     if (this.arrayType === VariantArrayType.Array || this.arrayType === VariantArrayType.Matrix) {
-        encodingByte |= Variant_ArrayMask;
+        encodingByte |= VARIANT_ARRAY_MASK;
     }
     if (this.dimensions) {
-        encodingByte |= Variant_ArrayDimensionsMask;
+        encodingByte |= VARIANT_ARRAY_DIMENSIONS_MASK;
     }
     ec.encodeUInt8(encodingByte, out);
 
@@ -153,14 +162,14 @@ public encode(out: DataStream) {
 public decode(inp: DataStream) {
     const encodingByte = ec.decodeUInt8(inp);
 
-    const isArray = ((encodingByte & Variant_ArrayMask) === Variant_ArrayMask);
+    const isArray = ((encodingByte & VARIANT_ARRAY_MASK) === VARIANT_ARRAY_MASK);
 
-    const hasDimension = (( encodingByte & Variant_ArrayDimensionsMask  ) === Variant_ArrayDimensionsMask);
+    const hasDimension = (( encodingByte & VARIANT_ARRAY_DIMENSIONS_MASK  ) === VARIANT_ARRAY_DIMENSIONS_MASK);
 
-    this.dataType = encodingByte & Variant_TypeMask;
+    this.dataType = encodingByte & VARIANT_TYPE_MASK;
 
     if (! (this.dataType in DataType)) {
-        throw new Error('cannot find DataType for encodingByte = 0x' + (encodingByte & Variant_TypeMask).toString(16));
+        throw new Error('cannot find DataType for encodingByte = 0x' + (encodingByte & VARIANT_TYPE_MASK).toString(16));
     }
     if (isArray) {
         this.arrayType = hasDimension ? VariantArrayType.Matrix : VariantArrayType.Array;
@@ -200,6 +209,7 @@ public clone(): Variant {
 
 import {register_class_definition} from '../factory/factories_factories';
 import {registerSpecialVariantEncoder} from '../factory/factories_builtin_types_special';
+import { isArray } from 'util';
 
 register_class_definition('Variant', Variant, makeExpandedNodeId(generate_new_id()));
 registerSpecialVariantEncoder(Variant, 'Variant');
@@ -403,6 +413,61 @@ export function decodeVariant(	inp: DataStream): Variant {
         obj.decode(inp);
         return obj;
 
+}
+
+export type VariantLike = IVariant | Variant;
+
+function variantToString(self: Variant, options?: any) {
+
+    function toString(value: any): string {
+        switch (self.dataType) {
+            case DataType.Null:
+                return '<null>';
+            case DataType.ByteString:
+                return value ? '0x' + value.toString('hex') : '<null>';
+            case DataType.Boolean:
+                return value.toString();
+            case DataType.DateTime:
+                return value ? (value.toISOString ? value.toISOString() : value.toString()) : '<null>';
+            default:
+                return value ? value.toString(options) : '0';
+        }
+    }
+
+    function f(value: any) {
+        if (value === undefined || (value === null && typeof value === 'object')) {
+            return '<null>';
+        }
+        return toString(value);
+    }
+
+    let data = VariantArrayType[self.arrayType];
+
+    if (self.dimensions && self.dimensions.length > 0) {
+        data += '[ ' + self.dimensions.join(',') + ' ]';
+    }
+
+    data += '<' + DataType[self.dataType] + '>';
+    if (self.arrayType === VariantArrayType.Scalar) {
+        data += ', value: ' + f(self.value);
+
+    } else if ((self.arrayType === VariantArrayType.Array) || (self.arrayType === VariantArrayType.Matrix)) {
+
+        if (!self.value) {
+            data += ', null';
+        } else {
+            const a = [];
+            assert(isArray(self.value) || (self.value.buffer instanceof ArrayBuffer));
+            for (let i = 0; i < Math.min(10, self.value.length); i++) {
+                a[i] = self.value[i];
+            }
+            if (self.value.length > 10) {
+                a.push('...');
+            }
+            data += ', l= ' + self.value.length + ', value=[' + a.map(f).join(',') + ']';
+        }
+    }
+    return 'Variant(' + data + ')';
 }
 
 
