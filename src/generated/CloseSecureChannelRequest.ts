@@ -8,7 +8,7 @@ export interface ICloseSecureChannelRequest {
 }
 
 /**
-Closes a secure channel.
+
 */
 
 export class CloseSecureChannelRequest {
@@ -16,7 +16,7 @@ export class CloseSecureChannelRequest {
 
  constructor( options?: ICloseSecureChannelRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
 
  }
 

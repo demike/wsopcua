@@ -21,9 +21,9 @@ export class DeleteMonitoredItemsRequest {
 
  constructor( options?: IDeleteMonitoredItemsRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.subscriptionId = (options.subscriptionId) ? options.subscriptionId : null;
-  this.monitoredItemIds = (options.monitoredItemIds) ? options.monitoredItemIds : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.subscriptionId = (options.subscriptionId !== undefined) ? options.subscriptionId : null;
+  this.monitoredItemIds = (options.monitoredItemIds !== undefined) ? options.monitoredItemIds : [];
 
  }
 

@@ -21,9 +21,9 @@ export class TransferSubscriptionsRequest {
 
  constructor( options?: ITransferSubscriptionsRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.subscriptionIds = (options.subscriptionIds) ? options.subscriptionIds : [];
-  this.sendInitialValues = (options.sendInitialValues) ? options.sendInitialValues : null;
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.subscriptionIds = (options.subscriptionIds !== undefined) ? options.subscriptionIds : [];
+  this.sendInitialValues = (options.sendInitialValues !== undefined) ? options.sendInitialValues : null;
 
  }
 

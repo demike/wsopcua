@@ -18,8 +18,8 @@ export class ServiceCounterDataType {
 
  constructor( options?: IServiceCounterDataType) {
   options = options || {};
-  this.totalCount = (options.totalCount) ? options.totalCount : null;
-  this.errorCount = (options.errorCount) ? options.errorCount : null;
+  this.totalCount = (options.totalCount !== undefined) ? options.totalCount : null;
+  this.errorCount = (options.errorCount !== undefined) ? options.errorCount : null;
 
  }
 

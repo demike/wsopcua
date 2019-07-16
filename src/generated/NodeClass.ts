@@ -2,8 +2,6 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
-/**
-A mask specifying the class of the node.*/
 export enum NodeClass {
    Unspecified = 0,
   Object = 1,

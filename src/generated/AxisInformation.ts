@@ -28,11 +28,11 @@ export class AxisInformation {
 
  constructor( options?: IAxisInformation) {
   options = options || {};
-  this.engineeringUnits = (options.engineeringUnits) ? options.engineeringUnits : new EUInformation();
-  this.eURange = (options.eURange) ? options.eURange : new Range();
-  this.title = (options.title) ? options.title : new LocalizedText();
-  this.axisScaleType = (options.axisScaleType) ? options.axisScaleType : null;
-  this.axisSteps = (options.axisSteps) ? options.axisSteps : [];
+  this.engineeringUnits = (options.engineeringUnits !== undefined) ? options.engineeringUnits : new EUInformation();
+  this.eURange = (options.eURange !== undefined) ? options.eURange : new Range();
+  this.title = (options.title !== undefined) ? options.title : new LocalizedText();
+  this.axisScaleType = (options.axisScaleType !== undefined) ? options.axisScaleType : null;
+  this.axisSteps = (options.axisSteps !== undefined) ? options.axisSteps : [];
 
  }
 

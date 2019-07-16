@@ -13,7 +13,7 @@ export interface IReferenceTypeAttributes extends INodeAttributes {
 }
 
 /**
-The attributes for a reference type node.
+
 */
 
 export class ReferenceTypeAttributes extends NodeAttributes {
@@ -24,9 +24,9 @@ export class ReferenceTypeAttributes extends NodeAttributes {
  constructor( options?: IReferenceTypeAttributes) {
   options = options || {};
   super(options);
-  this.isAbstract = (options.isAbstract) ? options.isAbstract : null;
-  this.symmetric = (options.symmetric) ? options.symmetric : null;
-  this.inverseName = (options.inverseName) ? options.inverseName : new LocalizedText();
+  this.isAbstract = (options.isAbstract !== undefined) ? options.isAbstract : null;
+  this.symmetric = (options.symmetric !== undefined) ? options.symmetric : null;
+  this.inverseName = (options.inverseName !== undefined) ? options.inverseName : new LocalizedText();
 
  }
 

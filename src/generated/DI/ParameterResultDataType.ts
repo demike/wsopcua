@@ -23,9 +23,9 @@ export class ParameterResultDataType {
 
  constructor( options?: IParameterResultDataType) {
   options = options || {};
-  this.nodePath = (options.nodePath) ? options.nodePath : [];
-  this.statusCode = (options.statusCode) ? options.statusCode : null;
-  this.diagnostics = (options.diagnostics) ? options.diagnostics : new DiagnosticInfo();
+  this.nodePath = (options.nodePath !== undefined) ? options.nodePath : [];
+  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
+  this.diagnostics = (options.diagnostics !== undefined) ? options.diagnostics : new DiagnosticInfo();
 
  }
 

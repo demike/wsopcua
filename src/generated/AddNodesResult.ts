@@ -9,7 +9,7 @@ export interface IAddNodesResult {
 }
 
 /**
-A result of an add node operation.
+
 */
 
 export class AddNodesResult {
@@ -18,8 +18,8 @@ export class AddNodesResult {
 
  constructor( options?: IAddNodesResult) {
   options = options || {};
-  this.statusCode = (options.statusCode) ? options.statusCode : null;
-  this.addedNodeId = (options.addedNodeId) ? options.addedNodeId : null;
+  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
+  this.addedNodeId = (options.addedNodeId !== undefined) ? options.addedNodeId : null;
 
  }
 

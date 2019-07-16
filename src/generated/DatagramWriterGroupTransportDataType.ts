@@ -20,8 +20,8 @@ export class DatagramWriterGroupTransportDataType extends WriterGroupTransportDa
  constructor( options?: IDatagramWriterGroupTransportDataType) {
   options = options || {};
   super();
-  this.messageRepeatCount = (options.messageRepeatCount) ? options.messageRepeatCount : null;
-  this.messageRepeatDelay = (options.messageRepeatDelay) ? options.messageRepeatDelay : null;
+  this.messageRepeatCount = (options.messageRepeatCount !== undefined) ? options.messageRepeatCount : null;
+  this.messageRepeatDelay = (options.messageRepeatDelay !== undefined) ? options.messageRepeatDelay : null;
 
  }
 

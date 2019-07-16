@@ -16,7 +16,7 @@ export interface IOpenSecureChannelRequest {
 }
 
 /**
-Creates a secure channel with a server.
+
 */
 
 export class OpenSecureChannelRequest {
@@ -29,12 +29,12 @@ export class OpenSecureChannelRequest {
 
  constructor( options?: IOpenSecureChannelRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.clientProtocolVersion = (options.clientProtocolVersion) ? options.clientProtocolVersion : null;
-  this.requestType = (options.requestType) ? options.requestType : null;
-  this.securityMode = (options.securityMode) ? options.securityMode : null;
-  this.clientNonce = (options.clientNonce) ? options.clientNonce : null;
-  this.requestedLifetime = (options.requestedLifetime) ? options.requestedLifetime : null;
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.clientProtocolVersion = (options.clientProtocolVersion !== undefined) ? options.clientProtocolVersion : null;
+  this.requestType = (options.requestType !== undefined) ? options.requestType : null;
+  this.securityMode = (options.securityMode !== undefined) ? options.securityMode : null;
+  this.clientNonce = (options.clientNonce !== undefined) ? options.clientNonce : null;
+  this.requestedLifetime = (options.requestedLifetime !== undefined) ? options.requestedLifetime : null;
 
  }
 

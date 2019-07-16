@@ -10,7 +10,7 @@ export interface IDataTypeAttributes extends INodeAttributes {
 }
 
 /**
-The attributes for a data type node.
+
 */
 
 export class DataTypeAttributes extends NodeAttributes {
@@ -19,7 +19,7 @@ export class DataTypeAttributes extends NodeAttributes {
  constructor( options?: IDataTypeAttributes) {
   options = options || {};
   super(options);
-  this.isAbstract = (options.isAbstract) ? options.isAbstract : null;
+  this.isAbstract = (options.isAbstract !== undefined) ? options.isAbstract : null;
 
  }
 

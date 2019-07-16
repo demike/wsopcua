@@ -23,10 +23,10 @@ export class ReadValueId {
 
  constructor( options?: IReadValueId) {
   options = options || {};
-  this.nodeId = (options.nodeId) ? options.nodeId : null;
-  this.attributeId = (options.attributeId) ? options.attributeId : null;
-  this.indexRange = (options.indexRange) ? options.indexRange : null;
-  this.dataEncoding = (options.dataEncoding) ? options.dataEncoding : new QualifiedName();
+  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
+  this.attributeId = (options.attributeId !== undefined) ? options.attributeId : null;
+  this.indexRange = (options.indexRange !== undefined) ? options.indexRange : null;
+  this.dataEncoding = (options.dataEncoding !== undefined) ? options.dataEncoding : new QualifiedName();
 
  }
 

@@ -2,8 +2,6 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
-/**
-A bit mask which specifies what should be returned in a browse response.*/
 export enum BrowseResultMask {
    None = 0,
   ReferenceTypeId = 1,

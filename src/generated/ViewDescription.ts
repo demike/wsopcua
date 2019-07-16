@@ -10,7 +10,7 @@ export interface IViewDescription {
 }
 
 /**
-The view to browse.
+
 */
 
 export class ViewDescription {
@@ -20,9 +20,9 @@ export class ViewDescription {
 
  constructor( options?: IViewDescription) {
   options = options || {};
-  this.viewId = (options.viewId) ? options.viewId : null;
-  this.timestamp = (options.timestamp) ? options.timestamp : null;
-  this.viewVersion = (options.viewVersion) ? options.viewVersion : null;
+  this.viewId = (options.viewId !== undefined) ? options.viewId : null;
+  this.timestamp = (options.timestamp !== undefined) ? options.timestamp : null;
+  this.viewVersion = (options.viewVersion !== undefined) ? options.viewVersion : null;
 
  }
 

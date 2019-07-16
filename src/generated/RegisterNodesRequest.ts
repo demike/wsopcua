@@ -10,7 +10,7 @@ export interface IRegisterNodesRequest {
 }
 
 /**
-Registers one or more nodes for repeated use within a session.
+
 */
 
 export class RegisterNodesRequest {
@@ -19,8 +19,8 @@ export class RegisterNodesRequest {
 
  constructor( options?: IRegisterNodesRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.nodesToRegister = (options.nodesToRegister) ? options.nodesToRegister : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.nodesToRegister = (options.nodesToRegister !== undefined) ? options.nodesToRegister : [];
 
  }
 

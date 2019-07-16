@@ -18,7 +18,7 @@ export class HistoryEvent {
 
  constructor( options?: IHistoryEvent) {
   options = options || {};
-  this.events = (options.events) ? options.events : [];
+  this.events = (options.events !== undefined) ? options.events : [];
 
  }
 

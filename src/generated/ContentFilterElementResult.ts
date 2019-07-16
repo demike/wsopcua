@@ -22,9 +22,9 @@ export class ContentFilterElementResult {
 
  constructor( options?: IContentFilterElementResult) {
   options = options || {};
-  this.statusCode = (options.statusCode) ? options.statusCode : null;
-  this.operandStatusCodes = (options.operandStatusCodes) ? options.operandStatusCodes : [];
-  this.operandDiagnosticInfos = (options.operandDiagnosticInfos) ? options.operandDiagnosticInfos : [];
+  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
+  this.operandStatusCodes = (options.operandStatusCodes !== undefined) ? options.operandStatusCodes : [];
+  this.operandDiagnosticInfos = (options.operandDiagnosticInfos !== undefined) ? options.operandDiagnosticInfos : [];
 
  }
 

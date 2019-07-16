@@ -23,8 +23,8 @@ export class HistoryModifiedData extends HistoryData {
  constructor( options?: IHistoryModifiedData) {
   options = options || {};
   super(options);
-  this.noOfDataValues = (options.noOfDataValues) ? options.noOfDataValues : null;
-  this.modificationInfos = (options.modificationInfos) ? options.modificationInfos : [];
+  this.noOfDataValues = (options.noOfDataValues !== undefined) ? options.noOfDataValues : null;
+  this.modificationInfos = (options.modificationInfos !== undefined) ? options.modificationInfos : [];
 
  }
 

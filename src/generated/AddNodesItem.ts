@@ -17,7 +17,7 @@ export interface IAddNodesItem {
 }
 
 /**
-A request to add a node to the server address space.
+
 */
 
 export class AddNodesItem {
@@ -31,13 +31,13 @@ export class AddNodesItem {
 
  constructor( options?: IAddNodesItem) {
   options = options || {};
-  this.parentNodeId = (options.parentNodeId) ? options.parentNodeId : null;
-  this.referenceTypeId = (options.referenceTypeId) ? options.referenceTypeId : null;
-  this.requestedNewNodeId = (options.requestedNewNodeId) ? options.requestedNewNodeId : null;
-  this.browseName = (options.browseName) ? options.browseName : new QualifiedName();
-  this.nodeClass = (options.nodeClass) ? options.nodeClass : null;
-  this.nodeAttributes = (options.nodeAttributes) ? options.nodeAttributes : null;
-  this.typeDefinition = (options.typeDefinition) ? options.typeDefinition : null;
+  this.parentNodeId = (options.parentNodeId !== undefined) ? options.parentNodeId : null;
+  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
+  this.requestedNewNodeId = (options.requestedNewNodeId !== undefined) ? options.requestedNewNodeId : null;
+  this.browseName = (options.browseName !== undefined) ? options.browseName : new QualifiedName();
+  this.nodeClass = (options.nodeClass !== undefined) ? options.nodeClass : null;
+  this.nodeAttributes = (options.nodeAttributes !== undefined) ? options.nodeAttributes : null;
+  this.typeDefinition = (options.typeDefinition !== undefined) ? options.typeDefinition : null;
 
  }
 

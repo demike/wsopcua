@@ -24,11 +24,11 @@ export class TrustListDataType {
 
  constructor( options?: ITrustListDataType) {
   options = options || {};
-  this.specifiedLists = (options.specifiedLists) ? options.specifiedLists : null;
-  this.trustedCertificates = (options.trustedCertificates) ? options.trustedCertificates : [];
-  this.trustedCrls = (options.trustedCrls) ? options.trustedCrls : [];
-  this.issuerCertificates = (options.issuerCertificates) ? options.issuerCertificates : [];
-  this.issuerCrls = (options.issuerCrls) ? options.issuerCrls : [];
+  this.specifiedLists = (options.specifiedLists !== undefined) ? options.specifiedLists : null;
+  this.trustedCertificates = (options.trustedCertificates !== undefined) ? options.trustedCertificates : [];
+  this.trustedCrls = (options.trustedCrls !== undefined) ? options.trustedCrls : [];
+  this.issuerCertificates = (options.issuerCertificates !== undefined) ? options.issuerCertificates : [];
+  this.issuerCrls = (options.issuerCrls !== undefined) ? options.issuerCrls : [];
 
  }
 

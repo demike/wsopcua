@@ -95,7 +95,8 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
                     alternativeCode = 'new ' + mem.Type.Name + '()';
                 }
 
-                body += '  this.' + mem.Name + ' = (options.' + mem.Name + ') ? options.' + mem.Name + ' : ' + alternativeCode + ';\n';
+                body += '  this.' + mem.Name + ' = (options.' + mem.Name + 
+                        ' !== undefined) ? options.' + mem.Name + ' : ' + alternativeCode + ';\n';
             }
         }
         const args = [];

@@ -20,8 +20,8 @@ export class EventFieldList {
 
  constructor( options?: IEventFieldList) {
   options = options || {};
-  this.clientHandle = (options.clientHandle) ? options.clientHandle : null;
-  this.eventFields = (options.eventFields) ? options.eventFields : [];
+  this.clientHandle = (options.clientHandle !== undefined) ? options.clientHandle : null;
+  this.eventFields = (options.eventFields !== undefined) ? options.eventFields : [];
 
  }
 

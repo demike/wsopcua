@@ -19,7 +19,7 @@ export class DeleteAtTimeDetails extends HistoryUpdateDetails {
  constructor( options?: IDeleteAtTimeDetails) {
   options = options || {};
   super(options);
-  this.reqTimes = (options.reqTimes) ? options.reqTimes : [];
+  this.reqTimes = (options.reqTimes !== undefined) ? options.reqTimes : [];
 
  }
 

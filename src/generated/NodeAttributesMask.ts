@@ -2,8 +2,6 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
-/**
-The bits used to specify default attributes for a new node.*/
 export enum NodeAttributesMask {
    None = 0,
   AccessLevel = 1,

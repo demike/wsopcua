@@ -40,15 +40,15 @@ export class PubSubConnectionDataType {
 
  constructor( options?: IPubSubConnectionDataType) {
   options = options || {};
-  this.name = (options.name) ? options.name : null;
-  this.enabled = (options.enabled) ? options.enabled : null;
-  this.publisherId = (options.publisherId) ? options.publisherId : new Variant();
-  this.transportProfileUri = (options.transportProfileUri) ? options.transportProfileUri : null;
-  this.address = (options.address) ? options.address : null;
-  this.connectionProperties = (options.connectionProperties) ? options.connectionProperties : [];
-  this.transportSettings = (options.transportSettings) ? options.transportSettings : null;
-  this.writerGroups = (options.writerGroups) ? options.writerGroups : [];
-  this.readerGroups = (options.readerGroups) ? options.readerGroups : [];
+  this.name = (options.name !== undefined) ? options.name : null;
+  this.enabled = (options.enabled !== undefined) ? options.enabled : null;
+  this.publisherId = (options.publisherId !== undefined) ? options.publisherId : new Variant();
+  this.transportProfileUri = (options.transportProfileUri !== undefined) ? options.transportProfileUri : null;
+  this.address = (options.address !== undefined) ? options.address : null;
+  this.connectionProperties = (options.connectionProperties !== undefined) ? options.connectionProperties : [];
+  this.transportSettings = (options.transportSettings !== undefined) ? options.transportSettings : null;
+  this.writerGroups = (options.writerGroups !== undefined) ? options.writerGroups : [];
+  this.readerGroups = (options.readerGroups !== undefined) ? options.readerGroups : [];
 
  }
 

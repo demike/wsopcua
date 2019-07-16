@@ -16,7 +16,7 @@ export class TwoByteNodeId {
 
  constructor( options?: ITwoByteNodeId) {
   options = options || {};
-  this.identifier = (options.identifier) ? options.identifier : null;
+  this.identifier = (options.identifier !== undefined) ? options.identifier : null;
 
  }
 

@@ -28,11 +28,11 @@ export class UadpWriterGroupMessageDataType extends WriterGroupMessageDataType {
  constructor( options?: IUadpWriterGroupMessageDataType) {
   options = options || {};
   super();
-  this.groupVersion = (options.groupVersion) ? options.groupVersion : null;
-  this.dataSetOrdering = (options.dataSetOrdering) ? options.dataSetOrdering : null;
-  this.networkMessageContentMask = (options.networkMessageContentMask) ? options.networkMessageContentMask : null;
-  this.samplingOffset = (options.samplingOffset) ? options.samplingOffset : null;
-  this.publishingOffset = (options.publishingOffset) ? options.publishingOffset : [];
+  this.groupVersion = (options.groupVersion !== undefined) ? options.groupVersion : null;
+  this.dataSetOrdering = (options.dataSetOrdering !== undefined) ? options.dataSetOrdering : null;
+  this.networkMessageContentMask = (options.networkMessageContentMask !== undefined) ? options.networkMessageContentMask : null;
+  this.samplingOffset = (options.samplingOffset !== undefined) ? options.samplingOffset : null;
+  this.publishingOffset = (options.publishingOffset !== undefined) ? options.publishingOffset : [];
 
  }
 

@@ -11,7 +11,7 @@ export interface IBrowseNextRequest {
 }
 
 /**
-Continues one or more browse operations.
+
 */
 
 export class BrowseNextRequest {
@@ -21,9 +21,9 @@ export class BrowseNextRequest {
 
  constructor( options?: IBrowseNextRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.releaseContinuationPoints = (options.releaseContinuationPoints) ? options.releaseContinuationPoints : null;
-  this.continuationPoints = (options.continuationPoints) ? options.continuationPoints : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.releaseContinuationPoints = (options.releaseContinuationPoints !== undefined) ? options.releaseContinuationPoints : null;
+  this.continuationPoints = (options.continuationPoints !== undefined) ? options.continuationPoints : [];
 
  }
 

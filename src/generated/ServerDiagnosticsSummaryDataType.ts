@@ -38,18 +38,18 @@ export class ServerDiagnosticsSummaryDataType {
 
  constructor( options?: IServerDiagnosticsSummaryDataType) {
   options = options || {};
-  this.serverViewCount = (options.serverViewCount) ? options.serverViewCount : null;
-  this.currentSessionCount = (options.currentSessionCount) ? options.currentSessionCount : null;
-  this.cumulatedSessionCount = (options.cumulatedSessionCount) ? options.cumulatedSessionCount : null;
-  this.securityRejectedSessionCount = (options.securityRejectedSessionCount) ? options.securityRejectedSessionCount : null;
-  this.rejectedSessionCount = (options.rejectedSessionCount) ? options.rejectedSessionCount : null;
-  this.sessionTimeoutCount = (options.sessionTimeoutCount) ? options.sessionTimeoutCount : null;
-  this.sessionAbortCount = (options.sessionAbortCount) ? options.sessionAbortCount : null;
-  this.currentSubscriptionCount = (options.currentSubscriptionCount) ? options.currentSubscriptionCount : null;
-  this.cumulatedSubscriptionCount = (options.cumulatedSubscriptionCount) ? options.cumulatedSubscriptionCount : null;
-  this.publishingIntervalCount = (options.publishingIntervalCount) ? options.publishingIntervalCount : null;
-  this.securityRejectedRequestsCount = (options.securityRejectedRequestsCount) ? options.securityRejectedRequestsCount : null;
-  this.rejectedRequestsCount = (options.rejectedRequestsCount) ? options.rejectedRequestsCount : null;
+  this.serverViewCount = (options.serverViewCount !== undefined) ? options.serverViewCount : null;
+  this.currentSessionCount = (options.currentSessionCount !== undefined) ? options.currentSessionCount : null;
+  this.cumulatedSessionCount = (options.cumulatedSessionCount !== undefined) ? options.cumulatedSessionCount : null;
+  this.securityRejectedSessionCount = (options.securityRejectedSessionCount !== undefined) ? options.securityRejectedSessionCount : null;
+  this.rejectedSessionCount = (options.rejectedSessionCount !== undefined) ? options.rejectedSessionCount : null;
+  this.sessionTimeoutCount = (options.sessionTimeoutCount !== undefined) ? options.sessionTimeoutCount : null;
+  this.sessionAbortCount = (options.sessionAbortCount !== undefined) ? options.sessionAbortCount : null;
+  this.currentSubscriptionCount = (options.currentSubscriptionCount !== undefined) ? options.currentSubscriptionCount : null;
+  this.cumulatedSubscriptionCount = (options.cumulatedSubscriptionCount !== undefined) ? options.cumulatedSubscriptionCount : null;
+  this.publishingIntervalCount = (options.publishingIntervalCount !== undefined) ? options.publishingIntervalCount : null;
+  this.securityRejectedRequestsCount = (options.securityRejectedRequestsCount !== undefined) ? options.securityRejectedRequestsCount : null;
+  this.rejectedRequestsCount = (options.rejectedRequestsCount !== undefined) ? options.rejectedRequestsCount : null;
 
  }
 

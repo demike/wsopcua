@@ -27,12 +27,12 @@ export class DataValue {
 
  constructor( options?: IDataValue) {
   options = options || {};
-  this.value = (options.value) ? options.value : null;
-  this.statusCode = (options.statusCode) ? options.statusCode : null;
-  this.sourceTimestamp = (options.sourceTimestamp) ? options.sourceTimestamp : null;
-  this.sourcePicoseconds = (options.sourcePicoseconds) ? options.sourcePicoseconds : null;
-  this.serverTimestamp = (options.serverTimestamp) ? options.serverTimestamp : null;
-  this.serverPicoseconds = (options.serverPicoseconds) ? options.serverPicoseconds : null;
+  this.value = (options.value !== undefined) ? options.value : null;
+  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
+  this.sourceTimestamp = (options.sourceTimestamp !== undefined) ? options.sourceTimestamp : null;
+  this.sourcePicoseconds = (options.sourcePicoseconds !== undefined) ? options.sourcePicoseconds : null;
+  this.serverTimestamp = (options.serverTimestamp !== undefined) ? options.serverTimestamp : null;
+  this.serverPicoseconds = (options.serverPicoseconds !== undefined) ? options.serverPicoseconds : null;
 
  }
 

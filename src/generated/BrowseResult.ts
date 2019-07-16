@@ -12,7 +12,7 @@ export interface IBrowseResult {
 }
 
 /**
-The result of a browse operation.
+
 */
 
 export class BrowseResult {
@@ -22,9 +22,9 @@ export class BrowseResult {
 
  constructor( options?: IBrowseResult) {
   options = options || {};
-  this.statusCode = (options.statusCode) ? options.statusCode : null;
-  this.continuationPoint = (options.continuationPoint) ? options.continuationPoint : null;
-  this.references = (options.references) ? options.references : [];
+  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
+  this.continuationPoint = (options.continuationPoint !== undefined) ? options.continuationPoint : null;
+  this.references = (options.references !== undefined) ? options.references : [];
 
  }
 

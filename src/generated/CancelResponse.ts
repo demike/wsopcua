@@ -10,7 +10,7 @@ export interface ICancelResponse {
 }
 
 /**
-Cancels an outstanding request.
+
 */
 
 export class CancelResponse {
@@ -19,8 +19,8 @@ export class CancelResponse {
 
  constructor( options?: ICancelResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.cancelCount = (options.cancelCount) ? options.cancelCount : null;
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.cancelCount = (options.cancelCount !== undefined) ? options.cancelCount : null;
 
  }
 

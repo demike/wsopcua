@@ -12,7 +12,7 @@ export interface IFindServersResponse {
 }
 
 /**
-Finds the servers known to the discovery server.
+
 */
 
 export class FindServersResponse {
@@ -21,8 +21,8 @@ export class FindServersResponse {
 
  constructor( options?: IFindServersResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.servers = (options.servers) ? options.servers : [];
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.servers = (options.servers !== undefined) ? options.servers : [];
 
  }
 

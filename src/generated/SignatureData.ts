@@ -9,7 +9,7 @@ export interface ISignatureData {
 }
 
 /**
-A digital signature.
+
 */
 
 export class SignatureData {
@@ -18,8 +18,8 @@ export class SignatureData {
 
  constructor( options?: ISignatureData) {
   options = options || {};
-  this.algorithm = (options.algorithm) ? options.algorithm : null;
-  this.signature = (options.signature) ? options.signature : null;
+  this.algorithm = (options.algorithm !== undefined) ? options.algorithm : null;
+  this.signature = (options.signature !== undefined) ? options.signature : null;
 
  }
 

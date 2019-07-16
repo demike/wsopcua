@@ -11,7 +11,7 @@ export interface IViewAttributes extends INodeAttributes {
 }
 
 /**
-The attributes for a view node.
+
 */
 
 export class ViewAttributes extends NodeAttributes {
@@ -21,8 +21,8 @@ export class ViewAttributes extends NodeAttributes {
  constructor( options?: IViewAttributes) {
   options = options || {};
   super(options);
-  this.containsNoLoops = (options.containsNoLoops) ? options.containsNoLoops : null;
-  this.eventNotifier = (options.eventNotifier) ? options.eventNotifier : null;
+  this.containsNoLoops = (options.containsNoLoops !== undefined) ? options.containsNoLoops : null;
+  this.eventNotifier = (options.eventNotifier !== undefined) ? options.eventNotifier : null;
 
  }
 

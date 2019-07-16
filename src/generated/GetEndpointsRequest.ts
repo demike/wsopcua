@@ -12,7 +12,7 @@ export interface IGetEndpointsRequest {
 }
 
 /**
-Gets the endpoints used by the server.
+
 */
 
 export class GetEndpointsRequest {
@@ -23,10 +23,10 @@ export class GetEndpointsRequest {
 
  constructor( options?: IGetEndpointsRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.endpointUrl = (options.endpointUrl) ? options.endpointUrl : null;
-  this.localeIds = (options.localeIds) ? options.localeIds : [];
-  this.profileUris = (options.profileUris) ? options.profileUris : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.endpointUrl = (options.endpointUrl !== undefined) ? options.endpointUrl : null;
+  this.localeIds = (options.localeIds !== undefined) ? options.localeIds : [];
+  this.profileUris = (options.profileUris !== undefined) ? options.profileUris : [];
 
  }
 

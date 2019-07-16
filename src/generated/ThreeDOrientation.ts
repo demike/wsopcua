@@ -22,9 +22,9 @@ export class ThreeDOrientation extends Orientation {
  constructor( options?: IThreeDOrientation) {
   options = options || {};
   super();
-  this.a = (options.a) ? options.a : null;
-  this.b = (options.b) ? options.b : null;
-  this.c = (options.c) ? options.c : null;
+  this.a = (options.a !== undefined) ? options.a : null;
+  this.b = (options.b !== undefined) ? options.b : null;
+  this.c = (options.c !== undefined) ? options.c : null;
 
  }
 

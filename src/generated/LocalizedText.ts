@@ -18,8 +18,8 @@ export class LocalizedText {
 
  constructor( options?: ILocalizedText) {
   options = options || {};
-  this.locale = (options.locale) ? options.locale : null;
-  this.text = (options.text) ? options.text : null;
+  this.locale = (options.locale !== undefined) ? options.locale : null;
+  this.text = (options.text !== undefined) ? options.text : null;
 
  }
 

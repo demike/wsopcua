@@ -34,12 +34,12 @@ export class QueryFirstResponse {
 
  constructor( options?: IQueryFirstResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.queryDataSets = (options.queryDataSets) ? options.queryDataSets : [];
-  this.continuationPoint = (options.continuationPoint) ? options.continuationPoint : null;
-  this.parsingResults = (options.parsingResults) ? options.parsingResults : [];
-  this.diagnosticInfos = (options.diagnosticInfos) ? options.diagnosticInfos : [];
-  this.filterResult = (options.filterResult) ? options.filterResult : new ContentFilterResult();
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.queryDataSets = (options.queryDataSets !== undefined) ? options.queryDataSets : [];
+  this.continuationPoint = (options.continuationPoint !== undefined) ? options.continuationPoint : null;
+  this.parsingResults = (options.parsingResults !== undefined) ? options.parsingResults : [];
+  this.diagnosticInfos = (options.diagnosticInfos !== undefined) ? options.diagnosticInfos : [];
+  this.filterResult = (options.filterResult !== undefined) ? options.filterResult : new ContentFilterResult();
 
  }
 

@@ -2,8 +2,6 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
-/**
-Indicates whether a token if being created or renewed.*/
 export enum SecurityTokenRequestType {
    Issue = 0,
   Renew = 1,

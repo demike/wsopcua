@@ -27,11 +27,11 @@ export class ReadProcessedDetails extends HistoryReadDetails {
  constructor( options?: IReadProcessedDetails) {
   options = options || {};
   super();
-  this.startTime = (options.startTime) ? options.startTime : null;
-  this.endTime = (options.endTime) ? options.endTime : null;
-  this.processingInterval = (options.processingInterval) ? options.processingInterval : null;
-  this.aggregateType = (options.aggregateType) ? options.aggregateType : [];
-  this.aggregateConfiguration = (options.aggregateConfiguration) ? options.aggregateConfiguration : new AggregateConfiguration();
+  this.startTime = (options.startTime !== undefined) ? options.startTime : null;
+  this.endTime = (options.endTime !== undefined) ? options.endTime : null;
+  this.processingInterval = (options.processingInterval !== undefined) ? options.processingInterval : null;
+  this.aggregateType = (options.aggregateType !== undefined) ? options.aggregateType : [];
+  this.aggregateConfiguration = (options.aggregateConfiguration !== undefined) ? options.aggregateConfiguration : new AggregateConfiguration();
 
  }
 

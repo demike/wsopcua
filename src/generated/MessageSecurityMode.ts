@@ -2,8 +2,6 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
-/**
-The type of security to use on a message.*/
 export enum MessageSecurityMode {
    Invalid = 0,
   None = 1,

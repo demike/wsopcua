@@ -21,9 +21,9 @@ export class SetPublishingModeRequest {
 
  constructor( options?: ISetPublishingModeRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.publishingEnabled = (options.publishingEnabled) ? options.publishingEnabled : null;
-  this.subscriptionIds = (options.subscriptionIds) ? options.subscriptionIds : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.publishingEnabled = (options.publishingEnabled !== undefined) ? options.publishingEnabled : null;
+  this.subscriptionIds = (options.subscriptionIds !== undefined) ? options.subscriptionIds : [];
 
  }
 

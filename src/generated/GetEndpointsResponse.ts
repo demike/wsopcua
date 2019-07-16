@@ -12,7 +12,7 @@ export interface IGetEndpointsResponse {
 }
 
 /**
-Gets the endpoints used by the server.
+
 */
 
 export class GetEndpointsResponse {
@@ -21,8 +21,8 @@ export class GetEndpointsResponse {
 
  constructor( options?: IGetEndpointsResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.endpoints = (options.endpoints) ? options.endpoints : [];
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.endpoints = (options.endpoints !== undefined) ? options.endpoints : [];
 
  }
 

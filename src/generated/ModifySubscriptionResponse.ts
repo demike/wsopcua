@@ -23,10 +23,10 @@ export class ModifySubscriptionResponse {
 
  constructor( options?: IModifySubscriptionResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.revisedPublishingInterval = (options.revisedPublishingInterval) ? options.revisedPublishingInterval : null;
-  this.revisedLifetimeCount = (options.revisedLifetimeCount) ? options.revisedLifetimeCount : null;
-  this.revisedMaxKeepAliveCount = (options.revisedMaxKeepAliveCount) ? options.revisedMaxKeepAliveCount : null;
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.revisedPublishingInterval = (options.revisedPublishingInterval !== undefined) ? options.revisedPublishingInterval : null;
+  this.revisedLifetimeCount = (options.revisedLifetimeCount !== undefined) ? options.revisedLifetimeCount : null;
+  this.revisedMaxKeepAliveCount = (options.revisedMaxKeepAliveCount !== undefined) ? options.revisedMaxKeepAliveCount : null;
 
  }
 

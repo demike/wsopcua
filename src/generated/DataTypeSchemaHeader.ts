@@ -28,10 +28,10 @@ export class DataTypeSchemaHeader {
 
  constructor( options?: IDataTypeSchemaHeader) {
   options = options || {};
-  this.namespaces = (options.namespaces) ? options.namespaces : [];
-  this.structureDataTypes = (options.structureDataTypes) ? options.structureDataTypes : [];
-  this.enumDataTypes = (options.enumDataTypes) ? options.enumDataTypes : [];
-  this.simpleDataTypes = (options.simpleDataTypes) ? options.simpleDataTypes : [];
+  this.namespaces = (options.namespaces !== undefined) ? options.namespaces : [];
+  this.structureDataTypes = (options.structureDataTypes !== undefined) ? options.structureDataTypes : [];
+  this.enumDataTypes = (options.enumDataTypes !== undefined) ? options.enumDataTypes : [];
+  this.simpleDataTypes = (options.simpleDataTypes !== undefined) ? options.simpleDataTypes : [];
 
  }
 

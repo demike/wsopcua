@@ -25,10 +25,10 @@ export class UadpDataSetWriterMessageDataType extends DataSetWriterMessageDataTy
  constructor( options?: IUadpDataSetWriterMessageDataType) {
   options = options || {};
   super();
-  this.dataSetMessageContentMask = (options.dataSetMessageContentMask) ? options.dataSetMessageContentMask : null;
-  this.configuredSize = (options.configuredSize) ? options.configuredSize : null;
-  this.networkMessageNumber = (options.networkMessageNumber) ? options.networkMessageNumber : null;
-  this.dataSetOffset = (options.dataSetOffset) ? options.dataSetOffset : null;
+  this.dataSetMessageContentMask = (options.dataSetMessageContentMask !== undefined) ? options.dataSetMessageContentMask : null;
+  this.configuredSize = (options.configuredSize !== undefined) ? options.configuredSize : null;
+  this.networkMessageNumber = (options.networkMessageNumber !== undefined) ? options.networkMessageNumber : null;
+  this.dataSetOffset = (options.dataSetOffset !== undefined) ? options.dataSetOffset : null;
 
  }
 

@@ -22,9 +22,9 @@ export class ThreeDCartesianCoordinates extends CartesianCoordinates {
  constructor( options?: IThreeDCartesianCoordinates) {
   options = options || {};
   super();
-  this.x = (options.x) ? options.x : null;
-  this.y = (options.y) ? options.y : null;
-  this.z = (options.z) ? options.z : null;
+  this.x = (options.x !== undefined) ? options.x : null;
+  this.y = (options.y !== undefined) ? options.y : null;
+  this.z = (options.z !== undefined) ? options.z : null;
 
  }
 

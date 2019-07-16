@@ -18,8 +18,8 @@ export class XVType {
 
  constructor( options?: IXVType) {
   options = options || {};
-  this.x = (options.x) ? options.x : null;
-  this.value = (options.value) ? options.value : null;
+  this.x = (options.x !== undefined) ? options.x : null;
+  this.value = (options.value !== undefined) ? options.value : null;
 
  }
 

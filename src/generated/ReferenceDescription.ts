@@ -17,7 +17,7 @@ export interface IReferenceDescription {
 }
 
 /**
-The description of a reference.
+
 */
 
 export class ReferenceDescription {
@@ -31,13 +31,13 @@ export class ReferenceDescription {
 
  constructor( options?: IReferenceDescription) {
   options = options || {};
-  this.referenceTypeId = (options.referenceTypeId) ? options.referenceTypeId : null;
-  this.isForward = (options.isForward) ? options.isForward : null;
-  this.nodeId = (options.nodeId) ? options.nodeId : null;
-  this.browseName = (options.browseName) ? options.browseName : new QualifiedName();
-  this.displayName = (options.displayName) ? options.displayName : new LocalizedText();
-  this.nodeClass = (options.nodeClass) ? options.nodeClass : null;
-  this.typeDefinition = (options.typeDefinition) ? options.typeDefinition : null;
+  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
+  this.isForward = (options.isForward !== undefined) ? options.isForward : null;
+  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
+  this.browseName = (options.browseName !== undefined) ? options.browseName : new QualifiedName();
+  this.displayName = (options.displayName !== undefined) ? options.displayName : new LocalizedText();
+  this.nodeClass = (options.nodeClass !== undefined) ? options.nodeClass : null;
+  this.typeDefinition = (options.typeDefinition !== undefined) ? options.typeDefinition : null;
 
  }
 

@@ -13,7 +13,7 @@ export interface INodeAttributes {
 }
 
 /**
-The base attributes for all nodes.
+
 */
 
 export class NodeAttributes {
@@ -25,11 +25,11 @@ export class NodeAttributes {
 
  constructor( options?: INodeAttributes) {
   options = options || {};
-  this.specifiedAttributes = (options.specifiedAttributes) ? options.specifiedAttributes : null;
-  this.displayName = (options.displayName) ? options.displayName : new LocalizedText();
-  this.description = (options.description) ? options.description : new LocalizedText();
-  this.writeMask = (options.writeMask) ? options.writeMask : null;
-  this.userWriteMask = (options.userWriteMask) ? options.userWriteMask : null;
+  this.specifiedAttributes = (options.specifiedAttributes !== undefined) ? options.specifiedAttributes : null;
+  this.displayName = (options.displayName !== undefined) ? options.displayName : new LocalizedText();
+  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
+  this.writeMask = (options.writeMask !== undefined) ? options.writeMask : null;
+  this.userWriteMask = (options.userWriteMask !== undefined) ? options.userWriteMask : null;
 
  }
 

@@ -2,8 +2,6 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
-/**
-Define bits used to indicate which attributes are writable.*/
 export enum AttributeWriteMask {
    None = 0,
   AccessLevel = 1,

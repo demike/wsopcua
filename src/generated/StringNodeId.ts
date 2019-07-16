@@ -18,8 +18,8 @@ export class StringNodeId {
 
  constructor( options?: IStringNodeId) {
   options = options || {};
-  this.namespaceIndex = (options.namespaceIndex) ? options.namespaceIndex : null;
-  this.identifier = (options.identifier) ? options.identifier : null;
+  this.namespaceIndex = (options.namespaceIndex !== undefined) ? options.namespaceIndex : null;
+  this.identifier = (options.identifier !== undefined) ? options.identifier : null;
 
  }
 

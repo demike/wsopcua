@@ -23,7 +23,7 @@ export interface ICreateSessionResponse {
 }
 
 /**
-Creates a new session with the server.
+
 */
 
 export class CreateSessionResponse {
@@ -40,16 +40,16 @@ export class CreateSessionResponse {
 
  constructor( options?: ICreateSessionResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.sessionId = (options.sessionId) ? options.sessionId : null;
-  this.authenticationToken = (options.authenticationToken) ? options.authenticationToken : null;
-  this.revisedSessionTimeout = (options.revisedSessionTimeout) ? options.revisedSessionTimeout : null;
-  this.serverNonce = (options.serverNonce) ? options.serverNonce : null;
-  this.serverCertificate = (options.serverCertificate) ? options.serverCertificate : null;
-  this.serverEndpoints = (options.serverEndpoints) ? options.serverEndpoints : [];
-  this.serverSoftwareCertificates = (options.serverSoftwareCertificates) ? options.serverSoftwareCertificates : [];
-  this.serverSignature = (options.serverSignature) ? options.serverSignature : new SignatureData();
-  this.maxRequestMessageSize = (options.maxRequestMessageSize) ? options.maxRequestMessageSize : null;
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.sessionId = (options.sessionId !== undefined) ? options.sessionId : null;
+  this.authenticationToken = (options.authenticationToken !== undefined) ? options.authenticationToken : null;
+  this.revisedSessionTimeout = (options.revisedSessionTimeout !== undefined) ? options.revisedSessionTimeout : null;
+  this.serverNonce = (options.serverNonce !== undefined) ? options.serverNonce : null;
+  this.serverCertificate = (options.serverCertificate !== undefined) ? options.serverCertificate : null;
+  this.serverEndpoints = (options.serverEndpoints !== undefined) ? options.serverEndpoints : [];
+  this.serverSoftwareCertificates = (options.serverSoftwareCertificates !== undefined) ? options.serverSoftwareCertificates : [];
+  this.serverSignature = (options.serverSignature !== undefined) ? options.serverSignature : new SignatureData();
+  this.maxRequestMessageSize = (options.maxRequestMessageSize !== undefined) ? options.maxRequestMessageSize : null;
 
  }
 

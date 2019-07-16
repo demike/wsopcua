@@ -24,9 +24,9 @@ export class PubSubConfigurationDataType {
 
  constructor( options?: IPubSubConfigurationDataType) {
   options = options || {};
-  this.publishedDataSets = (options.publishedDataSets) ? options.publishedDataSets : [];
-  this.connections = (options.connections) ? options.connections : [];
-  this.enabled = (options.enabled) ? options.enabled : null;
+  this.publishedDataSets = (options.publishedDataSets !== undefined) ? options.publishedDataSets : [];
+  this.connections = (options.connections !== undefined) ? options.connections : [];
+  this.enabled = (options.enabled !== undefined) ? options.enabled : null;
 
  }
 

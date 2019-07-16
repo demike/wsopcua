@@ -23,9 +23,9 @@ export class InstanceNode extends Node {
  constructor( options?: IInstanceNode) {
   options = options || {};
   super(options);
-  this.noOfRolePermissions = (options.noOfRolePermissions) ? options.noOfRolePermissions : null;
-  this.noOfUserRolePermissions = (options.noOfUserRolePermissions) ? options.noOfUserRolePermissions : null;
-  this.noOfReferences = (options.noOfReferences) ? options.noOfReferences : null;
+  this.noOfRolePermissions = (options.noOfRolePermissions !== undefined) ? options.noOfRolePermissions : null;
+  this.noOfUserRolePermissions = (options.noOfUserRolePermissions !== undefined) ? options.noOfUserRolePermissions : null;
+  this.noOfReferences = (options.noOfReferences !== undefined) ? options.noOfReferences : null;
 
  }
 

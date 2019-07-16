@@ -11,7 +11,7 @@ export interface IEnumValueType {
 }
 
 /**
-A mapping between a value of an enumerated type and a name and description.
+
 */
 
 export class EnumValueType {
@@ -21,9 +21,9 @@ export class EnumValueType {
 
  constructor( options?: IEnumValueType) {
   options = options || {};
-  this.value = (options.value) ? options.value : null;
-  this.displayName = (options.displayName) ? options.displayName : new LocalizedText();
-  this.description = (options.description) ? options.description : new LocalizedText();
+  this.value = (options.value !== undefined) ? options.value : null;
+  this.displayName = (options.displayName !== undefined) ? options.displayName : new LocalizedText();
+  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
 
  }
 

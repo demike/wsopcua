@@ -26,10 +26,10 @@ export class SimpleAttributeOperand extends FilterOperand {
  constructor( options?: ISimpleAttributeOperand) {
   options = options || {};
   super();
-  this.typeDefinitionId = (options.typeDefinitionId) ? options.typeDefinitionId : null;
-  this.browsePath = (options.browsePath) ? options.browsePath : [];
-  this.attributeId = (options.attributeId) ? options.attributeId : null;
-  this.indexRange = (options.indexRange) ? options.indexRange : null;
+  this.typeDefinitionId = (options.typeDefinitionId !== undefined) ? options.typeDefinitionId : null;
+  this.browsePath = (options.browsePath !== undefined) ? options.browsePath : [];
+  this.attributeId = (options.attributeId !== undefined) ? options.attributeId : null;
+  this.indexRange = (options.indexRange !== undefined) ? options.indexRange : null;
 
  }
 

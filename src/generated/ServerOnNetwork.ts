@@ -22,10 +22,10 @@ export class ServerOnNetwork {
 
  constructor( options?: IServerOnNetwork) {
   options = options || {};
-  this.recordId = (options.recordId) ? options.recordId : null;
-  this.serverName = (options.serverName) ? options.serverName : null;
-  this.discoveryUrl = (options.discoveryUrl) ? options.discoveryUrl : null;
-  this.serverCapabilities = (options.serverCapabilities) ? options.serverCapabilities : [];
+  this.recordId = (options.recordId !== undefined) ? options.recordId : null;
+  this.serverName = (options.serverName !== undefined) ? options.serverName : null;
+  this.discoveryUrl = (options.discoveryUrl !== undefined) ? options.discoveryUrl : null;
+  this.serverCapabilities = (options.serverCapabilities !== undefined) ? options.serverCapabilities : [];
 
  }
 

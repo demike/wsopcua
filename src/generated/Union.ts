@@ -1,7 +1,7 @@
 
 
 /**
-This abstract DataType is the base DataType for all union DataTypes.
+
 */
 
 export class Union {

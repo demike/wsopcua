@@ -15,7 +15,7 @@ export interface IRequestHeader {
 }
 
 /**
-The header passed with every server request.
+
 */
 
 export class RequestHeader {
@@ -29,13 +29,13 @@ export class RequestHeader {
 
  constructor( options?: IRequestHeader) {
   options = options || {};
-  this.authenticationToken = (options.authenticationToken) ? options.authenticationToken : null;
-  this.timestamp = (options.timestamp) ? options.timestamp : null;
-  this.requestHandle = (options.requestHandle) ? options.requestHandle : null;
-  this.returnDiagnostics = (options.returnDiagnostics) ? options.returnDiagnostics : null;
-  this.auditEntryId = (options.auditEntryId) ? options.auditEntryId : null;
-  this.timeoutHint = (options.timeoutHint) ? options.timeoutHint : null;
-  this.additionalHeader = (options.additionalHeader) ? options.additionalHeader : null;
+  this.authenticationToken = (options.authenticationToken !== undefined) ? options.authenticationToken : null;
+  this.timestamp = (options.timestamp !== undefined) ? options.timestamp : null;
+  this.requestHandle = (options.requestHandle !== undefined) ? options.requestHandle : null;
+  this.returnDiagnostics = (options.returnDiagnostics !== undefined) ? options.returnDiagnostics : null;
+  this.auditEntryId = (options.auditEntryId !== undefined) ? options.auditEntryId : null;
+  this.timeoutHint = (options.timeoutHint !== undefined) ? options.timeoutHint : null;
+  this.additionalHeader = (options.additionalHeader !== undefined) ? options.additionalHeader : null;
 
  }
 

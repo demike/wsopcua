@@ -23,10 +23,10 @@ export class EUInformation {
 
  constructor( options?: IEUInformation) {
   options = options || {};
-  this.namespaceUri = (options.namespaceUri) ? options.namespaceUri : null;
-  this.unitId = (options.unitId) ? options.unitId : null;
-  this.displayName = (options.displayName) ? options.displayName : new LocalizedText();
-  this.description = (options.description) ? options.description : new LocalizedText();
+  this.namespaceUri = (options.namespaceUri !== undefined) ? options.namespaceUri : null;
+  this.unitId = (options.unitId !== undefined) ? options.unitId : null;
+  this.displayName = (options.displayName !== undefined) ? options.displayName : new LocalizedText();
+  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
 
  }
 

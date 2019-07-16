@@ -25,11 +25,11 @@ export class MonitoringParameters {
 
  constructor( options?: IMonitoringParameters) {
   options = options || {};
-  this.clientHandle = (options.clientHandle) ? options.clientHandle : null;
-  this.samplingInterval = (options.samplingInterval) ? options.samplingInterval : null;
-  this.filter = (options.filter) ? options.filter : null;
-  this.queueSize = (options.queueSize) ? options.queueSize : null;
-  this.discardOldest = (options.discardOldest) ? options.discardOldest : null;
+  this.clientHandle = (options.clientHandle !== undefined) ? options.clientHandle : null;
+  this.samplingInterval = (options.samplingInterval !== undefined) ? options.samplingInterval : null;
+  this.filter = (options.filter !== undefined) ? options.filter : null;
+  this.queueSize = (options.queueSize !== undefined) ? options.queueSize : null;
+  this.discardOldest = (options.discardOldest !== undefined) ? options.discardOldest : null;
 
  }
 

@@ -18,7 +18,7 @@ export class HistoryData {
 
  constructor( options?: IHistoryData) {
   options = options || {};
-  this.dataValues = (options.dataValues) ? options.dataValues : [];
+  this.dataValues = (options.dataValues !== undefined) ? options.dataValues : [];
 
  }
 

@@ -18,8 +18,8 @@ export class Range {
 
  constructor( options?: IRange) {
   options = options || {};
-  this.low = (options.low) ? options.low : null;
-  this.high = (options.high) ? options.high : null;
+  this.low = (options.low !== undefined) ? options.low : null;
+  this.high = (options.high !== undefined) ? options.high : null;
 
  }
 

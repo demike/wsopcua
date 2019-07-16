@@ -19,8 +19,8 @@ export class DeleteSubscriptionsRequest {
 
  constructor( options?: IDeleteSubscriptionsRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.subscriptionIds = (options.subscriptionIds) ? options.subscriptionIds : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.subscriptionIds = (options.subscriptionIds !== undefined) ? options.subscriptionIds : [];
 
  }
 

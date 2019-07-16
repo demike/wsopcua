@@ -26,12 +26,12 @@ export class BuildInfo {
 
  constructor( options?: IBuildInfo) {
   options = options || {};
-  this.productUri = (options.productUri) ? options.productUri : null;
-  this.manufacturerName = (options.manufacturerName) ? options.manufacturerName : null;
-  this.productName = (options.productName) ? options.productName : null;
-  this.softwareVersion = (options.softwareVersion) ? options.softwareVersion : null;
-  this.buildNumber = (options.buildNumber) ? options.buildNumber : null;
-  this.buildDate = (options.buildDate) ? options.buildDate : null;
+  this.productUri = (options.productUri !== undefined) ? options.productUri : null;
+  this.manufacturerName = (options.manufacturerName !== undefined) ? options.manufacturerName : null;
+  this.productName = (options.productName !== undefined) ? options.productName : null;
+  this.softwareVersion = (options.softwareVersion !== undefined) ? options.softwareVersion : null;
+  this.buildNumber = (options.buildNumber !== undefined) ? options.buildNumber : null;
+  this.buildDate = (options.buildDate !== undefined) ? options.buildDate : null;
 
  }
 

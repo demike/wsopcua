@@ -19,7 +19,7 @@ export class DeleteEventDetails extends HistoryUpdateDetails {
  constructor( options?: IDeleteEventDetails) {
   options = options || {};
   super(options);
-  this.eventIds = (options.eventIds) ? options.eventIds : [];
+  this.eventIds = (options.eventIds !== undefined) ? options.eventIds : [];
 
  }
 

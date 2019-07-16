@@ -8,7 +8,7 @@ export interface IServiceFault {
 }
 
 /**
-The response returned by all services when there is a service level error.
+
 */
 
 export class ServiceFault {
@@ -16,7 +16,7 @@ export class ServiceFault {
 
  constructor( options?: IServiceFault) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
 
  }
 

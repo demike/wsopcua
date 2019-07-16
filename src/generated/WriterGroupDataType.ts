@@ -42,17 +42,17 @@ export class WriterGroupDataType extends PubSubGroupDataType {
  constructor( options?: IWriterGroupDataType) {
   options = options || {};
   super(options);
-  this.noOfSecurityKeyServices = (options.noOfSecurityKeyServices) ? options.noOfSecurityKeyServices : null;
-  this.noOfGroupProperties = (options.noOfGroupProperties) ? options.noOfGroupProperties : null;
-  this.writerGroupId = (options.writerGroupId) ? options.writerGroupId : null;
-  this.publishingInterval = (options.publishingInterval) ? options.publishingInterval : null;
-  this.keepAliveTime = (options.keepAliveTime) ? options.keepAliveTime : null;
-  this.priority = (options.priority) ? options.priority : null;
-  this.localeIds = (options.localeIds) ? options.localeIds : [];
-  this.headerLayoutUri = (options.headerLayoutUri) ? options.headerLayoutUri : null;
-  this.transportSettings = (options.transportSettings) ? options.transportSettings : null;
-  this.messageSettings = (options.messageSettings) ? options.messageSettings : null;
-  this.dataSetWriters = (options.dataSetWriters) ? options.dataSetWriters : [];
+  this.noOfSecurityKeyServices = (options.noOfSecurityKeyServices !== undefined) ? options.noOfSecurityKeyServices : null;
+  this.noOfGroupProperties = (options.noOfGroupProperties !== undefined) ? options.noOfGroupProperties : null;
+  this.writerGroupId = (options.writerGroupId !== undefined) ? options.writerGroupId : null;
+  this.publishingInterval = (options.publishingInterval !== undefined) ? options.publishingInterval : null;
+  this.keepAliveTime = (options.keepAliveTime !== undefined) ? options.keepAliveTime : null;
+  this.priority = (options.priority !== undefined) ? options.priority : null;
+  this.localeIds = (options.localeIds !== undefined) ? options.localeIds : [];
+  this.headerLayoutUri = (options.headerLayoutUri !== undefined) ? options.headerLayoutUri : null;
+  this.transportSettings = (options.transportSettings !== undefined) ? options.transportSettings : null;
+  this.messageSettings = (options.messageSettings !== undefined) ? options.messageSettings : null;
+  this.dataSetWriters = (options.dataSetWriters !== undefined) ? options.dataSetWriters : [];
 
  }
 

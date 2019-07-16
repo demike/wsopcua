@@ -10,7 +10,7 @@ export interface ICancelRequest {
 }
 
 /**
-Cancels an outstanding request.
+
 */
 
 export class CancelRequest {
@@ -19,8 +19,8 @@ export class CancelRequest {
 
  constructor( options?: ICancelRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.requestHandle = (options.requestHandle) ? options.requestHandle : null;
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.requestHandle = (options.requestHandle !== undefined) ? options.requestHandle : null;
 
  }
 

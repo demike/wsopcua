@@ -20,7 +20,7 @@ export class PublishedDataItemsDataType extends PublishedDataSetSourceDataType {
  constructor( options?: IPublishedDataItemsDataType) {
   options = options || {};
   super();
-  this.publishedData = (options.publishedData) ? options.publishedData : [];
+  this.publishedData = (options.publishedData !== undefined) ? options.publishedData : [];
 
  }
 

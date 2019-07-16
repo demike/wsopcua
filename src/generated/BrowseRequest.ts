@@ -15,7 +15,7 @@ export interface IBrowseRequest {
 }
 
 /**
-Browse the references for one or more nodes from the server address space.
+
 */
 
 export class BrowseRequest {
@@ -26,10 +26,10 @@ export class BrowseRequest {
 
  constructor( options?: IBrowseRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.view = (options.view) ? options.view : new ViewDescription();
-  this.requestedMaxReferencesPerNode = (options.requestedMaxReferencesPerNode) ? options.requestedMaxReferencesPerNode : null;
-  this.nodesToBrowse = (options.nodesToBrowse) ? options.nodesToBrowse : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.view = (options.view !== undefined) ? options.view : new ViewDescription();
+  this.requestedMaxReferencesPerNode = (options.requestedMaxReferencesPerNode !== undefined) ? options.requestedMaxReferencesPerNode : null;
+  this.nodesToBrowse = (options.nodesToBrowse !== undefined) ? options.nodesToBrowse : [];
 
  }
 

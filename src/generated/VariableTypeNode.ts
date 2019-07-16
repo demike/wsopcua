@@ -33,7 +33,7 @@ export interface IVariableTypeNode extends ITypeNode {
 }
 
 /**
-Specifies the attributes which belong to variable type nodes.
+
 */
 
 export class VariableTypeNode extends TypeNode {
@@ -57,22 +57,22 @@ export class VariableTypeNode extends TypeNode {
  constructor( options?: IVariableTypeNode) {
   options = options || {};
   super(options);
-  this.nodeId = (options.nodeId) ? options.nodeId : null;
-  this.nodeClass = (options.nodeClass) ? options.nodeClass : null;
-  this.browseName = (options.browseName) ? options.browseName : new QualifiedName();
-  this.displayName = (options.displayName) ? options.displayName : new LocalizedText();
-  this.description = (options.description) ? options.description : new LocalizedText();
-  this.writeMask = (options.writeMask) ? options.writeMask : null;
-  this.userWriteMask = (options.userWriteMask) ? options.userWriteMask : null;
-  this.rolePermissions = (options.rolePermissions) ? options.rolePermissions : [];
-  this.userRolePermissions = (options.userRolePermissions) ? options.userRolePermissions : [];
-  this.accessRestrictions = (options.accessRestrictions) ? options.accessRestrictions : null;
-  this.references = (options.references) ? options.references : [];
-  this.value = (options.value) ? options.value : new Variant();
-  this.dataType = (options.dataType) ? options.dataType : null;
-  this.valueRank = (options.valueRank) ? options.valueRank : null;
-  this.arrayDimensions = (options.arrayDimensions) ? options.arrayDimensions : [];
-  this.isAbstract = (options.isAbstract) ? options.isAbstract : null;
+  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
+  this.nodeClass = (options.nodeClass !== undefined) ? options.nodeClass : null;
+  this.browseName = (options.browseName !== undefined) ? options.browseName : new QualifiedName();
+  this.displayName = (options.displayName !== undefined) ? options.displayName : new LocalizedText();
+  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
+  this.writeMask = (options.writeMask !== undefined) ? options.writeMask : null;
+  this.userWriteMask = (options.userWriteMask !== undefined) ? options.userWriteMask : null;
+  this.rolePermissions = (options.rolePermissions !== undefined) ? options.rolePermissions : [];
+  this.userRolePermissions = (options.userRolePermissions !== undefined) ? options.userRolePermissions : [];
+  this.accessRestrictions = (options.accessRestrictions !== undefined) ? options.accessRestrictions : null;
+  this.references = (options.references !== undefined) ? options.references : [];
+  this.value = (options.value !== undefined) ? options.value : new Variant();
+  this.dataType = (options.dataType !== undefined) ? options.dataType : null;
+  this.valueRank = (options.valueRank !== undefined) ? options.valueRank : null;
+  this.arrayDimensions = (options.arrayDimensions !== undefined) ? options.arrayDimensions : [];
+  this.isAbstract = (options.isAbstract !== undefined) ? options.isAbstract : null;
 
  }
 

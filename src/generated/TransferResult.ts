@@ -18,8 +18,8 @@ export class TransferResult {
 
  constructor( options?: ITransferResult) {
   options = options || {};
-  this.statusCode = (options.statusCode) ? options.statusCode : null;
-  this.availableSequenceNumbers = (options.availableSequenceNumbers) ? options.availableSequenceNumbers : [];
+  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
+  this.availableSequenceNumbers = (options.availableSequenceNumbers !== undefined) ? options.availableSequenceNumbers : [];
 
  }
 

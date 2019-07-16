@@ -10,7 +10,7 @@ export interface IMdnsDiscoveryConfiguration {
 }
 
 /**
-The discovery information needed for mDNS registration.
+
 */
 
 export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
@@ -20,8 +20,8 @@ export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
  constructor( options?: IMdnsDiscoveryConfiguration) {
   options = options || {};
   super();
-  this.mdnsServerName = (options.mdnsServerName) ? options.mdnsServerName : null;
-  this.serverCapabilities = (options.serverCapabilities) ? options.serverCapabilities : [];
+  this.mdnsServerName = (options.mdnsServerName !== undefined) ? options.mdnsServerName : null;
+  this.serverCapabilities = (options.serverCapabilities !== undefined) ? options.serverCapabilities : [];
 
  }
 

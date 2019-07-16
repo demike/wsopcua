@@ -19,8 +19,8 @@ export class GenericAttributeValue {
 
  constructor( options?: IGenericAttributeValue) {
   options = options || {};
-  this.attributeId = (options.attributeId) ? options.attributeId : null;
-  this.value = (options.value) ? options.value : new Variant();
+  this.attributeId = (options.attributeId !== undefined) ? options.attributeId : null;
+  this.value = (options.value !== undefined) ? options.value : new Variant();
 
  }
 

@@ -15,7 +15,7 @@ export interface IVariableTypeAttributes extends INodeAttributes {
 }
 
 /**
-The attributes for a variable type node.
+
 */
 
 export class VariableTypeAttributes extends NodeAttributes {
@@ -28,11 +28,11 @@ export class VariableTypeAttributes extends NodeAttributes {
  constructor( options?: IVariableTypeAttributes) {
   options = options || {};
   super(options);
-  this.value = (options.value) ? options.value : new Variant();
-  this.dataType = (options.dataType) ? options.dataType : null;
-  this.valueRank = (options.valueRank) ? options.valueRank : null;
-  this.arrayDimensions = (options.arrayDimensions) ? options.arrayDimensions : [];
-  this.isAbstract = (options.isAbstract) ? options.isAbstract : null;
+  this.value = (options.value !== undefined) ? options.value : new Variant();
+  this.dataType = (options.dataType !== undefined) ? options.dataType : null;
+  this.valueRank = (options.valueRank !== undefined) ? options.valueRank : null;
+  this.arrayDimensions = (options.arrayDimensions !== undefined) ? options.arrayDimensions : [];
+  this.isAbstract = (options.isAbstract !== undefined) ? options.isAbstract : null;
 
  }
 

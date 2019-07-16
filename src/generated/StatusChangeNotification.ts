@@ -21,8 +21,8 @@ export class StatusChangeNotification extends NotificationData {
  constructor( options?: IStatusChangeNotification) {
   options = options || {};
   super();
-  this.status = (options.status) ? options.status : null;
-  this.diagnosticInfo = (options.diagnosticInfo) ? options.diagnosticInfo : new DiagnosticInfo();
+  this.status = (options.status !== undefined) ? options.status : null;
+  this.diagnosticInfo = (options.diagnosticInfo !== undefined) ? options.diagnosticInfo : new DiagnosticInfo();
 
  }
 

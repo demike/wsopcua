@@ -23,10 +23,10 @@ export class FindServersOnNetworkRequest {
 
  constructor( options?: IFindServersOnNetworkRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.startingRecordId = (options.startingRecordId) ? options.startingRecordId : null;
-  this.maxRecordsToReturn = (options.maxRecordsToReturn) ? options.maxRecordsToReturn : null;
-  this.serverCapabilityFilter = (options.serverCapabilityFilter) ? options.serverCapabilityFilter : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.startingRecordId = (options.startingRecordId !== undefined) ? options.startingRecordId : null;
+  this.maxRecordsToReturn = (options.maxRecordsToReturn !== undefined) ? options.maxRecordsToReturn : null;
+  this.serverCapabilityFilter = (options.serverCapabilityFilter !== undefined) ? options.serverCapabilityFilter : [];
 
  }
 

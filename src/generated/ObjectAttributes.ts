@@ -10,7 +10,7 @@ export interface IObjectAttributes extends INodeAttributes {
 }
 
 /**
-The attributes for an object node.
+
 */
 
 export class ObjectAttributes extends NodeAttributes {
@@ -19,7 +19,7 @@ export class ObjectAttributes extends NodeAttributes {
  constructor( options?: IObjectAttributes) {
   options = options || {};
   super(options);
-  this.eventNotifier = (options.eventNotifier) ? options.eventNotifier : null;
+  this.eventNotifier = (options.eventNotifier !== undefined) ? options.eventNotifier : null;
 
  }
 

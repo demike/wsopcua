@@ -33,14 +33,14 @@ export class PublishedVariableDataType {
 
  constructor( options?: IPublishedVariableDataType) {
   options = options || {};
-  this.publishedVariable = (options.publishedVariable) ? options.publishedVariable : null;
-  this.attributeId = (options.attributeId) ? options.attributeId : null;
-  this.samplingIntervalHint = (options.samplingIntervalHint) ? options.samplingIntervalHint : null;
-  this.deadbandType = (options.deadbandType) ? options.deadbandType : null;
-  this.deadbandValue = (options.deadbandValue) ? options.deadbandValue : null;
-  this.indexRange = (options.indexRange) ? options.indexRange : null;
-  this.substituteValue = (options.substituteValue) ? options.substituteValue : new Variant();
-  this.metaDataProperties = (options.metaDataProperties) ? options.metaDataProperties : [];
+  this.publishedVariable = (options.publishedVariable !== undefined) ? options.publishedVariable : null;
+  this.attributeId = (options.attributeId !== undefined) ? options.attributeId : null;
+  this.samplingIntervalHint = (options.samplingIntervalHint !== undefined) ? options.samplingIntervalHint : null;
+  this.deadbandType = (options.deadbandType !== undefined) ? options.deadbandType : null;
+  this.deadbandValue = (options.deadbandValue !== undefined) ? options.deadbandValue : null;
+  this.indexRange = (options.indexRange !== undefined) ? options.indexRange : null;
+  this.substituteValue = (options.substituteValue !== undefined) ? options.substituteValue : new Variant();
+  this.metaDataProperties = (options.metaDataProperties !== undefined) ? options.metaDataProperties : [];
 
  }
 

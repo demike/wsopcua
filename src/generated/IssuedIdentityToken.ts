@@ -11,7 +11,7 @@ export interface IIssuedIdentityToken extends IUserIdentityToken {
 }
 
 /**
-A token representing a user identified by a WS-Security XML token.
+
 */
 
 export class IssuedIdentityToken extends UserIdentityToken {
@@ -21,8 +21,8 @@ export class IssuedIdentityToken extends UserIdentityToken {
  constructor( options?: IIssuedIdentityToken) {
   options = options || {};
   super(options);
-  this.tokenData = (options.tokenData) ? options.tokenData : null;
-  this.encryptionAlgorithm = (options.encryptionAlgorithm) ? options.encryptionAlgorithm : null;
+  this.tokenData = (options.tokenData !== undefined) ? options.tokenData : null;
+  this.encryptionAlgorithm = (options.encryptionAlgorithm !== undefined) ? options.encryptionAlgorithm : null;
 
  }
 

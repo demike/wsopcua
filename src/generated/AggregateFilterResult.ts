@@ -23,9 +23,9 @@ export class AggregateFilterResult extends MonitoringFilterResult {
  constructor( options?: IAggregateFilterResult) {
   options = options || {};
   super();
-  this.revisedStartTime = (options.revisedStartTime) ? options.revisedStartTime : null;
-  this.revisedProcessingInterval = (options.revisedProcessingInterval) ? options.revisedProcessingInterval : null;
-  this.revisedAggregateConfiguration = (options.revisedAggregateConfiguration) ? options.revisedAggregateConfiguration : new AggregateConfiguration();
+  this.revisedStartTime = (options.revisedStartTime !== undefined) ? options.revisedStartTime : null;
+  this.revisedProcessingInterval = (options.revisedProcessingInterval !== undefined) ? options.revisedProcessingInterval : null;
+  this.revisedAggregateConfiguration = (options.revisedAggregateConfiguration !== undefined) ? options.revisedAggregateConfiguration : new AggregateConfiguration();
 
  }
 

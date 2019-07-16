@@ -2,8 +2,6 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
-/**
-The possible user token types.*/
 export enum UserTokenType {
    Anonymous = 0,
   UserName = 1,

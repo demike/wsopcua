@@ -20,7 +20,7 @@ export class EventNotificationList extends NotificationData {
  constructor( options?: IEventNotificationList) {
   options = options || {};
   super();
-  this.events = (options.events) ? options.events : [];
+  this.events = (options.events !== undefined) ? options.events : [];
 
  }
 

@@ -15,7 +15,7 @@ export interface IAddNodesResponse {
 }
 
 /**
-Adds one or more nodes to the server address space.
+
 */
 
 export class AddNodesResponse {
@@ -25,9 +25,9 @@ export class AddNodesResponse {
 
  constructor( options?: IAddNodesResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.results = (options.results) ? options.results : [];
-  this.diagnosticInfos = (options.diagnosticInfos) ? options.diagnosticInfos : [];
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.results = (options.results !== undefined) ? options.results : [];
+  this.diagnosticInfos = (options.diagnosticInfos !== undefined) ? options.diagnosticInfos : [];
 
  }
 

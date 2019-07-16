@@ -18,7 +18,7 @@ export class EnumDefinition {
 
  constructor( options?: IEnumDefinition) {
   options = options || {};
-  this.fields = (options.fields) ? options.fields : [];
+  this.fields = (options.fields !== undefined) ? options.fields : [];
 
  }
 

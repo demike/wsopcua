@@ -25,7 +25,7 @@ export interface INode {
 }
 
 /**
-Specifies the attributes which belong to all nodes.
+
 */
 
 export class Node {
@@ -43,17 +43,17 @@ export class Node {
 
  constructor( options?: INode) {
   options = options || {};
-  this.nodeId = (options.nodeId) ? options.nodeId : null;
-  this.nodeClass = (options.nodeClass) ? options.nodeClass : null;
-  this.browseName = (options.browseName) ? options.browseName : new QualifiedName();
-  this.displayName = (options.displayName) ? options.displayName : new LocalizedText();
-  this.description = (options.description) ? options.description : new LocalizedText();
-  this.writeMask = (options.writeMask) ? options.writeMask : null;
-  this.userWriteMask = (options.userWriteMask) ? options.userWriteMask : null;
-  this.rolePermissions = (options.rolePermissions) ? options.rolePermissions : [];
-  this.userRolePermissions = (options.userRolePermissions) ? options.userRolePermissions : [];
-  this.accessRestrictions = (options.accessRestrictions) ? options.accessRestrictions : null;
-  this.references = (options.references) ? options.references : [];
+  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
+  this.nodeClass = (options.nodeClass !== undefined) ? options.nodeClass : null;
+  this.browseName = (options.browseName !== undefined) ? options.browseName : new QualifiedName();
+  this.displayName = (options.displayName !== undefined) ? options.displayName : new LocalizedText();
+  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
+  this.writeMask = (options.writeMask !== undefined) ? options.writeMask : null;
+  this.userWriteMask = (options.userWriteMask !== undefined) ? options.userWriteMask : null;
+  this.rolePermissions = (options.rolePermissions !== undefined) ? options.rolePermissions : [];
+  this.userRolePermissions = (options.userRolePermissions !== undefined) ? options.userRolePermissions : [];
+  this.accessRestrictions = (options.accessRestrictions !== undefined) ? options.accessRestrictions : null;
+  this.references = (options.references !== undefined) ? options.references : [];
 
  }
 

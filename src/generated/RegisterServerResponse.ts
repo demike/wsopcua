@@ -8,7 +8,7 @@ export interface IRegisterServerResponse {
 }
 
 /**
-Registers a server with the discovery server.
+
 */
 
 export class RegisterServerResponse {
@@ -16,7 +16,7 @@ export class RegisterServerResponse {
 
  constructor( options?: IRegisterServerResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
 
  }
 

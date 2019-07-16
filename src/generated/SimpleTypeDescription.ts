@@ -21,8 +21,8 @@ export class SimpleTypeDescription extends DataTypeDescription {
  constructor( options?: ISimpleTypeDescription) {
   options = options || {};
   super(options);
-  this.baseDataType = (options.baseDataType) ? options.baseDataType : null;
-  this.builtInType = (options.builtInType) ? options.builtInType : null;
+  this.baseDataType = (options.baseDataType !== undefined) ? options.baseDataType : null;
+  this.builtInType = (options.builtInType !== undefined) ? options.builtInType : null;
 
  }
 

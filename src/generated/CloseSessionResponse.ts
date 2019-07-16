@@ -8,7 +8,7 @@ export interface ICloseSessionResponse {
 }
 
 /**
-Closes a session with the server.
+
 */
 
 export class CloseSessionResponse {
@@ -16,7 +16,7 @@ export class CloseSessionResponse {
 
  constructor( options?: ICloseSessionResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
 
  }
 

@@ -11,7 +11,7 @@ export interface IBrowsePathResult {
 }
 
 /**
-The result of a translate opearation.
+
 */
 
 export class BrowsePathResult {
@@ -20,8 +20,8 @@ export class BrowsePathResult {
 
  constructor( options?: IBrowsePathResult) {
   options = options || {};
-  this.statusCode = (options.statusCode) ? options.statusCode : null;
-  this.targets = (options.targets) ? options.targets : [];
+  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
+  this.targets = (options.targets !== undefined) ? options.targets : [];
 
  }
 

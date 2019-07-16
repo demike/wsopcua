@@ -15,7 +15,7 @@ export interface IBrowseNextResponse {
 }
 
 /**
-Continues one or more browse operations.
+
 */
 
 export class BrowseNextResponse {
@@ -25,9 +25,9 @@ export class BrowseNextResponse {
 
  constructor( options?: IBrowseNextResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.results = (options.results) ? options.results : [];
-  this.diagnosticInfos = (options.diagnosticInfos) ? options.diagnosticInfos : [];
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.results = (options.results !== undefined) ? options.results : [];
+  this.diagnosticInfos = (options.diagnosticInfos !== undefined) ? options.diagnosticInfos : [];
 
  }
 

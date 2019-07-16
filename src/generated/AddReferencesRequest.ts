@@ -12,7 +12,7 @@ export interface IAddReferencesRequest {
 }
 
 /**
-Adds one or more references to the server address space.
+
 */
 
 export class AddReferencesRequest {
@@ -21,8 +21,8 @@ export class AddReferencesRequest {
 
  constructor( options?: IAddReferencesRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.referencesToAdd = (options.referencesToAdd) ? options.referencesToAdd : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.referencesToAdd = (options.referencesToAdd !== undefined) ? options.referencesToAdd : [];
 
  }
 

@@ -10,7 +10,7 @@ export interface IRelativePath {
 }
 
 /**
-A relative path constructed from reference types and browse names.
+
 */
 
 export class RelativePath {
@@ -18,7 +18,7 @@ export class RelativePath {
 
  constructor( options?: IRelativePath) {
   options = options || {};
-  this.elements = (options.elements) ? options.elements : [];
+  this.elements = (options.elements !== undefined) ? options.elements : [];
 
  }
 

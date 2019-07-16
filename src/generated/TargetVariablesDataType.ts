@@ -20,7 +20,7 @@ export class TargetVariablesDataType extends SubscribedDataSetDataType {
  constructor( options?: ITargetVariablesDataType) {
   options = options || {};
   super();
-  this.targetVariables = (options.targetVariables) ? options.targetVariables : [];
+  this.targetVariables = (options.targetVariables !== undefined) ? options.targetVariables : [];
 
  }
 

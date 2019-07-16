@@ -13,7 +13,7 @@ export interface IArgument {
 }
 
 /**
-An argument for a method.
+
 */
 
 export class Argument {
@@ -25,11 +25,11 @@ export class Argument {
 
  constructor( options?: IArgument) {
   options = options || {};
-  this.name = (options.name) ? options.name : null;
-  this.dataType = (options.dataType) ? options.dataType : null;
-  this.valueRank = (options.valueRank) ? options.valueRank : null;
-  this.arrayDimensions = (options.arrayDimensions) ? options.arrayDimensions : [];
-  this.description = (options.description) ? options.description : new LocalizedText();
+  this.name = (options.name !== undefined) ? options.name : null;
+  this.dataType = (options.dataType !== undefined) ? options.dataType : null;
+  this.valueRank = (options.valueRank !== undefined) ? options.valueRank : null;
+  this.arrayDimensions = (options.arrayDimensions !== undefined) ? options.arrayDimensions : [];
+  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
 
  }
 

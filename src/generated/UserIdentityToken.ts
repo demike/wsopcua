@@ -8,7 +8,7 @@ export interface IUserIdentityToken {
 }
 
 /**
-A base type for a user identity token.
+
 */
 
 export class UserIdentityToken {
@@ -16,7 +16,7 @@ export class UserIdentityToken {
 
  constructor( options?: IUserIdentityToken) {
   options = options || {};
-  this.policyId = (options.policyId) ? options.policyId : null;
+  this.policyId = (options.policyId !== undefined) ? options.policyId : null;
 
  }
 

@@ -23,9 +23,9 @@ export class DataChangeFilter extends MonitoringFilter {
  constructor( options?: IDataChangeFilter) {
   options = options || {};
   super();
-  this.trigger = (options.trigger) ? options.trigger : null;
-  this.deadbandType = (options.deadbandType) ? options.deadbandType : null;
-  this.deadbandValue = (options.deadbandValue) ? options.deadbandValue : null;
+  this.trigger = (options.trigger !== undefined) ? options.trigger : null;
+  this.deadbandType = (options.deadbandType !== undefined) ? options.deadbandType : null;
+  this.deadbandValue = (options.deadbandValue !== undefined) ? options.deadbandValue : null;
 
  }
 

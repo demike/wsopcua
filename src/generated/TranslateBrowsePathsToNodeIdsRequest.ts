@@ -12,7 +12,7 @@ export interface ITranslateBrowsePathsToNodeIdsRequest {
 }
 
 /**
-Translates one or more paths in the server address space.
+
 */
 
 export class TranslateBrowsePathsToNodeIdsRequest {
@@ -21,8 +21,8 @@ export class TranslateBrowsePathsToNodeIdsRequest {
 
  constructor( options?: ITranslateBrowsePathsToNodeIdsRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.browsePaths = (options.browsePaths) ? options.browsePaths : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.browsePaths = (options.browsePaths !== undefined) ? options.browsePaths : [];
 
  }
 

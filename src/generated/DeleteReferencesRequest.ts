@@ -12,7 +12,7 @@ export interface IDeleteReferencesRequest {
 }
 
 /**
-Delete one or more references from the server address space.
+
 */
 
 export class DeleteReferencesRequest {
@@ -21,8 +21,8 @@ export class DeleteReferencesRequest {
 
  constructor( options?: IDeleteReferencesRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.referencesToDelete = (options.referencesToDelete) ? options.referencesToDelete : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.referencesToDelete = (options.referencesToDelete !== undefined) ? options.referencesToDelete : [];
 
  }
 

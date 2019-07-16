@@ -22,10 +22,10 @@ export class NodeReference {
 
  constructor( options?: INodeReference) {
   options = options || {};
-  this.nodeId = (options.nodeId) ? options.nodeId : null;
-  this.referenceTypeId = (options.referenceTypeId) ? options.referenceTypeId : null;
-  this.isForward = (options.isForward) ? options.isForward : null;
-  this.referencedNodeIds = (options.referencedNodeIds) ? options.referencedNodeIds : [];
+  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
+  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
+  this.isForward = (options.isForward !== undefined) ? options.isForward : null;
+  this.referencedNodeIds = (options.referencedNodeIds !== undefined) ? options.referencedNodeIds : [];
 
  }
 

@@ -8,7 +8,7 @@ export interface IAnonymousIdentityToken extends IUserIdentityToken {
 }
 
 /**
-A token representing an anonymous user.
+
 */
 
 export class AnonymousIdentityToken extends UserIdentityToken {

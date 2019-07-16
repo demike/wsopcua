@@ -23,10 +23,10 @@ export class MonitoredItemModifyResult {
 
  constructor( options?: IMonitoredItemModifyResult) {
   options = options || {};
-  this.statusCode = (options.statusCode) ? options.statusCode : null;
-  this.revisedSamplingInterval = (options.revisedSamplingInterval) ? options.revisedSamplingInterval : null;
-  this.revisedQueueSize = (options.revisedQueueSize) ? options.revisedQueueSize : null;
-  this.filterResult = (options.filterResult) ? options.filterResult : null;
+  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
+  this.revisedSamplingInterval = (options.revisedSamplingInterval !== undefined) ? options.revisedSamplingInterval : null;
+  this.revisedQueueSize = (options.revisedQueueSize !== undefined) ? options.revisedQueueSize : null;
+  this.filterResult = (options.filterResult !== undefined) ? options.filterResult : null;
 
  }
 

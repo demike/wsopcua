@@ -39,15 +39,15 @@ export class DataSetMetaDataType extends DataTypeSchemaHeader {
  constructor( options?: IDataSetMetaDataType) {
   options = options || {};
   super(options);
-  this.noOfNamespaces = (options.noOfNamespaces) ? options.noOfNamespaces : null;
-  this.noOfStructureDataTypes = (options.noOfStructureDataTypes) ? options.noOfStructureDataTypes : null;
-  this.noOfEnumDataTypes = (options.noOfEnumDataTypes) ? options.noOfEnumDataTypes : null;
-  this.noOfSimpleDataTypes = (options.noOfSimpleDataTypes) ? options.noOfSimpleDataTypes : null;
-  this.name = (options.name) ? options.name : null;
-  this.description = (options.description) ? options.description : new LocalizedText();
-  this.fields = (options.fields) ? options.fields : [];
-  this.dataSetClassId = (options.dataSetClassId) ? options.dataSetClassId : null;
-  this.configurationVersion = (options.configurationVersion) ? options.configurationVersion : new ConfigurationVersionDataType();
+  this.noOfNamespaces = (options.noOfNamespaces !== undefined) ? options.noOfNamespaces : null;
+  this.noOfStructureDataTypes = (options.noOfStructureDataTypes !== undefined) ? options.noOfStructureDataTypes : null;
+  this.noOfEnumDataTypes = (options.noOfEnumDataTypes !== undefined) ? options.noOfEnumDataTypes : null;
+  this.noOfSimpleDataTypes = (options.noOfSimpleDataTypes !== undefined) ? options.noOfSimpleDataTypes : null;
+  this.name = (options.name !== undefined) ? options.name : null;
+  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
+  this.fields = (options.fields !== undefined) ? options.fields : [];
+  this.dataSetClassId = (options.dataSetClassId !== undefined) ? options.dataSetClassId : null;
+  this.configurationVersion = (options.configurationVersion !== undefined) ? options.configurationVersion : new ConfigurationVersionDataType();
 
  }
 

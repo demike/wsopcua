@@ -29,12 +29,12 @@ export class ServerStatusDataType {
 
  constructor( options?: IServerStatusDataType) {
   options = options || {};
-  this.startTime = (options.startTime) ? options.startTime : null;
-  this.currentTime = (options.currentTime) ? options.currentTime : null;
-  this.state = (options.state) ? options.state : null;
-  this.buildInfo = (options.buildInfo) ? options.buildInfo : new BuildInfo();
-  this.secondsTillShutdown = (options.secondsTillShutdown) ? options.secondsTillShutdown : null;
-  this.shutdownReason = (options.shutdownReason) ? options.shutdownReason : new LocalizedText();
+  this.startTime = (options.startTime !== undefined) ? options.startTime : null;
+  this.currentTime = (options.currentTime !== undefined) ? options.currentTime : null;
+  this.state = (options.state !== undefined) ? options.state : null;
+  this.buildInfo = (options.buildInfo !== undefined) ? options.buildInfo : new BuildInfo();
+  this.secondsTillShutdown = (options.secondsTillShutdown !== undefined) ? options.secondsTillShutdown : null;
+  this.shutdownReason = (options.shutdownReason !== undefined) ? options.shutdownReason : new LocalizedText();
 
  }
 

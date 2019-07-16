@@ -20,8 +20,8 @@ export class NetworkGroupDataType {
 
  constructor( options?: INetworkGroupDataType) {
   options = options || {};
-  this.serverUri = (options.serverUri) ? options.serverUri : null;
-  this.networkPaths = (options.networkPaths) ? options.networkPaths : [];
+  this.serverUri = (options.serverUri !== undefined) ? options.serverUri : null;
+  this.networkPaths = (options.networkPaths !== undefined) ? options.networkPaths : [];
 
  }
 

@@ -57,23 +57,23 @@ export class DataSetReaderDataType {
 
  constructor( options?: IDataSetReaderDataType) {
   options = options || {};
-  this.name = (options.name) ? options.name : null;
-  this.enabled = (options.enabled) ? options.enabled : null;
-  this.publisherId = (options.publisherId) ? options.publisherId : new Variant();
-  this.writerGroupId = (options.writerGroupId) ? options.writerGroupId : null;
-  this.dataSetWriterId = (options.dataSetWriterId) ? options.dataSetWriterId : null;
-  this.dataSetMetaData = (options.dataSetMetaData) ? options.dataSetMetaData : new DataSetMetaDataType();
-  this.dataSetFieldContentMask = (options.dataSetFieldContentMask) ? options.dataSetFieldContentMask : null;
-  this.messageReceiveTimeout = (options.messageReceiveTimeout) ? options.messageReceiveTimeout : null;
-  this.keyFrameCount = (options.keyFrameCount) ? options.keyFrameCount : null;
-  this.headerLayoutUri = (options.headerLayoutUri) ? options.headerLayoutUri : null;
-  this.securityMode = (options.securityMode) ? options.securityMode : null;
-  this.securityGroupId = (options.securityGroupId) ? options.securityGroupId : null;
-  this.securityKeyServices = (options.securityKeyServices) ? options.securityKeyServices : [];
-  this.dataSetReaderProperties = (options.dataSetReaderProperties) ? options.dataSetReaderProperties : [];
-  this.transportSettings = (options.transportSettings) ? options.transportSettings : null;
-  this.messageSettings = (options.messageSettings) ? options.messageSettings : null;
-  this.subscribedDataSet = (options.subscribedDataSet) ? options.subscribedDataSet : null;
+  this.name = (options.name !== undefined) ? options.name : null;
+  this.enabled = (options.enabled !== undefined) ? options.enabled : null;
+  this.publisherId = (options.publisherId !== undefined) ? options.publisherId : new Variant();
+  this.writerGroupId = (options.writerGroupId !== undefined) ? options.writerGroupId : null;
+  this.dataSetWriterId = (options.dataSetWriterId !== undefined) ? options.dataSetWriterId : null;
+  this.dataSetMetaData = (options.dataSetMetaData !== undefined) ? options.dataSetMetaData : new DataSetMetaDataType();
+  this.dataSetFieldContentMask = (options.dataSetFieldContentMask !== undefined) ? options.dataSetFieldContentMask : null;
+  this.messageReceiveTimeout = (options.messageReceiveTimeout !== undefined) ? options.messageReceiveTimeout : null;
+  this.keyFrameCount = (options.keyFrameCount !== undefined) ? options.keyFrameCount : null;
+  this.headerLayoutUri = (options.headerLayoutUri !== undefined) ? options.headerLayoutUri : null;
+  this.securityMode = (options.securityMode !== undefined) ? options.securityMode : null;
+  this.securityGroupId = (options.securityGroupId !== undefined) ? options.securityGroupId : null;
+  this.securityKeyServices = (options.securityKeyServices !== undefined) ? options.securityKeyServices : [];
+  this.dataSetReaderProperties = (options.dataSetReaderProperties !== undefined) ? options.dataSetReaderProperties : [];
+  this.transportSettings = (options.transportSettings !== undefined) ? options.transportSettings : null;
+  this.messageSettings = (options.messageSettings !== undefined) ? options.messageSettings : null;
+  this.subscribedDataSet = (options.subscribedDataSet !== undefined) ? options.subscribedDataSet : null;
 
  }
 

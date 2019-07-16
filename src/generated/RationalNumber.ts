@@ -18,8 +18,8 @@ export class RationalNumber {
 
  constructor( options?: IRationalNumber) {
   options = options || {};
-  this.numerator = (options.numerator) ? options.numerator : null;
-  this.denominator = (options.denominator) ? options.denominator : null;
+  this.numerator = (options.numerator !== undefined) ? options.numerator : null;
+  this.denominator = (options.denominator !== undefined) ? options.denominator : null;
 
  }
 

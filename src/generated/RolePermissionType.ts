@@ -1,11 +1,12 @@
 
 
 import * as ec from '../basic-types';
+import {PermissionType, encodePermissionType, decodePermissionType} from './PermissionType';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRolePermissionType {
   roleId?: ec.NodeId;
-  permissions?: ec.UInt32;
+  permissions?: PermissionType;
 }
 
 /**
@@ -14,26 +15,26 @@ export interface IRolePermissionType {
 
 export class RolePermissionType {
   roleId: ec.NodeId;
-  permissions: ec.UInt32;
+  permissions: PermissionType;
 
  constructor( options?: IRolePermissionType) {
   options = options || {};
-  this.roleId = (options.roleId) ? options.roleId : null;
-  this.permissions = (options.permissions) ? options.permissions : null;
+  this.roleId = (options.roleId !== undefined) ? options.roleId : null;
+  this.permissions = (options.permissions !== undefined) ? options.permissions : null;
 
  }
 
 
  encode( out: DataStream) {
   ec.encodeNodeId(this.roleId, out);
-  ec.encodeUInt32(this.permissions, out);
+  encodePermissionType(this.permissions, out);
 
  }
 
 
  decode( inp: DataStream) {
   this.roleId = ec.decodeNodeId(inp);
-  this.permissions = ec.decodeUInt32(inp);
+  this.permissions = decodePermissionType(inp);
 
  }
 

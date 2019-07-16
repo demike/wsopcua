@@ -21,9 +21,9 @@ export class RepublishRequest {
 
  constructor( options?: IRepublishRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.subscriptionId = (options.subscriptionId) ? options.subscriptionId : null;
-  this.retransmitSequenceNumber = (options.retransmitSequenceNumber) ? options.retransmitSequenceNumber : null;
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.subscriptionId = (options.subscriptionId !== undefined) ? options.subscriptionId : null;
+  this.retransmitSequenceNumber = (options.retransmitSequenceNumber !== undefined) ? options.retransmitSequenceNumber : null;
 
  }
 

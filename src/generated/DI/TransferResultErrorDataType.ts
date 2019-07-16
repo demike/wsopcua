@@ -21,8 +21,8 @@ export class TransferResultErrorDataType extends FetchResultDataType {
  constructor( options?: ITransferResultErrorDataType) {
   options = options || {};
   super();
-  this.status = (options.status) ? options.status : null;
-  this.diagnostics = (options.diagnostics) ? options.diagnostics : new DiagnosticInfo();
+  this.status = (options.status !== undefined) ? options.status : null;
+  this.diagnostics = (options.diagnostics !== undefined) ? options.diagnostics : new DiagnosticInfo();
 
  }
 

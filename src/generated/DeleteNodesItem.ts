@@ -9,7 +9,7 @@ export interface IDeleteNodesItem {
 }
 
 /**
-A request to delete a node to the server address space.
+
 */
 
 export class DeleteNodesItem {
@@ -18,8 +18,8 @@ export class DeleteNodesItem {
 
  constructor( options?: IDeleteNodesItem) {
   options = options || {};
-  this.nodeId = (options.nodeId) ? options.nodeId : null;
-  this.deleteTargetReferences = (options.deleteTargetReferences) ? options.deleteTargetReferences : null;
+  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
+  this.deleteTargetReferences = (options.deleteTargetReferences !== undefined) ? options.deleteTargetReferences : null;
 
  }
 

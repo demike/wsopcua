@@ -21,9 +21,9 @@ export class NotificationMessage {
 
  constructor( options?: INotificationMessage) {
   options = options || {};
-  this.sequenceNumber = (options.sequenceNumber) ? options.sequenceNumber : null;
-  this.publishTime = (options.publishTime) ? options.publishTime : null;
-  this.notificationData = (options.notificationData) ? options.notificationData : [];
+  this.sequenceNumber = (options.sequenceNumber !== undefined) ? options.sequenceNumber : null;
+  this.publishTime = (options.publishTime !== undefined) ? options.publishTime : null;
+  this.notificationData = (options.notificationData !== undefined) ? options.notificationData : [];
 
  }
 

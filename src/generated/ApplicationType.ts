@@ -2,8 +2,6 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
-/**
-The types of applications.*/
 export enum ApplicationType {
    Server = 0,
   Client = 1,

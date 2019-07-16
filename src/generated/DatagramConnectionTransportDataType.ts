@@ -18,7 +18,7 @@ export class DatagramConnectionTransportDataType extends ConnectionTransportData
  constructor( options?: IDatagramConnectionTransportDataType) {
   options = options || {};
   super();
-  this.discoveryAddress = (options.discoveryAddress) ? options.discoveryAddress : null;
+  this.discoveryAddress = (options.discoveryAddress !== undefined) ? options.discoveryAddress : null;
 
  }
 

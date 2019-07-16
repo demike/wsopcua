@@ -32,13 +32,13 @@ export class PublishResponse {
 
  constructor( options?: IPublishResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.subscriptionId = (options.subscriptionId) ? options.subscriptionId : null;
-  this.availableSequenceNumbers = (options.availableSequenceNumbers) ? options.availableSequenceNumbers : [];
-  this.moreNotifications = (options.moreNotifications) ? options.moreNotifications : null;
-  this.notificationMessage = (options.notificationMessage) ? options.notificationMessage : new NotificationMessage();
-  this.results = (options.results) ? options.results : [];
-  this.diagnosticInfos = (options.diagnosticInfos) ? options.diagnosticInfos : [];
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.subscriptionId = (options.subscriptionId !== undefined) ? options.subscriptionId : null;
+  this.availableSequenceNumbers = (options.availableSequenceNumbers !== undefined) ? options.availableSequenceNumbers : [];
+  this.moreNotifications = (options.moreNotifications !== undefined) ? options.moreNotifications : null;
+  this.notificationMessage = (options.notificationMessage !== undefined) ? options.notificationMessage : new NotificationMessage();
+  this.results = (options.results !== undefined) ? options.results : [];
+  this.diagnosticInfos = (options.diagnosticInfos !== undefined) ? options.diagnosticInfos : [];
 
  }
 

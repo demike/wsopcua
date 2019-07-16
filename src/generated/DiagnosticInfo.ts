@@ -28,13 +28,13 @@ export class DiagnosticInfo {
 
  constructor( options?: IDiagnosticInfo) {
   options = options || {};
-  this.symbolicId = (options.symbolicId) ? options.symbolicId : null;
-  this.namespaceURI = (options.namespaceURI) ? options.namespaceURI : null;
-  this.locale = (options.locale) ? options.locale : null;
-  this.localizedText = (options.localizedText) ? options.localizedText : null;
-  this.additionalInfo = (options.additionalInfo) ? options.additionalInfo : null;
-  this.innerStatusCode = (options.innerStatusCode) ? options.innerStatusCode : null;
-  this.innerDiagnosticInfo = (options.innerDiagnosticInfo) ? options.innerDiagnosticInfo : null;
+  this.symbolicId = (options.symbolicId !== undefined) ? options.symbolicId : null;
+  this.namespaceURI = (options.namespaceURI !== undefined) ? options.namespaceURI : null;
+  this.locale = (options.locale !== undefined) ? options.locale : null;
+  this.localizedText = (options.localizedText !== undefined) ? options.localizedText : null;
+  this.additionalInfo = (options.additionalInfo !== undefined) ? options.additionalInfo : null;
+  this.innerStatusCode = (options.innerStatusCode !== undefined) ? options.innerStatusCode : null;
+  this.innerDiagnosticInfo = (options.innerDiagnosticInfo !== undefined) ? options.innerDiagnosticInfo : null;
 
  }
 
@@ -43,8 +43,8 @@ export class DiagnosticInfo {
   let encodingByte = 0;
   if (this.symbolicId != null) { encodingByte |= 1 << 0;}
   if (this.namespaceURI != null) { encodingByte |= 1 << 1;}
-  if (this.locale != null) { encodingByte |= 1 << 2;}
-  if (this.localizedText != null) { encodingByte |= 1 << 3;}
+  if (this.localizedText != null) { encodingByte |= 1 << 2;}
+  if (this.locale != null) { encodingByte |= 1 << 3;}
   if (this.additionalInfo != null) { encodingByte |= 1 << 4;}
   if (this.innerStatusCode != null) { encodingByte |= 1 << 5;}
   if (this.innerDiagnosticInfo != null) { encodingByte |= 1 << 6;}
@@ -64,8 +64,8 @@ export class DiagnosticInfo {
   let encodingByte = inp.getUint8();
   let symbolicIdSpecified = (encodingByte & 1) != 0;
   let namespaceURISpecified = (encodingByte & 2) != 0;
-  let localeSpecified = (encodingByte & 4) != 0;
-  let localizedTextSpecified = (encodingByte & 8) != 0;
+  let localizedTextSpecified = (encodingByte & 4) != 0;
+  let localeSpecified = (encodingByte & 8) != 0;
   let additionalInfoSpecified = (encodingByte & 16) != 0;
   let innerStatusCodeSpecified = (encodingByte & 32) != 0;
   let innerDiagnosticInfoSpecified = (encodingByte & 64) != 0;

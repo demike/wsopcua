@@ -37,16 +37,16 @@ export class ProgramDiagnosticDataType {
 
  constructor( options?: IProgramDiagnosticDataType) {
   options = options || {};
-  this.createSessionId = (options.createSessionId) ? options.createSessionId : null;
-  this.createClientName = (options.createClientName) ? options.createClientName : null;
-  this.invocationCreationTime = (options.invocationCreationTime) ? options.invocationCreationTime : null;
-  this.lastTransitionTime = (options.lastTransitionTime) ? options.lastTransitionTime : null;
-  this.lastMethodCall = (options.lastMethodCall) ? options.lastMethodCall : null;
-  this.lastMethodSessionId = (options.lastMethodSessionId) ? options.lastMethodSessionId : null;
-  this.lastMethodInputArguments = (options.lastMethodInputArguments) ? options.lastMethodInputArguments : [];
-  this.lastMethodOutputArguments = (options.lastMethodOutputArguments) ? options.lastMethodOutputArguments : [];
-  this.lastMethodCallTime = (options.lastMethodCallTime) ? options.lastMethodCallTime : null;
-  this.lastMethodReturnStatus = (options.lastMethodReturnStatus) ? options.lastMethodReturnStatus : new StatusResult();
+  this.createSessionId = (options.createSessionId !== undefined) ? options.createSessionId : null;
+  this.createClientName = (options.createClientName !== undefined) ? options.createClientName : null;
+  this.invocationCreationTime = (options.invocationCreationTime !== undefined) ? options.invocationCreationTime : null;
+  this.lastTransitionTime = (options.lastTransitionTime !== undefined) ? options.lastTransitionTime : null;
+  this.lastMethodCall = (options.lastMethodCall !== undefined) ? options.lastMethodCall : null;
+  this.lastMethodSessionId = (options.lastMethodSessionId !== undefined) ? options.lastMethodSessionId : null;
+  this.lastMethodInputArguments = (options.lastMethodInputArguments !== undefined) ? options.lastMethodInputArguments : [];
+  this.lastMethodOutputArguments = (options.lastMethodOutputArguments !== undefined) ? options.lastMethodOutputArguments : [];
+  this.lastMethodCallTime = (options.lastMethodCallTime !== undefined) ? options.lastMethodCallTime : null;
+  this.lastMethodReturnStatus = (options.lastMethodReturnStatus !== undefined) ? options.lastMethodReturnStatus : new StatusResult();
 
  }
 

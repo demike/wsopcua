@@ -21,9 +21,9 @@ export class HistoryReadResult {
 
  constructor( options?: IHistoryReadResult) {
   options = options || {};
-  this.statusCode = (options.statusCode) ? options.statusCode : null;
-  this.continuationPoint = (options.continuationPoint) ? options.continuationPoint : null;
-  this.historyData = (options.historyData) ? options.historyData : null;
+  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
+  this.continuationPoint = (options.continuationPoint !== undefined) ? options.continuationPoint : null;
+  this.historyData = (options.historyData !== undefined) ? options.historyData : null;
 
  }
 

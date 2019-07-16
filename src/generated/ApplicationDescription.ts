@@ -16,7 +16,7 @@ export interface IApplicationDescription {
 }
 
 /**
-Describes an application and how to find it.
+
 */
 
 export class ApplicationDescription {
@@ -30,13 +30,13 @@ export class ApplicationDescription {
 
  constructor( options?: IApplicationDescription) {
   options = options || {};
-  this.applicationUri = (options.applicationUri) ? options.applicationUri : null;
-  this.productUri = (options.productUri) ? options.productUri : null;
-  this.applicationName = (options.applicationName) ? options.applicationName : new LocalizedText();
-  this.applicationType = (options.applicationType) ? options.applicationType : null;
-  this.gatewayServerUri = (options.gatewayServerUri) ? options.gatewayServerUri : null;
-  this.discoveryProfileUri = (options.discoveryProfileUri) ? options.discoveryProfileUri : null;
-  this.discoveryUrls = (options.discoveryUrls) ? options.discoveryUrls : [];
+  this.applicationUri = (options.applicationUri !== undefined) ? options.applicationUri : null;
+  this.productUri = (options.productUri !== undefined) ? options.productUri : null;
+  this.applicationName = (options.applicationName !== undefined) ? options.applicationName : new LocalizedText();
+  this.applicationType = (options.applicationType !== undefined) ? options.applicationType : null;
+  this.gatewayServerUri = (options.gatewayServerUri !== undefined) ? options.gatewayServerUri : null;
+  this.discoveryProfileUri = (options.discoveryProfileUri !== undefined) ? options.discoveryProfileUri : null;
+  this.discoveryUrls = (options.discoveryUrls !== undefined) ? options.discoveryUrls : [];
 
  }
 

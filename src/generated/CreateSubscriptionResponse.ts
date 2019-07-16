@@ -25,11 +25,11 @@ export class CreateSubscriptionResponse {
 
  constructor( options?: ICreateSubscriptionResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.subscriptionId = (options.subscriptionId) ? options.subscriptionId : null;
-  this.revisedPublishingInterval = (options.revisedPublishingInterval) ? options.revisedPublishingInterval : null;
-  this.revisedLifetimeCount = (options.revisedLifetimeCount) ? options.revisedLifetimeCount : null;
-  this.revisedMaxKeepAliveCount = (options.revisedMaxKeepAliveCount) ? options.revisedMaxKeepAliveCount : null;
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.subscriptionId = (options.subscriptionId !== undefined) ? options.subscriptionId : null;
+  this.revisedPublishingInterval = (options.revisedPublishingInterval !== undefined) ? options.revisedPublishingInterval : null;
+  this.revisedLifetimeCount = (options.revisedLifetimeCount !== undefined) ? options.revisedLifetimeCount : null;
+  this.revisedMaxKeepAliveCount = (options.revisedMaxKeepAliveCount !== undefined) ? options.revisedMaxKeepAliveCount : null;
 
  }
 

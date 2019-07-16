@@ -36,15 +36,15 @@ export class UadpDataSetReaderMessageDataType extends DataSetReaderMessageDataTy
  constructor( options?: IUadpDataSetReaderMessageDataType) {
   options = options || {};
   super();
-  this.groupVersion = (options.groupVersion) ? options.groupVersion : null;
-  this.networkMessageNumber = (options.networkMessageNumber) ? options.networkMessageNumber : null;
-  this.dataSetOffset = (options.dataSetOffset) ? options.dataSetOffset : null;
-  this.dataSetClassId = (options.dataSetClassId) ? options.dataSetClassId : null;
-  this.networkMessageContentMask = (options.networkMessageContentMask) ? options.networkMessageContentMask : null;
-  this.dataSetMessageContentMask = (options.dataSetMessageContentMask) ? options.dataSetMessageContentMask : null;
-  this.publishingInterval = (options.publishingInterval) ? options.publishingInterval : null;
-  this.receiveOffset = (options.receiveOffset) ? options.receiveOffset : null;
-  this.processingOffset = (options.processingOffset) ? options.processingOffset : null;
+  this.groupVersion = (options.groupVersion !== undefined) ? options.groupVersion : null;
+  this.networkMessageNumber = (options.networkMessageNumber !== undefined) ? options.networkMessageNumber : null;
+  this.dataSetOffset = (options.dataSetOffset !== undefined) ? options.dataSetOffset : null;
+  this.dataSetClassId = (options.dataSetClassId !== undefined) ? options.dataSetClassId : null;
+  this.networkMessageContentMask = (options.networkMessageContentMask !== undefined) ? options.networkMessageContentMask : null;
+  this.dataSetMessageContentMask = (options.dataSetMessageContentMask !== undefined) ? options.dataSetMessageContentMask : null;
+  this.publishingInterval = (options.publishingInterval !== undefined) ? options.publishingInterval : null;
+  this.receiveOffset = (options.receiveOffset !== undefined) ? options.receiveOffset : null;
+  this.processingOffset = (options.processingOffset !== undefined) ? options.processingOffset : null;
 
  }
 

@@ -19,7 +19,7 @@ export class StructureDescription extends DataTypeDescription {
  constructor( options?: IStructureDescription) {
   options = options || {};
   super(options);
-  this.structureDefinition = (options.structureDefinition) ? options.structureDefinition : new StructureDefinition();
+  this.structureDefinition = (options.structureDefinition !== undefined) ? options.structureDefinition : new StructureDefinition();
 
  }
 

@@ -22,9 +22,9 @@ export class ParsingResult {
 
  constructor( options?: IParsingResult) {
   options = options || {};
-  this.statusCode = (options.statusCode) ? options.statusCode : null;
-  this.dataStatusCodes = (options.dataStatusCodes) ? options.dataStatusCodes : [];
-  this.dataDiagnosticInfos = (options.dataDiagnosticInfos) ? options.dataDiagnosticInfos : [];
+  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
+  this.dataStatusCodes = (options.dataStatusCodes !== undefined) ? options.dataStatusCodes : [];
+  this.dataDiagnosticInfos = (options.dataDiagnosticInfos !== undefined) ? options.dataDiagnosticInfos : [];
 
  }
 

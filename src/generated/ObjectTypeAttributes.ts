@@ -10,7 +10,7 @@ export interface IObjectTypeAttributes extends INodeAttributes {
 }
 
 /**
-The attributes for an object type node.
+
 */
 
 export class ObjectTypeAttributes extends NodeAttributes {
@@ -19,7 +19,7 @@ export class ObjectTypeAttributes extends NodeAttributes {
  constructor( options?: IObjectTypeAttributes) {
   options = options || {};
   super(options);
-  this.isAbstract = (options.isAbstract) ? options.isAbstract : null;
+  this.isAbstract = (options.isAbstract !== undefined) ? options.isAbstract : null;
 
  }
 

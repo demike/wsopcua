@@ -14,7 +14,7 @@ export interface IBrowseDescription {
 }
 
 /**
-A request to browse the the references from a node.
+
 */
 
 export class BrowseDescription {
@@ -27,12 +27,12 @@ export class BrowseDescription {
 
  constructor( options?: IBrowseDescription) {
   options = options || {};
-  this.nodeId = (options.nodeId) ? options.nodeId : null;
-  this.browseDirection = (options.browseDirection) ? options.browseDirection : null;
-  this.referenceTypeId = (options.referenceTypeId) ? options.referenceTypeId : null;
-  this.includeSubtypes = (options.includeSubtypes) ? options.includeSubtypes : null;
-  this.nodeClassMask = (options.nodeClassMask) ? options.nodeClassMask : null;
-  this.resultMask = (options.resultMask) ? options.resultMask : null;
+  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
+  this.browseDirection = (options.browseDirection !== undefined) ? options.browseDirection : null;
+  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
+  this.includeSubtypes = (options.includeSubtypes !== undefined) ? options.includeSubtypes : null;
+  this.nodeClassMask = (options.nodeClassMask !== undefined) ? options.nodeClassMask : null;
+  this.resultMask = (options.resultMask !== undefined) ? options.resultMask : null;
 
  }
 

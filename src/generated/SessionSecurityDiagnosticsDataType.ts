@@ -33,15 +33,15 @@ export class SessionSecurityDiagnosticsDataType {
 
  constructor( options?: ISessionSecurityDiagnosticsDataType) {
   options = options || {};
-  this.sessionId = (options.sessionId) ? options.sessionId : null;
-  this.clientUserIdOfSession = (options.clientUserIdOfSession) ? options.clientUserIdOfSession : null;
-  this.clientUserIdHistory = (options.clientUserIdHistory) ? options.clientUserIdHistory : [];
-  this.authenticationMechanism = (options.authenticationMechanism) ? options.authenticationMechanism : null;
-  this.encoding = (options.encoding) ? options.encoding : null;
-  this.transportProtocol = (options.transportProtocol) ? options.transportProtocol : null;
-  this.securityMode = (options.securityMode) ? options.securityMode : null;
-  this.securityPolicyUri = (options.securityPolicyUri) ? options.securityPolicyUri : null;
-  this.clientCertificate = (options.clientCertificate) ? options.clientCertificate : null;
+  this.sessionId = (options.sessionId !== undefined) ? options.sessionId : null;
+  this.clientUserIdOfSession = (options.clientUserIdOfSession !== undefined) ? options.clientUserIdOfSession : null;
+  this.clientUserIdHistory = (options.clientUserIdHistory !== undefined) ? options.clientUserIdHistory : [];
+  this.authenticationMechanism = (options.authenticationMechanism !== undefined) ? options.authenticationMechanism : null;
+  this.encoding = (options.encoding !== undefined) ? options.encoding : null;
+  this.transportProtocol = (options.transportProtocol !== undefined) ? options.transportProtocol : null;
+  this.securityMode = (options.securityMode !== undefined) ? options.securityMode : null;
+  this.securityPolicyUri = (options.securityPolicyUri !== undefined) ? options.securityPolicyUri : null;
+  this.clientCertificate = (options.clientCertificate !== undefined) ? options.clientCertificate : null;
 
  }
 

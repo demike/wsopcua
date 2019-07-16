@@ -12,7 +12,7 @@ export interface IDeleteNodesRequest {
 }
 
 /**
-Delete one or more nodes from the server address space.
+
 */
 
 export class DeleteNodesRequest {
@@ -21,8 +21,8 @@ export class DeleteNodesRequest {
 
  constructor( options?: IDeleteNodesRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.nodesToDelete = (options.nodesToDelete) ? options.nodesToDelete : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.nodesToDelete = (options.nodesToDelete !== undefined) ? options.nodesToDelete : [];
 
  }
 

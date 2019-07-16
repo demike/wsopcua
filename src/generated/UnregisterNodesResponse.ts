@@ -8,7 +8,7 @@ export interface IUnregisterNodesResponse {
 }
 
 /**
-Unregisters one or more previously registered nodes.
+
 */
 
 export class UnregisterNodesResponse {
@@ -16,7 +16,7 @@ export class UnregisterNodesResponse {
 
  constructor( options?: IUnregisterNodesResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
 
  }
 

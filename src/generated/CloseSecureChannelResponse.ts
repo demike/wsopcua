@@ -8,7 +8,7 @@ export interface ICloseSecureChannelResponse {
 }
 
 /**
-Closes a secure channel.
+
 */
 
 export class CloseSecureChannelResponse {
@@ -16,7 +16,7 @@ export class CloseSecureChannelResponse {
 
  constructor( options?: ICloseSecureChannelResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
 
  }
 

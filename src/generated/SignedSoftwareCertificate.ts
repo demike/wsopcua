@@ -9,7 +9,7 @@ export interface ISignedSoftwareCertificate {
 }
 
 /**
-A software certificate with a digital signature.
+
 */
 
 export class SignedSoftwareCertificate {
@@ -18,8 +18,8 @@ export class SignedSoftwareCertificate {
 
  constructor( options?: ISignedSoftwareCertificate) {
   options = options || {};
-  this.certificateData = (options.certificateData) ? options.certificateData : null;
-  this.signature = (options.signature) ? options.signature : null;
+  this.certificateData = (options.certificateData !== undefined) ? options.certificateData : null;
+  this.signature = (options.signature !== undefined) ? options.signature : null;
 
  }
 

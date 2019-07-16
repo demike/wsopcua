@@ -20,9 +20,9 @@ export class Annotation {
 
  constructor( options?: IAnnotation) {
   options = options || {};
-  this.message = (options.message) ? options.message : null;
-  this.userName = (options.userName) ? options.userName : null;
-  this.annotationTime = (options.annotationTime) ? options.annotationTime : null;
+  this.message = (options.message !== undefined) ? options.message : null;
+  this.userName = (options.userName !== undefined) ? options.userName : null;
+  this.annotationTime = (options.annotationTime !== undefined) ? options.annotationTime : null;
 
  }
 

@@ -21,9 +21,9 @@ export class QueryNextRequest {
 
  constructor( options?: IQueryNextRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.releaseContinuationPoint = (options.releaseContinuationPoint) ? options.releaseContinuationPoint : null;
-  this.continuationPoint = (options.continuationPoint) ? options.continuationPoint : null;
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.releaseContinuationPoint = (options.releaseContinuationPoint !== undefined) ? options.releaseContinuationPoint : null;
+  this.continuationPoint = (options.continuationPoint !== undefined) ? options.continuationPoint : null;
 
  }
 

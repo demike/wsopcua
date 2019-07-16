@@ -20,9 +20,9 @@ export class SessionlessInvokeResponseType {
 
  constructor( options?: ISessionlessInvokeResponseType) {
   options = options || {};
-  this.namespaceUris = (options.namespaceUris) ? options.namespaceUris : [];
-  this.serverUris = (options.serverUris) ? options.serverUris : [];
-  this.serviceId = (options.serviceId) ? options.serviceId : null;
+  this.namespaceUris = (options.namespaceUris !== undefined) ? options.namespaceUris : [];
+  this.serverUris = (options.serverUris !== undefined) ? options.serverUris : [];
+  this.serviceId = (options.serviceId !== undefined) ? options.serviceId : null;
 
  }
 

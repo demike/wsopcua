@@ -20,8 +20,8 @@ export class ContentFilterElement {
 
  constructor( options?: IContentFilterElement) {
   options = options || {};
-  this.filterOperator = (options.filterOperator) ? options.filterOperator : null;
-  this.filterOperands = (options.filterOperands) ? options.filterOperands : [];
+  this.filterOperator = (options.filterOperator !== undefined) ? options.filterOperator : null;
+  this.filterOperands = (options.filterOperands !== undefined) ? options.filterOperands : [];
 
  }
 

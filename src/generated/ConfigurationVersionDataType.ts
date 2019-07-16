@@ -18,8 +18,8 @@ export class ConfigurationVersionDataType {
 
  constructor( options?: IConfigurationVersionDataType) {
   options = options || {};
-  this.majorVersion = (options.majorVersion) ? options.majorVersion : null;
-  this.minorVersion = (options.minorVersion) ? options.minorVersion : null;
+  this.majorVersion = (options.majorVersion !== undefined) ? options.majorVersion : null;
+  this.minorVersion = (options.minorVersion !== undefined) ? options.minorVersion : null;
 
  }
 

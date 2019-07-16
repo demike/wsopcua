@@ -76,37 +76,37 @@ export class SubscriptionDiagnosticsDataType {
 
  constructor( options?: ISubscriptionDiagnosticsDataType) {
   options = options || {};
-  this.sessionId = (options.sessionId) ? options.sessionId : null;
-  this.subscriptionId = (options.subscriptionId) ? options.subscriptionId : null;
-  this.priority = (options.priority) ? options.priority : null;
-  this.publishingInterval = (options.publishingInterval) ? options.publishingInterval : null;
-  this.maxKeepAliveCount = (options.maxKeepAliveCount) ? options.maxKeepAliveCount : null;
-  this.maxLifetimeCount = (options.maxLifetimeCount) ? options.maxLifetimeCount : null;
-  this.maxNotificationsPerPublish = (options.maxNotificationsPerPublish) ? options.maxNotificationsPerPublish : null;
-  this.publishingEnabled = (options.publishingEnabled) ? options.publishingEnabled : null;
-  this.modifyCount = (options.modifyCount) ? options.modifyCount : null;
-  this.enableCount = (options.enableCount) ? options.enableCount : null;
-  this.disableCount = (options.disableCount) ? options.disableCount : null;
-  this.republishRequestCount = (options.republishRequestCount) ? options.republishRequestCount : null;
-  this.republishMessageRequestCount = (options.republishMessageRequestCount) ? options.republishMessageRequestCount : null;
-  this.republishMessageCount = (options.republishMessageCount) ? options.republishMessageCount : null;
-  this.transferRequestCount = (options.transferRequestCount) ? options.transferRequestCount : null;
-  this.transferredToAltClientCount = (options.transferredToAltClientCount) ? options.transferredToAltClientCount : null;
-  this.transferredToSameClientCount = (options.transferredToSameClientCount) ? options.transferredToSameClientCount : null;
-  this.publishRequestCount = (options.publishRequestCount) ? options.publishRequestCount : null;
-  this.dataChangeNotificationsCount = (options.dataChangeNotificationsCount) ? options.dataChangeNotificationsCount : null;
-  this.eventNotificationsCount = (options.eventNotificationsCount) ? options.eventNotificationsCount : null;
-  this.notificationsCount = (options.notificationsCount) ? options.notificationsCount : null;
-  this.latePublishRequestCount = (options.latePublishRequestCount) ? options.latePublishRequestCount : null;
-  this.currentKeepAliveCount = (options.currentKeepAliveCount) ? options.currentKeepAliveCount : null;
-  this.currentLifetimeCount = (options.currentLifetimeCount) ? options.currentLifetimeCount : null;
-  this.unacknowledgedMessageCount = (options.unacknowledgedMessageCount) ? options.unacknowledgedMessageCount : null;
-  this.discardedMessageCount = (options.discardedMessageCount) ? options.discardedMessageCount : null;
-  this.monitoredItemCount = (options.monitoredItemCount) ? options.monitoredItemCount : null;
-  this.disabledMonitoredItemCount = (options.disabledMonitoredItemCount) ? options.disabledMonitoredItemCount : null;
-  this.monitoringQueueOverflowCount = (options.monitoringQueueOverflowCount) ? options.monitoringQueueOverflowCount : null;
-  this.nextSequenceNumber = (options.nextSequenceNumber) ? options.nextSequenceNumber : null;
-  this.eventQueueOverFlowCount = (options.eventQueueOverFlowCount) ? options.eventQueueOverFlowCount : null;
+  this.sessionId = (options.sessionId !== undefined) ? options.sessionId : null;
+  this.subscriptionId = (options.subscriptionId !== undefined) ? options.subscriptionId : null;
+  this.priority = (options.priority !== undefined) ? options.priority : null;
+  this.publishingInterval = (options.publishingInterval !== undefined) ? options.publishingInterval : null;
+  this.maxKeepAliveCount = (options.maxKeepAliveCount !== undefined) ? options.maxKeepAliveCount : null;
+  this.maxLifetimeCount = (options.maxLifetimeCount !== undefined) ? options.maxLifetimeCount : null;
+  this.maxNotificationsPerPublish = (options.maxNotificationsPerPublish !== undefined) ? options.maxNotificationsPerPublish : null;
+  this.publishingEnabled = (options.publishingEnabled !== undefined) ? options.publishingEnabled : null;
+  this.modifyCount = (options.modifyCount !== undefined) ? options.modifyCount : null;
+  this.enableCount = (options.enableCount !== undefined) ? options.enableCount : null;
+  this.disableCount = (options.disableCount !== undefined) ? options.disableCount : null;
+  this.republishRequestCount = (options.republishRequestCount !== undefined) ? options.republishRequestCount : null;
+  this.republishMessageRequestCount = (options.republishMessageRequestCount !== undefined) ? options.republishMessageRequestCount : null;
+  this.republishMessageCount = (options.republishMessageCount !== undefined) ? options.republishMessageCount : null;
+  this.transferRequestCount = (options.transferRequestCount !== undefined) ? options.transferRequestCount : null;
+  this.transferredToAltClientCount = (options.transferredToAltClientCount !== undefined) ? options.transferredToAltClientCount : null;
+  this.transferredToSameClientCount = (options.transferredToSameClientCount !== undefined) ? options.transferredToSameClientCount : null;
+  this.publishRequestCount = (options.publishRequestCount !== undefined) ? options.publishRequestCount : null;
+  this.dataChangeNotificationsCount = (options.dataChangeNotificationsCount !== undefined) ? options.dataChangeNotificationsCount : null;
+  this.eventNotificationsCount = (options.eventNotificationsCount !== undefined) ? options.eventNotificationsCount : null;
+  this.notificationsCount = (options.notificationsCount !== undefined) ? options.notificationsCount : null;
+  this.latePublishRequestCount = (options.latePublishRequestCount !== undefined) ? options.latePublishRequestCount : null;
+  this.currentKeepAliveCount = (options.currentKeepAliveCount !== undefined) ? options.currentKeepAliveCount : null;
+  this.currentLifetimeCount = (options.currentLifetimeCount !== undefined) ? options.currentLifetimeCount : null;
+  this.unacknowledgedMessageCount = (options.unacknowledgedMessageCount !== undefined) ? options.unacknowledgedMessageCount : null;
+  this.discardedMessageCount = (options.discardedMessageCount !== undefined) ? options.discardedMessageCount : null;
+  this.monitoredItemCount = (options.monitoredItemCount !== undefined) ? options.monitoredItemCount : null;
+  this.disabledMonitoredItemCount = (options.disabledMonitoredItemCount !== undefined) ? options.disabledMonitoredItemCount : null;
+  this.monitoringQueueOverflowCount = (options.monitoringQueueOverflowCount !== undefined) ? options.monitoringQueueOverflowCount : null;
+  this.nextSequenceNumber = (options.nextSequenceNumber !== undefined) ? options.nextSequenceNumber : null;
+  this.eventQueueOverFlowCount = (options.eventQueueOverFlowCount !== undefined) ? options.eventQueueOverFlowCount : null;
 
  }
 

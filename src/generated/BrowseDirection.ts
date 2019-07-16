@@ -2,8 +2,6 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
-/**
-The directions of the references to return.*/
 export enum BrowseDirection {
    Forward = 0,
   Inverse = 1,

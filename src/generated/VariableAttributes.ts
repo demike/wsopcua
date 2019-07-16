@@ -18,7 +18,7 @@ export interface IVariableAttributes extends INodeAttributes {
 }
 
 /**
-The attributes for a variable node.
+
 */
 
 export class VariableAttributes extends NodeAttributes {
@@ -34,14 +34,14 @@ export class VariableAttributes extends NodeAttributes {
  constructor( options?: IVariableAttributes) {
   options = options || {};
   super(options);
-  this.value = (options.value) ? options.value : new Variant();
-  this.dataType = (options.dataType) ? options.dataType : null;
-  this.valueRank = (options.valueRank) ? options.valueRank : null;
-  this.arrayDimensions = (options.arrayDimensions) ? options.arrayDimensions : [];
-  this.accessLevel = (options.accessLevel) ? options.accessLevel : null;
-  this.userAccessLevel = (options.userAccessLevel) ? options.userAccessLevel : null;
-  this.minimumSamplingInterval = (options.minimumSamplingInterval) ? options.minimumSamplingInterval : null;
-  this.historizing = (options.historizing) ? options.historizing : null;
+  this.value = (options.value !== undefined) ? options.value : new Variant();
+  this.dataType = (options.dataType !== undefined) ? options.dataType : null;
+  this.valueRank = (options.valueRank !== undefined) ? options.valueRank : null;
+  this.arrayDimensions = (options.arrayDimensions !== undefined) ? options.arrayDimensions : [];
+  this.accessLevel = (options.accessLevel !== undefined) ? options.accessLevel : null;
+  this.userAccessLevel = (options.userAccessLevel !== undefined) ? options.userAccessLevel : null;
+  this.minimumSamplingInterval = (options.minimumSamplingInterval !== undefined) ? options.minimumSamplingInterval : null;
+  this.historizing = (options.historizing !== undefined) ? options.historizing : null;
 
  }
 

@@ -23,9 +23,9 @@ export class QueryNextResponse {
 
  constructor( options?: IQueryNextResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.queryDataSets = (options.queryDataSets) ? options.queryDataSets : [];
-  this.revisedContinuationPoint = (options.revisedContinuationPoint) ? options.revisedContinuationPoint : null;
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.queryDataSets = (options.queryDataSets !== undefined) ? options.queryDataSets : [];
+  this.revisedContinuationPoint = (options.revisedContinuationPoint !== undefined) ? options.revisedContinuationPoint : null;
 
  }
 

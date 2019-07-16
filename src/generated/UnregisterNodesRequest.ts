@@ -10,7 +10,7 @@ export interface IUnregisterNodesRequest {
 }
 
 /**
-Unregisters one or more previously registered nodes.
+
 */
 
 export class UnregisterNodesRequest {
@@ -19,8 +19,8 @@ export class UnregisterNodesRequest {
 
  constructor( options?: IUnregisterNodesRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.nodesToUnregister = (options.nodesToUnregister) ? options.nodesToUnregister : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.nodesToUnregister = (options.nodesToUnregister !== undefined) ? options.nodesToUnregister : [];
 
  }
 

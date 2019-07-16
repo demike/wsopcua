@@ -12,7 +12,7 @@ export interface IDeleteReferencesItem {
 }
 
 /**
-A request to delete a node from the server address space.
+
 */
 
 export class DeleteReferencesItem {
@@ -24,11 +24,11 @@ export class DeleteReferencesItem {
 
  constructor( options?: IDeleteReferencesItem) {
   options = options || {};
-  this.sourceNodeId = (options.sourceNodeId) ? options.sourceNodeId : null;
-  this.referenceTypeId = (options.referenceTypeId) ? options.referenceTypeId : null;
-  this.isForward = (options.isForward) ? options.isForward : null;
-  this.targetNodeId = (options.targetNodeId) ? options.targetNodeId : null;
-  this.deleteBidirectional = (options.deleteBidirectional) ? options.deleteBidirectional : null;
+  this.sourceNodeId = (options.sourceNodeId !== undefined) ? options.sourceNodeId : null;
+  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
+  this.isForward = (options.isForward !== undefined) ? options.isForward : null;
+  this.targetNodeId = (options.targetNodeId !== undefined) ? options.targetNodeId : null;
+  this.deleteBidirectional = (options.deleteBidirectional !== undefined) ? options.deleteBidirectional : null;
 
  }
 

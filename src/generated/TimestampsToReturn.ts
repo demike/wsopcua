@@ -17,9 +17,7 @@ export function encodeTimestampsToReturn( data: TimestampsToReturn,  out: DataSt
 
 
 export function decodeTimestampsToReturn( inp: DataStream) {
-    const tstr = inp.getUint32();
-    return (tstr < 4) ? tstr : TimestampsToReturn.Invalid;
-
+ return inp.getUint32();
  }
 
 

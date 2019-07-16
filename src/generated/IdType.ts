@@ -2,8 +2,6 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
-/**
-The type of identifier used in a node id.*/
 export enum IdType {
    Numeric = 0,
   String = 1,

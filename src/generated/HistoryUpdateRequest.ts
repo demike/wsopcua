@@ -20,8 +20,8 @@ export class HistoryUpdateRequest {
 
  constructor( options?: IHistoryUpdateRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.historyUpdateDetails = (options.historyUpdateDetails) ? options.historyUpdateDetails : [];
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.historyUpdateDetails = (options.historyUpdateDetails !== undefined) ? options.historyUpdateDetails : [];
 
  }
 

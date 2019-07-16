@@ -11,7 +11,7 @@ export interface IChannelSecurityToken {
 }
 
 /**
-The token that identifies a set of keys for an active secure channel.
+
 */
 
 export class ChannelSecurityToken {
@@ -22,10 +22,10 @@ export class ChannelSecurityToken {
 
  constructor( options?: IChannelSecurityToken) {
   options = options || {};
-  this.channelId = (options.channelId) ? options.channelId : null;
-  this.tokenId = (options.tokenId) ? options.tokenId : null;
-  this.createdAt = (options.createdAt) ? options.createdAt : null;
-  this.revisedLifetime = (options.revisedLifetime) ? options.revisedLifetime : null;
+  this.channelId = (options.channelId !== undefined) ? options.channelId : null;
+  this.tokenId = (options.tokenId !== undefined) ? options.tokenId : null;
+  this.createdAt = (options.createdAt !== undefined) ? options.createdAt : null;
+  this.revisedLifetime = (options.revisedLifetime !== undefined) ? options.revisedLifetime : null;
 
  }
 

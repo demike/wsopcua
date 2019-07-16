@@ -12,7 +12,7 @@ export interface IUserNameIdentityToken extends IUserIdentityToken {
 }
 
 /**
-A token representing a user identified by a user name and password.
+
 */
 
 export class UserNameIdentityToken extends UserIdentityToken {
@@ -23,9 +23,9 @@ export class UserNameIdentityToken extends UserIdentityToken {
  constructor( options?: IUserNameIdentityToken) {
   options = options || {};
   super(options);
-  this.userName = (options.userName) ? options.userName : null;
-  this.password = (options.password) ? options.password : null;
-  this.encryptionAlgorithm = (options.encryptionAlgorithm) ? options.encryptionAlgorithm : null;
+  this.userName = (options.userName !== undefined) ? options.userName : null;
+  this.password = (options.password !== undefined) ? options.password : null;
+  this.encryptionAlgorithm = (options.encryptionAlgorithm !== undefined) ? options.encryptionAlgorithm : null;
 
  }
 

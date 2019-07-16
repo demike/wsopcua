@@ -20,9 +20,9 @@ export class ModelChangeStructureDataType {
 
  constructor( options?: IModelChangeStructureDataType) {
   options = options || {};
-  this.affected = (options.affected) ? options.affected : null;
-  this.affectedType = (options.affectedType) ? options.affectedType : null;
-  this.verb = (options.verb) ? options.verb : null;
+  this.affected = (options.affected !== undefined) ? options.affected : null;
+  this.affectedType = (options.affectedType !== undefined) ? options.affectedType : null;
+  this.verb = (options.verb !== undefined) ? options.verb : null;
 
  }
 

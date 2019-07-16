@@ -10,7 +10,7 @@ export interface IBrowsePath {
 }
 
 /**
-A request to translate a path into a node id.
+
 */
 
 export class BrowsePath {
@@ -19,8 +19,8 @@ export class BrowsePath {
 
  constructor( options?: IBrowsePath) {
   options = options || {};
-  this.startingNode = (options.startingNode) ? options.startingNode : null;
-  this.relativePath = (options.relativePath) ? options.relativePath : new RelativePath();
+  this.startingNode = (options.startingNode !== undefined) ? options.startingNode : null;
+  this.relativePath = (options.relativePath !== undefined) ? options.relativePath : new RelativePath();
 
  }
 

@@ -18,8 +18,8 @@ export class SubscriptionAcknowledgement {
 
  constructor( options?: ISubscriptionAcknowledgement) {
   options = options || {};
-  this.subscriptionId = (options.subscriptionId) ? options.subscriptionId : null;
-  this.sequenceNumber = (options.sequenceNumber) ? options.sequenceNumber : null;
+  this.subscriptionId = (options.subscriptionId !== undefined) ? options.subscriptionId : null;
+  this.sequenceNumber = (options.sequenceNumber !== undefined) ? options.sequenceNumber : null;
 
  }
 

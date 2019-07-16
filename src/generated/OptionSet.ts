@@ -9,7 +9,7 @@ export interface IOptionSet {
 }
 
 /**
-This abstract Structured DataType is the base DataType for all DataTypes representing a bit mask.
+
 */
 
 export class OptionSet {
@@ -18,8 +18,8 @@ export class OptionSet {
 
  constructor( options?: IOptionSet) {
   options = options || {};
-  this.value = (options.value) ? options.value : null;
-  this.validBits = (options.validBits) ? options.validBits : null;
+  this.value = (options.value !== undefined) ? options.value : null;
+  this.validBits = (options.validBits !== undefined) ? options.validBits : null;
 
  }
 

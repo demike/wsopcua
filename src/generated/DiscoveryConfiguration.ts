@@ -1,7 +1,7 @@
 
 
 /**
-A base type for discovery configuration information.
+
 */
 
 export class DiscoveryConfiguration {

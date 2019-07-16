@@ -24,8 +24,8 @@ export class DataChangeNotification extends NotificationData {
  constructor( options?: IDataChangeNotification) {
   options = options || {};
   super();
-  this.monitoredItems = (options.monitoredItems) ? options.monitoredItems : [];
-  this.diagnosticInfos = (options.diagnosticInfos) ? options.diagnosticInfos : [];
+  this.monitoredItems = (options.monitoredItems !== undefined) ? options.monitoredItems : [];
+  this.diagnosticInfos = (options.diagnosticInfos !== undefined) ? options.diagnosticInfos : [];
 
  }
 

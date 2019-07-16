@@ -11,7 +11,7 @@ export interface IMethodAttributes extends INodeAttributes {
 }
 
 /**
-The attributes for a method node.
+
 */
 
 export class MethodAttributes extends NodeAttributes {
@@ -21,8 +21,8 @@ export class MethodAttributes extends NodeAttributes {
  constructor( options?: IMethodAttributes) {
   options = options || {};
   super(options);
-  this.executable = (options.executable) ? options.executable : null;
-  this.userExecutable = (options.userExecutable) ? options.userExecutable : null;
+  this.executable = (options.executable !== undefined) ? options.executable : null;
+  this.userExecutable = (options.userExecutable !== undefined) ? options.userExecutable : null;
 
  }
 

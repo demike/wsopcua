@@ -19,7 +19,7 @@ export class NetworkAddressUrlDataType extends NetworkAddressDataType {
  constructor( options?: INetworkAddressUrlDataType) {
   options = options || {};
   super(options);
-  this.url = (options.url) ? options.url : null;
+  this.url = (options.url !== undefined) ? options.url : null;
 
  }
 

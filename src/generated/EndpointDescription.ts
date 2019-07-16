@@ -19,7 +19,7 @@ export interface IEndpointDescription {
 }
 
 /**
-The description of a endpoint that can be used to access a server.
+
 */
 
 export class EndpointDescription {
@@ -34,14 +34,14 @@ export class EndpointDescription {
 
  constructor( options?: IEndpointDescription) {
   options = options || {};
-  this.endpointUrl = (options.endpointUrl) ? options.endpointUrl : null;
-  this.server = (options.server) ? options.server : new ApplicationDescription();
-  this.serverCertificate = (options.serverCertificate) ? options.serverCertificate : null;
-  this.securityMode = (options.securityMode) ? options.securityMode : null;
-  this.securityPolicyUri = (options.securityPolicyUri) ? options.securityPolicyUri : null;
-  this.userIdentityTokens = (options.userIdentityTokens) ? options.userIdentityTokens : [];
-  this.transportProfileUri = (options.transportProfileUri) ? options.transportProfileUri : null;
-  this.securityLevel = (options.securityLevel) ? options.securityLevel : null;
+  this.endpointUrl = (options.endpointUrl !== undefined) ? options.endpointUrl : null;
+  this.server = (options.server !== undefined) ? options.server : new ApplicationDescription();
+  this.serverCertificate = (options.serverCertificate !== undefined) ? options.serverCertificate : null;
+  this.securityMode = (options.securityMode !== undefined) ? options.securityMode : null;
+  this.securityPolicyUri = (options.securityPolicyUri !== undefined) ? options.securityPolicyUri : null;
+  this.userIdentityTokens = (options.userIdentityTokens !== undefined) ? options.userIdentityTokens : [];
+  this.transportProfileUri = (options.transportProfileUri !== undefined) ? options.transportProfileUri : null;
+  this.securityLevel = (options.securityLevel !== undefined) ? options.securityLevel : null;
 
  }
 

@@ -10,7 +10,7 @@ export interface IRegisterServerRequest {
 }
 
 /**
-Registers a server with the discovery server.
+
 */
 
 export class RegisterServerRequest {
@@ -19,8 +19,8 @@ export class RegisterServerRequest {
 
  constructor( options?: IRegisterServerRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.server = (options.server) ? options.server : new RegisteredServer();
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.server = (options.server !== undefined) ? options.server : new RegisteredServer();
 
  }
 

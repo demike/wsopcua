@@ -15,7 +15,7 @@ export interface IResponseHeader {
 }
 
 /**
-The header passed with every server response.
+
 */
 
 export class ResponseHeader {
@@ -28,12 +28,12 @@ export class ResponseHeader {
 
  constructor( options?: IResponseHeader) {
   options = options || {};
-  this.timestamp = (options.timestamp) ? options.timestamp : null;
-  this.requestHandle = (options.requestHandle) ? options.requestHandle : null;
-  this.serviceResult = (options.serviceResult) ? options.serviceResult : null;
-  this.serviceDiagnostics = (options.serviceDiagnostics) ? options.serviceDiagnostics : new DiagnosticInfo();
-  this.stringTable = (options.stringTable) ? options.stringTable : [];
-  this.additionalHeader = (options.additionalHeader) ? options.additionalHeader : null;
+  this.timestamp = (options.timestamp !== undefined) ? options.timestamp : null;
+  this.requestHandle = (options.requestHandle !== undefined) ? options.requestHandle : null;
+  this.serviceResult = (options.serviceResult !== undefined) ? options.serviceResult : null;
+  this.serviceDiagnostics = (options.serviceDiagnostics !== undefined) ? options.serviceDiagnostics : new DiagnosticInfo();
+  this.stringTable = (options.stringTable !== undefined) ? options.stringTable : [];
+  this.additionalHeader = (options.additionalHeader !== undefined) ? options.additionalHeader : null;
 
  }
 

@@ -13,7 +13,7 @@ export interface IUserTokenPolicy {
 }
 
 /**
-Describes a user token that can be used with a server.
+
 */
 
 export class UserTokenPolicy {
@@ -25,11 +25,11 @@ export class UserTokenPolicy {
 
  constructor( options?: IUserTokenPolicy) {
   options = options || {};
-  this.policyId = (options.policyId) ? options.policyId : null;
-  this.tokenType = (options.tokenType) ? options.tokenType : null;
-  this.issuedTokenType = (options.issuedTokenType) ? options.issuedTokenType : null;
-  this.issuerEndpointUrl = (options.issuerEndpointUrl) ? options.issuerEndpointUrl : null;
-  this.securityPolicyUri = (options.securityPolicyUri) ? options.securityPolicyUri : null;
+  this.policyId = (options.policyId !== undefined) ? options.policyId : null;
+  this.tokenType = (options.tokenType !== undefined) ? options.tokenType : null;
+  this.issuedTokenType = (options.issuedTokenType !== undefined) ? options.issuedTokenType : null;
+  this.issuerEndpointUrl = (options.issuerEndpointUrl !== undefined) ? options.issuerEndpointUrl : null;
+  this.securityPolicyUri = (options.securityPolicyUri !== undefined) ? options.securityPolicyUri : null;
 
  }
 

@@ -18,7 +18,7 @@ export interface IRegisteredServer {
 }
 
 /**
-The information required to register a server with a discovery server.
+
 */
 
 export class RegisteredServer {
@@ -33,14 +33,14 @@ export class RegisteredServer {
 
  constructor( options?: IRegisteredServer) {
   options = options || {};
-  this.serverUri = (options.serverUri) ? options.serverUri : null;
-  this.productUri = (options.productUri) ? options.productUri : null;
-  this.serverNames = (options.serverNames) ? options.serverNames : [];
-  this.serverType = (options.serverType) ? options.serverType : null;
-  this.gatewayServerUri = (options.gatewayServerUri) ? options.gatewayServerUri : null;
-  this.discoveryUrls = (options.discoveryUrls) ? options.discoveryUrls : [];
-  this.semaphoreFilePath = (options.semaphoreFilePath) ? options.semaphoreFilePath : null;
-  this.isOnline = (options.isOnline) ? options.isOnline : null;
+  this.serverUri = (options.serverUri !== undefined) ? options.serverUri : null;
+  this.productUri = (options.productUri !== undefined) ? options.productUri : null;
+  this.serverNames = (options.serverNames !== undefined) ? options.serverNames : [];
+  this.serverType = (options.serverType !== undefined) ? options.serverType : null;
+  this.gatewayServerUri = (options.gatewayServerUri !== undefined) ? options.gatewayServerUri : null;
+  this.discoveryUrls = (options.discoveryUrls !== undefined) ? options.discoveryUrls : [];
+  this.semaphoreFilePath = (options.semaphoreFilePath !== undefined) ? options.semaphoreFilePath : null;
+  this.isOnline = (options.isOnline !== undefined) ? options.isOnline : null;
 
  }
 

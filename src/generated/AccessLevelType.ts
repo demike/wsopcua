@@ -7,19 +7,20 @@ export enum AccessLevelType {
   CurrentRead = 1,
   CurrentWrite = 2,
   HistoryRead = 4,
-  HistoryWrite = 16,
+  HistoryWrite = 8,
+  SemanticChange = 16,
   StatusWrite = 32,
   TimestampWrite = 64,
 
 }
 
 export function encodeAccessLevelType( data: AccessLevelType,  out: DataStream) {
- out.setUint32(data);
+ out.setByte(data);
  }
 
 
 export function decodeAccessLevelType( inp: DataStream) {
- return inp.getUint32();
+ return inp.getByte();
  }
 
 

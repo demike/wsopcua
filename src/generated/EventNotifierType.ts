@@ -11,12 +11,12 @@ export enum EventNotifierType {
 }
 
 export function encodeEventNotifierType( data: EventNotifierType,  out: DataStream) {
- out.setUint32(data);
+ out.setByte(data);
  }
 
 
 export function decodeEventNotifierType( inp: DataStream) {
- return inp.getUint32();
+ return inp.getByte();
  }
 
 

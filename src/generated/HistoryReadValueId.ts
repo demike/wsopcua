@@ -23,10 +23,10 @@ export class HistoryReadValueId {
 
  constructor( options?: IHistoryReadValueId) {
   options = options || {};
-  this.nodeId = (options.nodeId) ? options.nodeId : null;
-  this.indexRange = (options.indexRange) ? options.indexRange : null;
-  this.dataEncoding = (options.dataEncoding) ? options.dataEncoding : new QualifiedName();
-  this.continuationPoint = (options.continuationPoint) ? options.continuationPoint : null;
+  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
+  this.indexRange = (options.indexRange !== undefined) ? options.indexRange : null;
+  this.dataEncoding = (options.dataEncoding !== undefined) ? options.dataEncoding : new QualifiedName();
+  this.continuationPoint = (options.continuationPoint !== undefined) ? options.continuationPoint : null;
 
  }
 

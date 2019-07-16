@@ -19,8 +19,8 @@ export class MonitoredItemNotification {
 
  constructor( options?: IMonitoredItemNotification) {
   options = options || {};
-  this.clientHandle = (options.clientHandle) ? options.clientHandle : null;
-  this.value = (options.value) ? options.value : new DataValue();
+  this.clientHandle = (options.clientHandle !== undefined) ? options.clientHandle : null;
+  this.value = (options.value !== undefined) ? options.value : new DataValue();
 
  }
 

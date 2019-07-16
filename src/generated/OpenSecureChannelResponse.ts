@@ -13,7 +13,7 @@ export interface IOpenSecureChannelResponse {
 }
 
 /**
-Creates a secure channel with a server.
+
 */
 
 export class OpenSecureChannelResponse {
@@ -24,10 +24,10 @@ export class OpenSecureChannelResponse {
 
  constructor( options?: IOpenSecureChannelResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.serverProtocolVersion = (options.serverProtocolVersion) ? options.serverProtocolVersion : null;
-  this.securityToken = (options.securityToken) ? options.securityToken : new ChannelSecurityToken();
-  this.serverNonce = (options.serverNonce) ? options.serverNonce : null;
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.serverProtocolVersion = (options.serverProtocolVersion !== undefined) ? options.serverProtocolVersion : null;
+  this.securityToken = (options.securityToken !== undefined) ? options.securityToken : new ChannelSecurityToken();
+  this.serverNonce = (options.serverNonce !== undefined) ? options.serverNonce : null;
 
  }
 

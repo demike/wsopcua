@@ -7,12 +7,13 @@ export enum AccessLevelExType {
   CurrentRead = 1,
   CurrentWrite = 2,
   HistoryRead = 4,
-  HistoryWrite = 16,
+  HistoryWrite = 8,
+  SemanticChange = 16,
   StatusWrite = 32,
   TimestampWrite = 64,
-  NonatomicRead = 65536,
-  NonatomicWrite = 131072,
-  WriteFullArrayOnly = 262144,
+  NonatomicRead = 256,
+  NonatomicWrite = 512,
+  WriteFullArrayOnly = 1024,
 
 }
 

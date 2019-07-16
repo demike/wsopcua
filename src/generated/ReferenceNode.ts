@@ -10,7 +10,7 @@ export interface IReferenceNode {
 }
 
 /**
-Specifies a reference which belongs to a node.
+
 */
 
 export class ReferenceNode {
@@ -20,9 +20,9 @@ export class ReferenceNode {
 
  constructor( options?: IReferenceNode) {
   options = options || {};
-  this.referenceTypeId = (options.referenceTypeId) ? options.referenceTypeId : null;
-  this.isInverse = (options.isInverse) ? options.isInverse : null;
-  this.targetId = (options.targetId) ? options.targetId : null;
+  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
+  this.isInverse = (options.isInverse !== undefined) ? options.isInverse : null;
+  this.targetId = (options.targetId !== undefined) ? options.targetId : null;
 
  }
 

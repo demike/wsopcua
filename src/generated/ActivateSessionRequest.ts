@@ -18,7 +18,7 @@ export interface IActivateSessionRequest {
 }
 
 /**
-Activates a session with the server.
+
 */
 
 export class ActivateSessionRequest {
@@ -31,12 +31,12 @@ export class ActivateSessionRequest {
 
  constructor( options?: IActivateSessionRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.clientSignature = (options.clientSignature) ? options.clientSignature : new SignatureData();
-  this.clientSoftwareCertificates = (options.clientSoftwareCertificates) ? options.clientSoftwareCertificates : [];
-  this.localeIds = (options.localeIds) ? options.localeIds : [];
-  this.userIdentityToken = (options.userIdentityToken) ? options.userIdentityToken : null;
-  this.userTokenSignature = (options.userTokenSignature) ? options.userTokenSignature : new SignatureData();
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.clientSignature = (options.clientSignature !== undefined) ? options.clientSignature : new SignatureData();
+  this.clientSoftwareCertificates = (options.clientSoftwareCertificates !== undefined) ? options.clientSoftwareCertificates : [];
+  this.localeIds = (options.localeIds !== undefined) ? options.localeIds : [];
+  this.userIdentityToken = (options.userIdentityToken !== undefined) ? options.userIdentityToken : null;
+  this.userTokenSignature = (options.userTokenSignature !== undefined) ? options.userTokenSignature : new SignatureData();
 
  }
 

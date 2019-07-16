@@ -27,11 +27,11 @@ export class SetTriggeringResponse {
 
  constructor( options?: ISetTriggeringResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader) ? options.responseHeader : new ResponseHeader();
-  this.addResults = (options.addResults) ? options.addResults : [];
-  this.addDiagnosticInfos = (options.addDiagnosticInfos) ? options.addDiagnosticInfos : [];
-  this.removeResults = (options.removeResults) ? options.removeResults : [];
-  this.removeDiagnosticInfos = (options.removeDiagnosticInfos) ? options.removeDiagnosticInfos : [];
+  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.addResults = (options.addResults !== undefined) ? options.addResults : [];
+  this.addDiagnosticInfos = (options.addDiagnosticInfos !== undefined) ? options.addDiagnosticInfos : [];
+  this.removeResults = (options.removeResults !== undefined) ? options.removeResults : [];
+  this.removeDiagnosticInfos = (options.removeDiagnosticInfos !== undefined) ? options.removeDiagnosticInfos : [];
 
  }
 

@@ -9,7 +9,7 @@ export interface IBrowsePathTarget {
 }
 
 /**
-The target of the translated path.
+
 */
 
 export class BrowsePathTarget {
@@ -18,8 +18,8 @@ export class BrowsePathTarget {
 
  constructor( options?: IBrowsePathTarget) {
   options = options || {};
-  this.targetId = (options.targetId) ? options.targetId : null;
-  this.remainingPathIndex = (options.remainingPathIndex) ? options.remainingPathIndex : null;
+  this.targetId = (options.targetId !== undefined) ? options.targetId : null;
+  this.remainingPathIndex = (options.remainingPathIndex !== undefined) ? options.remainingPathIndex : null;
 
  }
 

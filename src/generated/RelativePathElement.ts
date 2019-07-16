@@ -12,7 +12,7 @@ export interface IRelativePathElement {
 }
 
 /**
-An element in a relative path.
+
 */
 
 export class RelativePathElement {
@@ -23,10 +23,10 @@ export class RelativePathElement {
 
  constructor( options?: IRelativePathElement) {
   options = options || {};
-  this.referenceTypeId = (options.referenceTypeId) ? options.referenceTypeId : null;
-  this.isInverse = (options.isInverse) ? options.isInverse : null;
-  this.includeSubtypes = (options.includeSubtypes) ? options.includeSubtypes : null;
-  this.targetName = (options.targetName) ? options.targetName : new QualifiedName();
+  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
+  this.isInverse = (options.isInverse !== undefined) ? options.isInverse : null;
+  this.includeSubtypes = (options.includeSubtypes !== undefined) ? options.includeSubtypes : null;
+  this.targetName = (options.targetName !== undefined) ? options.targetName : new QualifiedName();
 
  }
 

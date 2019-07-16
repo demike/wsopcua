@@ -18,7 +18,7 @@ export class HistoryEventFieldList {
 
  constructor( options?: IHistoryEventFieldList) {
   options = options || {};
-  this.eventFields = (options.eventFields) ? options.eventFields : [];
+  this.eventFields = (options.eventFields !== undefined) ? options.eventFields : [];
 
  }
 

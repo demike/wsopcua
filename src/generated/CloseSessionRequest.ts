@@ -10,7 +10,7 @@ export interface ICloseSessionRequest {
 }
 
 /**
-Closes a session with the server.
+
 */
 
 export class CloseSessionRequest {
@@ -19,8 +19,8 @@ export class CloseSessionRequest {
 
  constructor( options?: ICloseSessionRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader) ? options.requestHeader : new RequestHeader();
-  this.deleteSubscriptions = (options.deleteSubscriptions) ? options.deleteSubscriptions : null;
+  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.deleteSubscriptions = (options.deleteSubscriptions !== undefined) ? options.deleteSubscriptions : null;
 
  }
 

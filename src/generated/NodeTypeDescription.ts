@@ -22,9 +22,9 @@ export class NodeTypeDescription {
 
  constructor( options?: INodeTypeDescription) {
   options = options || {};
-  this.typeDefinitionNode = (options.typeDefinitionNode) ? options.typeDefinitionNode : null;
-  this.includeSubTypes = (options.includeSubTypes) ? options.includeSubTypes : null;
-  this.dataToReturn = (options.dataToReturn) ? options.dataToReturn : [];
+  this.typeDefinitionNode = (options.typeDefinitionNode !== undefined) ? options.typeDefinitionNode : null;
+  this.includeSubTypes = (options.includeSubTypes !== undefined) ? options.includeSubTypes : null;
+  this.dataToReturn = (options.dataToReturn !== undefined) ? options.dataToReturn : [];
 
  }
 
