@@ -205,7 +205,7 @@ describe('DataValue', function () {
             value: new Variant({
                 dataType: DataType.ByteString,
                 arrayType: VariantArrayType.Scalar,
-                value: Buffer.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+                value: Uint8Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
             })
         });
         const dataValue1 = extractRange(dataValue, new NumericRange('2:3'));

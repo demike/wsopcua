@@ -90,7 +90,7 @@ export function apply_timestamps(dataValue: DataValue, timestampsToReturn: Times
  */
 function _clone_with_array_replacement(dataValue: DataValue, result) {
 
-    const statusCode = (!result.statuCode || result.statusCode === StatusCodes.Good) ? dataValue.statusCode : result.statusCode;
+    const statusCode = (!result.statusCode || result.statusCode === StatusCodes.Good) ? dataValue.statusCode : result.statusCode;
 
     return new DataValue({
         statusCode: statusCode,
