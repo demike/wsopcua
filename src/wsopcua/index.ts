@@ -2,7 +2,8 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Common
 // ---------------------------------------------------------------------------------------------------------------------
-export {NodeId, resolveNodeId, makeNodeId, coerceNodeId, NodeIdType/*sameNodeId*/} from '../nodeid/nodeid';
+export {NodeId, resolveNodeId, makeNodeId, coerceNodeId/*sameNodeId*/} from '../nodeid/nodeid';
+export {NodeIdType} from '../generated';
 
 export {ExpandedNodeId, makeExpandedNodeId/*,coerceExpandedNodeId*/} from '../nodeid/expanded_nodeid';
 

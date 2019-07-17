@@ -3,7 +3,7 @@
 import { DataStream } from './DataStream';
 import { assert } from '../assert';
 import '../nodeid/nodeid';
-import { NodeId, NodeIdType, makeNodeId } from '../nodeid/nodeid';
+import { NodeId, makeNodeId } from '../nodeid/nodeid';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 import { isValidGuid, decodeGuid, encodeGuid } from './guid';
 import { decodeString, encodeString } from './string';
@@ -15,6 +15,7 @@ export { NodeId } from '../nodeid/nodeid';
 export { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 
 import { set_flag, check_flag } from '../utils';
+import { NodeIdType } from '../generated/NodeIdType';
 
 enum EnumNodeIdEncoding {
     TwoBytes = 0x00, // A numeric value that fits into the two byte representation.
@@ -45,7 +46,7 @@ function nodeID_encodingByte(nodeId: NodeId | ExpandedNodeId): number {
 
     let encodingByte = 0;
 
-    if (nodeId.identifierType === NodeIdType.NUMERIC) {
+    if (nodeId.identifierType === NodeIdType.Numeric) {
 
         if (is_uint8(<number>nodeId.value) && (!nodeId.namespace) &&
             !(<ExpandedNodeId>nodeId).namespaceUri && !(<ExpandedNodeId>nodeId).serverIndex) {
@@ -61,14 +62,14 @@ function nodeID_encodingByte(nodeId: NodeId | ExpandedNodeId): number {
             encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.Numeric);
         }
 
-    } else if (nodeId.identifierType === NodeIdType.STRING) {
+    } else if (nodeId.identifierType === NodeIdType.String) {
 
         encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.String);
 
-    } else if (nodeId.identifierType === NodeIdType.BYTESTRING) {
+    } else if (nodeId.identifierType === NodeIdType.ByteString) {
         encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.ByteString);
 
-    } else if (nodeId.identifierType === NodeIdType.GUID) {
+    } else if (nodeId.identifierType === NodeIdType.Guid) {
         encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.Guid);
     }
 
@@ -173,27 +174,27 @@ const _decodeNodeId = function (encoding_byte: EnumNodeIdEncoding, stream: DataS
     switch (encoding_byte) {
         case EnumNodeIdEncoding.TwoBytes:
             value = stream.getUint8();
-            nodeIdType = NodeIdType.NUMERIC;
+            nodeIdType = NodeIdType.Numeric;
             break;
         case EnumNodeIdEncoding.FourBytes:
             namespace = stream.getUint8();
             value = stream.getUint16();
-            nodeIdType = NodeIdType.NUMERIC;
+            nodeIdType = NodeIdType.Numeric;
             break;
         case EnumNodeIdEncoding.Numeric:
             namespace = stream.getUint16();
             value = stream.getUint32();
-            nodeIdType = NodeIdType.NUMERIC;
+            nodeIdType = NodeIdType.Numeric;
             break;
         case EnumNodeIdEncoding.String:
             namespace = stream.getUint16();
             value = decodeString(stream);
-            nodeIdType = NodeIdType.STRING;
+            nodeIdType = NodeIdType.String;
             break;
         case EnumNodeIdEncoding.ByteString:
             namespace = stream.getUint16();
             value = decodeByteString(stream);
-            nodeIdType = NodeIdType.BYTESTRING;
+            nodeIdType = NodeIdType.ByteString;
             break;
         default:
             if (encoding_byte !== EnumNodeIdEncoding.Guid) {
@@ -205,7 +206,7 @@ const _decodeNodeId = function (encoding_byte: EnumNodeIdEncoding, stream: DataS
             }
             namespace = stream.getUint16();
             value = decodeGuid(stream);
-            nodeIdType = NodeIdType.GUID;
+            nodeIdType = NodeIdType.Guid;
             assert(isValidGuid(value));
             break;
     }

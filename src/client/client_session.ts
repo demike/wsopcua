@@ -4,7 +4,7 @@
  */
 import { EventEmitter } from '../eventemitter';
 import { assert } from '../assert';
-import { resolveNodeId, coerceNodeId, makeNodeId, NodeId, NodeIdType } from '../nodeid/nodeid';
+import { resolveNodeId, coerceNodeId, makeNodeId, NodeId } from '../nodeid/nodeid';
 import { OPCUAClientBase, OpcUaResponse, ErrorCallback, ResponseCallback } from './client_base';
 import { StatusCodes } from '../constants/raw_status_codes';
 
@@ -63,7 +63,7 @@ import { RegisterNodesResponse } from '../generated/RegisterNodesResponse';
 import { UnregisterNodesRequest } from '../generated/UnregisterNodesRequest';
 import { UnregisterNodesResponse } from '../generated/UnregisterNodesResponse';
 import { TransferSubscriptionsResponse } from '../service-subscription';
-import { IModifySubscriptionRequest, ISetMonitoringModeRequest, SignatureData, IReadValueId, ServerState } from '../generated';
+import { IModifySubscriptionRequest, ISetMonitoringModeRequest, SignatureData, IReadValueId, ServerState, NodeIdType } from '../generated';
 import { buf2base64, buf2hex } from '../crypto';
 
 
@@ -190,7 +190,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
                 browseDirection: BrowseDirection.Forward,
                 nodeClassMask: 0,
                 resultMask: 63,
-                referenceTypeId: new NodeId(NodeIdType.NUMERIC, ReferenceTypeIds.HierarchicalReferences)
+                referenceTypeId: new NodeId(NodeIdType.Numeric, ReferenceTypeIds.HierarchicalReferences)
             });
         } else {
             data.nodeId = resolveNodeId(data.nodeId);
@@ -1755,7 +1755,7 @@ public evaluateRemainingLifetime(): number {
  */
     public readNamespaceArray(callback: ResponseCallback<string[]>) {
         this.read(new read_service.ReadValueId({
-            nodeId:   new NodeId(NodeIdType.NUMERIC, /*VariableIds.Server_NamespaceArray*/2255, 0),
+            nodeId:   new NodeId(NodeIdType.Numeric, /*VariableIds.Server_NamespaceArray*/2255, 0),
              // resolveNodeId('Server_NamespaceArray'),
             attributeId: AttributeIds.Value
         }), (err: Error, dataValue: DataValue) => {

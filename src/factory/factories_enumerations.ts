@@ -4,8 +4,7 @@
  */
 
  import {assert} from '../assert';
-
-import {TypeSchema} from './factories_builtin_types';
+import { TypeSchema } from './type_schema';
 
 function _encode_enumeration(member, stream) {
     stream.writeInteger(member.value);

@@ -3,7 +3,8 @@
 /**
  * @module opcua.datamodel
  */
-import {NodeId, NodeIdType, coerceNodeId} from './nodeid';
+import {NodeId, coerceNodeId} from './nodeid';
+import { NodeIdType } from '../generated/NodeIdType';
 
 /**
  * An ExpandedNodeId extends the NodeId structure.
@@ -90,7 +91,7 @@ export function coerceExpandedNodeId(value): ExpandedNodeId {
 export function makeExpandedNodeId(value: any, namespace?: number, namespaceUri: string = null) {
 
     if (value === undefined && namespace === undefined) {
-        return new ExpandedNodeId(NodeIdType.NUMERIC, 0, 0, null, 0);
+        return new ExpandedNodeId(NodeIdType.Numeric, 0, 0, null, 0);
     }
     const serverIndex = 0;
     let n;
@@ -111,5 +112,5 @@ export function makeExpandedNodeId(value: any, namespace?: number, namespaceUri:
         throw new Error(' cannot makeExpandedNodeId out of ' + value);
     }
     namespace = namespace || 0;
-    return new ExpandedNodeId(NodeIdType.NUMERIC, valueInt, namespace, namespaceUri, serverIndex);
+    return new ExpandedNodeId(NodeIdType.Numeric, valueInt, namespace, namespaceUri, serverIndex);
 }

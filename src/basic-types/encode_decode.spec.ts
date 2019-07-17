@@ -5,9 +5,10 @@ import * as ec from './';
 import {DataStream} from './DataStream';
 
 import * as guid from './guid';
-import {makeNodeId, NodeIdType, NodeId} from '../nodeid/nodeid';
+import {makeNodeId, NodeId} from '../nodeid/nodeid';
 import {makeExpandedNodeId, ExpandedNodeId} from '../nodeid/expanded_nodeid';
 import { hexDump } from '../common/debug';
+import { NodeIdType } from '../generated/NodeIdType';
 
 const crypto: Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
 
@@ -247,7 +248,7 @@ describe('testing built-in type encoding', function() {
 
     it('should encode and decode a two byte NodeId', function() {
         const nodeId = makeNodeId(25);
-        expect(nodeId.identifierType).toEqual(NodeIdType.NUMERIC);
+        expect(nodeId.identifierType).toEqual(NodeIdType.Numeric);
 
         test_encode_decode(nodeId, ec.encodeNodeId, ec.decodeNodeId, 2, function verify_buffer(buf) {
             const buffer = new Uint8Array(buf);
@@ -258,7 +259,7 @@ describe('testing built-in type encoding', function() {
 
     it('should encode and decode a four byte NodeId', function() {
         const nodeId = makeNodeId(258);
-        expect(nodeId.identifierType).toEqual(NodeIdType.NUMERIC);
+        expect(nodeId.identifierType).toEqual(NodeIdType.Numeric);
         test_encode_decode(nodeId, ec.encodeNodeId, ec.decodeNodeId, 4, function verify_buffer(buf) {
             const buffer = new DataView(buf);
             expect(buffer.getInt8(0)).toBe(1);
@@ -269,7 +270,7 @@ describe('testing built-in type encoding', function() {
 
     it('should encode and decode a Numeric NodeId', function() {
         const nodeId = makeNodeId(545889, 2500);
-        expect(nodeId.identifierType).toEqual(NodeIdType.NUMERIC);
+        expect(nodeId.identifierType).toEqual(NodeIdType.Numeric);
         test_encode_decode(nodeId, ec.encodeNodeId, ec.decodeNodeId, 7);
     });
     it('should encode and decode a byte NodeId (bug reported by Mika)', function() {
@@ -291,19 +292,19 @@ describe('testing built-in type encoding', function() {
 
     it('should encode and decode a String NodeId', function() {
         const nodeId = makeNodeId('SomeStuff', 2500);
-        expect(nodeId.identifierType).toEqual(NodeIdType.STRING);
+        expect(nodeId.identifierType).toEqual(NodeIdType.String);
 
         test_encode_decode(nodeId, ec.encodeNodeId, ec.decodeNodeId, 4 + 9 + 2 + 1);
     });
 
     it('should encode and decode a Guid NodeId', function() {
         const nodeId = makeNodeId('72962B91-FA75-4AE6-8D28-B404DC7DAF63', 2500);
-        expect(nodeId.identifierType).toEqual(NodeIdType.GUID);
+        expect(nodeId.identifierType).toEqual(NodeIdType.Guid);
         test_encode_decode(nodeId, ec.encodeNodeId, ec.decodeNodeId, 16 + 2 + 1);
     });
     it('should encode and decode a String NodeId that looks like a GUID (issue#377)', function() {
-        const nodeId = new NodeId(NodeIdType.STRING, '72962B91-FA75-4AE6-8D28-B404DC7DAF63', 2500);
-        expect(nodeId.identifierType).toEqual(NodeIdType.STRING);
+        const nodeId = new NodeId(NodeIdType.String, '72962B91-FA75-4AE6-8D28-B404DC7DAF63', 2500);
+        expect(nodeId.identifierType).toEqual(NodeIdType.String);
         test_encode_decode(nodeId, ec.encodeNodeId, ec.decodeNodeId, 43);
     });
 
@@ -313,7 +314,7 @@ describe('testing built-in type encoding', function() {
             value[i] = i;
         }
         const nodeId = makeNodeId(value, 0x1bcd);
-        expect(nodeId.identifierType).toEqual(NodeIdType.BYTESTRING);
+        expect(nodeId.identifierType).toEqual(NodeIdType.ByteString);
         const expectedLength = 1 + 2 + 4 + 32;
         test_encode_decode(nodeId, ec.encodeNodeId, ec.decodeNodeId, expectedLength, function(buf) {
             const buffer = new DataView(buf);
@@ -338,7 +339,7 @@ describe('testing built-in type encoding', function() {
 
     it('should encode and decode a BYTESTRING NodeId', function() {
 
-        const nodeId = new NodeId(NodeIdType.BYTESTRING, crypto.getRandomValues(new Uint8Array(16)));
+        const nodeId = new NodeId(NodeIdType.ByteString, crypto.getRandomValues(new Uint8Array(16)));
 
         const expectedLength = 1 + 2 + 4 + 16;
         test_encode_decode(nodeId, ec.encodeNodeId, ec.decodeNodeId, expectedLength, function(buffer) {});
@@ -355,7 +356,7 @@ describe('testing built-in type encoding', function() {
     it('should encode and decode a Expanded NodeId with namespaceUri', function() {
         const serverIndex = 2;
         const namespaceUri = 'some:namespace:uri';
-        const expandedNodeId = new ExpandedNodeId(NodeIdType.NUMERIC, 4123, 4, namespaceUri, serverIndex);
+        const expandedNodeId = new ExpandedNodeId(NodeIdType.Numeric, 4123, 4, namespaceUri, serverIndex);
         test_encode_decode(expandedNodeId, ec.encodeExpandedNodeId, ec.decodeExpandedNodeId, 33);
     });
 

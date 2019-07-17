@@ -1,6 +1,7 @@
 import { makeExpandedNodeId, ExpandedNodeId } from './expanded_nodeid';
-import { NodeIdType, makeNodeId } from './nodeid';
-import {coerceExpandedNodeId} from './expanded_nodeid'
+import { makeNodeId } from './nodeid';
+import { NodeIdType} from '../generated/NodeIdType';
+import {coerceExpandedNodeId} from './expanded_nodeid';
 
 /*global describe, it, require*/
 
@@ -9,7 +10,7 @@ describe('testing ExpandedNodeId', function () {
 
     it('should create a ExpandedNodeId from a integer', function () {
         const exnodeId = makeExpandedNodeId(1);
-        expect(exnodeId.identifierType).toBe(NodeIdType.NUMERIC);
+        expect(exnodeId.identifierType).toBe(NodeIdType.Numeric);
         expect(exnodeId.value).toBe(1);
         expect(exnodeId.namespace).toBe(0);
         expect(exnodeId.namespaceUri).toBe(null);
@@ -24,7 +25,7 @@ describe('testing ExpandedNodeId', function () {
     });
     it('should create a ExpandedNodeId from a ExpandedNodeId', function () {
 
-        const exnodeId1 = new ExpandedNodeId(NodeIdType.NUMERIC, 1, 2, "namespaceURI", 3);
+        const exnodeId1 = new ExpandedNodeId(NodeIdType.Numeric, 1, 2, "namespaceURI", 3);
         const exnodeId2 = makeExpandedNodeId(exnodeId1);
         expect(exnodeId2.value).toBe(1);
     });
@@ -36,7 +37,7 @@ describe('testing ExpandedNodeId', function () {
     });
     it('ExpandedNodeId#toString', function () {
 
-        const exnodeId = new ExpandedNodeId(NodeIdType.NUMERIC, 1, 2, "namespaceURI", 3);
+        const exnodeId = new ExpandedNodeId(NodeIdType.Numeric, 1, 2, "namespaceURI", 3);
         expect(exnodeId.value).toBe(1);
         expect(exnodeId.namespace).toBe(2);
         expect(exnodeId.namespaceUri).toBe('namespaceURI');
@@ -48,10 +49,10 @@ describe('testing ExpandedNodeId', function () {
     it('should create a ExpandedNodeId from a NodeId', function () {
 
         const nodeId = makeNodeId('some_text', 2);
-        expect(nodeId.identifierType).toBe(NodeIdType.STRING);
+        expect(nodeId.identifierType).toBe(NodeIdType.String);
 
         const exnodeId = makeExpandedNodeId(nodeId);
-        expect(exnodeId.identifierType).toBe(NodeIdType.STRING);
+        expect(exnodeId.identifierType).toBe(NodeIdType.String);
         expect(exnodeId.value).toBe('some_text');
         expect(exnodeId.namespace).toBe(2);
         expect(exnodeId.namespaceUri).toBe(null);
