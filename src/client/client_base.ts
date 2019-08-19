@@ -66,6 +66,13 @@ export interface OpcUaResponse {
 }
 
 export type ResponseCallback<R1, R2 = undefined> = (err?: Error | null, response?: R1, arg2?: R2) => void;
+/*
+export interface ResponseCallback<R1, R2 = undefined> {
+    (err: null, response: R1, arg2?: R2): void;
+    (err: Error, response?: R1, arg2?: R2): void;
+}
+*/
+
 
 
 export interface ConnectionStrategy {

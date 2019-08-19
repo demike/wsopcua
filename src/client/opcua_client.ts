@@ -525,7 +525,8 @@ public reactivateSession(session: ClientSession, callback: ErrorCallback) {
  *     });
  *
  */
-public createSession(userIdentityInfo: UserIdentityInfo | null, callback: (err: Error, session?: ClientSession) => void) {
+
+public createSession(userIdentityInfo: UserIdentityInfo | null, callback: ResponseCallback<ClientSession>): void {
 
     if ('function' === typeof userIdentityInfo) {
         (<any>callback) = userIdentityInfo;
@@ -589,12 +590,12 @@ protected _closeSession(session: ClientSession,
     });
 
     if (!this._secureChannel.isValid()) {
-        return callback();
+        return callback(null);
     }
 
     if (this.isReconnecting) {
         console.log('OPCUAClient#_closeSession called while reconnection in progress ! What shall we do');
-        return callback();
+        return callback(null);
     }
 
     session.performMessageTransaction(request, function (err, response) {
