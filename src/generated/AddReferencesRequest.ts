@@ -21,8 +21,8 @@ export class AddReferencesRequest {
 
  constructor( options?: IAddReferencesRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.referencesToAdd = (options.referencesToAdd !== undefined) ? options.referencesToAdd : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.referencesToAdd = (options.referencesToAdd != null) ? options.referencesToAdd : [];
 
  }
 

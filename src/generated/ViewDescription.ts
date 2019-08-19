@@ -20,9 +20,9 @@ export class ViewDescription {
 
  constructor( options?: IViewDescription) {
   options = options || {};
-  this.viewId = (options.viewId !== undefined) ? options.viewId : null;
-  this.timestamp = (options.timestamp !== undefined) ? options.timestamp : null;
-  this.viewVersion = (options.viewVersion !== undefined) ? options.viewVersion : null;
+  this.viewId = (options.viewId != null) ? options.viewId : null;
+  this.timestamp = (options.timestamp != null) ? options.timestamp : null;
+  this.viewVersion = (options.viewVersion != null) ? options.viewVersion : null;
 
  }
 

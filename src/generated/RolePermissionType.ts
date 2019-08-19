@@ -19,8 +19,8 @@ export class RolePermissionType {
 
  constructor( options?: IRolePermissionType) {
   options = options || {};
-  this.roleId = (options.roleId !== undefined) ? options.roleId : null;
-  this.permissions = (options.permissions !== undefined) ? options.permissions : null;
+  this.roleId = (options.roleId != null) ? options.roleId : null;
+  this.permissions = (options.permissions != null) ? options.permissions : null;
 
  }
 

@@ -18,8 +18,8 @@ export class OptionSet {
 
  constructor( options?: IOptionSet) {
   options = options || {};
-  this.value = (options.value !== undefined) ? options.value : null;
-  this.validBits = (options.validBits !== undefined) ? options.validBits : null;
+  this.value = (options.value != null) ? options.value : null;
+  this.validBits = (options.validBits != null) ? options.validBits : null;
 
  }
 

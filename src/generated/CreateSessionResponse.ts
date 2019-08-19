@@ -40,16 +40,16 @@ export class CreateSessionResponse {
 
  constructor( options?: ICreateSessionResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
-  this.sessionId = (options.sessionId !== undefined) ? options.sessionId : null;
-  this.authenticationToken = (options.authenticationToken !== undefined) ? options.authenticationToken : null;
-  this.revisedSessionTimeout = (options.revisedSessionTimeout !== undefined) ? options.revisedSessionTimeout : null;
-  this.serverNonce = (options.serverNonce !== undefined) ? options.serverNonce : null;
-  this.serverCertificate = (options.serverCertificate !== undefined) ? options.serverCertificate : null;
-  this.serverEndpoints = (options.serverEndpoints !== undefined) ? options.serverEndpoints : [];
-  this.serverSoftwareCertificates = (options.serverSoftwareCertificates !== undefined) ? options.serverSoftwareCertificates : [];
-  this.serverSignature = (options.serverSignature !== undefined) ? options.serverSignature : new SignatureData();
-  this.maxRequestMessageSize = (options.maxRequestMessageSize !== undefined) ? options.maxRequestMessageSize : null;
+  this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
+  this.sessionId = (options.sessionId != null) ? options.sessionId : null;
+  this.authenticationToken = (options.authenticationToken != null) ? options.authenticationToken : null;
+  this.revisedSessionTimeout = (options.revisedSessionTimeout != null) ? options.revisedSessionTimeout : null;
+  this.serverNonce = (options.serverNonce != null) ? options.serverNonce : null;
+  this.serverCertificate = (options.serverCertificate != null) ? options.serverCertificate : null;
+  this.serverEndpoints = (options.serverEndpoints != null) ? options.serverEndpoints : [];
+  this.serverSoftwareCertificates = (options.serverSoftwareCertificates != null) ? options.serverSoftwareCertificates : [];
+  this.serverSignature = (options.serverSignature != null) ? options.serverSignature : new SignatureData();
+  this.maxRequestMessageSize = (options.maxRequestMessageSize != null) ? options.maxRequestMessageSize : null;
 
  }
 

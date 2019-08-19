@@ -21,8 +21,8 @@ export class ViewAttributes extends NodeAttributes {
  constructor( options?: IViewAttributes) {
   options = options || {};
   super(options);
-  this.containsNoLoops = (options.containsNoLoops !== undefined) ? options.containsNoLoops : null;
-  this.eventNotifier = (options.eventNotifier !== undefined) ? options.eventNotifier : null;
+  this.containsNoLoops = (options.containsNoLoops != null) ? options.containsNoLoops : null;
+  this.eventNotifier = (options.eventNotifier != null) ? options.eventNotifier : null;
 
  }
 

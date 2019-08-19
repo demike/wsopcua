@@ -25,9 +25,9 @@ export class PublishedEventsDataType extends PublishedDataSetSourceDataType {
  constructor( options?: IPublishedEventsDataType) {
   options = options || {};
   super();
-  this.eventNotifier = (options.eventNotifier !== undefined) ? options.eventNotifier : null;
-  this.selectedFields = (options.selectedFields !== undefined) ? options.selectedFields : [];
-  this.filter = (options.filter !== undefined) ? options.filter : new ContentFilter();
+  this.eventNotifier = (options.eventNotifier != null) ? options.eventNotifier : null;
+  this.selectedFields = (options.selectedFields != null) ? options.selectedFields : [];
+  this.filter = (options.filter != null) ? options.filter : new ContentFilter();
 
  }
 

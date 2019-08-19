@@ -19,8 +19,8 @@ export class MonitoredItemModifyRequest {
 
  constructor( options?: IMonitoredItemModifyRequest) {
   options = options || {};
-  this.monitoredItemId = (options.monitoredItemId !== undefined) ? options.monitoredItemId : null;
-  this.requestedParameters = (options.requestedParameters !== undefined) ? options.requestedParameters : new MonitoringParameters();
+  this.monitoredItemId = (options.monitoredItemId != null) ? options.monitoredItemId : null;
+  this.requestedParameters = (options.requestedParameters != null) ? options.requestedParameters : new MonitoringParameters();
 
  }
 

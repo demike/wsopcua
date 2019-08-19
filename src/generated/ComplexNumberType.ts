@@ -18,8 +18,8 @@ export class ComplexNumberType {
 
  constructor( options?: IComplexNumberType) {
   options = options || {};
-  this.real = (options.real !== undefined) ? options.real : null;
-  this.imaginary = (options.imaginary !== undefined) ? options.imaginary : null;
+  this.real = (options.real != null) ? options.real : null;
+  this.imaginary = (options.imaginary != null) ? options.imaginary : null;
 
  }
 

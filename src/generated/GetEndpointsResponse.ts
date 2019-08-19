@@ -21,8 +21,8 @@ export class GetEndpointsResponse {
 
  constructor( options?: IGetEndpointsResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
-  this.endpoints = (options.endpoints !== undefined) ? options.endpoints : [];
+  this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
+  this.endpoints = (options.endpoints != null) ? options.endpoints : [];
 
  }
 

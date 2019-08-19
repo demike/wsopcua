@@ -21,8 +21,8 @@ export class IssuedIdentityToken extends UserIdentityToken {
  constructor( options?: IIssuedIdentityToken) {
   options = options || {};
   super(options);
-  this.tokenData = (options.tokenData !== undefined) ? options.tokenData : null;
-  this.encryptionAlgorithm = (options.encryptionAlgorithm !== undefined) ? options.encryptionAlgorithm : null;
+  this.tokenData = (options.tokenData != null) ? options.tokenData : null;
+  this.encryptionAlgorithm = (options.encryptionAlgorithm != null) ? options.encryptionAlgorithm : null;
 
  }
 

@@ -19,8 +19,8 @@ export class StatusResult {
 
  constructor( options?: IStatusResult) {
   options = options || {};
-  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
-  this.diagnosticInfo = (options.diagnosticInfo !== undefined) ? options.diagnosticInfo : new DiagnosticInfo();
+  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.diagnosticInfo = (options.diagnosticInfo != null) ? options.diagnosticInfo : new DiagnosticInfo();
 
  }
 

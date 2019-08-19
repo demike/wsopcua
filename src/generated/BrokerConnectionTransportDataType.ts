@@ -20,8 +20,8 @@ export class BrokerConnectionTransportDataType extends ConnectionTransportDataTy
  constructor( options?: IBrokerConnectionTransportDataType) {
   options = options || {};
   super();
-  this.resourceUri = (options.resourceUri !== undefined) ? options.resourceUri : null;
-  this.authenticationProfileUri = (options.authenticationProfileUri !== undefined) ? options.authenticationProfileUri : null;
+  this.resourceUri = (options.resourceUri != null) ? options.resourceUri : null;
+  this.authenticationProfileUri = (options.authenticationProfileUri != null) ? options.authenticationProfileUri : null;
 
  }
 

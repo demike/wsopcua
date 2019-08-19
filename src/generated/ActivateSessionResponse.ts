@@ -25,10 +25,10 @@ export class ActivateSessionResponse {
 
  constructor( options?: IActivateSessionResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
-  this.serverNonce = (options.serverNonce !== undefined) ? options.serverNonce : null;
-  this.results = (options.results !== undefined) ? options.results : [];
-  this.diagnosticInfos = (options.diagnosticInfos !== undefined) ? options.diagnosticInfos : [];
+  this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
+  this.serverNonce = (options.serverNonce != null) ? options.serverNonce : null;
+  this.results = (options.results != null) ? options.results : [];
+  this.diagnosticInfos = (options.diagnosticInfos != null) ? options.diagnosticInfos : [];
 
  }
 

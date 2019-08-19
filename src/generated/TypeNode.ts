@@ -23,9 +23,9 @@ export class TypeNode extends Node {
  constructor( options?: ITypeNode) {
   options = options || {};
   super(options);
-  this.noOfRolePermissions = (options.noOfRolePermissions !== undefined) ? options.noOfRolePermissions : null;
-  this.noOfUserRolePermissions = (options.noOfUserRolePermissions !== undefined) ? options.noOfUserRolePermissions : null;
-  this.noOfReferences = (options.noOfReferences !== undefined) ? options.noOfReferences : null;
+  this.noOfRolePermissions = (options.noOfRolePermissions != null) ? options.noOfRolePermissions : null;
+  this.noOfUserRolePermissions = (options.noOfUserRolePermissions != null) ? options.noOfUserRolePermissions : null;
+  this.noOfReferences = (options.noOfReferences != null) ? options.noOfReferences : null;
 
  }
 

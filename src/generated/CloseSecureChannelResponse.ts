@@ -16,7 +16,7 @@ export class CloseSecureChannelResponse {
 
  constructor( options?: ICloseSecureChannelResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
 
  }
 

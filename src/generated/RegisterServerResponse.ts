@@ -16,7 +16,7 @@ export class RegisterServerResponse {
 
  constructor( options?: IRegisterServerResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
+  this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
 
  }
 

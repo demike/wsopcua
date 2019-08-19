@@ -25,11 +25,11 @@ export class Argument {
 
  constructor( options?: IArgument) {
   options = options || {};
-  this.name = (options.name !== undefined) ? options.name : null;
-  this.dataType = (options.dataType !== undefined) ? options.dataType : null;
-  this.valueRank = (options.valueRank !== undefined) ? options.valueRank : null;
-  this.arrayDimensions = (options.arrayDimensions !== undefined) ? options.arrayDimensions : [];
-  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
+  this.name = (options.name != null) ? options.name : null;
+  this.dataType = (options.dataType != null) ? options.dataType : null;
+  this.valueRank = (options.valueRank != null) ? options.valueRank : null;
+  this.arrayDimensions = (options.arrayDimensions != null) ? options.arrayDimensions : [];
+  this.description = (options.description != null) ? options.description : new LocalizedText();
 
  }
 

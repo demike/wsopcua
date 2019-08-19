@@ -19,8 +19,8 @@ export class RegisterServerRequest {
 
  constructor( options?: IRegisterServerRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.server = (options.server !== undefined) ? options.server : new RegisteredServer();
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.server = (options.server != null) ? options.server : new RegisteredServer();
 
  }
 

@@ -25,11 +25,11 @@ export class NodeAttributes {
 
  constructor( options?: INodeAttributes) {
   options = options || {};
-  this.specifiedAttributes = (options.specifiedAttributes !== undefined) ? options.specifiedAttributes : null;
-  this.displayName = (options.displayName !== undefined) ? options.displayName : new LocalizedText();
-  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
-  this.writeMask = (options.writeMask !== undefined) ? options.writeMask : null;
-  this.userWriteMask = (options.userWriteMask !== undefined) ? options.userWriteMask : null;
+  this.specifiedAttributes = (options.specifiedAttributes != null) ? options.specifiedAttributes : null;
+  this.displayName = (options.displayName != null) ? options.displayName : new LocalizedText();
+  this.description = (options.description != null) ? options.description : new LocalizedText();
+  this.writeMask = (options.writeMask != null) ? options.writeMask : null;
+  this.userWriteMask = (options.userWriteMask != null) ? options.userWriteMask : null;
 
  }
 

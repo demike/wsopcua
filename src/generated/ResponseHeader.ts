@@ -28,12 +28,12 @@ export class ResponseHeader {
 
  constructor( options?: IResponseHeader) {
   options = options || {};
-  this.timestamp = (options.timestamp !== undefined) ? options.timestamp : null;
-  this.requestHandle = (options.requestHandle !== undefined) ? options.requestHandle : null;
-  this.serviceResult = (options.serviceResult !== undefined) ? options.serviceResult : null;
-  this.serviceDiagnostics = (options.serviceDiagnostics !== undefined) ? options.serviceDiagnostics : new DiagnosticInfo();
-  this.stringTable = (options.stringTable !== undefined) ? options.stringTable : [];
-  this.additionalHeader = (options.additionalHeader !== undefined) ? options.additionalHeader : null;
+  this.timestamp = (options.timestamp != null) ? options.timestamp : null;
+  this.requestHandle = (options.requestHandle != null) ? options.requestHandle : null;
+  this.serviceResult = (options.serviceResult != null) ? options.serviceResult : null;
+  this.serviceDiagnostics = (options.serviceDiagnostics != null) ? options.serviceDiagnostics : new DiagnosticInfo();
+  this.stringTable = (options.stringTable != null) ? options.stringTable : [];
+  this.additionalHeader = (options.additionalHeader != null) ? options.additionalHeader : null;
 
  }
 

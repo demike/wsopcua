@@ -34,14 +34,14 @@ export class VariableAttributes extends NodeAttributes {
  constructor( options?: IVariableAttributes) {
   options = options || {};
   super(options);
-  this.value = (options.value !== undefined) ? options.value : new Variant();
-  this.dataType = (options.dataType !== undefined) ? options.dataType : null;
-  this.valueRank = (options.valueRank !== undefined) ? options.valueRank : null;
-  this.arrayDimensions = (options.arrayDimensions !== undefined) ? options.arrayDimensions : [];
-  this.accessLevel = (options.accessLevel !== undefined) ? options.accessLevel : null;
-  this.userAccessLevel = (options.userAccessLevel !== undefined) ? options.userAccessLevel : null;
-  this.minimumSamplingInterval = (options.minimumSamplingInterval !== undefined) ? options.minimumSamplingInterval : null;
-  this.historizing = (options.historizing !== undefined) ? options.historizing : null;
+  this.value = (options.value != null) ? options.value : new Variant();
+  this.dataType = (options.dataType != null) ? options.dataType : null;
+  this.valueRank = (options.valueRank != null) ? options.valueRank : null;
+  this.arrayDimensions = (options.arrayDimensions != null) ? options.arrayDimensions : [];
+  this.accessLevel = (options.accessLevel != null) ? options.accessLevel : null;
+  this.userAccessLevel = (options.userAccessLevel != null) ? options.userAccessLevel : null;
+  this.minimumSamplingInterval = (options.minimumSamplingInterval != null) ? options.minimumSamplingInterval : null;
+  this.historizing = (options.historizing != null) ? options.historizing : null;
 
  }
 

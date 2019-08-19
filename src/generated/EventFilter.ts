@@ -23,8 +23,8 @@ export class EventFilter extends MonitoringFilter {
  constructor( options?: IEventFilter) {
   options = options || {};
   super();
-  this.selectClauses = (options.selectClauses !== undefined) ? options.selectClauses : [];
-  this.whereClause = (options.whereClause !== undefined) ? options.whereClause : new ContentFilter();
+  this.selectClauses = (options.selectClauses != null) ? options.selectClauses : [];
+  this.whereClause = (options.whereClause != null) ? options.whereClause : new ContentFilter();
 
  }
 

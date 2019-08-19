@@ -29,13 +29,13 @@ export class StructureField {
 
  constructor( options?: IStructureField) {
   options = options || {};
-  this.name = (options.name !== undefined) ? options.name : null;
-  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
-  this.dataType = (options.dataType !== undefined) ? options.dataType : null;
-  this.valueRank = (options.valueRank !== undefined) ? options.valueRank : null;
-  this.arrayDimensions = (options.arrayDimensions !== undefined) ? options.arrayDimensions : [];
-  this.maxStringLength = (options.maxStringLength !== undefined) ? options.maxStringLength : null;
-  this.isOptional = (options.isOptional !== undefined) ? options.isOptional : null;
+  this.name = (options.name != null) ? options.name : null;
+  this.description = (options.description != null) ? options.description : new LocalizedText();
+  this.dataType = (options.dataType != null) ? options.dataType : null;
+  this.valueRank = (options.valueRank != null) ? options.valueRank : null;
+  this.arrayDimensions = (options.arrayDimensions != null) ? options.arrayDimensions : [];
+  this.maxStringLength = (options.maxStringLength != null) ? options.maxStringLength : null;
+  this.isOptional = (options.isOptional != null) ? options.isOptional : null;
 
  }
 

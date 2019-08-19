@@ -30,11 +30,11 @@ export class ReaderGroupDataType extends PubSubGroupDataType {
  constructor( options?: IReaderGroupDataType) {
   options = options || {};
   super(options);
-  this.noOfSecurityKeyServices = (options.noOfSecurityKeyServices !== undefined) ? options.noOfSecurityKeyServices : null;
-  this.noOfGroupProperties = (options.noOfGroupProperties !== undefined) ? options.noOfGroupProperties : null;
-  this.transportSettings = (options.transportSettings !== undefined) ? options.transportSettings : null;
-  this.messageSettings = (options.messageSettings !== undefined) ? options.messageSettings : null;
-  this.dataSetReaders = (options.dataSetReaders !== undefined) ? options.dataSetReaders : [];
+  this.noOfSecurityKeyServices = (options.noOfSecurityKeyServices != null) ? options.noOfSecurityKeyServices : null;
+  this.noOfGroupProperties = (options.noOfGroupProperties != null) ? options.noOfGroupProperties : null;
+  this.transportSettings = (options.transportSettings != null) ? options.transportSettings : null;
+  this.messageSettings = (options.messageSettings != null) ? options.messageSettings : null;
+  this.dataSetReaders = (options.dataSetReaders != null) ? options.dataSetReaders : [];
 
  }
 

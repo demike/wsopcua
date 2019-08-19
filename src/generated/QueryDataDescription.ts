@@ -21,9 +21,9 @@ export class QueryDataDescription {
 
  constructor( options?: IQueryDataDescription) {
   options = options || {};
-  this.relativePath = (options.relativePath !== undefined) ? options.relativePath : new RelativePath();
-  this.attributeId = (options.attributeId !== undefined) ? options.attributeId : null;
-  this.indexRange = (options.indexRange !== undefined) ? options.indexRange : null;
+  this.relativePath = (options.relativePath != null) ? options.relativePath : new RelativePath();
+  this.attributeId = (options.attributeId != null) ? options.attributeId : null;
+  this.indexRange = (options.indexRange != null) ? options.indexRange : null;
 
  }
 

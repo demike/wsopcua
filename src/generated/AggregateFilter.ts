@@ -25,10 +25,10 @@ export class AggregateFilter extends MonitoringFilter {
  constructor( options?: IAggregateFilter) {
   options = options || {};
   super();
-  this.startTime = (options.startTime !== undefined) ? options.startTime : null;
-  this.aggregateType = (options.aggregateType !== undefined) ? options.aggregateType : null;
-  this.processingInterval = (options.processingInterval !== undefined) ? options.processingInterval : null;
-  this.aggregateConfiguration = (options.aggregateConfiguration !== undefined) ? options.aggregateConfiguration : new AggregateConfiguration();
+  this.startTime = (options.startTime != null) ? options.startTime : null;
+  this.aggregateType = (options.aggregateType != null) ? options.aggregateType : null;
+  this.processingInterval = (options.processingInterval != null) ? options.processingInterval : null;
+  this.aggregateConfiguration = (options.aggregateConfiguration != null) ? options.aggregateConfiguration : new AggregateConfiguration();
 
  }
 

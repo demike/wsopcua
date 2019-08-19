@@ -21,9 +21,9 @@ export class RedundantServerDataType {
 
  constructor( options?: IRedundantServerDataType) {
   options = options || {};
-  this.serverId = (options.serverId !== undefined) ? options.serverId : null;
-  this.serviceLevel = (options.serviceLevel !== undefined) ? options.serviceLevel : null;
-  this.serverState = (options.serverState !== undefined) ? options.serverState : null;
+  this.serverId = (options.serverId != null) ? options.serverId : null;
+  this.serviceLevel = (options.serviceLevel != null) ? options.serviceLevel : null;
+  this.serverState = (options.serverState != null) ? options.serverState : null;
 
  }
 

@@ -21,9 +21,9 @@ export class BrowseNextRequest {
 
  constructor( options?: IBrowseNextRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.releaseContinuationPoints = (options.releaseContinuationPoints !== undefined) ? options.releaseContinuationPoints : null;
-  this.continuationPoints = (options.continuationPoints !== undefined) ? options.continuationPoints : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.releaseContinuationPoints = (options.releaseContinuationPoints != null) ? options.releaseContinuationPoints : null;
+  this.continuationPoints = (options.continuationPoints != null) ? options.continuationPoints : [];
 
  }
 

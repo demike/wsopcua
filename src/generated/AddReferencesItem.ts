@@ -27,12 +27,12 @@ export class AddReferencesItem {
 
  constructor( options?: IAddReferencesItem) {
   options = options || {};
-  this.sourceNodeId = (options.sourceNodeId !== undefined) ? options.sourceNodeId : null;
-  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
-  this.isForward = (options.isForward !== undefined) ? options.isForward : null;
-  this.targetServerUri = (options.targetServerUri !== undefined) ? options.targetServerUri : null;
-  this.targetNodeId = (options.targetNodeId !== undefined) ? options.targetNodeId : null;
-  this.targetNodeClass = (options.targetNodeClass !== undefined) ? options.targetNodeClass : null;
+  this.sourceNodeId = (options.sourceNodeId != null) ? options.sourceNodeId : null;
+  this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : null;
+  this.isForward = (options.isForward != null) ? options.isForward : null;
+  this.targetServerUri = (options.targetServerUri != null) ? options.targetServerUri : null;
+  this.targetNodeId = (options.targetNodeId != null) ? options.targetNodeId : null;
+  this.targetNodeClass = (options.targetNodeClass != null) ? options.targetNodeClass : null;
 
  }
 

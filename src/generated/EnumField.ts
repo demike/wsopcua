@@ -19,7 +19,7 @@ export class EnumField extends EnumValueType {
  constructor( options?: IEnumField) {
   options = options || {};
   super(options);
-  this.name = (options.name !== undefined) ? options.name : null;
+  this.name = (options.name != null) ? options.name : null;
 
  }
 

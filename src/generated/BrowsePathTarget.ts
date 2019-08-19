@@ -18,8 +18,8 @@ export class BrowsePathTarget {
 
  constructor( options?: IBrowsePathTarget) {
   options = options || {};
-  this.targetId = (options.targetId !== undefined) ? options.targetId : null;
-  this.remainingPathIndex = (options.remainingPathIndex !== undefined) ? options.remainingPathIndex : null;
+  this.targetId = (options.targetId != null) ? options.targetId : null;
+  this.remainingPathIndex = (options.remainingPathIndex != null) ? options.remainingPathIndex : null;
 
  }
 

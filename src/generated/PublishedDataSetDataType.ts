@@ -28,11 +28,11 @@ export class PublishedDataSetDataType {
 
  constructor( options?: IPublishedDataSetDataType) {
   options = options || {};
-  this.name = (options.name !== undefined) ? options.name : null;
-  this.dataSetFolder = (options.dataSetFolder !== undefined) ? options.dataSetFolder : [];
-  this.dataSetMetaData = (options.dataSetMetaData !== undefined) ? options.dataSetMetaData : new DataSetMetaDataType();
-  this.extensionFields = (options.extensionFields !== undefined) ? options.extensionFields : [];
-  this.dataSetSource = (options.dataSetSource !== undefined) ? options.dataSetSource : null;
+  this.name = (options.name != null) ? options.name : null;
+  this.dataSetFolder = (options.dataSetFolder != null) ? options.dataSetFolder : [];
+  this.dataSetMetaData = (options.dataSetMetaData != null) ? options.dataSetMetaData : new DataSetMetaDataType();
+  this.extensionFields = (options.extensionFields != null) ? options.extensionFields : [];
+  this.dataSetSource = (options.dataSetSource != null) ? options.dataSetSource : null;
 
  }
 

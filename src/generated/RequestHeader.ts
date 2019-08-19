@@ -29,13 +29,13 @@ export class RequestHeader {
 
  constructor( options?: IRequestHeader) {
   options = options || {};
-  this.authenticationToken = (options.authenticationToken !== undefined) ? options.authenticationToken : null;
-  this.timestamp = (options.timestamp !== undefined) ? options.timestamp : null;
-  this.requestHandle = (options.requestHandle !== undefined) ? options.requestHandle : null;
-  this.returnDiagnostics = (options.returnDiagnostics !== undefined) ? options.returnDiagnostics : null;
-  this.auditEntryId = (options.auditEntryId !== undefined) ? options.auditEntryId : null;
-  this.timeoutHint = (options.timeoutHint !== undefined) ? options.timeoutHint : null;
-  this.additionalHeader = (options.additionalHeader !== undefined) ? options.additionalHeader : null;
+  this.authenticationToken = (options.authenticationToken != null) ? options.authenticationToken : null;
+  this.timestamp = (options.timestamp != null) ? options.timestamp : null;
+  this.requestHandle = (options.requestHandle != null) ? options.requestHandle : null;
+  this.returnDiagnostics = (options.returnDiagnostics != null) ? options.returnDiagnostics : null;
+  this.auditEntryId = (options.auditEntryId != null) ? options.auditEntryId : null;
+  this.timeoutHint = (options.timeoutHint != null) ? options.timeoutHint : null;
+  this.additionalHeader = (options.additionalHeader != null) ? options.additionalHeader : null;
 
  }
 

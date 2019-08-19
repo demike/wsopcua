@@ -26,10 +26,10 @@ export class CallMethodResult {
 
  constructor( options?: ICallMethodResult) {
   options = options || {};
-  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
-  this.inputArgumentResults = (options.inputArgumentResults !== undefined) ? options.inputArgumentResults : [];
-  this.inputArgumentDiagnosticInfos = (options.inputArgumentDiagnosticInfos !== undefined) ? options.inputArgumentDiagnosticInfos : [];
-  this.outputArguments = (options.outputArguments !== undefined) ? options.outputArguments : [];
+  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.inputArgumentResults = (options.inputArgumentResults != null) ? options.inputArgumentResults : [];
+  this.inputArgumentDiagnosticInfos = (options.inputArgumentDiagnosticInfos != null) ? options.inputArgumentDiagnosticInfos : [];
+  this.outputArguments = (options.outputArguments != null) ? options.outputArguments : [];
 
  }
 

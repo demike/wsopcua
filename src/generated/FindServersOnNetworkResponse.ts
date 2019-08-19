@@ -23,9 +23,9 @@ export class FindServersOnNetworkResponse {
 
  constructor( options?: IFindServersOnNetworkResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
-  this.lastCounterResetTime = (options.lastCounterResetTime !== undefined) ? options.lastCounterResetTime : null;
-  this.servers = (options.servers !== undefined) ? options.servers : [];
+  this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
+  this.lastCounterResetTime = (options.lastCounterResetTime != null) ? options.lastCounterResetTime : null;
+  this.servers = (options.servers != null) ? options.servers : [];
 
  }
 

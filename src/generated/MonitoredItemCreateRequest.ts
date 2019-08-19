@@ -22,9 +22,9 @@ export class MonitoredItemCreateRequest {
 
  constructor( options?: IMonitoredItemCreateRequest) {
   options = options || {};
-  this.itemToMonitor = (options.itemToMonitor !== undefined) ? options.itemToMonitor : new ReadValueId();
-  this.monitoringMode = (options.monitoringMode !== undefined) ? options.monitoringMode : null;
-  this.requestedParameters = (options.requestedParameters !== undefined) ? options.requestedParameters : new MonitoringParameters();
+  this.itemToMonitor = (options.itemToMonitor != null) ? options.itemToMonitor : new ReadValueId();
+  this.monitoringMode = (options.monitoringMode != null) ? options.monitoringMode : null;
+  this.requestedParameters = (options.requestedParameters != null) ? options.requestedParameters : new MonitoringParameters();
 
  }
 

@@ -19,8 +19,8 @@ export class RepublishResponse {
 
  constructor( options?: IRepublishResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
-  this.notificationMessage = (options.notificationMessage !== undefined) ? options.notificationMessage : new NotificationMessage();
+  this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
+  this.notificationMessage = (options.notificationMessage != null) ? options.notificationMessage : new NotificationMessage();
 
  }
 

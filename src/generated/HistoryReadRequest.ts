@@ -29,11 +29,11 @@ export class HistoryReadRequest {
 
  constructor( options?: IHistoryReadRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.historyReadDetails = (options.historyReadDetails !== undefined) ? options.historyReadDetails : null;
-  this.timestampsToReturn = (options.timestampsToReturn !== undefined) ? options.timestampsToReturn : null;
-  this.releaseContinuationPoints = (options.releaseContinuationPoints !== undefined) ? options.releaseContinuationPoints : null;
-  this.nodesToRead = (options.nodesToRead !== undefined) ? options.nodesToRead : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.historyReadDetails = (options.historyReadDetails != null) ? options.historyReadDetails : null;
+  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : null;
+  this.releaseContinuationPoints = (options.releaseContinuationPoints != null) ? options.releaseContinuationPoints : null;
+  this.nodesToRead = (options.nodesToRead != null) ? options.nodesToRead : [];
 
  }
 

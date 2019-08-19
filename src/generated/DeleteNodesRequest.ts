@@ -21,8 +21,8 @@ export class DeleteNodesRequest {
 
  constructor( options?: IDeleteNodesRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.nodesToDelete = (options.nodesToDelete !== undefined) ? options.nodesToDelete : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.nodesToDelete = (options.nodesToDelete != null) ? options.nodesToDelete : [];
 
  }
 

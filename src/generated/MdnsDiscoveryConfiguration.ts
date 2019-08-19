@@ -20,8 +20,8 @@ export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
  constructor( options?: IMdnsDiscoveryConfiguration) {
   options = options || {};
   super();
-  this.mdnsServerName = (options.mdnsServerName !== undefined) ? options.mdnsServerName : null;
-  this.serverCapabilities = (options.serverCapabilities !== undefined) ? options.serverCapabilities : [];
+  this.mdnsServerName = (options.mdnsServerName != null) ? options.mdnsServerName : null;
+  this.serverCapabilities = (options.serverCapabilities != null) ? options.serverCapabilities : [];
 
  }
 

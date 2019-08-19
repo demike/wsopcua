@@ -31,13 +31,13 @@ export class AddNodesItem {
 
  constructor( options?: IAddNodesItem) {
   options = options || {};
-  this.parentNodeId = (options.parentNodeId !== undefined) ? options.parentNodeId : null;
-  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
-  this.requestedNewNodeId = (options.requestedNewNodeId !== undefined) ? options.requestedNewNodeId : null;
-  this.browseName = (options.browseName !== undefined) ? options.browseName : new QualifiedName();
-  this.nodeClass = (options.nodeClass !== undefined) ? options.nodeClass : null;
-  this.nodeAttributes = (options.nodeAttributes !== undefined) ? options.nodeAttributes : null;
-  this.typeDefinition = (options.typeDefinition !== undefined) ? options.typeDefinition : null;
+  this.parentNodeId = (options.parentNodeId != null) ? options.parentNodeId : null;
+  this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : null;
+  this.requestedNewNodeId = (options.requestedNewNodeId != null) ? options.requestedNewNodeId : null;
+  this.browseName = (options.browseName != null) ? options.browseName : new QualifiedName();
+  this.nodeClass = (options.nodeClass != null) ? options.nodeClass : null;
+  this.nodeAttributes = (options.nodeAttributes != null) ? options.nodeAttributes : null;
+  this.typeDefinition = (options.typeDefinition != null) ? options.typeDefinition : null;
 
  }
 

@@ -22,9 +22,9 @@ export class CallMethodRequest {
 
  constructor( options?: ICallMethodRequest) {
   options = options || {};
-  this.objectId = (options.objectId !== undefined) ? options.objectId : null;
-  this.methodId = (options.methodId !== undefined) ? options.methodId : null;
-  this.inputArguments = (options.inputArguments !== undefined) ? options.inputArguments : [];
+  this.objectId = (options.objectId != null) ? options.objectId : null;
+  this.methodId = (options.methodId != null) ? options.methodId : null;
+  this.inputArguments = (options.inputArguments != null) ? options.inputArguments : [];
 
  }
 

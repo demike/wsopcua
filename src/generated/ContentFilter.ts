@@ -18,7 +18,7 @@ export class ContentFilter {
 
  constructor( options?: IContentFilter) {
   options = options || {};
-  this.elements = (options.elements !== undefined) ? options.elements : [];
+  this.elements = (options.elements != null) ? options.elements : [];
 
  }
 

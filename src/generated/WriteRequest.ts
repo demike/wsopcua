@@ -21,8 +21,8 @@ export class WriteRequest {
 
  constructor( options?: IWriteRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.nodesToWrite = (options.nodesToWrite !== undefined) ? options.nodesToWrite : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.nodesToWrite = (options.nodesToWrite != null) ? options.nodesToWrite : [];
 
  }
 

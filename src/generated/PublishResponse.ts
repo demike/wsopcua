@@ -32,13 +32,13 @@ export class PublishResponse {
 
  constructor( options?: IPublishResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
-  this.subscriptionId = (options.subscriptionId !== undefined) ? options.subscriptionId : null;
-  this.availableSequenceNumbers = (options.availableSequenceNumbers !== undefined) ? options.availableSequenceNumbers : [];
-  this.moreNotifications = (options.moreNotifications !== undefined) ? options.moreNotifications : null;
-  this.notificationMessage = (options.notificationMessage !== undefined) ? options.notificationMessage : new NotificationMessage();
-  this.results = (options.results !== undefined) ? options.results : [];
-  this.diagnosticInfos = (options.diagnosticInfos !== undefined) ? options.diagnosticInfos : [];
+  this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
+  this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : null;
+  this.availableSequenceNumbers = (options.availableSequenceNumbers != null) ? options.availableSequenceNumbers : [];
+  this.moreNotifications = (options.moreNotifications != null) ? options.moreNotifications : null;
+  this.notificationMessage = (options.notificationMessage != null) ? options.notificationMessage : new NotificationMessage();
+  this.results = (options.results != null) ? options.results : [];
+  this.diagnosticInfos = (options.diagnosticInfos != null) ? options.diagnosticInfos : [];
 
  }
 

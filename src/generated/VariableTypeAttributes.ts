@@ -28,11 +28,11 @@ export class VariableTypeAttributes extends NodeAttributes {
  constructor( options?: IVariableTypeAttributes) {
   options = options || {};
   super(options);
-  this.value = (options.value !== undefined) ? options.value : new Variant();
-  this.dataType = (options.dataType !== undefined) ? options.dataType : null;
-  this.valueRank = (options.valueRank !== undefined) ? options.valueRank : null;
-  this.arrayDimensions = (options.arrayDimensions !== undefined) ? options.arrayDimensions : [];
-  this.isAbstract = (options.isAbstract !== undefined) ? options.isAbstract : null;
+  this.value = (options.value != null) ? options.value : new Variant();
+  this.dataType = (options.dataType != null) ? options.dataType : null;
+  this.valueRank = (options.valueRank != null) ? options.valueRank : null;
+  this.arrayDimensions = (options.arrayDimensions != null) ? options.arrayDimensions : [];
+  this.isAbstract = (options.isAbstract != null) ? options.isAbstract : null;
 
  }
 

@@ -23,9 +23,9 @@ export class DeleteRawModifiedDetails extends HistoryUpdateDetails {
  constructor( options?: IDeleteRawModifiedDetails) {
   options = options || {};
   super(options);
-  this.isDeleteModified = (options.isDeleteModified !== undefined) ? options.isDeleteModified : null;
-  this.startTime = (options.startTime !== undefined) ? options.startTime : null;
-  this.endTime = (options.endTime !== undefined) ? options.endTime : null;
+  this.isDeleteModified = (options.isDeleteModified != null) ? options.isDeleteModified : null;
+  this.startTime = (options.startTime != null) ? options.startTime : null;
+  this.endTime = (options.endTime != null) ? options.endTime : null;
 
  }
 

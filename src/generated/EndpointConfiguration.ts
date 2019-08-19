@@ -32,15 +32,15 @@ export class EndpointConfiguration {
 
  constructor( options?: IEndpointConfiguration) {
   options = options || {};
-  this.operationTimeout = (options.operationTimeout !== undefined) ? options.operationTimeout : null;
-  this.useBinaryEncoding = (options.useBinaryEncoding !== undefined) ? options.useBinaryEncoding : null;
-  this.maxStringLength = (options.maxStringLength !== undefined) ? options.maxStringLength : null;
-  this.maxByteStringLength = (options.maxByteStringLength !== undefined) ? options.maxByteStringLength : null;
-  this.maxArrayLength = (options.maxArrayLength !== undefined) ? options.maxArrayLength : null;
-  this.maxMessageSize = (options.maxMessageSize !== undefined) ? options.maxMessageSize : null;
-  this.maxBufferSize = (options.maxBufferSize !== undefined) ? options.maxBufferSize : null;
-  this.channelLifetime = (options.channelLifetime !== undefined) ? options.channelLifetime : null;
-  this.securityTokenLifetime = (options.securityTokenLifetime !== undefined) ? options.securityTokenLifetime : null;
+  this.operationTimeout = (options.operationTimeout != null) ? options.operationTimeout : null;
+  this.useBinaryEncoding = (options.useBinaryEncoding != null) ? options.useBinaryEncoding : null;
+  this.maxStringLength = (options.maxStringLength != null) ? options.maxStringLength : null;
+  this.maxByteStringLength = (options.maxByteStringLength != null) ? options.maxByteStringLength : null;
+  this.maxArrayLength = (options.maxArrayLength != null) ? options.maxArrayLength : null;
+  this.maxMessageSize = (options.maxMessageSize != null) ? options.maxMessageSize : null;
+  this.maxBufferSize = (options.maxBufferSize != null) ? options.maxBufferSize : null;
+  this.channelLifetime = (options.channelLifetime != null) ? options.channelLifetime : null;
+  this.securityTokenLifetime = (options.securityTokenLifetime != null) ? options.securityTokenLifetime : null;
 
  }
 

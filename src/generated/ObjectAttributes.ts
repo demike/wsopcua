@@ -19,7 +19,7 @@ export class ObjectAttributes extends NodeAttributes {
  constructor( options?: IObjectAttributes) {
   options = options || {};
   super(options);
-  this.eventNotifier = (options.eventNotifier !== undefined) ? options.eventNotifier : null;
+  this.eventNotifier = (options.eventNotifier != null) ? options.eventNotifier : null;
 
  }
 

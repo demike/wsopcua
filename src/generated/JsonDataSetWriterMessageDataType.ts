@@ -18,7 +18,7 @@ export class JsonDataSetWriterMessageDataType extends DataSetWriterMessageDataTy
  constructor( options?: IJsonDataSetWriterMessageDataType) {
   options = options || {};
   super();
-  this.dataSetMessageContentMask = (options.dataSetMessageContentMask !== undefined) ? options.dataSetMessageContentMask : null;
+  this.dataSetMessageContentMask = (options.dataSetMessageContentMask != null) ? options.dataSetMessageContentMask : null;
 
  }
 

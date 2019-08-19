@@ -28,13 +28,13 @@ export class DiagnosticInfo {
 
  constructor( options?: IDiagnosticInfo) {
   options = options || {};
-  this.symbolicId = (options.symbolicId !== undefined) ? options.symbolicId : null;
-  this.namespaceURI = (options.namespaceURI !== undefined) ? options.namespaceURI : null;
-  this.locale = (options.locale !== undefined) ? options.locale : null;
-  this.localizedText = (options.localizedText !== undefined) ? options.localizedText : null;
-  this.additionalInfo = (options.additionalInfo !== undefined) ? options.additionalInfo : null;
-  this.innerStatusCode = (options.innerStatusCode !== undefined) ? options.innerStatusCode : null;
-  this.innerDiagnosticInfo = (options.innerDiagnosticInfo !== undefined) ? options.innerDiagnosticInfo : null;
+  this.symbolicId = (options.symbolicId != null) ? options.symbolicId : null;
+  this.namespaceURI = (options.namespaceURI != null) ? options.namespaceURI : null;
+  this.locale = (options.locale != null) ? options.locale : null;
+  this.localizedText = (options.localizedText != null) ? options.localizedText : null;
+  this.additionalInfo = (options.additionalInfo != null) ? options.additionalInfo : null;
+  this.innerStatusCode = (options.innerStatusCode != null) ? options.innerStatusCode : null;
+  this.innerDiagnosticInfo = (options.innerDiagnosticInfo != null) ? options.innerDiagnosticInfo : null;
 
  }
 

@@ -18,7 +18,7 @@ export class ElementOperand extends FilterOperand {
  constructor( options?: IElementOperand) {
   options = options || {};
   super();
-  this.index = (options.index !== undefined) ? options.index : null;
+  this.index = (options.index != null) ? options.index : null;
 
  }
 

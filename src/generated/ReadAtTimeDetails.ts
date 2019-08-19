@@ -20,8 +20,8 @@ export class ReadAtTimeDetails extends HistoryReadDetails {
  constructor( options?: IReadAtTimeDetails) {
   options = options || {};
   super();
-  this.reqTimes = (options.reqTimes !== undefined) ? options.reqTimes : [];
-  this.useSimpleBounds = (options.useSimpleBounds !== undefined) ? options.useSimpleBounds : null;
+  this.reqTimes = (options.reqTimes != null) ? options.reqTimes : [];
+  this.useSimpleBounds = (options.useSimpleBounds != null) ? options.useSimpleBounds : null;
 
  }
 

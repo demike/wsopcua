@@ -22,10 +22,10 @@ export class SamplingIntervalDiagnosticsDataType {
 
  constructor( options?: ISamplingIntervalDiagnosticsDataType) {
   options = options || {};
-  this.samplingInterval = (options.samplingInterval !== undefined) ? options.samplingInterval : null;
-  this.monitoredItemCount = (options.monitoredItemCount !== undefined) ? options.monitoredItemCount : null;
-  this.maxMonitoredItemCount = (options.maxMonitoredItemCount !== undefined) ? options.maxMonitoredItemCount : null;
-  this.disabledMonitoredItemCount = (options.disabledMonitoredItemCount !== undefined) ? options.disabledMonitoredItemCount : null;
+  this.samplingInterval = (options.samplingInterval != null) ? options.samplingInterval : null;
+  this.monitoredItemCount = (options.monitoredItemCount != null) ? options.monitoredItemCount : null;
+  this.maxMonitoredItemCount = (options.maxMonitoredItemCount != null) ? options.maxMonitoredItemCount : null;
+  this.disabledMonitoredItemCount = (options.disabledMonitoredItemCount != null) ? options.disabledMonitoredItemCount : null;
 
  }
 

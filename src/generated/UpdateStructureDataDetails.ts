@@ -24,8 +24,8 @@ export class UpdateStructureDataDetails extends HistoryUpdateDetails {
  constructor( options?: IUpdateStructureDataDetails) {
   options = options || {};
   super(options);
-  this.performInsertReplace = (options.performInsertReplace !== undefined) ? options.performInsertReplace : null;
-  this.updateValues = (options.updateValues !== undefined) ? options.updateValues : [];
+  this.performInsertReplace = (options.performInsertReplace != null) ? options.performInsertReplace : null;
+  this.updateValues = (options.updateValues != null) ? options.updateValues : [];
 
  }
 

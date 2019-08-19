@@ -21,9 +21,9 @@ export class ModificationInfo {
 
  constructor( options?: IModificationInfo) {
   options = options || {};
-  this.modificationTime = (options.modificationTime !== undefined) ? options.modificationTime : null;
-  this.updateType = (options.updateType !== undefined) ? options.updateType : null;
-  this.userName = (options.userName !== undefined) ? options.userName : null;
+  this.modificationTime = (options.modificationTime != null) ? options.modificationTime : null;
+  this.updateType = (options.updateType != null) ? options.updateType : null;
+  this.userName = (options.userName != null) ? options.userName : null;
 
  }
 

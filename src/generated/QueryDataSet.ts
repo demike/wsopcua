@@ -22,9 +22,9 @@ export class QueryDataSet {
 
  constructor( options?: IQueryDataSet) {
   options = options || {};
-  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
-  this.typeDefinitionNode = (options.typeDefinitionNode !== undefined) ? options.typeDefinitionNode : null;
-  this.values = (options.values !== undefined) ? options.values : [];
+  this.nodeId = (options.nodeId != null) ? options.nodeId : null;
+  this.typeDefinitionNode = (options.typeDefinitionNode != null) ? options.typeDefinitionNode : null;
+  this.values = (options.values != null) ? options.values : [];
 
  }
 

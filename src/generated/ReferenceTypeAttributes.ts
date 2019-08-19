@@ -24,9 +24,9 @@ export class ReferenceTypeAttributes extends NodeAttributes {
  constructor( options?: IReferenceTypeAttributes) {
   options = options || {};
   super(options);
-  this.isAbstract = (options.isAbstract !== undefined) ? options.isAbstract : null;
-  this.symmetric = (options.symmetric !== undefined) ? options.symmetric : null;
-  this.inverseName = (options.inverseName !== undefined) ? options.inverseName : new LocalizedText();
+  this.isAbstract = (options.isAbstract != null) ? options.isAbstract : null;
+  this.symmetric = (options.symmetric != null) ? options.symmetric : null;
+  this.inverseName = (options.inverseName != null) ? options.inverseName : new LocalizedText();
 
  }
 

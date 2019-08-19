@@ -26,11 +26,11 @@ export class ReadRawModifiedDetails extends HistoryReadDetails {
  constructor( options?: IReadRawModifiedDetails) {
   options = options || {};
   super();
-  this.isReadModified = (options.isReadModified !== undefined) ? options.isReadModified : null;
-  this.startTime = (options.startTime !== undefined) ? options.startTime : null;
-  this.endTime = (options.endTime !== undefined) ? options.endTime : null;
-  this.numValuesPerNode = (options.numValuesPerNode !== undefined) ? options.numValuesPerNode : null;
-  this.returnBounds = (options.returnBounds !== undefined) ? options.returnBounds : null;
+  this.isReadModified = (options.isReadModified != null) ? options.isReadModified : null;
+  this.startTime = (options.startTime != null) ? options.startTime : null;
+  this.endTime = (options.endTime != null) ? options.endTime : null;
+  this.numValuesPerNode = (options.numValuesPerNode != null) ? options.numValuesPerNode : null;
+  this.returnBounds = (options.returnBounds != null) ? options.returnBounds : null;
 
  }
 

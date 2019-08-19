@@ -25,10 +25,10 @@ export class StructureDefinition {
 
  constructor( options?: IStructureDefinition) {
   options = options || {};
-  this.defaultEncodingId = (options.defaultEncodingId !== undefined) ? options.defaultEncodingId : null;
-  this.baseDataType = (options.baseDataType !== undefined) ? options.baseDataType : null;
-  this.structureType = (options.structureType !== undefined) ? options.structureType : null;
-  this.fields = (options.fields !== undefined) ? options.fields : [];
+  this.defaultEncodingId = (options.defaultEncodingId != null) ? options.defaultEncodingId : null;
+  this.baseDataType = (options.baseDataType != null) ? options.baseDataType : null;
+  this.structureType = (options.structureType != null) ? options.structureType : null;
+  this.fields = (options.fields != null) ? options.fields : [];
 
  }
 

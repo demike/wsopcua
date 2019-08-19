@@ -36,15 +36,15 @@ export class DataSetWriterDataType {
 
  constructor( options?: IDataSetWriterDataType) {
   options = options || {};
-  this.name = (options.name !== undefined) ? options.name : null;
-  this.enabled = (options.enabled !== undefined) ? options.enabled : null;
-  this.dataSetWriterId = (options.dataSetWriterId !== undefined) ? options.dataSetWriterId : null;
-  this.dataSetFieldContentMask = (options.dataSetFieldContentMask !== undefined) ? options.dataSetFieldContentMask : null;
-  this.keyFrameCount = (options.keyFrameCount !== undefined) ? options.keyFrameCount : null;
-  this.dataSetName = (options.dataSetName !== undefined) ? options.dataSetName : null;
-  this.dataSetWriterProperties = (options.dataSetWriterProperties !== undefined) ? options.dataSetWriterProperties : [];
-  this.transportSettings = (options.transportSettings !== undefined) ? options.transportSettings : null;
-  this.messageSettings = (options.messageSettings !== undefined) ? options.messageSettings : null;
+  this.name = (options.name != null) ? options.name : null;
+  this.enabled = (options.enabled != null) ? options.enabled : null;
+  this.dataSetWriterId = (options.dataSetWriterId != null) ? options.dataSetWriterId : null;
+  this.dataSetFieldContentMask = (options.dataSetFieldContentMask != null) ? options.dataSetFieldContentMask : null;
+  this.keyFrameCount = (options.keyFrameCount != null) ? options.keyFrameCount : null;
+  this.dataSetName = (options.dataSetName != null) ? options.dataSetName : null;
+  this.dataSetWriterProperties = (options.dataSetWriterProperties != null) ? options.dataSetWriterProperties : [];
+  this.transportSettings = (options.transportSettings != null) ? options.transportSettings : null;
+  this.messageSettings = (options.messageSettings != null) ? options.messageSettings : null;
 
  }
 

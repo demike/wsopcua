@@ -29,12 +29,12 @@ export class OpenSecureChannelRequest {
 
  constructor( options?: IOpenSecureChannelRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.clientProtocolVersion = (options.clientProtocolVersion !== undefined) ? options.clientProtocolVersion : null;
-  this.requestType = (options.requestType !== undefined) ? options.requestType : null;
-  this.securityMode = (options.securityMode !== undefined) ? options.securityMode : null;
-  this.clientNonce = (options.clientNonce !== undefined) ? options.clientNonce : null;
-  this.requestedLifetime = (options.requestedLifetime !== undefined) ? options.requestedLifetime : null;
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.clientProtocolVersion = (options.clientProtocolVersion != null) ? options.clientProtocolVersion : null;
+  this.requestType = (options.requestType != null) ? options.requestType : null;
+  this.securityMode = (options.securityMode != null) ? options.securityMode : null;
+  this.clientNonce = (options.clientNonce != null) ? options.clientNonce : null;
+  this.requestedLifetime = (options.requestedLifetime != null) ? options.requestedLifetime : null;
 
  }
 

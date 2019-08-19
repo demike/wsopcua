@@ -21,8 +21,8 @@ export class JsonDataSetReaderMessageDataType extends DataSetReaderMessageDataTy
  constructor( options?: IJsonDataSetReaderMessageDataType) {
   options = options || {};
   super();
-  this.networkMessageContentMask = (options.networkMessageContentMask !== undefined) ? options.networkMessageContentMask : null;
-  this.dataSetMessageContentMask = (options.dataSetMessageContentMask !== undefined) ? options.dataSetMessageContentMask : null;
+  this.networkMessageContentMask = (options.networkMessageContentMask != null) ? options.networkMessageContentMask : null;
+  this.dataSetMessageContentMask = (options.dataSetMessageContentMask != null) ? options.dataSetMessageContentMask : null;
 
  }
 

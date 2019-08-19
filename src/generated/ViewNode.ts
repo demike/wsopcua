@@ -50,19 +50,19 @@ export class ViewNode extends InstanceNode {
  constructor( options?: IViewNode) {
   options = options || {};
   super(options);
-  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
-  this.nodeClass = (options.nodeClass !== undefined) ? options.nodeClass : null;
-  this.browseName = (options.browseName !== undefined) ? options.browseName : new QualifiedName();
-  this.displayName = (options.displayName !== undefined) ? options.displayName : new LocalizedText();
-  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
-  this.writeMask = (options.writeMask !== undefined) ? options.writeMask : null;
-  this.userWriteMask = (options.userWriteMask !== undefined) ? options.userWriteMask : null;
-  this.rolePermissions = (options.rolePermissions !== undefined) ? options.rolePermissions : [];
-  this.userRolePermissions = (options.userRolePermissions !== undefined) ? options.userRolePermissions : [];
-  this.accessRestrictions = (options.accessRestrictions !== undefined) ? options.accessRestrictions : null;
-  this.references = (options.references !== undefined) ? options.references : [];
-  this.containsNoLoops = (options.containsNoLoops !== undefined) ? options.containsNoLoops : null;
-  this.eventNotifier = (options.eventNotifier !== undefined) ? options.eventNotifier : null;
+  this.nodeId = (options.nodeId != null) ? options.nodeId : null;
+  this.nodeClass = (options.nodeClass != null) ? options.nodeClass : null;
+  this.browseName = (options.browseName != null) ? options.browseName : new QualifiedName();
+  this.displayName = (options.displayName != null) ? options.displayName : new LocalizedText();
+  this.description = (options.description != null) ? options.description : new LocalizedText();
+  this.writeMask = (options.writeMask != null) ? options.writeMask : null;
+  this.userWriteMask = (options.userWriteMask != null) ? options.userWriteMask : null;
+  this.rolePermissions = (options.rolePermissions != null) ? options.rolePermissions : [];
+  this.userRolePermissions = (options.userRolePermissions != null) ? options.userRolePermissions : [];
+  this.accessRestrictions = (options.accessRestrictions != null) ? options.accessRestrictions : null;
+  this.references = (options.references != null) ? options.references : [];
+  this.containsNoLoops = (options.containsNoLoops != null) ? options.containsNoLoops : null;
+  this.eventNotifier = (options.eventNotifier != null) ? options.eventNotifier : null;
 
  }
 

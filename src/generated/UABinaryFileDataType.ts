@@ -34,13 +34,13 @@ export class UABinaryFileDataType extends DataTypeSchemaHeader {
  constructor( options?: IUABinaryFileDataType) {
   options = options || {};
   super(options);
-  this.noOfNamespaces = (options.noOfNamespaces !== undefined) ? options.noOfNamespaces : null;
-  this.noOfStructureDataTypes = (options.noOfStructureDataTypes !== undefined) ? options.noOfStructureDataTypes : null;
-  this.noOfEnumDataTypes = (options.noOfEnumDataTypes !== undefined) ? options.noOfEnumDataTypes : null;
-  this.noOfSimpleDataTypes = (options.noOfSimpleDataTypes !== undefined) ? options.noOfSimpleDataTypes : null;
-  this.schemaLocation = (options.schemaLocation !== undefined) ? options.schemaLocation : null;
-  this.fileHeader = (options.fileHeader !== undefined) ? options.fileHeader : [];
-  this.body = (options.body !== undefined) ? options.body : new Variant();
+  this.noOfNamespaces = (options.noOfNamespaces != null) ? options.noOfNamespaces : null;
+  this.noOfStructureDataTypes = (options.noOfStructureDataTypes != null) ? options.noOfStructureDataTypes : null;
+  this.noOfEnumDataTypes = (options.noOfEnumDataTypes != null) ? options.noOfEnumDataTypes : null;
+  this.noOfSimpleDataTypes = (options.noOfSimpleDataTypes != null) ? options.noOfSimpleDataTypes : null;
+  this.schemaLocation = (options.schemaLocation != null) ? options.schemaLocation : null;
+  this.fileHeader = (options.fileHeader != null) ? options.fileHeader : [];
+  this.body = (options.body != null) ? options.body : new Variant();
 
  }
 

@@ -29,13 +29,13 @@ export class ModifySubscriptionRequest {
 
  constructor( options?: IModifySubscriptionRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.subscriptionId = (options.subscriptionId !== undefined) ? options.subscriptionId : null;
-  this.requestedPublishingInterval = (options.requestedPublishingInterval !== undefined) ? options.requestedPublishingInterval : null;
-  this.requestedLifetimeCount = (options.requestedLifetimeCount !== undefined) ? options.requestedLifetimeCount : null;
-  this.requestedMaxKeepAliveCount = (options.requestedMaxKeepAliveCount !== undefined) ? options.requestedMaxKeepAliveCount : null;
-  this.maxNotificationsPerPublish = (options.maxNotificationsPerPublish !== undefined) ? options.maxNotificationsPerPublish : null;
-  this.priority = (options.priority !== undefined) ? options.priority : null;
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : null;
+  this.requestedPublishingInterval = (options.requestedPublishingInterval != null) ? options.requestedPublishingInterval : null;
+  this.requestedLifetimeCount = (options.requestedLifetimeCount != null) ? options.requestedLifetimeCount : null;
+  this.requestedMaxKeepAliveCount = (options.requestedMaxKeepAliveCount != null) ? options.requestedMaxKeepAliveCount : null;
+  this.maxNotificationsPerPublish = (options.maxNotificationsPerPublish != null) ? options.maxNotificationsPerPublish : null;
+  this.priority = (options.priority != null) ? options.priority : null;
 
  }
 

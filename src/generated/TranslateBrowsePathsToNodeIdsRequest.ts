@@ -21,8 +21,8 @@ export class TranslateBrowsePathsToNodeIdsRequest {
 
  constructor( options?: ITranslateBrowsePathsToNodeIdsRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.browsePaths = (options.browsePaths !== undefined) ? options.browsePaths : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.browsePaths = (options.browsePaths != null) ? options.browsePaths : [];
 
  }
 

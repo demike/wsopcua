@@ -42,17 +42,17 @@ export class WriterGroupDataType extends PubSubGroupDataType {
  constructor( options?: IWriterGroupDataType) {
   options = options || {};
   super(options);
-  this.noOfSecurityKeyServices = (options.noOfSecurityKeyServices !== undefined) ? options.noOfSecurityKeyServices : null;
-  this.noOfGroupProperties = (options.noOfGroupProperties !== undefined) ? options.noOfGroupProperties : null;
-  this.writerGroupId = (options.writerGroupId !== undefined) ? options.writerGroupId : null;
-  this.publishingInterval = (options.publishingInterval !== undefined) ? options.publishingInterval : null;
-  this.keepAliveTime = (options.keepAliveTime !== undefined) ? options.keepAliveTime : null;
-  this.priority = (options.priority !== undefined) ? options.priority : null;
-  this.localeIds = (options.localeIds !== undefined) ? options.localeIds : [];
-  this.headerLayoutUri = (options.headerLayoutUri !== undefined) ? options.headerLayoutUri : null;
-  this.transportSettings = (options.transportSettings !== undefined) ? options.transportSettings : null;
-  this.messageSettings = (options.messageSettings !== undefined) ? options.messageSettings : null;
-  this.dataSetWriters = (options.dataSetWriters !== undefined) ? options.dataSetWriters : [];
+  this.noOfSecurityKeyServices = (options.noOfSecurityKeyServices != null) ? options.noOfSecurityKeyServices : null;
+  this.noOfGroupProperties = (options.noOfGroupProperties != null) ? options.noOfGroupProperties : null;
+  this.writerGroupId = (options.writerGroupId != null) ? options.writerGroupId : null;
+  this.publishingInterval = (options.publishingInterval != null) ? options.publishingInterval : null;
+  this.keepAliveTime = (options.keepAliveTime != null) ? options.keepAliveTime : null;
+  this.priority = (options.priority != null) ? options.priority : null;
+  this.localeIds = (options.localeIds != null) ? options.localeIds : [];
+  this.headerLayoutUri = (options.headerLayoutUri != null) ? options.headerLayoutUri : null;
+  this.transportSettings = (options.transportSettings != null) ? options.transportSettings : null;
+  this.messageSettings = (options.messageSettings != null) ? options.messageSettings : null;
+  this.dataSetWriters = (options.dataSetWriters != null) ? options.dataSetWriters : [];
 
  }
 

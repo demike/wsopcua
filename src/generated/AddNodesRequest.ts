@@ -21,8 +21,8 @@ export class AddNodesRequest {
 
  constructor( options?: IAddNodesRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.nodesToAdd = (options.nodesToAdd !== undefined) ? options.nodesToAdd : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.nodesToAdd = (options.nodesToAdd != null) ? options.nodesToAdd : [];
 
  }
 

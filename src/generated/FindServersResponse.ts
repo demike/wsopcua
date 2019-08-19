@@ -21,8 +21,8 @@ export class FindServersResponse {
 
  constructor( options?: IFindServersResponse) {
   options = options || {};
-  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
-  this.servers = (options.servers !== undefined) ? options.servers : [];
+  this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
+  this.servers = (options.servers != null) ? options.servers : [];
 
  }
 

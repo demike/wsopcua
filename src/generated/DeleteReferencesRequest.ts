@@ -21,8 +21,8 @@ export class DeleteReferencesRequest {
 
  constructor( options?: IDeleteReferencesRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.referencesToDelete = (options.referencesToDelete !== undefined) ? options.referencesToDelete : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.referencesToDelete = (options.referencesToDelete != null) ? options.referencesToDelete : [];
 
  }
 

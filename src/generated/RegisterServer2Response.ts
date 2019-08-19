@@ -23,9 +23,9 @@ export class RegisterServer2Response {
 
  constructor( options?: IRegisterServer2Response) {
   options = options || {};
-  this.responseHeader = (options.responseHeader !== undefined) ? options.responseHeader : new ResponseHeader();
-  this.configurationResults = (options.configurationResults !== undefined) ? options.configurationResults : [];
-  this.diagnosticInfos = (options.diagnosticInfos !== undefined) ? options.diagnosticInfos : [];
+  this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
+  this.configurationResults = (options.configurationResults != null) ? options.configurationResults : [];
+  this.diagnosticInfos = (options.diagnosticInfos != null) ? options.diagnosticInfos : [];
 
  }
 

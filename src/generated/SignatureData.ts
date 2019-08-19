@@ -18,8 +18,8 @@ export class SignatureData {
 
  constructor( options?: ISignatureData) {
   options = options || {};
-  this.algorithm = (options.algorithm !== undefined) ? options.algorithm : null;
-  this.signature = (options.signature !== undefined) ? options.signature : null;
+  this.algorithm = (options.algorithm != null) ? options.algorithm : null;
+  this.signature = (options.signature != null) ? options.signature : null;
 
  }
 

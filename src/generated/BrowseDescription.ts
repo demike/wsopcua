@@ -27,12 +27,12 @@ export class BrowseDescription {
 
  constructor( options?: IBrowseDescription) {
   options = options || {};
-  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
-  this.browseDirection = (options.browseDirection !== undefined) ? options.browseDirection : null;
-  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
-  this.includeSubtypes = (options.includeSubtypes !== undefined) ? options.includeSubtypes : null;
-  this.nodeClassMask = (options.nodeClassMask !== undefined) ? options.nodeClassMask : null;
-  this.resultMask = (options.resultMask !== undefined) ? options.resultMask : null;
+  this.nodeId = (options.nodeId != null) ? options.nodeId : null;
+  this.browseDirection = (options.browseDirection != null) ? options.browseDirection : null;
+  this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : null;
+  this.includeSubtypes = (options.includeSubtypes != null) ? options.includeSubtypes : null;
+  this.nodeClassMask = (options.nodeClassMask != null) ? options.nodeClassMask : null;
+  this.resultMask = (options.resultMask != null) ? options.resultMask : null;
 
  }
 

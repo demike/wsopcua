@@ -34,14 +34,14 @@ export class EndpointDescription {
 
  constructor( options?: IEndpointDescription) {
   options = options || {};
-  this.endpointUrl = (options.endpointUrl !== undefined) ? options.endpointUrl : null;
-  this.server = (options.server !== undefined) ? options.server : new ApplicationDescription();
-  this.serverCertificate = (options.serverCertificate !== undefined) ? options.serverCertificate : null;
-  this.securityMode = (options.securityMode !== undefined) ? options.securityMode : null;
-  this.securityPolicyUri = (options.securityPolicyUri !== undefined) ? options.securityPolicyUri : null;
-  this.userIdentityTokens = (options.userIdentityTokens !== undefined) ? options.userIdentityTokens : [];
-  this.transportProfileUri = (options.transportProfileUri !== undefined) ? options.transportProfileUri : null;
-  this.securityLevel = (options.securityLevel !== undefined) ? options.securityLevel : null;
+  this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;
+  this.server = (options.server != null) ? options.server : new ApplicationDescription();
+  this.serverCertificate = (options.serverCertificate != null) ? options.serverCertificate : null;
+  this.securityMode = (options.securityMode != null) ? options.securityMode : null;
+  this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;
+  this.userIdentityTokens = (options.userIdentityTokens != null) ? options.userIdentityTokens : [];
+  this.transportProfileUri = (options.transportProfileUri != null) ? options.transportProfileUri : null;
+  this.securityLevel = (options.securityLevel != null) ? options.securityLevel : null;
 
  }
 

@@ -23,10 +23,10 @@ export class EndpointType {
 
  constructor( options?: IEndpointType) {
   options = options || {};
-  this.endpointUrl = (options.endpointUrl !== undefined) ? options.endpointUrl : null;
-  this.securityMode = (options.securityMode !== undefined) ? options.securityMode : null;
-  this.securityPolicyUri = (options.securityPolicyUri !== undefined) ? options.securityPolicyUri : null;
-  this.transportProfileUri = (options.transportProfileUri !== undefined) ? options.transportProfileUri : null;
+  this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;
+  this.securityMode = (options.securityMode != null) ? options.securityMode : null;
+  this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;
+  this.transportProfileUri = (options.transportProfileUri != null) ? options.transportProfileUri : null;
 
  }
 

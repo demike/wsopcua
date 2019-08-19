@@ -21,8 +21,8 @@ export class ThreeDFrame extends Frame {
  constructor( options?: IThreeDFrame) {
   options = options || {};
   super();
-  this.cartesianCoordinates = (options.cartesianCoordinates !== undefined) ? options.cartesianCoordinates : new ThreeDCartesianCoordinates();
-  this.orientation = (options.orientation !== undefined) ? options.orientation : new ThreeDOrientation();
+  this.cartesianCoordinates = (options.cartesianCoordinates != null) ? options.cartesianCoordinates : new ThreeDCartesianCoordinates();
+  this.orientation = (options.orientation != null) ? options.orientation : new ThreeDOrientation();
 
  }
 

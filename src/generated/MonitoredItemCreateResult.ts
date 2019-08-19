@@ -25,11 +25,11 @@ export class MonitoredItemCreateResult {
 
  constructor( options?: IMonitoredItemCreateResult) {
   options = options || {};
-  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
-  this.monitoredItemId = (options.monitoredItemId !== undefined) ? options.monitoredItemId : null;
-  this.revisedSamplingInterval = (options.revisedSamplingInterval !== undefined) ? options.revisedSamplingInterval : null;
-  this.revisedQueueSize = (options.revisedQueueSize !== undefined) ? options.revisedQueueSize : null;
-  this.filterResult = (options.filterResult !== undefined) ? options.filterResult : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.monitoredItemId = (options.monitoredItemId != null) ? options.monitoredItemId : null;
+  this.revisedSamplingInterval = (options.revisedSamplingInterval != null) ? options.revisedSamplingInterval : null;
+  this.revisedQueueSize = (options.revisedQueueSize != null) ? options.revisedQueueSize : null;
+  this.filterResult = (options.filterResult != null) ? options.filterResult : null;
 
  }
 

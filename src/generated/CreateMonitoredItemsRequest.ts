@@ -26,10 +26,10 @@ export class CreateMonitoredItemsRequest {
 
  constructor( options?: ICreateMonitoredItemsRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.subscriptionId = (options.subscriptionId !== undefined) ? options.subscriptionId : null;
-  this.timestampsToReturn = (options.timestampsToReturn !== undefined) ? options.timestampsToReturn : null;
-  this.itemsToCreate = (options.itemsToCreate !== undefined) ? options.itemsToCreate : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : null;
+  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : null;
+  this.itemsToCreate = (options.itemsToCreate != null) ? options.itemsToCreate : [];
 
  }
 

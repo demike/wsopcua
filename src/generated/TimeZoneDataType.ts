@@ -18,8 +18,8 @@ export class TimeZoneDataType {
 
  constructor( options?: ITimeZoneDataType) {
   options = options || {};
-  this.offset = (options.offset !== undefined) ? options.offset : null;
-  this.daylightSavingInOffset = (options.daylightSavingInOffset !== undefined) ? options.daylightSavingInOffset : null;
+  this.offset = (options.offset != null) ? options.offset : null;
+  this.daylightSavingInOffset = (options.daylightSavingInOffset != null) ? options.daylightSavingInOffset : null;
 
  }
 

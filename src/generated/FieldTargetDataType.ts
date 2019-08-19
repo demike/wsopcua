@@ -30,13 +30,13 @@ export class FieldTargetDataType {
 
  constructor( options?: IFieldTargetDataType) {
   options = options || {};
-  this.dataSetFieldId = (options.dataSetFieldId !== undefined) ? options.dataSetFieldId : null;
-  this.receiverIndexRange = (options.receiverIndexRange !== undefined) ? options.receiverIndexRange : null;
-  this.targetNodeId = (options.targetNodeId !== undefined) ? options.targetNodeId : null;
-  this.attributeId = (options.attributeId !== undefined) ? options.attributeId : null;
-  this.writeIndexRange = (options.writeIndexRange !== undefined) ? options.writeIndexRange : null;
-  this.overrideValueHandling = (options.overrideValueHandling !== undefined) ? options.overrideValueHandling : null;
-  this.overrideValue = (options.overrideValue !== undefined) ? options.overrideValue : new Variant();
+  this.dataSetFieldId = (options.dataSetFieldId != null) ? options.dataSetFieldId : null;
+  this.receiverIndexRange = (options.receiverIndexRange != null) ? options.receiverIndexRange : null;
+  this.targetNodeId = (options.targetNodeId != null) ? options.targetNodeId : null;
+  this.attributeId = (options.attributeId != null) ? options.attributeId : null;
+  this.writeIndexRange = (options.writeIndexRange != null) ? options.writeIndexRange : null;
+  this.overrideValueHandling = (options.overrideValueHandling != null) ? options.overrideValueHandling : null;
+  this.overrideValue = (options.overrideValue != null) ? options.overrideValue : new Variant();
 
  }
 

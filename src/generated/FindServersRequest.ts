@@ -23,10 +23,10 @@ export class FindServersRequest {
 
  constructor( options?: IFindServersRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.endpointUrl = (options.endpointUrl !== undefined) ? options.endpointUrl : null;
-  this.localeIds = (options.localeIds !== undefined) ? options.localeIds : [];
-  this.serverUris = (options.serverUris !== undefined) ? options.serverUris : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;
+  this.localeIds = (options.localeIds != null) ? options.localeIds : [];
+  this.serverUris = (options.serverUris != null) ? options.serverUris : [];
 
  }
 

@@ -16,7 +16,7 @@ export class UserIdentityToken {
 
  constructor( options?: IUserIdentityToken) {
   options = options || {};
-  this.policyId = (options.policyId !== undefined) ? options.policyId : null;
+  this.policyId = (options.policyId != null) ? options.policyId : null;
 
  }
 

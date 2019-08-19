@@ -25,10 +25,10 @@ export class ReadEventDetails extends HistoryReadDetails {
  constructor( options?: IReadEventDetails) {
   options = options || {};
   super();
-  this.numValuesPerNode = (options.numValuesPerNode !== undefined) ? options.numValuesPerNode : null;
-  this.startTime = (options.startTime !== undefined) ? options.startTime : null;
-  this.endTime = (options.endTime !== undefined) ? options.endTime : null;
-  this.filter = (options.filter !== undefined) ? options.filter : new EventFilter();
+  this.numValuesPerNode = (options.numValuesPerNode != null) ? options.numValuesPerNode : null;
+  this.startTime = (options.startTime != null) ? options.startTime : null;
+  this.endTime = (options.endTime != null) ? options.endTime : null;
+  this.filter = (options.filter != null) ? options.filter : new EventFilter();
 
  }
 

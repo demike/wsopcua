@@ -26,10 +26,10 @@ export class ReadRequest {
 
  constructor( options?: IReadRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.maxAge = (options.maxAge !== undefined) ? options.maxAge : null;
-  this.timestampsToReturn = (options.timestampsToReturn !== undefined) ? options.timestampsToReturn : null;
-  this.nodesToRead = (options.nodesToRead !== undefined) ? options.nodesToRead : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.maxAge = (options.maxAge != null) ? options.maxAge : null;
+  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : null;
+  this.nodesToRead = (options.nodesToRead != null) ? options.nodesToRead : [];
 
  }
 

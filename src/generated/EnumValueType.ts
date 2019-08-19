@@ -21,9 +21,9 @@ export class EnumValueType {
 
  constructor( options?: IEnumValueType) {
   options = options || {};
-  this.value = (options.value !== undefined) ? options.value : null;
-  this.displayName = (options.displayName !== undefined) ? options.displayName : new LocalizedText();
-  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
+  this.value = (options.value != null) ? options.value : null;
+  this.displayName = (options.displayName != null) ? options.displayName : new LocalizedText();
+  this.description = (options.description != null) ? options.description : new LocalizedText();
 
  }
 

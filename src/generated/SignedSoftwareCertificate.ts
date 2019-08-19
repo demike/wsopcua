@@ -18,8 +18,8 @@ export class SignedSoftwareCertificate {
 
  constructor( options?: ISignedSoftwareCertificate) {
   options = options || {};
-  this.certificateData = (options.certificateData !== undefined) ? options.certificateData : null;
-  this.signature = (options.signature !== undefined) ? options.signature : null;
+  this.certificateData = (options.certificateData != null) ? options.certificateData : null;
+  this.signature = (options.signature != null) ? options.signature : null;
 
  }
 

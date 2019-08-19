@@ -22,8 +22,8 @@ export class EnumDescription extends DataTypeDescription {
  constructor( options?: IEnumDescription) {
   options = options || {};
   super(options);
-  this.enumDefinition = (options.enumDefinition !== undefined) ? options.enumDefinition : new EnumDefinition();
-  this.builtInType = (options.builtInType !== undefined) ? options.builtInType : null;
+  this.enumDefinition = (options.enumDefinition != null) ? options.enumDefinition : new EnumDefinition();
+  this.builtInType = (options.builtInType != null) ? options.builtInType : null;
 
  }
 

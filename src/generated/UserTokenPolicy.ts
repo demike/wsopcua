@@ -25,11 +25,11 @@ export class UserTokenPolicy {
 
  constructor( options?: IUserTokenPolicy) {
   options = options || {};
-  this.policyId = (options.policyId !== undefined) ? options.policyId : null;
-  this.tokenType = (options.tokenType !== undefined) ? options.tokenType : null;
-  this.issuedTokenType = (options.issuedTokenType !== undefined) ? options.issuedTokenType : null;
-  this.issuerEndpointUrl = (options.issuerEndpointUrl !== undefined) ? options.issuerEndpointUrl : null;
-  this.securityPolicyUri = (options.securityPolicyUri !== undefined) ? options.securityPolicyUri : null;
+  this.policyId = (options.policyId != null) ? options.policyId : null;
+  this.tokenType = (options.tokenType != null) ? options.tokenType : null;
+  this.issuedTokenType = (options.issuedTokenType != null) ? options.issuedTokenType : null;
+  this.issuerEndpointUrl = (options.issuerEndpointUrl != null) ? options.issuerEndpointUrl : null;
+  this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;
 
  }
 

@@ -20,9 +20,9 @@ export class ReferenceNode {
 
  constructor( options?: IReferenceNode) {
   options = options || {};
-  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
-  this.isInverse = (options.isInverse !== undefined) ? options.isInverse : null;
-  this.targetId = (options.targetId !== undefined) ? options.targetId : null;
+  this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : null;
+  this.isInverse = (options.isInverse != null) ? options.isInverse : null;
+  this.targetId = (options.targetId != null) ? options.targetId : null;
 
  }
 

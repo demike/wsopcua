@@ -16,7 +16,7 @@ export class CloseSecureChannelRequest {
 
  constructor( options?: ICloseSecureChannelRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
 
  }
 

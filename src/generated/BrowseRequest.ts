@@ -26,10 +26,10 @@ export class BrowseRequest {
 
  constructor( options?: IBrowseRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.view = (options.view !== undefined) ? options.view : new ViewDescription();
-  this.requestedMaxReferencesPerNode = (options.requestedMaxReferencesPerNode !== undefined) ? options.requestedMaxReferencesPerNode : null;
-  this.nodesToBrowse = (options.nodesToBrowse !== undefined) ? options.nodesToBrowse : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.view = (options.view != null) ? options.view : new ViewDescription();
+  this.requestedMaxReferencesPerNode = (options.requestedMaxReferencesPerNode != null) ? options.requestedMaxReferencesPerNode : null;
+  this.nodesToBrowse = (options.nodesToBrowse != null) ? options.nodesToBrowse : [];
 
  }
 

@@ -30,13 +30,13 @@ export class ApplicationDescription {
 
  constructor( options?: IApplicationDescription) {
   options = options || {};
-  this.applicationUri = (options.applicationUri !== undefined) ? options.applicationUri : null;
-  this.productUri = (options.productUri !== undefined) ? options.productUri : null;
-  this.applicationName = (options.applicationName !== undefined) ? options.applicationName : new LocalizedText();
-  this.applicationType = (options.applicationType !== undefined) ? options.applicationType : null;
-  this.gatewayServerUri = (options.gatewayServerUri !== undefined) ? options.gatewayServerUri : null;
-  this.discoveryProfileUri = (options.discoveryProfileUri !== undefined) ? options.discoveryProfileUri : null;
-  this.discoveryUrls = (options.discoveryUrls !== undefined) ? options.discoveryUrls : [];
+  this.applicationUri = (options.applicationUri != null) ? options.applicationUri : null;
+  this.productUri = (options.productUri != null) ? options.productUri : null;
+  this.applicationName = (options.applicationName != null) ? options.applicationName : new LocalizedText();
+  this.applicationType = (options.applicationType != null) ? options.applicationType : null;
+  this.gatewayServerUri = (options.gatewayServerUri != null) ? options.gatewayServerUri : null;
+  this.discoveryProfileUri = (options.discoveryProfileUri != null) ? options.discoveryProfileUri : null;
+  this.discoveryUrls = (options.discoveryUrls != null) ? options.discoveryUrls : [];
 
  }
 

@@ -27,11 +27,11 @@ export class BrokerDataSetReaderTransportDataType extends DataSetReaderTransport
  constructor( options?: IBrokerDataSetReaderTransportDataType) {
   options = options || {};
   super();
-  this.queueName = (options.queueName !== undefined) ? options.queueName : null;
-  this.resourceUri = (options.resourceUri !== undefined) ? options.resourceUri : null;
-  this.authenticationProfileUri = (options.authenticationProfileUri !== undefined) ? options.authenticationProfileUri : null;
-  this.requestedDeliveryGuarantee = (options.requestedDeliveryGuarantee !== undefined) ? options.requestedDeliveryGuarantee : null;
-  this.metaDataQueueName = (options.metaDataQueueName !== undefined) ? options.metaDataQueueName : null;
+  this.queueName = (options.queueName != null) ? options.queueName : null;
+  this.resourceUri = (options.resourceUri != null) ? options.resourceUri : null;
+  this.authenticationProfileUri = (options.authenticationProfileUri != null) ? options.authenticationProfileUri : null;
+  this.requestedDeliveryGuarantee = (options.requestedDeliveryGuarantee != null) ? options.requestedDeliveryGuarantee : null;
+  this.metaDataQueueName = (options.metaDataQueueName != null) ? options.metaDataQueueName : null;
 
  }
 

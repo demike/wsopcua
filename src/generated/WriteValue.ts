@@ -23,10 +23,10 @@ export class WriteValue {
 
  constructor( options?: IWriteValue) {
   options = options || {};
-  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
-  this.attributeId = (options.attributeId !== undefined) ? options.attributeId : null;
-  this.indexRange = (options.indexRange !== undefined) ? options.indexRange : null;
-  this.value = (options.value !== undefined) ? options.value : new DataValue();
+  this.nodeId = (options.nodeId != null) ? options.nodeId : null;
+  this.attributeId = (options.attributeId != null) ? options.attributeId : null;
+  this.indexRange = (options.indexRange != null) ? options.indexRange : null;
+  this.value = (options.value != null) ? options.value : new DataValue();
 
  }
 

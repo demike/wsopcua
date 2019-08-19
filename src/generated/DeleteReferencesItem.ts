@@ -24,11 +24,11 @@ export class DeleteReferencesItem {
 
  constructor( options?: IDeleteReferencesItem) {
   options = options || {};
-  this.sourceNodeId = (options.sourceNodeId !== undefined) ? options.sourceNodeId : null;
-  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
-  this.isForward = (options.isForward !== undefined) ? options.isForward : null;
-  this.targetNodeId = (options.targetNodeId !== undefined) ? options.targetNodeId : null;
-  this.deleteBidirectional = (options.deleteBidirectional !== undefined) ? options.deleteBidirectional : null;
+  this.sourceNodeId = (options.sourceNodeId != null) ? options.sourceNodeId : null;
+  this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : null;
+  this.isForward = (options.isForward != null) ? options.isForward : null;
+  this.targetNodeId = (options.targetNodeId != null) ? options.targetNodeId : null;
+  this.deleteBidirectional = (options.deleteBidirectional != null) ? options.deleteBidirectional : null;
 
  }
 

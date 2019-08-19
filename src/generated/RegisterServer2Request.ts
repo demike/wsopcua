@@ -23,9 +23,9 @@ export class RegisterServer2Request {
 
  constructor( options?: IRegisterServer2Request) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.server = (options.server !== undefined) ? options.server : new RegisteredServer();
-  this.discoveryConfiguration = (options.discoveryConfiguration !== undefined) ? options.discoveryConfiguration : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.server = (options.server != null) ? options.server : new RegisteredServer();
+  this.discoveryConfiguration = (options.discoveryConfiguration != null) ? options.discoveryConfiguration : [];
 
  }
 

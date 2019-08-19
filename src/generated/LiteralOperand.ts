@@ -18,7 +18,7 @@ export class LiteralOperand extends FilterOperand {
  constructor( options?: ILiteralOperand) {
   options = options || {};
   super();
-  this.value = (options.value !== undefined) ? options.value : new Variant();
+  this.value = (options.value != null) ? options.value : new Variant();
 
  }
 

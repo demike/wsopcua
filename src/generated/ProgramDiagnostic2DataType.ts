@@ -43,18 +43,18 @@ export class ProgramDiagnostic2DataType {
 
  constructor( options?: IProgramDiagnostic2DataType) {
   options = options || {};
-  this.createSessionId = (options.createSessionId !== undefined) ? options.createSessionId : null;
-  this.createClientName = (options.createClientName !== undefined) ? options.createClientName : null;
-  this.invocationCreationTime = (options.invocationCreationTime !== undefined) ? options.invocationCreationTime : null;
-  this.lastTransitionTime = (options.lastTransitionTime !== undefined) ? options.lastTransitionTime : null;
-  this.lastMethodCall = (options.lastMethodCall !== undefined) ? options.lastMethodCall : null;
-  this.lastMethodSessionId = (options.lastMethodSessionId !== undefined) ? options.lastMethodSessionId : null;
-  this.lastMethodInputArguments = (options.lastMethodInputArguments !== undefined) ? options.lastMethodInputArguments : [];
-  this.lastMethodOutputArguments = (options.lastMethodOutputArguments !== undefined) ? options.lastMethodOutputArguments : [];
-  this.lastMethodInputValues = (options.lastMethodInputValues !== undefined) ? options.lastMethodInputValues : [];
-  this.lastMethodOutputValues = (options.lastMethodOutputValues !== undefined) ? options.lastMethodOutputValues : [];
-  this.lastMethodCallTime = (options.lastMethodCallTime !== undefined) ? options.lastMethodCallTime : null;
-  this.lastMethodReturnStatus = (options.lastMethodReturnStatus !== undefined) ? options.lastMethodReturnStatus : new StatusResult();
+  this.createSessionId = (options.createSessionId != null) ? options.createSessionId : null;
+  this.createClientName = (options.createClientName != null) ? options.createClientName : null;
+  this.invocationCreationTime = (options.invocationCreationTime != null) ? options.invocationCreationTime : null;
+  this.lastTransitionTime = (options.lastTransitionTime != null) ? options.lastTransitionTime : null;
+  this.lastMethodCall = (options.lastMethodCall != null) ? options.lastMethodCall : null;
+  this.lastMethodSessionId = (options.lastMethodSessionId != null) ? options.lastMethodSessionId : null;
+  this.lastMethodInputArguments = (options.lastMethodInputArguments != null) ? options.lastMethodInputArguments : [];
+  this.lastMethodOutputArguments = (options.lastMethodOutputArguments != null) ? options.lastMethodOutputArguments : [];
+  this.lastMethodInputValues = (options.lastMethodInputValues != null) ? options.lastMethodInputValues : [];
+  this.lastMethodOutputValues = (options.lastMethodOutputValues != null) ? options.lastMethodOutputValues : [];
+  this.lastMethodCallTime = (options.lastMethodCallTime != null) ? options.lastMethodCallTime : null;
+  this.lastMethodReturnStatus = (options.lastMethodReturnStatus != null) ? options.lastMethodReturnStatus : new StatusResult();
 
  }
 

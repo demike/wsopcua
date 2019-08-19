@@ -23,10 +23,10 @@ export class RelativePathElement {
 
  constructor( options?: IRelativePathElement) {
   options = options || {};
-  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
-  this.isInverse = (options.isInverse !== undefined) ? options.isInverse : null;
-  this.includeSubtypes = (options.includeSubtypes !== undefined) ? options.includeSubtypes : null;
-  this.targetName = (options.targetName !== undefined) ? options.targetName : new QualifiedName();
+  this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : null;
+  this.isInverse = (options.isInverse != null) ? options.isInverse : null;
+  this.includeSubtypes = (options.includeSubtypes != null) ? options.includeSubtypes : null;
+  this.targetName = (options.targetName != null) ? options.targetName : new QualifiedName();
 
  }
 

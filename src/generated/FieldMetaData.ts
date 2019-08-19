@@ -38,16 +38,16 @@ export class FieldMetaData {
 
  constructor( options?: IFieldMetaData) {
   options = options || {};
-  this.name = (options.name !== undefined) ? options.name : null;
-  this.description = (options.description !== undefined) ? options.description : new LocalizedText();
-  this.fieldFlags = (options.fieldFlags !== undefined) ? options.fieldFlags : null;
-  this.builtInType = (options.builtInType !== undefined) ? options.builtInType : null;
-  this.dataType = (options.dataType !== undefined) ? options.dataType : null;
-  this.valueRank = (options.valueRank !== undefined) ? options.valueRank : null;
-  this.arrayDimensions = (options.arrayDimensions !== undefined) ? options.arrayDimensions : [];
-  this.maxStringLength = (options.maxStringLength !== undefined) ? options.maxStringLength : null;
-  this.dataSetFieldId = (options.dataSetFieldId !== undefined) ? options.dataSetFieldId : null;
-  this.properties = (options.properties !== undefined) ? options.properties : [];
+  this.name = (options.name != null) ? options.name : null;
+  this.description = (options.description != null) ? options.description : new LocalizedText();
+  this.fieldFlags = (options.fieldFlags != null) ? options.fieldFlags : null;
+  this.builtInType = (options.builtInType != null) ? options.builtInType : null;
+  this.dataType = (options.dataType != null) ? options.dataType : null;
+  this.valueRank = (options.valueRank != null) ? options.valueRank : null;
+  this.arrayDimensions = (options.arrayDimensions != null) ? options.arrayDimensions : [];
+  this.maxStringLength = (options.maxStringLength != null) ? options.maxStringLength : null;
+  this.dataSetFieldId = (options.dataSetFieldId != null) ? options.dataSetFieldId : null;
+  this.properties = (options.properties != null) ? options.properties : [];
 
  }
 

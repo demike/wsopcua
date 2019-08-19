@@ -33,14 +33,14 @@ export class RegisteredServer {
 
  constructor( options?: IRegisteredServer) {
   options = options || {};
-  this.serverUri = (options.serverUri !== undefined) ? options.serverUri : null;
-  this.productUri = (options.productUri !== undefined) ? options.productUri : null;
-  this.serverNames = (options.serverNames !== undefined) ? options.serverNames : [];
-  this.serverType = (options.serverType !== undefined) ? options.serverType : null;
-  this.gatewayServerUri = (options.gatewayServerUri !== undefined) ? options.gatewayServerUri : null;
-  this.discoveryUrls = (options.discoveryUrls !== undefined) ? options.discoveryUrls : [];
-  this.semaphoreFilePath = (options.semaphoreFilePath !== undefined) ? options.semaphoreFilePath : null;
-  this.isOnline = (options.isOnline !== undefined) ? options.isOnline : null;
+  this.serverUri = (options.serverUri != null) ? options.serverUri : null;
+  this.productUri = (options.productUri != null) ? options.productUri : null;
+  this.serverNames = (options.serverNames != null) ? options.serverNames : [];
+  this.serverType = (options.serverType != null) ? options.serverType : null;
+  this.gatewayServerUri = (options.gatewayServerUri != null) ? options.gatewayServerUri : null;
+  this.discoveryUrls = (options.discoveryUrls != null) ? options.discoveryUrls : [];
+  this.semaphoreFilePath = (options.semaphoreFilePath != null) ? options.semaphoreFilePath : null;
+  this.isOnline = (options.isOnline != null) ? options.isOnline : null;
 
  }
 

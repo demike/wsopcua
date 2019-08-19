@@ -34,15 +34,15 @@ export class CreateSessionRequest {
 
  constructor( options?: ICreateSessionRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.clientDescription = (options.clientDescription !== undefined) ? options.clientDescription : new ApplicationDescription();
-  this.serverUri = (options.serverUri !== undefined) ? options.serverUri : null;
-  this.endpointUrl = (options.endpointUrl !== undefined) ? options.endpointUrl : null;
-  this.sessionName = (options.sessionName !== undefined) ? options.sessionName : null;
-  this.clientNonce = (options.clientNonce !== undefined) ? options.clientNonce : null;
-  this.clientCertificate = (options.clientCertificate !== undefined) ? options.clientCertificate : null;
-  this.requestedSessionTimeout = (options.requestedSessionTimeout !== undefined) ? options.requestedSessionTimeout : null;
-  this.maxResponseMessageSize = (options.maxResponseMessageSize !== undefined) ? options.maxResponseMessageSize : null;
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.clientDescription = (options.clientDescription != null) ? options.clientDescription : new ApplicationDescription();
+  this.serverUri = (options.serverUri != null) ? options.serverUri : null;
+  this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;
+  this.sessionName = (options.sessionName != null) ? options.sessionName : null;
+  this.clientNonce = (options.clientNonce != null) ? options.clientNonce : null;
+  this.clientCertificate = (options.clientCertificate != null) ? options.clientCertificate : null;
+  this.requestedSessionTimeout = (options.requestedSessionTimeout != null) ? options.requestedSessionTimeout : null;
+  this.maxResponseMessageSize = (options.maxResponseMessageSize != null) ? options.maxResponseMessageSize : null;
 
  }
 

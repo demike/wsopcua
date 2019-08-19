@@ -31,13 +31,13 @@ export class ReferenceDescription {
 
  constructor( options?: IReferenceDescription) {
   options = options || {};
-  this.referenceTypeId = (options.referenceTypeId !== undefined) ? options.referenceTypeId : null;
-  this.isForward = (options.isForward !== undefined) ? options.isForward : null;
-  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
-  this.browseName = (options.browseName !== undefined) ? options.browseName : new QualifiedName();
-  this.displayName = (options.displayName !== undefined) ? options.displayName : new LocalizedText();
-  this.nodeClass = (options.nodeClass !== undefined) ? options.nodeClass : null;
-  this.typeDefinition = (options.typeDefinition !== undefined) ? options.typeDefinition : null;
+  this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : null;
+  this.isForward = (options.isForward != null) ? options.isForward : null;
+  this.nodeId = (options.nodeId != null) ? options.nodeId : null;
+  this.browseName = (options.browseName != null) ? options.browseName : new QualifiedName();
+  this.displayName = (options.displayName != null) ? options.displayName : new LocalizedText();
+  this.nodeClass = (options.nodeClass != null) ? options.nodeClass : null;
+  this.typeDefinition = (options.typeDefinition != null) ? options.typeDefinition : null;
 
  }
 

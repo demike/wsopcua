@@ -18,8 +18,8 @@ export class QualifiedName {
 
  constructor( options?: IQualifiedName) {
   options = options || {};
-  this.namespaceIndex = (options.namespaceIndex !== undefined) ? options.namespaceIndex : null;
-  this.name = (options.name !== undefined) ? options.name : null;
+  this.namespaceIndex = (options.namespaceIndex != null) ? options.namespaceIndex : null;
+  this.name = (options.name != null) ? options.name : null;
 
  }
 

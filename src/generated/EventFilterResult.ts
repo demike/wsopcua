@@ -25,9 +25,9 @@ export class EventFilterResult extends MonitoringFilterResult {
  constructor( options?: IEventFilterResult) {
   options = options || {};
   super();
-  this.selectClauseResults = (options.selectClauseResults !== undefined) ? options.selectClauseResults : [];
-  this.selectClauseDiagnosticInfos = (options.selectClauseDiagnosticInfos !== undefined) ? options.selectClauseDiagnosticInfos : [];
-  this.whereClauseResult = (options.whereClauseResult !== undefined) ? options.whereClauseResult : new ContentFilterResult();
+  this.selectClauseResults = (options.selectClauseResults != null) ? options.selectClauseResults : [];
+  this.selectClauseDiagnosticInfos = (options.selectClauseDiagnosticInfos != null) ? options.selectClauseDiagnosticInfos : [];
+  this.whereClauseResult = (options.whereClauseResult != null) ? options.whereClauseResult : new ContentFilterResult();
 
  }
 

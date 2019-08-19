@@ -18,8 +18,8 @@ export class DeleteNodesItem {
 
  constructor( options?: IDeleteNodesItem) {
   options = options || {};
-  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
-  this.deleteTargetReferences = (options.deleteTargetReferences !== undefined) ? options.deleteTargetReferences : null;
+  this.nodeId = (options.nodeId != null) ? options.nodeId : null;
+  this.deleteTargetReferences = (options.deleteTargetReferences != null) ? options.deleteTargetReferences : null;
 
  }
 

@@ -33,13 +33,13 @@ export class PubSubGroupDataType {
 
  constructor( options?: IPubSubGroupDataType) {
   options = options || {};
-  this.name = (options.name !== undefined) ? options.name : null;
-  this.enabled = (options.enabled !== undefined) ? options.enabled : null;
-  this.securityMode = (options.securityMode !== undefined) ? options.securityMode : null;
-  this.securityGroupId = (options.securityGroupId !== undefined) ? options.securityGroupId : null;
-  this.securityKeyServices = (options.securityKeyServices !== undefined) ? options.securityKeyServices : [];
-  this.maxNetworkMessageSize = (options.maxNetworkMessageSize !== undefined) ? options.maxNetworkMessageSize : null;
-  this.groupProperties = (options.groupProperties !== undefined) ? options.groupProperties : [];
+  this.name = (options.name != null) ? options.name : null;
+  this.enabled = (options.enabled != null) ? options.enabled : null;
+  this.securityMode = (options.securityMode != null) ? options.securityMode : null;
+  this.securityGroupId = (options.securityGroupId != null) ? options.securityGroupId : null;
+  this.securityKeyServices = (options.securityKeyServices != null) ? options.securityKeyServices : [];
+  this.maxNetworkMessageSize = (options.maxNetworkMessageSize != null) ? options.maxNetworkMessageSize : null;
+  this.groupProperties = (options.groupProperties != null) ? options.groupProperties : [];
 
  }
 

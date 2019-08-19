@@ -25,11 +25,11 @@ export class SetTriggeringRequest {
 
  constructor( options?: ISetTriggeringRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.subscriptionId = (options.subscriptionId !== undefined) ? options.subscriptionId : null;
-  this.triggeringItemId = (options.triggeringItemId !== undefined) ? options.triggeringItemId : null;
-  this.linksToAdd = (options.linksToAdd !== undefined) ? options.linksToAdd : [];
-  this.linksToRemove = (options.linksToRemove !== undefined) ? options.linksToRemove : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : null;
+  this.triggeringItemId = (options.triggeringItemId != null) ? options.triggeringItemId : null;
+  this.linksToAdd = (options.linksToAdd != null) ? options.linksToAdd : [];
+  this.linksToRemove = (options.linksToRemove != null) ? options.linksToRemove : [];
 
  }
 

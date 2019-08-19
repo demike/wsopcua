@@ -19,7 +19,7 @@ export class X509IdentityToken extends UserIdentityToken {
  constructor( options?: IX509IdentityToken) {
   options = options || {};
   super(options);
-  this.certificateData = (options.certificateData !== undefined) ? options.certificateData : null;
+  this.certificateData = (options.certificateData != null) ? options.certificateData : null;
 
  }
 

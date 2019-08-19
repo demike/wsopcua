@@ -21,8 +21,8 @@ export class PublishRequest {
 
  constructor( options?: IPublishRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.subscriptionAcknowledgements = (options.subscriptionAcknowledgements !== undefined) ? options.subscriptionAcknowledgements : [];
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.subscriptionAcknowledgements = (options.subscriptionAcknowledgements != null) ? options.subscriptionAcknowledgements : [];
 
  }
 

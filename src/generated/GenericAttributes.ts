@@ -21,7 +21,7 @@ export class GenericAttributes extends NodeAttributes {
  constructor( options?: IGenericAttributes) {
   options = options || {};
   super(options);
-  this.attributeValues = (options.attributeValues !== undefined) ? options.attributeValues : [];
+  this.attributeValues = (options.attributeValues != null) ? options.attributeValues : [];
 
  }
 

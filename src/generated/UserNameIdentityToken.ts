@@ -23,9 +23,9 @@ export class UserNameIdentityToken extends UserIdentityToken {
  constructor( options?: IUserNameIdentityToken) {
   options = options || {};
   super(options);
-  this.userName = (options.userName !== undefined) ? options.userName : null;
-  this.password = (options.password !== undefined) ? options.password : null;
-  this.encryptionAlgorithm = (options.encryptionAlgorithm !== undefined) ? options.encryptionAlgorithm : null;
+  this.userName = (options.userName != null) ? options.userName : null;
+  this.password = (options.password != null) ? options.password : null;
+  this.encryptionAlgorithm = (options.encryptionAlgorithm != null) ? options.encryptionAlgorithm : null;
 
  }
 

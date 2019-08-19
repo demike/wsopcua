@@ -19,8 +19,8 @@ export class BrowsePath {
 
  constructor( options?: IBrowsePath) {
   options = options || {};
-  this.startingNode = (options.startingNode !== undefined) ? options.startingNode : null;
-  this.relativePath = (options.relativePath !== undefined) ? options.relativePath : new RelativePath();
+  this.startingNode = (options.startingNode != null) ? options.startingNode : null;
+  this.relativePath = (options.relativePath != null) ? options.relativePath : new RelativePath();
 
  }
 

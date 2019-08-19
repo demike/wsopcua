@@ -24,11 +24,11 @@ export class AggregateConfiguration {
 
  constructor( options?: IAggregateConfiguration) {
   options = options || {};
-  this.useServerCapabilitiesDefaults = (options.useServerCapabilitiesDefaults !== undefined) ? options.useServerCapabilitiesDefaults : null;
-  this.treatUncertainAsBad = (options.treatUncertainAsBad !== undefined) ? options.treatUncertainAsBad : null;
-  this.percentDataBad = (options.percentDataBad !== undefined) ? options.percentDataBad : null;
-  this.percentDataGood = (options.percentDataGood !== undefined) ? options.percentDataGood : null;
-  this.useSlopedExtrapolation = (options.useSlopedExtrapolation !== undefined) ? options.useSlopedExtrapolation : null;
+  this.useServerCapabilitiesDefaults = (options.useServerCapabilitiesDefaults != null) ? options.useServerCapabilitiesDefaults : null;
+  this.treatUncertainAsBad = (options.treatUncertainAsBad != null) ? options.treatUncertainAsBad : null;
+  this.percentDataBad = (options.percentDataBad != null) ? options.percentDataBad : null;
+  this.percentDataGood = (options.percentDataGood != null) ? options.percentDataGood : null;
+  this.useSlopedExtrapolation = (options.useSlopedExtrapolation != null) ? options.useSlopedExtrapolation : null;
 
  }
 

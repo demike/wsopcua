@@ -18,8 +18,8 @@ export class AddNodesResult {
 
  constructor( options?: IAddNodesResult) {
   options = options || {};
-  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
-  this.addedNodeId = (options.addedNodeId !== undefined) ? options.addedNodeId : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.addedNodeId = (options.addedNodeId != null) ? options.addedNodeId : null;
 
  }
 

@@ -16,7 +16,7 @@ export class HistoryUpdateDetails {
 
  constructor( options?: IHistoryUpdateDetails) {
   options = options || {};
-  this.nodeId = (options.nodeId !== undefined) ? options.nodeId : null;
+  this.nodeId = (options.nodeId != null) ? options.nodeId : null;
 
  }
 

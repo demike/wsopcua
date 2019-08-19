@@ -22,8 +22,8 @@ export class SubscribedDataSetMirrorDataType extends SubscribedDataSetDataType {
  constructor( options?: ISubscribedDataSetMirrorDataType) {
   options = options || {};
   super();
-  this.parentNodeName = (options.parentNodeName !== undefined) ? options.parentNodeName : null;
-  this.rolePermissions = (options.rolePermissions !== undefined) ? options.rolePermissions : [];
+  this.parentNodeName = (options.parentNodeName != null) ? options.parentNodeName : null;
+  this.rolePermissions = (options.rolePermissions != null) ? options.rolePermissions : [];
 
  }
 

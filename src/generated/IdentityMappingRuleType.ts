@@ -19,8 +19,8 @@ export class IdentityMappingRuleType {
 
  constructor( options?: IIdentityMappingRuleType) {
   options = options || {};
-  this.criteriaType = (options.criteriaType !== undefined) ? options.criteriaType : null;
-  this.criteria = (options.criteria !== undefined) ? options.criteria : null;
+  this.criteriaType = (options.criteriaType != null) ? options.criteriaType : null;
+  this.criteria = (options.criteria != null) ? options.criteria : null;
 
  }
 

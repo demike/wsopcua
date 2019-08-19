@@ -31,12 +31,12 @@ export class QueryFirstRequest {
 
  constructor( options?: IQueryFirstRequest) {
   options = options || {};
-  this.requestHeader = (options.requestHeader !== undefined) ? options.requestHeader : new RequestHeader();
-  this.view = (options.view !== undefined) ? options.view : new ViewDescription();
-  this.nodeTypes = (options.nodeTypes !== undefined) ? options.nodeTypes : [];
-  this.filter = (options.filter !== undefined) ? options.filter : new ContentFilter();
-  this.maxDataSetsToReturn = (options.maxDataSetsToReturn !== undefined) ? options.maxDataSetsToReturn : null;
-  this.maxReferencesToReturn = (options.maxReferencesToReturn !== undefined) ? options.maxReferencesToReturn : null;
+  this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
+  this.view = (options.view != null) ? options.view : new ViewDescription();
+  this.nodeTypes = (options.nodeTypes != null) ? options.nodeTypes : [];
+  this.filter = (options.filter != null) ? options.filter : new ContentFilter();
+  this.maxDataSetsToReturn = (options.maxDataSetsToReturn != null) ? options.maxDataSetsToReturn : null;
+  this.maxReferencesToReturn = (options.maxReferencesToReturn != null) ? options.maxReferencesToReturn : null;
 
  }
 

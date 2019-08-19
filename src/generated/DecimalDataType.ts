@@ -18,8 +18,8 @@ export class DecimalDataType {
 
  constructor( options?: IDecimalDataType) {
   options = options || {};
-  this.scale = (options.scale !== undefined) ? options.scale : null;
-  this.value = (options.value !== undefined) ? options.value : null;
+  this.scale = (options.scale != null) ? options.scale : null;
+  this.value = (options.value != null) ? options.value : null;
 
  }
 

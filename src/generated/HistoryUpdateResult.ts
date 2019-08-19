@@ -22,9 +22,9 @@ export class HistoryUpdateResult {
 
  constructor( options?: IHistoryUpdateResult) {
   options = options || {};
-  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
-  this.operationResults = (options.operationResults !== undefined) ? options.operationResults : [];
-  this.diagnosticInfos = (options.diagnosticInfos !== undefined) ? options.diagnosticInfos : [];
+  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.operationResults = (options.operationResults != null) ? options.operationResults : [];
+  this.diagnosticInfos = (options.diagnosticInfos != null) ? options.diagnosticInfos : [];
 
  }
 

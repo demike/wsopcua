@@ -19,8 +19,8 @@ export class KeyValuePair {
 
  constructor( options?: IKeyValuePair) {
   options = options || {};
-  this.key = (options.key !== undefined) ? options.key : new QualifiedName();
-  this.value = (options.value !== undefined) ? options.value : new Variant();
+  this.key = (options.key != null) ? options.key : new QualifiedName();
+  this.value = (options.value != null) ? options.value : new Variant();
 
  }
 

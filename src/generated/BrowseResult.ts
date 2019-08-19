@@ -22,9 +22,9 @@ export class BrowseResult {
 
  constructor( options?: IBrowseResult) {
   options = options || {};
-  this.statusCode = (options.statusCode !== undefined) ? options.statusCode : null;
-  this.continuationPoint = (options.continuationPoint !== undefined) ? options.continuationPoint : null;
-  this.references = (options.references !== undefined) ? options.references : [];
+  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.continuationPoint = (options.continuationPoint != null) ? options.continuationPoint : null;
+  this.references = (options.references != null) ? options.references : [];
 
  }
 

@@ -16,7 +16,7 @@ export class NetworkAddressDataType {
 
  constructor( options?: INetworkAddressDataType) {
   options = options || {};
-  this.networkInterface = (options.networkInterface !== undefined) ? options.networkInterface : null;
+  this.networkInterface = (options.networkInterface != null) ? options.networkInterface : null;
 
  }
 

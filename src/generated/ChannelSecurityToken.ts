@@ -22,10 +22,10 @@ export class ChannelSecurityToken {
 
  constructor( options?: IChannelSecurityToken) {
   options = options || {};
-  this.channelId = (options.channelId !== undefined) ? options.channelId : null;
-  this.tokenId = (options.tokenId !== undefined) ? options.tokenId : null;
-  this.createdAt = (options.createdAt !== undefined) ? options.createdAt : null;
-  this.revisedLifetime = (options.revisedLifetime !== undefined) ? options.revisedLifetime : null;
+  this.channelId = (options.channelId != null) ? options.channelId : null;
+  this.tokenId = (options.tokenId != null) ? options.tokenId : null;
+  this.createdAt = (options.createdAt != null) ? options.createdAt : null;
+  this.revisedLifetime = (options.revisedLifetime != null) ? options.revisedLifetime : null;
 
  }
 

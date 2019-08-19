@@ -16,7 +16,7 @@ export class EndpointUrlListDataType {
 
  constructor( options?: IEndpointUrlListDataType) {
   options = options || {};
-  this.endpointUrlList = (options.endpointUrlList !== undefined) ? options.endpointUrlList : [];
+  this.endpointUrlList = (options.endpointUrlList != null) ? options.endpointUrlList : [];
 
  }
 

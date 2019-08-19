@@ -19,7 +19,7 @@ export class ObjectTypeAttributes extends NodeAttributes {
  constructor( options?: IObjectTypeAttributes) {
   options = options || {};
   super(options);
-  this.isAbstract = (options.isAbstract !== undefined) ? options.isAbstract : null;
+  this.isAbstract = (options.isAbstract != null) ? options.isAbstract : null;
 
  }
 

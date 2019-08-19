@@ -24,11 +24,11 @@ export class SessionlessInvokeRequestType {
 
  constructor( options?: ISessionlessInvokeRequestType) {
   options = options || {};
-  this.urisVersion = (options.urisVersion !== undefined) ? options.urisVersion : [];
-  this.namespaceUris = (options.namespaceUris !== undefined) ? options.namespaceUris : [];
-  this.serverUris = (options.serverUris !== undefined) ? options.serverUris : [];
-  this.localeIds = (options.localeIds !== undefined) ? options.localeIds : [];
-  this.serviceId = (options.serviceId !== undefined) ? options.serviceId : null;
+  this.urisVersion = (options.urisVersion != null) ? options.urisVersion : [];
+  this.namespaceUris = (options.namespaceUris != null) ? options.namespaceUris : [];
+  this.serverUris = (options.serverUris != null) ? options.serverUris : [];
+  this.localeIds = (options.localeIds != null) ? options.localeIds : [];
+  this.serviceId = (options.serviceId != null) ? options.serviceId : null;
 
  }
 

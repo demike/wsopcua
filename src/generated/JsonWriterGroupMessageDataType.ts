@@ -18,7 +18,7 @@ export class JsonWriterGroupMessageDataType extends WriterGroupMessageDataType {
  constructor( options?: IJsonWriterGroupMessageDataType) {
   options = options || {};
   super();
-  this.networkMessageContentMask = (options.networkMessageContentMask !== undefined) ? options.networkMessageContentMask : null;
+  this.networkMessageContentMask = (options.networkMessageContentMask != null) ? options.networkMessageContentMask : null;
 
  }
 
