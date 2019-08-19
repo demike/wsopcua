@@ -90,6 +90,21 @@ export interface BrowseDescription {
 */
 
 
+function coerceReadValueId(node: string| NodeId | IReadValueId) {
+
+    if (typeof node === 'string' || node instanceof NodeId) {
+        return new read_service.ReadValueId({
+            nodeId: resolveNodeId(node),
+            attributeId: read_service.AttributeIds.Value,
+            indexRange: null,
+            dataEncoding: new QualifiedName({ namespaceIndex: 0, name: null })
+        });
+
+    } else {
+        return new read_service.ReadValueId(node);
+    }
+}
+
 
 export interface ClientSessionEvent {
     'session_closed': (status: IStatusCodeOptions) => void;
@@ -443,21 +458,6 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
         let nodesToRead = [];
 
-        function coerceReadValueId(node: string| NodeId | IReadValueId) {
-
-            if (typeof node === 'string' || node instanceof NodeId) {
-                return new read_service.ReadValueId({
-                    nodeId: resolveNodeId(node),
-                    attributeId: read_service.AttributeIds.Value,
-                    indexRange: null,
-                    dataEncoding: new QualifiedName({ namespaceIndex: 0, name: null })
-                });
-
-            } else {
-                return new read_service.ReadValueId(node);
-            }
-        }
-
         nodesToRead = (<any[]>nodes).map(coerceReadValueId);
 
         const request = new read_service.ReadRequest({
@@ -467,14 +467,14 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
         assert((<any[]>nodes).length === request.nodesToRead.length);
 
-        this.performMessageTransaction(request, (err, response: read_service.ReadResponse) => {
+        this.performMessageTransaction(request, (err: Error | null, response?: read_service.ReadResponse) => {
 
             /* istanbul ignore next */
             if (err) {
-                return callback(err, <any>response);
+                return (callback as ResponseCallback<any>)(err);
             }
             if (response.responseHeader.serviceResult.isNot(StatusCodes.Good)) {
-                return callback(new Error(response.responseHeader.serviceResult.toString()));
+                return (callback as ResponseCallback<any>)(new Error(response.responseHeader.serviceResult.toString()));
             }
             assert(response instanceof read_service.ReadResponse);
             assert((<any[]>nodes).length === response.results.length);
@@ -1204,7 +1204,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     public translateBrowsePath(browsePath: translate_service.BrowsePath,
         callback: ResponseCallback<translate_service.BrowsePathResult>): void;
     public translateBrowsePath(browsePath: translate_service.BrowsePath | translate_service.BrowsePath[],
-            callback: ResponseCallback<translate_service.BrowsePathResult> | ResponseCallback<translate_service.BrowsePathResult[]>): void {
+            callback: ResponseCallback<any>): void {
         assert('function' === typeof callback);
 
         const has_single_element = !Array.isArray(browsePath);
@@ -1220,9 +1220,12 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             if (err) {
                 return callback(err, response);
             }
-            assert(response instanceof translate_service.TranslateBrowsePathsToNodeIdsResponse);
-            callback(null, has_single_element ? response.results[0] : response.results);
 
+            if (!response || !(response instanceof translate_service.TranslateBrowsePathsToNodeIdsResponse)) {
+                return callback(new Error('Internal Error'));
+            }
+
+            callback(null, has_single_element ? response.results[0] : response.results);
         });
 
     }
