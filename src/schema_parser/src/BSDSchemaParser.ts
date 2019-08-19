@@ -72,6 +72,25 @@ export class BSDSchemaParser {
 
     public parseNodeSet2XmlDoc(doc: JSDOM) {
         this.addTypeIdsFromNodeSet(doc);
+        const elements = doc.window.document.querySelectorAll('[DataType="ByteString"][SymbolicName$="_BinarySchema"] > Value');
+        for (let i = 0; i < elements.length; i++) {
+            const el = elements.item(i);
+            for (let j = 0; j < el.children.length; j++) {
+                const elByteString = el.children.item(j);
+                if (!elByteString) {
+                    continue;
+                }
+                let docdata =  Buffer.from(elByteString.innerHTML, 'base64').toString();
+                    docdata = this.fixDocData(docdata);
+                    this.parseBSDDoc(new JSDOM(docdata, { contentType : 'text/xml'}));
+            }
+        }
+
+
+        
+
+/*
+        this.addTypeIdsFromNodeSet(doc);
         const elements = doc.window.document.querySelectorAll('ByteString');
         for (let i = 0; i < elements.length; i++) {
             const el = elements.item(i);
@@ -87,7 +106,9 @@ export class BSDSchemaParser {
             }
 
         }
+*/
     }
+
 
     /**
      * removes \r from the document

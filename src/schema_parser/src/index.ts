@@ -21,7 +21,7 @@ console.log(defaultConfigFilePath);
 program
     .description(pkg.description)
     .name(appName)
-    .option('-c --config <path>', 'set path configuration file')
+    .option('-c --config <path>', 'set path to configuration file')
     .version(pkg.verison)
     .parse(process.argv);
 
