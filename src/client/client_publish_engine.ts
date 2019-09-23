@@ -143,7 +143,7 @@ public send_publish_request() {
             }
         }, 100);
     } else {
-        setImmediate( () => {
+        window.setImmediate( () => {
             if (!this.session || this.isSuspended || !this.subscriptionCount) {
                 // session has been terminated or suspended or no subscription is available
                 return;
@@ -475,7 +475,7 @@ public republish(callback: ErrorCallback) {
             });
         }
 
-        setImmediate(function() {
+        window.setImmediate(function() {
 
             assert('function' === typeof _i_callback);
             whilst(function () { return !is_done; }, _send_republish, function(err: Error) {

@@ -831,7 +831,7 @@ public create(endpoint_url: string , callback: ErrorCallback) {
              */
             this.emit('abort');
 
-            setImmediate(function () {
+            window.setImmediate(function () {
                 _backoff_completion(new Error('Connection abandoned'));
             });
 
@@ -1336,7 +1336,7 @@ public cancelPendingTransactions(callback: () => void ) {
             transaction.callback(new Error('Transaction has been canceled because client channel  is beeing closed'));
         }
     }
-    setImmediate(callback);
+    window.setImmediate(callback);
 }
 
 /**

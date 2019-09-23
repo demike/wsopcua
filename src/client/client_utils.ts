@@ -14,7 +14,7 @@ import { ClientSession } from './client_session';
 import { ReadValueId } from '../service-read';
 import { lowerFirstLetter } from '../utils/string_utils';
 import { ServerOnNetwork, DataValue, ReadResponse } from '../generated';
-import { async_series} from 'async-es/series';
+import async_series from 'async-es/series';
 
 const hasPropertyRefId = resolveNodeId('HasProperty');
 /* NodeId  ns=0;i=46*/

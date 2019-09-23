@@ -61,7 +61,7 @@ export class DirectTransport extends EventEmitter<any> {
         this.client.end();
         this.server.end();
         if (done) {
-           // setImmediate(done);
+           // window.setImmediate(done);
             window.setTimeout(done, 0);
 
         }

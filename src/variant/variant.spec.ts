@@ -17,15 +17,15 @@ import { StatusCodes } from '../basic-types';
 import { get_clock_tick } from '../utils';
 
 
-function str2Uint8Array (str : String ) : Uint8Array {
-	let array = new Uint8Array(str.length);
-	for(let i = 0; i < str.length; i++) {
-		array[i] = str.charCodeAt(i);
-	}
-	return array;
+function str2Uint8Array (str: String ): Uint8Array {
+    const array = new Uint8Array(str.length);
+    for (let i = 0; i < str.length; i++) {
+        array[i] = str.charCodeAt(i);
+    }
+    return array;
 }
 
-function uint8ArrayToStr(array: Uint8Array) : string {
+function uint8ArrayToStr(array: Uint8Array): string {
     let str = '';
     for (let i = 0; i < array.byteLength; i++) {
         str += String.fromCharCode( array[i]);
@@ -499,7 +499,7 @@ describe('Variant - Analyser', function () {
     });
 
     it('should encode/decode a very large array of Float - 1', function () {
-        
+
 
         const nbElements = 1500 * 1024;
 
@@ -1329,7 +1329,7 @@ describe('Variant with Advanced Array', function () {
         const v = new Variant({
             dataType: DataType.ByteString,
             arrayType: VariantArrayType.Array,
-            value: [str2Uint8Array('ABCDEFGHIJKL'), str2Uint8Array('BCDEFGHIJKLA'), 
+            value: [str2Uint8Array('ABCDEFGHIJKL'), str2Uint8Array('BCDEFGHIJKLA'),
             str2Uint8Array('CDEFGHIJKLAB'), str2Uint8Array('DEFGHIJKLABC'),
             str2Uint8Array('EFGHIJKLABCD'), str2Uint8Array('FGHIJKLABCDE')]
         });
@@ -1638,7 +1638,7 @@ describe('testing sameVariant Performance', function () {
 
     for (let i = 0; i < variousVariants.length; i++) {
         const v1 = variousVariants[i];
-        it('#sameVariant with ' + (v1 ? v1.toString() : 'null'), test_variant.bind(null, i, sameVariant),40000);
+        it('#sameVariant with ' + (v1 ? v1.toString() : 'null'), test_variant.bind(null, i, sameVariant), 40000);
     }
 
 /*

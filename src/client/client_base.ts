@@ -358,7 +358,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
         // prevent illegal call to connect
         if (this._secureChannel !== null) {
-            setImmediate(() => {
+            window.setImmediate(() => {
                 callback(new Error('connect already called'));
             });
             return;
@@ -469,7 +469,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
                  * @event close
                  */
                 this.emit('close', null);
-                setImmediate(callback);
+                window.setImmediate(callback);
             });
         } else {
             this.emit('close', null);
@@ -504,7 +504,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     public findServers(options: IFindServersOptions, callback: ResponseCallback<endpoints_service.ApplicationDescription[]>) {
 
         if (!this._secureChannel) {
-            setImmediate(function () {
+            window.setImmediate(function () {
                 callback(new Error('Invalid Secure Channel'));
             });
             return;
@@ -827,7 +827,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
         // create a secure channel
         // a new secure channel must be established
-        setImmediate(() => {
+        window.setImmediate(() => {
 
             this._destroy_secure_channel();
 
@@ -1003,14 +1003,14 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
                  * @param error {Error}
                  */
                 client.emit('close', err);
-                setImmediate(() => {
+                window.setImmediate(() => {
                     client._destroy_secure_channel();
                 });
                 return;
             } else {
                 client.emit('connection_lost');
                 debugLog('recreating new secure channel ');
-                setImmediate(() => client._recreate_secure_channel((err) => {
+                window.setImmediate(() => client._recreate_secure_channel((err) => {
                     debugLog('secureChannel#on(close) => _recreate_secure_channel returns ' + (err ? err.message : 'OK'));
                     if (err) {
                         // xx assert(!this._secureChannel);

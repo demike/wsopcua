@@ -928,7 +928,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
         if (this._closeEventHasBeenEmmitted) {
             debugLog('ClientSession#_defaultRequest => session has been closed !! ' + request.toString());
-            setImmediate(function() {
+            window.setImmediate(function() {
                 callback(new Error('ClientSession is closed !'));
             });
             return ;

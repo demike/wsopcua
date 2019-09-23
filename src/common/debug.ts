@@ -2,7 +2,9 @@ export var doDebug = false;
 
 
 export function debugLog(...args) {
-    console.debug(args.join(''));
+    if (doDebug) {
+        console.debug(args.join(''));
+    }
 }
 
 /*

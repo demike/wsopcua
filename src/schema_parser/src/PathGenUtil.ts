@@ -1,7 +1,7 @@
 import { ProjectModulePath } from "./SchemaParserConfig";
 
 export class PathGenUtil {
-    public static readonly PROJECT_NAME = "wsopcua";
+    public static readonly PROJECT_NAME = "wsopcua/dist/es2015";
     private static _projectRootPath : string;
    
     private static readonly _simpleTypeModulePath = new ProjectModulePath(PathGenUtil.PROJECT_NAME, "/basic-types");

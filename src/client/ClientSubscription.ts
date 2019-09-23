@@ -157,14 +157,14 @@ constructor (session: ClientSession, options: ICreateSubscriptionRequest) {
      */
     this.hasTimedOut = false;
 
-    setImmediate(() => {
+    window.setImmediate(() => {
 
         this.__create_subscription( (err) => {
 
             if (!err) {
 
 
-                setImmediate(() => {
+                window.setImmediate(() => {
                     /**
                      * notify the observers that the subscription has now started
                      * @event started
@@ -361,7 +361,7 @@ public onNotificationMessage(notificationMessage: subscription_service.Notificat
 
 
 protected _terminate_step2(callback: ErrorCallback) {
-    setImmediate(() => {
+    window.setImmediate(() => {
         /**
          * notify the observers tha the client subscription has terminated
          * @event  terminated
@@ -454,7 +454,7 @@ protected _wait_for_subscription_to_be_ready(done: ErrorCallback) {
         if (self._subscriptionId === 'pending') {
             // the subscriptionID is not yet known because the server hasn't replied yet
             // let postpone this call, a little bit, to let things happen
-            setImmediate(wait_for_subscription_and_monitor);
+            window.setImmediate(wait_for_subscription_and_monitor);
 
         } else if (self._subscriptionId === 'terminated') {
             // the subscription has been terminated in the meantime
@@ -467,7 +467,7 @@ protected _wait_for_subscription_to_be_ready(done: ErrorCallback) {
         }
     }
 
-    setImmediate(wait_for_subscription_and_monitor);
+    window.setImmediate(wait_for_subscription_and_monitor);
 
 }
 /**
@@ -636,51 +636,6 @@ public monitorItems(itemsToMonitor: IReadValueId[], requestedParameters: IMonito
     });
     return monitoredItemGroup;
 }
-
-// ClientSubscription.prototype.monitorOld = function (itemToMonitor, requestedParameters, timestampsToReturn, done) {
-//
-//     var self = this;
-//
-//
-//     assert(itemToMonitor.nodeId);
-//     assert(itemToMonitor.attributeId);
-//     assert(done === undefined || ('function' === typeof done));
-//     assert('function' !== typeof timestampsToReturn);
-//
-//     // Try to resolve the nodeId and fail fast if we can't.
-//     resolveNodeId(itemToMonitor.nodeId);
-//
-//     timestampsToReturn = timestampsToReturn || TimestampsToReturn.Neither;
-//
-//
-//     var monitoredItem = new ClientMonitoredItem(this, itemToMonitor, requestedParameters, timestampsToReturn);
-//
-//     var _watch_dog = 0;
-//
-//     function wait_for_subscription_and_monitor() {
-//
-//         _watch_dog++;
-//
-//         if (self.subscriptionId === "pending") {
-//             // the subscriptionID is not yet known because the server hasn't replied yet
-//             // let postpone this call, a little bit, to let things happen
-//             setImmediate(wait_for_subscription_and_monitor);
-//
-//         } else if (self.subscriptionId === "terminated") {
-//             // the subscription has been terminated in the meantime
-//             // this indicates a potential issue in the code using this api.
-//             if ('function' === typeof done) {
-//                 done(new Error("subscription has been deleted"));
-//             }
-//         } else {
-//             //xxx console.log("xxxx _watch_dog ",_watch_dog);
-//             monitoredItem._monitor(done);
-//         }
-//     }
-//
-//     setImmediate(wait_for_subscription_and_monitor);
-//     return monitoredItem;
-// };
 
 public isActive(): boolean {
     return typeof this._subscriptionId !== 'string';

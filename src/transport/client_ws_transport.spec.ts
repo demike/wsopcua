@@ -305,7 +305,7 @@ describe('testing ClientWS_transport', function () {
             expect(transport_confirms_that_close_event_has_been_processed).toBe(false);
             transport.disconnect(function () {
 
-                setImmediate(function () {
+                window.setImmediate(function () {
                     expect(server_confirms_that_server_socket_has_been_closed).toBe(true);
                     expect(transport_confirms_that_close_event_has_been_processed).toBe(true);
                     done();

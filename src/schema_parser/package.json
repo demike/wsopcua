@@ -1,7 +1,7 @@
 {
  "name": "opcua-schema-parser",
  "version": "0.1.0-00",
- "description": "nodejs opcua schema parser",
+ "description": "opcua schema parser",
  "main": "index.ts",
  "dependencies": {
   "@types/jsdom": "~12.2.4",

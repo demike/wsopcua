@@ -419,7 +419,7 @@ public disconnect(callback: () => void ) {
         this._socket = null;
     }
 
-    setImmediate(function () {
+    window.setImmediate(function () {
         this.on_socket_ended(null);
         callback();
     });
