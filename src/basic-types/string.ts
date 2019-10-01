@@ -17,6 +17,6 @@ export function randomString() {
 export function decodeString(stream: DataStream) {
     return stream.readString();
 }
-export function encodeString(value: string, stream: DataStream) {
+export function encodeString(value: string|undefined|null, stream: DataStream) {
     stream.writeString(value);
 }

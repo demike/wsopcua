@@ -42,6 +42,7 @@ import { NodeIdType } from '../generated/NodeIdType';
  * @constructor
  */
 export class ExpandedNodeId extends NodeId {
+    public static NullExpandedNodeId: Readonly<ExpandedNodeId> = new ExpandedNodeId(NodeIdType.Numeric, 0, 0);
     public namespaceUri: string;
     public serverIndex: number;
     constructor(identifierType: NodeIdType, value, namespace: number = 0, namespaceUri?: string, serverIndex?: number) {

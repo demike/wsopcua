@@ -71,7 +71,7 @@ export function decodeFloat(stream: DataStream) {
     // xx return roundToFloat(float);
 }
 
-export function isValidDouble(value: number) {
+export function isValidDouble(value: any) {
     if (!Number.isFinite(value)) {
         return false;
     }

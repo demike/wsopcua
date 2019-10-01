@@ -30,7 +30,7 @@ export function randomDateTime(): Date {
         r(0, 24), r(0, 59), r(0, 59), r(0, 1000));
 
 }
-export function encodeDateTime(date: Date, stream: DataStream) {
+export function encodeDateTime(date: Date|undefined|null, stream: DataStream) {
 
     if (!date) {
         stream.setUint32(0);

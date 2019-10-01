@@ -94,11 +94,19 @@ export class ClassMember {
         return this._isArray;
     }
 
+    public get Required(): boolean {
+        return this._required;
+    }
+
+    public set Required(required: boolean) {
+        this._required = required;
+    }
+
     /**
      *
      * @param option {required : boolean, typePrefix : string}
      */
-    public toString(option?: any): string {
+    public toString(option?: {required: boolean, typePrefix: string}): string {
         const required = (!option || option.required === undefined) ? this._required : option.required;
         if (this._name.toLowerCase().indexOf('reserved') == 0) {
             return '';
@@ -134,6 +142,11 @@ export class ClassMember {
 
         if (this._length > 1 || this._isArray) {
             str += '[]';
+        } else {
+            if ( this._type instanceof SimpleType && this._type.defaultValue == undefined && required) {
+                // account for strict null checking
+                str += ' | null';
+            }
         }
 
         if (this._defaultValue) {
@@ -144,7 +157,6 @@ export class ClassMember {
     }
 
     writeToEncodingByteSrc(value: number|boolean, encodingByteName: string): string {
-        let encodingByte;
         if (length < 2) {
             const mask = 1 << this._bitPos;
             if (value) {

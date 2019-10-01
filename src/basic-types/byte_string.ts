@@ -18,7 +18,7 @@ export function randomByteString(value, len: number) {
     }
     return b;
 }
-export function encodeByteString(byteString: Uint8Array, stream: DataStream): void {
+export function encodeByteString(byteString: Uint8Array|undefined|null, stream: DataStream): void {
     stream.writeByteStream(byteString);
 }
 export function decodeByteString(stream: DataStream): Uint8Array {

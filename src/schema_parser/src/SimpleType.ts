@@ -12,6 +12,7 @@ export class SimpleType extends ClassFile {
      */
     protected _jsType?:  string;
     private _hasEnDeCodeFunctions = true;
+    protected _defaultValue?: string;
 
     constructor(modulePath: ProjectModulePath, name?: string, baseClass?: string|ClassFile ,
             members?: ClassMember[], methods?: ClassMethod[]) {
@@ -35,6 +36,17 @@ export class SimpleType extends ClassFile {
         this._hasEnDeCodeFunctions = value;
     }
 
+    /**
+     * the string representation of the default value used
+     * in the constructor, if not set null will be used
+     */
+    public get defaultValue(): string | undefined {
+        return this._defaultValue;
+    }
+
+    public set defaultValue(value: string | undefined) {
+        this._defaultValue = value;
+    }
 
     // protected createDecodeMethod() : void {
     //     let enc = new ClassMethod(null,new ClassFile(this.name),"decode" + this.name,
@@ -66,11 +78,10 @@ export class SimpleType extends ClassFile {
      * @param targetClassFile the file the returned import should be placed in (needed to build the relative path)
      */
     public getImportSrc(targetClassFile: ClassFile): string {
-        let ret: string;
         if (this.importAs) {
             return "import * as " + this.importAs + " from '" +
                  getModuleImportPath(targetClassFile.ModulePath, this.ModulePath) + "';";
-        } 
+        }
         if (this._hasEnDeCodeFunctions) {
             return "import {" + this.Name + ", encode" + this.Name + ", decode" + this.Name + "} from '" +
                  getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + "';";

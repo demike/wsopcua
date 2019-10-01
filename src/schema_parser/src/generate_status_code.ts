@@ -6,36 +6,39 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+    // see OPC-UA Part 6 , A2
+    const codeMap: {[key: string]: number} = {};
+    const code_list: {name: string, value: number, description: string}[] = [];
 
-// see OPC-UA Part 6 , A2
-const codeMap: {[key: string]: number} = {};
-const code_list: {name: string, value: number, description: string}[] = [];
+export function generateStatusCodes() {
 
 
-const datafolder = path.join(__dirname, '../schemas');
 
-fs.readFile(path.join(datafolder, '/StatusCodes.csv'), 'utf8', (err: Error|null, data: string) => {
-    if (err) {
-        console.log(err);
-    } else {
-        const lines = data.split('\n');
-        lines.forEach(function(line) {
-            const e = line.split(',');
-            const codeName = e[0];
-            console.log(e);
-            code_list.push({
-                name: e[0],
-                value: parseInt(e[1], 16),
-                description: e[2]
+    const datafolder = path.join(__dirname, '../schemas');
+
+    fs.readFile(path.join(datafolder, '/StatusCodes.csv'), 'utf8', (err: Error|null, data: string) => {
+        if (err) {
+            console.log(err);
+        } else {
+            const lines = data.split('\n');
+            lines.forEach(function(line) {
+                const e = line.split(',');
+                const codeName = e[0];
+                console.log(e);
+                code_list.push({
+                    name: e[0],
+                    value: parseInt(e[1], 16),
+                    description: e[2]
+                });
+            codeMap[codeName] = parseInt(e[1], 16);
             });
-        codeMap[codeName] = parseInt(e[1], 16);
-        });
 
-        console.log('codeMap' , codeMap);
-        parseStatusCodeXML();
+            console.log('codeMap' , codeMap);
+            parseStatusCodeXML();
 
-    }
-});
+        }
+    });
+}
 
 function parseStatusCodeXML() {
     const obj = {};

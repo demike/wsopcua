@@ -88,7 +88,7 @@ export function encodeGuid(guid: string, stream: DataStream): void {
     }
 
 
-    export function decodeGuid(stream: DataStream) {
+    export function decodeGuid(stream: DataStream): string {
 
         function read_UInt32() {
             return toHex(stream.getUint32(), 8);

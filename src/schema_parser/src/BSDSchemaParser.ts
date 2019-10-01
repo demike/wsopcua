@@ -22,6 +22,8 @@ export class BSDSchemaParser {
     protected metaTypeMap: {[key: string]: {[key: string]: string[]}} = {};
     protected namespace: string | number  = -1;
 
+    protected importConfig?: ProjectImportConfig;
+
     constructor() {
         this.clsIncompleteTypes = [];
     }
@@ -29,15 +31,16 @@ export class BSDSchemaParser {
     public parse(importConfig: ProjectImportConfig,
             metaTypeMap: {[key: string]: {[key: string]: string[]}}): void {
         this.metaTypeMap = metaTypeMap;
+        this.importConfig = importConfig;
         for (const schema of importConfig.schemaImports) {
-            this.outPath = importConfig.protjectSrcPath + schema.modulePath;
+            this.outPath = path.join(importConfig.protjectSrcPath, schema.modulePath);
             if (schema.namespace !== undefined) {
                 this.namespace = schema.namespace;
             }
             this.currentModulePath = new ProjectModulePath(importConfig.projectName, schema.modulePath);
 
             if (!fs.existsSync(this.outPath)) {
-                fs.mkdirSync(this.outPath);
+                fs.mkdirSync(this.outPath, { recursive: true } as any);
             }
 
             try {
@@ -246,25 +249,32 @@ export class BSDSchemaParser {
     }
 
     protected writeFiles() {
+        if(!this.importConfig) {
+            return;
+        }
         let ar: ClassFile[];
         ar = TypeRegistry.getTypes();
         for (const file of ar) {
             if (!file.Written) {
-                let arParams = this.metaTypeMap[/*"DataType"*/'Object'][file.Name + '_Encoding_DefaultBinary'];
-                if (!arParams) {
-                    arParams = this.metaTypeMap['DataType'][file.Name ];
+                if ( !this.importConfig.readonly) {
+                    let arParams = this.metaTypeMap[/*"DataType"*/'Object'][file.Name + '_Encoding_DefaultBinary'];
+                    if (!arParams) {
+                        arParams = this.metaTypeMap['DataType'][file.Name ];
+                    }
+                    if (arParams) {
+                        file.setTypeId(arParams[1], this.namespace);
+                    }
+                    this.writeToFile(path.resolve(this.outPath, file.Name + '.ts'), file);
                 }
-                if (arParams) {
-                    file.setTypeId(arParams[1], this.namespace);
-                }
-                this.writeToFile(path.resolve(this.outPath, file.Name + '.ts'), file);
                 file.Written = true;
             }
         }
     }
 
     protected writeIndexFile() {
-
+        if (!this.importConfig || this.importConfig.readonly) {
+            return;
+        }
         let strFileContent = '';
         const ar = TypeRegistry.getTypes();
 

@@ -2,7 +2,7 @@ import * as path from 'path';
 
 export interface SchemaImportConfig {
     /**
-     * path to the schema file (.bsd or NodeSet2.xml), can be relative to the schema parser execution path
+     * path to the schema file (.bsd or NodeSet2.xml), can be relative to the schema parser config json file path
      */
     pathToSchema: string;
 
@@ -25,9 +25,16 @@ export interface ProjectImportConfig {
     projectName: string;
 
     /**
-     * the path to src folder of the project (can be relative to the schema parser execution path)
+     * the path to src folder of the project (can be relative to the schema parser config json file path)
      */
     protjectSrcPath: string;
+
+    /**
+     * do not write files, just generate in memory for
+     * being referencable by of other projects
+     * @default false
+     */
+    readonly: boolean;
 
     /**
      * the schema files to import
@@ -73,16 +80,24 @@ export class ProjectModulePath {
     }
 }
 
-export function sanitizeProjectImportConfig(conf: ProjectImportConfig) {
+/**
+ * replaces all relative paths to absolute paths
+ * 
+ * @param conf the configuration
+ * @param configFilePath the file the configuration was parsed from
+ */
+export function sanitizeProjectImportConfig(conf: ProjectImportConfig, configFilePath: string) {
+    const confFilePath = path.dirname(configFilePath);
     if (conf.protjectSrcPath.startsWith('.')) {
         //it's a relative path
-        conf.protjectSrcPath = path.join(__dirname, conf.protjectSrcPath);
+
+        conf.protjectSrcPath = path.join(confFilePath , conf.protjectSrcPath);
     }
 
     for (const schemaConf of conf.schemaImports) {
         if (schemaConf.pathToSchema.startsWith('.')) {
             //it's a relative path
-            schemaConf.pathToSchema = path.join(__dirname, schemaConf.pathToSchema);
+            schemaConf.pathToSchema = path.join(confFilePath, schemaConf.pathToSchema);
         }
     }
 }

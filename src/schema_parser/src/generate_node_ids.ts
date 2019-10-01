@@ -1,18 +1,21 @@
-"use strict";
+'use strict';
 import * as path from 'path';
 import * as fs from 'fs';
 
 
 // see OPC-UA Part 6 , A2
-//export var codeMap : {[key:string] : string[]} = {};
-export var metaTypeMap : {[key : string]:{[key : string]:string[]}} = {};
+// export var codeMap : {[key:string] : string[]} = {};
+export let metaTypeMap: {[key: string]: {[key: string]: string[]}} = {};
 
-export function generateNodeIds(csvFilePath : string, outFileName : string, callback?: () => void ) {
-    fs.readFile(csvFilePath, 'utf8', (err: Error|null, data: string) =>{
+export function generateNodeIds(csvFilePath: string, writeFile: boolean, callback?: () => void ) {
+    fs.readFile(csvFilePath, 'utf8', (err: Error|null, data: string) => {
         if (err) {
             console.log(err);
         } else {
-            convert(data,outFileName);
+            convert(data);
+            if (writeFile) {
+                writeToFile();
+            }
             if (callback) {
                 callback();
             }
@@ -20,32 +23,30 @@ export function generateNodeIds(csvFilePath : string, outFileName : string, call
     });
 }
 
-function convert(data: string, outFileName: string)
-{
-    let lines = data.split("\n");
+function convert(data: string) {
+    const lines = data.split('\n');
 
-
-    var name,id,type,codeName,value,typeName;
     metaTypeMap = {};
 
     lines.forEach(function(line) {
-        let row = line.split(',');
+        const row = line.split(',');
         if (!row || row.length < 3) {
             return;
         }
-        let codeName : string = row[0];
-        let value : string    = row[1];
-        let type : string = row[2];
+        const codeName: string = row[0];
+        const value: string    = row[1];
+        const type: string = row[2];
 
         if (!metaTypeMap.hasOwnProperty(type)) {
-            metaTypeMap[type]= {};
+            metaTypeMap[type] = {};
         }
 
-        //codeMap[codeName] = row;
-        metaTypeMap[type][codeName]= row;
+        // codeMap[codeName] = row;
+        metaTypeMap[type][codeName] = row;
 
 
     });
+}
 
     /*
     var outFile = fs.createWriteStream(path.join(__dirname + "/../../constants",outFileName));
@@ -53,7 +54,7 @@ function convert(data: string, outFileName: string)
     outFile.write("// using schema_parser/generate_node_ids.ts\n");
     */
 
-    var e;
+    let e;
 /*    if (false) {
         outFile.write(" export var NodeIds : {[key:string]:{name : string, value : number}} = { \n");
         for(name in codeMap) {
@@ -70,34 +71,35 @@ function convert(data: string, outFileName: string)
 
     }
 */
-    let typeMap;
-    for(typeName in metaTypeMap) {
+function writeToFile() {
+    let name, id, type, typeName, typeMap;
+    for (typeName in metaTypeMap) {
         if (metaTypeMap.hasOwnProperty(typeName)) {
-            const fileName = (typeName + 'Ids.ts'); //.split(/(?=[A-Z])/).join('_').toLowerCase();
-            const outFile = fs.createWriteStream(path.join(__dirname + "/../../constants",fileName));
-            outFile.write("// this file has been automatically generated\n");
-            outFile.write("// using schema_parser/generate_node_ids.ts\n");
+            const fileName = (typeName + 'Ids.ts'); // .split(/(?=[A-Z])/).join('_').toLowerCase();
+            const outFile = fs.createWriteStream(path.join(__dirname + '/../../constants', fileName));
+            outFile.write('// this file has been automatically generated\n');
+            outFile.write('// using schema_parser/generate_node_ids.ts\n');
             typeMap = metaTypeMap[typeName];
-            outFile.write(" export var "+ typeName + "Ids = { \n");
+            outFile.write(' export var '+ typeName + 'Ids = { \n');
 
-            var names = Object.keys(typeMap);
+            let names = Object.keys(typeMap);
 
-            for(var i=0;i< names.length;i++) {
+            for (let i = 0; i < names.length; i++) {
                 name = names[i];
 
                 if (typeMap.hasOwnProperty(name)) {
                     e = typeMap[name];
                     name = e[0];
-                    id   = parseInt(e[1],10);
+                    id   = parseInt(e[1], 10);
                     type = e[2];
-                    if (i +1 <names.length) {
-                        outFile.write(" " + name + ": " + id + ",\n");
+                    if (i + 1 < names.length) {
+                        outFile.write(' ' + name + ': ' + id + ',\n');
                     } else {
-                        outFile.write(" " + name + ": " + id + "\n");
+                        outFile.write(' ' + name + ': ' + id + '\n');
                     }
                 }
             }
-            outFile.write("};\n");
+            outFile.write('};\n');
             // outFile.close();
         }
     }

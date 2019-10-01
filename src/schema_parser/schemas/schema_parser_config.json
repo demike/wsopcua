@@ -1,7 +1,7 @@
 {
     "projects" : [
         {
-            "projectName": "wsopcua",
+            "projectName": "wsopcua/dist/es2015",
             "protjectSrcPath": "../../",
             "schemaImports": [
                 {

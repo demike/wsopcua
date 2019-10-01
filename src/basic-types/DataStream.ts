@@ -269,7 +269,7 @@ export class DataStream {
     this._pos = 0;
   }
 
-  writeByteStream(buf: Uint8Array) {
+  writeByteStream(buf?: Uint8Array) {
 
     if (!buf) {
       this.setInt32(-1);
@@ -329,7 +329,7 @@ export class DataStream {
 
   }
 
-  writeString(str: string): void {
+  writeString(str?: string): void {
     if (str === undefined || str === null) {
       this.setInt32(-1);
       return;

@@ -59,6 +59,10 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
             }
             this.encodingByteMap[mem.Name] = mem;
         } else {
+            if (this.encodingByteMap && this.encodingByteMap[mem.Name + 'Specified']) {
+                // this is an optional field, because we found a specified flag
+                mem.Required = false;
+            }
             this.cls.addMemberVariable(mem);
         }
         return true;
@@ -88,11 +92,13 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
             if (mem.Type.Name != 'Bit') {
                 let alternativeCode = 'null';
                 if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
-                    alternativeCode = 'null'; // availability is specified in encoding byte
+                    alternativeCode = 'undefined'; // availability is specified in encoding byte
                 } else if (mem.IsArray) {
                     alternativeCode = '[]';
                 } else if (mem.Type instanceof StructTypeFile) {
                     alternativeCode = 'new ' + mem.Type.Name + '()';
+                } else if (mem.Type instanceof SimpleType) {
+                    alternativeCode = mem.Type.defaultValue || 'null';
                 }
 
                 body += '  this.' + mem.Name + ' = (options.' + mem.Name + 
