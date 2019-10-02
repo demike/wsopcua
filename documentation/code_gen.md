@@ -17,7 +17,7 @@ dependencies to different specified locations a data-type-gen.json file is used.
 
 Usage Example (in your project / monorepo):
 ```shell
-node ./node_modules/@engel/wsopcua/src/schema_parser/bin/index.js -c ./data-type-gen.json
+node ./node_modules/@engel/wsopcua/src/schema_parser/dist-es2015/index.js -c ./data-type-gen.json
 ```
 
 ## Generator Config Format

@@ -38,6 +38,6 @@
   "start": "tsc -p ./tsconfig.json --watch",
   "build": "tsc -p ./tsconfig.json",
   "build-min": "webpack --config webpack.config.js ",
-  "schema-gen": "node ./bin/index.js --genids --gencodes"
+  "schema-gen": "node ./dist-es2015/index.js --genids --gencodes"
  }
 }

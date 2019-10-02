@@ -24,7 +24,7 @@
     "compilerOptions": {
         "target": "ES6",
         "module": "commonjs",
-        "outDir": "bin",
+        "outDir": "dist-es2015",
         "declaration": true,
         "strict": true,
         "sourceMap": true
