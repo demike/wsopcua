@@ -39,7 +39,7 @@ Note that all <b>relative paths</b> of this config file are <b>relative to the c
     "projects" : [
         {
             "projectName": "project-a",
-            "protjectSrcPath": "./packages/ProjectA/src",
+            "projectSrcPath": "./packages/ProjectA/src",
             "schemaImports": [
                 {
                     "pathToSchema" : "./nodesets/feature_a1.NodeSet2.xml",
@@ -54,7 +54,7 @@ Note that all <b>relative paths</b> of this config file are <b>relative to the c
         },
          {
             "projectName": "project-b",
-            "protjectSrcPath": "./packages/ProjectB/src",
+            "projectSrcPath": "./packages/ProjectB/src",
             "schemaImports": [
                 {
                     "pathToSchema" : "./nodesets/feature_a1.NodeSet2.xml",
@@ -84,7 +84,7 @@ property defines the path to the `src` folder of the specific project
 ### The `schemaImports`
 property hold a list schema imports that correspond to different `NodeSet2.xml` schema files.  
  `pathToSchema` is the relative path to the NodeSet2.xml-file and
- `modulePath` appended to `protjectSrcPath` results in the target directory for
+ `modulePath` appended to `projectSrcPath` results in the target directory for
  the generated classes.
 
  In the above example the generation process results in the following folder structure

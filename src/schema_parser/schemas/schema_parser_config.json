@@ -2,7 +2,7 @@
     "projects" : [
         {
             "projectName": "wsopcua/dist/es2015",
-            "protjectSrcPath": "../../",
+            "projectSrcPath": "../../",
             "schemaImports": [
                 {
                     "pathToSchema" : "../schemas/Opc.Ua.Types.bsd",

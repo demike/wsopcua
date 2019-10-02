@@ -151,6 +151,9 @@ export class ClassMember {
 
         if (this._defaultValue) {
             str += ' = ' + this._defaultValue;
+            if (this._length > 1 || this._isArray) {
+                str += '[]';
+            }
         }
 
         return str;

@@ -33,7 +33,7 @@ export class BSDSchemaParser {
         this.metaTypeMap = metaTypeMap;
         this.importConfig = importConfig;
         for (const schema of importConfig.schemaImports) {
-            this.outPath = path.join(importConfig.protjectSrcPath, schema.modulePath);
+            this.outPath = path.join(importConfig.projectSrcPath, schema.modulePath);
             if (schema.namespace !== undefined) {
                 this.namespace = schema.namespace;
             }

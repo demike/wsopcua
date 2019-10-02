@@ -9,14 +9,14 @@ export type SByte = number;
 
 export type Int16 = number;
 export type Int32 = number;
-export type Int64 = number[];
+export type Int64 = [number, number];
 
 export type UInt8 = number;
 export type Byte = number;
 
 export type UInt16 = number;
 export type UInt32 = number;
-export type UInt64 = number;
+export type UInt64 = [number, number];
 
 
 function getRandomInt(min: number, max: number) {
@@ -156,18 +156,18 @@ export function encodeUInt64(value, stream: DataStream) {
     stream.setUint32(value[0]);
 }
 
-export function decodeUInt64(stream: DataStream): number[] {
+export function decodeUInt64(stream: DataStream): [number, number] {
     const low = stream.getUint32();
     const high = stream.getUint32();
     return constructInt64(high, low);
 }
-export function constructInt64(high: number, low: number): number[] {
+export function constructInt64(high: number, low: number): [number, number] {
     assert(low >= 0 && low <= 0xffffffff);
     assert(high >= 0 && high <= 0xffffffff);
     return [high, low];
 }
 
-export function coerceUInt64(value): number[] {
+export function coerceUInt64(value): [number, number] {
 
     let high, low, v;
     if (value === null || value === undefined) {
@@ -176,7 +176,7 @@ export function coerceUInt64(value): number[] {
     if (value instanceof Array) {
         assert('number' === typeof value[0]);
         assert('number' === typeof value[1]);
-        return value;
+        return value as [number, number];
     }
     if (typeof value === 'string') {
         v = value.split(',');

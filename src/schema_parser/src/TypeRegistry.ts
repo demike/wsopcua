@@ -192,7 +192,7 @@ export class TypeRegistry {
         type = new SimpleType(this.BASIC_TYPES_PATH, 'Int64');
 //        type.Path = this.BASIC_TYPES_PATH + "integers";
         type.ImportAs = 'ec';
-        type.defaultValue = '0';
+        type.defaultValue = '[0, 0]';
         this.addType(type.Name, type);
 
         // TimeZoneDataType: 8.28
@@ -236,7 +236,7 @@ export class TypeRegistry {
         type = new SimpleType(this.BASIC_TYPES_PATH, 'UInt64');
  //       type.Path = this.BASIC_TYPES_PATH + "integers";
         type.ImportAs = 'ec';
-        type.defaultValue = '0';
+        type.defaultValue = '[0, 0]';
         this.addType(type.Name, type);
 
         // XmlElement: 8.39

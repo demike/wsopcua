@@ -27,7 +27,7 @@ export interface ProjectImportConfig {
     /**
      * the path to src folder of the project (can be relative to the schema parser config json file path)
      */
-    protjectSrcPath: string;
+    projectSrcPath: string;
 
     /**
      * do not write files, just generate in memory for
@@ -88,10 +88,10 @@ export class ProjectModulePath {
  */
 export function sanitizeProjectImportConfig(conf: ProjectImportConfig, configFilePath: string) {
     const confFilePath = path.dirname(configFilePath);
-    if (conf.protjectSrcPath.startsWith('.')) {
+    if (conf.projectSrcPath.startsWith('.')) {
         //it's a relative path
 
-        conf.protjectSrcPath = path.join(confFilePath , conf.protjectSrcPath);
+        conf.projectSrcPath = path.join(confFilePath , conf.projectSrcPath);
     }
 
     for (const schemaConf of conf.schemaImports) {

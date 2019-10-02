@@ -7,7 +7,6 @@ import { StatusCode } from '../basic-types/status_code';
 import { NumericRange } from '../numeric-range/numeric_range';
 import { ExtensionObject } from '../basic-types/extension_object';
 import { BinaryStreamSizeCalculator, DataStream } from '../basic-types/DataStream';
-import { BSDClassFileParser } from '../schema_parser/bin/BSDClassFileParser';
 import { IEncodable } from '../factory/factories_baseobject';
 import { constructObject } from '../factory';
 import { NodeId } from '../nodeid/nodeid';

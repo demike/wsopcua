@@ -1,6 +1,7 @@
 node_modules/
 bin/
-#dist/
+dist/
+dist-es2015/
 examples/dist/
 out/chrome/
 coverage/
