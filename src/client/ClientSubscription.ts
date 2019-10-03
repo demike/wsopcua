@@ -472,6 +472,7 @@ protected _wait_for_subscription_to_be_ready(done: ErrorCallback) {
 }
 /**
  * add a monitor item to the subscription
+ * waits for the subscription to be ready
  *
  * @method monitor
  * @async
@@ -608,6 +609,9 @@ public monitor(itemToMonitor: ReadValueId, requestedParameters: IMonitoringParam
 
 
 /**
+ * add monitored items to the subscription
+ * waits for the subscription to be ready
+ * 
  * @method monitorItems
  * @param itemsToMonitor
  * @param requestedParameters

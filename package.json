@@ -1,6 +1,6 @@
 {
   "name": "wsopcua",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "license": "MYLicense",
   "author": "Michael Derfler",
   "private": true,
@@ -52,7 +52,7 @@
     "docs": "typedoc --json docs/json/docs.json && python parse.py"
   },
   "files": [
-    "documentation/*",
+    "documentation/**/*",
     "dist/es2015/**/*",
     "src/schema_parser/dist2015/**/*",
     "src/schema_parser/schemas/**/*"

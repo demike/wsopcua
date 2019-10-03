@@ -61,7 +61,7 @@ constructor(subscription: ClientSubscription, itemToMonitor: IReadValueId, monit
     this._monitoringParameters = new MonitoringParameters(monitoringParameters);
     this._subscription = subscription;
     this._monitoringMode = subscription_service.MonitoringMode.Reporting;
-    assert(this._monitoringParameters.clientHandle === null/*4294967295*/, 'should not have a client handle yet');
+    assert(!this._monitoringParameters.clientHandle, 'should not have a client handle yet');
 }
 
 public get monitoringParameters() {
@@ -129,7 +129,7 @@ public _notify_value_change(value: DataValue) {
 protected _prepare_for_monitoring (): subscription_service.MonitoredItemCreateRequest | Error {
 
     assert(this._subscription.subscriptionId !== 'pending');
-    assert(this._monitoringParameters.clientHandle === /*4294967295*/null, 'should not have a client handle yet');
+    assert(!this._monitoringParameters.clientHandle, 'should not have a client handle yet');
     this._monitoringParameters.clientHandle = this._subscription.nextClientHandle();
     assert(this._monitoringParameters.clientHandle > 0 && this._monitoringParameters.clientHandle !== null/*4294967295*/);
 
