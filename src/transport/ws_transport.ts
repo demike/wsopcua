@@ -245,6 +245,16 @@ public on_socket_closed(err: Error) {
     this.emit('socket_closed', err || null);
 }
 
+protected _on_socket_data(evt: MessageEvent): void {
+    if (!this.packetAssembler) {
+        throw new Error('internal Error');
+    }
+    this.bytesRead += evt.data.byteLength;
+    if (evt.data.byteLength > 0) {
+        this.packetAssembler.feed(new DataView(evt.data));
+    }
+}
+
 public on_socket_ended(err: Error) {
 
     assert(!this._on_socket_ended_called);
@@ -272,8 +282,8 @@ protected _on_socket_ended_message(err: Error) {
 
     debugLog(' bytesRead    = ' + this.bytesRead);
     debugLog(' bytesWritten = ' + this.bytesWritten);
-    this._fulfill_pending_promises(new Error('Connection aborted - ended by server : ' + (err ? err.message : '')));
-};
+    this._fulfill_pending_promises(new Error('Connection aborted - ended by client : ' + (err ? err.message : '')));
+}
 
 
 /**
@@ -301,14 +311,7 @@ protected _install_socket(socket: WebSocket) {
         this._on_message_received( message_chunk);
     });
 
-    this._socket.onmessage = (evt: MessageEvent) => {
-        this.bytesRead += evt.data.byteLength;
-        if (evt.data.byteLength > 0) {
-            this.packetAssembler.feed(new DataView(evt.data));
-        }
-
-    };
-
+    this._socket.onmessage = (evt: MessageEvent) => {this._on_socket_data(evt); };
     this._socket.onclose = (evt: CloseEvent) => {
         // istanbul ignore next
         if (doDebug) {
@@ -327,6 +330,8 @@ protected _install_socket(socket: WebSocket) {
             */
            this.emit('socket_error', evt);
            err = new Error('ERROR IN SOCKET: reason=' + evt.reason + ' code=' + evt.code  + ' name=' + this.name);
+        } else {
+            this._on_socket_ended_message(new Error('Connection aborted'));
         }
 
         this.on_socket_closed(err);
@@ -350,7 +355,6 @@ protected _install_socket(socket: WebSocket) {
             debugLog(' SOCKET ERROR : ' + this.name);
         }
 
-        this._on_socket_ended_message(new Error('Connection aborted'));
         // note: The "close" event will be called directly following this event.
     });
 
@@ -422,7 +426,7 @@ public disconnect(callback: () => void) {
 }
 
 public isValid() {
-    return this._socket && (this._socket.readyState == this._socket.OPEN) && !this.__disconnecting__;
+    return this._socket && (this._socket.readyState === this._socket.OPEN) && !this.__disconnecting__;
 }
 
 }
