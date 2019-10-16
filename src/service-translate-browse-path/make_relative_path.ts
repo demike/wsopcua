@@ -155,7 +155,7 @@ export function makeRelativePath(str: string, addressSpace?): RelativePath {
             // name      match 7
             const ns = matches[6] ? parseInt(matches[6]) : 0;
             const name = matches[7];
-            if ( !matches[6] ) {
+            if ( ns === 0 ) {
                 // xx console.log( mm[6])
                 referenceTypeId = resolveNodeId(name);
 
