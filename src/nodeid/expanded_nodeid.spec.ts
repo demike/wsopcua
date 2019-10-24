@@ -75,5 +75,12 @@ describe('testing ExpandedNodeId', function () {
 
     });
 
+    it('coerceExpandedNodeId should coerce a string with nsu="testuri"', function () {
+
+        const exNodeId = coerceExpandedNodeId('nsu=testuri;i=10');
+        expect(exNodeId.toString()).toBe('ns=0;i=10;namespaceUri:testuri');
+
+    });
+
 
 });

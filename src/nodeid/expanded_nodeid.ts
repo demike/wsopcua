@@ -79,8 +79,20 @@ export class ExpandedNodeId extends NodeId {
 }
 
 export function coerceExpandedNodeId(value): ExpandedNodeId {
+
+    if (value instanceof ExpandedNodeId) {
+        return value;
+    }
+    let namespaceUri = null;
+
+    if (typeof value === 'string' && value.substr(0, 4) === 'nsu=') {
+        const idStart = value.indexOf(';');
+        namespaceUri = value.substring(4, idStart );
+        value = value.substring(idStart + 1);
+    }
+
     const n = coerceNodeId(value);
-    return new ExpandedNodeId(n.identifierType, n.value, n.namespace, /*namespaceUri*/null, /*serverIndex*/0);
+    return new ExpandedNodeId(n.identifierType, n.value, n.namespace, namespaceUri, /*serverIndex*/0);
 }
 
 /**
