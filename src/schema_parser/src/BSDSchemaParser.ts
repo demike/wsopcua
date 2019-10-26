@@ -64,13 +64,38 @@ export class BSDSchemaParser {
 
         for (let i = 0; i < elements.length; i++) {
             const el = elements.item(i);
-            const nodeId = el.getAttribute('NodeId');
+            const nodeId = this.getTypeNodeId(el);
             let browseName = el.getAttribute('BrowseName');
             if (nodeId && browseName) {
                 browseName = browseName.split(':')[1];
-                this.metaTypeMap['DataType'][browseName] = [browseName, nodeId.split('i=')[1], 'DataType'];
+                this.metaTypeMap['DataType'][browseName] = [browseName, nodeId, 'DataType'];
             }
         }
+    }
+
+    protected getTypeNodeId(el: Element) {
+        let nodeId: string|null;
+        //has encoding reference
+        const hasEncodingRef = el.querySelector('References > Reference[ReferenceType="i=38"]');
+        if (hasEncodingRef && hasEncodingRef.innerHTML) {
+            nodeId = hasEncodingRef.innerHTML;
+        } else {
+            nodeId = el.getAttribute('NodeId');
+        }
+
+        if (nodeId) {
+            let split;
+            split = nodeId.split('x=');
+            if (split.length >= 2) {
+                return split[1];
+            }
+            split = nodeId.split('s=');
+            if (split.length >= 2) {
+                return "'" + split[split.length - 1 ] + "'";
+            }
+        }
+
+        return nodeId;
     }
 
     public parseNodeSet2XmlDoc(doc: JSDOM) {
