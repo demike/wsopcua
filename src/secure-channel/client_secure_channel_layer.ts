@@ -366,14 +366,16 @@ public isTransactionInProgress() {
 protected _cancel_pending_transactions(err?: Error) {
     /* jshint validthis: true */
 
-    debugLog('_cancel_pending_transactions  '
-         + Object.keys(this._request_data) +  (this._transport ? this._transport.name : 'no transport'));
+    if (doDebug && this._request_data) {
+        debugLog('_cancel_pending_transactions  '
+            + Object.keys(this._request_data) +  (this._transport ? this._transport.name : 'no transport'));
+    }
 
-    assert(typeof err === 'object', 'expecting valid error');
-
-    for (const [key, request_data] of this._request_data) {
-        debugLog('xxxx Cancelling pending transaction ' + key + ' ' +  request_data.msgType + request_data.request.constructor.name);
-        this.process_request_callback(request_data, err, null);
+    if (this._request_data) {
+        for (const [key, request_data] of this._request_data) {
+            debugLog('xxxx Cancelling pending transaction ' + key + ' ' +  request_data.msgType + request_data.request.constructor.name);
+            this.process_request_callback(request_data, err, null);
+        }
     }
 
     this._request_data = new Map();
@@ -1420,7 +1422,7 @@ public close(callback: ErrorCallback) {
     protected serverCertificate: string;
     protected messageBuilder: MessageBuilder;
 
-    protected _request_data: Map<number, RequestData>;;
+    protected _request_data: Map<number, RequestData>;
     protected __in_normal_close_operation = false;
     protected _renew_security_token_requested = 0;
     protected _timedout_request_count = 0;
