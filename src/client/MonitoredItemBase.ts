@@ -46,9 +46,9 @@ export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
     protected _subscription: ClientSubscription;
     protected _monitoringMode: MonitoringMode ;
     protected _statusCode: StatusCode;
-    protected _result: MonitoredItemCreateResult;
+    public result?: MonitoredItemCreateResult;
     protected _monitoredItemId: number;
-    protected _filterResult: ExtensionObject;
+    public filterResult?: ExtensionObject;
 
 
 constructor(subscription: ClientSubscription, itemToMonitor: IReadValueId, monitoringParameters: IMonitoringParameters) {
@@ -82,6 +82,10 @@ public get monitoringMode() {
 
 public get monitoredItemId() {
     return this._monitoredItemId;
+}
+
+public set monitoredItemId(monitoredItemId: number) {
+    this._monitoredItemId = monitoredItemId;
 }
 
 public get statusCode(): StatusCode {
@@ -193,11 +197,11 @@ protected _after_create(monitoredItemResult: MonitoredItemCreateResult) {
     if (monitoredItemResult.statusCode === StatusCodes.Good) {
 
 
-        this._result = monitoredItemResult;
+        this.result = monitoredItemResult;
         this._monitoredItemId = monitoredItemResult.monitoredItemId;
         this._monitoringParameters.samplingInterval = monitoredItemResult.revisedSamplingInterval;
         this._monitoringParameters.queueSize = monitoredItemResult.revisedQueueSize;
-        this._filterResult = monitoredItemResult.filterResult;
+        this.filterResult = monitoredItemResult.filterResult;
 
 
         this._subscription._add_monitored_item(this._monitoringParameters.clientHandle, this);
