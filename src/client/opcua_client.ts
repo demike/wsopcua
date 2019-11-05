@@ -312,6 +312,13 @@ public computeClientSignature(channel: ClientSecureChannelLayer, serverCertifica
 }
 
 
+public createUserIdentityTokenP(session: ClientSession, userIdentityToken: UserIdentityToken|UserIdentityInfo):
+Promise<UserIdentityToken> {
+    return new Promise((res, rej) => {this.createUserIdentityToken(session, userIdentityToken, (err, _userIdentityToken) => {
+        if (err) { rej(err); } else { res(_userIdentityToken); }
+    }); });
+}
+
 public createUserIdentityToken(session: ClientSession, userIdentityToken: UserIdentityToken|UserIdentityInfo,
     callback: ResponseCallback<UserIdentityToken>): void {
     assert('function' === typeof callback);
@@ -436,6 +443,8 @@ protected _activateSession(session: ClientSession, callback: ResponseCallback<Cl
                 if (!validateServerNonce(session.serverNonce)) {
                     return callback(new Error('Invalid server Nonce'));
                 }
+                // 05.11.2019: Derfler added new session_activated
+                session.emit('session_activated');
                 return callback(null, session);
 
             } else {
@@ -498,6 +507,21 @@ public reactivateSession(session: ClientSession, callback: ErrorCallback) {
         callback(err);
     });
 }
+
+/**
+ * transfer session to this client
+ * @method reactivateSession
+ * @param session
+ * @param callback
+ * @return {*}
+ */
+public reactivateSessionP(session: ClientSession): Promise<void> {
+    return new Promise((res, rej) => {this.reactivateSession(session, (err) => {
+        if (err) { rej(err); } else { res(); }
+    }); });
+}
+
+
 /**
  * create and activate a new session
  * @async
@@ -551,6 +575,30 @@ public createSession(userIdentityInfo: UserIdentityInfo | null, callback: Respon
     });
 }
 
+/**
+ * @method createSessionAsync
+ * @param [userIdentityInfo {Object} ] optional
+ * @param [userIdentityInfo.userName {String} ]
+ * @param [userIdentityInfo.password {String} ]
+ * @return {Promise}
+ * @async
+ *
+ * @example
+ *     // create a anonymous session
+ *     const session = await client.createSession();
+ *
+ * @example
+ *     // create a session with a userName and password
+ *     const userIdentityInfo  = { userName: "JoeDoe", password:"secret"};
+ *     const session = client.createSession(userIdentityInfo);
+ *
+ */
+public createSessionP(userIdentityInfo: UserIdentityInfo | null): Promise<ClientSession> {
+    return new Promise((res, rej) => {this.createSession(userIdentityInfo, (err, clientSession) => {
+        if (err) { rej(err); } else { res(clientSession); }
+    }); });
+}
+
 
 /**
  * @method changeSessionIdentity
@@ -571,6 +619,11 @@ public changeSessionIdentity(session: ClientSession | null, userIdentityInfo: Us
     });
 
 
+}
+public changeSessionIdentityP(session: ClientSession | null, userIdentityInfo: UserIdentityInfo | null): Promise<void> {
+    return new Promise((res, rej) => {this.changeSessionIdentity(session, userIdentityInfo, (err) => {
+        if (err) { rej(err); } else { res(); }
+    }); });
 }
 
 
@@ -643,6 +696,19 @@ public closeSession(session: ClientSession, deleteSubscriptions: boolean, callba
         callback(err);
     });
 }
+/**
+ *
+ * @method closeSessionAsync
+ * @async
+ * @param session  {ClientSession} - the created client session
+ * @param deleteSubscriptions  {Boolean} - whether to delete subscriptions or not
+ */
+public closeSessionP(session: ClientSession, deleteSubscriptions: boolean): Promise<void> {
+    return new Promise((res, rej) => {this.closeSession(session, deleteSubscriptions, (err) => {
+        if (err) { rej(err); } else { res(); }
+    }); });
+}
+
 
 protected _ask_for_subscription_republish(session: ClientSession, callback: ErrorCallback) {
 
@@ -761,60 +827,6 @@ public withSession(endpointUrl: string, inner_func: (sess: ClientSession, cb: Er
     });
 }
 
-
-// var thenify = require("thenify");
-/**
- * @method connect
- * @param endpointUrl {string}
- * @async
- * @return {Promise}
- */
-// OPCUAClient.prototype.connect = thenify.withCallback(OPCUAClient.prototype.connect);
-/**
- * @method disconnect
- * disconnect client from server
- * @return {Promise}
- * @async
- */
-// OPCUAClient.prototype.disconnect = thenify.withCallback(OPCUAClient.prototype.disconnect);
-/**
- * @method createSession
- * @param [userIdentityInfo {Object} ] optional
- * @param [userIdentityInfo.userName {String} ]
- * @param [userIdentityInfo.password {String} ]
- * @return {Promise}
- * @async
- *
- * @example
- *     // create a anonymous session
- *     const session = await client.createSession();
- *
- * @example
- *     // create a session with a userName and password
- *     const userIdentityInfo  = { userName: "JoeDoe", password:"secret"};
- *     const session = client.createSession(userIdentityInfo);
- *
- */
-// OPCUAClient.prototype.createSession = thenify.withCallback(OPCUAClient.prototype.createSession);
-/**
- * @method changeSessionIdentity
- * @param session
- * @param userIdentityInfo
- * @return {Promise}
- * @async
- */
-// OPCUAClient.prototype.changeSessionIdentity = thenify.withCallback(OPCUAClient.prototype.changeSessionIdentity);
-/**
- * @method closeSession
- * @param session {ClientSession}
- * @param deleteSubscriptions  {Boolean} - whether to delete
- * @return {Promise}
- * @async
- * @example
- *    const session  = await client.createSession();
- *    await client.closeSession(session);
- */
-// OPCUAClient.prototype.closeSession = thenify.withCallback(OPCUAClient.prototype.closeSession);
 
 
 public withSubscription(endpointUrl: string, subscriptionParameters: ICreateSubscriptionRequest,
