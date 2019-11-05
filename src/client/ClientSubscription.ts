@@ -746,7 +746,7 @@ public recreateSubscriptionAndMonitoredItem(callback: ErrorCallback) {
                     assert(response instanceof subscription_service.CreateMonitoredItemsResponse);
                     const monitoredItemResults = response.results;
 
-                    monitoredItemResults.forEach(function (monitoredItemResult, index) {
+                    monitoredItemResults.forEach( (monitoredItemResult, index) => {
 
                         const clientHandle = itemsToCreate[index].requestedParameters.clientHandle;
                         const monitoredItem = this.monitoredItems[clientHandle];
