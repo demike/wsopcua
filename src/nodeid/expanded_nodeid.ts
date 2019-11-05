@@ -58,10 +58,10 @@ export class ExpandedNodeId extends NodeId {
     toString(): string {
     let str = super.toString();
     if (this.namespaceUri) {
-        str += ';namespaceUri:' + this.namespaceUri;
+        str = 'nsu=' + this.namespaceUri + ';' + str;
     }
     if (this.serverIndex) {
-        str += ';serverIndex:' + this.serverIndex;
+        str = 'svr=' + this.serverIndex + ';' + str;
     }
     return str;
     }
@@ -84,15 +84,24 @@ export function coerceExpandedNodeId(value): ExpandedNodeId {
         return value;
     }
     let namespaceUri = null;
+    let serverIndex = 0;
 
-    if (typeof value === 'string' && value.substr(0, 4) === 'nsu=') {
-        const idStart = value.indexOf(';');
-        namespaceUri = value.substring(4, idStart );
-        value = value.substring(idStart + 1);
+    if (typeof value === 'string') {
+        if (value.substr(0, 4) === 'svr=') {
+            const idStart = value.indexOf(';');
+            serverIndex =  Number.parseInt(value.substring(4, idStart ), 10);
+            value = value.substring(idStart + 1);
+        }
+
+        if (value.substr(0, 4) === 'nsu=') {
+            const idStart = value.indexOf(';');
+            namespaceUri = value.substring(4, idStart );
+            value = value.substring(idStart + 1);
+        }
     }
 
     const n = coerceNodeId(value);
-    return new ExpandedNodeId(n.identifierType, n.value, n.namespace, namespaceUri, /*serverIndex*/0);
+    return new ExpandedNodeId(n.identifierType, n.value, n.namespace, namespaceUri, serverIndex);
 }
 
 /**
