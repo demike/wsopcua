@@ -363,7 +363,7 @@ public isTransactionInProgress() {
     return this._request_data.size > 0;
 }
 
-protected _cancel_pending_transactions(err: Error) {
+protected _cancel_pending_transactions(err?: Error) {
     /* jshint validthis: true */
 
     debugLog('_cancel_pending_transactions  '
@@ -380,13 +380,13 @@ protected _cancel_pending_transactions(err: Error) {
 
 }
 
-protected _on_transport_closed(error: Error) {
+protected _on_transport_closed(err?: Error) {
 
-    debugLog(' =>ClientSecureChannelLayer#_on_transport_closed');
+    debugLog(' =>ClientSecureChannelLayer#_on_transport_closed  err=', err ? err.message : 'null');
     /* jshint validthis: true */
 
     if (this.__in_normal_close_operation) {
-        error = null;
+        err = undefined;
     }
     /**
      * notify the observers that the transport connection has ended.
@@ -396,8 +396,8 @@ protected _on_transport_closed(error: Error) {
      * @event close
      * @param error {Error}
      */
-    this.emit('close', error);
-    this._cancel_pending_transactions(error);
+    this.emit('close', err);
+    this._cancel_pending_transactions(err);
 
     this._transport = null;
 
@@ -644,15 +644,15 @@ protected _on_connection(transport: ClientWSTransport, callback: ErrorCallback, 
         });
 
 
-        this._transport.on('close', () => this._on_transport_closed);
+        this._transport.on('close', (err1) => this._on_transport_closed(err1));
 
         this._transport.on('connection_break', () => {
             debugLog('Client => CONNECTION BREAK  <=');
             this._on_transport_closed(new Error('Connection Break'));
         });
 
-        this._transport.on('error', function () {
-            debugLog(' ERROR');
+        this._transport.on('error', function (err1) {
+            debugLog(' ERROR', err1);
         });
 
 
