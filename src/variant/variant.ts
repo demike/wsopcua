@@ -44,8 +44,8 @@ export class Variant extends BaseUAObject {
 
 public dataType: DataType = DataType.Null;
 public arrayType: VariantArrayType = VariantArrayType.Scalar;
-public value: any;
-public dimensions: UInt32[] = null;
+public value?: any = null; // default value null
+public dimensions?: UInt32[];
 
 constructor(options?: IVariant) {
     super();
