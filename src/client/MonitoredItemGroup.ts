@@ -108,6 +108,12 @@ public terminate(done: ErrorCallback): void {
     });
 }
 
+public terminateP(): Promise<void> {
+    return new Promise((res, rej) => {this.terminate((err) => {
+        if (err) { rej(err); } else { res(); }
+    }); });
+}
+
 
 /**
  * @method _monitor
@@ -164,11 +170,22 @@ public modify(parameters: IMonitoringParameters,
     MonitoredItemBase._toolbox_modify(this._subscription, this._monitoredItems, parameters, this._timestampsToReturn, callback);
 }
 
+public modifyP(parameters: IMonitoringParameters,
+    timestampsToReturn?: TimestampsToReturn): Promise<subscription_service.MonitoredItemModifyResult[]> {
+    return new Promise((res, rej) => {this.modify(parameters,timestampsToReturn, (err, result) => {
+        if (err) { rej(err); } else { res(result); }
+    }); });
+}
+
 public setMonitoringMode(monitoringMode: MonitoringMode, callback: ResponseCallback<StatusCode[]>): void {
 
     MonitoredItemBase._toolbox_setMonitoringMode(this._subscription, this._monitoredItems, monitoringMode, callback);
 }
-
+public setMonitoringModeP(monitoringMode: MonitoringMode): Promise<StatusCode[]> {
+    return new Promise((res, rej) => {this.setMonitoringMode(monitoringMode, (err, statusCodes) => {
+        if (err) { rej(err); } else { res(statusCodes); }
+    }); });
+}
 
 public onChanged(callback: (item: MonitoredItemBase, dataValue: DataValue, index: number) => void) {
     this.on('changed', callback);
