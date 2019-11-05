@@ -709,19 +709,6 @@ public closeSessionP(session: ClientSession, deleteSubscriptions: boolean): Prom
     }); });
 }
 
-
-protected _ask_for_subscription_republish(session: ClientSession, callback: ErrorCallback) {
-
-    debugLog('_ask_for_subscription_republish ');
-    // xx assert(session.getPublishEngine().nbPendingPublishRequests === 0, "at this time, publish request queue shall still be empty");
-    session.getPublishEngine().republish((err) => {
-        debugLog('_ask_for_subscription_republish done' + (err ? err.message : 'OKs'));
-        // xx assert(session.getPublishEngine().nbPendingPublishRequests === 0);
-        session.resumePublishEngine();
-        callback(err);
-    });
-}
-
 protected _on_connection_reestablished(callback: ErrorCallback) {
 
     assert('function' === typeof callback);
