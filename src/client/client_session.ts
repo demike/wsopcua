@@ -13,14 +13,14 @@ import { CreateMonitoredItemsResponse } from '../generated/CreateMonitoredItemsR
 import { ICreateSubscriptionRequest } from '../generated/CreateSubscriptionRequest';
 import { CreateSubscriptionResponse } from '../generated/CreateSubscriptionResponse';
 import { PublishResponse } from '../generated/PublishResponse';
-import { PublishRequest } from '../generated/PublishRequest';
-import { RepublishRequest } from '../generated/RepublishRequest';
+import { PublishRequest, IPublishRequest } from '../generated/PublishRequest';
+import { RepublishRequest, IRepublishRequest } from '../generated/RepublishRequest';
 import { RepublishResponse } from '../generated/RepublishResponse';
 import { IDeleteMonitoredItemsRequest } from '../generated/DeleteMonitoredItemsRequest';
-import { ModifyMonitoredItemsRequest } from '../generated/ModifyMonitoredItemsRequest';
+import { ModifyMonitoredItemsRequest, IModifyMonitoredItemsRequest } from '../generated/ModifyMonitoredItemsRequest';
 import { ModifyMonitoredItemsResponse } from '../generated/ModifyMonitoredItemsResponse';
 import { IDeleteSubscriptionsRequest } from '../generated/DeleteSubscriptionsRequest';
-import { TransferSubscriptionsRequest } from '../generated/TransferSubscriptionsRequest';
+import { TransferSubscriptionsRequest, ITransferSubscriptionsRequest } from '../generated/TransferSubscriptionsRequest';
 
 import { ClientSidePublishEngine } from './client_publish_engine';
 import { ClientSessionKeepAliveManager } from './client_session_keepalive_manager';
@@ -107,6 +107,7 @@ function coerceReadValueId(node: string| NodeId | IReadValueId) {
 
 
 export interface ClientSessionEvent {
+    'session_activated': () => void;
     'session_closed': (status: IStatusCodeOptions) => void;
     'keepalive': (state: ServerState) => void;
     'keepalive_failure': () => void;
@@ -337,6 +338,12 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             return callback(null, response.results, response.diagnosticInfos);
         });
     }
+    browseP(nodesToBrowse: string | string[] | NodeId | NodeId[] | IBrowseDescription | IBrowseDescription[]):
+        Promise<{results: browse_service.BrowseResult[], diagnosticInfos: DiagnosticInfo[] | browse_service.BrowseResponse}> {
+        return new Promise((res, rej) => {this.browse(nodesToBrowse, (err, results, diagnosticInfos) => {
+            if (err) { rej(err); } else { res({results, diagnosticInfos}); }
+        }); });
+    }
 
     /**
      * This Service is used to request the next set of Browse or BrowseNext
@@ -396,6 +403,14 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
                 return callback(null, response.results, response.diagnosticInfos);
             });
     }
+    browseNextP(continuationPoints: Uint8Array | Uint8Array[], releaseContinuationPoints: boolean= false):
+        Promise<{results: browse_service.BrowseResult[], diagnosticInfos: DiagnosticInfo[] | browse_service.BrowseNextResponse}> {
+        return new Promise((res, rej) => {this.browseNext(continuationPoints, releaseContinuationPoints,
+            (err, results, diagnosticInfos) => {
+            if (err) { rej(err); } else { res({results, diagnosticInfos}); }
+        }); });
+    }
+
 
 
     /**
@@ -490,6 +505,18 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         });
 
     }
+    public readVariableValueP(nodes: string | NodeId | read_service.ReadValueId):
+        Promise<{value: DataValue, diagnosticInfos: DiagnosticInfo }>;
+    public readVariableValueP(nodes: string[] | NodeId[] | read_service.ReadValueId[]):
+        Promise<{value: DataValue[], diagnosticInfos: DiagnosticInfo[] }>;
+    public readVariableValueP(nodes: string | string[] | NodeId | NodeId[] | read_service.ReadValueId | read_service.ReadValueId[]):
+        Promise<{value: DataValue, diagnosticInfos: DiagnosticInfo } | {value: DataValue[], diagnosticInfos: DiagnosticInfo[] }> {
+            return new Promise((res, rej) => {this.readVariableValue(nodes as any,
+                (err, value, diagnosticInfos) => {
+                if (err) { rej(err); } else { res({value, diagnosticInfos}); }
+            }); });
+    }
+
 
     /**
      * @method readHistoryValue
@@ -507,7 +534,14 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.results {DataValue[]} - an array of dataValue each read
      * @param callback.diagnosticInfos {DiagnosticInfo[]} - the diagnostic infos.
      */
-    readHistoryValue(nodes: string | string[] | NodeId | NodeId[], start: Date, end: Date, callback) {
+
+    public readHistoryValue(nodes: string | NodeId | read_service.ReadValueId, start: Date, end: Date,
+        callback: ResponseCallback<DataValue, DiagnosticInfo>): void;
+    public readHistoryValue(nodes: string[] | NodeId[] | read_service.ReadValueId[], start: Date, end: Date,
+        callback: ResponseCallback<DataValue[], DiagnosticInfo[]>): void;
+    public readHistoryValue(nodes: string | string[] | NodeId | NodeId[] | read_service.ReadValueId | read_service.ReadValueId[],
+        start: Date, end: Date,
+        callback: ResponseCallback<DataValue, DiagnosticInfo> | ResponseCallback<DataValue[], DiagnosticInfo[]>): void {
         assert('function' === typeof callback);
         const isArr = Array.isArray(nodes);
         if (!isArr) {
@@ -543,7 +577,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         this.performMessageTransaction(request, (err, response: historizing_service.HistoryReadResponse) => {
 
             if (err) {
-                return callback(err, response);
+                return (callback as ResponseCallback<any>)(err, response);
             }
 
             if (response.responseHeader.serviceResult.isNot(StatusCodes.Good)) {
@@ -553,9 +587,24 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             assert(response instanceof historizing_service.HistoryReadResponse);
             assert( (nodes as any[]).length === response.results.length);
 
-            callback(null, isArr ? response.results : response.results[0],
-                isArr ? response.diagnosticInfos : response.diagnosticInfos[0]);
+            if ( isArr ) {
+                (callback as ResponseCallback<DataValue[], DiagnosticInfo[]> )(null, response.results, response.diagnosticInfos);
+            } else {
+                (callback as ResponseCallback<DataValue, DiagnosticInfo> )(null, response.results[0], response.diagnosticInfos[0]);
+            }
         });
+    }
+    public readHistoryValueP(nodes: string | NodeId | read_service.ReadValueId, start: Date, end: Date):
+        Promise<{value: DataValue, diagnosticInfos: DiagnosticInfo }>;
+    public readHistoryValueP(nodes: string[] | NodeId[] | read_service.ReadValueId[], start: Date, end: Date):
+        Promise<{value: DataValue[], diagnosticInfos: DiagnosticInfo[] }>;
+    public readHistoryValueP(nodes: string | string[] | NodeId | NodeId[] | read_service.ReadValueId | read_service.ReadValueId[],
+        start: Date, end: Date):
+        Promise<{value: DataValue, diagnosticInfos: DiagnosticInfo } | {value: DataValue[], diagnosticInfos: DiagnosticInfo[] }> {
+            return new Promise((res, rej) => {this.readHistoryValue(nodes as any, start, end,
+                (err, value, diagnosticInfos) => {
+                if (err) { rej(err); } else { res({value, diagnosticInfos}); }
+            }); });
     }
 
 
@@ -649,7 +698,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @example
      *   const statusCodes = await session.write(nodesToWrite);
      */
-    write(nodesToWrite: write_service.WriteValue[] | write_service.WriteValue, callback) {
+    write(nodesToWrite: write_service.WriteValue[] | write_service.WriteValue, callback: ResponseCallback<StatusCode[]| StatusCode>) {
 
         assert('function' === typeof callback);
         const isArray = Array.isArray(nodesToWrite);
@@ -663,16 +712,21 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
             /* istanbul ignore next */
             if (err) {
-                return callback(err, response);
+                return (callback as ResponseCallback<any>)(err, response);
             }
             if (response.responseHeader.serviceResult.isNot(StatusCodes.Good)) {
                 return callback(new Error(response.responseHeader.serviceResult.toString()));
             }
             assert(response instanceof write_service.WriteResponse);
             assert((<write_service.WriteValue[]>nodesToWrite).length === response.results.length);
-            callback(null, isArray ? response.results : response.results[0], response.diagnosticInfos);
+            (callback as ResponseCallback<any, any>)(null, isArray ? response.results : response.results[0], response.diagnosticInfos);
 
         });
+    }
+    writeP(nodesToWrite: write_service.WriteValue[] | write_service.WriteValue): Promise<StatusCode[] | StatusCode> {
+        return new Promise((res, rej) => {this.write(nodesToWrite, (err, status) => {
+            if (err) { rej(err); } else { res(status); }
+        }); });
     }
 
 
@@ -712,6 +766,11 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
         });
     }
+    writeSingleNodeP(nodeId: NodeId, value: Variant,): Promise<{status: StatusCode, diagnosticInfos: DiagnosticInfo}> {
+        return new Promise((res, rej) => {this.writeSingleNode(nodeId, value, (err, status, diagnosticInfos) => {
+            if (err) { rej(err); } else { res({status, diagnosticInfos}); }
+        }); });
+    }
 
     protected composeResult(nodes: NodeId[], nodesToRead: read_service.ReadValueId[], dataValues: DataValue[]) {
         assert(nodesToRead.length === dataValues.length);
@@ -726,7 +785,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             for (i = 0; i < ClientSession.keys.length; i++) {
                 dataValue = dataValues[c];
                 c++;
-                if (dataValue.statusCode === null || dataValue.statusCode.equals(StatusCodes.Good)) {
+                if (!dataValue.statusCode || dataValue.statusCode.equals(StatusCodes.Good)) {
                     k = utils.lowerFirstLetter(ClientSession.keys[i]);
                     data[k] = dataValue.value ? dataValue.value.value : null;
                     addedProperty += 1;
@@ -771,7 +830,10 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.data.<attribute>     {*}
      *
      */
-    readAllAttributes(nodes: NodeId | NodeId[], callback) {
+
+    readAllAttributes(nodes: NodeId, callback: ResponseCallback<any>);
+    readAllAttributes(nodes: NodeId[], callback: ResponseCallback<any[]>);
+    readAllAttributes(nodes: NodeId | NodeId[], callback: ResponseCallback<any[]|any>) {
 
         assert('function' === typeof callback);
         const isArray = Array.isArray(nodes);
@@ -800,14 +862,20 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         }
 
 
-        this.read(nodesToRead, (err: Error, dataValues: DataValue[] /*, diagnosticInfos */) => {
+        this.read(nodesToRead, 0, (err: Error, dataValues: DataValue[] /*, diagnosticInfos */) => {
             if (err) { return callback(err); }
             const results = this.composeResult(nodes as NodeId[], nodesToRead, dataValues);
             callback(err, isArray ? results : results[0]);
         });
 
     }
-
+    readAllAttributesP(nodes: NodeId): Promise<any>;
+    readAllAttributesP(nodes: NodeId[]): Promise<any[]>;
+    readAllAttributesP(nodes: NodeId | NodeId[]): Promise<any| any[]> {
+        return new Promise((res, rej) => {this.readAllAttributes(nodes as any, (err, result) => {
+            if (err) { rej(err); } else { res(result); }
+        }); });
+    }
     /**
      * @method read
      *
@@ -855,10 +923,14 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.diagnosticInfos {DiagnosticInfo[]}
      *
      */
-    public read(nodesToRead: read_service.ReadValueId | read_service.ReadValueId[], maxAge?, callback?) {
+    public read(nodesToRead: read_service.ReadValueId , maxAge: number,
+        callback: ResponseCallback<DataValue, DiagnosticInfo>);
+    public read(nodesToRead: read_service.ReadValueId[], maxAge: number,
+            callback: ResponseCallback<DataValue[], DiagnosticInfo[]>);
+    public read(nodesToRead: read_service.ReadValueId | read_service.ReadValueId[], maxAge: number,
+        callback: ResponseCallback<any, any>) {
 
-        if (!callback) {
-            callback = maxAge;
+        if (maxAge == undefined) {
             maxAge = 0;
         }
 
@@ -905,6 +977,16 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
                 isArray ? response.diagnosticInfos : response.diagnosticInfos[0]);
 
         });
+    }
+    public readP(nodesToRead: read_service.ReadValueId , maxAge: number):
+        Promise<{value: DataValue, diagnosticInfo: DiagnosticInfo}>;
+    public readP(nodesToRead: read_service.ReadValueId[], maxAge: number):
+        Promise<{value: DataValue[], diagnosticInfo: DiagnosticInfo[]}>;
+    public readP(nodesToRead: read_service.ReadValueId | read_service.ReadValueId[], maxAge: number):
+        Promise<{value: DataValue, diagnosticInfo: DiagnosticInfo} | {value: DataValue[], diagnosticInfo: DiagnosticInfo[]}> {
+            return new Promise((res, rej) => {this.read(nodesToRead as any, (maxAge ? maxAge : 0) , (err, value, diagnosticInfo) => {
+                if (err) { rej(err); } else { res({value, diagnosticInfo}); }
+            }); });
     }
 
     public emitCloseEvent(statusCode?: IStatusCodeOptions) {
@@ -1011,7 +1093,11 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             callback(null, response);
         });
     }
-
+    createSubscriptionP(options: ICreateSubscriptionRequest): Promise<CreateSubscriptionResponse> {
+        return new Promise((res, rej) => {this.createSubscription(options, (err, response) => {
+            if (err) { rej(err); } else { res(response); }
+        }); });
+    }
     /**
      * @method deleteSubscriptions
      * @async
@@ -1031,6 +1117,12 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             subscription_service.DeleteSubscriptionsResponse,
             options, callback);
     }
+    deleteSubscriptionsP(options: IDeleteSubscriptionsRequest): Promise<subscription_service.DeleteSubscriptionsResponse> {
+        return new Promise((res, rej) => {this.deleteSubscriptions(options, (err, response) => {
+            if (err) { rej(err); } else { res(response); }
+        }); });
+    }
+
 
     /**
      * @method transferSubscriptions
@@ -1041,12 +1133,18 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.err {Error|null}   - the Error if the async method has failed
      * @param callback.response {TransferSubscriptionsResponse} - the response
      */
-    transferSubscriptions(options: TransferSubscriptionsRequest, callback: ResponseCallback<TransferSubscriptionsResponse>) {
+    transferSubscriptions(options: ITransferSubscriptionsRequest, callback: ResponseCallback<TransferSubscriptionsResponse>) {
         this._defaultRequest(
             subscription_service.TransferSubscriptionsRequest,
             subscription_service.TransferSubscriptionsResponse,
             options, callback);
     }
+    transferSubscriptionsP(options: ITransferSubscriptionsRequest): Promise<subscription_service.TransferSubscriptionsResponse> {
+        return new Promise((res, rej) => {this.transferSubscriptions(options, (err, response) => {
+            if (err) { rej(err); } else { res(response); }
+        }); });
+    }
+
 
     /**
      *
@@ -1064,6 +1162,11 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             subscription_service.CreateMonitoredItemsResponse,
             options, callback);
     }
+    public createMonitoredItemsP(options: ICreateMonitoredItemsRequest): Promise<CreateMonitoredItemsResponse> {
+        return new Promise((res, rej) => {this.createMonitoredItems(options, (err, response) => {
+            if (err) { rej(err); } else { res(response); }
+        }); });
+    }
 
     /**
      *
@@ -1074,12 +1177,17 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.err {Error|null}   - the Error if the async method has failed
      * @param callback.response {ModifyMonitoredItemsResponse} - the response
      */
-    public modifyMonitoredItems(options: ModifyMonitoredItemsRequest, callback: (err: Error | null,
+    public modifyMonitoredItems(options: IModifyMonitoredItemsRequest, callback: (err: Error | null,
             response: ModifyMonitoredItemsResponse) => void) {
         this._defaultRequest(
             subscription_service.ModifyMonitoredItemsRequest,
             subscription_service.ModifyMonitoredItemsResponse,
             options, callback);
+    }
+    public modifyMonitoredItemsP(options: IModifyMonitoredItemsRequest): Promise<ModifyMonitoredItemsResponse> {
+        return new Promise((res, rej) => {this.modifyMonitoredItems(options, (err, response) => {
+            if (err) { rej(err); } else { res(response); }
+        }); });
     }
 
     /**
@@ -1098,6 +1206,11 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             subscription_service.ModifySubscriptionResponse,
             options, callback);
     }
+    public modifySubscriptionP(options: IModifySubscriptionRequest): Promise<subscription_service.ModifySubscriptionResponse> {
+        return new Promise((res, rej) => {this.modifySubscription(options, (err, response) => {
+            if (err) { rej(err); } else { res(response); }
+        }); });
+    }
 
     public setMonitoringMode(options: ISetMonitoringModeRequest,
         callback: ResponseCallback<subscription_service.SetMonitoringModeResponse>) {
@@ -1105,6 +1218,11 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             subscription_service.SetMonitoringModeRequest,
             subscription_service.SetMonitoringModeResponse,
             options, callback);
+    }
+    public setMonitoringModeP(options: ISetMonitoringModeRequest): Promise<subscription_service.SetMonitoringModeResponse> {
+        return new Promise((res, rej) => {this.setMonitoringMode(options, (err, response) => {
+            if (err) { rej(err); } else { res(response); }
+        }); });
     }
 
     /**
@@ -1116,11 +1234,16 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.err {Error|null}   - the Error if the async method has failed
      * @param callback.response {PublishResponse} - the response
      */
-    public publish(options: PublishRequest, callback: (err: Error | null, response: PublishResponse) => void) {
+    public publish(options: IPublishRequest, callback: (err: Error | null, response: PublishResponse) => void) {
         this._defaultRequest(
             subscription_service.PublishRequest,
             subscription_service.PublishResponse,
             options, callback);
+    }
+    public publishP(options: IPublishRequest): Promise<PublishResponse> {
+        return new Promise((res, rej) => {this.publish(options, (err, response) => {
+            if (err) { rej(err); } else { res(response); }
+        }); });
     }
 
     /**
@@ -1132,11 +1255,16 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.err {Error|null}   - the Error if the async method has failed
      * @param callback.response {RepublishResponse} - the response
      */
-    public republish(options: RepublishRequest, callback: (err: Error | null, response: RepublishResponse) => void) {
+    public republish(options: IRepublishRequest, callback: (err: Error | null, response: RepublishResponse) => void) {
         this._defaultRequest(
             subscription_service.RepublishRequest,
             subscription_service.RepublishResponse,
             options, callback);
+    }
+    public republishP(options: IRepublishRequest): Promise<RepublishResponse> {
+        return new Promise((res, rej) => {this.publish(options, (err, response) => {
+            if (err) { rej(err); } else { res(response); }
+        }); });
     }
 
     /**
@@ -1152,6 +1280,11 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             subscription_service.DeleteMonitoredItemsRequest,
             subscription_service.DeleteMonitoredItemsResponse,
             options, callback);
+    }
+    public deleteMonitoredItemsP(options: IDeleteMonitoredItemsRequest): Promise<void> {
+        return new Promise((res, rej) => {this.deleteMonitoredItems(options, (err) => {
+            if (err) { rej(err); } else { res(); }
+        }); });
     }
 
     /**
@@ -1185,6 +1318,11 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             }
             callback(err, response.results);
         });
+    }
+    public setPublishingModeP(publishingEnabled: boolean, subscriptionIds: number[] | number): Promise<StatusCode[]> {
+        return new Promise((res, rej) => {this.setPublishingMode(publishingEnabled, subscriptionIds, (err, response) => {
+            if (err) { rej(err); } else { res(response); }
+        }); });
     }
 
     /**
@@ -1229,6 +1367,15 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         });
 
     }
+    public translateBrowsePathP(browsePath: translate_service.BrowsePath[]): Promise<translate_service.BrowsePathResult[]>;
+    public translateBrowsePathP(browsePath: translate_service.BrowsePath): Promise<translate_service.BrowsePathResult>;
+    public translateBrowsePathP(browsePath: translate_service.BrowsePath | translate_service.BrowsePath[]):
+         Promise<translate_service.BrowsePathResult|translate_service.BrowsePathResult[]> {
+            return new Promise((res, rej) => {this.translateBrowsePath(browsePath as any, (err, response) => {
+                if (err) { rej(err); } else { res(response); }
+            }); });
+    }
+
 
     public isChannelValid(): boolean {
         if (!this._client) {
@@ -1271,27 +1418,27 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     }
 
     /**
- * evaluate the time in milliseconds that the session will live
- * on the server end from now. The remaining live time is
- * calculated based on when the last message was sent to the server
- * and the session timeout.
- * * In normal operation , when server and client communicates on a regular
- *   basis, evaluateRemainingLifetime will return a number slightly below
- *   session.timeout
- * * when the client and server cannot communicate due to a network issue
- *   (or a server crash), evaluateRemainingLifetime returns the estimated number
- *   of milliseconds before the server (if not crash) will keep  the session alive
- *   on its end to allow a automatic reconnection with session.
- * * When evaluateRemainingLifetime returns zero , this mean that
- *   the session has probably ended on the server side and will have to be recreated
- *   from scratch in case of a reconnection.
- * @return {number}
- */
-public evaluateRemainingLifetime(): number {
-    const now = Date.now();
-    const expiryTime = this.lastRequestSentTime + this.timeout;
-    return Math.max(0, (expiryTime - now));
-}
+     * evaluate the time in milliseconds that the session will live
+     * on the server end from now. The remaining live time is
+     * calculated based on when the last message was sent to the server
+     * and the session timeout.
+     * * In normal operation , when server and client communicates on a regular
+     *   basis, evaluateRemainingLifetime will return a number slightly below
+     *   session.timeout
+     * * when the client and server cannot communicate due to a network issue
+     *   (or a server crash), evaluateRemainingLifetime returns the estimated number
+     *   of milliseconds before the server (if not crash) will keep  the session alive
+     *   on its end to allow a automatic reconnection with session.
+     * * When evaluateRemainingLifetime returns zero , this mean that
+     *   the session has probably ended on the server side and will have to be recreated
+     *   from scratch in case of a reconnection.
+     * @return {number}
+     */
+    public evaluateRemainingLifetime(): number {
+        const now = Date.now();
+        const expiryTime = this.lastRequestSentTime + this.timeout;
+        return Math.max(0, (expiryTime - now));
+    }
 
 
     protected _terminatePublishEngine() {
@@ -1328,7 +1475,11 @@ public evaluateRemainingLifetime(): number {
         this._client.closeSession(this, deleteSubscription, callback);
 
     }
-
+    public closeP(deleteSubscription: boolean = true): Promise<void> {
+        return new Promise((res, rej) => {this.close(deleteSubscription, (err) => {
+            if (err) { rej(err); } else { res(); }
+        }); });
+    }
     /**
      *
      * @returns {Boolean}
@@ -1393,6 +1544,12 @@ public evaluateRemainingLifetime(): number {
         });
 
     }
+    public callP(methodsToCall: CallMethodRequest[]): Promise<{ result: CallMethodResult[], diagnosticInfo?: any}> {
+        return new Promise((res, rej) => {this.call(methodsToCall, (err, result, diagnosticInfo) => {
+            if (err) { rej(err); } else { res({result, diagnosticInfo}); }
+        }); });
+    }
+
 
 
 
@@ -1539,7 +1696,7 @@ public evaluateRemainingLifetime(): number {
                 return callback(null, inputArguments, outputArguments);
             }
             // now read the variable
-            this.read(nodesToRead, (error: Error|null, dataValues: DataValue[]) => {
+            this.read(nodesToRead, 0, (error: Error|null, dataValues: DataValue[]) => {
 
                 /* istanbul ignore next */
                 if (error) {
@@ -1575,6 +1732,11 @@ public evaluateRemainingLifetime(): number {
         });
 
     }
+    public registerNodesP(nodesToRegister: NodeId[] | string[]): Promise<NodeId[]> {
+        return new Promise((res, rej) => {this.registerNodes(nodesToRegister, (err, response) => {
+            if (err) { rej(err); } else { res(response); }
+        }); });
+    }
 
     public unregisterNodes(nodesToUnregister: NodeId[] | string[], callback: ErrorCallback) {
         assert(Array.isArray(nodesToUnregister));
@@ -1592,6 +1754,11 @@ public evaluateRemainingLifetime(): number {
             callback(null);
         });
     }
+    public unregisterNodesP(nodesToRegister: NodeId[] | string[]): Promise<void> {
+        return new Promise((res, rej) => {this.unregisterNodes(nodesToRegister, (err) => {
+            if (err) { rej(err); } else { res(); }
+        }); });
+    }
 
     /**
      * @method queryFirst
@@ -1601,7 +1768,7 @@ public evaluateRemainingLifetime(): number {
      * @param callback.response {queryFirstResponse}
      *
      */
-    public queryFirst(queryFirstRequest: query_service.QueryFirstRequest, callback: ResponseCallback<query_service.QueryFirstResponse>) {
+    public queryFirst(queryFirstRequest: query_service.IQueryFirstRequest, callback: ResponseCallback<query_service.QueryFirstResponse>) {
         assert('function' === typeof callback);
 
         const request = new query_service.QueryFirstRequest(queryFirstRequest);
@@ -1614,6 +1781,11 @@ public evaluateRemainingLifetime(): number {
             assert(response instanceof query_service.QueryFirstResponse);
             callback(null, response);
         });
+    }
+    public queryFirstP(queryFirstRequest: query_service.IQueryFirstRequest): Promise<query_service.QueryFirstResponse> {
+        return new Promise((res, rej) => {this.queryFirst(queryFirstRequest, (err, response) => {
+            if (err) { rej(err); } else { res(response); }
+        }); });
     }
 
     public startKeepAliveManager() {
@@ -1742,6 +1914,11 @@ public evaluateRemainingLifetime(): number {
         });
 
     }
+    public getBuiltInDataTypeP(nodeId: NodeId): Promise<DataType> {
+        return new Promise((res, rej) => {this.getBuiltInDataType(nodeId, (err, dataType) => {
+            if (err) { rej(err); } else { res(dataType); }
+        }); });
+    }
 
     public resumePublishEngine() {
         assert(this._publishEngine);
@@ -1761,7 +1938,7 @@ public evaluateRemainingLifetime(): number {
             nodeId:   new NodeId(NodeIdType.Numeric, /*VariableIds.Server_NamespaceArray*/2255, 0),
              // resolveNodeId('Server_NamespaceArray'),
             attributeId: AttributeIds.Value
-        }), (err: Error, dataValue: DataValue) => {
+        }), 0, (err: Error, dataValue: DataValue) => {
             if (err) {
                 return callback(err);
             }
@@ -1778,12 +1955,15 @@ public evaluateRemainingLifetime(): number {
             callback(null, this._namespaceArray);
         });
     }
+    public readNamespaceArrayP(): Promise<string[]> {
+        return new Promise((res, rej) => {this.readNamespaceArray((err, nsarray) => {
+            if (err) { rej(err); } else { res(nsarray); }
+        }); });
+    }
+
 
     public getNamespaceIndex(namespaceUri: string) {
         assert(this._namespaceArray, 'please make sure that readNamespaceArray has been called');
         return this._namespaceArray.indexOf(namespaceUri);
     }
-
 }
-
-
