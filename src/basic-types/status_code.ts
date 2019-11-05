@@ -159,7 +159,7 @@ public toString(): string {
 }
 
 public checkBit(mask: number): boolean {
-    return (this.value  & mask  ) === mask ;
+    return (this.value & mask) !== 0;
 }
 
 get hasOverflowBit() {
