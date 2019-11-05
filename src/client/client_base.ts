@@ -417,6 +417,17 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         });
 
     }
+    /**
+     * @method connectAsync
+    * @param endpointUrl {string}
+    * @async
+    * @return {Promise}
+    */
+    connectP(endpointUrl: string): Promise<void> {
+        return new Promise((res, rej) => {this.connect(endpointUrl, (err) => {
+            if (err) { rej(err); } else { res(); }
+        }); });
+    }
 
     disconnect(callback: ErrorCallback): void {
 
@@ -477,6 +488,18 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         }
 
     }
+    /**
+    * @method disconnectAsync
+    * disconnect client from server
+    * @return {Promise}
+    * @async
+    */
+    disconnectP(): Promise<void> {
+        return new Promise((res, rej) => {this.disconnect((err) => {
+            if (err) { rej(err); } else { res(); }
+        }); });
+    }
+
 
     performMessageTransaction(request: any,
         callback: ResponseCallback<any>): void {
@@ -510,11 +533,6 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
             return;
         }
 
-        /*
-        if (!callback) {
-            callback = options;
-            options = {};
-        }*/
 
         const request = new FindServersRequest({
             endpointUrl: options.endpointUrl || this._endpointUrl,
@@ -527,16 +545,25 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
             if (err) {
                 return callback(err);
             }
-            assert(response instanceof FindServersResponse);
+
+            if (!response || !(response instanceof FindServersResponse)) {
+                return callback(new Error('Internal Error'));
+            }
+            response.servers = response.servers || [];
             callback(null, response.servers);
         });
+    }
+    public findServersP(options: IFindServersOptions): Promise<endpoints_service.ApplicationDescription[]> {
+        return new Promise((res, rej) => {this.findServers(options, (err, applDescription) => {
+            if (err) { rej(err); } else { res(applDescription); }
+        }); });
     }
 
     public findServersOnNetwork(options: IFindServersOnNetworkRequest,
         callback: (error: Error|null, servers?: ServerOnNetwork[]) => void ) {
 
         if (!this._secureChannel) {
-            setImmediate(function () {
+            window.setImmediate(function () {
                 callback(new Error('Invalid Secure Channel'));
             });
             return;
@@ -548,9 +575,17 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
             if (err) {
                 return callback(err);
             }
-            assert(response instanceof FindServersOnNetworkResponse);
+            if (!response || !(response instanceof FindServersOnNetworkResponse)) {
+                return new Error('Internal Error');
+            }
+            response.servers = response.servers || [];
             callback(null, (<FindServersOnNetworkResponse>response).servers);
         });
+    }
+    public findServersOnNetworkP(options: IFindServersOnNetworkRequest): Promise<ServerOnNetwork[]> {
+        return new Promise((res, rej) => {this.findServersOnNetwork(options, (err, servers) => {
+            if (err) { rej(err); } else { res(servers); }
+        }); });
     }
 
 
@@ -627,8 +662,11 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
             callback(err, this._server_endpoints);
         });
     }
-
-
+    public getEndpointsP(options: IGetEndpointsRequest | null): Promise<EndpointDescription[]> {
+        return new Promise((res, rej) => {this.getEndpoints(options, (err, eps) => {
+            if (err) { rej(err); } else { res(eps); }
+        }); });
+    }
 
     // override me !
     protected _on_connection_reestablished(callback: ErrorCallback) {
