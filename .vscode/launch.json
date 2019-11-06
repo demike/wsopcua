@@ -45,7 +45,7 @@
             "program": "${workspaceFolder}/src/schema_parser/src/index.ts",
         //    "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
-                "${workspaceFolder}/src/schema_parser/bin/**/*.js"
+                "${workspaceFolder}/src/schema_parser/dist-es2015/**/*.js"
             ]
         }
     ]

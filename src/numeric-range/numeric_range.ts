@@ -88,6 +88,7 @@ const NumericRange_Schema = {
 
 import {registerBasicType} from '../factory/factories_basic_type';
 import { DataStream } from '../basic-types/DataStream';
+import { StatusCode } from '../basic-types';
 registerBasicType(NumericRange_Schema);
 
 export enum NumericRangeType {
@@ -345,17 +346,17 @@ public isDefined () {
 }
 
 /**
- * @method extract_values
- * @param array {Array<Any>}  flat array containing values
- * @param [dimensions = null ]{Array<Number>} dimension of the matrix if data is a matrix
- * @return {*}
- */
-public extract_values (array: any[]|string|Uint8Array, dimensions?: number[]) {
+   * @method extract_values
+   * @param array   flat array containing values or string
+   * @param dimensions: of the matrix if data is a matrix
+   * @return {*}
+   */
+  public extract_values<U, T extends ArrayLike<U>>(array: T, dimensions?: number[]): ExtractResult<T> {
 
     if (!array) {
         return {
             array: array,
-            statusCode: this.type === NumericRangeType.Empty ? StatusCodes.Good : StatusCodes.BadIndexRangeNoData
+            statusCode: (this.type === NumericRangeType.Empty ? StatusCodes.Good : StatusCodes.BadIndexRangeNoData) as StatusCode
         };
     }
     switch (this.type) {
@@ -377,7 +378,7 @@ public extract_values (array: any[]|string|Uint8Array, dimensions?: number[]) {
             return extract_matrix_range(array, rowRange, colRange, dimensions);
 
         default:
-            return {array: [], statusCode: StatusCodes.BadIndexRangeInvalid};
+            return {array: [] as any, statusCode: StatusCodes.BadIndexRangeInvalid as StatusCode};
     }
 }
 
@@ -430,101 +431,109 @@ public set_values(arrayToAlter, newValues) {
 }
 
 
-function slice(arr, start: number, end: number) {
+function slice<U, T extends ArrayLike<U>>(arr: T, start: number, end: number): T {
 
     assert(arr, 'expecting value to slice');
 
-    if (start === 0 && end === (arr as any).length) {
+    if (start === 0 && end === arr.length) {
         return arr;
     }
 
     let res;
     // xx console.log("arr",arr.constructor.name,arr.length,start,end);
-    if (arr.buffer instanceof ArrayBuffer) {
+    if ((arr as any).buffer instanceof ArrayBuffer) {
         // xx console.log("XXXX ERN ERN ERN 2");
-        res = arr.subarray(start, end);
+        res = (arr as any).subarray(start, end);
     } else {
         // xx console.log("XXXX ERN ERN ERN 3");
 
-        assert(typeof arr.slice === 'function');
+        assert(typeof (arr as any).slice === 'function');
         assert(arr instanceof Array || typeof arr === 'string');
-        res = arr.slice(start, end);
+        res = (arr as any).slice(start, end);
     }
+    /*
     if (res instanceof Uint8Array && arr instanceof ArrayBuffer) {
 
         // TODO: ???
         res = res.buffer;
     }
+    */
     return res;
 }
 
-function extract_empty(array: any[]|string|Uint8Array, dimensions?: number[]) {
+export interface ExtractResult<T> {
+    array?: T;
+    statusCode: StatusCode;
+    dimensions?: number[];
+  }
+
+function extract_empty<U, T extends ArrayLike<U>>(array: T, dimensions: number[]): ExtractResult<T> {
     return {
         array: slice(array, 0, array.length),
         dimensions: dimensions,
-        statusCode: StatusCodes.Good
+        statusCode: StatusCodes.Good as StatusCode
     };
 }
 
-function extract_single_value(array: any[]|string|Uint8Array, index: number) {
+function extract_single_value<U, T extends ArrayLike<U>>(array: T, index: number): ExtractResult<T> {
     if (index >= array.length) {
         if (typeof array  === 'string') {
-            return {array: '', statusCode: StatusCodes.BadIndexRangeNoData};
+            return {array: '' as any, statusCode: StatusCodes.BadIndexRangeNoData as StatusCode};
         }
-        return {array: [], statusCode: StatusCodes.BadIndexRangeNoData};
+        return {array: [] as any, statusCode: StatusCodes.BadIndexRangeNoData as StatusCode};
     }
     return {
         array: slice(array, index, index + 1),
-        statusCode: StatusCodes.Good
+        statusCode: StatusCodes.Good as StatusCode
     };
 }
 
-function extract_array_range(array: any[]|string|Uint8Array, low_index: number, high_index: number) {
+function extract_array_range<U, T extends ArrayLike<U>>(array: T, low_index: number, high_index: number): ExtractResult<T> {
     assert(Number.isFinite(low_index) && Number.isFinite(high_index));
     assert(low_index >= 0);
     assert(low_index <= high_index);
     if (low_index >= array.length) {
         if (typeof array  === 'string') {
-            return {array: '', statusCode: StatusCodes.BadIndexRangeNoData};
+            return {array: '' as any as T, statusCode: StatusCodes.BadIndexRangeNoData as StatusCode};
         }
-        return {array: [], statusCode: StatusCodes.BadIndexRangeNoData};
+        return {array: [] as any as T, statusCode: StatusCodes.BadIndexRangeNoData as StatusCode};
     }
     // clamp high index
     high_index = Math.min(high_index, array.length - 1);
 
     return {
         array: slice(array, low_index, high_index + 1),
-        statusCode: StatusCodes.Good
+        statusCode: StatusCodes.Good as StatusCode
     };
 
 }
 
 function isArrayLike(value: any) {
-    return Number.isFinite(value.length) || value.hasOwnProperty('length');
+    return value && (Number.isFinite(value.length) || value.hasOwnProperty('length'));
 }
 
-function extract_matrix_range(array: any[]|string|Uint8Array, rowRange: [number, number],
-        colRange: [number, number], dimension?: number[]) {
+function extract_matrix_range<U, T extends ArrayLike<U>>(array: T, rowRange: number[], colRange: number[], 
+    dimension?: number[]): ExtractResult<T> {
     assert(Array.isArray(rowRange) && Array.isArray(colRange));
     if (array.length === 0) {
         return {
-            array: [],
-            statusCode: StatusCodes.BadIndexRangeNoData
+            array: [] as any,
+            statusCode: StatusCodes.BadIndexRangeNoData as StatusCode
         };
     }
     if (isArrayLike(array[0]) && !dimension) {
         // like extracting data from a one dimensionnal array of strings or byteStrings...
         const result = extract_array_range(array, rowRange[0], rowRange[1]);
         for (let i = 0; i < result.array.length; i++) {
-            const e = result.array[i];
-            result.array[i] = extract_array_range(e, colRange[0], colRange[1]).array;
+            const e = (result.array as any)[i];
+            (result.array as any)[i] = extract_array_range(e, colRange[0], colRange[1]).array;
         }
         return result;
     }
     if (!dimension) {
         return {
-            array: [],
-            statusCode: StatusCodes.BadIndexRangeNoData
+            array: [] as any,
+            statusCode: StatusCodes.BadIndexRangeNoData as StatusCode
         };
     }
 
@@ -563,7 +572,7 @@ function extract_matrix_range(array: any[]|string|Uint8Array, rowRange: [number,
     return {
         array: tmp,
         dimensions: [nbRowDest, nbColDest],
-        statusCode: StatusCodes.Good
+        statusCode: StatusCodes.Good as StatusCode
     };
 
 }

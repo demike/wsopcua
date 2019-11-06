@@ -3,6 +3,7 @@ import { assert } from '../assert';
 import { ObjectIds} from '../constants/ObjectIds';
 import { VariableIds} from '../constants/VariableIds';
 import { NodeIdType } from '../generated/NodeIdType';
+import { stringToUint8Array } from '../basic-types/DataStream';
 
 beforeAll( () => {
     build_nodid_indexes_for_map(ObjectIds);
@@ -152,11 +153,11 @@ describe('testing coerceNodeId', function() {
     });
     it('should detect empty Opaque NodeIds', function() {
         // empty opaque nodeId
-        const empty_nodeId = coerceNodeId(Buffer.alloc(0));
+        const empty_nodeId = coerceNodeId(new ArrayBuffer(0));
         expect(empty_nodeId.identifierType).toBe(NodeIdType.ByteString);
         expect(empty_nodeId.isEmpty()).toBeTruthy();
 
-        const non_empty_nodeId = coerceNodeId(Buffer.alloc(1));
+        const non_empty_nodeId = coerceNodeId(new ArrayBuffer(1));
         expect(empty_nodeId.identifierType).toBe(NodeIdType.ByteString);
         expect(non_empty_nodeId.isEmpty()).toBeFalsy();
     });
@@ -191,7 +192,7 @@ describe('#sameNodeId', function() {
         new NodeId(NodeIdType.Numeric, 23, 2),
         new NodeId(NodeIdType.String, 'TemperatureSensor', 4),
         new NodeId(NodeIdType.String, 'A very long string very very long string', 4),
-        new NodeId(NodeIdType.ByteString, Buffer.from('AZERTY'), 4)
+        new NodeId(NodeIdType.ByteString,  stringToUint8Array('AZERTY'), 4)
     ];
     for (let i = 0; i < nodeIds.length; i++) {
         const nodeId1 = nodeIds[i];

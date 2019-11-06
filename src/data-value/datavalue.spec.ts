@@ -460,8 +460,11 @@ describe('TimestampsToReturn', function () {
 describe('apply_timestamps', function() {
     let dataValue: DataValue;
     beforeEach(function() {
+        const now = getCurrentClock();
         dataValue = new DataValue({
-            value: new Variant({dataType: DataType.String, value: 'Hello'})
+            value: new Variant({dataType: DataType.String, value: 'Hello'}),
+            sourcePicoseconds: now.picoseconds,
+            sourceTimestamp: now.timestamp
         });
     });
 
@@ -477,7 +480,7 @@ describe('apply_timestamps', function() {
         expect(cloneDataValue.value.value).toBe('Hello');
         expect(cloneDataValue.serverTimestamp).toBeDefined();
         expect(cloneDataValue.serverPicoseconds).toBeDefined();
-        expect(cloneDataValue.sourceTimestamp).toBeNull();
+        expect(cloneDataValue.sourceTimestamp).toBeUndefined();
     });
 
     it('should apply source timestamp only', function() {
@@ -487,7 +490,7 @@ describe('apply_timestamps', function() {
         const cloneDataValue = apply_timestamps(dataValue, TimestampsToReturn.Source , 13 /* value */);
 
         expect(cloneDataValue.value.value).toBe('Hello');
-        expect(cloneDataValue.serverTimestamp).toBeNull();
+        expect(cloneDataValue.serverTimestamp).toBeUndefined();
         expect(cloneDataValue.sourceTimestamp).toBe(now.timestamp);
         expect(cloneDataValue.sourcePicoseconds).toBe(now.picoseconds);
     });

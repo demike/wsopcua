@@ -16,6 +16,7 @@ import { MonitoredItemBase } from '../src/client/MonitoredItemBase';
 import { IReadValueId } from '../src/generated/ReadValueId';
 import { Variant, DataType, VariantArrayType } from '../src/variant';
 import { CallMethodRequest, CallMethodResult } from '../src/service-call';
+import { OPCUAClientEvents } from '../src/client/client_base';
 
 
 function sleep(ms) {
@@ -23,47 +24,48 @@ function sleep(ms) {
 }
 
 
-var cli = new OPCUAClient(
+const cli = new OPCUAClient(
     {
-        applicationName: "testapp",
-        clientName: "theClient",
+        applicationName: 'testapp',
+        clientName: 'theClient',
         endpoint_must_exist: false // <-- necessary for the websocket proxying to work
-        
-        //TODO: add some more
+
+        // TODO: add some more
     });
-var cliSession: ClientSession = null;
+let cliSession: ClientSession = null;
 
 export function exectest() {
 
-    //cli.findServers({endpointUrl : "192.168.110.10:4840"},onFindServers);
+    // cli.findServers({endpointUrl : "192.168.110.10:4840"},onFindServers);
     connect("ws://192.168.110.10:4444");
+    //connect('ws://10.36.64.1:4444');
 }
 
 function connect(uri: string) {
-    console.log("connecting to server: " + uri);
+    console.log('connecting to server: ' + uri);
 
     cli.connect(uri, (err) => {
         if (err) {
-            console.log(err.name + ": " + err.message);
+            console.log(err.name + ': ' + err.message);
             return;
         } else {
-            cli.getEndpoints({ endpointUrl: "ws://192.168.110.10:4444" }, onGetEndpoints);
+            cli.getEndpoints({ endpointUrl: 'ws://192.168.110.10:4444' }, onGetEndpoints);
         }
 
-        //next step
-    })
+        // next step
+    });
 
 }
 
 function onFindServers(err: Error | null, serverUris: string[]) {
     if (err) {
-        console.log(err.name + ": " + err.message);
+        console.log(err.name + ': ' + err.message);
         return;
     }
 
-    console.log("found following servers:");
-    for (let uri in serverUris) {
-        console.log("\t" + uri);
+    console.log('found following servers:');
+    for (const uri in serverUris) {
+        console.log('\t' + uri);
     }
 
     connect(serverUris[0]);
@@ -72,40 +74,40 @@ function onFindServers(err: Error | null, serverUris: string[]) {
 
 function onGetEndpoints(err: Error | null, serverUris: EndpointDescription[]) {
     if (err) {
-        console.log(err.name + ": " + err.message);
+        console.log(err.name + ': ' + err.message);
         return;
     }
 
-    console.log("found following servers:");
-    for (let uri of serverUris) {
-        console.log("\t" + uri.endpointUrl);
+    console.log('found following servers:');
+    for (const uri of serverUris) {
+        console.log('\t' + uri.endpointUrl);
     }
 
     createSession();
-    //connect(serverUris[0]);
+    // connect(serverUris[0]);
 }
 
 function createSession() {
     cli.createSession(/*{userName : "anonymous", password : "anonymous"}*/null, (err, session) => {
         if (err) {
-            console.log(err.name + ": " + err.message);
+            console.log(err.name + ': ' + err.message);
             return;
         }
 
         cliSession = session;
-        console.log("session name: " + session.name);
+        console.log('session name: ' + session.name);
 
         translateBrowsePaths();
     });
 }
 
-var browseDepth = 0;
-var nodeCnt = 0;
-var maxNodeCnt = 300;
+const browseDepth = 0;
+let nodeCnt = 0;
+const maxNodeCnt = 300;
 function browse(nodeId: NodeId | NodeId[], elemId: string | string[]) {
     //   if (nodeCnt >maxNodeCnt) {
     //        return;
-    //    }    
+    //    }
     if (!Array.isArray(nodeId)) {
         nodeId = <any>[nodeId];
     }
@@ -114,54 +116,54 @@ function browse(nodeId: NodeId | NodeId[], elemId: string | string[]) {
         elemId = <any>[elemId];
     }
 
-    let arBd = [];
-    for (let id of <NodeId[]>nodeId) {
+    const arBd = [];
+    for (const id of <NodeId[]>nodeId) {
         arBd.push(
             new BrowseDescription({
-                "nodeId": id, "browseDirection": BrowseDirection.Forward, "includeSubtypes": true,
+                'nodeId': id, 'browseDirection': BrowseDirection.Forward, 'includeSubtypes': true,
                 nodeClassMask: 0, resultMask: 61, referenceTypeId: new NodeId(NodeIdType.NUMERIC, ReferenceTypeIds.HierarchicalReferences)
             })
-        )
+        );
     }
-    let bd =
+    const bd =
         cliSession.browse(arBd/*nodeId*/, (err: Error, results: BrowseResult[], diagInfos: DiagnosticInfo[]) => {
             if (results && results.length > 0) {
                 for (let ii = 0; ii < results.length; ii++) {
-                    let ulId = elemId[ii] + "_" + nodeId[ii].value;
-                    createUL("#" + elemId[ii], ulId);
+                    const ulId = elemId[ii] + '_' + nodeId[ii].value;
+                    createUL('#' + elemId[ii], ulId);
                     onBrowse(err, results[ii], ulId);
                 }
             }
 
-        })
+        });
 }
 
 async function onBrowse(err: Error, result: BrowseResult, ulId: string) {
     if (err) {
-        console.log(err.name + ": " + err.message);
+        console.log(err.name + ': ' + err.message);
         return;
     }
 
-    let arNodesToBrowse = [];
-    let arIds = [];
-    console.log("BrowseResults:");
-    for (let ref of result.references) {
-        let liId = ulId + "_" + ref.nodeId.value;
-        let text = ref.browseName.name; //+ ": " + ref.displayName.text
-        logToElem("#" + ulId, liId, text);
-        if( nodeCnt > maxNodeCnt) {
-            //quit recursive browsing and start the next test
+    const arNodesToBrowse = [];
+    const arIds = [];
+    console.log('BrowseResults:');
+    for (const ref of result.references) {
+        const liId = ulId + '_' + ref.nodeId.value;
+        const text = ref.browseName.name; // + ": " + ref.displayName.text
+        logToElem('#' + ulId, liId, text);
+        if ( nodeCnt > maxNodeCnt) {
+            // quit recursive browsing and start the next test
             readValues();
           return;
         }
         arNodesToBrowse.push(ref.nodeId);
         arIds.push(liId);
         //     ref.nodeId.namespace = ref.browseName.namespaceIndex;
-        
+
     }
 
         await sleep(100);
-        browse(arNodesToBrowse,arIds);
+        browse(arNodesToBrowse, arIds);
 
 
     // logToElem("#browseResults","","-------------------------------------------");
@@ -169,74 +171,74 @@ async function onBrowse(err: Error, result: BrowseResult, ulId: string) {
 }
 
 
-var arPathsBNF = [
-    "/5:_global/5:EqRobot1/5:X/5:posMin/5:r",
-    "/5:_global/5:EqRobot1/5:X/5:rPosMax",
-    "/5:_global/5:EqRobot1/5:X/5:actPos",
-    "/5:_global/5:EqRobot1/5:X/5:rPosMin",
-    "/5:_global/5:EqRobot1/5:Y/5:actPos",
-    "/5:_global/5:EqRobot1/5:Y/5:rPosMax",
-    "/5:_global/5:EqRobot1/5:Y/5:rPosMin",
-    "/5:_global/5:EqRobot1/5:Z/5:actPos",
-    "/5:_global/5:EqRobot1/5:Z/5:rPosMax",
-    "/5:_global/5:EqRobot1/5:Z/5:rPosMin",
-    "/5:_global/5:EqRobot1/5:A/5:actPos",
-    "/5:_global/5:EqRobot1/5:B/5:actPos",
-    "/5:_global/5:EqRobot1/5:B/5:rPosMax",
-    "/5:_global/5:EqRobot1/5:B/5:rPosMin",
-    "/5:_global/5:EqRobot1/5:C12/5:ubActive",
-    "/5:_global/5:EqRobot1/5:C22/5:actPos",
-    "/5:_global/5:EqRobot1/5:X/5:Unknown",
+const arPathsBNF = [
+    '/5:_global/5:EqRobot1/5:X/5:posMin/5:r',
+    '/5:_global/5:EqRobot1/5:X/5:rPosMax',
+    '/5:_global/5:EqRobot1/5:X/5:actPos',
+    '/5:_global/5:EqRobot1/5:X/5:rPosMin',
+    '/5:_global/5:EqRobot1/5:Y/5:actPos',
+    '/5:_global/5:EqRobot1/5:Y/5:rPosMax',
+    '/5:_global/5:EqRobot1/5:Y/5:rPosMin',
+    '/5:_global/5:EqRobot1/5:Z/5:actPos',
+    '/5:_global/5:EqRobot1/5:Z/5:rPosMax',
+    '/5:_global/5:EqRobot1/5:Z/5:rPosMin',
+    '/5:_global/5:EqRobot1/5:A/5:actPos',
+    '/5:_global/5:EqRobot1/5:B/5:actPos',
+    '/5:_global/5:EqRobot1/5:B/5:rPosMax',
+    '/5:_global/5:EqRobot1/5:B/5:rPosMin',
+    '/5:_global/5:EqRobot1/5:C12/5:ubActive',
+    '/5:_global/5:EqRobot1/5:C22/5:actPos',
+    '/5:_global/5:EqRobot1/5:X/5:Unknown',
 ];
 
-var translatedIds : NodeId[]  = [];
+const translatedIds: NodeId[]  = [];
 
 function translateBrowsePaths() {
 
-    let rootNode = makeNodeId(85);
-    let arBrowsePaths : BrowsePath[] = [];
-    for (let name of arPathsBNF) {
-        arBrowsePaths.push(makeBrowsePath(rootNode,name));
+    const rootNode = makeNodeId(85);
+    const arBrowsePaths: BrowsePath[] = [];
+    for (const name of arPathsBNF) {
+        arBrowsePaths.push(makeBrowsePath(rootNode, name));
     }
-    cliSession.translateBrowsePath(arBrowsePaths,onTranslateBrowsePaths)
+    cliSession.translateBrowsePath(arBrowsePaths, onTranslateBrowsePaths);
 }
 
-function onTranslateBrowsePaths(err : Error|null, results : BrowsePathResult[]) {
+function onTranslateBrowsePaths(err: Error|null, results: BrowsePathResult[]) {
     if (err) {
         console.log(err);
         console.log(results);
     }
 
-    createUL("#tranlateBrowsePaths","translateBrowsePath_UL")
-    for(let ii=0; ii< results.length; ii++) {
+    createUL('#tranlateBrowsePaths','translateBrowsePath_UL');
+    for (let ii = 0; ii < results.length; ii++) {
         let targetId;
         let strResult;
         if (results[ii].statusCode.value == StatusCodes.Good.value) {
-            targetId = results[ii].targets[0].targetId
+            targetId = results[ii].targets[0].targetId;
             strResult = targetId.value;
             translatedIds.push(targetId);
-            logToElem("#translateBrowsePath_UL",strResult,arPathsBNF[ii] + ": id=" + strResult);
-            createInput("#" + strResult,strResult + "_in");
+            logToElem('#translateBrowsePath_UL', strResult, arPathsBNF[ii] + ': id=' + strResult);
+            createInput('#' + strResult, strResult + '_in');
         } else {
-            logToElem("#translateBrowsePath_UL","",arPathsBNF[ii] + ": id=" + "not found");
+            logToElem('#translateBrowsePath_UL','', arPathsBNF[ii] + ': id=' + 'not found');
         }
-       
-        
+
+
     }
 
     createSubscription();
-    //browse(new NodeId(NodeIdType.NUMERIC, 50510), "browseResults");
+    // browse(new NodeId(NodeIdType.NUMERIC, 50510), "browseResults");
 
 
 
-    
+
 }
 
 
-var cliSubscription : ClientSubscription = null;
-var monItemGroup : MonitoredItemGroup;
+let cliSubscription: ClientSubscription = null;
+let monItemGroup: MonitoredItemGroup;
 function createSubscription() {
-    cliSubscription = new ClientSubscription(cliSession,{
+    cliSubscription = new ClientSubscription(cliSession, {
         requestedPublishingInterval: 100,
         requestedLifetimeCount: 10000,
         requestedMaxKeepAliveCount: 100,
@@ -244,91 +246,91 @@ function createSubscription() {
         publishingEnabled: true,
         priority: 10
     });
-    cliSubscription.on("started", registerMonitoredItems);
+    cliSubscription.on('started', registerMonitoredItems);
 }
 
 function registerMonitoredItems() {
-    console.log("subscription created");
+    console.log('subscription created');
 
-    let arIds : IReadValueId[] = [];
-    for (let id of translatedIds) {
+    const arIds: IReadValueId[] = [];
+    for (const id of translatedIds) {
         arIds.push({
             nodeId : id,
             attributeId : AttributeIds.Value,
         });
     }
-    monItemGroup = cliSubscription.monitorItems(arIds,{samplingInterval : 100, discardOldest : true,queueSize : 1},TimestampsToReturn.Both,onRegisterMonitoredItems);
+    monItemGroup = cliSubscription.monitorItems(arIds, {samplingInterval : 100, discardOldest : true, queueSize : 1}, TimestampsToReturn.Both, onRegisterMonitoredItems);
     monItemGroup.onChanged(onItemChanged);
 }
-function onRegisterMonitoredItems(err : Error,mg : MonitoredItemGroup) {
+function onRegisterMonitoredItems(err: Error, mg: MonitoredItemGroup) {
 
-   console.log("Monitored items registered!"); 
-   browse(new NodeId(NodeIdType.NUMERIC, 50510), "browseResults");
+   console.log('Monitored items registered!');
+   browse(new NodeId(NodeIdType.NUMERIC, 50510), 'browseResults');
 }
 
-function onItemChanged(item : MonitoredItemBase,dataValue : DataValue,index : number) {
-    setInputValue("#" + item.nodeId.value + "_in",dataValue.value.value);
+function onItemChanged(item: MonitoredItemBase, dataValue: DataValue, index: number) {
+    setInputValue('#' + item.nodeId.value + '_in', dataValue.value.value);
 }
 
-//function createBrowsePath(str : string) : BrowsePath {
+// function createBrowsePath(str : string) : BrowsePath {
  //   let rp = new RelativePath({elements : str.split(".")});
  //   let bp = new BrowsePath({relativePath })
-//}
+// }
 
 function readValues() {
-    cliSession.readVariableValue(translatedIds,onReadValues);// monitorItems(arIds,{samplingInterval : 100, discardOldest : true,queueSize : 1},TimestampsToReturn.Both,onRegisterMonitoredItems);
+    cliSession.readVariableValue(translatedIds, onReadValues); // monitorItems(arIds,{samplingInterval : 100, discardOldest : true,queueSize : 1},TimestampsToReturn.Both,onRegisterMonitoredItems);
 }
 
-function onReadValues(err: Error,results? : DataValue[],diagInf? : DiagnosticInfo[]) {
-    let str : string = "";
+function onReadValues(err: Error, results?: DataValue[], diagInf?: DiagnosticInfo[]) {
+    let str: string = '';
 
     if (err) {
         console.log(err);
         return;
     }
 
-    for (let ii=0;ii < translatedIds.length; ++ii) {
-        str += translatedIds[ii].value + ": " + results[ii].value.value + ", "
+    for (let ii = 0; ii < translatedIds.length; ++ii) {
+        str += translatedIds[ii].value + ': ' + results[ii].value.value + ', '
     }
    console.log(str);
-   createUL("#readValues","readValuesUL");
-   logToElem("#readValuesUL","readValuesLI",str); 
+   createUL('#readValues','readValuesUL');
+   logToElem('#readValuesUL','readValuesLI', str);
 }
 
 function logToElem(querySelector: string, id: string, text: string) {
     nodeCnt++;
-    querySelector = querySelector.replace(/[.\[\]]/g,'_');
-    let div = window.document.createElement("LI");
-    div.id = id.replace(/[.\[\]]/g,'_');
+    querySelector = querySelector.replace(/[.\[\]]/g, '_');
+    const div = window.document.createElement('LI');
+    div.id = id.replace(/[.\[\]]/g, '_');
     div.appendChild(document.createTextNode(text));
     window.document.querySelector(querySelector).appendChild(div);
 }
 
 function createUL(parentSelector: string, id: string) {
 
-    let ul = window.document.createElement("UL");
-    parentSelector = parentSelector.replace(/[.\[\]]/g,'_');
-    ul.id = id.replace(/[.\[\]]/g,'_');
+    const ul = window.document.createElement('UL');
+    parentSelector = parentSelector.replace(/[.\[\]]/g, '_');
+    ul.id = id.replace(/[.\[\]]/g, '_');
     window.document.querySelector(parentSelector).appendChild(ul);
 
 }
 
 function createInput(parentSelector: string, id: string ) {
-    let inp = window.document.createElement("input");
-    parentSelector = parentSelector.replace(/[.\[\]]/g,'_');
-    inp.id = id.replace(/[.\[\]]/g,'_');
+    const inp = window.document.createElement('input');
+    parentSelector = parentSelector.replace(/[.\[\]]/g, '_');
+    inp.id = id.replace(/[.\[\]]/g, '_');
     window.document.querySelector(parentSelector).appendChild(inp);
 }
 
-function setInputValue(inputSelector : string,value : any) {
-    inputSelector = inputSelector.replace(/[.\[\]]/g,'_');
-    let inp : HTMLInputElement = window.document.querySelector(inputSelector);
+function setInputValue(inputSelector: string, value: any) {
+    inputSelector = inputSelector.replace(/[.\[\]]/g, '_');
+    const inp: HTMLInputElement = window.document.querySelector(inputSelector);
     inp.value = value;
 }
 
-var newValue = 100;
+let newValue = 100;
 export function onWriteValue() {
-    cliSession.writeSingleNode(translatedIds[0],new Variant({value:newValue++, dataType:DataType.Float,arrayType:VariantArrayType.Scalar}),onValueWritten);
+    cliSession.writeSingleNode(translatedIds[0], new Variant({value: newValue++, dataType: DataType.Float, arrayType: VariantArrayType.Scalar}), onValueWritten);
 }
 
 function onValueWritten(err) {
@@ -340,29 +342,29 @@ function onValueWritten(err) {
 
 function setupButtons() {
     window.onload = () => {
-     window.document.querySelector<HTMLButtonElement>("#writeValue").onclick=onWriteValue;
-     window.document.querySelector<HTMLButtonElement>("#callMethod").onclick=callMethodTest;
-    }
+     window.document.querySelector<HTMLButtonElement>('#writeValue').onclick = onWriteValue;
+     window.document.querySelector<HTMLButtonElement>('#callMethod').onclick = callMethodTest;
+    };
 }
 
 
 function callMethodTest() {
 
-   
-    let arNames : string[] = ["APPL.TT._global.EqRobot1.SuctionGripper1", "APPL.TT._global.EqRobot1.SuctionGripper2"];
-    let phraseNames: Variant = new Variant({ value: arNames, dataType: DataType.String, arrayType: VariantArrayType.Array });
-    let languageKey: Variant = new Variant({ value: "de", dataType: DataType.String, arrayType: VariantArrayType.Scalar});
+
+    const arNames: string[] = ['APPL.TT._global.EqRobot1.SuctionGripper1', 'APPL.TT._global.EqRobot1.SuctionGripper2'];
+    const phraseNames: Variant = new Variant({ value: arNames, dataType: DataType.String, arrayType: VariantArrayType.Array });
+    const languageKey: Variant = new Variant({ value: 'de', dataType: DataType.String, arrayType: VariantArrayType.Scalar});
 
     const request = new CallMethodRequest({
-              inputArguments: [phraseNames,languageKey],
-              objectId: new NodeId(NodeIdType.STRING,"ResourceService",2),
-              methodId: new NodeId(NodeIdType.STRING,"getPhrases",2) });
+              inputArguments: [phraseNames, languageKey],
+              objectId: new NodeId(NodeIdType.STRING,'ResourceService', 2),
+              methodId: new NodeId(NodeIdType.STRING, "getPhrases", 2) });
 
 
     cliSession.call([request], (err, response) => {
       if (err) {
 
-        console.log(err + " ");
+        console.log(err + ' ');
       } else {
         onMethodCall(response);
       }
@@ -371,12 +373,12 @@ function callMethodTest() {
 }
 
 function onMethodCall(response: CallMethodResult[]) {
-   console.log("onMethodCall");
+   console.log('onMethodCall');
 }
 
 
 // execute the test
-console.log("starting the tests");
+console.log('starting the tests');
 exectest();
 setupButtons();
 

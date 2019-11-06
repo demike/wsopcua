@@ -80,7 +80,7 @@ function readVariableProperties(session: ClientSession, nodeId: NodeId, varObj: 
             ii++;
         }
 
-        session.read(nodesToRead, function (err: Error, dataValues: DataValue[]) {
+        session.read(nodesToRead, 0,  function (err: Error, dataValues: DataValue[]) {
             if (err) {
                 return callback(err);
             }
@@ -181,7 +181,7 @@ export function readUAAnalogItem(session: ClientSession, nodeId: NodeId, callbac
         processProperty(3, 'valuePrecision');
         processProperty(4, 'definition');
 
-        session.read(nodesToRead, function (err: Error, dataValues: DataValue[]) {
+        session.read(nodesToRead, 0, function (err: Error, dataValues: DataValue[]) {
             if (err) {
                 return callback(err);
             }
@@ -321,7 +321,7 @@ export function readHistoryServerCapabilities(the_session: ClientSession,
             });
 
             const data = {};
-            the_session.read(nodesToRead, function(err: Error, dataValues: DataValue[]) {
+            the_session.read(nodesToRead, 0, function(err: Error, dataValues: DataValue[]) {
                 if (err) { return callback(err); }
 
                 for (let i = 0; i < dataValues.length; i++ ) {

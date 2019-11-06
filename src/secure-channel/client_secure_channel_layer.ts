@@ -385,7 +385,6 @@ protected _cancel_pending_transactions(err?: Error) {
 protected _on_transport_closed(err?: Error) {
 
     debugLog(' =>ClientSecureChannelLayer#_on_transport_closed  err=', err ? err.message : 'null');
-    /* jshint validthis: true */
 
     if (this.__in_normal_close_operation) {
         err = undefined;

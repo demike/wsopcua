@@ -1,6 +1,6 @@
 import { TranslateBrowsePathsToNodeIdsRequest, TranslateBrowsePathsToNodeIdsResponse, makeBrowsePath, BrowsePath } from ".";
-import { coerceNodeId } from "../wsopcua";
-import { QualifiedName, RelativePathElement, RelativePath } from "../generated";
+import { coerceNodeId, ExpandedNodeId } from "../wsopcua";
+import { QualifiedName, RelativePathElement, RelativePath, NodeIdType } from "../generated";
 
 
 describe("Test TranslateBrowsePath Service",function() {
@@ -49,4 +49,28 @@ describe("#makeBrowsePath", function () {
         expect(path).toEqual(expected);
 
     });
+
+    it('should make relative path', () => {
+        const nid = new ExpandedNodeId(
+          NodeIdType.String,
+          'basenodeid',
+          1,
+          'urn:thecompany:NS'
+        );
+        const bp = makeBrowsePath(nid, '/1:foo/1:bar');
+        expect(bp).toBeTruthy();
+      });
+  
+      it('should make relative path', () => {
+        const nid = new ExpandedNodeId(
+          NodeIdType.String,
+          'basenodeid',
+          1,
+          'urn:thecompany:NS'
+        );
+        const bp1 = makeBrowsePath(nid, '<0:HasChild>2:Wheel'); // fails!
+        const bp2 = makeBrowsePath(nid, '<HasChild>2:Wheel'); // works!
+        expect(bp1).toBeTruthy();
+        expect(bp2).toBeTruthy();
+      });
 });

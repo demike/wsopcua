@@ -9,7 +9,7 @@ describe('QualifiedName', function () {
 
     it('should construct a qualified name', function () {
         const qn = new QualifiedName({});
-        expect(qn.namespaceIndex).toBeNull();
+        expect(qn.namespaceIndex).toEqual(0);
         expect(qn.name).toBeNull();
     });
     it('testing qualified name toString', function () {
@@ -23,7 +23,7 @@ describe('QualifiedName', function () {
     it('should coerce a string into a qualified name ', function () {
         const qn = coerceQualifiedName('Hello');
         expect(qn.name).toBe('Hello');
-        expect(qn.namespaceIndex).toBeNull();
+        expect(qn.namespaceIndex).toEqual(0);
     });
     it('should coerce a qualified name with namespaceIndex into a qualified name ', function () {
         const qn = coerceQualifiedName({namespaceIndex: 0, name: 'Hello'});
