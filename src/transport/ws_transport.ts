@@ -15,6 +15,7 @@ import {readRawMessageHeader} from './message_builder_base';
 
 import {debugLog, doDebug} from '../common/debug';
 import { ResponseCallback, ErrorCallback } from '../client/client_base';
+import { ObjectRegistry } from '../object-registry/objectRegistry';
 
 let fakeSocket: any = {invalid: true} ;
 
@@ -49,72 +50,80 @@ interface WSTransportEvents {
  */
 export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
 
-    packetAssembler: PacketAssembler;
+    private static registry = new ObjectRegistry();
+
+    packetAssembler?: PacketAssembler;
     name: string;
-    _timerId: number;
-    protected _socket: WebSocket;
-    timeout: number;
-    headerSize: number;
+    private _timerId: number;
+    protected _socket: WebSocket | null;
+    private _timeout: number;
+    public readonly headerSize: number;
     _protocolVersion: number;
 
     bytesRead: number;
     bytesWritten: number;
     chunkReadCount: number;
     chunkWrittenCount: number;
-    protected __disconnecting__: boolean;
-    protected _on_socket_closed_called: boolean;
-    protected _on_socket_ended_called: boolean;
-    protected _pending_buffer: ArrayBuffer;
+    protected _disconnecting: boolean;
+    protected _onSocketClosedHasBeenCalled: boolean;
+    protected _onSocketEndedHasBeenCalled: boolean;
+    protected _pending_buffer?: ArrayBuffer;
 
-    protected _the_callback: ResponseCallback<DataView>;
+    protected _the_callback?: ResponseCallback<DataView>;
 
     get disconnecting() {
-        return this.__disconnecting__;
+        return this._disconnecting;
     }
 
 constructor() {
     super();
-    /**
-     * timeout
-     * @property [timeout=30000]
-     * @type {number}
-     */
-    this.timeout = 30000; // 30 seconds timeout
+    this.name = this.constructor.name + counter;
+    counter += 1;
 
+    this._timeout = 30000; // 30 seconds timeout
     this._socket = null;
 
-    /**
-     * @property headerSize the size of the header in bytes
-     * @type {number}
-     * @default  8
-     */
     this.headerSize = 8;
 
     /**
      * @property protocolVersion indicates the version number of the OPCUA protocol used
-     * @type {number}
-     * @default  0
      */
     this._protocolVersion = 0;
 
-    this.__disconnecting__ = false;
+    this._disconnecting = false;
 
     this.bytesWritten = 0;
     this.bytesRead = 0;
 
-    this._the_callback = null;
+    this._the_callback = undefined;
 
-
-    /***
-     * @property chunkWrittenCount
-     * @type {number}
-     */
     this.chunkWrittenCount = 0;
-    /***
-     * @property chunkReadCount
-     * @type {number}
-     */
     this.chunkReadCount = 0;
+
+    this._onSocketClosedHasBeenCalled = false;
+    this._onSocketEndedHasBeenCalled = false;
+
+    WSTransport.registry.register(this);
+}
+
+public get timeout(): number {
+    return this._timeout;
+}
+public set timeout(value: number) {
+    debugLog('Setting socket ' + this.name + ' timeout = ', value);
+    this._timeout = value;
+}
+protected dispose() {
+    this._cleanup_timers();
+    assert(!this._timerId);
+    if (this._socket) {
+        this._socket.onclose = undefined;
+        this._socket.onerror = undefined;
+        this._socket.onopen = undefined;
+        this._socket.onmessage = undefined;
+        this._socket = null;
+    }
+    WSTransport.registry.unregister(this);
 }
 
 
@@ -147,17 +156,6 @@ public createChunk(msg_type: string, chunk_type: string, length: number): ArrayB
 }
 
 
-
-
-protected _write_chunk(message_chunk: ArrayBuffer) {
-
-    if (this._socket) {
-        this.bytesWritten += message_chunk.byteLength;
-        this.chunkWrittenCount ++;
-        this._socket.send(message_chunk);
-    }
-}
-
 /**
  * write the message_chunk on the socket.
  * @method write
@@ -176,89 +174,65 @@ public write(message_chunk: ArrayBuffer) {
     const header = readRawMessageHeader(message_chunk);
     assert(header.length === message_chunk.byteLength);
     assert(['F', 'C', 'A'].indexOf(header.messageHeader.isFinal) !== -1);
-
     this._write_chunk(message_chunk);
-
     this._pending_buffer = undefined;
 }
 
+/**
+ * disconnect the TCP layer and close the underlying socket.
+ * The ```"close"``` event will be emitted to the observers with err=null.
+ *
+ * @method disconnect
+ * @async
+ * @param callback
+ */
+public disconnect(callback: () => void) {
 
-protected _fulfill_pending_promises(err: Error, data?: DataView) {
-
-    this._cleanup_timers();
-
-    const the_callback = this._the_callback;
-    this._the_callback = null;
-
-    if (the_callback) {
-        the_callback(err, data);
-        return true;
-    }
-    return false;
-
-}
-
-protected _on_message_received(message_chunk: DataView) {
-    const has_callback = this._fulfill_pending_promises(null, message_chunk);
-    this.chunkReadCount ++;
-
-    if (!has_callback) {
-        /**
-         * notify the observers that a message chunk has been received
-         * @event message
-         * @param message_chunk {Buffer} the message chunk
-         */
-        this.emit('message', message_chunk);
-    }
-}
+    assert('function' === typeof callback, 'expecting a callback function, but got ' + callback);
 
 
-protected _cleanup_timers() {
-    if (this._timerId) {
-        clearTimeout(this._timerId);
-        this._timerId = null;
-    }
-}
-
-protected _start_timeout_timer() {
-
-    assert(!this._timerId, 'timer already started');
-    this._timerId = window.setTimeout( () => {
-        this._timerId = null;
-        this._fulfill_pending_promises(new Error('Timeout in waiting for data on socket ( timeout was = ' + this.timeout + ' ms )'));
-    }, this.timeout);
-
-}
-
-public on_socket_closed(err: Error) {
-
-    if (this._on_socket_closed_called) {
+    if (this._disconnecting || !this._socket) {
+        callback();
         return;
     }
-    assert(!this._on_socket_closed_called);
-    this._on_socket_closed_called = true; // we don't want to send close event twice ...
-    /**
-     * notify the observers that the transport layer has been disconnected.
-     * @event socket_closed
-     * @param err the Error object or null
-     */
-    this.emit('socket_closed', err || null);
+
+    assert(!this._disconnecting, 'TCP Transport has already been disconnected');
+    this._disconnecting = true;
+
+    // xx assert(!this._the_callback, 'disconnect shall not be called while the \'one time message receiver\' is in operation');
+    this._cleanup_timers();
+
+    if (this._socket) {
+        this._socket.onclose = () => {
+            this.on_socket_ended(null);
+            callback();
+        };
+
+        const sock = this._socket;
+        this._socket = null;
+        sock.close(1000);
+    }
+
 }
 
-protected _on_socket_data(evt: MessageEvent): void {
-    if (!this.packetAssembler) {
-        throw new Error('internal Error');
-    }
-    this.bytesRead += evt.data.byteLength;
-    if (evt.data.byteLength > 0) {
-        this.packetAssembler.feed(new DataView(evt.data));
+public isValid() {
+    return this._socket && (this._socket.readyState === this._socket.OPEN) && !this._disconnecting;
+}
+
+protected _write_chunk(message_chunk: ArrayBuffer) {
+    if (this._socket) {
+        this.bytesWritten += message_chunk.byteLength;
+        this.chunkWrittenCount ++;
+        this._socket.send(message_chunk);
     }
 }
 
-public on_socket_ended(err: Error) {
 
-    assert(!this._on_socket_ended_called);
-    this._on_socket_ended_called = true; // we don't want to send ende event twice ...
+
+public on_socket_ended(err: Error| null) {
+
+    assert(!this._onSocketEndedHasBeenCalled);
+    this._onSocketEndedHasBeenCalled = true; // we don't want to send ende event twice ...
     /**
      * notify the observers that the transport layer has been disconnected.
      * @event close
@@ -266,25 +240,6 @@ public on_socket_ended(err: Error) {
      */
     this.emit('close', err || null);
 }
-
-protected _on_socket_ended_message(err: Error) {
-    if (this.__disconnecting__) {
-        return;
-    }
-
-    debugLog('Transport Connection ended ' + self.name);
-    assert(!this.__disconnecting__);
-    err = err || new Error('_socket has been disconnected by third party');
-
-    this.on_socket_ended(err);
-
-    this.__disconnecting__ = true;
-
-    debugLog(' bytesRead    = ' + this.bytesRead);
-    debugLog(' bytesWritten = ' + this.bytesWritten);
-    this._fulfill_pending_promises(new Error('Connection aborted - ended by client : ' + (err ? err.message : '')));
-}
-
 
 /**
  * @method _install_socket
@@ -294,11 +249,6 @@ protected _on_socket_ended_message(err: Error) {
 protected _install_socket(socket: WebSocket) {
 
     assert(socket);
-
-
-    this.name = ' Transport ' + counter;
-    counter += 1;
-
     this._socket = socket;
 
     // install packet assembler ...
@@ -311,32 +261,8 @@ protected _install_socket(socket: WebSocket) {
         this._on_message_received( message_chunk);
     });
 
-    this._socket.onmessage = (evt: MessageEvent) => {this._on_socket_data(evt); };
-    this._socket.onclose = (evt: CloseEvent) => {
-        // istanbul ignore next
-        if (doDebug) {
-            debugLog(' SOCKET CLOSE : reason =' + evt.reason + ' code=' + evt.code  + ' name=' + this.name);
-        }
-        if (this._socket ) {
-            debugLog('  remote address = ' + this._socket.url);
-        }
-
-        let err = null;
-        if (evt.code !== 1000 /* if not normal*/) {
-            /* TODO: what should we do now
-            if (this._socket) {
-                this._socket.destroy();
-            }
-            */
-           this.emit('socket_error', evt);
-           err = new Error('ERROR IN SOCKET: reason=' + evt.reason + ' code=' + evt.code  + ' name=' + this.name);
-        } else {
-            this._on_socket_ended_message(new Error('Connection aborted'));
-        }
-
-        this.on_socket_closed(err);
-
-    };
+    this._socket.onmessage = (evt: MessageEvent) => this._on_socket_data(evt);
+    this._socket.onclose = (evt: CloseEvent) => {this._on_socket_close(evt); this.dispose(); };
     /*
     this._socket.on("end", function (err) {
 
@@ -384,50 +310,125 @@ protected _install_one_time_message_receiver(callback: ResponseCallback<DataView
     assert(!this._the_callback, 'callback already set');
     assert('function' === typeof callback);
     this._the_callback = callback;
-    this._start_timeout_timer();
+    this._start_one_time_message_receiver();
+}
+
+protected _fulfill_pending_promises(err: Error, data?: DataView) {
+
+    this._cleanup_timers();
+
+    const the_callback = this._the_callback;
+    this._the_callback = undefined;
+
+    if (the_callback) {
+        the_callback(err, data);
+        return true;
+    }
+    return false;
+
+}
+
+protected _on_message_received(message_chunk: DataView) {
+    const has_callback = this._fulfill_pending_promises(null, message_chunk);
+    this.chunkReadCount ++;
+
+    if (!has_callback) {
+        /**
+         * notify the observers that a message chunk has been received
+         * @event message
+         * @param message_chunk {Buffer} the message chunk
+         */
+        this.emit('message', message_chunk);
+    }
 }
 
 
-/**
- * disconnect the TCP layer and close the underlying socket.
- * The ```"close"``` event will be emitted to the observers with err=null.
- *
- * @method disconnect
- * @async
- * @param callback
- */
-public disconnect(callback: () => void) {
+protected _cleanup_timers() {
+    if (this._timerId) {
+        clearTimeout(this._timerId);
+        this._timerId = null;
+    }
+}
 
-    assert('function' === typeof callback, 'expecting a callback function, but got ' + callback);
+protected _start_one_time_message_receiver() {
 
+    assert(!this._timerId, 'timer already started');
+    this._timerId = window.setTimeout( () => {
+        this._timerId = null;
+        this._fulfill_pending_promises(new Error('Timeout in waiting for data on socket ( timeout was = ' + this._timeout + ' ms )'));
+    }, this._timeout);
 
-    if (this.__disconnecting__ || !this._socket) {
-        callback();
+}
+
+public on_socket_closed(err: Error) {
+
+    if (this._onSocketClosedHasBeenCalled) {
+        return;
+    }
+    assert(!this._onSocketClosedHasBeenCalled);
+    this._onSocketClosedHasBeenCalled = true; // we don't want to send close event twice ...
+    /**
+     * notify the observers that the transport layer has been disconnected.
+     * @event socket_closed
+     * @param err the Error object or null
+     */
+    this.emit('socket_closed', err || null);
+}
+
+protected _on_socket_data(evt: MessageEvent): void {
+    if (!this.packetAssembler) {
+        throw new Error('internal Error');
+    }
+    this.bytesRead += evt.data.byteLength;
+    if (evt.data.byteLength > 0) {
+        this.packetAssembler.feed(new DataView(evt.data));
+    }
+}
+
+private _on_socket_close(evt: CloseEvent) {
+    // istanbul ignore next
+    if (doDebug) {
+        debugLog(' SOCKET CLOSE : reason =' + evt.reason + ' code=' + evt.code  + ' name=' + this.name);
+    }
+    if (this._socket ) {
+        debugLog('  remote address = ' + this._socket.url);
+    }
+
+    let err = null;
+    if (evt.code !== 1000 /* if not normal*/) {
+        /* TODO: what should we do now
+        if (this._socket) {
+            this._socket.destroy();
+        }
+        */
+       this.emit('socket_error', evt);
+       err = new Error('ERROR IN SOCKET: reason=' + evt.reason + ' code=' + evt.code  + ' name=' + this.name);
+    } else {
+        this._on_socket_ended_message(new Error('Connection aborted'));
+    }
+
+    this.on_socket_closed(err);
+
+}
+
+protected _on_socket_ended_message(err: Error) {
+    if (this._disconnecting) {
         return;
     }
 
-    assert(!this.__disconnecting__, 'TCP Transport has already been disconnected');
-    this.__disconnecting__ = true;
+    debugLog('Transport Connection ended ' + this.name);
+    assert(!this._disconnecting);
+    err = err || new Error('_socket has been disconnected by third party');
 
-    assert(!this._the_callback, 'disconnect shall not be called while the \'one time message receiver\' is in operation');
-    this._cleanup_timers();
+    this.on_socket_ended(err);
 
-    if (this._socket) {
-        this._socket.onclose = () => {
-            this.on_socket_ended(null);
-            callback();
-        };
+    this._disconnecting = true;
 
-        const sock = this._socket;
-        this._socket = null;
-        sock.close();
-    }
-
+    debugLog(' bytesRead    = ' + this.bytesRead);
+    debugLog(' bytesWritten = ' + this.bytesWritten);
+    this._fulfill_pending_promises(new Error('Connection aborted - ended by client : ' + (err ? err.message : '')));
 }
 
-public isValid() {
-    return this._socket && (this._socket.readyState === this._socket.OPEN) && !this.__disconnecting__;
-}
 
 }
 

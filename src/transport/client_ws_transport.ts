@@ -27,7 +27,6 @@ import {readMessageHeader} from '../chunkmanager';
 
 import {decodeMessage} from './tools';
 import { ErrorCallback } from '../client/client_base';
-import { IEncodableConstructor } from '../factory/factories_baseobject';
 
 function createClientSocket(endpointUrl: string): WebSocket {
     // create a socket based on Url
@@ -177,23 +176,27 @@ public connect(endpointUrl: string, callback: ErrorCallback, options?) {
     // ----------------------------------------------------------------------------
     const _on_socket_error_for_connect = (err: Event) => {
         // this handler will catch attempt to connect to an inaccessible address.
-        this._socket.removeEventListener('error', _on_socket_error_for_connect);
+//        this._socket.removeEventListener('error', _on_socket_error_for_connect);
+        this.off('socket_error', _on_socket_error_for_connect)
         callback(new Error('failed to connect'));
     };
-    this._socket.addEventListener('error', _on_socket_error_for_connect); /* TODO think about listening on the close event, it has mor */
+ //   this._socket.addEventListener('error', _on_socket_error_for_connect); /* TODO think about listening on the close event, it has mor */
+    this.on('socket_error', _on_socket_error_for_connect);
     // ---------------------------------------------------------------------------
 
 
     this._socket.onopen =  () => {
 
         /* remove the connect error listener  */
-        this._socket.removeEventListener('error', _on_socket_error_for_connect);
+        //this._socket.removeEventListener('error', _on_socket_error_for_connect);
+        this.off('socket_error', _on_socket_error_for_connect)
 
         this._perform_HEL_ACK_transaction((err) => {
             if (!err) {
 
                 // install error handler to detect connection break
-                this.on('socket_error', (evt: CloseEvent) => {this._on_socket_error_after_connection(evt); });
+                this.on('socket_error', this._on_socket_error_after_connection);
+
 
                 this._connected = true;
                 /**
@@ -297,7 +300,7 @@ protected _perform_HEL_ACK_transaction(callback: ErrorCallback) {
     this._send_HELLO_request();
 }
 
-protected _on_socket_error_after_connection(evt: CloseEvent)  {
+protected _on_socket_error_after_connection = (evt: CloseEvent) => {
     debugLog(' ClientWSTransport Socket Error', evt);
 
     // EPIPE : EPIPE (Broken pipe): A write on a pipe, socket, or FIFO for which there is no process to read the
@@ -315,6 +318,12 @@ protected _on_socket_error_after_connection(evt: CloseEvent)  {
          */
         this.emit('connection_break');
     }
+}
+
+protected dispose() {
+    super.dispose();
+    this.off('socket_error', this._on_socket_error_after_connection);
+    //this._socket.removeEventListener('socket_error', this._on_socket_error_after_connection);
 }
 
 }
