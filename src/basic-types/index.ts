@@ -9,6 +9,7 @@ export * from './date_time';
 export * from './byte_string';
 export * from './nodeid';
 export * from './status_code';
+export * from './status_code_utils';
 export * from './guid';
 export * from './localeid';
 export * from './array';

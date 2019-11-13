@@ -177,7 +177,7 @@ public connect(endpointUrl: string, callback: ErrorCallback, options?) {
     const _on_socket_error_for_connect = (err: Event) => {
         // this handler will catch attempt to connect to an inaccessible address.
 //        this._socket.removeEventListener('error', _on_socket_error_for_connect);
-        this.off('socket_error', _on_socket_error_for_connect)
+        this.off('socket_error', _on_socket_error_for_connect);
         callback(new Error('failed to connect'));
     };
  //   this._socket.addEventListener('error', _on_socket_error_for_connect); /* TODO think about listening on the close event, it has mor */

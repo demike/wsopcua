@@ -25,7 +25,7 @@ import { TransferSubscriptionsRequest, ITransferSubscriptionsRequest } from '../
 import { ClientSidePublishEngine } from './client_publish_engine';
 import { ClientSessionKeepAliveManager } from './client_session_keepalive_manager';
 
-import { UInt32, StatusCode, IStatusCodeOptions } from '../basic-types';
+import { UInt32, StatusCode } from '../basic-types';
 import { CallMethodRequest } from '../generated/CallMethodRequest';
 import { CallMethodResult } from '../generated/CallMethodResult';
 import { Argument } from '../generated/Argument';
@@ -108,7 +108,7 @@ function coerceReadValueId(node: string| NodeId | IReadValueId) {
 
 export interface ClientSessionEvent {
     'session_activated': () => void;
-    'session_closed': (status: IStatusCodeOptions) => void;
+    'session_closed': (status: StatusCode) => void;
     'keepalive': (state: ServerState) => void;
     'keepalive_failure': () => void;
 }
@@ -723,7 +723,9 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
         });
     }
-    writeP(nodesToWrite: write_service.WriteValue[] | write_service.WriteValue): Promise<StatusCode[] | StatusCode> {
+    public writeP(nodesToWrite: write_service.WriteValue): Promise<StatusCode>;
+    public writeP(nodesToWrite: write_service.WriteValue[]): Promise<StatusCode[]>;
+    public writeP(nodesToWrite: write_service.WriteValue[] | write_service.WriteValue): Promise<StatusCode[] | StatusCode> {
         return new Promise((res, rej) => {this.write(nodesToWrite, (err, status) => {
             if (err) { rej(err); } else { res(status); }
         }); });
@@ -978,18 +980,18 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
         });
     }
-    public readP(nodesToRead: read_service.ReadValueId , maxAge: number):
+    public readP(nodesToRead: read_service.ReadValueId , maxAge?: number):
         Promise<{value: DataValue, diagnosticInfo: DiagnosticInfo}>;
-    public readP(nodesToRead: read_service.ReadValueId[], maxAge: number):
+    public readP(nodesToRead: read_service.ReadValueId[], maxAge?: number):
         Promise<{value: DataValue[], diagnosticInfo: DiagnosticInfo[]}>;
-    public readP(nodesToRead: read_service.ReadValueId | read_service.ReadValueId[], maxAge: number):
+    public readP(nodesToRead: read_service.ReadValueId | read_service.ReadValueId[], maxAge?: number):
         Promise<{value: DataValue, diagnosticInfo: DiagnosticInfo} | {value: DataValue[], diagnosticInfo: DiagnosticInfo[]}> {
             return new Promise((res, rej) => {this.read(nodesToRead as any, (maxAge ? maxAge : 0) , (err, value, diagnosticInfo) => {
                 if (err) { rej(err); } else { res({value, diagnosticInfo}); }
             }); });
     }
 
-    public emitCloseEvent(statusCode?: IStatusCodeOptions) {
+    public emitCloseEvent(statusCode?: StatusCode) {
         if (!this._closeEventHasBeenEmmitted) {
             debugLog('ClientSession#emitCloseEvent');
             this._closeEventHasBeenEmmitted = true;

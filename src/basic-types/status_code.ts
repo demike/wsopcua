@@ -4,10 +4,8 @@
  * @module opcua.datamodel
  */
 import {assert} from '../assert';
-import {StatusCodes} from '../constants';
-import { DataStream } from './DataStream';
 
-const extraStatusCodeBits: {[key: string]: number} = {
+export const ExtraStatusCodeBits = Object.freeze({
 
 // StatusCode Special bits
 //
@@ -88,274 +86,195 @@ HistorianPartial:      0x1 << 2,
 HistorianExtraData:    0x1 << 3,
 HistorianMultiValue:   0x1 << 4,
 
-};
+});
 
-
-
-// Release 1.03 144 OPC Unified Architecture, Part 4
-
-
-
-
-
-StatusCodes['Bad'] = {
-    name: 'Bad',
-    value: 0x80000000,
-    description: 'The value is bad but no specific reason is known.'
-};
-
-StatusCodes['Uncertain'] = {
-    name: 'Uncertain',
-    value: 0x40000000,
-    description: 'The value is uncertain but no specific reason is known.'
-};
-
-
-
-export interface IStatusCodeOptions {
-    value: number;
-    description: string;
-    name: string;
-}
 
 /**
  * a particular StatusCode , with it's value , name and description
- *
- * @class  StatusCode
- * @param options
- * @param options.value
- * @param options.description
- * @param options.name
- *
- * @constructor
  */
-export class StatusCode {
-    private _value: number;
+
+export abstract class StatusCode {
+
+    /**
+     * returns status code value in numerical form, including extra bits
+     */
+    public abstract get value(): number;
+
+    /***
+     * status code by name, (including  extra bits in textual forms)
+     */
+    public abstract get name(): string;
+
+    /**
+     * return the long description of the status code
+     */
+    public abstract get description(): string;
+
+    public get valueOf(): number {
+        return this.value;
+    }
+
+    public toString(): string {
+        return this.name + ' (0x' + ('0000' + this.value.toString(16)).substr(-8) + ')';
+    }
+
+    public checkBit(mask: number): boolean {
+        return (this.value & mask) === mask;
+    }
+
+    /**returns true if the overflow bit is set */
+    public get hasOverflowBit(): boolean {
+        return this.checkBit(ExtraStatusCodeBits.Overflow);
+    }
+
+    /**returns true if the semanticChange bit is set */
+    public get hasSemanticChangedBit(): boolean {
+        return this.checkBit(ExtraStatusCodeBits.SemanticChanged);
+    }
+
+    /**returns true if the structureChange bit is set */
+    public get hasStructureChangedBit(): boolean {
+        return this.checkBit(ExtraStatusCodeBits.StructureChanged);
+    }
+
+    public isNot(other: StatusCode): boolean {
+        assert(other instanceof StatusCode);
+        return this.value !== other.value;
+    }
+
+    public equals(other: StatusCode): boolean {
+        assert(other instanceof StatusCode);
+        return this.value === other.value;
+    }
+
+    public toJSON(): any {
+        return { value: this.value };
+    }
+
+    public toJSONFull(): any {
+        return { value: this.value, name: this.name, description: this.description };
+    }
+}
+
+
+export class ConstantStatusCode extends StatusCode {
+
+    private readonly _value: number;
+    private readonly _description: string;
+    private readonly _name: string;
+
+    /**
+     * @param options
+     * @param options
+     * @param options.value
+     * @param options.description
+     * @param options.name
+     *
+     */
+    constructor(options: { value: number, description: string, name: string }) {
+        super();
+        this._value = options.value;
+        this._description = options.description;
+        this._name = options.name;
+    }
+
     public get value(): number {
         return this._value;
     }
-    private _description: string;
-    public get description(): string {
-        return this._description;
-    }
-    private _name: string;
+
     public get name(): string {
         return this._name;
     }
-constructor(options: IStatusCodeOptions) {
-    this._value = options.value;
-    this._description = options.description;
-    this._name = options.name;
-    // xx this.highword =  this.value ? 0x8000 + this.value : 0 ;
-}
 
-/**
- *
- * @method toString
- * @return {string}
- */
-public toString(): string {
-    return this.name + ' (0x' + ('0000' + this.value.toString(16)).substr(-8) + ')';
-}
-
-/**
- * checks if <b>all</b> of the bits present in
- * 'mask' are present
- * @param mask
- */
-public checkBit(mask: number): boolean {
-    return (this.value & mask) === mask;
-}
-
-get hasOverflowBit() {
-    return this.checkBit(extraStatusCodeBits.Overflow);
-}
-get hasSemanticChangedBit() {
-    return this.checkBit(extraStatusCodeBits.SemanticChanged);
-}
-get hasStructureChangedBit() {
-    return this.checkBit(extraStatusCodeBits.StructureChanged);
-}
-
-public valueOf(): number {
-    return this.value;
-}
-
-public isNot(other: IStatusCodeOptions) {
-    // assert(other instanceof StatusCode);
-    return this.value !== other.value;
-}
-
-public equals(other: IStatusCodeOptions) {
-    // assert(other instanceof StatusCode);
-    return this.value === other.value;
-}
-
-}
-
-class ConstantStatusCode extends StatusCode {
-    constructor(options: IStatusCodeOptions) {
-        super(options);
+    public get description(): string {
+        return this._description;
     }
+
 }
 
-/* construct status codes fast search indexes */
-const StatusCodes_reverse_map: {[key: number]: ConstantStatusCode} = {};
+export class ModifiableStatusCode extends StatusCode {
 
-
-export const encodeStatusCode = function (statusCode: StatusCode, stream: DataStream) {
-    assert(statusCode instanceof StatusCode);
-    stream.setUint32(statusCode.value);
-};
-
-function b(c: number) {
-    const tmp = '0000000000000000000000' + (c >>> 0).toString(2);
-    return tmp.substr(-32);
-}
-export const decodeStatusCode = function (stream: DataStream) {
-    const code = stream.getUint32();
-
-    const code_without_info_bits = (code &  0xFFFF0000) >>> 0;
-    const info_bits = code & 0x0000FFFF;
-    // xx console.log(b(mask));
-    // xx console.log(b(~mask));
-    // xx console.log(b(code));
-    // xx console.log(b(code_without_info_bits));
-    let sc = StatusCodes_reverse_map[code_without_info_bits];
-    if (!sc) {
-        sc = <ConstantStatusCode>StatusCodes['Bad'];
-        console.warn('expecting a known StatusCode but got 0x' + code_without_info_bits.toString(16));
-    }
-    if (info_bits) {
-        const tmp = new ModifiableStatusCode({_base: sc});
-        tmp.set(info_bits);
-        sc = tmp;
-    }
-    return sc;
-};
-
-// tslint:disable-next-line:forin
-for (const codeName in StatusCodes) {
-     const csc = new ConstantStatusCode(StatusCodes[codeName]);
-     StatusCodes_reverse_map[csc.value] = csc;
-     StatusCodes[csc.name] = csc;
-}
-
-/**
- * @module StatusCodes
- * @type {exports.StatusCodes|*}
- */
-export {StatusCodes} from '../constants';
-
-class ModifiableStatusCode extends StatusCode {
-
-    private _base: StatusCode;
+    private readonly _base: StatusCode;
     private _extraBits: number;
-constructor(options) {
-    super(options);
-    this._base = options._base;
-    this._extraBits = 0;
-    if (this._base instanceof ModifiableStatusCode) {
-        this._extraBits = this._base._extraBits;
-        this._base = this._base._base;
-    }
-}
 
-_getExtraName(): string {
-    const str = [];
-    // tslint:disable-next-line:forin
-    for (const key in extraStatusCodeBits) {
-        const value = extraStatusCodeBits[key];
-        if ((this._extraBits & value ) === value) {
-            str.push(key);
+    constructor(options: { _base: StatusCode }) {
+        super();
+        this._base = options._base;
+        this._extraBits = 0;
+        if (this._base instanceof ModifiableStatusCode) {
+            this._extraBits = this._base._extraBits;
+            this._base = this._base._base;
         }
     }
 
-    if (str.length === 0) {
-        return '';
+    public get value() {
+        return this._base.value + this._extraBits;
     }
-    return '#' + str.join('|');
-}
 
-get value(): number {
-    return this._base.value + this._extraBits;
-}
+    public get name() {
+        return this._base.name + this._getExtraName();
+    }
 
-get name(): string {
-    return this._base.name + this._getExtraName();
-}
-get description(): string {
-    return this._base.description;
-}
+    public get description() {
+        return this._base.description;
+    }
 
+    public set(bit: string | number): void {
 
-valueOf(): number {
-    return this._base.value;
-}
-
-set(bit) {
-
-    if (typeof bit === 'string') {
-        const bitsarray = bit.split(' | ');
-        if (bitsarray.length > 1) {
-            for (let i = 0; i < bitsarray.length; i++) {
-                this.set(bitsarray[i]);
+        if (typeof bit === 'string') {
+            const bitsArray = bit.split(' | ');
+            if (bitsArray.length > 1) {
+                for (const bitArray of bitsArray) {
+                    this.set(bitArray);
+                }
+                return;
             }
-            return;
-        }
-        const tmp = extraStatusCodeBits[bit];
-        if (!tmp) {
-            throw new Error('Invalid StatusCode Bit ' + bit);
-        }
-        bit = tmp;
-    }
-    this._extraBits = this._extraBits | bit;
-}
+            const tmp = ExtraStatusCodeBits[bit as string];
 
-unset(bit) {
-
-    if (typeof bit === 'string') {
-
-        const bitsarray = bit.split(' | ');
-        if (bitsarray.length > 1) {
-            for (let i = 0; i < bitsarray.length; i++) {
-
-                console.log(' Unset', this._extraBits.toString(16));
-                this.unset(bitsarray[i]);
-                console.log(' Unset', this._extraBits.toString(16));
+            /* istanbul ignore next */
+            if (!tmp) {
+                throw new Error('Invalid StatusCode Bit ' + bit);
             }
-            return;
+            bit = tmp;
         }
-        const tmp = extraStatusCodeBits[bit];
-        if (!tmp) {
-            throw new Error('Invalid StatusCode Bit ' + bit);
+        this._extraBits = this._extraBits | (bit as number);
+    }
+
+    public unset(bit: string | number): void {
+
+        if (typeof bit === 'string') {
+
+            const bitsArray = bit.split(' | ');
+            if (bitsArray.length > 1) {
+                for (const bitArray of bitsArray) {
+                    this.unset(bitArray);
+                }
+                return;
+            }
+            const tmp = ExtraStatusCodeBits[bit];
+
+            /* istanbul ignore next */
+            if (!tmp) {
+                throw new Error('Invalid StatusCode Bit ' + bit);
+            }
+            bit = tmp;
         }
-        bit = tmp;
+        this._extraBits = this._extraBits & (~bit >>> 0);
+
     }
-    this._extraBits = this._extraBits & (~bit >>> 0) ;
 
-}
-}
-
-// return a status code that can be modified
-export function makeStatusCode(statusCode: IStatusCodeOptions, optionalBits?) {
-    const tmp = new ModifiableStatusCode({
-        _base: statusCode
-    });
-    if (optionalBits) {
-        tmp.set(optionalBits);
+    private _getExtraName() {
+        const str = [];
+        // tslint:disable-next-line:forin
+        for (const key in ExtraStatusCodeBits) {
+            const value = ExtraStatusCodeBits[key];
+            if ((this._extraBits & value ) === value) {
+                str.push(key);
+            }
+        }
+        if (str.length === 0) {
+            return '';
+        }
+        return '#' + str.join('|');
     }
-    return tmp;
-};
-
-
-StatusCodes['GoodWithOverflowBit'] = makeStatusCode(StatusCodes.Good, 'Overflow | InfoTypeDataValue');
-
-export function coerceStatusCode(statusCode) {
-    if (statusCode instanceof StatusCode) {
-        return statusCode;
-    }
-    assert(statusCode.hasOwnProperty('name'));
-    return StatusCodes[statusCode.name];
 }
-

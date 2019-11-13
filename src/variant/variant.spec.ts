@@ -13,8 +13,8 @@ import { DataStream } from '../basic-types/DataStream';
 import { makeNodeId } from '../nodeid/nodeid';
 import { assert } from '../assert';
 import { NumericRange } from '../numeric-range/numeric_range';
-import { StatusCodes } from '../basic-types';
 import { get_clock_tick } from '../utils';
+import { StatusCodes } from '../constants';
 
 
 function str2Uint8Array (str: String ): Uint8Array {

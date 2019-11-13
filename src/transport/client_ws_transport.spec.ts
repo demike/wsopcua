@@ -5,11 +5,12 @@ import { AcknowledgeMessage } from './AcknowledgeMessage';
 import { assert } from '../assert';
 import { packTcpMessage } from './tools';
 import { TCPErrorMessage } from './TCPErrorMessage';
-import { StatusCode, StatusCodes } from '../basic-types/status_code';
+import { StatusCode } from '../basic-types/status_code';
 import { debugLog, hexDump } from '../common/debug';
 import { installMockWebSocket, uninstallMockWebSocket, WebSocketMock } from './test_helpers/mock_web_socket';
 import { ClientWSTransport } from './client_ws_transport';
 import { setFakeTransport, getFakeTransport } from './ws_transport';
+import { StatusCodes } from '../constants/raw_status_codes';
 
 
 

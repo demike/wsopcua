@@ -7,7 +7,7 @@ import {makeNodeId,coerceNodeId} from '../nodeid/nodeid';
 import { makeExpandedNodeId, coerceExpandedNodeId } from '../nodeid/expanded_nodeid';
 
 import {encodeBoolean, decodeBoolean, coerceBoolean} from '../basic-types/boolean';
-import {encodeStatusCode, decodeStatusCode, coerceStatusCode} from '../basic-types/status_code';
+import {encodeStatusCode, decodeStatusCode, coerceStatusCode} from '../basic-types/status_code_utils';
 import {encodeNodeId, decodeNodeId, encodeExpandedNodeId, decodeExpandedNodeId} from '../basic-types/nodeid';
 import {encodeByteString, decodeByteString, coerceByteString} from '../basic-types/byte_string';
 import {encodeGuid, decodeGuid, emptyGuid} from '../basic-types/guid';
