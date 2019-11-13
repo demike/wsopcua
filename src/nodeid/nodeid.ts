@@ -395,7 +395,9 @@ export function coerceNodeId(value: any, namespace?: number): NodeId {
 
     } else if (value instanceof Uint8Array) {
         identifierType = NodeIdType.ByteString;
-
+    } else if (value instanceof ArrayBuffer) {
+        identifierType = NodeIdType.ByteString;
+        value = new Uint8Array(value);
     } else if (value instanceof Object) {
         // it could be a Enum or a NodeId Like object
         const tmp = value;
