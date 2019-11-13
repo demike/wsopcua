@@ -45,31 +45,33 @@ function parseStatusCodeXML() {
     const obj = {};
     const outFile = fs.createWriteStream(__dirname + '/../../constants/raw_status_codes.ts');
 
-    outFile.write(`
+    outFile.write(`\n
     /**
      * @module node-opcua-status-codes
      */
     // this file has been automatically generated
-    import { ConstantStatusCode, StatusCode } from \"../basic-types/status_code\";\n`);
+    import { ConstantStatusCode, ModifiableStatusCode, ExtraStatusCodeBits } from '../basic-types/status_code';\n
+    // tslint:disable: max-line-length
+    // tslint:disable: quotemark\n`);
 
     outFile.write(' export class StatusCodes  { \n');
 
     outFile.write(' /** Good: No Error */\n');
-    outFile.write(' static Good: ConstantStatusCode =  new ConstantStatusCode({ name:\'Good\', value: 0, description:\'No Error\' });\n');
+    outFile.write(' static Good: ConstantStatusCode =  new ConstantStatusCode({ name: \'Good\', value: 0, description: \'No Error\' });\n');
 
-    outFile.write(`/** The value is bad but no specific reason is known. */`);
-    outFile.write(' static Bad: ConstantStatusCode =  new ConstantStatusCode({ name:\'Bad\', value: 0x80000000, description:\'The value is bad but no specific reason is known.\' });\n');
+    outFile.write(`/** The value is bad but no specific reason is known. */\n`);
+    outFile.write(' static Bad: ConstantStatusCode =  new ConstantStatusCode({ name: \'Bad\', value: 0x80000000, description: \'The value is bad but no specific reason is known.\' });\n');
 
-    outFile.write(`/** The value is uncertain but no specific reason is known. */`);
-    outFile.write(' static Uncertain: ConstantStatusCode =  new ConstantStatusCode({ name:\'Uncertain\', value: 0x40000000, description:\'The value is uncertain but no specific reason is known.\' });\n');
+    outFile.write(`/** The value is uncertain but no specific reason is known. */\n`);
+    outFile.write(' static Uncertain: ConstantStatusCode =  new ConstantStatusCode({ name: \'Uncertain\', value: 0x40000000, description: \'The value is uncertain but no specific reason is known.\' });\n');
 
-    outFile.write('  static GoodWithOverflowBit= ConstantStatusCode = new ConstantStatusCode({name: "GoodWithOverflowBit", value: StatusCodes.Good.value + ExtraStatusCodeBits.Overflow  + ExtraStatusCodeBits.InfoTypeDataValue, description: "Good with overflow bit"});\n');
+    outFile.write('  static GoodWithOverflowBit = new ModifiableStatusCode({ base: StatusCodes.Good, extraBits: (ExtraStatusCodeBits.Overflow | ExtraStatusCodeBits.InfoTypeDataValue)});\n');
 
 
     code_list.forEach(function (obj) {
     const s = util.format(' /** %s */\n  static %s: ConstantStatusCode = new ConstantStatusCode({ name: %s , value: %s  , description: "%s"});\n',
         obj.description,
-        obj.name, '"' + obj.name + '"', '0x' + obj.value.toString(16), obj.description);
+        obj.name, '\'' + obj.name + '\'', '0x' + obj.value.toString(16), obj.description);
         outFile.write(s);
     });
     outFile.write('};\n');

@@ -29,7 +29,7 @@ export function getStatusCodeFromCode(code: number) {
         ' code was 0x' + code.toString(16));
     }
     if (infoBits) {
-        const tmp = new ModifiableStatusCode({ _base: sc });
+        const tmp = new ModifiableStatusCode({ base: sc });
         tmp.set(infoBits);
         sc = tmp;
     }
@@ -66,8 +66,8 @@ export function makeStatusCode(
         statusCode: StatusCode | string,
         optionalBits?: string | number): StatusCode {
 
-        const _base = coerceStatusCode(statusCode);
-        const tmp = new ModifiableStatusCode({_base});
+        const base = coerceStatusCode(statusCode);
+        const tmp = new ModifiableStatusCode({base});
         if (optionalBits || typeof optionalBits === 'number') {
             tmp.set(optionalBits);
         }

@@ -197,13 +197,17 @@ export class ModifiableStatusCode extends StatusCode {
     private readonly _base: StatusCode;
     private _extraBits: number;
 
-    constructor(options: { _base: StatusCode }) {
+    constructor(options: { base: StatusCode, extraBits?: number  }) {
         super();
-        this._base = options._base;
+        this._base = options.base;
         this._extraBits = 0;
         if (this._base instanceof ModifiableStatusCode) {
             this._extraBits = this._base._extraBits;
             this._base = this._base._base;
+        }
+
+        if (options.extraBits) {
+            this._extraBits = this._extraBits | options.extraBits;
         }
     }
 
