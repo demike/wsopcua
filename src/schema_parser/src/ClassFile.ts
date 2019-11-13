@@ -252,10 +252,20 @@ export class ClassFile {
             return '';
         }
 
+        let value: string;
+        if (Number.isFinite(parseInt(this.id, 10))) {
+            // treat it as a number
+            value = '2 /*numeric id*/, ' + this.id;
+        } else {
+            // treat it as a string
+            value = '3 /*string id*/,' + this.id;
+        }
+
         let str = 'import {register_class_definition} from \'' + getModuleImportPath(this.modulePath, PathGenUtil.FactoryModulePath) + '/factories_factories\';\n';
-        str += 'import { makeExpandedNodeId } from \'' + getModuleImportPath(this.modulePath, PathGenUtil.NodeIdModulePath) +  '/expanded_nodeid\';\n';
+        str += 'import { ExpandedNodeId } from \'' + getModuleImportPath(this.modulePath, PathGenUtil.NodeIdModulePath) +  '/expanded_nodeid\';\n';
         const ns = (typeof this.namespace === 'number') ? this.namespace : (' undefined, \'' + this.namespace + '\'');
-        str += 'register_class_definition(\'' + this.name + '\', ' + this.name + ', makeExpandedNodeId(' + this.id + ', ' + ns + '));\n';
+        str += 'register_class_definition(\'' + this.name + '\', ' + this.name + ', new ExpandedNodeId(' + value + ', ' + ns + '));\n';
+       // str += 'register_class_definition(\'' + this.name + '\', ' + this.name + ', makeExpandedNodeId(' + this.id + ', ' + ns + '));\n';
         return str;
     }
 
