@@ -43,9 +43,11 @@ import { NodeIdType } from '../generated/NodeIdType';
  */
 export class ExpandedNodeId extends NodeId {
     public static NullExpandedNodeId: Readonly<ExpandedNodeId> = new ExpandedNodeId(NodeIdType.Numeric, 0, 0);
+    public static UNDEFINED_NAMESPACE = 0;
     public namespaceUri: string;
     public serverIndex: number;
-    constructor(identifierType: NodeIdType, value, namespace: number = 0, namespaceUri?: string, serverIndex?: number) {
+    constructor(identifierType: NodeIdType, value, namespace: number =
+        ExpandedNodeId.UNDEFINED_NAMESPACE, namespaceUri?: string, serverIndex?: number) {
         super(identifierType, value, namespace);
         this.namespaceUri = namespaceUri || null;
         this.serverIndex = serverIndex || 0;
