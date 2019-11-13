@@ -62,5 +62,5 @@ export function decodeServiceCounterDataType( inp: DataStream): ServiceCounterDa
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ServiceCounterDataType', ServiceCounterDataType, makeExpandedNodeId(873, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('ServiceCounterDataType', ServiceCounterDataType, new ExpandedNodeId(2 /*numeric id*/, 873, 0));

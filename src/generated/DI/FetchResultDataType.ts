@@ -21,5 +21,5 @@ export class FetchResultDataType {
 
 }
 import {register_class_definition} from '../../factory/factories_factories';
-import { makeExpandedNodeId } from '../../nodeid/expanded_nodeid';
-register_class_definition('FetchResultDataType', FetchResultDataType, makeExpandedNodeId(6522, 2));
+import { ExpandedNodeId } from '../../nodeid/expanded_nodeid';
+register_class_definition('FetchResultDataType', FetchResultDataType, new ExpandedNodeId(3 /*string id*/,'1;i=6522', 2));

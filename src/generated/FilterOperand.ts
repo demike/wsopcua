@@ -21,5 +21,5 @@ export class FilterOperand {
 
 }
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('FilterOperand', FilterOperand, makeExpandedNodeId(591, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('FilterOperand', FilterOperand, new ExpandedNodeId(2 /*numeric id*/, 591, 0));

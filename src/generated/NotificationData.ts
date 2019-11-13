@@ -21,5 +21,5 @@ export class NotificationData {
 
 }
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('NotificationData', NotificationData, makeExpandedNodeId(947, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('NotificationData', NotificationData, new ExpandedNodeId(2 /*numeric id*/, 947, 0));

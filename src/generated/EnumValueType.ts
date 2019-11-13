@@ -69,5 +69,5 @@ export function decodeEnumValueType( inp: DataStream): EnumValueType {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EnumValueType', EnumValueType, makeExpandedNodeId(8251, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('EnumValueType', EnumValueType, new ExpandedNodeId(2 /*numeric id*/, 8251, 0));

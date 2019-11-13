@@ -62,5 +62,5 @@ export function decodeTransferResult( inp: DataStream): TransferResult {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TransferResult', TransferResult, makeExpandedNodeId(838, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('TransferResult', TransferResult, new ExpandedNodeId(2 /*numeric id*/, 838, 0));

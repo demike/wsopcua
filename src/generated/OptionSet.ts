@@ -62,5 +62,5 @@ export function decodeOptionSet( inp: DataStream): OptionSet {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('OptionSet', OptionSet, makeExpandedNodeId(12765, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('OptionSet', OptionSet, new ExpandedNodeId(2 /*numeric id*/, 12765, 0));

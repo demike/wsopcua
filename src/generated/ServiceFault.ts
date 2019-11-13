@@ -56,5 +56,5 @@ export function decodeServiceFault( inp: DataStream): ServiceFault {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ServiceFault', ServiceFault, makeExpandedNodeId(397, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('ServiceFault', ServiceFault, new ExpandedNodeId(2 /*numeric id*/, 397, 0));

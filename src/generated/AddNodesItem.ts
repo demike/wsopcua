@@ -95,5 +95,5 @@ export function decodeAddNodesItem( inp: DataStream): AddNodesItem {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AddNodesItem', AddNodesItem, makeExpandedNodeId(378, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('AddNodesItem', AddNodesItem, new ExpandedNodeId(2 /*numeric id*/, 378, 0));

@@ -96,5 +96,5 @@ export function decodePublishResponse( inp: DataStream): PublishResponse {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PublishResponse', PublishResponse, makeExpandedNodeId(829, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('PublishResponse', PublishResponse, new ExpandedNodeId(2 /*numeric id*/, 829, 0));

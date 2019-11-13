@@ -73,5 +73,5 @@ export function decodeCreateMonitoredItemsResponse( inp: DataStream): CreateMoni
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CreateMonitoredItemsResponse', CreateMonitoredItemsResponse, makeExpandedNodeId(754, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('CreateMonitoredItemsResponse', CreateMonitoredItemsResponse, new ExpandedNodeId(2 /*numeric id*/, 754, 0));

@@ -56,5 +56,5 @@ export function decodeRegisterServerResponse( inp: DataStream): RegisterServerRe
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RegisterServerResponse', RegisterServerResponse, makeExpandedNodeId(440, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('RegisterServerResponse', RegisterServerResponse, new ExpandedNodeId(2 /*numeric id*/, 440, 0));

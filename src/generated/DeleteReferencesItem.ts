@@ -80,5 +80,5 @@ export function decodeDeleteReferencesItem( inp: DataStream): DeleteReferencesIt
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DeleteReferencesItem', DeleteReferencesItem, makeExpandedNodeId(387, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('DeleteReferencesItem', DeleteReferencesItem, new ExpandedNodeId(2 /*numeric id*/, 387, 0));

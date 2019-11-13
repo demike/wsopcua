@@ -62,5 +62,5 @@ export function decodeDoubleComplexNumberType( inp: DataStream): DoubleComplexNu
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DoubleComplexNumberType', DoubleComplexNumberType, makeExpandedNodeId(12182, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('DoubleComplexNumberType', DoubleComplexNumberType, new ExpandedNodeId(2 /*numeric id*/, 12182, 0));

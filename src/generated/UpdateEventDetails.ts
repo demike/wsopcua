@@ -78,5 +78,5 @@ export function decodeUpdateEventDetails( inp: DataStream): UpdateEventDetails {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UpdateEventDetails', UpdateEventDetails, makeExpandedNodeId(685, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('UpdateEventDetails', UpdateEventDetails, new ExpandedNodeId(2 /*numeric id*/, 685, 0));

@@ -65,5 +65,5 @@ export function decodeTranslateBrowsePathsToNodeIdsRequest( inp: DataStream): Tr
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TranslateBrowsePathsToNodeIdsRequest', TranslateBrowsePathsToNodeIdsRequest, makeExpandedNodeId(554, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('TranslateBrowsePathsToNodeIdsRequest', TranslateBrowsePathsToNodeIdsRequest, new ExpandedNodeId(2 /*numeric id*/, 554, 0));

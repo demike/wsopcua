@@ -71,5 +71,5 @@ export function decodeSetMonitoringModeResponse( inp: DataStream): SetMonitoring
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SetMonitoringModeResponse', SetMonitoringModeResponse, makeExpandedNodeId(772, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('SetMonitoringModeResponse', SetMonitoringModeResponse, new ExpandedNodeId(2 /*numeric id*/, 772, 0));

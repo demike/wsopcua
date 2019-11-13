@@ -71,5 +71,5 @@ export function decodeDeleteMonitoredItemsResponse( inp: DataStream): DeleteMoni
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DeleteMonitoredItemsResponse', DeleteMonitoredItemsResponse, makeExpandedNodeId(784, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('DeleteMonitoredItemsResponse', DeleteMonitoredItemsResponse, new ExpandedNodeId(2 /*numeric id*/, 784, 0));

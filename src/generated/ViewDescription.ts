@@ -68,5 +68,5 @@ export function decodeViewDescription( inp: DataStream): ViewDescription {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ViewDescription', ViewDescription, makeExpandedNodeId(513, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('ViewDescription', ViewDescription, new ExpandedNodeId(2 /*numeric id*/, 513, 0));

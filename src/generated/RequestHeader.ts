@@ -93,5 +93,5 @@ export function decodeRequestHeader( inp: DataStream): RequestHeader {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RequestHeader', RequestHeader, makeExpandedNodeId(391, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('RequestHeader', RequestHeader, new ExpandedNodeId(2 /*numeric id*/, 391, 0));

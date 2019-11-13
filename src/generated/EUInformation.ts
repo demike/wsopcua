@@ -75,5 +75,5 @@ export function decodeEUInformation( inp: DataStream): EUInformation {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EUInformation', EUInformation, makeExpandedNodeId(889, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('EUInformation', EUInformation, new ExpandedNodeId(2 /*numeric id*/, 889, 0));

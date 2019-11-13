@@ -56,5 +56,5 @@ export function decodeUnregisterNodesResponse( inp: DataStream): UnregisterNodes
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UnregisterNodesResponse', UnregisterNodesResponse, makeExpandedNodeId(569, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('UnregisterNodesResponse', UnregisterNodesResponse, new ExpandedNodeId(2 /*numeric id*/, 569, 0));

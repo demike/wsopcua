@@ -62,5 +62,5 @@ export function decodeObjectTypeAttributes( inp: DataStream): ObjectTypeAttribut
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ObjectTypeAttributes', ObjectTypeAttributes, makeExpandedNodeId(363, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('ObjectTypeAttributes', ObjectTypeAttributes, new ExpandedNodeId(2 /*numeric id*/, 363, 0));

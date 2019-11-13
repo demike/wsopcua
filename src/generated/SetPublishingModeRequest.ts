@@ -69,5 +69,5 @@ export function decodeSetPublishingModeRequest( inp: DataStream): SetPublishingM
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SetPublishingModeRequest', SetPublishingModeRequest, makeExpandedNodeId(799, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('SetPublishingModeRequest', SetPublishingModeRequest, new ExpandedNodeId(2 /*numeric id*/, 799, 0));

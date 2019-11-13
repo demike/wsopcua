@@ -74,5 +74,5 @@ export function decodeDeleteRawModifiedDetails( inp: DataStream): DeleteRawModif
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DeleteRawModifiedDetails', DeleteRawModifiedDetails, makeExpandedNodeId(688, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('DeleteRawModifiedDetails', DeleteRawModifiedDetails, new ExpandedNodeId(2 /*numeric id*/, 688, 0));

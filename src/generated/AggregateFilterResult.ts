@@ -71,5 +71,5 @@ export function decodeAggregateFilterResult( inp: DataStream): AggregateFilterRe
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AggregateFilterResult', AggregateFilterResult, makeExpandedNodeId(739, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('AggregateFilterResult', AggregateFilterResult, new ExpandedNodeId(2 /*numeric id*/, 739, 0));

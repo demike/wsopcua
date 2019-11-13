@@ -85,5 +85,5 @@ export function decodeHistoryReadRequest( inp: DataStream): HistoryReadRequest {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryReadRequest', HistoryReadRequest, makeExpandedNodeId(664, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('HistoryReadRequest', HistoryReadRequest, new ExpandedNodeId(2 /*numeric id*/, 664, 0));

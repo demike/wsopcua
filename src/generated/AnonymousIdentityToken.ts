@@ -55,5 +55,5 @@ export function decodeAnonymousIdentityToken( inp: DataStream): AnonymousIdentit
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AnonymousIdentityToken', AnonymousIdentityToken, makeExpandedNodeId(321, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('AnonymousIdentityToken', AnonymousIdentityToken, new ExpandedNodeId(2 /*numeric id*/, 321, 0));

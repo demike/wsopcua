@@ -71,5 +71,5 @@ export function decodeDeleteNodesResponse( inp: DataStream): DeleteNodesResponse
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DeleteNodesResponse', DeleteNodesResponse, makeExpandedNodeId(503, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('DeleteNodesResponse', DeleteNodesResponse, new ExpandedNodeId(2 /*numeric id*/, 503, 0));

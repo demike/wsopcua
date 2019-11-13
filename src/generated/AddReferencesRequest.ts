@@ -65,5 +65,5 @@ export function decodeAddReferencesRequest( inp: DataStream): AddReferencesReque
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AddReferencesRequest', AddReferencesRequest, makeExpandedNodeId(494, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('AddReferencesRequest', AddReferencesRequest, new ExpandedNodeId(2 /*numeric id*/, 494, 0));

@@ -75,5 +75,5 @@ export function decodeWriteValue( inp: DataStream): WriteValue {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('WriteValue', WriteValue, makeExpandedNodeId(670, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('WriteValue', WriteValue, new ExpandedNodeId(2 /*numeric id*/, 670, 0));

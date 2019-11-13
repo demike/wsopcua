@@ -82,5 +82,5 @@ export function decodeReadRawModifiedDetails( inp: DataStream): ReadRawModifiedD
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReadRawModifiedDetails', ReadRawModifiedDetails, makeExpandedNodeId(649, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('ReadRawModifiedDetails', ReadRawModifiedDetails, new ExpandedNodeId(2 /*numeric id*/, 649, 0));

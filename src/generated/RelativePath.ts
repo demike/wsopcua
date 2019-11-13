@@ -58,5 +58,5 @@ export function decodeRelativePath( inp: DataStream): RelativePath {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RelativePath', RelativePath, makeExpandedNodeId(542, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('RelativePath', RelativePath, new ExpandedNodeId(2 /*numeric id*/, 542, 0));

@@ -75,5 +75,5 @@ export function decodeGetEndpointsRequest( inp: DataStream): GetEndpointsRequest
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('GetEndpointsRequest', GetEndpointsRequest, makeExpandedNodeId(428, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('GetEndpointsRequest', GetEndpointsRequest, new ExpandedNodeId(2 /*numeric id*/, 428, 0));

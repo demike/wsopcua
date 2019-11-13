@@ -73,5 +73,5 @@ export function decodeBrowseNextResponse( inp: DataStream): BrowseNextResponse {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('BrowseNextResponse', BrowseNextResponse, makeExpandedNodeId(536, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('BrowseNextResponse', BrowseNextResponse, new ExpandedNodeId(2 /*numeric id*/, 536, 0));

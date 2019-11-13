@@ -88,5 +88,5 @@ export function decodeResponseHeader( inp: DataStream): ResponseHeader {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ResponseHeader', ResponseHeader, makeExpandedNodeId(394, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('ResponseHeader', ResponseHeader, new ExpandedNodeId(2 /*numeric id*/, 394, 0));

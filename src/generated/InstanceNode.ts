@@ -74,5 +74,5 @@ export function decodeInstanceNode( inp: DataStream): InstanceNode {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('InstanceNode', InstanceNode, makeExpandedNodeId(11889, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('InstanceNode', InstanceNode, new ExpandedNodeId(2 /*numeric id*/, 11889, 0));

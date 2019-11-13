@@ -69,5 +69,5 @@ export function decodeRedundantServerDataType( inp: DataStream): RedundantServer
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RedundantServerDataType', RedundantServerDataType, makeExpandedNodeId(855, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('RedundantServerDataType', RedundantServerDataType, new ExpandedNodeId(2 /*numeric id*/, 855, 0));

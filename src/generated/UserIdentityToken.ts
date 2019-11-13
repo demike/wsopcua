@@ -56,5 +56,5 @@ export function decodeUserIdentityToken( inp: DataStream): UserIdentityToken {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UserIdentityToken', UserIdentityToken, makeExpandedNodeId(318, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('UserIdentityToken', UserIdentityToken, new ExpandedNodeId(2 /*numeric id*/, 318, 0));

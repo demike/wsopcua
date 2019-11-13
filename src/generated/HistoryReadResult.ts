@@ -69,5 +69,5 @@ export function decodeHistoryReadResult( inp: DataStream): HistoryReadResult {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryReadResult', HistoryReadResult, makeExpandedNodeId(640, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('HistoryReadResult', HistoryReadResult, new ExpandedNodeId(2 /*numeric id*/, 640, 0));

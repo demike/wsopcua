@@ -76,5 +76,5 @@ export function decodeOpenSecureChannelResponse( inp: DataStream): OpenSecureCha
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('OpenSecureChannelResponse', OpenSecureChannelResponse, makeExpandedNodeId(449, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('OpenSecureChannelResponse', OpenSecureChannelResponse, new ExpandedNodeId(2 /*numeric id*/, 449, 0));

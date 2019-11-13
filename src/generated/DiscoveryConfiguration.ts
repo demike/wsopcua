@@ -21,5 +21,5 @@ export class DiscoveryConfiguration {
 
 }
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DiscoveryConfiguration', DiscoveryConfiguration, makeExpandedNodeId(12900, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('DiscoveryConfiguration', DiscoveryConfiguration, new ExpandedNodeId(2 /*numeric id*/, 12900, 0));

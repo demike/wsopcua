@@ -70,5 +70,5 @@ export function decodeMonitoredItemCreateRequest( inp: DataStream): MonitoredIte
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('MonitoredItemCreateRequest', MonitoredItemCreateRequest, makeExpandedNodeId(745, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('MonitoredItemCreateRequest', MonitoredItemCreateRequest, new ExpandedNodeId(2 /*numeric id*/, 745, 0));

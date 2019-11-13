@@ -71,5 +71,5 @@ export function decodeParameterResultDataType( inp: DataStream): ParameterResult
 
 
 import {register_class_definition} from '../../factory/factories_factories';
-import { makeExpandedNodeId } from '../../nodeid/expanded_nodeid';
-register_class_definition('ParameterResultDataType', ParameterResultDataType, makeExpandedNodeId(6525, 2));
+import { ExpandedNodeId } from '../../nodeid/expanded_nodeid';
+register_class_definition('ParameterResultDataType', ParameterResultDataType, new ExpandedNodeId(3 /*string id*/,'1;i=6525', 2));

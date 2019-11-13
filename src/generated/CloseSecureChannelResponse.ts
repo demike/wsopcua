@@ -56,5 +56,5 @@ export function decodeCloseSecureChannelResponse( inp: DataStream): CloseSecureC
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CloseSecureChannelResponse', CloseSecureChannelResponse, makeExpandedNodeId(455, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('CloseSecureChannelResponse', CloseSecureChannelResponse, new ExpandedNodeId(2 /*numeric id*/, 455, 0));

@@ -58,5 +58,5 @@ export function decodeHistoryData( inp: DataStream): HistoryData {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryData', HistoryData, makeExpandedNodeId(658, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('HistoryData', HistoryData, new ExpandedNodeId(2 /*numeric id*/, 658, 0));

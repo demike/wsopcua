@@ -63,5 +63,5 @@ export function decodeStatusResult( inp: DataStream): StatusResult {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('StatusResult', StatusResult, makeExpandedNodeId(301, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('StatusResult', StatusResult, new ExpandedNodeId(2 /*numeric id*/, 301, 0));

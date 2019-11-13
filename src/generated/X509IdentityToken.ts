@@ -62,5 +62,5 @@ export function decodeX509IdentityToken( inp: DataStream): X509IdentityToken {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('X509IdentityToken', X509IdentityToken, makeExpandedNodeId(327, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('X509IdentityToken', X509IdentityToken, new ExpandedNodeId(2 /*numeric id*/, 327, 0));

@@ -65,5 +65,5 @@ export function decodePublishRequest( inp: DataStream): PublishRequest {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PublishRequest', PublishRequest, makeExpandedNodeId(826, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('PublishRequest', PublishRequest, new ExpandedNodeId(2 /*numeric id*/, 826, 0));

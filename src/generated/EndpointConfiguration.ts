@@ -104,5 +104,5 @@ export function decodeEndpointConfiguration( inp: DataStream): EndpointConfigura
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EndpointConfiguration', EndpointConfiguration, makeExpandedNodeId(333, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('EndpointConfiguration', EndpointConfiguration, new ExpandedNodeId(2 /*numeric id*/, 333, 0));

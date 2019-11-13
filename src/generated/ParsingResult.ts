@@ -70,5 +70,5 @@ export function decodeParsingResult( inp: DataStream): ParsingResult {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ParsingResult', ParsingResult, makeExpandedNodeId(612, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('ParsingResult', ParsingResult, new ExpandedNodeId(2 /*numeric id*/, 612, 0));

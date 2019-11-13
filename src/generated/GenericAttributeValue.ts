@@ -63,5 +63,5 @@ export function decodeGenericAttributeValue( inp: DataStream): GenericAttributeV
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('GenericAttributeValue', GenericAttributeValue, makeExpandedNodeId(17610, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('GenericAttributeValue', GenericAttributeValue, new ExpandedNodeId(2 /*numeric id*/, 17610, 0));

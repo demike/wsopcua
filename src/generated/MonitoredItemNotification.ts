@@ -63,5 +63,5 @@ export function decodeMonitoredItemNotification( inp: DataStream): MonitoredItem
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('MonitoredItemNotification', MonitoredItemNotification, makeExpandedNodeId(808, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('MonitoredItemNotification', MonitoredItemNotification, new ExpandedNodeId(2 /*numeric id*/, 808, 0));

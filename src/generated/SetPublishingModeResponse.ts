@@ -71,5 +71,5 @@ export function decodeSetPublishingModeResponse( inp: DataStream): SetPublishing
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SetPublishingModeResponse', SetPublishingModeResponse, makeExpandedNodeId(802, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('SetPublishingModeResponse', SetPublishingModeResponse, new ExpandedNodeId(2 /*numeric id*/, 802, 0));

@@ -81,5 +81,5 @@ export function decodeNodeAttributes( inp: DataStream): NodeAttributes {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('NodeAttributes', NodeAttributes, makeExpandedNodeId(351, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('NodeAttributes', NodeAttributes, new ExpandedNodeId(2 /*numeric id*/, 351, 0));

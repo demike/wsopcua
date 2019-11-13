@@ -184,5 +184,5 @@ export function decodeVariableNode( inp: DataStream): VariableNode {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('VariableNode', VariableNode, makeExpandedNodeId(269, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('VariableNode', VariableNode, new ExpandedNodeId(2 /*numeric id*/, 269, 0));

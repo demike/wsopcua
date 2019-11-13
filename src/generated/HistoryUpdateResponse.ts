@@ -73,5 +73,5 @@ export function decodeHistoryUpdateResponse( inp: DataStream): HistoryUpdateResp
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryUpdateResponse', HistoryUpdateResponse, makeExpandedNodeId(703, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('HistoryUpdateResponse', HistoryUpdateResponse, new ExpandedNodeId(2 /*numeric id*/, 703, 0));

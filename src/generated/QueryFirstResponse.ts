@@ -94,5 +94,5 @@ export function decodeQueryFirstResponse( inp: DataStream): QueryFirstResponse {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('QueryFirstResponse', QueryFirstResponse, makeExpandedNodeId(618, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('QueryFirstResponse', QueryFirstResponse, new ExpandedNodeId(2 /*numeric id*/, 618, 0));

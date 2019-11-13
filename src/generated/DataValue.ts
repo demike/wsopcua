@@ -116,5 +116,5 @@ export function decodeDataValue( inp: DataStream): DataValue {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DataValue', DataValue, makeExpandedNodeId(23, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('DataValue', DataValue, new ExpandedNodeId(2 /*numeric id*/, 23, 0));

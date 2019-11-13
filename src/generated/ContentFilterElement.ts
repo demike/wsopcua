@@ -64,5 +64,5 @@ export function decodeContentFilterElement( inp: DataStream): ContentFilterEleme
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ContentFilterElement', ContentFilterElement, makeExpandedNodeId(585, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('ContentFilterElement', ContentFilterElement, new ExpandedNodeId(2 /*numeric id*/, 585, 0));

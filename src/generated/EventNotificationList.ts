@@ -60,5 +60,5 @@ export function decodeEventNotificationList( inp: DataStream): EventNotification
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EventNotificationList', EventNotificationList, makeExpandedNodeId(916, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('EventNotificationList', EventNotificationList, new ExpandedNodeId(2 /*numeric id*/, 916, 0));

@@ -64,5 +64,5 @@ export function decodeEventFieldList( inp: DataStream): EventFieldList {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EventFieldList', EventFieldList, makeExpandedNodeId(919, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('EventFieldList', EventFieldList, new ExpandedNodeId(2 /*numeric id*/, 919, 0));

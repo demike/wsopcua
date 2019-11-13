@@ -70,5 +70,5 @@ export function decodeNodeTypeDescription( inp: DataStream): NodeTypeDescription
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('NodeTypeDescription', NodeTypeDescription, makeExpandedNodeId(575, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('NodeTypeDescription', NodeTypeDescription, new ExpandedNodeId(2 /*numeric id*/, 575, 0));

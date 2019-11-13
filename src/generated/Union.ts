@@ -21,5 +21,5 @@ export class Union {
 
 }
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('Union', Union, makeExpandedNodeId(12766, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('Union', Union, new ExpandedNodeId(2 /*numeric id*/, 12766, 0));

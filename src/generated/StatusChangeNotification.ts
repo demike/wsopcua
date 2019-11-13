@@ -65,5 +65,5 @@ export function decodeStatusChangeNotification( inp: DataStream): StatusChangeNo
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('StatusChangeNotification', StatusChangeNotification, makeExpandedNodeId(820, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('StatusChangeNotification', StatusChangeNotification, new ExpandedNodeId(2 /*numeric id*/, 820, 0));

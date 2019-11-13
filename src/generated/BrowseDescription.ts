@@ -87,5 +87,5 @@ export function decodeBrowseDescription( inp: DataStream): BrowseDescription {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('BrowseDescription', BrowseDescription, makeExpandedNodeId(516, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('BrowseDescription', BrowseDescription, new ExpandedNodeId(2 /*numeric id*/, 516, 0));

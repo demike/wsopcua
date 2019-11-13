@@ -83,5 +83,5 @@ export function decodeAttributeOperand( inp: DataStream): AttributeOperand {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AttributeOperand', AttributeOperand, makeExpandedNodeId(600, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('AttributeOperand', AttributeOperand, new ExpandedNodeId(2 /*numeric id*/, 600, 0));

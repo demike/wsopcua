@@ -74,5 +74,5 @@ export function decodeChannelSecurityToken( inp: DataStream): ChannelSecurityTok
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ChannelSecurityToken', ChannelSecurityToken, makeExpandedNodeId(443, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('ChannelSecurityToken', ChannelSecurityToken, new ExpandedNodeId(2 /*numeric id*/, 443, 0));

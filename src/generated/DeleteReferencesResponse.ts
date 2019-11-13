@@ -71,5 +71,5 @@ export function decodeDeleteReferencesResponse( inp: DataStream): DeleteReferenc
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DeleteReferencesResponse', DeleteReferencesResponse, makeExpandedNodeId(509, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('DeleteReferencesResponse', DeleteReferencesResponse, new ExpandedNodeId(2 /*numeric id*/, 509, 0));

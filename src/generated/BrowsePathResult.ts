@@ -64,5 +64,5 @@ export function decodeBrowsePathResult( inp: DataStream): BrowsePathResult {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('BrowsePathResult', BrowsePathResult, makeExpandedNodeId(551, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('BrowsePathResult', BrowsePathResult, new ExpandedNodeId(2 /*numeric id*/, 551, 0));

@@ -68,5 +68,5 @@ export function decodeAnnotation( inp: DataStream): Annotation {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('Annotation', Annotation, makeExpandedNodeId(893, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('Annotation', Annotation, new ExpandedNodeId(2 /*numeric id*/, 893, 0));

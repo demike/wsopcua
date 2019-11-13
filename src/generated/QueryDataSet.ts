@@ -70,5 +70,5 @@ export function decodeQueryDataSet( inp: DataStream): QueryDataSet {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('QueryDataSet', QueryDataSet, makeExpandedNodeId(579, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('QueryDataSet', QueryDataSet, new ExpandedNodeId(2 /*numeric id*/, 579, 0));

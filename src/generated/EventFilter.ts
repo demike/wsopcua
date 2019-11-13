@@ -67,5 +67,5 @@ export function decodeEventFilter( inp: DataStream): EventFilter {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EventFilter', EventFilter, makeExpandedNodeId(727, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('EventFilter', EventFilter, new ExpandedNodeId(2 /*numeric id*/, 727, 0));

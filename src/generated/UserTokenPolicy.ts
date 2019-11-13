@@ -81,5 +81,5 @@ export function decodeUserTokenPolicy( inp: DataStream): UserTokenPolicy {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UserTokenPolicy', UserTokenPolicy, makeExpandedNodeId(306, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('UserTokenPolicy', UserTokenPolicy, new ExpandedNodeId(2 /*numeric id*/, 306, 0));

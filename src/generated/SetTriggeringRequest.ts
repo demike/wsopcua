@@ -81,5 +81,5 @@ export function decodeSetTriggeringRequest( inp: DataStream): SetTriggeringReque
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SetTriggeringRequest', SetTriggeringRequest, makeExpandedNodeId(775, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('SetTriggeringRequest', SetTriggeringRequest, new ExpandedNodeId(2 /*numeric id*/, 775, 0));

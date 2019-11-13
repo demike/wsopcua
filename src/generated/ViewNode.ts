@@ -141,5 +141,5 @@ export function decodeViewNode( inp: DataStream): ViewNode {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ViewNode', ViewNode, makeExpandedNodeId(281, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('ViewNode', ViewNode, new ExpandedNodeId(2 /*numeric id*/, 281, 0));

@@ -83,5 +83,5 @@ export function decodeSetTriggeringResponse( inp: DataStream): SetTriggeringResp
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SetTriggeringResponse', SetTriggeringResponse, makeExpandedNodeId(778, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('SetTriggeringResponse', SetTriggeringResponse, new ExpandedNodeId(2 /*numeric id*/, 778, 0));

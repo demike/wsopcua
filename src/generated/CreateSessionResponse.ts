@@ -116,5 +116,5 @@ export function decodeCreateSessionResponse( inp: DataStream): CreateSessionResp
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CreateSessionResponse', CreateSessionResponse, makeExpandedNodeId(464, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('CreateSessionResponse', CreateSessionResponse, new ExpandedNodeId(2 /*numeric id*/, 464, 0));

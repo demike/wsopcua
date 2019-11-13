@@ -62,5 +62,5 @@ export function decodeDecimalDataType( inp: DataStream): DecimalDataType {
 
 
 import {register_class_definition} from '../factory/factories_factories';
-import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DecimalDataType', DecimalDataType, makeExpandedNodeId(17863, 0));
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('DecimalDataType', DecimalDataType, new ExpandedNodeId(2 /*numeric id*/, 17863, 0));
