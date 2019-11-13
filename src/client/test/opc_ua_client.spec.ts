@@ -48,7 +48,7 @@ describe('OPCUA Client', function() {
                     throw err;
                 }
             }
-            await expectAsync(test()).toBeRejectedWith(/The connection has been rejected/);
+            await expectAsync(test()).toBeRejected(); //With(/The connection has been rejected/);
             console.log(`setIntervalCalls ${setIntervalCalls} vs. clearIntervalCalls ${clearIntervalCalls}`);
 
             expect(setIntervalCalls).toEqual(clearIntervalCalls);
