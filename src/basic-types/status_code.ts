@@ -158,8 +158,13 @@ public toString(): string {
     return this.name + ' (0x' + ('0000' + this.value.toString(16)).substr(-8) + ')';
 }
 
+/**
+ * checks if <b>all</b> of the bits present in
+ * 'mask' are present
+ * @param mask
+ */
 public checkBit(mask: number): boolean {
-    return (this.value & mask) !== 0;
+    return (this.value & mask) === mask;
 }
 
 get hasOverflowBit() {
