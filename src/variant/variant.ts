@@ -342,7 +342,7 @@ function encodeGeneralArray(dataType: DataType, stream: DataStream, value: any) 
 
 function encodeVariantArray(dataType: DataType, stream: DataStream, value: any) {
 
-    if (value.buffer && value.buffer instanceof ArrayBuffer) {
+    if (value && value.buffer && value.buffer instanceof ArrayBuffer) {
         try {
             ec.encodeUInt32(value.length, stream);
             stream.writeArrayBuffer(value.buffer, value.byteOffset, value.byteLength);

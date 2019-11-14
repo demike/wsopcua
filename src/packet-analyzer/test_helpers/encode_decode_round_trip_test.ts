@@ -40,7 +40,7 @@ function compare(objReloaded: any, obj: any) {
     Object.keys(objReloaded).forEach((p: any) => {
         try {
             if (isArrayOrTypedArray(obj[p])) {
-                expect(objReloaded[p]).toEqual(obj[p]);
+                expect(Array.from(objReloaded[p])).toEqual(Array.from(obj[p]));
             } else {
                 expect(JSON.stringify(objReloaded[p]) as any).toEqual(JSON.stringify(obj[p]));
             }
