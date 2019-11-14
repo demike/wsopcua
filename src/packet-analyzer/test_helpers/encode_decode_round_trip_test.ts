@@ -42,7 +42,15 @@ function compare(objReloaded: any, obj: any) {
             if (isArrayOrTypedArray(obj[p])) {
                 expect(Array.from(objReloaded[p])).toEqual(Array.from(obj[p]));
             } else {
-                expect(JSON.stringify(objReloaded[p]) as any).toEqual(JSON.stringify(obj[p]));
+                if(obj[p] == null) {
+                    // skip, as a valid array or 0 might be returned
+                    return;
+                }
+
+                //        Int32Array [0, 1, 2, 3] ends with [0, 1, 2, 3]
+                const str1 = JSON.stringify(objReloaded[p]);
+                const str2 = JSON.stringify(obj[p]);
+                expect(str1.endsWith(str2)).toBeTruthy(str1 + "  should be  " + str2);
             }
         } catch (err) {
             displayError(p, obj[p], objReloaded[p]);
