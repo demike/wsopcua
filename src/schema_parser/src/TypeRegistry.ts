@@ -130,6 +130,7 @@ export class TypeRegistry {
         type = new SimpleType(this.BASIC_TYPES_PATH, 'DateTime');
 //        type.Path = this.BASIC_TYPES_PATH + "date_time";
         type.ImportAs = 'ec';
+        type.defaultValue = 'new Date()';
         this.addType(type.Name, type);
         type.JsType = 'Date';
         // UtcTime: 8.38
