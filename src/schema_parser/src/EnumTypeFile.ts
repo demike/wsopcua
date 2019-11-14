@@ -43,11 +43,11 @@ export class EnumTypeFile extends ClassFile {
             str +=  '/**\n' + this.documentation + '*/\n';
         }
         str += this.getEnumHeader();
-        str += ' {\n ';
+        str += ' {\n';
         for (const mem of this.members) {
             str += ' ' + mem + '\n';
         }
-        str += '\n';
+
         str += '}';
         str += '\n\n';
         for (const met of this.utilityFunctions) {
