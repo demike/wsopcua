@@ -10,7 +10,7 @@ import { NodeIdType } from '../generated/NodeIdType';
 
 export class NodeId {
 
-static NullNodeId: Readonly<NodeId> = new NodeId(NodeIdType.Numeric, 0);
+static readonly NullNodeId: Readonly<NodeId> = new NodeId(NodeIdType.Numeric, 0);
 public identifierType: NodeIdType;
 public value: number|string|Uint8Array;
 public namespace: number;
