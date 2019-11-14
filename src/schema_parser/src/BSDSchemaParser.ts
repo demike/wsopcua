@@ -45,6 +45,7 @@ export class BSDSchemaParser {
 
             try {
                 let data = fs.readFileSync(schema.pathToSchema, 'utf8');
+                console.log('Parsing \'' + schema.pathToSchema + '\':\n');
                 data = this.fixDocData(data);
                 // console.log(data);
                 const doc = new JSDOM(data, { contentType : 'text/xml'});
@@ -75,7 +76,7 @@ export class BSDSchemaParser {
 
     protected getTypeNodeId(el: Element) {
         let nodeId: string|null;
-        //has encoding reference
+        // has encoding reference
         const hasEncodingRef = el.querySelector('References > Reference[ReferenceType="i=38"]');
         if (hasEncodingRef && hasEncodingRef.innerHTML) {
             nodeId = hasEncodingRef.innerHTML;
@@ -91,7 +92,7 @@ export class BSDSchemaParser {
             }
             split = nodeId.split('s=');
             if (split.length >= 2) {
-                return "'" + split[split.length - 1 ] + "'";
+                return '\'' + split[split.length - 1 ] + '\'';
             }
         }
 
@@ -99,8 +100,15 @@ export class BSDSchemaParser {
     }
 
     public parseNodeSet2XmlDoc(doc: JSDOM) {
+        let binarySchemaFound = false;
         this.addTypeIdsFromNodeSet(doc);
-        const elements = doc.window.document.querySelectorAll('[DataType="ByteString"][SymbolicName$="_BinarySchema"] > Value');
+        const elements = doc.window.document.querySelectorAll(
+            '[DataType="ByteString"][SymbolicName$="_BinarySchema"] > Value,' +
+            '[DataType="i=15"][SymbolicName$="_BinarySchema"] > Value,' +
+            '[DataType="ByteString"] > Value,' +
+            '[DataType="i=15"] > Value'
+        );
+
         for (let i = 0; i < elements.length; i++) {
             const el = elements.item(i);
             for (let j = 0; j < el.children.length; j++) {
@@ -108,14 +116,21 @@ export class BSDSchemaParser {
                 if (!elByteString) {
                     continue;
                 }
+
+                binarySchemaFound = true;
                 let docdata =  Buffer.from(elByteString.innerHTML, 'base64').toString();
-                    docdata = this.fixDocData(docdata);
-                    this.parseBSDDoc(new JSDOM(docdata, { contentType : 'text/xml'}));
+                docdata = this.fixDocData(docdata);
+                this.parseBSDDoc(new JSDOM(docdata, { contentType : 'text/xml'}));
+                break;
             }
         }
 
+        if (!binarySchemaFound) {
+            console.log('could not find binary schema in .xsd file');
+        }
 
-        
+
+
 
 /*
         this.addTypeIdsFromNodeSet(doc);
@@ -274,7 +289,7 @@ export class BSDSchemaParser {
     }
 
     protected writeFiles() {
-        if(!this.importConfig) {
+        if (!this.importConfig) {
             return;
         }
         let ar: ClassFile[];
