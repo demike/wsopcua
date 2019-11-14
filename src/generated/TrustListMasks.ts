@@ -6,13 +6,12 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum TrustListMasks {
-   None = 0,
+  None = 0,
   TrustedCertificates = 1,
   TrustedCrls = 2,
   IssuerCertificates = 4,
   IssuerCrls = 8,
   All = 15,
-
 }
 
 export function encodeTrustListMasks( data: TrustListMasks,  out: DataStream) {

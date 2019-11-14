@@ -25,7 +25,7 @@ export class BuildInfo {
   productName: string | null;
   softwareVersion: string | null;
   buildNumber: string | null;
-  buildDate: Date | null;
+  buildDate: Date;
 
  constructor( options?: IBuildInfo) {
   options = options || {};
@@ -34,7 +34,7 @@ export class BuildInfo {
   this.productName = (options.productName != null) ? options.productName : null;
   this.softwareVersion = (options.softwareVersion != null) ? options.softwareVersion : null;
   this.buildNumber = (options.buildNumber != null) ? options.buildNumber : null;
-  this.buildDate = (options.buildDate != null) ? options.buildDate : null;
+  this.buildDate = (options.buildDate != null) ? options.buildDate : new Date();
 
  }
 

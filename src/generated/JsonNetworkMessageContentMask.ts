@@ -6,14 +6,13 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum JsonNetworkMessageContentMask {
-   None = 0,
+  None = 0,
   NetworkMessageHeader = 1,
   DataSetMessageHeader = 2,
   SingleDataSetMessage = 4,
   PublisherId = 8,
   DataSetClassId = 16,
   ReplyTo = 32,
-
 }
 
 export function encodeJsonNetworkMessageContentMask( data: JsonNetworkMessageContentMask,  out: DataStream) {

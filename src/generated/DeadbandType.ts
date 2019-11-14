@@ -6,10 +6,9 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum DeadbandType {
-   None = 0,
+  None = 0,
   Absolute = 1,
   Percent = 2,
-
 }
 
 export function encodeDeadbandType( data: DeadbandType,  out: DataStream) {

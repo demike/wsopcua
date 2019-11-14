@@ -6,7 +6,7 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum FilterOperator {
-   Equals = 0,
+  Equals = 0,
   IsNull = 1,
   GreaterThan = 2,
   LessThan = 3,
@@ -24,7 +24,6 @@ export enum FilterOperator {
   RelatedTo = 15,
   BitwiseAnd = 16,
   BitwiseOr = 17,
-
 }
 
 export function encodeFilterOperator( data: FilterOperator,  out: DataStream) {

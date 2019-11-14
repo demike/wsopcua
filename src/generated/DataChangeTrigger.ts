@@ -6,10 +6,9 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum DataChangeTrigger {
-   Status = 0,
+  Status = 0,
   StatusValue = 1,
   StatusValueTimestamp = 2,
-
 }
 
 export function encodeDataChangeTrigger( data: DataChangeTrigger,  out: DataStream) {

@@ -23,7 +23,7 @@ export interface IRequestHeader {
 
 export class RequestHeader {
   authenticationToken: ec.NodeId;
-  timestamp: Date | null;
+  timestamp: Date;
   requestHandle: ec.UInt32;
   returnDiagnostics: ec.UInt32;
   auditEntryId: string | null;
@@ -33,7 +33,7 @@ export class RequestHeader {
  constructor( options?: IRequestHeader) {
   options = options || {};
   this.authenticationToken = (options.authenticationToken != null) ? options.authenticationToken : ec.NodeId.NullNodeId;
-  this.timestamp = (options.timestamp != null) ? options.timestamp : null;
+  this.timestamp = (options.timestamp != null) ? options.timestamp : new Date();
   this.requestHandle = (options.requestHandle != null) ? options.requestHandle : 0;
   this.returnDiagnostics = (options.returnDiagnostics != null) ? options.returnDiagnostics : 0;
   this.auditEntryId = (options.auditEntryId != null) ? options.auditEntryId : null;

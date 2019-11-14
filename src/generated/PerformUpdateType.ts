@@ -6,11 +6,10 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum PerformUpdateType {
-   Insert = 1,
+  Insert = 1,
   Replace = 2,
   Update = 3,
   Remove = 4,
-
 }
 
 export function encodePerformUpdateType( data: PerformUpdateType,  out: DataStream) {

@@ -6,9 +6,8 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum DataSetFieldFlags {
-   None = 0,
+  None = 0,
   PromotedField = 1,
-
 }
 
 export function encodeDataSetFieldFlags( data: DataSetFieldFlags,  out: DataStream) {

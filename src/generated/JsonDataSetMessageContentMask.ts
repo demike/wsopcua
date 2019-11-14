@@ -6,13 +6,12 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum JsonDataSetMessageContentMask {
-   None = 0,
+  None = 0,
   DataSetWriterId = 1,
   MetaDataVersion = 2,
   SequenceNumber = 4,
   Timestamp = 8,
   Status = 16,
-
 }
 
 export function encodeJsonDataSetMessageContentMask( data: JsonDataSetMessageContentMask,  out: DataStream) {

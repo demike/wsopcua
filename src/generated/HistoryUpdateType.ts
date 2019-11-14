@@ -6,11 +6,10 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum HistoryUpdateType {
-   Insert = 1,
+  Insert = 1,
   Replace = 2,
   Update = 3,
   Delete = 4,
-
 }
 
 export function encodeHistoryUpdateType( data: HistoryUpdateType,  out: DataStream) {

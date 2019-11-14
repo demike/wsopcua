@@ -6,7 +6,7 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum BrowseResultMask {
-   None = 0,
+  None = 0,
   ReferenceTypeId = 1,
   IsForward = 2,
   NodeClass = 4,
@@ -16,7 +16,6 @@ export enum BrowseResultMask {
   All = 63,
   ReferenceTypeInfo = 3,
   TargetInfo = 60,
-
 }
 
 export function encodeBrowseResultMask( data: BrowseResultMask,  out: DataStream) {

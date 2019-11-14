@@ -6,7 +6,7 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum AttributeWriteMask {
-   None = 0,
+  None = 0,
   AccessLevel = 1,
   ArrayDimensions = 2,
   BrowseName = 4,
@@ -33,7 +33,6 @@ export enum AttributeWriteMask {
   RolePermissions = 8388608,
   AccessRestrictions = 16777216,
   AccessLevelEx = 33554432,
-
 }
 
 export function encodeAttributeWriteMask( data: AttributeWriteMask,  out: DataStream) {

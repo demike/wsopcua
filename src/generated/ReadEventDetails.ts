@@ -21,16 +21,16 @@ export interface IReadEventDetails {
 
 export class ReadEventDetails extends HistoryReadDetails {
   numValuesPerNode: ec.UInt32;
-  startTime: Date | null;
-  endTime: Date | null;
+  startTime: Date;
+  endTime: Date;
   filter: EventFilter;
 
  constructor( options?: IReadEventDetails) {
   options = options || {};
   super();
   this.numValuesPerNode = (options.numValuesPerNode != null) ? options.numValuesPerNode : 0;
-  this.startTime = (options.startTime != null) ? options.startTime : null;
-  this.endTime = (options.endTime != null) ? options.endTime : null;
+  this.startTime = (options.startTime != null) ? options.startTime : new Date();
+  this.endTime = (options.endTime != null) ? options.endTime : new Date();
   this.filter = (options.filter != null) ? options.filter : new EventFilter();
 
  }

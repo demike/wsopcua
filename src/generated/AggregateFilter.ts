@@ -20,7 +20,7 @@ export interface IAggregateFilter {
 */
 
 export class AggregateFilter extends MonitoringFilter {
-  startTime: Date | null;
+  startTime: Date;
   aggregateType: ec.NodeId;
   processingInterval: ec.Double;
   aggregateConfiguration: AggregateConfiguration;
@@ -28,7 +28,7 @@ export class AggregateFilter extends MonitoringFilter {
  constructor( options?: IAggregateFilter) {
   options = options || {};
   super();
-  this.startTime = (options.startTime != null) ? options.startTime : null;
+  this.startTime = (options.startTime != null) ? options.startTime : new Date();
   this.aggregateType = (options.aggregateType != null) ? options.aggregateType : ec.NodeId.NullNodeId;
   this.processingInterval = (options.processingInterval != null) ? options.processingInterval : 0;
   this.aggregateConfiguration = (options.aggregateConfiguration != null) ? options.aggregateConfiguration : new AggregateConfiguration();

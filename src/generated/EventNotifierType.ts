@@ -6,11 +6,10 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum EventNotifierType {
-   None = 0,
+  None = 0,
   SubscribeToEvents = 1,
   HistoryRead = 4,
   HistoryWrite = 8,
-
 }
 
 export function encodeEventNotifierType( data: EventNotifierType,  out: DataStream) {

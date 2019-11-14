@@ -6,11 +6,10 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum IdType {
-   Numeric = 0,
+  Numeric = 0,
   String = 1,
   Guid = 2,
   Opaque = 3,
-
 }
 
 export function encodeIdType( data: IdType,  out: DataStream) {

@@ -6,7 +6,7 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum NodeClass {
-   Unspecified = 0,
+  Unspecified = 0,
   Object = 1,
   Variable = 2,
   Method = 4,
@@ -15,7 +15,6 @@ export enum NodeClass {
   ReferenceType = 32,
   DataType = 64,
   View = 128,
-
 }
 
 export function encodeNodeClass( data: NodeClass,  out: DataStream) {

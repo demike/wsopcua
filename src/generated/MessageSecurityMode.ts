@@ -6,11 +6,10 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum MessageSecurityMode {
-   Invalid = 0,
+  Invalid = 0,
   None = 1,
   Sign = 2,
   SignAndEncrypt = 3,
-
 }
 
 export function encodeMessageSecurityMode( data: MessageSecurityMode,  out: DataStream) {

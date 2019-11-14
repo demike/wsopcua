@@ -6,7 +6,7 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum AccessLevelType {
-   None = 0,
+  None = 0,
   CurrentRead = 1,
   CurrentWrite = 2,
   HistoryRead = 4,
@@ -14,7 +14,6 @@ export enum AccessLevelType {
   SemanticChange = 16,
   StatusWrite = 32,
   TimestampWrite = 64,
-
 }
 
 export function encodeAccessLevelType( data: AccessLevelType,  out: DataStream) {

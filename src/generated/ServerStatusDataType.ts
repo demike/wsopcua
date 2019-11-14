@@ -23,8 +23,8 @@ export interface IServerStatusDataType {
 */
 
 export class ServerStatusDataType {
-  startTime: Date | null;
-  currentTime: Date | null;
+  startTime: Date;
+  currentTime: Date;
   state: ServerState;
   buildInfo: BuildInfo;
   secondsTillShutdown: ec.UInt32;
@@ -32,8 +32,8 @@ export class ServerStatusDataType {
 
  constructor( options?: IServerStatusDataType) {
   options = options || {};
-  this.startTime = (options.startTime != null) ? options.startTime : null;
-  this.currentTime = (options.currentTime != null) ? options.currentTime : null;
+  this.startTime = (options.startTime != null) ? options.startTime : new Date();
+  this.currentTime = (options.currentTime != null) ? options.currentTime : new Date();
   this.state = (options.state != null) ? options.state : null;
   this.buildInfo = (options.buildInfo != null) ? options.buildInfo : new BuildInfo();
   this.secondsTillShutdown = (options.secondsTillShutdown != null) ? options.secondsTillShutdown : 0;

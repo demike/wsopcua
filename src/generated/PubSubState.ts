@@ -6,11 +6,10 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum PubSubState {
-   Disabled = 0,
+  Disabled = 0,
   Paused = 1,
   Operational = 2,
   Error = 3,
-
 }
 
 export function encodePubSubState( data: PubSubState,  out: DataStream) {

@@ -18,13 +18,13 @@ export interface IViewDescription {
 
 export class ViewDescription {
   viewId: ec.NodeId;
-  timestamp: Date | null;
+  timestamp: Date;
   viewVersion: ec.UInt32;
 
  constructor( options?: IViewDescription) {
   options = options || {};
   this.viewId = (options.viewId != null) ? options.viewId : ec.NodeId.NullNodeId;
-  this.timestamp = (options.timestamp != null) ? options.timestamp : null;
+  this.timestamp = (options.timestamp != null) ? options.timestamp : new Date();
   this.viewVersion = (options.viewVersion != null) ? options.viewVersion : 0;
 
  }

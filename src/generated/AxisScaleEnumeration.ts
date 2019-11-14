@@ -6,10 +6,9 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum AxisScaleEnumeration {
-   Linear = 0,
+  Linear = 0,
   Log = 1,
   Ln = 2,
-
 }
 
 export function encodeAxisScaleEnumeration( data: AxisScaleEnumeration,  out: DataStream) {

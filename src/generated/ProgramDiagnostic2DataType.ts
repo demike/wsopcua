@@ -33,30 +33,30 @@ export interface IProgramDiagnostic2DataType {
 export class ProgramDiagnostic2DataType {
   createSessionId: ec.NodeId;
   createClientName: string | null;
-  invocationCreationTime: Date | null;
-  lastTransitionTime: Date | null;
+  invocationCreationTime: Date;
+  lastTransitionTime: Date;
   lastMethodCall: string | null;
   lastMethodSessionId: ec.NodeId;
   lastMethodInputArguments: Argument[];
   lastMethodOutputArguments: Argument[];
   lastMethodInputValues: Variant[];
   lastMethodOutputValues: Variant[];
-  lastMethodCallTime: Date | null;
+  lastMethodCallTime: Date;
   lastMethodReturnStatus: StatusResult;
 
  constructor( options?: IProgramDiagnostic2DataType) {
   options = options || {};
   this.createSessionId = (options.createSessionId != null) ? options.createSessionId : ec.NodeId.NullNodeId;
   this.createClientName = (options.createClientName != null) ? options.createClientName : null;
-  this.invocationCreationTime = (options.invocationCreationTime != null) ? options.invocationCreationTime : null;
-  this.lastTransitionTime = (options.lastTransitionTime != null) ? options.lastTransitionTime : null;
+  this.invocationCreationTime = (options.invocationCreationTime != null) ? options.invocationCreationTime : new Date();
+  this.lastTransitionTime = (options.lastTransitionTime != null) ? options.lastTransitionTime : new Date();
   this.lastMethodCall = (options.lastMethodCall != null) ? options.lastMethodCall : null;
   this.lastMethodSessionId = (options.lastMethodSessionId != null) ? options.lastMethodSessionId : ec.NodeId.NullNodeId;
   this.lastMethodInputArguments = (options.lastMethodInputArguments != null) ? options.lastMethodInputArguments : [];
   this.lastMethodOutputArguments = (options.lastMethodOutputArguments != null) ? options.lastMethodOutputArguments : [];
   this.lastMethodInputValues = (options.lastMethodInputValues != null) ? options.lastMethodInputValues : [];
   this.lastMethodOutputValues = (options.lastMethodOutputValues != null) ? options.lastMethodOutputValues : [];
-  this.lastMethodCallTime = (options.lastMethodCallTime != null) ? options.lastMethodCallTime : null;
+  this.lastMethodCallTime = (options.lastMethodCallTime != null) ? options.lastMethodCallTime : new Date();
   this.lastMethodReturnStatus = (options.lastMethodReturnStatus != null) ? options.lastMethodReturnStatus : new StatusResult();
 
  }

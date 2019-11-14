@@ -6,10 +6,9 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum OverrideValueHandling {
-   Disabled = 0,
+  Disabled = 0,
   LastUsableValue = 1,
   OverrideValue = 2,
-
 }
 
 export function encodeOverrideValueHandling( data: OverrideValueHandling,  out: DataStream) {

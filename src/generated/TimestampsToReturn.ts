@@ -6,12 +6,11 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum TimestampsToReturn {
-   Source = 0,
+  Source = 0,
   Server = 1,
   Both = 2,
   Neither = 3,
   Invalid = 4,
-
 }
 
 export function encodeTimestampsToReturn( data: TimestampsToReturn,  out: DataStream) {

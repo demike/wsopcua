@@ -20,14 +20,14 @@ export interface IChannelSecurityToken {
 export class ChannelSecurityToken {
   channelId: ec.UInt32;
   tokenId: ec.UInt32;
-  createdAt: Date | null;
+  createdAt: Date;
   revisedLifetime: ec.UInt32;
 
  constructor( options?: IChannelSecurityToken) {
   options = options || {};
   this.channelId = (options.channelId != null) ? options.channelId : 0;
   this.tokenId = (options.tokenId != null) ? options.tokenId : 0;
-  this.createdAt = (options.createdAt != null) ? options.createdAt : null;
+  this.createdAt = (options.createdAt != null) ? options.createdAt : new Date();
   this.revisedLifetime = (options.revisedLifetime != null) ? options.revisedLifetime : 0;
 
  }

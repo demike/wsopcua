@@ -67,8 +67,8 @@ export class SessionDiagnosticsDataType {
   localeIds: string[];
   actualSessionTimeout: ec.Double;
   maxResponseMessageSize: ec.UInt32;
-  clientConnectionTime: Date | null;
-  clientLastContactTime: Date | null;
+  clientConnectionTime: Date;
+  clientLastContactTime: Date;
   currentSubscriptionsCount: ec.UInt32;
   currentMonitoredItemsCount: ec.UInt32;
   currentPublishRequestsInQueue: ec.UInt32;
@@ -113,8 +113,8 @@ export class SessionDiagnosticsDataType {
   this.localeIds = (options.localeIds != null) ? options.localeIds : [];
   this.actualSessionTimeout = (options.actualSessionTimeout != null) ? options.actualSessionTimeout : 0;
   this.maxResponseMessageSize = (options.maxResponseMessageSize != null) ? options.maxResponseMessageSize : 0;
-  this.clientConnectionTime = (options.clientConnectionTime != null) ? options.clientConnectionTime : null;
-  this.clientLastContactTime = (options.clientLastContactTime != null) ? options.clientLastContactTime : null;
+  this.clientConnectionTime = (options.clientConnectionTime != null) ? options.clientConnectionTime : new Date();
+  this.clientLastContactTime = (options.clientLastContactTime != null) ? options.clientLastContactTime : new Date();
   this.currentSubscriptionsCount = (options.currentSubscriptionsCount != null) ? options.currentSubscriptionsCount : 0;
   this.currentMonitoredItemsCount = (options.currentMonitoredItemsCount != null) ? options.currentMonitoredItemsCount : 0;
   this.currentPublishRequestsInQueue = (options.currentPublishRequestsInQueue != null) ? options.currentPublishRequestsInQueue : 0;

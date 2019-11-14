@@ -19,13 +19,13 @@ export interface INotificationMessage {
 
 export class NotificationMessage {
   sequenceNumber: ec.UInt32;
-  publishTime: Date | null;
+  publishTime: Date;
   notificationData: ExtensionObject[];
 
  constructor( options?: INotificationMessage) {
   options = options || {};
   this.sequenceNumber = (options.sequenceNumber != null) ? options.sequenceNumber : 0;
-  this.publishTime = (options.publishTime != null) ? options.publishTime : null;
+  this.publishTime = (options.publishTime != null) ? options.publishTime : new Date();
   this.notificationData = (options.notificationData != null) ? options.notificationData : [];
 
  }

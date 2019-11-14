@@ -6,9 +6,8 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum PubSubDiagnosticsCounterClassification {
-   Information = 0,
+  Information = 0,
   Error = 1,
-
 }
 
 export function encodePubSubDiagnosticsCounterClassification( data: PubSubDiagnosticsCounterClassification,  out: DataStream) {

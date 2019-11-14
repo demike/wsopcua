@@ -19,13 +19,13 @@ export interface IAnnotation {
 export class Annotation {
   message: string | null;
   userName: string | null;
-  annotationTime: Date | null;
+  annotationTime: Date;
 
  constructor( options?: IAnnotation) {
   options = options || {};
   this.message = (options.message != null) ? options.message : null;
   this.userName = (options.userName != null) ? options.userName : null;
-  this.annotationTime = (options.annotationTime != null) ? options.annotationTime : null;
+  this.annotationTime = (options.annotationTime != null) ? options.annotationTime : new Date();
 
  }
 

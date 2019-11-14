@@ -6,7 +6,7 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum ServerState {
-   Running = 0,
+  Running = 0,
   Failed = 1,
   NoConfiguration = 2,
   Suspended = 3,
@@ -14,7 +14,6 @@ export enum ServerState {
   Test = 5,
   CommunicationFault = 6,
   Unknown = 7,
-
 }
 
 export function encodeServerState( data: ServerState,  out: DataStream) {

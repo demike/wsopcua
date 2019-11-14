@@ -21,8 +21,8 @@ export interface IReadRawModifiedDetails {
 
 export class ReadRawModifiedDetails extends HistoryReadDetails {
   isReadModified: boolean;
-  startTime: Date | null;
-  endTime: Date | null;
+  startTime: Date;
+  endTime: Date;
   numValuesPerNode: ec.UInt32;
   returnBounds: boolean;
 
@@ -30,8 +30,8 @@ export class ReadRawModifiedDetails extends HistoryReadDetails {
   options = options || {};
   super();
   this.isReadModified = (options.isReadModified != null) ? options.isReadModified : false;
-  this.startTime = (options.startTime != null) ? options.startTime : null;
-  this.endTime = (options.endTime != null) ? options.endTime : null;
+  this.startTime = (options.startTime != null) ? options.startTime : new Date();
+  this.endTime = (options.endTime != null) ? options.endTime : new Date();
   this.numValuesPerNode = (options.numValuesPerNode != null) ? options.numValuesPerNode : 0;
   this.returnBounds = (options.returnBounds != null) ? options.returnBounds : false;
 

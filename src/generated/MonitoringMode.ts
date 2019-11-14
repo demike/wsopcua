@@ -6,10 +6,9 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum MonitoringMode {
-   Disabled = 0,
+  Disabled = 0,
   Sampling = 1,
   Reporting = 2,
-
 }
 
 export function encodeMonitoringMode( data: MonitoringMode,  out: DataStream) {

@@ -6,14 +6,13 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum UadpDataSetMessageContentMask {
-   None = 0,
+  None = 0,
   Timestamp = 1,
   PicoSeconds = 2,
   Status = 4,
   MajorVersion = 8,
   MinorVersion = 16,
   SequenceNumber = 32,
-
 }
 
 export function encodeUadpDataSetMessageContentMask( data: UadpDataSetMessageContentMask,  out: DataStream) {

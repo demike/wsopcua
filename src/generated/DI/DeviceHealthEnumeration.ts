@@ -6,12 +6,11 @@
 import {DataStream} from '../../basic-types/DataStream';
 
 export enum DeviceHealthEnumeration {
-   NORMAL = 0,
+  NORMAL = 0,
   FAILURE = 1,
   CHECK_FUNCTION = 2,
   OFF_SPEC = 3,
   MAINTENANCE_REQUIRED = 4,
-
 }
 
 export function encodeDeviceHealthEnumeration( data: DeviceHealthEnumeration,  out: DataStream) {

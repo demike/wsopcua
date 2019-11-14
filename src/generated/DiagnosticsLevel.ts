@@ -6,12 +6,11 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum DiagnosticsLevel {
-   Basic = 0,
+  Basic = 0,
   Advanced = 1,
   Info = 2,
   Log = 3,
   Debug = 4,
-
 }
 
 export function encodeDiagnosticsLevel( data: DiagnosticsLevel,  out: DataStream) {

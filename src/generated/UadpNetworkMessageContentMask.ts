@@ -6,7 +6,7 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum UadpNetworkMessageContentMask {
-   None = 0,
+  None = 0,
   PublisherId = 1,
   GroupHeader = 2,
   WriterGroupId = 4,
@@ -18,7 +18,6 @@ export enum UadpNetworkMessageContentMask {
   PicoSeconds = 256,
   DataSetClassId = 512,
   PromotedFields = 1024,
-
 }
 
 export function encodeUadpNetworkMessageContentMask( data: UadpNetworkMessageContentMask,  out: DataStream) {

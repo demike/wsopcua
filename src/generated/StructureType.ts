@@ -6,10 +6,9 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum StructureType {
-   Structure = 0,
+  Structure = 0,
   StructureWithOptionalFields = 1,
   Union = 2,
-
 }
 
 export function encodeStructureType( data: StructureType,  out: DataStream) {

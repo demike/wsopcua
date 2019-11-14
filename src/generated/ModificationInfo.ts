@@ -18,13 +18,13 @@ export interface IModificationInfo {
 */
 
 export class ModificationInfo {
-  modificationTime: Date | null;
+  modificationTime: Date;
   updateType: HistoryUpdateType;
   userName: string | null;
 
  constructor( options?: IModificationInfo) {
   options = options || {};
-  this.modificationTime = (options.modificationTime != null) ? options.modificationTime : null;
+  this.modificationTime = (options.modificationTime != null) ? options.modificationTime : new Date();
   this.updateType = (options.updateType != null) ? options.updateType : null;
   this.userName = (options.userName != null) ? options.userName : null;
 

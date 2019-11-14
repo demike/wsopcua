@@ -19,14 +19,14 @@ export interface IAggregateFilterResult {
 */
 
 export class AggregateFilterResult extends MonitoringFilterResult {
-  revisedStartTime: Date | null;
+  revisedStartTime: Date;
   revisedProcessingInterval: ec.Double;
   revisedAggregateConfiguration: AggregateConfiguration;
 
  constructor( options?: IAggregateFilterResult) {
   options = options || {};
   super();
-  this.revisedStartTime = (options.revisedStartTime != null) ? options.revisedStartTime : null;
+  this.revisedStartTime = (options.revisedStartTime != null) ? options.revisedStartTime : new Date();
   this.revisedProcessingInterval = (options.revisedProcessingInterval != null) ? options.revisedProcessingInterval : 0;
   this.revisedAggregateConfiguration = (options.revisedAggregateConfiguration != null) ? options.revisedAggregateConfiguration : new AggregateConfiguration();
 

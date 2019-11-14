@@ -6,11 +6,10 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum BrowseDirection {
-   Forward = 0,
+  Forward = 0,
   Inverse = 1,
   Both = 2,
   Invalid = 3,
-
 }
 
 export function encodeBrowseDirection( data: BrowseDirection,  out: DataStream) {

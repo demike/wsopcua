@@ -6,10 +6,9 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum NamingRuleType {
-   Mandatory = 1,
+  Mandatory = 1,
   Optional = 2,
   Constraint = 3,
-
 }
 
 export function encodeNamingRuleType( data: NamingRuleType,  out: DataStream) {

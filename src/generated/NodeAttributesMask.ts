@@ -6,7 +6,7 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum NodeAttributesMask {
-   None = 0,
+  None = 0,
   AccessLevel = 1,
   ArrayDimensions = 2,
   BrowseName = 4,
@@ -41,7 +41,6 @@ export enum NodeAttributesMask {
   Method = 26632548,
   ReferenceType = 26537060,
   View = 26501356,
-
 }
 
 export function encodeNodeAttributesMask( data: NodeAttributesMask,  out: DataStream) {

@@ -6,12 +6,11 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum BrokerTransportQualityOfService {
-   NotSpecified = 0,
+  NotSpecified = 0,
   BestEffort = 1,
   AtLeastOnce = 2,
   AtMostOnce = 3,
   ExactlyOnce = 4,
-
 }
 
 export function encodeBrokerTransportQualityOfService( data: BrokerTransportQualityOfService,  out: DataStream) {

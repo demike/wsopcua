@@ -6,11 +6,10 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum ApplicationType {
-   Server = 0,
+  Server = 0,
   Client = 1,
   ClientAndServer = 2,
   DiscoveryServer = 3,
-
 }
 
 export function encodeApplicationType( data: ApplicationType,  out: DataStream) {

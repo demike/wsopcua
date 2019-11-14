@@ -21,8 +21,8 @@ export interface IReadProcessedDetails {
 */
 
 export class ReadProcessedDetails extends HistoryReadDetails {
-  startTime: Date | null;
-  endTime: Date | null;
+  startTime: Date;
+  endTime: Date;
   processingInterval: ec.Double;
   aggregateType: ec.NodeId[];
   aggregateConfiguration: AggregateConfiguration;
@@ -30,8 +30,8 @@ export class ReadProcessedDetails extends HistoryReadDetails {
  constructor( options?: IReadProcessedDetails) {
   options = options || {};
   super();
-  this.startTime = (options.startTime != null) ? options.startTime : null;
-  this.endTime = (options.endTime != null) ? options.endTime : null;
+  this.startTime = (options.startTime != null) ? options.startTime : new Date();
+  this.endTime = (options.endTime != null) ? options.endTime : new Date();
   this.processingInterval = (options.processingInterval != null) ? options.processingInterval : 0;
   this.aggregateType = (options.aggregateType != null) ? options.aggregateType : [];
   this.aggregateConfiguration = (options.aggregateConfiguration != null) ? options.aggregateConfiguration : new AggregateConfiguration();

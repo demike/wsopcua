@@ -20,15 +20,15 @@ export interface IDeleteRawModifiedDetails extends IHistoryUpdateDetails {
 
 export class DeleteRawModifiedDetails extends HistoryUpdateDetails {
   isDeleteModified: boolean;
-  startTime: Date | null;
-  endTime: Date | null;
+  startTime: Date;
+  endTime: Date;
 
  constructor( options?: IDeleteRawModifiedDetails) {
   options = options || {};
   super(options);
   this.isDeleteModified = (options.isDeleteModified != null) ? options.isDeleteModified : false;
-  this.startTime = (options.startTime != null) ? options.startTime : null;
-  this.endTime = (options.endTime != null) ? options.endTime : null;
+  this.startTime = (options.startTime != null) ? options.startTime : new Date();
+  this.endTime = (options.endTime != null) ? options.endTime : new Date();
 
  }
 

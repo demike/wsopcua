@@ -22,7 +22,7 @@ export interface IResponseHeader {
 */
 
 export class ResponseHeader {
-  timestamp: Date | null;
+  timestamp: Date;
   requestHandle: ec.UInt32;
   serviceResult: ec.StatusCode | null;
   serviceDiagnostics: DiagnosticInfo;
@@ -31,7 +31,7 @@ export class ResponseHeader {
 
  constructor( options?: IResponseHeader) {
   options = options || {};
-  this.timestamp = (options.timestamp != null) ? options.timestamp : null;
+  this.timestamp = (options.timestamp != null) ? options.timestamp : new Date();
   this.requestHandle = (options.requestHandle != null) ? options.requestHandle : 0;
   this.serviceResult = (options.serviceResult != null) ? options.serviceResult : null;
   this.serviceDiagnostics = (options.serviceDiagnostics != null) ? options.serviceDiagnostics : new DiagnosticInfo();

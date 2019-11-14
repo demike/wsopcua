@@ -6,9 +6,8 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum SecurityTokenRequestType {
-   Issue = 0,
+  Issue = 0,
   Renew = 1,
-
 }
 
 export function encodeSecurityTokenRequestType( data: SecurityTokenRequestType,  out: DataStream) {

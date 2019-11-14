@@ -6,7 +6,7 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum PermissionType {
-   None = 0,
+  None = 0,
   Browse = 1,
   ReadRolePermissions = 2,
   WriteAttribute = 4,
@@ -24,7 +24,6 @@ export enum PermissionType {
   RemoveReference = 16384,
   DeleteNode = 32768,
   AddNode = 65536,
-
 }
 
 export function encodePermissionType( data: PermissionType,  out: DataStream) {

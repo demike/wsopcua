@@ -21,13 +21,13 @@ export interface IFindServersOnNetworkResponse {
 
 export class FindServersOnNetworkResponse {
   responseHeader: ResponseHeader;
-  lastCounterResetTime: Date | null;
+  lastCounterResetTime: Date;
   servers: ServerOnNetwork[];
 
  constructor( options?: IFindServersOnNetworkResponse) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
-  this.lastCounterResetTime = (options.lastCounterResetTime != null) ? options.lastCounterResetTime : null;
+  this.lastCounterResetTime = (options.lastCounterResetTime != null) ? options.lastCounterResetTime : new Date();
   this.servers = (options.servers != null) ? options.servers : [];
 
  }

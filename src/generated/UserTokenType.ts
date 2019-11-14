@@ -6,11 +6,10 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum UserTokenType {
-   Anonymous = 0,
+  Anonymous = 0,
   UserName = 1,
   Certificate = 2,
   IssuedToken = 3,
-
 }
 
 export function encodeUserTokenType( data: UserTokenType,  out: DataStream) {

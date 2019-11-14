@@ -6,7 +6,7 @@
 import {DataStream} from '../basic-types/DataStream';
 
 export enum AccessLevelExType {
-   None = 0,
+  None = 0,
   CurrentRead = 1,
   CurrentWrite = 2,
   HistoryRead = 4,
@@ -17,7 +17,6 @@ export enum AccessLevelExType {
   NonatomicRead = 256,
   NonatomicWrite = 512,
   WriteFullArrayOnly = 1024,
-
 }
 
 export function encodeAccessLevelExType( data: AccessLevelExType,  out: DataStream) {
