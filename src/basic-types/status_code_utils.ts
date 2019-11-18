@@ -1,4 +1,4 @@
-import { StatusCode, ModifiableStatusCode, ConstantStatusCode } from '.';
+import { StatusCode, ModifiableStatusCode, ConstantStatusCode } from './status_code';
 import { DataStream } from './DataStream';
 import { StatusCodes } from '../constants/raw_status_codes';
 
