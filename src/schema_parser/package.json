@@ -5,14 +5,15 @@
  "main": "index.ts",
  "dependencies": {
   "@types/jsdom": "~12.2.4",
-  "commander": "^2.20.0",
+  "@types/node": "^12.12.9",
+  "commander": "^4.0.1",
   "csv": "^2.0.0",
   "jsdom": "~15.1.1",
   "parse5": "^5.1.0"
  },
  "devDependencies": {
-  "webpack": "^4.29.6",
-  "webpack-cli": "^3.3.0"
+  "webpack": "^4.41.2",
+  "webpack-cli": "^3.3.10"
  },
  "eslintConfig": {
   "env": {

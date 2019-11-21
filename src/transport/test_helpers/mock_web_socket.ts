@@ -1,5 +1,5 @@
 
-let origWS = window['WebSocket'];
+const origWS = window.WebSocket;
 
 export interface WebSocketMock {
     _open(): void;
@@ -81,10 +81,10 @@ export function installMockWebSocket() {
     (wsSpy as any).CLOSED = 3;
 
 
-    window['WebSocket'] = wsSpy;
+    window.WebSocket = wsSpy as any;
 
 }
 
 export function uninstallMockWebSocket() {
-    window['WebSocket'] = origWS;
+    window.WebSocket = origWS;
 }

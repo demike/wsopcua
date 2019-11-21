@@ -1,6 +1,6 @@
 {
   "name": "wsopcua",
-  "version": "0.0.18",
+  "version": "0.0.23",
   "license": "MYLicense",
   "author": "Michael Derfler",
   "private": true,
@@ -35,9 +35,9 @@
     "ts-loader": "^5.3.3",
     "tslint": "^5.14.0",
     "tslint-loader": "^3.6.0",
-    "typescript": "^3.3.4000",
-    "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5"
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   },
   "scripts": {
     "start": "webpack --watch --config webpack.dev.js",
@@ -54,7 +54,7 @@
   "files": [
     "documentation/**/*",
     "dist/es2015/**/*",
-    "src/schema_parser/dist2015/**/*",
+    "src/schema_parser/dist/wsopcua-schema-gen.js",
     "src/schema_parser/schemas/**/*"
   ]
 }

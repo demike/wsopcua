@@ -10,11 +10,13 @@ describe('OPCUA Client', function() {
     it('it should create a client', function () {
 
         const client = new OPCUAClient({});
+        expect(client).toBeDefined();
 
     });
     it('should create a ClientSecureChannerLayer', function () {
 
         const secLayer = new ClientSecureChannelLayer({});
+        expect(secLayer).toBeDefined();
     });
 
     describe('issue 696: https://github.com/node-opcua/node-opcua/issues/696', function() {
