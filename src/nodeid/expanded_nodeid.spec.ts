@@ -96,5 +96,23 @@ describe('testing ExpandedNodeId', function () {
 
     });
 
+    [
+        'ns=urn:engel:foo;s=myid',
+        'ns=-1;s=myId',
+        'svr=foo;ns=1;s=myId',
+        'ns=1;svr=1;s=myId',
+        'nsu=1;s=myId',
+        'ns=1;myId',
+        'ns=1;val=myId',
+        'ns=1;i=myId',
+        'ns=1;g=54'
+      ].forEach(s =>
+        it(`must fail on invalid expanded node id string ${s}`, () => {
+          expect(() => {
+            coerceExpandedNodeId(s);
+          }).toThrowError();
+        })
+      );
+
 
 });

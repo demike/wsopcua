@@ -54,7 +54,7 @@ export function coerceStatusCode(statusCode: any): StatusCode {
     }
     const _StatusCodes = StatusCodes as any;
     if (!_StatusCodes[statusCode as string]) {
-        throw new Error('Cannot find StatusCode '+ statusCode);
+        throw new Error('Cannot find StatusCode ' + statusCode);
     }
     return _StatusCodes[statusCode as string];
 }

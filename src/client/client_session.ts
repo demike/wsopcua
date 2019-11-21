@@ -768,7 +768,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
         });
     }
-    writeSingleNodeP(nodeId: NodeId, value: Variant,): Promise<{status: StatusCode, diagnosticInfos: DiagnosticInfo}> {
+    writeSingleNodeP(nodeId: NodeId, value: Variant): Promise<{status: StatusCode, diagnosticInfos: DiagnosticInfo}> {
         return new Promise((res, rej) => {this.writeSingleNode(nodeId, value, (err, status, diagnosticInfos) => {
             if (err) { rej(err); } else { res({status, diagnosticInfos}); }
         }); });

@@ -92,6 +92,9 @@ export function coerceExpandedNodeId(value): ExpandedNodeId {
         if (value.substr(0, 4) === 'svr=') {
             const idStart = value.indexOf(';');
             serverIndex =  Number.parseInt(value.substring(4, idStart ), 10);
+            if ( isNaN(serverIndex)) {
+                throw new Error('String cannot be coerced to an ExpandedNodeId (invalid svr) : ' + value);
+            }
             value = value.substring(idStart + 1);
         }
 
@@ -103,6 +106,9 @@ export function coerceExpandedNodeId(value): ExpandedNodeId {
     }
 
     const n = coerceNodeId(value);
+    if (namespaceUri) {
+        n.namespace = 0;
+    }
     return new ExpandedNodeId(n.identifierType, n.value, n.namespace, namespaceUri, serverIndex);
 }
 
