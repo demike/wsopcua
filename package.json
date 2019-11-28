@@ -1,6 +1,6 @@
 {
-  "name": "wsopcua",
-  "version": "0.0.23",
+  "name": "@engel/wsopcua",
+  "version": "0.0.25",
   "license": "MYLicense",
   "author": "Michael Derfler",
   "private": true,
@@ -54,6 +54,7 @@
   "files": [
     "documentation/**/*",
     "dist/es2015/**/*",
+    "!dist/es2015/**/*.spec.*",
     "src/schema_parser/dist/wsopcua-schema-gen.js",
     "src/schema_parser/schemas/**/*"
   ]
