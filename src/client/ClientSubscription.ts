@@ -416,6 +416,11 @@ public terminate(callback: ErrorCallback) {
         this._terminate_step2(callback);
     }
 }
+public terminateP(): Promise<void> {
+    return new Promise((res, rej) => {this.terminate((err) => {
+        if (err) { rej(err); } else { res(); }
+    }); });
+}
 
 /**
  * increment and get next client handle
@@ -606,6 +611,12 @@ public monitor(itemToMonitor: ReadValueId, requestedParameters: IMonitoringParam
     });
     return monitoredItem;
 }
+public monitorP(itemToMonitor: ReadValueId, requestedParameters: IMonitoringParameters, timestampsToReturn: TimestampsToReturn):
+Promise<MonitoredItem> {
+return new Promise((res, rej) => {this.monitor(itemToMonitor, requestedParameters, timestampsToReturn, (err, monitoredItem) => {
+    if (err) { rej(err); } else { res(monitoredItem); }
+}); });
+}
 
 
 /**
@@ -639,6 +650,12 @@ public monitorItems(itemsToMonitor: IReadValueId[], requestedParameters: IMonito
         });
     });
     return monitoredItemGroup;
+}
+public monitorItemsP(itemsToMonitor: ReadValueId[], requestedParameters: IMonitoringParameters, timestampsToReturn: TimestampsToReturn):
+Promise<MonitoredItemGroup> {
+return new Promise((res, rej) => {this.monitorItems(itemsToMonitor, requestedParameters, timestampsToReturn, (err, monitoredItemGroup) => {
+    if (err) { rej(err); } else { res(monitoredItemGroup); }
+}); });
 }
 
 public isActive(): boolean {
@@ -694,6 +711,11 @@ public setPublishingMode(publishingEnabled: boolean, callback: ErrorCallback): v
         }
         callback();
     });
+}
+public setPublishingModeP(publishingEnabled: boolean): Promise<void> {
+    return new Promise((res, rej) => {this.setPublishingMode(publishingEnabled, (err) => {
+        if (err) { rej(err); } else { res(); }
+    }); });
 }
 
 
@@ -778,6 +800,13 @@ public recreateSubscriptionAndMonitoredItem(callback: ErrorCallback) {
 
     ], callback);
 }
+public recreateSubscriptionAndMonitoredItemP(): Promise<void> {
+    return new Promise((res, rej) => {this.recreateSubscriptionAndMonitoredItem((err) => {
+        if (err) { rej(err); } else { res(); }
+    }); });
+}
+
+
 
 public toString() {
     let str = '';
