@@ -20,7 +20,7 @@ import { Variant } from '../variant';
 
 export interface MonitoredItemGroupEvents {
     'initialized': () => void;
-    'terminated': ()=> void;
+    'terminated': () => void;
     'changed': (item: MonitoredItemBase, dataValue: DataValue /* a value change */| Variant[] /* an event */, index: number) => void;
 }
 

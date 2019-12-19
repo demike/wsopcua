@@ -110,7 +110,6 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
 
 constructor (session: ClientSession, options: ICreateSubscriptionRequest) {
     super();
-    assert(session instanceof ClientSession);
 
     this._publishEngine = session.getPublishEngine();
 
@@ -651,7 +650,7 @@ public monitorItems(itemsToMonitor: IReadValueId[], requestedParameters: IMonito
     });
     return monitoredItemGroup;
 }
-public monitorItemsP(itemsToMonitor: ReadValueId[], requestedParameters: IMonitoringParameters, timestampsToReturn: TimestampsToReturn):
+public monitorItemsP(itemsToMonitor: IReadValueId[], requestedParameters: IMonitoringParameters, timestampsToReturn: TimestampsToReturn):
 Promise<MonitoredItemGroup> {
 return new Promise((res, rej) => {this.monitorItems(itemsToMonitor, requestedParameters, timestampsToReturn, (err, monitoredItemGroup) => {
     if (err) { rej(err); } else { res(monitoredItemGroup); }
