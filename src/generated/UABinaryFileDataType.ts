@@ -100,3 +100,6 @@ export function decodeUABinaryFileDataType( inp: DataStream): UABinaryFileDataTy
 
 
 
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('UABinaryFileDataType', UABinaryFileDataType, new ExpandedNodeId(2 /*numeric id*/, 15422, 0));

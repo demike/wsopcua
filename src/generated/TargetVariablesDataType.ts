@@ -59,3 +59,6 @@ export function decodeTargetVariablesDataType( inp: DataStream): TargetVariables
 
 
 
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('TargetVariablesDataType', TargetVariablesDataType, new ExpandedNodeId(2 /*numeric id*/, 15712, 0));

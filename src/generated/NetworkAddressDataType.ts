@@ -55,3 +55,6 @@ export function decodeNetworkAddressDataType( inp: DataStream): NetworkAddressDa
 
 
 
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('NetworkAddressDataType', NetworkAddressDataType, new ExpandedNodeId(2 /*numeric id*/, 21151, 0));

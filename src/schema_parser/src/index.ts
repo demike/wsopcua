@@ -10,6 +10,7 @@ import { SchemaParserConfig, sanitizeProjectImportConfig } from './SchemaParserC
 
 import * as program from 'commander';
 import { PathGenUtil } from './PathGenUtil';
+import { generateAttributeIds } from './generate_attribute_ids';
 
 const pkg = require('../package.json');
 const appName = 'wsopcua-schema-gen'; // Object.keys(pkg.bin)[0];
@@ -30,6 +31,10 @@ program
 
 if (program.gencodes) {
     generateStatusCodes();
+}
+
+if (program.genids) {
+    generateAttributeIds(path.join(datafolder, '/AttributeIds.csv'));
 }
 
 // parse the default configuration file

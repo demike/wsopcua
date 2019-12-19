@@ -61,3 +61,6 @@ export function decodeStructureDescription( inp: DataStream): StructureDescripti
 
 
 
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('StructureDescription', StructureDescription, new ExpandedNodeId(2 /*numeric id*/, 126, 0));

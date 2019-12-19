@@ -20,3 +20,6 @@ export class DataSetWriterTransportDataType {
 
 
 }
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('DataSetWriterTransportDataType', DataSetWriterTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15683, 0));

@@ -65,3 +65,6 @@ export function decodeSubscribedDataSetMirrorDataType( inp: DataStream): Subscri
 
 
 
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('SubscribedDataSetMirrorDataType', SubscribedDataSetMirrorDataType, new ExpandedNodeId(2 /*numeric id*/, 15713, 0));

@@ -111,3 +111,6 @@ export function decodePubSubConnectionDataType( inp: DataStream): PubSubConnecti
 
 
 
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('PubSubConnectionDataType', PubSubConnectionDataType, new ExpandedNodeId(2 /*numeric id*/, 15694, 0));

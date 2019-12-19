@@ -76,3 +76,6 @@ export function decodeBrokerWriterGroupTransportDataType( inp: DataStream): Brok
 
 
 
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('BrokerWriterGroupTransportDataType', BrokerWriterGroupTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15727, 0));

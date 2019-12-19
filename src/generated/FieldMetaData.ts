@@ -113,3 +113,6 @@ export function decodeFieldMetaData( inp: DataStream): FieldMetaData {
 
 
 
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('FieldMetaData', FieldMetaData, new ExpandedNodeId(2 /*numeric id*/, 14839, 0));

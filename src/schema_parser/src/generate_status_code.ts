@@ -69,9 +69,10 @@ function parseStatusCodeXML() {
 
 
     code_list.forEach(function (obj) {
+    const description = obj.description.replace(/^"|"$/g, '')    
     const s = util.format(' /** %s */\n  static %s: ConstantStatusCode = new ConstantStatusCode({ name: %s , value: %s  , description: "%s"});\n',
-        obj.description,
-        obj.name, '\'' + obj.name + '\'', '0x' + obj.value.toString(16), obj.description);
+        description,
+        obj.name, '\'' + obj.name + '\'', '0x' + obj.value.toString(16), description);
         outFile.write(s);
     });
     outFile.write('};\n');

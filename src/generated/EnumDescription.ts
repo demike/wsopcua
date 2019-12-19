@@ -68,3 +68,6 @@ export function decodeEnumDescription( inp: DataStream): EnumDescription {
 
 
 
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+register_class_definition('EnumDescription', EnumDescription, new ExpandedNodeId(2 /*numeric id*/, 127, 0));

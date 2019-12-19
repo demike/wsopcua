@@ -60,24 +60,26 @@
   static BadCertificateInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateInvalid' , value: 0x80120000  , description: "The certificate provided as a parameter is not valid."});
  /** An error occurred verifying security. */
   static BadSecurityChecksFailed: ConstantStatusCode = new ConstantStatusCode({ name: 'BadSecurityChecksFailed' , value: 0x80130000  , description: "An error occurred verifying security."});
- /** The Certificate has expired or is not yet valid. */
-  static BadCertificateTimeInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateTimeInvalid' , value: 0x80140000  , description: "The Certificate has expired or is not yet valid."});
- /** An Issuer Certificate has expired or is not yet valid. */
-  static BadCertificateIssuerTimeInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateIssuerTimeInvalid' , value: 0x80150000  , description: "An Issuer Certificate has expired or is not yet valid."});
- /** The HostName used to connect to a Server does not match a HostName in the Certificate. */
-  static BadCertificateHostNameInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateHostNameInvalid' , value: 0x80160000  , description: "The HostName used to connect to a Server does not match a HostName in the Certificate."});
- /** The URI specified in the ApplicationDescription does not match the URI in the Certificate. */
-  static BadCertificateUriInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateUriInvalid' , value: 0x80170000  , description: "The URI specified in the ApplicationDescription does not match the URI in the Certificate."});
- /** The Certificate may not be used for the requested operation. */
-  static BadCertificateUseNotAllowed: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateUseNotAllowed' , value: 0x80180000  , description: "The Certificate may not be used for the requested operation."});
- /** The Issuer Certificate may not be used for the requested operation. */
-  static BadCertificateIssuerUseNotAllowed: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateIssuerUseNotAllowed' , value: 0x80190000  , description: "The Issuer Certificate may not be used for the requested operation."});
- /** The Certificate is not trusted. */
-  static BadCertificateUntrusted: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateUntrusted' , value: 0x801a0000  , description: "The Certificate is not trusted."});
- /** It was not possible to determine if the Certificate has been revoked. */
-  static BadCertificateRevocationUnknown: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateRevocationUnknown' , value: 0x801b0000  , description: "It was not possible to determine if the Certificate has been revoked."});
- /** It was not possible to determine if the Issuer Certificate has been revoked. */
-  static BadCertificateIssuerRevocationUnknown: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateIssuerRevocationUnknown' , value: 0x801c0000  , description: "It was not possible to determine if the Issuer Certificate has been revoked."});
+ /** The certificate does not meet the requirements of the security policy. */
+  static BadCertificatePolicyCheckFailed: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificatePolicyCheckFailed' , value: 0x81140000  , description: "The certificate does not meet the requirements of the security policy."});
+ /** The certificate has expired or is not yet valid. */
+  static BadCertificateTimeInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateTimeInvalid' , value: 0x80140000  , description: "The certificate has expired or is not yet valid."});
+ /** An issuer certificate has expired or is not yet valid. */
+  static BadCertificateIssuerTimeInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateIssuerTimeInvalid' , value: 0x80150000  , description: "An issuer certificate has expired or is not yet valid."});
+ /** The HostName used to connect to a server does not match a HostName in the certificate. */
+  static BadCertificateHostNameInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateHostNameInvalid' , value: 0x80160000  , description: "The HostName used to connect to a server does not match a HostName in the certificate."});
+ /** The URI specified in the ApplicationDescription does not match the URI in the certificate. */
+  static BadCertificateUriInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateUriInvalid' , value: 0x80170000  , description: "The URI specified in the ApplicationDescription does not match the URI in the certificate."});
+ /** The certificate may not be used for the requested operation. */
+  static BadCertificateUseNotAllowed: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateUseNotAllowed' , value: 0x80180000  , description: "The certificate may not be used for the requested operation."});
+ /** The issuer certificate may not be used for the requested operation. */
+  static BadCertificateIssuerUseNotAllowed: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateIssuerUseNotAllowed' , value: 0x80190000  , description: "The issuer certificate may not be used for the requested operation."});
+ /** The certificate is not trusted. */
+  static BadCertificateUntrusted: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateUntrusted' , value: 0x801a0000  , description: "The certificate is not trusted."});
+ /** It was not possible to determine if the certificate has been revoked. */
+  static BadCertificateRevocationUnknown: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateRevocationUnknown' , value: 0x801b0000  , description: "It was not possible to determine if the certificate has been revoked."});
+ /** It was not possible to determine if the issuer certificate has been revoked. */
+  static BadCertificateIssuerRevocationUnknown: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateIssuerRevocationUnknown' , value: 0x801c0000  , description: "It was not possible to determine if the issuer certificate has been revoked."});
  /** The certificate has been revoked. */
   static BadCertificateRevoked: ConstantStatusCode = new ConstantStatusCode({ name: 'BadCertificateRevoked' , value: 0x801d0000  , description: "The certificate has been revoked."});
  /** The issuer certificate has been revoked. */
@@ -112,6 +114,12 @@
   static BadRequestCancelledByClient: ConstantStatusCode = new ConstantStatusCode({ name: 'BadRequestCancelledByClient' , value: 0x802c0000  , description: "The request was cancelled by the client."});
  /** Too many arguments were provided. */
   static BadTooManyArguments: ConstantStatusCode = new ConstantStatusCode({ name: 'BadTooManyArguments' , value: 0x80e50000  , description: "Too many arguments were provided."});
+ /** The server requires a license to operate in general or to perform a service or operation */
+  static BadLicenseExpired: ConstantStatusCode = new ConstantStatusCode({ name: 'BadLicenseExpired' , value: 0x810e0000  , description: "The server requires a license to operate in general or to perform a service or operation"});
+ /** The server has limits on number of allowed operations / objects */
+  static BadLicenseLimitsExceeded: ConstantStatusCode = new ConstantStatusCode({ name: 'BadLicenseLimitsExceeded' , value: 0x810f0000  , description: "The server has limits on number of allowed operations / objects"});
+ /** The server does not have a license which is required to operate in general or to perform a service or operation. */
+  static BadLicenseNotAvailable: ConstantStatusCode = new ConstantStatusCode({ name: 'BadLicenseNotAvailable' , value: 0x81100000  , description: "The server does not have a license which is required to operate in general or to perform a service or operation."});
  /** The subscription was transferred to another session. */
   static GoodSubscriptionTransferred: ConstantStatusCode = new ConstantStatusCode({ name: 'GoodSubscriptionTransferred' , value: 0x2d0000  , description: "The subscription was transferred to another session."});
  /** The processing will complete asynchronously. */
@@ -168,8 +176,8 @@
   static BadEventFilterInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadEventFilterInvalid' , value: 0x80470000  , description: "The event filter is not valid."});
  /** The content filter is not valid. */
   static BadContentFilterInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadContentFilterInvalid' , value: 0x80480000  , description: "The content filter is not valid."});
- /** An unregognized operator was provided in a filter. */
-  static BadFilterOperatorInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadFilterOperatorInvalid' , value: 0x80c10000  , description: "An unregognized operator was provided in a filter."});
+ /** An unrecognized operator was provided in a filter. */
+  static BadFilterOperatorInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadFilterOperatorInvalid' , value: 0x80c10000  , description: "An unrecognized operator was provided in a filter."});
  /** A valid operator was provided */
   static BadFilterOperatorUnsupported: ConstantStatusCode = new ConstantStatusCode({ name: 'BadFilterOperatorUnsupported' , value: 0x80c20000  , description: "A valid operator was provided"});
  /** The number of operands provided for the filter operator was less then expected for the operand provided. */
@@ -184,12 +192,14 @@
   static BadContinuationPointInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadContinuationPointInvalid' , value: 0x804a0000  , description: "The continuation point provide is longer valid."});
  /** The operation could not be processed because all continuation points have been allocated. */
   static BadNoContinuationPoints: ConstantStatusCode = new ConstantStatusCode({ name: 'BadNoContinuationPoints' , value: 0x804b0000  , description: "The operation could not be processed because all continuation points have been allocated."});
- /** The operation could not be processed because all continuation points have been allocated. */
-  static BadReferenceTypeIdInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadReferenceTypeIdInvalid' , value: 0x804c0000  , description: "The operation could not be processed because all continuation points have been allocated."});
+ /** The reference type id does not refer to a valid reference type node. */
+  static BadReferenceTypeIdInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadReferenceTypeIdInvalid' , value: 0x804c0000  , description: "The reference type id does not refer to a valid reference type node."});
  /** The browse direction is not valid. */
   static BadBrowseDirectionInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadBrowseDirectionInvalid' , value: 0x804d0000  , description: "The browse direction is not valid."});
  /** The node is not part of the view. */
   static BadNodeNotInView: ConstantStatusCode = new ConstantStatusCode({ name: 'BadNodeNotInView' , value: 0x804e0000  , description: "The node is not part of the view."});
+ /** The number was not accepted because of a numeric overflow. */
+  static BadNumericOverflow: ConstantStatusCode = new ConstantStatusCode({ name: 'BadNumericOverflow' , value: 0x81120000  , description: "The number was not accepted because of a numeric overflow."});
  /** The ServerUri is not a valid URI. */
   static BadServerUriInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadServerUriInvalid' , value: 0x804f0000  , description: "The ServerUri is not a valid URI."});
  /** No ServerName was specified. */
@@ -200,10 +210,10 @@
   static BadSempahoreFileMissing: ConstantStatusCode = new ConstantStatusCode({ name: 'BadSempahoreFileMissing' , value: 0x80520000  , description: "The semaphore file specified by the client is not valid."});
  /** The security token request type is not valid. */
   static BadRequestTypeInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadRequestTypeInvalid' , value: 0x80530000  , description: "The security token request type is not valid."});
- /** The security mode does not meet the requirements set by the Server. */
-  static BadSecurityModeRejected: ConstantStatusCode = new ConstantStatusCode({ name: 'BadSecurityModeRejected' , value: 0x80540000  , description: "The security mode does not meet the requirements set by the Server."});
- /** The security policy does not meet the requirements set by the Server. */
-  static BadSecurityPolicyRejected: ConstantStatusCode = new ConstantStatusCode({ name: 'BadSecurityPolicyRejected' , value: 0x80550000  , description: "The security policy does not meet the requirements set by the Server."});
+ /** The security mode does not meet the requirements set by the server. */
+  static BadSecurityModeRejected: ConstantStatusCode = new ConstantStatusCode({ name: 'BadSecurityModeRejected' , value: 0x80540000  , description: "The security mode does not meet the requirements set by the server."});
+ /** The security policy does not meet the requirements set by the server. */
+  static BadSecurityPolicyRejected: ConstantStatusCode = new ConstantStatusCode({ name: 'BadSecurityPolicyRejected' , value: 0x80550000  , description: "The security policy does not meet the requirements set by the server."});
  /** The server has reached its maximum number of sessions. */
   static BadTooManySessions: ConstantStatusCode = new ConstantStatusCode({ name: 'BadTooManySessions' , value: 0x80560000  , description: "The server has reached its maximum number of sessions."});
  /** The user token signature is missing or invalid. */
@@ -212,8 +222,8 @@
   static BadApplicationSignatureInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadApplicationSignatureInvalid' , value: 0x80580000  , description: "The signature generated with the client certificate is missing or invalid."});
  /** The client did not provide at least one software certificate that is valid and meets the profile requirements for the server. */
   static BadNoValidCertificates: ConstantStatusCode = new ConstantStatusCode({ name: 'BadNoValidCertificates' , value: 0x80590000  , description: "The client did not provide at least one software certificate that is valid and meets the profile requirements for the server."});
- /** The Server does not support changing the user identity assigned to the session. */
-  static BadIdentityChangeNotSupported: ConstantStatusCode = new ConstantStatusCode({ name: 'BadIdentityChangeNotSupported' , value: 0x80c60000  , description: "The Server does not support changing the user identity assigned to the session."});
+ /** The server does not support changing the user identity assigned to the session. */
+  static BadIdentityChangeNotSupported: ConstantStatusCode = new ConstantStatusCode({ name: 'BadIdentityChangeNotSupported' , value: 0x80c60000  , description: "The server does not support changing the user identity assigned to the session."});
  /** The request was cancelled by the client with the Cancel service. */
   static BadRequestCancelledByRequest: ConstantStatusCode = new ConstantStatusCode({ name: 'BadRequestCancelledByRequest' , value: 0x805a0000  , description: "The request was cancelled by the client with the Cancel service."});
  /** The parent node id does not to refer to a valid node. */
@@ -282,16 +292,18 @@
   static BadHistoryOperationUnsupported: ConstantStatusCode = new ConstantStatusCode({ name: 'BadHistoryOperationUnsupported' , value: 0x80720000  , description: "The server does not support the requested operation."});
  /** The defined timestamp to return was invalid. */
   static BadInvalidTimestampArgument: ConstantStatusCode = new ConstantStatusCode({ name: 'BadInvalidTimestampArgument' , value: 0x80bd0000  , description: "The defined timestamp to return was invalid."});
- /** The server not does support writing the combination of value */
-  static BadWriteNotSupported: ConstantStatusCode = new ConstantStatusCode({ name: 'BadWriteNotSupported' , value: 0x80730000  , description: "The server not does support writing the combination of value"});
+ /** The server does not support writing the combination of value */
+  static BadWriteNotSupported: ConstantStatusCode = new ConstantStatusCode({ name: 'BadWriteNotSupported' , value: 0x80730000  , description: "The server does not support writing the combination of value"});
  /** The value supplied for the attribute is not of the same type as the attribute's value. */
   static BadTypeMismatch: ConstantStatusCode = new ConstantStatusCode({ name: 'BadTypeMismatch' , value: 0x80740000  , description: "The value supplied for the attribute is not of the same type as the attribute's value."});
  /** The method id does not refer to a method for the specified object. */
   static BadMethodInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadMethodInvalid' , value: 0x80750000  , description: "The method id does not refer to a method for the specified object."});
  /** The client did not specify all of the input arguments for the method. */
   static BadArgumentsMissing: ConstantStatusCode = new ConstantStatusCode({ name: 'BadArgumentsMissing' , value: 0x80760000  , description: "The client did not specify all of the input arguments for the method."});
- /** The server has reached its  maximum number of subscriptions. */
-  static BadTooManySubscriptions: ConstantStatusCode = new ConstantStatusCode({ name: 'BadTooManySubscriptions' , value: 0x80770000  , description: "The server has reached its  maximum number of subscriptions."});
+ /** The executable attribute does not allow the execution of the method. */
+  static BadNotExecutable: ConstantStatusCode = new ConstantStatusCode({ name: 'BadNotExecutable' , value: 0x81110000  , description: "The executable attribute does not allow the execution of the method."});
+ /** The server has reached its maximum number of subscriptions. */
+  static BadTooManySubscriptions: ConstantStatusCode = new ConstantStatusCode({ name: 'BadTooManySubscriptions' , value: 0x80770000  , description: "The server has reached its maximum number of subscriptions."});
  /** The server has reached the maximum number of queued publish requests. */
   static BadTooManyPublishRequests: ConstantStatusCode = new ConstantStatusCode({ name: 'BadTooManyPublishRequests' , value: 0x80780000  , description: "The server has reached the maximum number of queued publish requests."});
  /** There is no subscription available for this session. */
@@ -300,10 +312,12 @@
   static BadSequenceNumberUnknown: ConstantStatusCode = new ConstantStatusCode({ name: 'BadSequenceNumberUnknown' , value: 0x807a0000  , description: "The sequence number is unknown to the server."});
  /** The requested notification message is no longer available. */
   static BadMessageNotAvailable: ConstantStatusCode = new ConstantStatusCode({ name: 'BadMessageNotAvailable' , value: 0x807b0000  , description: "The requested notification message is no longer available."});
- /** The Client of the current Session does not support one or more Profiles that are necessary for the Subscription. */
-  static BadInsufficientClientProfile: ConstantStatusCode = new ConstantStatusCode({ name: 'BadInsufficientClientProfile' , value: 0x807c0000  , description: "The Client of the current Session does not support one or more Profiles that are necessary for the Subscription."});
+ /** The client of the current session does not support one or more Profiles that are necessary for the subscription. */
+  static BadInsufficientClientProfile: ConstantStatusCode = new ConstantStatusCode({ name: 'BadInsufficientClientProfile' , value: 0x807c0000  , description: "The client of the current session does not support one or more Profiles that are necessary for the subscription."});
  /** The sub-state machine is not currently active. */
   static BadStateNotActive: ConstantStatusCode = new ConstantStatusCode({ name: 'BadStateNotActive' , value: 0x80bf0000  , description: "The sub-state machine is not currently active."});
+ /** An equivalent rule already exists. */
+  static BadAlreadyExists: ConstantStatusCode = new ConstantStatusCode({ name: 'BadAlreadyExists' , value: 0x81150000  , description: "An equivalent rule already exists."});
  /** The server cannot process the request because it is too busy. */
   static BadTcpServerTooBusy: ConstantStatusCode = new ConstantStatusCode({ name: 'BadTcpServerTooBusy' , value: 0x807d0000  , description: "The server cannot process the request because it is too busy."});
  /** The type of the message specified in the header invalid. */
@@ -316,8 +330,8 @@
   static BadTcpNotEnoughResources: ConstantStatusCode = new ConstantStatusCode({ name: 'BadTcpNotEnoughResources' , value: 0x80810000  , description: "There are not enough resources to process the request."});
  /** An internal error occurred. */
   static BadTcpInternalError: ConstantStatusCode = new ConstantStatusCode({ name: 'BadTcpInternalError' , value: 0x80820000  , description: "An internal error occurred."});
- /** The Server does not recognize the QueryString specified. */
-  static BadTcpEndpointUrlInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadTcpEndpointUrlInvalid' , value: 0x80830000  , description: "The Server does not recognize the QueryString specified."});
+ /** The server does not recognize the QueryString specified. */
+  static BadTcpEndpointUrlInvalid: ConstantStatusCode = new ConstantStatusCode({ name: 'BadTcpEndpointUrlInvalid' , value: 0x80830000  , description: "The server does not recognize the QueryString specified."});
  /** The request could not be sent because of a network interruption. */
   static BadRequestInterrupted: ConstantStatusCode = new ConstantStatusCode({ name: 'BadRequestInterrupted' , value: 0x80840000  , description: "The request could not be sent because of a network interruption."});
  /** Timeout occurred while processing the request. */
@@ -418,10 +432,12 @@
   static BadAggregateInvalidInputs: ConstantStatusCode = new ConstantStatusCode({ name: 'BadAggregateInvalidInputs' , value: 0x80d60000  , description: "The aggregate value could not be derived due to invalid data inputs."});
  /** The aggregate configuration is not valid for specified node. */
   static BadAggregateConfigurationRejected: ConstantStatusCode = new ConstantStatusCode({ name: 'BadAggregateConfigurationRejected' , value: 0x80da0000  , description: "The aggregate configuration is not valid for specified node."});
- /** The request pecifies fields which are not valid for the EventType or cannot be saved by the historian. */
-  static GoodDataIgnored: ConstantStatusCode = new ConstantStatusCode({ name: 'GoodDataIgnored' , value: 0xd90000  , description: "The request pecifies fields which are not valid for the EventType or cannot be saved by the historian."});
+ /** The request specifies fields which are not valid for the EventType or cannot be saved by the historian. */
+  static GoodDataIgnored: ConstantStatusCode = new ConstantStatusCode({ name: 'GoodDataIgnored' , value: 0xd90000  , description: "The request specifies fields which are not valid for the EventType or cannot be saved by the historian."});
  /** The request was rejected by the server because it did not meet the criteria set by the server. */
   static BadRequestNotAllowed: ConstantStatusCode = new ConstantStatusCode({ name: 'BadRequestNotAllowed' , value: 0x80e40000  , description: "The request was rejected by the server because it did not meet the criteria set by the server."});
+ /** The request has not been processed by the server yet. */
+  static BadRequestNotComplete: ConstantStatusCode = new ConstantStatusCode({ name: 'BadRequestNotComplete' , value: 0x81130000  , description: "The request has not been processed by the server yet."});
  /** The value does not come from the real source and has been edited by the server. */
   static GoodEdited: ConstantStatusCode = new ConstantStatusCode({ name: 'GoodEdited' , value: 0xdc0000  , description: "The value does not come from the real source and has been edited by the server."});
  /** There was an error in execution of these post-actions. */
@@ -436,6 +452,24 @@
   static UncertainDependentValueChanged: ConstantStatusCode = new ConstantStatusCode({ name: 'UncertainDependentValueChanged' , value: 0x40e20000  , description: "A dependent value has been changed but the change has not been applied to the device. The quality of the dominant variable is uncertain."});
  /** A dependent value has been changed but the change has not been applied to the device. The quality of the dominant variable is Bad. */
   static BadDependentValueChanged: ConstantStatusCode = new ConstantStatusCode({ name: 'BadDependentValueChanged' , value: 0x80e30000  , description: "A dependent value has been changed but the change has not been applied to the device. The quality of the dominant variable is Bad."});
+ /** It is delivered with a dominant Variable value when a dependent Variable has changed but the change has not been applied. */
+  static GoodEdited_DependentValueChanged: ConstantStatusCode = new ConstantStatusCode({ name: 'GoodEdited_DependentValueChanged' , value: 0x1160000  , description: "It is delivered with a dominant Variable value when a dependent Variable has changed but the change has not been applied."});
+ /** It is delivered with a dependent Variable value when a dominant Variable has changed but the change has not been applied. */
+  static GoodEdited_DominantValueChanged: ConstantStatusCode = new ConstantStatusCode({ name: 'GoodEdited_DominantValueChanged' , value: 0x1170000  , description: "It is delivered with a dependent Variable value when a dominant Variable has changed but the change has not been applied."});
+ /** It is delivered with a dependent Variable value when a dominant or dependent Variable has changed but change has not been applied. */
+  static GoodEdited_DominantValueChanged_DependentValueChanged: ConstantStatusCode = new ConstantStatusCode({ name: 'GoodEdited_DominantValueChanged_DependentValueChanged' , value: 0x1180000  , description: "It is delivered with a dependent Variable value when a dominant or dependent Variable has changed but change has not been applied."});
+ /** It is delivered with a Variable value when Variable has changed but the value is not legal. */
+  static BadEdited_OutOfRange: ConstantStatusCode = new ConstantStatusCode({ name: 'BadEdited_OutOfRange' , value: 0x81190000  , description: "It is delivered with a Variable value when Variable has changed but the value is not legal."});
+ /** It is delivered with a Variable value when a source Variable has changed but the value is not legal. */
+  static BadInitialValue_OutOfRange: ConstantStatusCode = new ConstantStatusCode({ name: 'BadInitialValue_OutOfRange' , value: 0x811a0000  , description: "It is delivered with a Variable value when a source Variable has changed but the value is not legal."});
+ /** It is delivered with a dependent Variable value when a dominant Variable has changed and the value is not legal. */
+  static BadOutOfRange_DominantValueChanged: ConstantStatusCode = new ConstantStatusCode({ name: 'BadOutOfRange_DominantValueChanged' , value: 0x811b0000  , description: "It is delivered with a dependent Variable value when a dominant Variable has changed and the value is not legal."});
+ /** It is delivered with a dependent Variable value when a dominant Variable has changed */
+  static BadEdited_OutOfRange_DominantValueChanged: ConstantStatusCode = new ConstantStatusCode({ name: 'BadEdited_OutOfRange_DominantValueChanged' , value: 0x811c0000  , description: "It is delivered with a dependent Variable value when a dominant Variable has changed"});
+ /** It is delivered with a dependent Variable value when a dominant or dependent Variable has changed and the value is not legal. */
+  static BadOutOfRange_DominantValueChanged_DependentValueChanged: ConstantStatusCode = new ConstantStatusCode({ name: 'BadOutOfRange_DominantValueChanged_DependentValueChanged' , value: 0x811d0000  , description: "It is delivered with a dependent Variable value when a dominant or dependent Variable has changed and the value is not legal."});
+ /** It is delivered with a dependent Variable value when a dominant or dependent Variable has changed */
+  static BadEdited_OutOfRange_DominantValueChanged_DependentValueChanged: ConstantStatusCode = new ConstantStatusCode({ name: 'BadEdited_OutOfRange_DominantValueChanged_DependentValueChanged' , value: 0x811e0000  , description: "It is delivered with a dependent Variable value when a dominant or dependent Variable has changed"});
  /** The communication layer has raised an event. */
   static GoodCommunicationEvent: ConstantStatusCode = new ConstantStatusCode({ name: 'GoodCommunicationEvent' , value: 0xa70000  , description: "The communication layer has raised an event."});
  /** The system is shutting down. */
