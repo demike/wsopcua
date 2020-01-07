@@ -103,6 +103,9 @@ export function coerceExpandedNodeId(value): ExpandedNodeId {
             namespaceUri = value.substring(4, idStart );
             value = value.substring(idStart + 1);
         }
+    } else if (value instanceof Object) {
+        namespaceUri = value.namespaceUri;
+        serverIndex = value.serverIndex;
     }
 
     const n = coerceNodeId(value);

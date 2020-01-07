@@ -114,5 +114,17 @@ describe('testing ExpandedNodeId', function () {
         })
       );
 
+      it('coerceExpandedNodeId should coerce an object with svr=2 and nsu="testuri"', function () {
+        const obj = {
+            namespaceUri: 'testuri',
+            serverIndex: 2,
+            value: 10
+        }
+
+        const exNodeId = coerceExpandedNodeId(obj);
+        expect(exNodeId.toString()).toBe('svr=2;nsu=testuri;ns=0;i=10');
+
+    });
+
 
 });
