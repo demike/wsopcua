@@ -42,15 +42,19 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
             true, null, bitLength, isArr
         );
 
-        if (this.cls.BaseClass && this.cls.BaseClass.getMemberByName(mem.Name) != null) {
-            // this member is already present in the parent class
-            return true;
-        }
-
         if (lengthField != null) {
             // we found an array type --> lets remove the array length member entry,
             // because every array is preceeded by a 32 bit integer and this is handled by arrayDecode/Encode
             this.cls.removeMember(lengthField);
+        }
+
+        let baseClass = this.cls.BaseClass;
+        while (baseClass) {
+            if (baseClass.getMemberByName(mem.Name) != null) {
+                 // this member is already present in the parent class
+                return true;
+            }
+            baseClass = baseClass.BaseClass;
         }
 
         if (mem.Type.Name == 'Bit') {

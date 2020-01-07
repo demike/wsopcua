@@ -3,15 +3,14 @@
  do not modify, changes will be overwritten
 */
 
-import * as ec from '../basic-types';
 import {ModificationInfo} from './ModificationInfo';
 import {decodeModificationInfo} from './ModificationInfo';
+import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {HistoryData} from './HistoryData';
 import {IHistoryData} from './HistoryData';
 
 export interface IHistoryModifiedData extends IHistoryData {
-  noOfDataValues?: ec.Int32;
   modificationInfos?: ModificationInfo[];
 }
 
@@ -20,13 +19,11 @@ export interface IHistoryModifiedData extends IHistoryData {
 */
 
 export class HistoryModifiedData extends HistoryData {
-  noOfDataValues: ec.Int32;
   modificationInfos: ModificationInfo[];
 
  constructor( options?: IHistoryModifiedData) {
   options = options || {};
   super(options);
-  this.noOfDataValues = (options.noOfDataValues != null) ? options.noOfDataValues : 0;
   this.modificationInfos = (options.modificationInfos != null) ? options.modificationInfos : [];
 
  }
@@ -34,7 +31,6 @@ export class HistoryModifiedData extends HistoryData {
 
  encode( out: DataStream) {
   super.encode(out);
-  ec.encodeInt32(this.noOfDataValues, out);
   ec.encodeArray(this.modificationInfos, out);
 
  }
@@ -42,7 +38,6 @@ export class HistoryModifiedData extends HistoryData {
 
  decode( inp: DataStream) {
   super.decode(inp);
-  this.noOfDataValues = ec.decodeInt32(inp);
   this.modificationInfos = ec.decodeArray(inp, decodeModificationInfo);
 
  }
@@ -53,7 +48,6 @@ export class HistoryModifiedData extends HistoryData {
    target = new HistoryModifiedData();
   }
   super.clone(target);
-  target.noOfDataValues = this.noOfDataValues;
   if (this.modificationInfos) { target.modificationInfos = ec.cloneComplexArray(this.modificationInfos); }
   return target;
  }

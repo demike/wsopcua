@@ -12,10 +12,6 @@ import {DataTypeSchemaHeader} from './DataTypeSchemaHeader';
 import {IDataTypeSchemaHeader} from './DataTypeSchemaHeader';
 
 export interface IUABinaryFileDataType extends IDataTypeSchemaHeader {
-  noOfNamespaces?: ec.Int32;
-  noOfStructureDataTypes?: ec.Int32;
-  noOfEnumDataTypes?: ec.Int32;
-  noOfSimpleDataTypes?: ec.Int32;
   schemaLocation?: string;
   fileHeader?: KeyValuePair[];
   body?: Variant;
@@ -26,10 +22,6 @@ export interface IUABinaryFileDataType extends IDataTypeSchemaHeader {
 */
 
 export class UABinaryFileDataType extends DataTypeSchemaHeader {
-  noOfNamespaces: ec.Int32;
-  noOfStructureDataTypes: ec.Int32;
-  noOfEnumDataTypes: ec.Int32;
-  noOfSimpleDataTypes: ec.Int32;
   schemaLocation: string | null;
   fileHeader: KeyValuePair[];
   body: Variant;
@@ -37,10 +29,6 @@ export class UABinaryFileDataType extends DataTypeSchemaHeader {
  constructor( options?: IUABinaryFileDataType) {
   options = options || {};
   super(options);
-  this.noOfNamespaces = (options.noOfNamespaces != null) ? options.noOfNamespaces : 0;
-  this.noOfStructureDataTypes = (options.noOfStructureDataTypes != null) ? options.noOfStructureDataTypes : 0;
-  this.noOfEnumDataTypes = (options.noOfEnumDataTypes != null) ? options.noOfEnumDataTypes : 0;
-  this.noOfSimpleDataTypes = (options.noOfSimpleDataTypes != null) ? options.noOfSimpleDataTypes : 0;
   this.schemaLocation = (options.schemaLocation != null) ? options.schemaLocation : null;
   this.fileHeader = (options.fileHeader != null) ? options.fileHeader : [];
   this.body = (options.body != null) ? options.body : new Variant();
@@ -50,10 +38,6 @@ export class UABinaryFileDataType extends DataTypeSchemaHeader {
 
  encode( out: DataStream) {
   super.encode(out);
-  ec.encodeInt32(this.noOfNamespaces, out);
-  ec.encodeInt32(this.noOfStructureDataTypes, out);
-  ec.encodeInt32(this.noOfEnumDataTypes, out);
-  ec.encodeInt32(this.noOfSimpleDataTypes, out);
   ec.encodeString(this.schemaLocation, out);
   ec.encodeArray(this.fileHeader, out);
   this.body.encode(out);
@@ -63,10 +47,6 @@ export class UABinaryFileDataType extends DataTypeSchemaHeader {
 
  decode( inp: DataStream) {
   super.decode(inp);
-  this.noOfNamespaces = ec.decodeInt32(inp);
-  this.noOfStructureDataTypes = ec.decodeInt32(inp);
-  this.noOfEnumDataTypes = ec.decodeInt32(inp);
-  this.noOfSimpleDataTypes = ec.decodeInt32(inp);
   this.schemaLocation = ec.decodeString(inp);
   this.fileHeader = ec.decodeArray(inp, decodeKeyValuePair);
   this.body.decode(inp);
@@ -79,10 +59,6 @@ export class UABinaryFileDataType extends DataTypeSchemaHeader {
    target = new UABinaryFileDataType();
   }
   super.clone(target);
-  target.noOfNamespaces = this.noOfNamespaces;
-  target.noOfStructureDataTypes = this.noOfStructureDataTypes;
-  target.noOfEnumDataTypes = this.noOfEnumDataTypes;
-  target.noOfSimpleDataTypes = this.noOfSimpleDataTypes;
   target.schemaLocation = this.schemaLocation;
   if (this.fileHeader) { target.fileHeader = ec.cloneComplexArray(this.fileHeader); }
   if (this.body) { target.body = this.body.clone(); }

@@ -12,8 +12,6 @@ import {PubSubGroupDataType} from './PubSubGroupDataType';
 import {IPubSubGroupDataType} from './PubSubGroupDataType';
 
 export interface IWriterGroupDataType extends IPubSubGroupDataType {
-  noOfSecurityKeyServices?: ec.Int32;
-  noOfGroupProperties?: ec.Int32;
   writerGroupId?: ec.UInt16;
   publishingInterval?: ec.Double;
   keepAliveTime?: ec.Double;
@@ -30,8 +28,6 @@ export interface IWriterGroupDataType extends IPubSubGroupDataType {
 */
 
 export class WriterGroupDataType extends PubSubGroupDataType {
-  noOfSecurityKeyServices: ec.Int32;
-  noOfGroupProperties: ec.Int32;
   writerGroupId: ec.UInt16;
   publishingInterval: ec.Double;
   keepAliveTime: ec.Double;
@@ -45,8 +41,6 @@ export class WriterGroupDataType extends PubSubGroupDataType {
  constructor( options?: IWriterGroupDataType) {
   options = options || {};
   super(options);
-  this.noOfSecurityKeyServices = (options.noOfSecurityKeyServices != null) ? options.noOfSecurityKeyServices : 0;
-  this.noOfGroupProperties = (options.noOfGroupProperties != null) ? options.noOfGroupProperties : 0;
   this.writerGroupId = (options.writerGroupId != null) ? options.writerGroupId : 0;
   this.publishingInterval = (options.publishingInterval != null) ? options.publishingInterval : 0;
   this.keepAliveTime = (options.keepAliveTime != null) ? options.keepAliveTime : 0;
@@ -62,8 +56,6 @@ export class WriterGroupDataType extends PubSubGroupDataType {
 
  encode( out: DataStream) {
   super.encode(out);
-  ec.encodeInt32(this.noOfSecurityKeyServices, out);
-  ec.encodeInt32(this.noOfGroupProperties, out);
   ec.encodeUInt16(this.writerGroupId, out);
   ec.encodeDouble(this.publishingInterval, out);
   ec.encodeDouble(this.keepAliveTime, out);
@@ -79,8 +71,6 @@ export class WriterGroupDataType extends PubSubGroupDataType {
 
  decode( inp: DataStream) {
   super.decode(inp);
-  this.noOfSecurityKeyServices = ec.decodeInt32(inp);
-  this.noOfGroupProperties = ec.decodeInt32(inp);
   this.writerGroupId = ec.decodeUInt16(inp);
   this.publishingInterval = ec.decodeDouble(inp);
   this.keepAliveTime = ec.decodeDouble(inp);
@@ -99,8 +89,6 @@ export class WriterGroupDataType extends PubSubGroupDataType {
    target = new WriterGroupDataType();
   }
   super.clone(target);
-  target.noOfSecurityKeyServices = this.noOfSecurityKeyServices;
-  target.noOfGroupProperties = this.noOfGroupProperties;
   target.writerGroupId = this.writerGroupId;
   target.publishingInterval = this.publishingInterval;
   target.keepAliveTime = this.keepAliveTime;

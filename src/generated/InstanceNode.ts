@@ -3,15 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {Node} from './Node';
 import {INode} from './Node';
 
 export interface IInstanceNode extends INode {
-  noOfRolePermissions?: ec.Int32;
-  noOfUserRolePermissions?: ec.Int32;
-  noOfReferences?: ec.Int32;
 }
 
 /**
@@ -19,34 +15,22 @@ export interface IInstanceNode extends INode {
 */
 
 export class InstanceNode extends Node {
-  noOfRolePermissions: ec.Int32;
-  noOfUserRolePermissions: ec.Int32;
-  noOfReferences: ec.Int32;
 
  constructor( options?: IInstanceNode) {
   options = options || {};
   super(options);
-  this.noOfRolePermissions = (options.noOfRolePermissions != null) ? options.noOfRolePermissions : 0;
-  this.noOfUserRolePermissions = (options.noOfUserRolePermissions != null) ? options.noOfUserRolePermissions : 0;
-  this.noOfReferences = (options.noOfReferences != null) ? options.noOfReferences : 0;
 
  }
 
 
  encode( out: DataStream) {
   super.encode(out);
-  ec.encodeInt32(this.noOfRolePermissions, out);
-  ec.encodeInt32(this.noOfUserRolePermissions, out);
-  ec.encodeInt32(this.noOfReferences, out);
 
  }
 
 
  decode( inp: DataStream) {
   super.decode(inp);
-  this.noOfRolePermissions = ec.decodeInt32(inp);
-  this.noOfUserRolePermissions = ec.decodeInt32(inp);
-  this.noOfReferences = ec.decodeInt32(inp);
 
  }
 
@@ -56,9 +40,6 @@ export class InstanceNode extends Node {
    target = new InstanceNode();
   }
   super.clone(target);
-  target.noOfRolePermissions = this.noOfRolePermissions;
-  target.noOfUserRolePermissions = this.noOfUserRolePermissions;
-  target.noOfReferences = this.noOfReferences;
   return target;
  }
 

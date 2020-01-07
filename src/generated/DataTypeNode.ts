@@ -4,30 +4,12 @@
 */
 
 import * as ec from '../basic-types';
-import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
-import {QualifiedName} from './QualifiedName';
-import {LocalizedText} from './LocalizedText';
-import {RolePermissionType} from './RolePermissionType';
-import {decodeRolePermissionType} from './RolePermissionType';
-import {ReferenceNode} from './ReferenceNode';
-import {decodeReferenceNode} from './ReferenceNode';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 import {TypeNode} from './TypeNode';
 import {ITypeNode} from './TypeNode';
 
 export interface IDataTypeNode extends ITypeNode {
-  nodeId?: ec.NodeId;
-  nodeClass?: NodeClass;
-  browseName?: QualifiedName;
-  displayName?: LocalizedText;
-  description?: LocalizedText;
-  writeMask?: ec.UInt32;
-  userWriteMask?: ec.UInt32;
-  rolePermissions?: RolePermissionType[];
-  userRolePermissions?: RolePermissionType[];
-  accessRestrictions?: ec.UInt16;
-  references?: ReferenceNode[];
   isAbstract?: boolean;
   dataTypeDefinition?: ExtensionObject;
 }
@@ -37,34 +19,12 @@ export interface IDataTypeNode extends ITypeNode {
 */
 
 export class DataTypeNode extends TypeNode {
-  nodeId: ec.NodeId;
-  nodeClass: NodeClass;
-  browseName: QualifiedName;
-  displayName: LocalizedText;
-  description: LocalizedText;
-  writeMask: ec.UInt32;
-  userWriteMask: ec.UInt32;
-  rolePermissions: RolePermissionType[];
-  userRolePermissions: RolePermissionType[];
-  accessRestrictions: ec.UInt16;
-  references: ReferenceNode[];
   isAbstract: boolean;
   dataTypeDefinition: ExtensionObject | null;
 
  constructor( options?: IDataTypeNode) {
   options = options || {};
   super(options);
-  this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
-  this.nodeClass = (options.nodeClass != null) ? options.nodeClass : null;
-  this.browseName = (options.browseName != null) ? options.browseName : new QualifiedName();
-  this.displayName = (options.displayName != null) ? options.displayName : new LocalizedText();
-  this.description = (options.description != null) ? options.description : new LocalizedText();
-  this.writeMask = (options.writeMask != null) ? options.writeMask : 0;
-  this.userWriteMask = (options.userWriteMask != null) ? options.userWriteMask : 0;
-  this.rolePermissions = (options.rolePermissions != null) ? options.rolePermissions : [];
-  this.userRolePermissions = (options.userRolePermissions != null) ? options.userRolePermissions : [];
-  this.accessRestrictions = (options.accessRestrictions != null) ? options.accessRestrictions : 0;
-  this.references = (options.references != null) ? options.references : [];
   this.isAbstract = (options.isAbstract != null) ? options.isAbstract : false;
   this.dataTypeDefinition = (options.dataTypeDefinition != null) ? options.dataTypeDefinition : null;
 
@@ -73,17 +33,6 @@ export class DataTypeNode extends TypeNode {
 
  encode( out: DataStream) {
   super.encode(out);
-  ec.encodeNodeId(this.nodeId, out);
-  encodeNodeClass(this.nodeClass, out);
-  this.browseName.encode(out);
-  this.displayName.encode(out);
-  this.description.encode(out);
-  ec.encodeUInt32(this.writeMask, out);
-  ec.encodeUInt32(this.userWriteMask, out);
-  ec.encodeArray(this.rolePermissions, out);
-  ec.encodeArray(this.userRolePermissions, out);
-  ec.encodeUInt16(this.accessRestrictions, out);
-  ec.encodeArray(this.references, out);
   ec.encodeBoolean(this.isAbstract, out);
   encodeExtensionObject(this.dataTypeDefinition, out);
 
@@ -92,17 +41,6 @@ export class DataTypeNode extends TypeNode {
 
  decode( inp: DataStream) {
   super.decode(inp);
-  this.nodeId = ec.decodeNodeId(inp);
-  this.nodeClass = decodeNodeClass(inp);
-  this.browseName.decode(inp);
-  this.displayName.decode(inp);
-  this.description.decode(inp);
-  this.writeMask = ec.decodeUInt32(inp);
-  this.userWriteMask = ec.decodeUInt32(inp);
-  this.rolePermissions = ec.decodeArray(inp, decodeRolePermissionType);
-  this.userRolePermissions = ec.decodeArray(inp, decodeRolePermissionType);
-  this.accessRestrictions = ec.decodeUInt16(inp);
-  this.references = ec.decodeArray(inp, decodeReferenceNode);
   this.isAbstract = ec.decodeBoolean(inp);
   this.dataTypeDefinition = decodeExtensionObject(inp);
 
@@ -114,17 +52,6 @@ export class DataTypeNode extends TypeNode {
    target = new DataTypeNode();
   }
   super.clone(target);
-  target.nodeId = this.nodeId;
-  target.nodeClass = this.nodeClass;
-  if (this.browseName) { target.browseName = this.browseName.clone(); }
-  if (this.displayName) { target.displayName = this.displayName.clone(); }
-  if (this.description) { target.description = this.description.clone(); }
-  target.writeMask = this.writeMask;
-  target.userWriteMask = this.userWriteMask;
-  if (this.rolePermissions) { target.rolePermissions = ec.cloneComplexArray(this.rolePermissions); }
-  if (this.userRolePermissions) { target.userRolePermissions = ec.cloneComplexArray(this.userRolePermissions); }
-  target.accessRestrictions = this.accessRestrictions;
-  if (this.references) { target.references = ec.cloneComplexArray(this.references); }
   target.isAbstract = this.isAbstract;
   target.dataTypeDefinition = this.dataTypeDefinition;
   return target;
