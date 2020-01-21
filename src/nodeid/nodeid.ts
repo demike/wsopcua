@@ -231,8 +231,8 @@ const ReferenceTypeIds = constants.ReferenceTypeIds;
 
 
 // reverse maps
-let _nodeid_to_name_index : {[name: number]: string} = {};
-let _name_to_nodeid_index : {[name: string]: NodeId} = {};
+let _nodeid_to_name_index: {[name: number]: string} = {};
+let _name_to_nodeid_index: {[name: string]: NodeId} = {};
 
 function expand_map(direct_index: {[name: string]: number}) {
     for (const name in direct_index) {

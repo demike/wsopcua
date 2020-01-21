@@ -51,7 +51,7 @@ export class MonitoredItemGroup extends EventEmitter<MonitoredItemGroupEvents> {
     protected _timestampsToReturn: TimestampsToReturn;
     protected _monitoringMode: MonitoringMode;
 constructor (subscription: ClientSubscription, itemsToMonitor: IReadValueId[],
-                monitoringParameters: IMonitoringParameters, timestampsToReturn: TimestampsToReturn) {
+                monitoringParameters: IMonitoringParameters | IMonitoringParameters[], timestampsToReturn: TimestampsToReturn) {
     super();
     assert(Array.isArray(itemsToMonitor));
 
@@ -59,9 +59,18 @@ constructor (subscription: ClientSubscription, itemsToMonitor: IReadValueId[],
 
     this._subscription = subscription;
 
-    this._monitoredItems = itemsToMonitor.map(function (itemToMonitor) {
-        return new MonitoredItemBase(subscription, itemToMonitor, monitoringParameters);
-    });
+    if (Array.isArray(monitoringParameters)) {
+        assert(itemsToMonitor.length === monitoringParameters.length,
+            `itemsToMonitor.length: ${itemsToMonitor.length} differs from monitoringParameters.length: ${monitoringParameters.length}`);
+        this._monitoredItems = [];
+        for (let i = 0; i < itemsToMonitor.length; i++) {
+            this._monitoredItems.push(new MonitoredItemBase(subscription, itemsToMonitor[i], monitoringParameters[i]));
+        }
+    } else {
+        this._monitoredItems = itemsToMonitor.map(function (itemToMonitor) {
+            return new MonitoredItemBase(subscription, itemToMonitor, monitoringParameters);
+        });
+    }
 
     this._timestampsToReturn = timestampsToReturn;
     this._monitoringMode = subscription_service.MonitoringMode.Reporting;
@@ -187,7 +196,14 @@ public setMonitoringModeP(monitoringMode: MonitoringMode): Promise<StatusCode[]>
     }); });
 }
 
-public onChanged(callback: (item: MonitoredItemBase, dataValue: DataValue, index: number) => void) {
+/**
+ * the return type of the changed value:
+ *   event:             Variant[]
+ *   (value)attribute:  DataValue
+ * @param callback the callback to register for the changed event
+ */
+public onChanged(callback: (item: MonitoredItemBase,
+    changedValue: DataValue /* a value change */| Variant[] /* an event */, index: number) => void) {
     this.on('changed', callback);
 }
 

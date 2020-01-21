@@ -621,14 +621,19 @@ return new Promise((res, rej) => {this.monitor(itemToMonitor, requestedParameter
 /**
  * add monitored items to the subscription
  * waits for the subscription to be ready
- * 
+ *
+ * if @param requestedParameters is a single instance this parameter set is used for
+ * all monitored items
+ * if it is an array every itemToMonitor gets its own parameter set, that means 
+ * both array lengths have to be equal
+ *
  * @method monitorItems
  * @param itemsToMonitor
  * @param requestedParameters
  * @param timestampsToReturn
  * @param done
  */
-public monitorItems(itemsToMonitor: IReadValueId[], requestedParameters: IMonitoringParameters,
+public monitorItems(itemsToMonitor: IReadValueId[], requestedParameters: IMonitoringParameters | IMonitoringParameters[],
     timestampsToReturn?: TimestampsToReturn, done?: (err: Error|null, mItemGroup?: MonitoredItemGroup ) => void ): MonitoredItemGroup {
     // Try to resolve the nodeId and fail fast if we can't.
     itemsToMonitor.forEach(function (itemToMonitor) {
@@ -650,7 +655,8 @@ public monitorItems(itemsToMonitor: IReadValueId[], requestedParameters: IMonito
     });
     return monitoredItemGroup;
 }
-public monitorItemsP(itemsToMonitor: IReadValueId[], requestedParameters: IMonitoringParameters, timestampsToReturn: TimestampsToReturn):
+public monitorItemsP(itemsToMonitor: IReadValueId[], requestedParameters:
+    IMonitoringParameters | IMonitoringParameters[], timestampsToReturn: TimestampsToReturn):
 Promise<MonitoredItemGroup> {
 return new Promise((res, rej) => {this.monitorItems(itemsToMonitor, requestedParameters, timestampsToReturn, (err, monitoredItemGroup) => {
     if (err) { rej(err); } else { res(monitoredItemGroup); }
