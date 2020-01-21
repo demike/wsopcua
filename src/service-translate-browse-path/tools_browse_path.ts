@@ -7,12 +7,13 @@
  */
 
 import {BrowsePath} from '../generated/BrowsePath';
-import {makeNodeId} from '../nodeid/nodeid';
+import {makeNodeId, NodeId} from '../nodeid/nodeid';
 import {ReferenceTypeIds} from '../constants';
 import { RelativePath} from '../generated/RelativePath';
 import { RelativePathElement } from '../generated/RelativePathElement';
+import { QualifiedName } from '../generated';
 
-var hierarchicalReferencesId = makeNodeId(ReferenceTypeIds.HierarchicalReferences);
+const hierarchicalReferencesId = makeNodeId(ReferenceTypeIds.HierarchicalReferences);
 
 
 export {stringToQualifiedName} from '../data-model/';
@@ -22,20 +23,22 @@ export {stringToQualifiedName} from '../data-model/';
  * @param browsePath
  * @return {number|*|BrowsePath}
  */
-export function constructBrowsePathFromQualifiedName(startingNode, browsePath) {
+export function constructBrowsePathFromQualifiedName(
+    startingNode: { nodeId: NodeId },
+    targetNames: QualifiedName[] |  null) {
 
-    browsePath = browsePath || [];
-    
-    var elements : RelativePathElement[] = browsePath.map(function (targetName) {
-        return {
+    targetNames = targetNames || [];
+
+    const elements: RelativePathElement[] = targetNames.map(function (targetName) {
+        return new RelativePathElement({
             referenceTypeId: hierarchicalReferencesId,
             isInverse: false,
             includeSubtypes: true,
             targetName: targetName
-        };
+        });
     });
 
-    browsePath = new BrowsePath({
+    const browsePath = new BrowsePath({
         startingNode: startingNode.nodeId, // ROOT
         relativePath: new RelativePath({
             elements: elements,

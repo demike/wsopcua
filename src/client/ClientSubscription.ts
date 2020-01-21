@@ -624,7 +624,7 @@ return new Promise((res, rej) => {this.monitor(itemToMonitor, requestedParameter
  *
  * if @param requestedParameters is a single instance this parameter set is used for
  * all monitored items
- * if it is an array every itemToMonitor gets its own parameter set, that means 
+ * if it is an array every itemToMonitor gets its own parameter set, that means
  * both array lengths have to be equal
  *
  * @method monitorItems
