@@ -122,6 +122,14 @@ export abstract class StatusCode {
         return (this.value & mask) === mask;
     }
 
+    /**
+     * checks if any of the mask's bits is present in the value
+     * @param mask the bit mask
+     */
+    public checkAnyBit(mask: number): boolean {
+        return (this.value & mask) !== 0;
+    }
+
     /**returns true if the overflow bit is set */
     public get hasOverflowBit(): boolean {
         return this.checkBit(ExtraStatusCodeBits.Overflow);
