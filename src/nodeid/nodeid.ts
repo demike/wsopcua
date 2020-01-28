@@ -125,9 +125,9 @@ toJSON(): string {
 
 /**
  * @method isEmpty
- * @return {Boolean} true if the NodeId is null or empty
+ * @return {boolean} true if the NodeId is null or empty
  */
-isEmpty(): Boolean {
+isEmpty(): boolean {
     switch (this.identifierType) {
         case NodeIdType.Numeric:
             return this.value === 0;
