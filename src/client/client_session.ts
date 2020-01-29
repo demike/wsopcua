@@ -991,7 +991,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             }); });
     }
 
-    public emitCloseEvent(statusCode?: StatusCode) {
+    public emitCloseEvent(statusCode: StatusCode = StatusCodes.Good) {
         if (!this._closeEventHasBeenEmmitted) {
             debugLog('ClientSession#emitCloseEvent');
             this._closeEventHasBeenEmmitted = true;
