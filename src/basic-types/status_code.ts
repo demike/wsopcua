@@ -276,7 +276,7 @@ export class ModifiableStatusCode extends StatusCode {
     }
 
     private _getExtraName() {
-        const str = [];
+        const str: string[] = [];
         // tslint:disable-next-line:forin
         for (const key in ExtraStatusCodeBits) {
             const value = ExtraStatusCodeBits[key];

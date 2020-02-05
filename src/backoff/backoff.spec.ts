@@ -26,7 +26,7 @@ describe('Backoff', function() {
         backoff.on('backoff', () => {
             called = true;
         });
-        backoff.backoff(null);
+        backoff.backoff();
 
         expect(called).toBeTruthy( 'Backoff event should be emitted when backoff starts.');
     });
@@ -37,7 +37,7 @@ describe('Backoff', function() {
         backoff.on('backoff', () => {
             called = true;
         });
-        backoff.backoff(null);
+        backoff.backoff();
         jasmine.clock().tick(10);
 
         expect(called).toBeTruthy('Ready event should be emitted when backoff ends.');
@@ -49,7 +49,7 @@ describe('Backoff', function() {
             expect(arg1).toBe(989, 'Backoff event should ' +
             'carry the backoff delay as its second argument.');
         });
-        backoff.backoff(null);
+        backoff.backoff();
     });
 
     it('the ready event should be passed the backoff delay', function() {
@@ -58,7 +58,7 @@ describe('Backoff', function() {
             expect(arg1).toBe(989, 'Ready event should ' +
             'carry the backoff delay as its second argument.');
         });
-        backoff.backoff(null);
+        backoff.backoff();
         jasmine.clock().tick(989);
     });
 
@@ -77,7 +77,7 @@ describe('Backoff', function() {
 
         // Consume first 2 backoffs.
         for (let i = 0; i < 2; i++) {
-            backoff.backoff(null);
+            backoff.backoff();
             jasmine.clock().tick(10);
         }
 
@@ -89,7 +89,7 @@ describe('Backoff', function() {
 
     it('calling backoff while a backoff is in progress should throw an error', function() {
         spyOn<BackoffStrategy>(backoffStrategy, 'next').and.returnValue(10);
-        backoff.backoff(null);
+        backoff.backoff();
 
         // in progress
         expect(backoff.backoff).toThrowError();
@@ -105,7 +105,7 @@ describe('Backoff', function() {
         let called = false;
         backoff.on('ready', () => called = true);
 
-        backoff.backoff(null);
+        backoff.backoff();
 
         backoff.reset();
         jasmine.clock().tick(100);   // 'ready' should not be emitted.
@@ -126,24 +126,26 @@ describe('Backoff', function() {
 
         backoff.failAfter(1);
 
-        backoff.backoff(null);
+        backoff.backoff();
         jasmine.clock().tick(10);
-        backoff.backoff(null);
+        backoff.backoff();
 
         expect(backoffStrategy.reset).toHaveBeenCalled();
     });
 
     it('the backoff number should increase from 0 to N - 1', function() {
         spyOn<BackoffStrategy>(backoffStrategy, 'next').and.returnValue(10);
+        const actualNumbers: number[] = [];
+
         backoff.on('backoff', (arg0) => {
             actualNumbers.push(arg0);
         });
 
         const expectedNumbers = [0, 1, 2, 3, 4];
-        const actualNumbers = [];
+        
 
         for (let i = 0; i < expectedNumbers.length; i++) {
-            backoff.backoff(null);
+            backoff.backoff();
             jasmine.clock().tick(10);
         }
 

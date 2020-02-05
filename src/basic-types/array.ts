@@ -35,7 +35,7 @@ export function encodeArray (arr: Array<any>, stream: DataStream, encode_element
  *                      The  function to decode a single array element. This function returns the element decoded from the stream
  * @param decode_element_func.stream {DataStream}  the stream.
  */
-export function decodeArray<T> (stream: DataStream, decode_element_func?: (stream: DataStream) => T ): T[] {
+export function decodeArray<T> (stream: DataStream, decode_element_func: (stream: DataStream) => T ): T[] | null {
 
 
     const length = stream.getInt32();
@@ -43,7 +43,7 @@ export function decodeArray<T> (stream: DataStream, decode_element_func?: (strea
         return null;
     }
 
-    const arr = [];
+    const arr: T[] = [];
     for (let i = 0; i < length; i++) {
         arr.push(decode_element_func(stream));
     }
@@ -54,7 +54,7 @@ export function decodeArray<T> (stream: DataStream, decode_element_func?: (strea
 
 
 export function cloneArray (arr: any[]) {
-    const out = [];
+    const out: any[] = [];
 
     if (arr && arr.length > 0) {
         for (const item  of arr) {
@@ -66,7 +66,7 @@ export function cloneArray (arr: any[]) {
 }
 
 export function cloneComplexArray(arr: any[]) {
-    const out = [];
+    const out: any[] = [];
 
     if (arr && arr.length > 0) {
         for (const item  of arr) {

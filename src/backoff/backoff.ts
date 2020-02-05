@@ -6,7 +6,7 @@ import { ErrorCallback } from '../client/client_base';
 
 export interface BackoffEvents {
     'fail': ErrorCallback;
-    'backoff': (backoffNumber: number, backoffDelay: number, err: Error) => void;
+    'backoff': (backoffNumber: number, backoffDelay: number, err?: Error) => void;
     'ready': (backoffNumber: number, backoffDelay: number) => void;
 }
 
@@ -46,7 +46,7 @@ export class Backoff extends EventEmitter<BackoffEvents> {
 
     // Starts a backoff operation. Accepts an optional parameter to let the
     // listeners know why the backoff operation was started.
-    public backoff(err: Error) {
+    public backoff(err?: Error) {
         if (this.timeoutID_ !== -1) {
             throw new Error('Backoff in progress.');
         }

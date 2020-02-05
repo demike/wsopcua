@@ -29,5 +29,6 @@ export function call(fn: Function, vargs?, callback?: Function) {
     fn = args[0];
     vargs = args.slice(1, args.length - 1);
     callback = args[args.length - 1];
-    return new FunctionCall(fn, vargs, callback);
+    // tslint:disable-next-line: no-non-null-assertion
+    return new FunctionCall(fn, vargs, callback!);
 }

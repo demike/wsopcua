@@ -28,14 +28,14 @@ export class FunctionCall extends EventEmitter<FunctionCallEvents> {
 
     private state_: FunctionCallState;
     protected retryPredicate_: (err: any) => boolean;
-    protected backoff_: Backoff;
+    protected backoff_?: Backoff;
     protected numRetries_: number;
     protected lastResult_: any[];
     protected callback_: Function;
     protected arguments_: any[];
     protected function_: Function;
     protected failAfter_: number;
-    protected strategy_: BackoffStrategy;
+    protected strategy_?: BackoffStrategy;
 constructor(fn: Function, args: any[], callback: Function) {
     super();
 
@@ -46,8 +46,6 @@ constructor(fn: Function, args: any[], callback: Function) {
     this.lastResult_ = [];
     this.numRetries_ = 0;
 
-    this.backoff_ = null;
-    this.strategy_ = null;
     this.failAfter_ = -1;
     this.retryPredicate_ = FunctionCall.DEFAULT_RETRY_PREDICATE_;
 
@@ -131,7 +129,7 @@ public abort() {
       return;
     }
 
-    if (this.isRunning()) {
+    if (this.isRunning() && this.backoff_) {
         this.backoff_.reset();
     }
 
@@ -198,7 +196,7 @@ protected handleFunctionCallback_() {
     this.emit( <any>['callback'].concat(args));
 
     const err = args[0];
-    if (err && this.retryPredicate_(err)) {
+    if (this.backoff_ && err && this.retryPredicate_(err)) {
         this.backoff_.backoff(err);
     } else {
         this.state_ = FunctionCallState.COMPLETED;

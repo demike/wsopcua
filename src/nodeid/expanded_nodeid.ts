@@ -47,7 +47,7 @@ export class ExpandedNodeId extends NodeId {
     public namespaceUri: null | string;
     public serverIndex: number;
     constructor(identifierType: NodeIdType, value, namespace: number =
-        ExpandedNodeId.UNDEFINED_NAMESPACE, namespaceUri?: string, serverIndex?: number) {
+        ExpandedNodeId.UNDEFINED_NAMESPACE, namespaceUri?: string|null, serverIndex?: number) {
         super(identifierType, value, namespace);
         this.namespaceUri = namespaceUri || null;
         this.serverIndex = serverIndex || 0;
@@ -121,7 +121,7 @@ export function coerceExpandedNodeId(value): ExpandedNodeId {
  * @param [namespace=0] {Integer} the namespace
  * @return {ExpandedNodeId}
  */
-export function makeExpandedNodeId(value: any, namespace?: number, namespaceUri: string = null) {
+export function makeExpandedNodeId(value: any, namespace?: number, namespaceUri: string| null = null) {
 
     if (value === undefined && namespace === undefined) {
         return new ExpandedNodeId(NodeIdType.Numeric, 0, 0, null, 0);
