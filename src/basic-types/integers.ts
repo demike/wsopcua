@@ -70,7 +70,7 @@ export function randomInt32(): number {
     return getRandomInt(-0x80000000, 0x7fffffff);
 }
 export function encodeInt32(value: number, stream: DataStream) {
-    assert(Number.isFinite(value));
+    assert(Number.isFinite(value), 'Number must be finite: ' + value);
     stream.setInt32(value);
 }
 export function decodeInt32(stream: DataStream): number {
