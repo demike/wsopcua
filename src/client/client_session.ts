@@ -548,13 +548,13 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             nodes = [<any>nodes];
         }
 
-        const nodesToRead = [];
+        const nodesToRead: historizing_service.HistoryReadValueId[] = [];
         for (const node of nodes as any[]) {
             nodesToRead.push(new historizing_service.HistoryReadValueId({
                 nodeId: resolveNodeId(node),
-                indexRange: null,
-                dataEncoding: new QualifiedName({ namespaceIndex: 0, name: null }),
-                continuationPoint: null
+                // indexRange: null,
+                // dataEncoding: new QualifiedName({ namespaceIndex: 0, name: undefined }),
+                // continuationPoint: null
             }));
         }
 
