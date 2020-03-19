@@ -2,7 +2,7 @@
 // https://karma-runner.github.io/1.0/config/configuration-file.html
 
 module.exports = function (config) {
-  config.set({
+  return config.set({
     basePath: '',
     frameworks: ['jasmine', 'karma-typescript', 'source-map-support'],
 
@@ -34,7 +34,7 @@ module.exports = function (config) {
       },
 
       coverageOptions: {
-        exclude: [/\.(d|spec)\.ts$/i,/(generated)/,/(tcp_transport)/]
+        exclude: [/\.(d|spec|e2e-spec)\.ts$/i,/(generated)/,/(tcp_transport)/]
       },
       
 
@@ -47,9 +47,8 @@ module.exports = function (config) {
       },
       
       exclude: [
-        "src/**/*.d.ts",
         "src/**/node_modules",
-        "src/schema_parser/*",
+        "src/schema_parser/**/*",
       ],
   },
 /*
