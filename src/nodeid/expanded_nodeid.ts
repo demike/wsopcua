@@ -82,6 +82,10 @@ export class ExpandedNodeId extends NodeId {
 
 export function coerceExpandedNodeId(value): ExpandedNodeId {
 
+    if (value == null) {
+        return ExpandedNodeId.NullExpandedNodeId;
+    }
+
     if (value instanceof ExpandedNodeId) {
         return value;
     }

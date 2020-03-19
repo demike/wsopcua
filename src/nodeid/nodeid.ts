@@ -160,6 +160,12 @@ isEmpty(): boolean {
     }
 
     static sameNodeId(n1: NodeId, n2: NodeId): boolean {
+        if (n1.constructor !== n2.constructor) {
+            return false;
+        }
+        if (n1 === n2) {
+            return true;
+        }
         if (n1.identifierType !== n2.identifierType) {
             return false;
         }
@@ -328,6 +334,10 @@ const rege_ns_g = /ns=([0-9]+);g=(.*)/;
  * @param namespace {Integer}
  */
 export function coerceNodeId(value: any, namespace?: number): NodeId {
+
+    if (value == null) {
+        return NodeId.NullNodeId;
+    }
 
     let matches, two_first;
 
