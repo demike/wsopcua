@@ -56,7 +56,10 @@ export function decodeDateTime(stream: DataStream) {
 }
 
 
-export function coerceDateTime(value: string | number | Date) {
+export function coerceDateTime(value: string | number | Date | undefined | null) {
+    if (value == null) {
+        return new Date();
+    }
     return new Date(value);
 }
 
