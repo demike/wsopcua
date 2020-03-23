@@ -4,7 +4,7 @@
 import * as ec from '../basic-types';
 
 import * as factories from '../factory';
-import { Variant, isValidVariant, VARIANT_ARRAY_MASK } from './variant';
+import { Variant, isValidVariant, VARIANT_ARRAY_MASK, coerceVariant } from './variant';
 import { DataType, VariantArrayType, sameVariant, buildVariantArray } from '.';
 import { QualifiedName, LocalizedText } from '../generated';
 import { ExtensionObject } from '../basic-types/extension_object';
@@ -1842,4 +1842,16 @@ describe('testing isValidVariant', function() {
         expect(isValidVariant(VariantArrayType.Matrix, DataType.Byte, [655525, 12], [1, 2])).toEqual(false);
     });
 
+});
+
+describe('testing coerceVariant', function() {
+    const variantLike = {dataType: DataType.String, value: 'Hello'};
+    const variant = new Variant(variantLike);
+    it('should create valid Variant from ArrayLike structure', function() {
+        expect(coerceVariant(variantLike)).toEqual(variant);
+
+    });
+    it('should pass through valid variants', function() {
+        expect(coerceVariant(variant)).toBe(variant);
+    });
 });

@@ -188,12 +188,6 @@ public decode(inp: DataStream) {
     }
 }
 
-public coerceVariant(variantLike: any) {
-    const value =  (variantLike instanceof Variant) ? variantLike : new Variant(variantLike);
-    assert(value instanceof Variant);
-    return value;
-}
-
 /**
  * @method clone
  *   deep clone a variant
@@ -215,7 +209,11 @@ register_class_definition('Variant', Variant, makeExpandedNodeId(generate_new_id
 registerSpecialVariantEncoder(Variant, 'Variant');
 
 
-
+export function coerceVariant(variantLike: any) {
+    const value =  (variantLike instanceof Variant) ? variantLike : new Variant(variantLike);
+    assert(value instanceof Variant);
+    return value;
+}
 
 export function isValidVariant(arrayType: VariantArrayType, dataType: DataType, value: any, dimensions?: number[]) {
 
