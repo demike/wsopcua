@@ -55,6 +55,13 @@ export function decodeDateTime(stream: DataStream) {
     return bn_hundredNanoSecondFrom1601ToDate(hi, lo);
 }
 
+export function jsonDecodeDateTime(jsonDate: string) {
+    return new Date(jsonDate);
+}
+
+export function jsonEncodeDateTime(dateTime: Date) {
+    return dateTime.toJSON();
+}
 
 export function coerceDateTime(value: string | number | Date | undefined | null) {
     if (value == null) {

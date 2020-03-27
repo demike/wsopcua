@@ -198,6 +198,56 @@ public clone(): Variant {
     return new Variant(this);
 }
 
+public fromJSON(inp: any) {
+    const body = inp.Body;
+    if (inp.DataType) {
+        this.dataType = inp.DataType;
+    } else {
+        // it is the non reversable form --> just store the variant body to value as is
+        this.value = body;
+        return;
+    }
+
+    if(inp.Dimensions) {
+        this.arrayType = VariantArrayType.Matrix;
+        this.dimensions = inp.Dimensions;
+        this.value = jsonDecodeMatrix(this.dataType, body);
+    } else if (Array.isArray(body)) {
+        this.arrayType = VariantArrayType.Array;
+        this.value = jsonDecodeVariantArray(this.dataType, body)
+    } else {
+        const decode = get_json_decoder(this.dataType);
+        this.value = decode ? decode(body) : body;
+    }
+}
+
+public toJSON() {
+    const out: any = {};
+    out.DataType = this.dataType;
+    out.Dimensions = this.dimensions;
+
+    if (this.dataType === DataType.Null) {
+        // it is the non reversable form --> just try to store the variant value to the body
+        out.Body = this.value;
+        return out;
+    }
+
+    if (this.arrayType === VariantArrayType.Array) {
+       out.Body = jsonEncodeVariantArray(this.dataType, this.value);
+    } else if (this.arrayType === VariantArrayType.Matrix) {
+        out.Body = jsonEncodeMatrix(this.dataType, this.value);
+    } else {
+        const encode = get_json_encoder(this.dataType);
+        if (encode) {
+            out.Body = encode(this.value);
+        } else {
+            out.Body = this.value;
+        }
+    }
+
+    return out;
+}
+
 
 }
 
@@ -466,6 +516,84 @@ function variantToString(self: Variant, options?: any) {
         }
     }
     return 'Variant(' + data + ')';
+}
+
+
+// json coding 
+function get_json_encoder(dataType: DataType) {
+    return findBuiltInType(DataType[dataType]).jsonEncode;
+}
+
+function get_json_decoder(dataType: DataType) {
+    return findBuiltInType(DataType[dataType]).jsonDecode;
+}
+
+function jsonDecodeVariantArray(dataType: DataType, array: any[]) {
+
+    switch (dataType) {
+        case DataType.Float:
+            return new Float32Array(array);
+        case DataType.Double:
+            return new Float64Array(array);
+        case DataType.SByte:
+            return new Int8Array(array);
+        case DataType.Byte:
+            return new Uint8Array(array).buffer;
+        case DataType.Int16:
+            return new Int16Array(array);
+        case DataType.Int32:
+            return new Int32Array(array);
+        case DataType.UInt16:
+            return new Uint16Array(array);
+        case DataType.UInt32:
+            return new Uint32Array(array);
+       // () case DataType.UInt64: ?
+    }
+
+    return jsonDecodeGeneralArray(dataType, array);
+}
+
+function jsonDecodeGeneralArray(dataType: DataType, array: any[]) {
+    const decode = get_json_decoder(dataType);
+    if (!decode) {
+        return array;
+    }
+    return array.map(decode);
+}
+
+function jsonEncodeVariantArray(dataType: DataType, array: any[]) {
+
+    switch (dataType) {
+        case DataType.Float:
+        case DataType.Double:
+        case DataType.SByte:
+        case DataType.Byte:
+        case DataType.Int16:
+        case DataType.Int32:
+        case DataType.UInt16:
+        case DataType.UInt32:
+        case DataType.UInt64:
+            return Array.from(array);
+    }
+
+    return jsonEncodeGeneralArray(dataType, array);
+}
+
+
+function jsonEncodeGeneralArray(dataType: DataType, array: any[]) {
+    const encode = get_json_encoder(dataType);
+    if (!encode) {
+        return array;
+    }
+    return array.map(encode);
+}
+
+function jsonEncodeMatrix(dataType: DataType, matrix: any[]) {
+    throw new Error('not implemented');
+}
+
+function jsonDecodeMatrix(dataType: DataType, matrix: any[]) {
+    throw new Error('not implemented');
 }
 
 

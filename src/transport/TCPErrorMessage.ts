@@ -13,17 +13,16 @@ import {BaseUAObject} from '../factory/factories_baseobject';
 
 import {register_class_definition} from '../factory/factories_factories';
 import { DataStream } from '../basic-types/DataStream';
-import { UInt32 } from '../basic-types';
+import { UInt32, jsonDecodeStatusCode, jsonEncodeStatusCode } from '../basic-types';
 import { StatusCode, encodeStatusCode, decodeStatusCode} from '../basic-types/';
 
-const encodeArray = ec.encodeArray;
-const decodeArray = ec.decodeArray;
 const encode_StatusCode = encodeStatusCode;
 const decode_StatusCode = decodeStatusCode;
 const encode_String = ec.encodeString;
 const decode_String = ec.decodeString;
 
 import {generate_new_id} from '../factory';
+import { StatusCodes } from '../constants';
 
 export interface ITCPErrorMessage {
     reason?: string;
@@ -81,6 +80,18 @@ public encode(stream: DataStream) {
 public decode(stream: DataStream) {
     this.statusCode = decode_StatusCode(stream);
     this.reason = decode_String(stream);
+}
+
+public toJSON() {
+    const out: any = {};
+    out.StatusCode = jsonEncodeStatusCode(this.statusCode);
+    out.Reason = this.reason;
+}
+
+public fromJSON(json: any) {
+    const out: any = {};
+    this.statusCode =  jsonDecodeStatusCode(json.StatusCode);
+    this.reason = json.Reason;
 }
 
 public clone(target: any): BaseUAObject {

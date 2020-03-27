@@ -96,6 +96,13 @@ public clone(target?: SequenceHeader): BaseUAObject {
   return target;
 }
 
+public toJSON() {
+  throw new Error('Method not implemented.');
+}
+public fromJSON(json: any): void {
+  throw new Error('Method not implemented.');
+}
+
 }
 
 

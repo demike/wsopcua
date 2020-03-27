@@ -125,6 +125,23 @@ export class AcknowledgeMessage extends BaseUAObject {
     throw new Error('Method not implemented.');
   }
 
+  public toJSON() {
+    const out: any = {};
+    out.ProtocolVersion = this.protocolVersion;
+    out.ReceiveBufferSize = this.receiveBufferSize;
+    out.SendBufferSize = this.sendBufferSize;
+    out.MaxMessageSize = this.maxMessageSize;
+    out.MaxChunkCount = this.maxChunkCount;
+  }
+
+  public fromJSON(json: any) {
+    this.protocolVersion = json.ProtocolVersion;
+    this.receiveBufferSize = json.ReceiveBufferSize;
+    this.sendBufferSize = json.SendBufferSize;
+    this.maxMessageSize = json.MaxMessageSize;
+    this.maxChunkCount = json.MaxChunkCount;
+  }
+
 }
 
 

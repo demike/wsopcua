@@ -8,7 +8,7 @@ import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 import { isValidGuid, decodeGuid, encodeGuid } from './guid';
 import { decodeString, encodeString } from './string';
 import { decodeUInt32, encodeUInt32 } from './integers';
-import { encodeByteString, decodeByteString } from './byte_string';
+import { encodeByteString, decodeByteString, jsonDecodeByteString, jsonEncodeByteString } from './byte_string';
 import { getRandomInt } from './utils';
 
 export { NodeId } from '../nodeid/nodeid';
@@ -16,6 +16,7 @@ export { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 
 import { set_flag, check_flag } from '../utils';
 import { NodeIdType } from '../generated/NodeIdType';
+import { Node } from '../generated';
 
 enum EnumNodeIdEncoding {
     TwoBytes = 0x00, // A numeric value that fits into the two byte representation.
@@ -240,3 +241,57 @@ export function decodeExpandedNodeId(stream: DataStream) {
     const e = expandedNodeId;
     return new ExpandedNodeId(e.identifierType, e.value, e.namespace, e.namespaceUri, e.serverIndex);
 }
+
+
+export function jsonEncodeNodeId(id: NodeId) {
+    const out: any = {};
+    const idType = id.identifierType - 2; // yes there is a difference between BIN and JSON types!
+    // 5.4.2.11: Uint32 is omitted
+    if ( idType > 0) {
+        out.IdType = idType;
+    }
+    // namespace 0 is omitted
+    if (id.namespace > 0) {
+        out.Namespace =  id.namespace;
+    }
+
+    if(id.identifierType === NodeIdType.ByteString) {
+        out.Id = jsonEncodeByteString(id.value as Uint8Array);
+    }
+    return out;
+
+}
+
+export function jsonDecodeNodeId(id: any) {
+    const idType = (id.IdType === undefined) ? NodeIdType.Numeric : id.IdType + 2; // yes there is a difference between BIN and JSON types!
+    const namespace = (id.Namespace !== undefined) ? id.Namespace : 0;
+    const value = (idType === NodeIdType.ByteString) ? jsonDecodeByteString(id.Id) : id.Id;
+    return new NodeId(idType, value, namespace);
+}
+
+export function jsonEncodeExpandedNodeId(id: ExpandedNodeId) {
+    const out = jsonEncodeNodeId(id);
+    if (id.namespace !== 1 && id.namespaceUri) {
+        out.Namespace = id.namespaceUri;
+    }
+
+    if (id.serverIndex > 0) {
+       out.ServerUri = id.serverIndex;
+    }
+    return out;
+}
+
+export function jsonDecodeExpandedNodeId(id: any) {
+    const idType = (id.IdType === undefined) ? NodeIdType.Numeric : id.IdType + 2; // yes there is a difference between BIN and JSON types!
+    let namespace = (id.Namespace !== undefined) ? id.Namespace : 0;
+    const value = (idType === NodeIdType.ByteString) ? jsonDecodeByteString(id.Id) : id.Id;
+    let namespaceUri;
+    if (typeof namespace === 'string') {
+        namespaceUri = namespace;
+        namespace = 0;
+    }
+    return new ExpandedNodeId(idType, value, namespace, namespaceUri, id.ServerUri);
+}
+
+
+

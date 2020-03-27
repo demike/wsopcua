@@ -11,6 +11,8 @@ import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 export interface IEncodable {
     encode(stream: DataStream|BinaryStreamSizeCalculator): void;
     decode(stream: DataStream): void;
+    toJSON(): any;
+    fromJSON(json: any): void;
     encodingDefaultBinary?: ExpandedNodeId;
 }
 
@@ -18,7 +20,7 @@ export interface IEncodableConstructor {
     new(options?:any): IEncodable;
 }
 
-export abstract class BaseUAObject implements IEncodable{
+export abstract class BaseUAObject implements IEncodable {
 
 /**
  * Encode the object to the binary stream.
@@ -37,6 +39,9 @@ public abstract encode(stream: DataStream|BinaryStreamSizeCalculator): void;
  * @param options {Object}
  */
 public abstract decode(stream: DataStream): void;
+
+public abstract toJSON(): any;
+public abstract fromJSON(json: any): void;
 
 /**
  * Calculate the required size to store this object in a binary stream.

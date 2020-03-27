@@ -23,6 +23,26 @@ function _self_decode(Type) {
     };
 }
 
+function _self_json_encode(Type) {
+    assert('function' === typeof Type);
+    return function (value) {
+        if (!value || !value.toJSON) {
+            value = new Type(value);
+        }
+        return value.toJSON();
+    };
+}
+function _self_json_decode(Type) {
+    assert('function' === typeof Type);
+
+    return function (jsonObj) {
+        const value = new Type();
+        value.fromJSON(jsonObj);
+        return value;
+    };
+}
+
+
 export function registerSpecialVariantEncoder(ConstructorFunc, name: string) {
 
     assert('function' === typeof ConstructorFunc);
@@ -31,6 +51,8 @@ export function registerSpecialVariantEncoder(ConstructorFunc, name: string) {
         name: name,
         encode: _self_encode(ConstructorFunc),
         decode: _self_decode(ConstructorFunc),
+        jsonEncode: _self_json_encode(ConstructorFunc),
+        jsonDecode: _self_json_decode(ConstructorFunc),
         defaultValue: null
     });
 

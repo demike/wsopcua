@@ -139,6 +139,14 @@ public decode(stream: DataStream) {
 public clone(target: any): BaseUAObject {
   throw new Error('Method not implemented.');
 }
+
+public toJSON() {
+  throw new Error("Method not implemented.");
+}
+public fromJSON(json: any): void {
+  throw new Error("Method not implemented.");
+}
+
 }
 
 register_class_definition('HelloMessage', HelloMessage, makeExpandedNodeId(generate_new_id()));

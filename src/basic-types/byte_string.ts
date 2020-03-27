@@ -1,5 +1,6 @@
 'use strict';
 import { DataStream } from './DataStream';
+import { buf2base64, base64ToBuf } from '../crypto';
 
 function getRandomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -45,5 +46,13 @@ export function coerceByteString(value): Uint8Array {
         return buf;
     }
     return value;
+}
+
+export function jsonEncodeByteString(byteString: Uint8Array): string {
+    return buf2base64(byteString);
+}
+
+export function jsonDecodeByteString(b64ByteString: string) {
+    return base64ToBuf(b64ByteString);
 }
 

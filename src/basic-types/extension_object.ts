@@ -7,13 +7,12 @@
 // import {constructObject, is_internal_id, registerBuiltInType} from '../factory';
 
 import {makeNodeId, NodeId} from '../nodeid/nodeid';
-import { encodeNodeId, decodeNodeId } from './nodeid';
+import { encodeNodeId, decodeNodeId, jsonEncodeNodeId, jsonDecodeNodeId } from './nodeid';
 import { DataStream } from './DataStream';
-import { ExpandedNodeId } from '../wsopcua';
 import { constructObject } from '../factory/factories_factories';
 import { is_internal_id } from '../factory/factories_id_generator';
 import { registerType } from '../factory/factories_builtin_types';
-import { IEncodable } from '../factory/factories_baseobject';
+
 
 export class ExtensionObject {
 
@@ -128,11 +127,73 @@ export function decodeExtensionObject(stream: DataStream) {
     return object;
 }
 
+export function jsonEncodeExtensionObject(object: any) {
+
+    const out: any = {};
+
+    if (!object) {
+        out.TypeId = jsonDecodeNodeId(NodeId.NullNodeId);
+        // no body is encoded, end of the job!
+    } else {
+        // ensure we have a valid encoding Default Binary ID !!!
+        if (!object.encodingDefaultBinary) {
+            console.log('xxxxxxxxx encoding ExtObj ', object);
+            throw new Error('Cannot find encodingDefaultBinary for this object');
+        }
+
+        if (object.encodingDefaultBinary.isEmpty()) {
+            console.log('xxxxxxxxx encoding ExtObj ', object.encodingDefaultBinary.toString());
+            throw new Error('Cannot find encodingDefaultBinary for this object');
+        }
+
+        if (is_internal_id(object.encodingDefaultBinary.value)) {
+            console.log('xxxxxxxxx encoding ExtObj ', object.encodingDefaultBinary.toString(), object.constructor.name);
+            throw new Error('Cannot find valid OPCUA encodingDefaultBinary for this object');
+        }
+
+        out.TypeId = jsonEncodeNodeId(object.encodingDefaultBinary);
+        // json encding gets ommited // out.Encoding = 0;
+        out.Body = object.toJSON();
+    }
+
+    return out;
+}
+
+export function jsonDecodeExtensionObject(jsonObj: any) {
+
+    if (jsonObj.TypeId === undefined) {
+        // the non reverseable form, just return the body
+        return jsonObj.Body;
+    }
+
+    const nodeId = jsonDecodeNodeId(jsonObj.TypeId);
+    if (jsonObj.Encoding !== undefined && jsonObj.Encoding > 0) {
+        throw new Error('not supported');
+    }
+
+    const object = constructEmptyExtensionObject(nodeId);
+
+    if (object === null) {
+        // this object is unknown to us ..
+        return null;
+    }
+
+    try {
+        object.fromJSON(jsonObj.Body);
+    } catch (err) {
+            console.log('Cannot decode object ', err.message);
+    }
+
+    return object;
+}
+
 // register builtin type
 registerType({
     name: 'ExtensionObject',
     encode: encodeExtensionObject,
     decode: decodeExtensionObject,
+    jsonEncode: jsonEncodeExtensionObject,
+    jsonDecode: jsonDecodeExtensionObject,
     defaultValue: function () {
         return null;
     }
