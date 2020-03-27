@@ -84,6 +84,8 @@ export interface ConnectionStrategy {
 
 export interface OPCUAClientOptions {
 
+    encoding?: 'opcua+uacp'|'opcua+json'; // default: 'opcua+uacp'
+
     defaultSecureTokenLifetime?: number; // default secure token lifetime in ms
     serverCertificate?: any; // =null] {Certificate} the server certificate.
     connectionStrategy?: ConnectionStrategy;
@@ -175,6 +177,8 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
     protected _endpointUrl: string;
     protected connectionStrategy: ConnectionStrategy;
+
+    public readonly encoding: 'opcua+uacp'|'opcua+json';
 
     /**
  * true if session shall periodically probe the server to keep the session alive and prevent timeout
@@ -277,6 +281,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
         this._clientName = options.clientName || 'Session';
         this._applicationName = options.applicationName || 'NodeOPCUA-Client';
+        this.encoding = options.encoding || 'opcua+uacp';
 
         // options.certificateFile = options.certificateFile || path.join(__dirname, "../certificates/client_selfsigned_cert_1024.pem");
         // options.privateKeyFile = options.privateKeyFile || path.join(__dirname, "../certificates/PKI/own/private/private_key.pem");
@@ -909,6 +914,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
             (_inner_callback: ErrorCallback) => {
 
                 secureChannel = new ClientSecureChannelLayer({
+                    encoding: this.encoding,
                     defaultSecureTokenLifeTime: this.defaultSecureTokenLifetime,
                     securityMode: this.securityMode,
                     securityPolicy: this.securityPolicy,

@@ -1,6 +1,6 @@
 'use strict';
 
-import { ClientTCP_transport } from './client_tcp_transport';
+
 import { AcknowledgeMessage } from './AcknowledgeMessage';
 import { assert } from '../assert';
 import { packTcpMessage } from './tools';
@@ -24,7 +24,7 @@ describe('testing ClientWS_transport', function () {
 
     beforeEach(function (done) {
 
-        transport = new ClientWSTransport();
+        transport = new ClientWSTransport('opcua+uacp');
         installMockWebSocket();
         setFakeTransport(new WebSocket(url));
         fakeWS = getFakeTransport();

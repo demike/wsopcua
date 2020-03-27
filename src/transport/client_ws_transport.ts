@@ -28,7 +28,7 @@ import {readMessageHeader} from '../chunkmanager';
 import {decodeMessage} from './tools';
 import { ErrorCallback } from '../client/client_base';
 
-function createClientSocket(endpointUrl: string): WebSocket {
+function createClientSocket(endpointUrl: string, protocol: 'opcua+uacp'|'opcua+json'): WebSocket {
     // create a socket based on Url
     const ep = parseEndpointUrl(endpointUrl);
     const port = ep.port;
@@ -39,7 +39,7 @@ function createClientSocket(endpointUrl: string): WebSocket {
         case 'ws':
         case 'wss':
             // TODO: that's it --> implement me
-            const websocket = new WebSocket(endpointUrl);
+            const websocket = new WebSocket(endpointUrl, protocol);
             websocket.binaryType  = 'arraybuffer';
            return websocket;
             break;
@@ -126,7 +126,7 @@ export class ClientWSTransport extends WSTransport {
         return this._parameters;
     }
 
-constructor() {
+constructor(public readonly encoding: 'opcua+uacp'|'opcua+json') {
     super();
 
     this._connected = false;
@@ -165,7 +165,7 @@ public connect(endpointUrl: string, callback: ErrorCallback, options?) {
 
 
     try {
-        this._socket = createClientSocket(endpointUrl);
+        this._socket = createClientSocket(endpointUrl, this.encoding);
     } catch (err) {
         return callback(err);
     }
@@ -188,8 +188,18 @@ public connect(endpointUrl: string, callback: ErrorCallback, options?) {
     this._socket.onopen =  () => {
 
         /* remove the connect error listener  */
-        //this._socket.removeEventListener('error', _on_socket_error_for_connect);
+        // this._socket.removeEventListener('error', _on_socket_error_for_connect);
         this.off('socket_error', _on_socket_error_for_connect)
+
+        // HEL ACK transaction is used to determine the maximum size of the message chunk
+        // this is only necessary for 'opcua+uacp' binary protocol not for 'opcua+json'
+        // https://reference.opcfoundation.org/v104/Core/docs/Part6/7.5.2/
+        if(this.encoding === 'opcua+json') {
+            this._connected = true;
+            this.emit('connect');
+            callback();
+            return;
+        }
 
         this._perform_HEL_ACK_transaction((err) => {
             if (!err) {
@@ -213,6 +223,7 @@ public connect(endpointUrl: string, callback: ErrorCallback, options?) {
         });
     };
 }
+
 
 
 protected _handle_ACK_response(message_chunk: DataView | ArrayBuffer, callback: ErrorCallback) {

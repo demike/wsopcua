@@ -166,7 +166,10 @@ public createChunk(msg_type: string, chunk_type: string, length: number): ArrayB
  *  - once a message chunk has been written, it is possible to call ```createChunk``` again.
  *
  */
-public write(message_chunk: ArrayBuffer) {
+public write(message_chunk: ArrayBuffer|string) {
+    if(typeof message_chunk === 'string') {
+        return this._write_json(message_chunk);
+    }
 
     assert((this._pending_buffer === undefined) ||
                 this._pending_buffer === message_chunk, ' write should be used with buffer created by createChunk');
@@ -224,6 +227,14 @@ protected _write_chunk(message_chunk: ArrayBuffer) {
         this.bytesWritten += message_chunk.byteLength;
         this.chunkWrittenCount ++;
         this._socket.send(message_chunk);
+    }
+}
+
+protected _write_json(message: string) {
+    if (this._socket) {
+        this.bytesWritten += message.length;
+        this.chunkWrittenCount ++;
+        this._socket.send(message);
     }
 }
 
