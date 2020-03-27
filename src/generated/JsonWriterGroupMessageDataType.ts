@@ -38,6 +38,19 @@ export class JsonWriterGroupMessageDataType extends WriterGroupMessageDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NetworkMessageContentMask = this.networkMessageContentMask;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.networkMessageContentMask = inp.NetworkMessageContentMask;
+
+ }
+
+
  clone( target?: JsonWriterGroupMessageDataType): JsonWriterGroupMessageDataType {
   if (!target) {
    target = new JsonWriterGroupMessageDataType();

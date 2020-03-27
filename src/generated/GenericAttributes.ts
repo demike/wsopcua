@@ -43,6 +43,20 @@ export class GenericAttributes extends NodeAttributes {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.AttributeValues = this.attributeValues;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.attributeValues = inp.AttributeValues.map(m => { const mem = new GenericAttributeValue(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: GenericAttributes): GenericAttributes {
   if (!target) {
    target = new GenericAttributes();

@@ -52,6 +52,25 @@ export class FindServersRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.EndpointUrl = this.endpointUrl;
+  out.LocaleIds = this.localeIds;
+  out.ServerUris = this.serverUris;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.endpointUrl = inp.EndpointUrl;
+  this.localeIds = inp.LocaleIds;
+  this.serverUris = inp.ServerUris;
+
+ }
+
+
  clone( target?: FindServersRequest): FindServersRequest {
   if (!target) {
    target = new FindServersRequest();

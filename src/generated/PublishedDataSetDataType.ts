@@ -60,6 +60,27 @@ export class PublishedDataSetDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Name = this.name;
+  out.DataSetFolder = this.dataSetFolder;
+  out.DataSetMetaData = this.dataSetMetaData;
+  out.ExtensionFields = this.extensionFields;
+  out.DataSetSource = this.dataSetSource;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.name = inp.Name;
+  this.dataSetFolder = inp.DataSetFolder;
+  this.dataSetMetaData.fromJSON(inp);
+  this.extensionFields = inp.ExtensionFields.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
+  this.dataSetSource = inp.DataSetSource;
+
+ }
+
+
  clone( target?: PublishedDataSetDataType): PublishedDataSetDataType {
   if (!target) {
    target = new PublishedDataSetDataType();

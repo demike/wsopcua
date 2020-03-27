@@ -59,6 +59,27 @@ export class AttributeOperand extends FilterOperand {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
+  out.Alias = this.alias;
+  out.BrowsePath = this.browsePath;
+  out.AttributeId = this.attributeId;
+  out.IndexRange = this.indexRange;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+  this.alias = inp.Alias;
+  this.browsePath.fromJSON(inp);
+  this.attributeId = inp.AttributeId;
+  this.indexRange = inp.IndexRange;
+
+ }
+
+
  clone( target?: AttributeOperand): AttributeOperand {
   if (!target) {
    target = new AttributeOperand();

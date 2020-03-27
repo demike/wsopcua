@@ -46,6 +46,23 @@ export class Annotation {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Message = this.message;
+  out.UserName = this.userName;
+  out.AnnotationTime = ec.jsonEncodeDateTime(this.annotationTime);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.message = inp.Message;
+  this.userName = inp.UserName;
+  this.annotationTime  = ec.jsonDecodeDateTime(inp.AnnotationTime);
+
+ }
+
+
  clone( target?: Annotation): Annotation {
   if (!target) {
    target = new Annotation();

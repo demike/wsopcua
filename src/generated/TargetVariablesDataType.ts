@@ -40,6 +40,19 @@ export class TargetVariablesDataType extends SubscribedDataSetDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.TargetVariables = this.targetVariables;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.targetVariables = inp.TargetVariables.map(m => { const mem = new FieldTargetDataType(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: TargetVariablesDataType): TargetVariablesDataType {
   if (!target) {
    target = new TargetVariablesDataType();

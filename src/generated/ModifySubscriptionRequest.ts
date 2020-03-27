@@ -67,6 +67,31 @@ export class ModifySubscriptionRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.SubscriptionId = this.subscriptionId;
+  out.RequestedPublishingInterval = this.requestedPublishingInterval;
+  out.RequestedLifetimeCount = this.requestedLifetimeCount;
+  out.RequestedMaxKeepAliveCount = this.requestedMaxKeepAliveCount;
+  out.MaxNotificationsPerPublish = this.maxNotificationsPerPublish;
+  out.Priority = this.priority;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.subscriptionId = inp.SubscriptionId;
+  this.requestedPublishingInterval = inp.RequestedPublishingInterval;
+  this.requestedLifetimeCount = inp.RequestedLifetimeCount;
+  this.requestedMaxKeepAliveCount = inp.RequestedMaxKeepAliveCount;
+  this.maxNotificationsPerPublish = inp.MaxNotificationsPerPublish;
+  this.priority = inp.Priority;
+
+ }
+
+
  clone( target?: ModifySubscriptionRequest): ModifySubscriptionRequest {
   if (!target) {
    target = new ModifySubscriptionRequest();

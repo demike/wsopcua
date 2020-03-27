@@ -46,6 +46,23 @@ export class ModelChangeStructureDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Affected = ec.jsonEncodeNodeId(this.affected);
+  out.AffectedType = ec.jsonEncodeNodeId(this.affectedType);
+  out.Verb = this.verb;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.affected  = ec.jsonDecodeNodeId(inp.Affected);
+  this.affectedType  = ec.jsonDecodeNodeId(inp.AffectedType);
+  this.verb = inp.Verb;
+
+ }
+
+
  clone( target?: ModelChangeStructureDataType): ModelChangeStructureDataType {
   if (!target) {
    target = new ModelChangeStructureDataType();

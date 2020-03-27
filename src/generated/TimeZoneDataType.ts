@@ -41,6 +41,21 @@ export class TimeZoneDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Offset = this.offset;
+  out.DaylightSavingInOffset = this.daylightSavingInOffset;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.offset = inp.Offset;
+  this.daylightSavingInOffset = inp.DaylightSavingInOffset;
+
+ }
+
+
  clone( target?: TimeZoneDataType): TimeZoneDataType {
   if (!target) {
    target = new TimeZoneDataType();

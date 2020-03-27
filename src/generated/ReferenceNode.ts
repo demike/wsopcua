@@ -46,6 +46,23 @@ export class ReferenceNode {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ReferenceTypeId = ec.jsonEncodeNodeId(this.referenceTypeId);
+  out.IsInverse = this.isInverse;
+  out.TargetId = ec.jsonEncodeExpandedNodeId(this.targetId);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+  this.isInverse = inp.IsInverse;
+  this.targetId  = ec.jsonDecodeExpandedNodeId(inp.TargetId);
+
+ }
+
+
  clone( target?: ReferenceNode): ReferenceNode {
   if (!target) {
    target = new ReferenceNode();

@@ -43,6 +43,20 @@ export class HistoryModifiedData extends HistoryData {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.ModificationInfos = this.modificationInfos;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.modificationInfos = inp.ModificationInfos.map(m => { const mem = new ModificationInfo(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: HistoryModifiedData): HistoryModifiedData {
   if (!target) {
    target = new HistoryModifiedData();

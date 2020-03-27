@@ -52,6 +52,25 @@ export class ModifySubscriptionResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.RevisedPublishingInterval = this.revisedPublishingInterval;
+  out.RevisedLifetimeCount = this.revisedLifetimeCount;
+  out.RevisedMaxKeepAliveCount = this.revisedMaxKeepAliveCount;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.revisedPublishingInterval = inp.RevisedPublishingInterval;
+  this.revisedLifetimeCount = inp.RevisedLifetimeCount;
+  this.revisedMaxKeepAliveCount = inp.RevisedMaxKeepAliveCount;
+
+ }
+
+
  clone( target?: ModifySubscriptionResponse): ModifySubscriptionResponse {
   if (!target) {
    target = new ModifySubscriptionResponse();

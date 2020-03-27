@@ -75,6 +75,33 @@ export class EndpointDescription {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.EndpointUrl = this.endpointUrl;
+  out.Server = this.server;
+  out.ServerCertificate = this.serverCertificate;
+  out.SecurityMode = this.securityMode;
+  out.SecurityPolicyUri = this.securityPolicyUri;
+  out.UserIdentityTokens = this.userIdentityTokens;
+  out.TransportProfileUri = this.transportProfileUri;
+  out.SecurityLevel = this.securityLevel;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.endpointUrl = inp.EndpointUrl;
+  this.server.fromJSON(inp);
+  this.serverCertificate = inp.ServerCertificate;
+  this.securityMode = inp.SecurityMode;
+  this.securityPolicyUri = inp.SecurityPolicyUri;
+  this.userIdentityTokens = inp.UserIdentityTokens.map(m => { const mem = new UserTokenPolicy(); mem.fromJSON(m); return mem;});
+  this.transportProfileUri = inp.TransportProfileUri;
+  this.securityLevel = inp.SecurityLevel;
+
+ }
+
+
  clone( target?: EndpointDescription): EndpointDescription {
   if (!target) {
    target = new EndpointDescription();

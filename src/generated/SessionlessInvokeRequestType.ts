@@ -56,6 +56,27 @@ export class SessionlessInvokeRequestType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.UrisVersion = this.urisVersion;
+  out.NamespaceUris = this.namespaceUris;
+  out.ServerUris = this.serverUris;
+  out.LocaleIds = this.localeIds;
+  out.ServiceId = this.serviceId;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.urisVersion = inp.UrisVersion;
+  this.namespaceUris = inp.NamespaceUris;
+  this.serverUris = inp.ServerUris;
+  this.localeIds = inp.LocaleIds;
+  this.serviceId = inp.ServiceId;
+
+ }
+
+
  clone( target?: SessionlessInvokeRequestType): SessionlessInvokeRequestType {
   if (!target) {
    target = new SessionlessInvokeRequestType();

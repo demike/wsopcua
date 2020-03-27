@@ -42,6 +42,21 @@ export class StatusResult {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
+  out.DiagnosticInfo = this.diagnosticInfo;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.diagnosticInfo.fromJSON(inp);
+
+ }
+
+
  clone( target?: StatusResult): StatusResult {
   if (!target) {
    target = new StatusResult();

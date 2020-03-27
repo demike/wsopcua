@@ -36,6 +36,19 @@ export class UnregisterNodesResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+
+ }
+
+
  clone( target?: UnregisterNodesResponse): UnregisterNodesResponse {
   if (!target) {
    target = new UnregisterNodesResponse();

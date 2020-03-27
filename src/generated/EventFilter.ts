@@ -46,6 +46,21 @@ export class EventFilter extends MonitoringFilter {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SelectClauses = this.selectClauses;
+  out.WhereClause = this.whereClause;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.selectClauses = inp.SelectClauses.map(m => { const mem = new SimpleAttributeOperand(); mem.fromJSON(m); return mem;});
+  this.whereClause.fromJSON(inp);
+
+ }
+
+
  clone( target?: EventFilter): EventFilter {
   if (!target) {
    target = new EventFilter();

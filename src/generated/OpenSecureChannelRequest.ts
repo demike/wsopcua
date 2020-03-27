@@ -64,6 +64,29 @@ export class OpenSecureChannelRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.ClientProtocolVersion = this.clientProtocolVersion;
+  out.RequestType = this.requestType;
+  out.SecurityMode = this.securityMode;
+  out.ClientNonce = this.clientNonce;
+  out.RequestedLifetime = this.requestedLifetime;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.clientProtocolVersion = inp.ClientProtocolVersion;
+  this.requestType = inp.RequestType;
+  this.securityMode = inp.SecurityMode;
+  this.clientNonce = inp.ClientNonce;
+  this.requestedLifetime = inp.RequestedLifetime;
+
+ }
+
+
  clone( target?: OpenSecureChannelRequest): OpenSecureChannelRequest {
   if (!target) {
    target = new OpenSecureChannelRequest();

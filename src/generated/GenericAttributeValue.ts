@@ -42,6 +42,21 @@ export class GenericAttributeValue {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.AttributeId = this.attributeId;
+  out.Value = this.value;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.attributeId = inp.AttributeId;
+  this.value.fromJSON(inp);
+
+ }
+
+
  clone( target?: GenericAttributeValue): GenericAttributeValue {
   if (!target) {
    target = new GenericAttributeValue();

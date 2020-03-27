@@ -42,6 +42,21 @@ export class RegisterNodesRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.NodesToRegister = this.nodesToRegister.map(m => ec.jsonEncodeNodeId);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.nodesToRegister = inp.NodesToRegister.map(m => ec.jsonDecodeNodeId);
+
+ }
+
+
  clone( target?: RegisterNodesRequest): RegisterNodesRequest {
   if (!target) {
    target = new RegisterNodesRequest();

@@ -48,6 +48,23 @@ export class ParsingResult {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
+  out.DataStatusCodes = this.dataStatusCodes.map(m => ec.jsonEncodeStatusCode);
+  out.DataDiagnosticInfos = this.dataDiagnosticInfos;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.dataStatusCodes = inp.DataStatusCodes.map(m => ec.jsonDecodeStatusCode);
+  this.dataDiagnosticInfos = inp.DataDiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: ParsingResult): ParsingResult {
   if (!target) {
    target = new ParsingResult();

@@ -49,6 +49,23 @@ export class DataChangeFilter extends MonitoringFilter {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Trigger = this.trigger;
+  out.DeadbandType = this.deadbandType;
+  out.DeadbandValue = this.deadbandValue;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.trigger = inp.Trigger;
+  this.deadbandType = inp.DeadbandType;
+  this.deadbandValue = inp.DeadbandValue;
+
+ }
+
+
  clone( target?: DataChangeFilter): DataChangeFilter {
   if (!target) {
    target = new DataChangeFilter();

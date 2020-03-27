@@ -48,6 +48,23 @@ export class MonitoredItemCreateRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ItemToMonitor = this.itemToMonitor;
+  out.MonitoringMode = this.monitoringMode;
+  out.RequestedParameters = this.requestedParameters;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.itemToMonitor.fromJSON(inp);
+  this.monitoringMode = inp.MonitoringMode;
+  this.requestedParameters.fromJSON(inp);
+
+ }
+
+
  clone( target?: MonitoredItemCreateRequest): MonitoredItemCreateRequest {
   if (!target) {
    target = new MonitoredItemCreateRequest();

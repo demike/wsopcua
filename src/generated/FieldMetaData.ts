@@ -85,6 +85,37 @@ export class FieldMetaData {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Name = this.name;
+  out.Description = this.description;
+  out.FieldFlags = this.fieldFlags;
+  out.BuiltInType = this.builtInType;
+  out.DataType = ec.jsonEncodeNodeId(this.dataType);
+  out.ValueRank = this.valueRank;
+  out.ArrayDimensions = this.arrayDimensions;
+  out.MaxStringLength = this.maxStringLength;
+  out.DataSetFieldId = this.dataSetFieldId;
+  out.Properties = this.properties;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.name = inp.Name;
+  this.description.fromJSON(inp);
+  this.fieldFlags = inp.FieldFlags;
+  this.builtInType = inp.BuiltInType;
+  this.dataType  = ec.jsonDecodeNodeId(inp.DataType);
+  this.valueRank = inp.ValueRank;
+  this.arrayDimensions = inp.ArrayDimensions;
+  this.maxStringLength = inp.MaxStringLength;
+  this.dataSetFieldId = inp.DataSetFieldId;
+  this.properties = inp.Properties.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: FieldMetaData): FieldMetaData {
   if (!target) {
    target = new FieldMetaData();

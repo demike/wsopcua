@@ -57,6 +57,27 @@ export class CreateSubscriptionResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.SubscriptionId = this.subscriptionId;
+  out.RevisedPublishingInterval = this.revisedPublishingInterval;
+  out.RevisedLifetimeCount = this.revisedLifetimeCount;
+  out.RevisedMaxKeepAliveCount = this.revisedMaxKeepAliveCount;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.subscriptionId = inp.SubscriptionId;
+  this.revisedPublishingInterval = inp.RevisedPublishingInterval;
+  this.revisedLifetimeCount = inp.RevisedLifetimeCount;
+  this.revisedMaxKeepAliveCount = inp.RevisedMaxKeepAliveCount;
+
+ }
+
+
  clone( target?: CreateSubscriptionResponse): CreateSubscriptionResponse {
   if (!target) {
    target = new CreateSubscriptionResponse();

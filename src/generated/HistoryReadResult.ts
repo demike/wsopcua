@@ -47,6 +47,23 @@ export class HistoryReadResult {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
+  out.ContinuationPoint = this.continuationPoint;
+  out.HistoryData = this.historyData;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.continuationPoint = inp.ContinuationPoint;
+  this.historyData = inp.HistoryData;
+
+ }
+
+
  clone( target?: HistoryReadResult): HistoryReadResult {
   if (!target) {
    target = new HistoryReadResult();

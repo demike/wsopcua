@@ -38,6 +38,19 @@ export class ElementOperand extends FilterOperand {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Index = this.index;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.index = inp.Index;
+
+ }
+
+
  clone( target?: ElementOperand): ElementOperand {
   if (!target) {
    target = new ElementOperand();

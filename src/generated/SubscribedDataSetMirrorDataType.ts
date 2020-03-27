@@ -45,6 +45,21 @@ export class SubscribedDataSetMirrorDataType extends SubscribedDataSetDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ParentNodeName = this.parentNodeName;
+  out.RolePermissions = this.rolePermissions;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.parentNodeName = inp.ParentNodeName;
+  this.rolePermissions = inp.RolePermissions.map(m => { const mem = new RolePermissionType(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: SubscribedDataSetMirrorDataType): SubscribedDataSetMirrorDataType {
   if (!target) {
    target = new SubscribedDataSetMirrorDataType();

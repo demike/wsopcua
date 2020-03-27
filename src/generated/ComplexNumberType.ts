@@ -41,6 +41,21 @@ export class ComplexNumberType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Real = this.real;
+  out.Imaginary = this.imaginary;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.real = inp.Real;
+  this.imaginary = inp.Imaginary;
+
+ }
+
+
  clone( target?: ComplexNumberType): ComplexNumberType {
   if (!target) {
    target = new ComplexNumberType();

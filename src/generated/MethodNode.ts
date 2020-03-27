@@ -46,6 +46,22 @@ export class MethodNode extends InstanceNode {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.Executable = this.executable;
+  out.UserExecutable = this.userExecutable;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.executable = inp.Executable;
+  this.userExecutable = inp.UserExecutable;
+
+ }
+
+
  clone( target?: MethodNode): MethodNode {
   if (!target) {
    target = new MethodNode();

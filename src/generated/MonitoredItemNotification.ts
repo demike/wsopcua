@@ -42,6 +42,21 @@ export class MonitoredItemNotification {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ClientHandle = this.clientHandle;
+  out.Value = this.value;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.clientHandle = inp.ClientHandle;
+  this.value.fromJSON(inp);
+
+ }
+
+
  clone( target?: MonitoredItemNotification): MonitoredItemNotification {
   if (!target) {
    target = new MonitoredItemNotification();

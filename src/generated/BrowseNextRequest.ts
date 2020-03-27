@@ -47,6 +47,23 @@ export class BrowseNextRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.ReleaseContinuationPoints = this.releaseContinuationPoints;
+  out.ContinuationPoints = this.continuationPoints;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.releaseContinuationPoints = inp.ReleaseContinuationPoints;
+  this.continuationPoints = inp.ContinuationPoints;
+
+ }
+
+
  clone( target?: BrowseNextRequest): BrowseNextRequest {
   if (!target) {
    target = new BrowseNextRequest();

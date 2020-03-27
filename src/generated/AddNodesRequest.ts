@@ -44,6 +44,21 @@ export class AddNodesRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.NodesToAdd = this.nodesToAdd;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.nodesToAdd = inp.NodesToAdd.map(m => { const mem = new AddNodesItem(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: AddNodesRequest): AddNodesRequest {
   if (!target) {
    target = new AddNodesRequest();

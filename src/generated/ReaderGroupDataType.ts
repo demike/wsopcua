@@ -54,6 +54,24 @@ export class ReaderGroupDataType extends PubSubGroupDataType {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.TransportSettings = this.transportSettings;
+  out.MessageSettings = this.messageSettings;
+  out.DataSetReaders = this.dataSetReaders;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.transportSettings = inp.TransportSettings;
+  this.messageSettings = inp.MessageSettings;
+  this.dataSetReaders = inp.DataSetReaders.map(m => { const mem = new DataSetReaderDataType(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: ReaderGroupDataType): ReaderGroupDataType {
   if (!target) {
    target = new ReaderGroupDataType();

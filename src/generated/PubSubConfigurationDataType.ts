@@ -50,6 +50,23 @@ export class PubSubConfigurationDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.PublishedDataSets = this.publishedDataSets;
+  out.Connections = this.connections;
+  out.Enabled = this.enabled;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.publishedDataSets = inp.PublishedDataSets.map(m => { const mem = new PublishedDataSetDataType(); mem.fromJSON(m); return mem;});
+  this.connections = inp.Connections.map(m => { const mem = new PubSubConnectionDataType(); mem.fromJSON(m); return mem;});
+  this.enabled = inp.Enabled;
+
+ }
+
+
  clone( target?: PubSubConfigurationDataType): PubSubConfigurationDataType {
   if (!target) {
    target = new PubSubConfigurationDataType();

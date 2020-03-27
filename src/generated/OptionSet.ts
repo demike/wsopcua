@@ -41,6 +41,21 @@ export class OptionSet {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Value = this.value;
+  out.ValidBits = this.validBits;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.value = inp.Value;
+  this.validBits = inp.ValidBits;
+
+ }
+
+
  clone( target?: OptionSet): OptionSet {
   if (!target) {
    target = new OptionSet();

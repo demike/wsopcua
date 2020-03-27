@@ -41,6 +41,20 @@ export class DeleteEventDetails extends HistoryUpdateDetails {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.EventIds = this.eventIds;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.eventIds = inp.EventIds;
+
+ }
+
+
  clone( target?: DeleteEventDetails): DeleteEventDetails {
   if (!target) {
    target = new DeleteEventDetails();

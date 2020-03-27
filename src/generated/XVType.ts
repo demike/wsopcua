@@ -41,6 +41,21 @@ export class XVType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.X = this.x;
+  out.Value = this.value;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.x = inp.X;
+  this.value = inp.Value;
+
+ }
+
+
  clone( target?: XVType): XVType {
   if (!target) {
    target = new XVType();

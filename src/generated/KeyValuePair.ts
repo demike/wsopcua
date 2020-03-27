@@ -42,6 +42,21 @@ export class KeyValuePair {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Key = this.key;
+  out.Value = this.value;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.key.fromJSON(inp);
+  this.value.fromJSON(inp);
+
+ }
+
+
  clone( target?: KeyValuePair): KeyValuePair {
   if (!target) {
    target = new KeyValuePair();

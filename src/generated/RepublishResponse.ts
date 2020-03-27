@@ -42,6 +42,21 @@ export class RepublishResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.NotificationMessage = this.notificationMessage;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.notificationMessage.fromJSON(inp);
+
+ }
+
+
  clone( target?: RepublishResponse): RepublishResponse {
   if (!target) {
    target = new RepublishResponse();

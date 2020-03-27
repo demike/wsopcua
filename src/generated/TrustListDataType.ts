@@ -56,6 +56,27 @@ export class TrustListDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SpecifiedLists = this.specifiedLists;
+  out.TrustedCertificates = this.trustedCertificates;
+  out.TrustedCrls = this.trustedCrls;
+  out.IssuerCertificates = this.issuerCertificates;
+  out.IssuerCrls = this.issuerCrls;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.specifiedLists = inp.SpecifiedLists;
+  this.trustedCertificates = inp.TrustedCertificates;
+  this.trustedCrls = inp.TrustedCrls;
+  this.issuerCertificates = inp.IssuerCertificates;
+  this.issuerCrls = inp.IssuerCrls;
+
+ }
+
+
  clone( target?: TrustListDataType): TrustListDataType {
   if (!target) {
    target = new TrustListDataType();

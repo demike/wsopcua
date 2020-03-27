@@ -44,6 +44,21 @@ export class JsonDataSetReaderMessageDataType extends DataSetReaderMessageDataTy
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NetworkMessageContentMask = this.networkMessageContentMask;
+  out.DataSetMessageContentMask = this.dataSetMessageContentMask;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.networkMessageContentMask = inp.NetworkMessageContentMask;
+  this.dataSetMessageContentMask = inp.DataSetMessageContentMask;
+
+ }
+
+
  clone( target?: JsonDataSetReaderMessageDataType): JsonDataSetReaderMessageDataType {
   if (!target) {
    target = new JsonDataSetReaderMessageDataType();

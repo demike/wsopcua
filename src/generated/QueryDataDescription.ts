@@ -47,6 +47,23 @@ export class QueryDataDescription {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RelativePath = this.relativePath;
+  out.AttributeId = this.attributeId;
+  out.IndexRange = this.indexRange;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.relativePath.fromJSON(inp);
+  this.attributeId = inp.AttributeId;
+  this.indexRange = inp.IndexRange;
+
+ }
+
+
  clone( target?: QueryDataDescription): QueryDataDescription {
   if (!target) {
    target = new QueryDataDescription();

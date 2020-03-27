@@ -54,6 +54,25 @@ export class UadpDataSetWriterMessageDataType extends DataSetWriterMessageDataTy
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.DataSetMessageContentMask = this.dataSetMessageContentMask;
+  out.ConfiguredSize = this.configuredSize;
+  out.NetworkMessageNumber = this.networkMessageNumber;
+  out.DataSetOffset = this.dataSetOffset;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.dataSetMessageContentMask = inp.DataSetMessageContentMask;
+  this.configuredSize = inp.ConfiguredSize;
+  this.networkMessageNumber = inp.NetworkMessageNumber;
+  this.dataSetOffset = inp.DataSetOffset;
+
+ }
+
+
  clone( target?: UadpDataSetWriterMessageDataType): UadpDataSetWriterMessageDataType {
   if (!target) {
    target = new UadpDataSetWriterMessageDataType();

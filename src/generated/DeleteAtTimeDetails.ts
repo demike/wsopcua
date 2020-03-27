@@ -41,6 +41,20 @@ export class DeleteAtTimeDetails extends HistoryUpdateDetails {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.ReqTimes = this.reqTimes.map(m => ec.jsonEncodeDateTime);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.reqTimes = inp.ReqTimes.map(m => ec.jsonDecodeDateTime);
+
+ }
+
+
  clone( target?: DeleteAtTimeDetails): DeleteAtTimeDetails {
   if (!target) {
    target = new DeleteAtTimeDetails();

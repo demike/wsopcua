@@ -43,6 +43,21 @@ export class ReadAtTimeDetails extends HistoryReadDetails {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ReqTimes = this.reqTimes.map(m => ec.jsonEncodeDateTime);
+  out.UseSimpleBounds = this.useSimpleBounds;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.reqTimes = inp.ReqTimes.map(m => ec.jsonDecodeDateTime);
+  this.useSimpleBounds = inp.UseSimpleBounds;
+
+ }
+
+
  clone( target?: ReadAtTimeDetails): ReadAtTimeDetails {
   if (!target) {
    target = new ReadAtTimeDetails();

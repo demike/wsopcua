@@ -47,6 +47,23 @@ export class RepublishRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.SubscriptionId = this.subscriptionId;
+  out.RetransmitSequenceNumber = this.retransmitSequenceNumber;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.subscriptionId = inp.SubscriptionId;
+  this.retransmitSequenceNumber = inp.RetransmitSequenceNumber;
+
+ }
+
+
  clone( target?: RepublishRequest): RepublishRequest {
   if (!target) {
    target = new RepublishRequest();

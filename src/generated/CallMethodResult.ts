@@ -55,6 +55,25 @@ export class CallMethodResult {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
+  out.InputArgumentResults = this.inputArgumentResults.map(m => ec.jsonEncodeStatusCode);
+  out.InputArgumentDiagnosticInfos = this.inputArgumentDiagnosticInfos;
+  out.OutputArguments = this.outputArguments;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.inputArgumentResults = inp.InputArgumentResults.map(m => ec.jsonDecodeStatusCode);
+  this.inputArgumentDiagnosticInfos = inp.InputArgumentDiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+  this.outputArguments = inp.OutputArguments.map(m => { const mem = new Variant(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: CallMethodResult): CallMethodResult {
   if (!target) {
    target = new CallMethodResult();

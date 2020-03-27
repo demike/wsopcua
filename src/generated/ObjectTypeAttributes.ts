@@ -41,6 +41,20 @@ export class ObjectTypeAttributes extends NodeAttributes {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.IsAbstract = this.isAbstract;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.isAbstract = inp.IsAbstract;
+
+ }
+
+
  clone( target?: ObjectTypeAttributes): ObjectTypeAttributes {
   if (!target) {
    target = new ObjectTypeAttributes();

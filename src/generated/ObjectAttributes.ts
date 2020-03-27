@@ -41,6 +41,20 @@ export class ObjectAttributes extends NodeAttributes {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.EventNotifier = this.eventNotifier;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.eventNotifier = inp.EventNotifier;
+
+ }
+
+
  clone( target?: ObjectAttributes): ObjectAttributes {
   if (!target) {
    target = new ObjectAttributes();

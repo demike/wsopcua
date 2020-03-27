@@ -43,6 +43,21 @@ export class ContentFilterElement {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.FilterOperator = this.filterOperator;
+  out.FilterOperands = this.filterOperands;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.filterOperator = inp.FilterOperator;
+  this.filterOperands = inp.FilterOperands;
+
+ }
+
+
  clone( target?: ContentFilterElement): ContentFilterElement {
   if (!target) {
    target = new ContentFilterElement();

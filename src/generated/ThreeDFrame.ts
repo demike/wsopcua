@@ -44,6 +44,21 @@ export class ThreeDFrame extends Frame {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.CartesianCoordinates = this.cartesianCoordinates;
+  out.Orientation = this.orientation;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.cartesianCoordinates.fromJSON(inp);
+  this.orientation.fromJSON(inp);
+
+ }
+
+
  clone( target?: ThreeDFrame): ThreeDFrame {
   if (!target) {
    target = new ThreeDFrame();

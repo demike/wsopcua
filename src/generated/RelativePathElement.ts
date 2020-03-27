@@ -52,6 +52,25 @@ export class RelativePathElement {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ReferenceTypeId = ec.jsonEncodeNodeId(this.referenceTypeId);
+  out.IsInverse = this.isInverse;
+  out.IncludeSubtypes = this.includeSubtypes;
+  out.TargetName = this.targetName;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+  this.isInverse = inp.IsInverse;
+  this.includeSubtypes = inp.IncludeSubtypes;
+  this.targetName.fromJSON(inp);
+
+ }
+
+
  clone( target?: RelativePathElement): RelativePathElement {
   if (!target) {
    target = new RelativePathElement();

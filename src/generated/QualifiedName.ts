@@ -41,6 +41,21 @@ export class QualifiedName {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NamespaceIndex = this.namespaceIndex;
+  out.Name = this.name;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.namespaceIndex = inp.NamespaceIndex;
+  this.name = inp.Name;
+
+ }
+
+
  clone( target?: QualifiedName): QualifiedName {
   if (!target) {
    target = new QualifiedName();

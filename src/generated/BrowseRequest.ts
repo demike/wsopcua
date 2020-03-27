@@ -55,6 +55,25 @@ export class BrowseRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.View = this.view;
+  out.RequestedMaxReferencesPerNode = this.requestedMaxReferencesPerNode;
+  out.NodesToBrowse = this.nodesToBrowse;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.view.fromJSON(inp);
+  this.requestedMaxReferencesPerNode = inp.RequestedMaxReferencesPerNode;
+  this.nodesToBrowse = inp.NodesToBrowse.map(m => { const mem = new BrowseDescription(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: BrowseRequest): BrowseRequest {
   if (!target) {
    target = new BrowseRequest();

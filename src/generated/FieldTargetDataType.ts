@@ -68,6 +68,31 @@ export class FieldTargetDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.DataSetFieldId = this.dataSetFieldId;
+  out.ReceiverIndexRange = this.receiverIndexRange;
+  out.TargetNodeId = ec.jsonEncodeNodeId(this.targetNodeId);
+  out.AttributeId = this.attributeId;
+  out.WriteIndexRange = this.writeIndexRange;
+  out.OverrideValueHandling = this.overrideValueHandling;
+  out.OverrideValue = this.overrideValue;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.dataSetFieldId = inp.DataSetFieldId;
+  this.receiverIndexRange = inp.ReceiverIndexRange;
+  this.targetNodeId  = ec.jsonDecodeNodeId(inp.TargetNodeId);
+  this.attributeId = inp.AttributeId;
+  this.writeIndexRange = inp.WriteIndexRange;
+  this.overrideValueHandling = inp.OverrideValueHandling;
+  this.overrideValue.fromJSON(inp);
+
+ }
+
+
  clone( target?: FieldTargetDataType): FieldTargetDataType {
   if (!target) {
    target = new FieldTargetDataType();

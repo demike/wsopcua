@@ -42,6 +42,21 @@ export class RegisterNodesResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.RegisteredNodeIds = this.registeredNodeIds.map(m => ec.jsonEncodeNodeId);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.registeredNodeIds = inp.RegisteredNodeIds.map(m => ec.jsonDecodeNodeId);
+
+ }
+
+
  clone( target?: RegisterNodesResponse): RegisterNodesResponse {
   if (!target) {
    target = new RegisterNodesResponse();

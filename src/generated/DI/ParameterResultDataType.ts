@@ -49,6 +49,23 @@ export class ParameterResultDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NodePath = this.nodePath;
+  out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
+  out.Diagnostics = this.diagnostics;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.nodePath = inp.NodePath.map(m => { const mem = new QualifiedName(); mem.fromJSON(m); return mem;});
+  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.diagnostics.fromJSON(inp);
+
+ }
+
+
  clone( target?: ParameterResultDataType): ParameterResultDataType {
   if (!target) {
    target = new ParameterResultDataType();

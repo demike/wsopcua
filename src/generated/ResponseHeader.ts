@@ -63,6 +63,29 @@ export class ResponseHeader {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Timestamp = ec.jsonEncodeDateTime(this.timestamp);
+  out.RequestHandle = this.requestHandle;
+  out.ServiceResult = ec.jsonEncodeStatusCode(this.serviceResult);
+  out.ServiceDiagnostics = this.serviceDiagnostics;
+  out.StringTable = this.stringTable;
+  out.AdditionalHeader = this.additionalHeader;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.timestamp  = ec.jsonDecodeDateTime(inp.Timestamp);
+  this.requestHandle = inp.RequestHandle;
+  this.serviceResult  = ec.jsonDecodeStatusCode(inp.ServiceResult);
+  this.serviceDiagnostics.fromJSON(inp);
+  this.stringTable = inp.StringTable;
+  this.additionalHeader = inp.AdditionalHeader;
+
+ }
+
+
  clone( target?: ResponseHeader): ResponseHeader {
   if (!target) {
    target = new ResponseHeader();

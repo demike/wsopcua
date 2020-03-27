@@ -41,6 +41,20 @@ export class ObjectNode extends InstanceNode {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.EventNotifier = this.eventNotifier;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.eventNotifier = inp.EventNotifier;
+
+ }
+
+
  clone( target?: ObjectNode): ObjectNode {
   if (!target) {
    target = new ObjectNode();

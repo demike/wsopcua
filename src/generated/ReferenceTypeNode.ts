@@ -52,6 +52,24 @@ export class ReferenceTypeNode extends TypeNode {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.IsAbstract = this.isAbstract;
+  out.Symmetric = this.symmetric;
+  out.InverseName = this.inverseName;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.isAbstract = inp.IsAbstract;
+  this.symmetric = inp.Symmetric;
+  this.inverseName.fromJSON(inp);
+
+ }
+
+
  clone( target?: ReferenceTypeNode): ReferenceTypeNode {
   if (!target) {
    target = new ReferenceTypeNode();

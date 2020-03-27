@@ -41,6 +41,21 @@ export class SignedSoftwareCertificate {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.CertificateData = this.certificateData;
+  out.Signature = this.signature;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.certificateData = inp.CertificateData;
+  this.signature = inp.Signature;
+
+ }
+
+
  clone( target?: SignedSoftwareCertificate): SignedSoftwareCertificate {
   if (!target) {
    target = new SignedSoftwareCertificate();

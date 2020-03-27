@@ -53,6 +53,25 @@ export class LocalizedText {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  if(this.locale != null) { out.Locale = this.locale; }
+  if(this.text != null) { out.Text = this.text; }
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  if(inp.Locale) {
+   this.locale = inp.Locale;
+  }
+  if(inp.Text) {
+   this.text = inp.Text;
+  }
+
+ }
+
+
  clone( target?: LocalizedText): LocalizedText {
   if (!target) {
    target = new LocalizedText();

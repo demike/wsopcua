@@ -54,6 +54,25 @@ export class BrokerWriterGroupTransportDataType extends WriterGroupTransportData
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.QueueName = this.queueName;
+  out.ResourceUri = this.resourceUri;
+  out.AuthenticationProfileUri = this.authenticationProfileUri;
+  out.RequestedDeliveryGuarantee = this.requestedDeliveryGuarantee;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.queueName = inp.QueueName;
+  this.resourceUri = inp.ResourceUri;
+  this.authenticationProfileUri = inp.AuthenticationProfileUri;
+  this.requestedDeliveryGuarantee = inp.RequestedDeliveryGuarantee;
+
+ }
+
+
  clone( target?: BrokerWriterGroupTransportDataType): BrokerWriterGroupTransportDataType {
   if (!target) {
    target = new BrokerWriterGroupTransportDataType();

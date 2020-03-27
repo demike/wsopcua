@@ -41,6 +41,21 @@ export class SignatureData {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Algorithm = this.algorithm;
+  out.Signature = this.signature;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.algorithm = inp.Algorithm;
+  this.signature = inp.Signature;
+
+ }
+
+
  clone( target?: SignatureData): SignatureData {
   if (!target) {
    target = new SignatureData();

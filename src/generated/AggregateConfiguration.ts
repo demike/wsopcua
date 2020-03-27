@@ -56,6 +56,27 @@ export class AggregateConfiguration {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.UseServerCapabilitiesDefaults = this.useServerCapabilitiesDefaults;
+  out.TreatUncertainAsBad = this.treatUncertainAsBad;
+  out.PercentDataBad = this.percentDataBad;
+  out.PercentDataGood = this.percentDataGood;
+  out.UseSlopedExtrapolation = this.useSlopedExtrapolation;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.useServerCapabilitiesDefaults = inp.UseServerCapabilitiesDefaults;
+  this.treatUncertainAsBad = inp.TreatUncertainAsBad;
+  this.percentDataBad = inp.PercentDataBad;
+  this.percentDataGood = inp.PercentDataGood;
+  this.useSlopedExtrapolation = inp.UseSlopedExtrapolation;
+
+ }
+
+
  clone( target?: AggregateConfiguration): AggregateConfiguration {
   if (!target) {
    target = new AggregateConfiguration();

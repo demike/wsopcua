@@ -80,6 +80,35 @@ export class UadpDataSetReaderMessageDataType extends DataSetReaderMessageDataTy
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.GroupVersion = this.groupVersion;
+  out.NetworkMessageNumber = this.networkMessageNumber;
+  out.DataSetOffset = this.dataSetOffset;
+  out.DataSetClassId = this.dataSetClassId;
+  out.NetworkMessageContentMask = this.networkMessageContentMask;
+  out.DataSetMessageContentMask = this.dataSetMessageContentMask;
+  out.PublishingInterval = this.publishingInterval;
+  out.ReceiveOffset = this.receiveOffset;
+  out.ProcessingOffset = this.processingOffset;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.groupVersion = inp.GroupVersion;
+  this.networkMessageNumber = inp.NetworkMessageNumber;
+  this.dataSetOffset = inp.DataSetOffset;
+  this.dataSetClassId = inp.DataSetClassId;
+  this.networkMessageContentMask = inp.NetworkMessageContentMask;
+  this.dataSetMessageContentMask = inp.DataSetMessageContentMask;
+  this.publishingInterval = inp.PublishingInterval;
+  this.receiveOffset = inp.ReceiveOffset;
+  this.processingOffset = inp.ProcessingOffset;
+
+ }
+
+
  clone( target?: UadpDataSetReaderMessageDataType): UadpDataSetReaderMessageDataType {
   if (!target) {
    target = new UadpDataSetReaderMessageDataType();

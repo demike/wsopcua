@@ -38,6 +38,19 @@ export class DatagramConnectionTransportDataType extends ConnectionTransportData
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.DiscoveryAddress = this.discoveryAddress;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.discoveryAddress = inp.DiscoveryAddress;
+
+ }
+
+
  clone( target?: DatagramConnectionTransportDataType): DatagramConnectionTransportDataType {
   if (!target) {
    target = new DatagramConnectionTransportDataType();

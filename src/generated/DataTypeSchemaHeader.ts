@@ -57,6 +57,25 @@ export class DataTypeSchemaHeader {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Namespaces = this.namespaces;
+  out.StructureDataTypes = this.structureDataTypes;
+  out.EnumDataTypes = this.enumDataTypes;
+  out.SimpleDataTypes = this.simpleDataTypes;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.namespaces = inp.Namespaces;
+  this.structureDataTypes = inp.StructureDataTypes.map(m => { const mem = new StructureDescription(); mem.fromJSON(m); return mem;});
+  this.enumDataTypes = inp.EnumDataTypes.map(m => { const mem = new EnumDescription(); mem.fromJSON(m); return mem;});
+  this.simpleDataTypes = inp.SimpleDataTypes.map(m => { const mem = new SimpleTypeDescription(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: DataTypeSchemaHeader): DataTypeSchemaHeader {
   if (!target) {
    target = new DataTypeSchemaHeader();

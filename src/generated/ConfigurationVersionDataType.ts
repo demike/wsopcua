@@ -41,6 +41,21 @@ export class ConfigurationVersionDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.MajorVersion = this.majorVersion;
+  out.MinorVersion = this.minorVersion;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.majorVersion = inp.MajorVersion;
+  this.minorVersion = inp.MinorVersion;
+
+ }
+
+
  clone( target?: ConfigurationVersionDataType): ConfigurationVersionDataType {
   if (!target) {
    target = new ConfigurationVersionDataType();

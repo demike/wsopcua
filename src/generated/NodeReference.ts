@@ -51,6 +51,25 @@ export class NodeReference {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
+  out.ReferenceTypeId = ec.jsonEncodeNodeId(this.referenceTypeId);
+  out.IsForward = this.isForward;
+  out.ReferencedNodeIds = this.referencedNodeIds.map(m => ec.jsonEncodeNodeId);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+  this.isForward = inp.IsForward;
+  this.referencedNodeIds = inp.ReferencedNodeIds.map(m => ec.jsonDecodeNodeId);
+
+ }
+
+
  clone( target?: NodeReference): NodeReference {
   if (!target) {
    target = new NodeReference();

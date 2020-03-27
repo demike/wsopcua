@@ -43,6 +43,21 @@ export class EventFieldList {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ClientHandle = this.clientHandle;
+  out.EventFields = this.eventFields;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.clientHandle = inp.ClientHandle;
+  this.eventFields = inp.EventFields.map(m => { const mem = new Variant(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: EventFieldList): EventFieldList {
   if (!target) {
    target = new EventFieldList();

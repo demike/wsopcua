@@ -35,6 +35,18 @@ export class AnonymousIdentityToken extends UserIdentityToken {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+
+ }
+
+
  clone( target?: AnonymousIdentityToken): AnonymousIdentityToken {
   if (!target) {
    target = new AnonymousIdentityToken();

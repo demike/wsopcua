@@ -46,6 +46,23 @@ export class SessionlessInvokeResponseType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NamespaceUris = this.namespaceUris;
+  out.ServerUris = this.serverUris;
+  out.ServiceId = this.serviceId;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.namespaceUris = inp.NamespaceUris;
+  this.serverUris = inp.ServerUris;
+  this.serviceId = inp.ServiceId;
+
+ }
+
+
  clone( target?: SessionlessInvokeResponseType): SessionlessInvokeResponseType {
   if (!target) {
    target = new SessionlessInvokeResponseType();

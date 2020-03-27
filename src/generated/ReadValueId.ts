@@ -52,6 +52,25 @@ export class ReadValueId {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
+  out.AttributeId = this.attributeId;
+  out.IndexRange = this.indexRange;
+  out.DataEncoding = this.dataEncoding;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+  this.attributeId = inp.AttributeId;
+  this.indexRange = inp.IndexRange;
+  this.dataEncoding.fromJSON(inp);
+
+ }
+
+
  clone( target?: ReadValueId): ReadValueId {
   if (!target) {
    target = new ReadValueId();

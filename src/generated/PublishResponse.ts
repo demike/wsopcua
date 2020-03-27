@@ -70,6 +70,31 @@ export class PublishResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.SubscriptionId = this.subscriptionId;
+  out.AvailableSequenceNumbers = this.availableSequenceNumbers;
+  out.MoreNotifications = this.moreNotifications;
+  out.NotificationMessage = this.notificationMessage;
+  out.Results = this.results.map(m => ec.jsonEncodeStatusCode);
+  out.DiagnosticInfos = this.diagnosticInfos;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.subscriptionId = inp.SubscriptionId;
+  this.availableSequenceNumbers = inp.AvailableSequenceNumbers;
+  this.moreNotifications = inp.MoreNotifications;
+  this.notificationMessage.fromJSON(inp);
+  this.results = inp.Results.map(m => ec.jsonDecodeStatusCode);
+  this.diagnosticInfos = inp.DiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: PublishResponse): PublishResponse {
   if (!target) {
    target = new PublishResponse();

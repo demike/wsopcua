@@ -62,6 +62,29 @@ export class BrowseDescription {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
+  out.BrowseDirection = this.browseDirection;
+  out.ReferenceTypeId = ec.jsonEncodeNodeId(this.referenceTypeId);
+  out.IncludeSubtypes = this.includeSubtypes;
+  out.NodeClassMask = this.nodeClassMask;
+  out.ResultMask = this.resultMask;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+  this.browseDirection = inp.BrowseDirection;
+  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+  this.includeSubtypes = inp.IncludeSubtypes;
+  this.nodeClassMask = inp.NodeClassMask;
+  this.resultMask = inp.ResultMask;
+
+ }
+
+
  clone( target?: BrowseDescription): BrowseDescription {
   if (!target) {
    target = new BrowseDescription();

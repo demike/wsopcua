@@ -59,6 +59,27 @@ export class BrokerDataSetReaderTransportDataType extends DataSetReaderTransport
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.QueueName = this.queueName;
+  out.ResourceUri = this.resourceUri;
+  out.AuthenticationProfileUri = this.authenticationProfileUri;
+  out.RequestedDeliveryGuarantee = this.requestedDeliveryGuarantee;
+  out.MetaDataQueueName = this.metaDataQueueName;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.queueName = inp.QueueName;
+  this.resourceUri = inp.ResourceUri;
+  this.authenticationProfileUri = inp.AuthenticationProfileUri;
+  this.requestedDeliveryGuarantee = inp.RequestedDeliveryGuarantee;
+  this.metaDataQueueName = inp.MetaDataQueueName;
+
+ }
+
+
  clone( target?: BrokerDataSetReaderTransportDataType): BrokerDataSetReaderTransportDataType {
   if (!target) {
    target = new BrokerDataSetReaderTransportDataType();

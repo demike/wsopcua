@@ -74,6 +74,33 @@ export class RegisteredServer {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ServerUri = this.serverUri;
+  out.ProductUri = this.productUri;
+  out.ServerNames = this.serverNames;
+  out.ServerType = this.serverType;
+  out.GatewayServerUri = this.gatewayServerUri;
+  out.DiscoveryUrls = this.discoveryUrls;
+  out.SemaphoreFilePath = this.semaphoreFilePath;
+  out.IsOnline = this.isOnline;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.serverUri = inp.ServerUri;
+  this.productUri = inp.ProductUri;
+  this.serverNames = inp.ServerNames.map(m => { const mem = new LocalizedText(); mem.fromJSON(m); return mem;});
+  this.serverType = inp.ServerType;
+  this.gatewayServerUri = inp.GatewayServerUri;
+  this.discoveryUrls = inp.DiscoveryUrls;
+  this.semaphoreFilePath = inp.SemaphoreFilePath;
+  this.isOnline = inp.IsOnline;
+
+ }
+
+
  clone( target?: RegisteredServer): RegisteredServer {
   if (!target) {
    target = new RegisteredServer();

@@ -47,6 +47,23 @@ export class SetPublishingModeRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.PublishingEnabled = this.publishingEnabled;
+  out.SubscriptionIds = this.subscriptionIds;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.publishingEnabled = inp.PublishingEnabled;
+  this.subscriptionIds = inp.SubscriptionIds;
+
+ }
+
+
  clone( target?: SetPublishingModeRequest): SetPublishingModeRequest {
   if (!target) {
    target = new SetPublishingModeRequest();

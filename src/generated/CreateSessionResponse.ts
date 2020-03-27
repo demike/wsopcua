@@ -87,6 +87,37 @@ export class CreateSessionResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.SessionId = ec.jsonEncodeNodeId(this.sessionId);
+  out.AuthenticationToken = ec.jsonEncodeNodeId(this.authenticationToken);
+  out.RevisedSessionTimeout = this.revisedSessionTimeout;
+  out.ServerNonce = this.serverNonce;
+  out.ServerCertificate = this.serverCertificate;
+  out.ServerEndpoints = this.serverEndpoints;
+  out.ServerSoftwareCertificates = this.serverSoftwareCertificates;
+  out.ServerSignature = this.serverSignature;
+  out.MaxRequestMessageSize = this.maxRequestMessageSize;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.sessionId  = ec.jsonDecodeNodeId(inp.SessionId);
+  this.authenticationToken  = ec.jsonDecodeNodeId(inp.AuthenticationToken);
+  this.revisedSessionTimeout = inp.RevisedSessionTimeout;
+  this.serverNonce = inp.ServerNonce;
+  this.serverCertificate = inp.ServerCertificate;
+  this.serverEndpoints = inp.ServerEndpoints.map(m => { const mem = new EndpointDescription(); mem.fromJSON(m); return mem;});
+  this.serverSoftwareCertificates = inp.ServerSoftwareCertificates.map(m => { const mem = new SignedSoftwareCertificate(); mem.fromJSON(m); return mem;});
+  this.serverSignature.fromJSON(inp);
+  this.maxRequestMessageSize = inp.MaxRequestMessageSize;
+
+ }
+
+
  clone( target?: CreateSessionResponse): CreateSessionResponse {
   if (!target) {
    target = new CreateSessionResponse();

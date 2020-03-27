@@ -48,6 +48,23 @@ export class NodeTypeDescription {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.TypeDefinitionNode = ec.jsonEncodeExpandedNodeId(this.typeDefinitionNode);
+  out.IncludeSubTypes = this.includeSubTypes;
+  out.DataToReturn = this.dataToReturn;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.typeDefinitionNode  = ec.jsonDecodeExpandedNodeId(inp.TypeDefinitionNode);
+  this.includeSubTypes = inp.IncludeSubTypes;
+  this.dataToReturn = inp.DataToReturn.map(m => { const mem = new QueryDataDescription(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: NodeTypeDescription): NodeTypeDescription {
   if (!target) {
    target = new NodeTypeDescription();

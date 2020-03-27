@@ -62,6 +62,28 @@ export class VariableTypeNode extends TypeNode {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.Value = this.value;
+  out.DataType = ec.jsonEncodeNodeId(this.dataType);
+  out.ValueRank = this.valueRank;
+  out.ArrayDimensions = this.arrayDimensions;
+  out.IsAbstract = this.isAbstract;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.value.fromJSON(inp);
+  this.dataType  = ec.jsonDecodeNodeId(inp.DataType);
+  this.valueRank = inp.ValueRank;
+  this.arrayDimensions = inp.ArrayDimensions;
+  this.isAbstract = inp.IsAbstract;
+
+ }
+
+
  clone( target?: VariableTypeNode): VariableTypeNode {
   if (!target) {
    target = new VariableTypeNode();

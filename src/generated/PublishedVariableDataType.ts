@@ -74,6 +74,33 @@ export class PublishedVariableDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.PublishedVariable = ec.jsonEncodeNodeId(this.publishedVariable);
+  out.AttributeId = this.attributeId;
+  out.SamplingIntervalHint = this.samplingIntervalHint;
+  out.DeadbandType = this.deadbandType;
+  out.DeadbandValue = this.deadbandValue;
+  out.IndexRange = this.indexRange;
+  out.SubstituteValue = this.substituteValue;
+  out.MetaDataProperties = this.metaDataProperties;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.publishedVariable  = ec.jsonDecodeNodeId(inp.PublishedVariable);
+  this.attributeId = inp.AttributeId;
+  this.samplingIntervalHint = inp.SamplingIntervalHint;
+  this.deadbandType = inp.DeadbandType;
+  this.deadbandValue = inp.DeadbandValue;
+  this.indexRange = inp.IndexRange;
+  this.substituteValue.fromJSON(inp);
+  this.metaDataProperties = inp.MetaDataProperties.map(m => { const mem = new QualifiedName(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: PublishedVariableDataType): PublishedVariableDataType {
   if (!target) {
    target = new PublishedVariableDataType();

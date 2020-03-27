@@ -38,6 +38,19 @@ export class HistoryEvent {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Events = this.events;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.events = inp.Events.map(m => { const mem = new HistoryEventFieldList(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: HistoryEvent): HistoryEvent {
   if (!target) {
    target = new HistoryEvent();

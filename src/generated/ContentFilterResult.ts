@@ -45,6 +45,21 @@ export class ContentFilterResult {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ElementResults = this.elementResults;
+  out.ElementDiagnosticInfos = this.elementDiagnosticInfos;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.elementResults = inp.ElementResults.map(m => { const mem = new ContentFilterElementResult(); mem.fromJSON(m); return mem;});
+  this.elementDiagnosticInfos = inp.ElementDiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: ContentFilterResult): ContentFilterResult {
   if (!target) {
    target = new ContentFilterResult();

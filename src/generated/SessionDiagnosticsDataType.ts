@@ -248,6 +248,103 @@ export class SessionDiagnosticsDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SessionId = ec.jsonEncodeNodeId(this.sessionId);
+  out.SessionName = this.sessionName;
+  out.ClientDescription = this.clientDescription;
+  out.ServerUri = this.serverUri;
+  out.EndpointUrl = this.endpointUrl;
+  out.LocaleIds = this.localeIds;
+  out.ActualSessionTimeout = this.actualSessionTimeout;
+  out.MaxResponseMessageSize = this.maxResponseMessageSize;
+  out.ClientConnectionTime = ec.jsonEncodeDateTime(this.clientConnectionTime);
+  out.ClientLastContactTime = ec.jsonEncodeDateTime(this.clientLastContactTime);
+  out.CurrentSubscriptionsCount = this.currentSubscriptionsCount;
+  out.CurrentMonitoredItemsCount = this.currentMonitoredItemsCount;
+  out.CurrentPublishRequestsInQueue = this.currentPublishRequestsInQueue;
+  out.TotalRequestCount = this.totalRequestCount;
+  out.UnauthorizedRequestCount = this.unauthorizedRequestCount;
+  out.ReadCount = this.readCount;
+  out.HistoryReadCount = this.historyReadCount;
+  out.WriteCount = this.writeCount;
+  out.HistoryUpdateCount = this.historyUpdateCount;
+  out.CallCount = this.callCount;
+  out.CreateMonitoredItemsCount = this.createMonitoredItemsCount;
+  out.ModifyMonitoredItemsCount = this.modifyMonitoredItemsCount;
+  out.SetMonitoringModeCount = this.setMonitoringModeCount;
+  out.SetTriggeringCount = this.setTriggeringCount;
+  out.DeleteMonitoredItemsCount = this.deleteMonitoredItemsCount;
+  out.CreateSubscriptionCount = this.createSubscriptionCount;
+  out.ModifySubscriptionCount = this.modifySubscriptionCount;
+  out.SetPublishingModeCount = this.setPublishingModeCount;
+  out.PublishCount = this.publishCount;
+  out.RepublishCount = this.republishCount;
+  out.TransferSubscriptionsCount = this.transferSubscriptionsCount;
+  out.DeleteSubscriptionsCount = this.deleteSubscriptionsCount;
+  out.AddNodesCount = this.addNodesCount;
+  out.AddReferencesCount = this.addReferencesCount;
+  out.DeleteNodesCount = this.deleteNodesCount;
+  out.DeleteReferencesCount = this.deleteReferencesCount;
+  out.BrowseCount = this.browseCount;
+  out.BrowseNextCount = this.browseNextCount;
+  out.TranslateBrowsePathsToNodeIdsCount = this.translateBrowsePathsToNodeIdsCount;
+  out.QueryFirstCount = this.queryFirstCount;
+  out.QueryNextCount = this.queryNextCount;
+  out.RegisterNodesCount = this.registerNodesCount;
+  out.UnregisterNodesCount = this.unregisterNodesCount;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.sessionId  = ec.jsonDecodeNodeId(inp.SessionId);
+  this.sessionName = inp.SessionName;
+  this.clientDescription.fromJSON(inp);
+  this.serverUri = inp.ServerUri;
+  this.endpointUrl = inp.EndpointUrl;
+  this.localeIds = inp.LocaleIds;
+  this.actualSessionTimeout = inp.ActualSessionTimeout;
+  this.maxResponseMessageSize = inp.MaxResponseMessageSize;
+  this.clientConnectionTime  = ec.jsonDecodeDateTime(inp.ClientConnectionTime);
+  this.clientLastContactTime  = ec.jsonDecodeDateTime(inp.ClientLastContactTime);
+  this.currentSubscriptionsCount = inp.CurrentSubscriptionsCount;
+  this.currentMonitoredItemsCount = inp.CurrentMonitoredItemsCount;
+  this.currentPublishRequestsInQueue = inp.CurrentPublishRequestsInQueue;
+  this.totalRequestCount.fromJSON(inp);
+  this.unauthorizedRequestCount = inp.UnauthorizedRequestCount;
+  this.readCount.fromJSON(inp);
+  this.historyReadCount.fromJSON(inp);
+  this.writeCount.fromJSON(inp);
+  this.historyUpdateCount.fromJSON(inp);
+  this.callCount.fromJSON(inp);
+  this.createMonitoredItemsCount.fromJSON(inp);
+  this.modifyMonitoredItemsCount.fromJSON(inp);
+  this.setMonitoringModeCount.fromJSON(inp);
+  this.setTriggeringCount.fromJSON(inp);
+  this.deleteMonitoredItemsCount.fromJSON(inp);
+  this.createSubscriptionCount.fromJSON(inp);
+  this.modifySubscriptionCount.fromJSON(inp);
+  this.setPublishingModeCount.fromJSON(inp);
+  this.publishCount.fromJSON(inp);
+  this.republishCount.fromJSON(inp);
+  this.transferSubscriptionsCount.fromJSON(inp);
+  this.deleteSubscriptionsCount.fromJSON(inp);
+  this.addNodesCount.fromJSON(inp);
+  this.addReferencesCount.fromJSON(inp);
+  this.deleteNodesCount.fromJSON(inp);
+  this.deleteReferencesCount.fromJSON(inp);
+  this.browseCount.fromJSON(inp);
+  this.browseNextCount.fromJSON(inp);
+  this.translateBrowsePathsToNodeIdsCount.fromJSON(inp);
+  this.queryFirstCount.fromJSON(inp);
+  this.queryNextCount.fromJSON(inp);
+  this.registerNodesCount.fromJSON(inp);
+  this.unregisterNodesCount.fromJSON(inp);
+
+ }
+
+
  clone( target?: SessionDiagnosticsDataType): SessionDiagnosticsDataType {
   if (!target) {
    target = new SessionDiagnosticsDataType();

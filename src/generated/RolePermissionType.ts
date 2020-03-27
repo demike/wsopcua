@@ -42,6 +42,21 @@ export class RolePermissionType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RoleId = ec.jsonEncodeNodeId(this.roleId);
+  out.Permissions = this.permissions;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.roleId  = ec.jsonDecodeNodeId(inp.RoleId);
+  this.permissions = inp.Permissions;
+
+ }
+
+
  clone( target?: RolePermissionType): RolePermissionType {
   if (!target) {
    target = new RolePermissionType();

@@ -38,6 +38,19 @@ export class LiteralOperand extends FilterOperand {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Value = this.value;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.value.fromJSON(inp);
+
+ }
+
+
  clone( target?: LiteralOperand): LiteralOperand {
   if (!target) {
    target = new LiteralOperand();

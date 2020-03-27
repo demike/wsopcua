@@ -64,6 +64,29 @@ export class ServerStatusDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StartTime = ec.jsonEncodeDateTime(this.startTime);
+  out.CurrentTime = ec.jsonEncodeDateTime(this.currentTime);
+  out.State = this.state;
+  out.BuildInfo = this.buildInfo;
+  out.SecondsTillShutdown = this.secondsTillShutdown;
+  out.ShutdownReason = this.shutdownReason;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.startTime  = ec.jsonDecodeDateTime(inp.StartTime);
+  this.currentTime  = ec.jsonDecodeDateTime(inp.CurrentTime);
+  this.state = inp.State;
+  this.buildInfo.fromJSON(inp);
+  this.secondsTillShutdown = inp.SecondsTillShutdown;
+  this.shutdownReason.fromJSON(inp);
+
+ }
+
+
  clone( target?: ServerStatusDataType): ServerStatusDataType {
   if (!target) {
    target = new ServerStatusDataType();

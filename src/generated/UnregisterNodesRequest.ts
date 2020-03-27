@@ -42,6 +42,21 @@ export class UnregisterNodesRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.NodesToUnregister = this.nodesToUnregister.map(m => ec.jsonEncodeNodeId);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.nodesToUnregister = inp.NodesToUnregister.map(m => ec.jsonDecodeNodeId);
+
+ }
+
+
  clone( target?: UnregisterNodesRequest): UnregisterNodesRequest {
   if (!target) {
    target = new UnregisterNodesRequest();

@@ -64,6 +64,29 @@ export class BrokerDataSetWriterTransportDataType extends DataSetWriterTransport
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.QueueName = this.queueName;
+  out.ResourceUri = this.resourceUri;
+  out.AuthenticationProfileUri = this.authenticationProfileUri;
+  out.RequestedDeliveryGuarantee = this.requestedDeliveryGuarantee;
+  out.MetaDataQueueName = this.metaDataQueueName;
+  out.MetaDataUpdateTime = this.metaDataUpdateTime;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.queueName = inp.QueueName;
+  this.resourceUri = inp.ResourceUri;
+  this.authenticationProfileUri = inp.AuthenticationProfileUri;
+  this.requestedDeliveryGuarantee = inp.RequestedDeliveryGuarantee;
+  this.metaDataQueueName = inp.MetaDataQueueName;
+  this.metaDataUpdateTime = inp.MetaDataUpdateTime;
+
+ }
+
+
  clone( target?: BrokerDataSetWriterTransportDataType): BrokerDataSetWriterTransportDataType {
   if (!target) {
    target = new BrokerDataSetWriterTransportDataType();

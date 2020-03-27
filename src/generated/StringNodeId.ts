@@ -41,6 +41,21 @@ export class StringNodeId {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NamespaceIndex = this.namespaceIndex;
+  out.Identifier = this.identifier;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.namespaceIndex = inp.NamespaceIndex;
+  this.identifier = inp.Identifier;
+
+ }
+
+
  clone( target?: StringNodeId): StringNodeId {
   if (!target) {
    target = new StringNodeId();

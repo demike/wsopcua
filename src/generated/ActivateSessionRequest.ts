@@ -66,6 +66,29 @@ export class ActivateSessionRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.ClientSignature = this.clientSignature;
+  out.ClientSoftwareCertificates = this.clientSoftwareCertificates;
+  out.LocaleIds = this.localeIds;
+  out.UserIdentityToken = this.userIdentityToken;
+  out.UserTokenSignature = this.userTokenSignature;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.clientSignature.fromJSON(inp);
+  this.clientSoftwareCertificates = inp.ClientSoftwareCertificates.map(m => { const mem = new SignedSoftwareCertificate(); mem.fromJSON(m); return mem;});
+  this.localeIds = inp.LocaleIds;
+  this.userIdentityToken = inp.UserIdentityToken;
+  this.userTokenSignature.fromJSON(inp);
+
+ }
+
+
  clone( target?: ActivateSessionRequest): ActivateSessionRequest {
   if (!target) {
    target = new ActivateSessionRequest();

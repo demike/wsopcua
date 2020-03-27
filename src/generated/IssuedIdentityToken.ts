@@ -46,6 +46,22 @@ export class IssuedIdentityToken extends UserIdentityToken {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.TokenData = this.tokenData;
+  out.EncryptionAlgorithm = this.encryptionAlgorithm;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.tokenData = inp.TokenData;
+  this.encryptionAlgorithm = inp.EncryptionAlgorithm;
+
+ }
+
+
  clone( target?: IssuedIdentityToken): IssuedIdentityToken {
   if (!target) {
    target = new IssuedIdentityToken();

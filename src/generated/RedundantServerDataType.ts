@@ -47,6 +47,23 @@ export class RedundantServerDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ServerId = this.serverId;
+  out.ServiceLevel = this.serviceLevel;
+  out.ServerState = this.serverState;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.serverId = inp.ServerId;
+  this.serviceLevel = inp.ServiceLevel;
+  this.serverState = inp.ServerState;
+
+ }
+
+
  clone( target?: RedundantServerDataType): RedundantServerDataType {
   if (!target) {
    target = new RedundantServerDataType();

@@ -48,6 +48,23 @@ export class ThreeDOrientation extends Orientation {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.A = this.a;
+  out.B = this.b;
+  out.C = this.c;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.a = inp.A;
+  this.b = inp.B;
+  this.c = inp.C;
+
+ }
+
+
  clone( target?: ThreeDOrientation): ThreeDOrientation {
   if (!target) {
    target = new ThreeDOrientation();

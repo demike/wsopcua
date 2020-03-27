@@ -41,6 +41,20 @@ export class EnumField extends EnumValueType {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.Name = this.name;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.name = inp.Name;
+
+ }
+
+
  clone( target?: EnumField): EnumField {
   if (!target) {
    target = new EnumField();

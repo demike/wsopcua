@@ -60,6 +60,27 @@ export class UadpWriterGroupMessageDataType extends WriterGroupMessageDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.GroupVersion = this.groupVersion;
+  out.DataSetOrdering = this.dataSetOrdering;
+  out.NetworkMessageContentMask = this.networkMessageContentMask;
+  out.SamplingOffset = this.samplingOffset;
+  out.PublishingOffset = this.publishingOffset;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.groupVersion = inp.GroupVersion;
+  this.dataSetOrdering = inp.DataSetOrdering;
+  this.networkMessageContentMask = inp.NetworkMessageContentMask;
+  this.samplingOffset = inp.SamplingOffset;
+  this.publishingOffset = inp.PublishingOffset;
+
+ }
+
+
  clone( target?: UadpWriterGroupMessageDataType): UadpWriterGroupMessageDataType {
   if (!target) {
    target = new UadpWriterGroupMessageDataType();

@@ -49,6 +49,23 @@ export class FindServersOnNetworkResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.LastCounterResetTime = ec.jsonEncodeDateTime(this.lastCounterResetTime);
+  out.Servers = this.servers;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.lastCounterResetTime  = ec.jsonDecodeDateTime(inp.LastCounterResetTime);
+  this.servers = inp.Servers.map(m => { const mem = new ServerOnNetwork(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: FindServersOnNetworkResponse): FindServersOnNetworkResponse {
   if (!target) {
    target = new FindServersOnNetworkResponse();

@@ -42,6 +42,21 @@ export class CloseSessionRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.DeleteSubscriptions = this.deleteSubscriptions;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.deleteSubscriptions = inp.DeleteSubscriptions;
+
+ }
+
+
  clone( target?: CloseSessionRequest): CloseSessionRequest {
   if (!target) {
    target = new CloseSessionRequest();

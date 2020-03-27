@@ -36,6 +36,19 @@ export class UserIdentityToken {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.PolicyId = this.policyId;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.policyId = inp.PolicyId;
+
+ }
+
+
  clone( target?: UserIdentityToken): UserIdentityToken {
   if (!target) {
    target = new UserIdentityToken();

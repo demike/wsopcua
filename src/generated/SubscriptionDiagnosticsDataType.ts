@@ -186,6 +186,79 @@ export class SubscriptionDiagnosticsDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SessionId = ec.jsonEncodeNodeId(this.sessionId);
+  out.SubscriptionId = this.subscriptionId;
+  out.Priority = this.priority;
+  out.PublishingInterval = this.publishingInterval;
+  out.MaxKeepAliveCount = this.maxKeepAliveCount;
+  out.MaxLifetimeCount = this.maxLifetimeCount;
+  out.MaxNotificationsPerPublish = this.maxNotificationsPerPublish;
+  out.PublishingEnabled = this.publishingEnabled;
+  out.ModifyCount = this.modifyCount;
+  out.EnableCount = this.enableCount;
+  out.DisableCount = this.disableCount;
+  out.RepublishRequestCount = this.republishRequestCount;
+  out.RepublishMessageRequestCount = this.republishMessageRequestCount;
+  out.RepublishMessageCount = this.republishMessageCount;
+  out.TransferRequestCount = this.transferRequestCount;
+  out.TransferredToAltClientCount = this.transferredToAltClientCount;
+  out.TransferredToSameClientCount = this.transferredToSameClientCount;
+  out.PublishRequestCount = this.publishRequestCount;
+  out.DataChangeNotificationsCount = this.dataChangeNotificationsCount;
+  out.EventNotificationsCount = this.eventNotificationsCount;
+  out.NotificationsCount = this.notificationsCount;
+  out.LatePublishRequestCount = this.latePublishRequestCount;
+  out.CurrentKeepAliveCount = this.currentKeepAliveCount;
+  out.CurrentLifetimeCount = this.currentLifetimeCount;
+  out.UnacknowledgedMessageCount = this.unacknowledgedMessageCount;
+  out.DiscardedMessageCount = this.discardedMessageCount;
+  out.MonitoredItemCount = this.monitoredItemCount;
+  out.DisabledMonitoredItemCount = this.disabledMonitoredItemCount;
+  out.MonitoringQueueOverflowCount = this.monitoringQueueOverflowCount;
+  out.NextSequenceNumber = this.nextSequenceNumber;
+  out.EventQueueOverFlowCount = this.eventQueueOverFlowCount;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.sessionId  = ec.jsonDecodeNodeId(inp.SessionId);
+  this.subscriptionId = inp.SubscriptionId;
+  this.priority = inp.Priority;
+  this.publishingInterval = inp.PublishingInterval;
+  this.maxKeepAliveCount = inp.MaxKeepAliveCount;
+  this.maxLifetimeCount = inp.MaxLifetimeCount;
+  this.maxNotificationsPerPublish = inp.MaxNotificationsPerPublish;
+  this.publishingEnabled = inp.PublishingEnabled;
+  this.modifyCount = inp.ModifyCount;
+  this.enableCount = inp.EnableCount;
+  this.disableCount = inp.DisableCount;
+  this.republishRequestCount = inp.RepublishRequestCount;
+  this.republishMessageRequestCount = inp.RepublishMessageRequestCount;
+  this.republishMessageCount = inp.RepublishMessageCount;
+  this.transferRequestCount = inp.TransferRequestCount;
+  this.transferredToAltClientCount = inp.TransferredToAltClientCount;
+  this.transferredToSameClientCount = inp.TransferredToSameClientCount;
+  this.publishRequestCount = inp.PublishRequestCount;
+  this.dataChangeNotificationsCount = inp.DataChangeNotificationsCount;
+  this.eventNotificationsCount = inp.EventNotificationsCount;
+  this.notificationsCount = inp.NotificationsCount;
+  this.latePublishRequestCount = inp.LatePublishRequestCount;
+  this.currentKeepAliveCount = inp.CurrentKeepAliveCount;
+  this.currentLifetimeCount = inp.CurrentLifetimeCount;
+  this.unacknowledgedMessageCount = inp.UnacknowledgedMessageCount;
+  this.discardedMessageCount = inp.DiscardedMessageCount;
+  this.monitoredItemCount = inp.MonitoredItemCount;
+  this.disabledMonitoredItemCount = inp.DisabledMonitoredItemCount;
+  this.monitoringQueueOverflowCount = inp.MonitoringQueueOverflowCount;
+  this.nextSequenceNumber = inp.NextSequenceNumber;
+  this.eventQueueOverFlowCount = inp.EventQueueOverFlowCount;
+
+ }
+
+
  clone( target?: SubscriptionDiagnosticsDataType): SubscriptionDiagnosticsDataType {
   if (!target) {
    target = new SubscriptionDiagnosticsDataType();

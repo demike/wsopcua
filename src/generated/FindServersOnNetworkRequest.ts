@@ -52,6 +52,25 @@ export class FindServersOnNetworkRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.StartingRecordId = this.startingRecordId;
+  out.MaxRecordsToReturn = this.maxRecordsToReturn;
+  out.ServerCapabilityFilter = this.serverCapabilityFilter;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.startingRecordId = inp.StartingRecordId;
+  this.maxRecordsToReturn = inp.MaxRecordsToReturn;
+  this.serverCapabilityFilter = inp.ServerCapabilityFilter;
+
+ }
+
+
  clone( target?: FindServersOnNetworkRequest): FindServersOnNetworkRequest {
   if (!target) {
    target = new FindServersOnNetworkRequest();

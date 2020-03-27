@@ -57,6 +57,27 @@ export class MonitoringParameters {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ClientHandle = this.clientHandle;
+  out.SamplingInterval = this.samplingInterval;
+  out.Filter = this.filter;
+  out.QueueSize = this.queueSize;
+  out.DiscardOldest = this.discardOldest;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.clientHandle = inp.ClientHandle;
+  this.samplingInterval = inp.SamplingInterval;
+  this.filter = inp.Filter;
+  this.queueSize = inp.QueueSize;
+  this.discardOldest = inp.DiscardOldest;
+
+ }
+
+
  clone( target?: MonitoringParameters): MonitoringParameters {
   if (!target) {
    target = new MonitoringParameters();

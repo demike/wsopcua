@@ -48,6 +48,23 @@ export class ThreeDCartesianCoordinates extends CartesianCoordinates {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.X = this.x;
+  out.Y = this.y;
+  out.Z = this.z;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.x = inp.X;
+  this.y = inp.Y;
+  this.z = inp.Z;
+
+ }
+
+
  clone( target?: ThreeDCartesianCoordinates): ThreeDCartesianCoordinates {
   if (!target) {
    target = new ThreeDCartesianCoordinates();

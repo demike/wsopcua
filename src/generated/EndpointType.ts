@@ -52,6 +52,25 @@ export class EndpointType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.EndpointUrl = this.endpointUrl;
+  out.SecurityMode = this.securityMode;
+  out.SecurityPolicyUri = this.securityPolicyUri;
+  out.TransportProfileUri = this.transportProfileUri;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.endpointUrl = inp.EndpointUrl;
+  this.securityMode = inp.SecurityMode;
+  this.securityPolicyUri = inp.SecurityPolicyUri;
+  this.transportProfileUri = inp.TransportProfileUri;
+
+ }
+
+
  clone( target?: EndpointType): EndpointType {
   if (!target) {
    target = new EndpointType();

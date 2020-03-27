@@ -54,6 +54,25 @@ export class StructureDefinition {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.DefaultEncodingId = ec.jsonEncodeNodeId(this.defaultEncodingId);
+  out.BaseDataType = ec.jsonEncodeNodeId(this.baseDataType);
+  out.StructureType = this.structureType;
+  out.Fields = this.fields;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.defaultEncodingId  = ec.jsonDecodeNodeId(inp.DefaultEncodingId);
+  this.baseDataType  = ec.jsonDecodeNodeId(inp.BaseDataType);
+  this.structureType = inp.StructureType;
+  this.fields = inp.Fields.map(m => { const mem = new StructureField(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: StructureDefinition): StructureDefinition {
   if (!target) {
    target = new StructureDefinition();

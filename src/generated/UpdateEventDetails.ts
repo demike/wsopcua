@@ -55,6 +55,24 @@ export class UpdateEventDetails extends HistoryUpdateDetails {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.PerformInsertReplace = this.performInsertReplace;
+  out.Filter = this.filter;
+  out.EventData = this.eventData;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.performInsertReplace = inp.PerformInsertReplace;
+  this.filter.fromJSON(inp);
+  this.eventData = inp.EventData.map(m => { const mem = new HistoryEventFieldList(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: UpdateEventDetails): UpdateEventDetails {
   if (!target) {
    target = new UpdateEventDetails();

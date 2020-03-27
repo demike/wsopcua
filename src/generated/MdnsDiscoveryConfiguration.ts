@@ -43,6 +43,21 @@ export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.MdnsServerName = this.mdnsServerName;
+  out.ServerCapabilities = this.serverCapabilities;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.mdnsServerName = inp.MdnsServerName;
+  this.serverCapabilities = inp.ServerCapabilities;
+
+ }
+
+
  clone( target?: MdnsDiscoveryConfiguration): MdnsDiscoveryConfiguration {
   if (!target) {
    target = new MdnsDiscoveryConfiguration();

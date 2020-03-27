@@ -41,6 +41,21 @@ export class ByteStringNodeId {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NamespaceIndex = this.namespaceIndex;
+  out.Identifier = this.identifier;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.namespaceIndex = inp.NamespaceIndex;
+  this.identifier = inp.Identifier;
+
+ }
+
+
  clone( target?: ByteStringNodeId): ByteStringNodeId {
   if (!target) {
    target = new ByteStringNodeId();

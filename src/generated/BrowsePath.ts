@@ -42,6 +42,21 @@ export class BrowsePath {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StartingNode = ec.jsonEncodeNodeId(this.startingNode);
+  out.RelativePath = this.relativePath;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.startingNode  = ec.jsonDecodeNodeId(inp.StartingNode);
+  this.relativePath.fromJSON(inp);
+
+ }
+
+
  clone( target?: BrowsePath): BrowsePath {
   if (!target) {
    target = new BrowsePath();

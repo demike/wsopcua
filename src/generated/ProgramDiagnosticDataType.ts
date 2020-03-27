@@ -84,6 +84,37 @@ export class ProgramDiagnosticDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.CreateSessionId = ec.jsonEncodeNodeId(this.createSessionId);
+  out.CreateClientName = this.createClientName;
+  out.InvocationCreationTime = ec.jsonEncodeDateTime(this.invocationCreationTime);
+  out.LastTransitionTime = ec.jsonEncodeDateTime(this.lastTransitionTime);
+  out.LastMethodCall = this.lastMethodCall;
+  out.LastMethodSessionId = ec.jsonEncodeNodeId(this.lastMethodSessionId);
+  out.LastMethodInputArguments = this.lastMethodInputArguments;
+  out.LastMethodOutputArguments = this.lastMethodOutputArguments;
+  out.LastMethodCallTime = ec.jsonEncodeDateTime(this.lastMethodCallTime);
+  out.LastMethodReturnStatus = this.lastMethodReturnStatus;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.createSessionId  = ec.jsonDecodeNodeId(inp.CreateSessionId);
+  this.createClientName = inp.CreateClientName;
+  this.invocationCreationTime  = ec.jsonDecodeDateTime(inp.InvocationCreationTime);
+  this.lastTransitionTime  = ec.jsonDecodeDateTime(inp.LastTransitionTime);
+  this.lastMethodCall = inp.LastMethodCall;
+  this.lastMethodSessionId  = ec.jsonDecodeNodeId(inp.LastMethodSessionId);
+  this.lastMethodInputArguments = inp.LastMethodInputArguments.map(m => { const mem = new Argument(); mem.fromJSON(m); return mem;});
+  this.lastMethodOutputArguments = inp.LastMethodOutputArguments.map(m => { const mem = new Argument(); mem.fromJSON(m); return mem;});
+  this.lastMethodCallTime  = ec.jsonDecodeDateTime(inp.LastMethodCallTime);
+  this.lastMethodReturnStatus.fromJSON(inp);
+
+ }
+
+
  clone( target?: ProgramDiagnosticDataType): ProgramDiagnosticDataType {
   if (!target) {
    target = new ProgramDiagnosticDataType();

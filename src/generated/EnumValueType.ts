@@ -47,6 +47,23 @@ export class EnumValueType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Value = this.value;
+  out.DisplayName = this.displayName;
+  out.Description = this.description;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.value = inp.Value;
+  this.displayName.fromJSON(inp);
+  this.description.fromJSON(inp);
+
+ }
+
+
  clone( target?: EnumValueType): EnumValueType {
   if (!target) {
    target = new EnumValueType();

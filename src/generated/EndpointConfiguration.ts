@@ -76,6 +76,35 @@ export class EndpointConfiguration {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.OperationTimeout = this.operationTimeout;
+  out.UseBinaryEncoding = this.useBinaryEncoding;
+  out.MaxStringLength = this.maxStringLength;
+  out.MaxByteStringLength = this.maxByteStringLength;
+  out.MaxArrayLength = this.maxArrayLength;
+  out.MaxMessageSize = this.maxMessageSize;
+  out.MaxBufferSize = this.maxBufferSize;
+  out.ChannelLifetime = this.channelLifetime;
+  out.SecurityTokenLifetime = this.securityTokenLifetime;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.operationTimeout = inp.OperationTimeout;
+  this.useBinaryEncoding = inp.UseBinaryEncoding;
+  this.maxStringLength = inp.MaxStringLength;
+  this.maxByteStringLength = inp.MaxByteStringLength;
+  this.maxArrayLength = inp.MaxArrayLength;
+  this.maxMessageSize = inp.MaxMessageSize;
+  this.maxBufferSize = inp.MaxBufferSize;
+  this.channelLifetime = inp.ChannelLifetime;
+  this.securityTokenLifetime = inp.SecurityTokenLifetime;
+
+ }
+
+
  clone( target?: EndpointConfiguration): EndpointConfiguration {
   if (!target) {
    target = new EndpointConfiguration();

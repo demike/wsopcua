@@ -47,6 +47,23 @@ export class NotificationMessage {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SequenceNumber = this.sequenceNumber;
+  out.PublishTime = ec.jsonEncodeDateTime(this.publishTime);
+  out.NotificationData = this.notificationData;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.sequenceNumber = inp.SequenceNumber;
+  this.publishTime  = ec.jsonDecodeDateTime(inp.PublishTime);
+  this.notificationData = inp.NotificationData;
+
+ }
+
+
  clone( target?: NotificationMessage): NotificationMessage {
   if (!target) {
    target = new NotificationMessage();

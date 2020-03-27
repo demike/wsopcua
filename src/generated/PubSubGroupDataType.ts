@@ -71,6 +71,31 @@ export class PubSubGroupDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Name = this.name;
+  out.Enabled = this.enabled;
+  out.SecurityMode = this.securityMode;
+  out.SecurityGroupId = this.securityGroupId;
+  out.SecurityKeyServices = this.securityKeyServices;
+  out.MaxNetworkMessageSize = this.maxNetworkMessageSize;
+  out.GroupProperties = this.groupProperties;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.name = inp.Name;
+  this.enabled = inp.Enabled;
+  this.securityMode = inp.SecurityMode;
+  this.securityGroupId = inp.SecurityGroupId;
+  this.securityKeyServices = inp.SecurityKeyServices.map(m => { const mem = new EndpointDescription(); mem.fromJSON(m); return mem;});
+  this.maxNetworkMessageSize = inp.MaxNetworkMessageSize;
+  this.groupProperties = inp.GroupProperties.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: PubSubGroupDataType): PubSubGroupDataType {
   if (!target) {
    target = new PubSubGroupDataType();

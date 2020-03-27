@@ -47,6 +47,22 @@ export class DataTypeNode extends TypeNode {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.IsAbstract = this.isAbstract;
+  out.DataTypeDefinition = this.dataTypeDefinition;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.isAbstract = inp.IsAbstract;
+  this.dataTypeDefinition = inp.DataTypeDefinition;
+
+ }
+
+
  clone( target?: DataTypeNode): DataTypeNode {
   if (!target) {
    target = new DataTypeNode();

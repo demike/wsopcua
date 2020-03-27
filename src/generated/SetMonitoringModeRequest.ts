@@ -53,6 +53,25 @@ export class SetMonitoringModeRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.SubscriptionId = this.subscriptionId;
+  out.MonitoringMode = this.monitoringMode;
+  out.MonitoredItemIds = this.monitoredItemIds;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.subscriptionId = inp.SubscriptionId;
+  this.monitoringMode = inp.MonitoringMode;
+  this.monitoredItemIds = inp.MonitoredItemIds;
+
+ }
+
+
  clone( target?: SetMonitoringModeRequest): SetMonitoringModeRequest {
   if (!target) {
    target = new SetMonitoringModeRequest();

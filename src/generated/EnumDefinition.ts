@@ -38,6 +38,19 @@ export class EnumDefinition {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Fields = this.fields;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.fields = inp.Fields.map(m => { const mem = new EnumField(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: EnumDefinition): EnumDefinition {
   if (!target) {
    target = new EnumDefinition();

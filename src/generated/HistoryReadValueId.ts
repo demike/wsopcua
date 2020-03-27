@@ -52,6 +52,25 @@ export class HistoryReadValueId {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
+  out.IndexRange = this.indexRange;
+  out.DataEncoding = this.dataEncoding;
+  out.ContinuationPoint = this.continuationPoint;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+  this.indexRange = inp.IndexRange;
+  this.dataEncoding.fromJSON(inp);
+  this.continuationPoint = inp.ContinuationPoint;
+
+ }
+
+
  clone( target?: HistoryReadValueId): HistoryReadValueId {
   if (!target) {
    target = new HistoryReadValueId();

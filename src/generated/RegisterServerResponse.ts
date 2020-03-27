@@ -36,6 +36,19 @@ export class RegisterServerResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+
+ }
+
+
  clone( target?: RegisterServerResponse): RegisterServerResponse {
   if (!target) {
    target = new RegisterServerResponse();

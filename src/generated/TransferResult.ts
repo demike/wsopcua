@@ -41,6 +41,21 @@ export class TransferResult {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
+  out.AvailableSequenceNumbers = this.availableSequenceNumbers;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.availableSequenceNumbers = inp.AvailableSequenceNumbers;
+
+ }
+
+
  clone( target?: TransferResult): TransferResult {
   if (!target) {
    target = new TransferResult();

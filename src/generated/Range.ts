@@ -41,6 +41,21 @@ export class Range {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Low = this.low;
+  out.High = this.high;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.low = inp.Low;
+  this.high = inp.High;
+
+ }
+
+
  clone( target?: Range): Range {
   if (!target) {
    target = new Range();

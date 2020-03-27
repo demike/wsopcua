@@ -48,6 +48,23 @@ export class QueryDataSet {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NodeId = ec.jsonEncodeExpandedNodeId(this.nodeId);
+  out.TypeDefinitionNode = ec.jsonEncodeExpandedNodeId(this.typeDefinitionNode);
+  out.Values = this.values;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.nodeId  = ec.jsonDecodeExpandedNodeId(inp.NodeId);
+  this.typeDefinitionNode  = ec.jsonDecodeExpandedNodeId(inp.TypeDefinitionNode);
+  this.values = inp.Values.map(m => { const mem = new Variant(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: QueryDataSet): QueryDataSet {
   if (!target) {
    target = new QueryDataSet();

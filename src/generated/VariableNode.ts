@@ -82,6 +82,36 @@ export class VariableNode extends InstanceNode {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.Value = this.value;
+  out.DataType = ec.jsonEncodeNodeId(this.dataType);
+  out.ValueRank = this.valueRank;
+  out.ArrayDimensions = this.arrayDimensions;
+  out.AccessLevel = this.accessLevel;
+  out.UserAccessLevel = this.userAccessLevel;
+  out.MinimumSamplingInterval = this.minimumSamplingInterval;
+  out.Historizing = this.historizing;
+  out.AccessLevelEx = this.accessLevelEx;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.value.fromJSON(inp);
+  this.dataType  = ec.jsonDecodeNodeId(inp.DataType);
+  this.valueRank = inp.ValueRank;
+  this.arrayDimensions = inp.ArrayDimensions;
+  this.accessLevel = inp.AccessLevel;
+  this.userAccessLevel = inp.UserAccessLevel;
+  this.minimumSamplingInterval = inp.MinimumSamplingInterval;
+  this.historizing = inp.Historizing;
+  this.accessLevelEx = inp.AccessLevelEx;
+
+ }
+
+
  clone( target?: VariableNode): VariableNode {
   if (!target) {
    target = new VariableNode();

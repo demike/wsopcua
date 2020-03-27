@@ -44,6 +44,21 @@ export class AddReferencesRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.ReferencesToAdd = this.referencesToAdd;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.referencesToAdd = inp.ReferencesToAdd.map(m => { const mem = new AddReferencesItem(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: AddReferencesRequest): AddReferencesRequest {
   if (!target) {
    target = new AddReferencesRequest();

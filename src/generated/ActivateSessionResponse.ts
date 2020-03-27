@@ -54,6 +54,25 @@ export class ActivateSessionResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.ServerNonce = this.serverNonce;
+  out.Results = this.results.map(m => ec.jsonEncodeStatusCode);
+  out.DiagnosticInfos = this.diagnosticInfos;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.serverNonce = inp.ServerNonce;
+  this.results = inp.Results.map(m => ec.jsonDecodeStatusCode);
+  this.diagnosticInfos = inp.DiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: ActivateSessionResponse): ActivateSessionResponse {
   if (!target) {
    target = new ActivateSessionResponse();

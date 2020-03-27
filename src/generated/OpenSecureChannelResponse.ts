@@ -53,6 +53,25 @@ export class OpenSecureChannelResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.ServerProtocolVersion = this.serverProtocolVersion;
+  out.SecurityToken = this.securityToken;
+  out.ServerNonce = this.serverNonce;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.serverProtocolVersion = inp.ServerProtocolVersion;
+  this.securityToken.fromJSON(inp);
+  this.serverNonce = inp.ServerNonce;
+
+ }
+
+
  clone( target?: OpenSecureChannelResponse): OpenSecureChannelResponse {
   if (!target) {
    target = new OpenSecureChannelResponse();

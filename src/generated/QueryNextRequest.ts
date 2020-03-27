@@ -47,6 +47,23 @@ export class QueryNextRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.ReleaseContinuationPoint = this.releaseContinuationPoint;
+  out.ContinuationPoint = this.continuationPoint;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.releaseContinuationPoint = inp.ReleaseContinuationPoint;
+  this.continuationPoint = inp.ContinuationPoint;
+
+ }
+
+
  clone( target?: QueryNextRequest): QueryNextRequest {
   if (!target) {
    target = new QueryNextRequest();

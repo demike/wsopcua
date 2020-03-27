@@ -47,6 +47,23 @@ export class ModificationInfo {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ModificationTime = ec.jsonEncodeDateTime(this.modificationTime);
+  out.UpdateType = this.updateType;
+  out.UserName = this.userName;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.modificationTime  = ec.jsonDecodeDateTime(inp.ModificationTime);
+  this.updateType = inp.UpdateType;
+  this.userName = inp.UserName;
+
+ }
+
+
  clone( target?: ModificationInfo): ModificationInfo {
   if (!target) {
    target = new ModificationInfo();

@@ -51,6 +51,23 @@ export class HistoryUpdateResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.Results = this.results;
+  out.DiagnosticInfos = this.diagnosticInfos;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.results = inp.Results.map(m => { const mem = new HistoryUpdateResult(); mem.fromJSON(m); return mem;});
+  this.diagnosticInfos = inp.DiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: HistoryUpdateResponse): HistoryUpdateResponse {
   if (!target) {
    target = new HistoryUpdateResponse();

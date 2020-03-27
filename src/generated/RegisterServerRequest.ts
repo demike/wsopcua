@@ -42,6 +42,21 @@ export class RegisterServerRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.Server = this.server;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.server.fromJSON(inp);
+
+ }
+
+
  clone( target?: RegisterServerRequest): RegisterServerRequest {
   if (!target) {
    target = new RegisterServerRequest();

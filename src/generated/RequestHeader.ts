@@ -67,6 +67,31 @@ export class RequestHeader {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.AuthenticationToken = ec.jsonEncodeNodeId(this.authenticationToken);
+  out.Timestamp = ec.jsonEncodeDateTime(this.timestamp);
+  out.RequestHandle = this.requestHandle;
+  out.ReturnDiagnostics = this.returnDiagnostics;
+  out.AuditEntryId = this.auditEntryId;
+  out.TimeoutHint = this.timeoutHint;
+  out.AdditionalHeader = this.additionalHeader;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.authenticationToken  = ec.jsonDecodeNodeId(inp.AuthenticationToken);
+  this.timestamp  = ec.jsonDecodeDateTime(inp.Timestamp);
+  this.requestHandle = inp.RequestHandle;
+  this.returnDiagnostics = inp.ReturnDiagnostics;
+  this.auditEntryId = inp.AuditEntryId;
+  this.timeoutHint = inp.TimeoutHint;
+  this.additionalHeader = inp.AdditionalHeader;
+
+ }
+
+
  clone( target?: RequestHeader): RequestHeader {
   if (!target) {
    target = new RequestHeader();

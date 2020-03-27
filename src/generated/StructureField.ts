@@ -67,6 +67,31 @@ export class StructureField {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Name = this.name;
+  out.Description = this.description;
+  out.DataType = ec.jsonEncodeNodeId(this.dataType);
+  out.ValueRank = this.valueRank;
+  out.ArrayDimensions = this.arrayDimensions;
+  out.MaxStringLength = this.maxStringLength;
+  out.IsOptional = this.isOptional;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.name = inp.Name;
+  this.description.fromJSON(inp);
+  this.dataType  = ec.jsonDecodeNodeId(inp.DataType);
+  this.valueRank = inp.ValueRank;
+  this.arrayDimensions = inp.ArrayDimensions;
+  this.maxStringLength = inp.MaxStringLength;
+  this.isOptional = inp.IsOptional;
+
+ }
+
+
  clone( target?: StructureField): StructureField {
   if (!target) {
    target = new StructureField();

@@ -41,6 +41,21 @@ export class RationalNumber {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Numerator = this.numerator;
+  out.Denominator = this.denominator;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.numerator = inp.Numerator;
+  this.denominator = inp.Denominator;
+
+ }
+
+
  clone( target?: RationalNumber): RationalNumber {
   if (!target) {
    target = new RationalNumber();

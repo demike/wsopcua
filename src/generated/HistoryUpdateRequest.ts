@@ -43,6 +43,21 @@ export class HistoryUpdateRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.HistoryUpdateDetails = this.historyUpdateDetails;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.historyUpdateDetails = inp.HistoryUpdateDetails;
+
+ }
+
+
  clone( target?: HistoryUpdateRequest): HistoryUpdateRequest {
   if (!target) {
    target = new HistoryUpdateRequest();

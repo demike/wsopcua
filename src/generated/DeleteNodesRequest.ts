@@ -44,6 +44,21 @@ export class DeleteNodesRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.NodesToDelete = this.nodesToDelete;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.nodesToDelete = inp.NodesToDelete.map(m => { const mem = new DeleteNodesItem(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: DeleteNodesRequest): DeleteNodesRequest {
   if (!target) {
    target = new DeleteNodesRequest();

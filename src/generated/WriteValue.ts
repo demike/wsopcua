@@ -52,6 +52,25 @@ export class WriteValue {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
+  out.AttributeId = this.attributeId;
+  out.IndexRange = this.indexRange;
+  out.Value = this.value;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+  this.attributeId = inp.AttributeId;
+  this.indexRange = inp.IndexRange;
+  this.value.fromJSON(inp);
+
+ }
+
+
  clone( target?: WriteValue): WriteValue {
   if (!target) {
    target = new WriteValue();

@@ -93,6 +93,39 @@ export class Node {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
+  out.NodeClass = this.nodeClass;
+  out.BrowseName = this.browseName;
+  out.DisplayName = this.displayName;
+  out.Description = this.description;
+  out.WriteMask = this.writeMask;
+  out.UserWriteMask = this.userWriteMask;
+  out.RolePermissions = this.rolePermissions;
+  out.UserRolePermissions = this.userRolePermissions;
+  out.AccessRestrictions = this.accessRestrictions;
+  out.References = this.references;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+  this.nodeClass = inp.NodeClass;
+  this.browseName.fromJSON(inp);
+  this.displayName.fromJSON(inp);
+  this.description.fromJSON(inp);
+  this.writeMask = inp.WriteMask;
+  this.userWriteMask = inp.UserWriteMask;
+  this.rolePermissions = inp.RolePermissions.map(m => { const mem = new RolePermissionType(); mem.fromJSON(m); return mem;});
+  this.userRolePermissions = inp.UserRolePermissions.map(m => { const mem = new RolePermissionType(); mem.fromJSON(m); return mem;});
+  this.accessRestrictions = inp.AccessRestrictions;
+  this.references = inp.References.map(m => { const mem = new ReferenceNode(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: Node): Node {
   if (!target) {
    target = new Node();

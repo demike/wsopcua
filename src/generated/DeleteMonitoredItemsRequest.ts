@@ -47,6 +47,23 @@ export class DeleteMonitoredItemsRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.SubscriptionId = this.subscriptionId;
+  out.MonitoredItemIds = this.monitoredItemIds;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.subscriptionId = inp.SubscriptionId;
+  this.monitoredItemIds = inp.MonitoredItemIds;
+
+ }
+
+
  clone( target?: DeleteMonitoredItemsRequest): DeleteMonitoredItemsRequest {
   if (!target) {
    target = new DeleteMonitoredItemsRequest();

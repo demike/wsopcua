@@ -41,6 +41,21 @@ export class SemanticChangeStructureDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Affected = ec.jsonEncodeNodeId(this.affected);
+  out.AffectedType = ec.jsonEncodeNodeId(this.affectedType);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.affected  = ec.jsonDecodeNodeId(inp.Affected);
+  this.affectedType  = ec.jsonDecodeNodeId(inp.AffectedType);
+
+ }
+
+
  clone( target?: SemanticChangeStructureDataType): SemanticChangeStructureDataType {
   if (!target) {
    target = new SemanticChangeStructureDataType();

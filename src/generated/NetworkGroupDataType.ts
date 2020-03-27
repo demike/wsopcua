@@ -43,6 +43,21 @@ export class NetworkGroupDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ServerUri = this.serverUri;
+  out.NetworkPaths = this.networkPaths;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.serverUri = inp.ServerUri;
+  this.networkPaths = inp.NetworkPaths.map(m => { const mem = new EndpointUrlListDataType(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: NetworkGroupDataType): NetworkGroupDataType {
   if (!target) {
    target = new NetworkGroupDataType();

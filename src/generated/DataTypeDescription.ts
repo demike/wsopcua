@@ -42,6 +42,21 @@ export class DataTypeDescription {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.DataTypeId = ec.jsonEncodeNodeId(this.dataTypeId);
+  out.Name = this.name;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.dataTypeId  = ec.jsonDecodeNodeId(inp.DataTypeId);
+  this.name.fromJSON(inp);
+
+ }
+
+
  clone( target?: DataTypeDescription): DataTypeDescription {
   if (!target) {
    target = new DataTypeDescription();

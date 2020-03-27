@@ -43,6 +43,21 @@ export class BrokerConnectionTransportDataType extends ConnectionTransportDataTy
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResourceUri = this.resourceUri;
+  out.AuthenticationProfileUri = this.authenticationProfileUri;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.resourceUri = inp.ResourceUri;
+  this.authenticationProfileUri = inp.AuthenticationProfileUri;
+
+ }
+
+
  clone( target?: BrokerConnectionTransportDataType): BrokerConnectionTransportDataType {
   if (!target) {
    target = new BrokerConnectionTransportDataType();

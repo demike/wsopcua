@@ -62,6 +62,29 @@ export class AddReferencesItem {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SourceNodeId = ec.jsonEncodeNodeId(this.sourceNodeId);
+  out.ReferenceTypeId = ec.jsonEncodeNodeId(this.referenceTypeId);
+  out.IsForward = this.isForward;
+  out.TargetServerUri = this.targetServerUri;
+  out.TargetNodeId = ec.jsonEncodeExpandedNodeId(this.targetNodeId);
+  out.TargetNodeClass = this.targetNodeClass;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.sourceNodeId  = ec.jsonDecodeNodeId(inp.SourceNodeId);
+  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+  this.isForward = inp.IsForward;
+  this.targetServerUri = inp.TargetServerUri;
+  this.targetNodeId  = ec.jsonDecodeExpandedNodeId(inp.TargetNodeId);
+  this.targetNodeClass = inp.TargetNodeClass;
+
+ }
+
+
  clone( target?: AddReferencesItem): AddReferencesItem {
   if (!target) {
    target = new AddReferencesItem();

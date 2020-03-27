@@ -46,6 +46,22 @@ export class SimpleTypeDescription extends DataTypeDescription {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.BaseDataType = ec.jsonEncodeNodeId(this.baseDataType);
+  out.BuiltInType = this.builtInType;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.baseDataType  = ec.jsonDecodeNodeId(inp.BaseDataType);
+  this.builtInType = inp.BuiltInType;
+
+ }
+
+
  clone( target?: SimpleTypeDescription): SimpleTypeDescription {
   if (!target) {
    target = new SimpleTypeDescription();

@@ -61,6 +61,27 @@ export class HistoryReadRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.HistoryReadDetails = this.historyReadDetails;
+  out.TimestampsToReturn = this.timestampsToReturn;
+  out.ReleaseContinuationPoints = this.releaseContinuationPoints;
+  out.NodesToRead = this.nodesToRead;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.historyReadDetails = inp.HistoryReadDetails;
+  this.timestampsToReturn = inp.TimestampsToReturn;
+  this.releaseContinuationPoints = inp.ReleaseContinuationPoints;
+  this.nodesToRead = inp.NodesToRead.map(m => { const mem = new HistoryReadValueId(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: HistoryReadRequest): HistoryReadRequest {
   if (!target) {
    target = new HistoryReadRequest();

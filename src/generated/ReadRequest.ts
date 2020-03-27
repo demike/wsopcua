@@ -55,6 +55,25 @@ export class ReadRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.MaxAge = this.maxAge;
+  out.TimestampsToReturn = this.timestampsToReturn;
+  out.NodesToRead = this.nodesToRead;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.maxAge = inp.MaxAge;
+  this.timestampsToReturn = inp.TimestampsToReturn;
+  this.nodesToRead = inp.NodesToRead.map(m => { const mem = new ReadValueId(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: ReadRequest): ReadRequest {
   if (!target) {
    target = new ReadRequest();

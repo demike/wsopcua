@@ -77,6 +77,35 @@ export class SessionSecurityDiagnosticsDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SessionId = ec.jsonEncodeNodeId(this.sessionId);
+  out.ClientUserIdOfSession = this.clientUserIdOfSession;
+  out.ClientUserIdHistory = this.clientUserIdHistory;
+  out.AuthenticationMechanism = this.authenticationMechanism;
+  out.Encoding = this.encoding;
+  out.TransportProtocol = this.transportProtocol;
+  out.SecurityMode = this.securityMode;
+  out.SecurityPolicyUri = this.securityPolicyUri;
+  out.ClientCertificate = this.clientCertificate;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.sessionId  = ec.jsonDecodeNodeId(inp.SessionId);
+  this.clientUserIdOfSession = inp.ClientUserIdOfSession;
+  this.clientUserIdHistory = inp.ClientUserIdHistory;
+  this.authenticationMechanism = inp.AuthenticationMechanism;
+  this.encoding = inp.Encoding;
+  this.transportProtocol = inp.TransportProtocol;
+  this.securityMode = inp.SecurityMode;
+  this.securityPolicyUri = inp.SecurityPolicyUri;
+  this.clientCertificate = inp.ClientCertificate;
+
+ }
+
+
  clone( target?: SessionSecurityDiagnosticsDataType): SessionSecurityDiagnosticsDataType {
   if (!target) {
    target = new SessionSecurityDiagnosticsDataType();

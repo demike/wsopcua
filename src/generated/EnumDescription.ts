@@ -47,6 +47,22 @@ export class EnumDescription extends DataTypeDescription {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.EnumDefinition = this.enumDefinition;
+  out.BuiltInType = this.builtInType;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.enumDefinition.fromJSON(inp);
+  this.builtInType = inp.BuiltInType;
+
+ }
+
+
  clone( target?: EnumDescription): EnumDescription {
   if (!target) {
    target = new EnumDescription();

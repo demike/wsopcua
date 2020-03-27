@@ -47,6 +47,23 @@ export class TransferSubscriptionsRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.SubscriptionIds = this.subscriptionIds;
+  out.SendInitialValues = this.sendInitialValues;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.subscriptionIds = inp.SubscriptionIds;
+  this.sendInitialValues = inp.SendInitialValues;
+
+ }
+
+
  clone( target?: TransferSubscriptionsRequest): TransferSubscriptionsRequest {
   if (!target) {
    target = new TransferSubscriptionsRequest();

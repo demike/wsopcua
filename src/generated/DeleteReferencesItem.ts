@@ -56,6 +56,27 @@ export class DeleteReferencesItem {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SourceNodeId = ec.jsonEncodeNodeId(this.sourceNodeId);
+  out.ReferenceTypeId = ec.jsonEncodeNodeId(this.referenceTypeId);
+  out.IsForward = this.isForward;
+  out.TargetNodeId = ec.jsonEncodeExpandedNodeId(this.targetNodeId);
+  out.DeleteBidirectional = this.deleteBidirectional;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.sourceNodeId  = ec.jsonDecodeNodeId(inp.SourceNodeId);
+  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+  this.isForward = inp.IsForward;
+  this.targetNodeId  = ec.jsonDecodeExpandedNodeId(inp.TargetNodeId);
+  this.deleteBidirectional = inp.DeleteBidirectional;
+
+ }
+
+
  clone( target?: DeleteReferencesItem): DeleteReferencesItem {
   if (!target) {
    target = new DeleteReferencesItem();

@@ -38,6 +38,19 @@ export class HistoryData {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.DataValues = this.dataValues;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.dataValues = inp.DataValues.map(m => { const mem = new DataValue(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: HistoryData): HistoryData {
   if (!target) {
    target = new HistoryData();

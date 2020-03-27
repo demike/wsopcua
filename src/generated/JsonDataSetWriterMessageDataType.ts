@@ -38,6 +38,19 @@ export class JsonDataSetWriterMessageDataType extends DataSetWriterMessageDataTy
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.DataSetMessageContentMask = this.dataSetMessageContentMask;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.dataSetMessageContentMask = inp.DataSetMessageContentMask;
+
+ }
+
+
  clone( target?: JsonDataSetWriterMessageDataType): JsonDataSetWriterMessageDataType {
   if (!target) {
    target = new JsonDataSetWriterMessageDataType();

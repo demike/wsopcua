@@ -44,6 +44,21 @@ export class GetEndpointsResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.Endpoints = this.endpoints;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.endpoints = inp.Endpoints.map(m => { const mem = new EndpointDescription(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: GetEndpointsResponse): GetEndpointsResponse {
   if (!target) {
    target = new GetEndpointsResponse();

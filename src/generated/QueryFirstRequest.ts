@@ -66,6 +66,29 @@ export class QueryFirstRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.View = this.view;
+  out.NodeTypes = this.nodeTypes;
+  out.Filter = this.filter;
+  out.MaxDataSetsToReturn = this.maxDataSetsToReturn;
+  out.MaxReferencesToReturn = this.maxReferencesToReturn;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.view.fromJSON(inp);
+  this.nodeTypes = inp.NodeTypes.map(m => { const mem = new NodeTypeDescription(); mem.fromJSON(m); return mem;});
+  this.filter.fromJSON(inp);
+  this.maxDataSetsToReturn = inp.MaxDataSetsToReturn;
+  this.maxReferencesToReturn = inp.MaxReferencesToReturn;
+
+ }
+
+
  clone( target?: QueryFirstRequest): QueryFirstRequest {
   if (!target) {
    target = new QueryFirstRequest();

@@ -44,6 +44,21 @@ export class WriteRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.NodesToWrite = this.nodesToWrite;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.nodesToWrite = inp.NodesToWrite.map(m => { const mem = new WriteValue(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: WriteRequest): WriteRequest {
   if (!target) {
    target = new WriteRequest();

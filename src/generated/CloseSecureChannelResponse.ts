@@ -36,6 +36,19 @@ export class CloseSecureChannelResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+
+ }
+
+
  clone( target?: CloseSecureChannelResponse): CloseSecureChannelResponse {
   if (!target) {
    target = new CloseSecureChannelResponse();

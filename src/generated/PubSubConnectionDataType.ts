@@ -84,6 +84,35 @@ export class PubSubConnectionDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Name = this.name;
+  out.Enabled = this.enabled;
+  out.PublisherId = this.publisherId;
+  out.TransportProfileUri = this.transportProfileUri;
+  out.Address = this.address;
+  out.ConnectionProperties = this.connectionProperties;
+  out.TransportSettings = this.transportSettings;
+  out.WriterGroups = this.writerGroups;
+  out.ReaderGroups = this.readerGroups;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.name = inp.Name;
+  this.enabled = inp.Enabled;
+  this.publisherId.fromJSON(inp);
+  this.transportProfileUri = inp.TransportProfileUri;
+  this.address = inp.Address;
+  this.connectionProperties = inp.ConnectionProperties.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
+  this.transportSettings = inp.TransportSettings;
+  this.writerGroups = inp.WriterGroups.map(m => { const mem = new WriterGroupDataType(); mem.fromJSON(m); return mem;});
+  this.readerGroups = inp.ReaderGroups.map(m => { const mem = new ReaderGroupDataType(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: PubSubConnectionDataType): PubSubConnectionDataType {
   if (!target) {
    target = new PubSubConnectionDataType();

@@ -35,6 +35,18 @@ export class TypeNode extends Node {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+
+ }
+
+
  clone( target?: TypeNode): TypeNode {
   if (!target) {
    target = new TypeNode();

@@ -99,6 +99,45 @@ export class DiagnosticInfo {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  if(this.symbolicId != null) { out.SymbolicId = this.symbolicId; }
+  if(this.namespaceURI != null) { out.NamespaceURI = this.namespaceURI; }
+  if(this.locale != null) { out.Locale = this.locale; }
+  if(this.localizedText != null) { out.LocalizedText = this.localizedText; }
+  if(this.additionalInfo != null) { out.AdditionalInfo = this.additionalInfo; }
+  if(this.innerStatusCode != null) { out.InnerStatusCode = ec.jsonEncodeStatusCode(this.innerStatusCode); }
+  if(this.innerDiagnosticInfo != null) { out.InnerDiagnosticInfo = this.innerDiagnosticInfo; }
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  if(inp.SymbolicId) {
+   this.symbolicId = inp.SymbolicId;
+  }
+  if(inp.NamespaceURI) {
+   this.namespaceURI = inp.NamespaceURI;
+  }
+  if(inp.Locale) {
+   this.locale = inp.Locale;
+  }
+  if(inp.LocalizedText) {
+   this.localizedText = inp.LocalizedText;
+  }
+  if(inp.AdditionalInfo) {
+   this.additionalInfo = inp.AdditionalInfo;
+  }
+  if(inp.InnerStatusCode) {
+   this.innerStatusCode  = ec.jsonDecodeStatusCode(inp.InnerStatusCode);
+  }
+  if(inp.InnerDiagnosticInfo) {
+   this.innerDiagnosticInfo.fromJSON(inp);
+  }
+
+ }
+
+
  clone( target?: DiagnosticInfo): DiagnosticInfo {
   if (!target) {
    target = new DiagnosticInfo();

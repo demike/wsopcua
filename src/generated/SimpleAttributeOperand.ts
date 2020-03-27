@@ -55,6 +55,25 @@ export class SimpleAttributeOperand extends FilterOperand {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.TypeDefinitionId = ec.jsonEncodeNodeId(this.typeDefinitionId);
+  out.BrowsePath = this.browsePath;
+  out.AttributeId = this.attributeId;
+  out.IndexRange = this.indexRange;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.typeDefinitionId  = ec.jsonDecodeNodeId(inp.TypeDefinitionId);
+  this.browsePath = inp.BrowsePath.map(m => { const mem = new QualifiedName(); mem.fromJSON(m); return mem;});
+  this.attributeId = inp.AttributeId;
+  this.indexRange = inp.IndexRange;
+
+ }
+
+
  clone( target?: SimpleAttributeOperand): SimpleAttributeOperand {
   if (!target) {
    target = new SimpleAttributeOperand();

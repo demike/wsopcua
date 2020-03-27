@@ -60,6 +60,27 @@ export class AxisInformation {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.EngineeringUnits = this.engineeringUnits;
+  out.EURange = this.eURange;
+  out.Title = this.title;
+  out.AxisScaleType = this.axisScaleType;
+  out.AxisSteps = this.axisSteps;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.engineeringUnits.fromJSON(inp);
+  this.eURange.fromJSON(inp);
+  this.title.fromJSON(inp);
+  this.axisScaleType = inp.AxisScaleType;
+  this.axisSteps = inp.AxisSteps;
+
+ }
+
+
  clone( target?: AxisInformation): AxisInformation {
   if (!target) {
    target = new AxisInformation();

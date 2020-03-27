@@ -38,6 +38,19 @@ export class RelativePath {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Elements = this.elements;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.elements = inp.Elements.map(m => { const mem = new RelativePathElement(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: RelativePath): RelativePath {
   if (!target) {
    target = new RelativePath();

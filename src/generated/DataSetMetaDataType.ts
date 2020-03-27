@@ -65,6 +65,28 @@ export class DataSetMetaDataType extends DataTypeSchemaHeader {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.Name = this.name;
+  out.Description = this.description;
+  out.Fields = this.fields;
+  out.DataSetClassId = this.dataSetClassId;
+  out.ConfigurationVersion = this.configurationVersion;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.name = inp.Name;
+  this.description.fromJSON(inp);
+  this.fields = inp.Fields.map(m => { const mem = new FieldMetaData(); mem.fromJSON(m); return mem;});
+  this.dataSetClassId = inp.DataSetClassId;
+  this.configurationVersion.fromJSON(inp);
+
+ }
+
+
  clone( target?: DataSetMetaDataType): DataSetMetaDataType {
   if (!target) {
    target = new DataSetMetaDataType();

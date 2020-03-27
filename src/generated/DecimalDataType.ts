@@ -41,6 +41,21 @@ export class DecimalDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Scale = this.scale;
+  out.Value = this.value;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.scale = inp.Scale;
+  this.value = inp.Value;
+
+ }
+
+
  clone( target?: DecimalDataType): DecimalDataType {
   if (!target) {
    target = new DecimalDataType();

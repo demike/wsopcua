@@ -42,6 +42,21 @@ export class IdentityMappingRuleType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.CriteriaType = this.criteriaType;
+  out.Criteria = this.criteria;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.criteriaType = inp.CriteriaType;
+  this.criteria = inp.Criteria;
+
+ }
+
+
  clone( target?: IdentityMappingRuleType): IdentityMappingRuleType {
   if (!target) {
    target = new IdentityMappingRuleType();

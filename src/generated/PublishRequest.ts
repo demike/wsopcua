@@ -44,6 +44,21 @@ export class PublishRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.SubscriptionAcknowledgements = this.subscriptionAcknowledgements;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.subscriptionAcknowledgements = inp.SubscriptionAcknowledgements.map(m => { const mem = new SubscriptionAcknowledgement(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: PublishRequest): PublishRequest {
   if (!target) {
    target = new PublishRequest();

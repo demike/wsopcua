@@ -55,6 +55,25 @@ export class CreateMonitoredItemsRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.SubscriptionId = this.subscriptionId;
+  out.TimestampsToReturn = this.timestampsToReturn;
+  out.ItemsToCreate = this.itemsToCreate;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.subscriptionId = inp.SubscriptionId;
+  this.timestampsToReturn = inp.TimestampsToReturn;
+  this.itemsToCreate = inp.ItemsToCreate.map(m => { const mem = new MonitoredItemCreateRequest(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: CreateMonitoredItemsRequest): CreateMonitoredItemsRequest {
   if (!target) {
    target = new CreateMonitoredItemsRequest();

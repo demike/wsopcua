@@ -41,6 +41,20 @@ export class StructureDescription extends DataTypeDescription {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.StructureDefinition = this.structureDefinition;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.structureDefinition.fromJSON(inp);
+
+ }
+
+
  clone( target?: StructureDescription): StructureDescription {
   if (!target) {
    target = new StructureDescription();

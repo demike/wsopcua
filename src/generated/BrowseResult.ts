@@ -48,6 +48,23 @@ export class BrowseResult {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
+  out.ContinuationPoint = this.continuationPoint;
+  out.References = this.references;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.continuationPoint = inp.ContinuationPoint;
+  this.references = inp.References.map(m => { const mem = new ReferenceDescription(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: BrowseResult): BrowseResult {
   if (!target) {
    target = new BrowseResult();

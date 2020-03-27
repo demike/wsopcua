@@ -36,6 +36,19 @@ export class NetworkAddressDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NetworkInterface = this.networkInterface;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.networkInterface = inp.NetworkInterface;
+
+ }
+
+
  clone( target?: NetworkAddressDataType): NetworkAddressDataType {
   if (!target) {
    target = new NetworkAddressDataType();

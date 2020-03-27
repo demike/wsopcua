@@ -36,6 +36,19 @@ export class CloseSecureChannelRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+
+ }
+
+
  clone( target?: CloseSecureChannelRequest): CloseSecureChannelRequest {
   if (!target) {
    target = new CloseSecureChannelRequest();

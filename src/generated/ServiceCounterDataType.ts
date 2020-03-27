@@ -41,6 +41,21 @@ export class ServiceCounterDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.TotalCount = this.totalCount;
+  out.ErrorCount = this.errorCount;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.totalCount = inp.TotalCount;
+  this.errorCount = inp.ErrorCount;
+
+ }
+
+
  clone( target?: ServiceCounterDataType): ServiceCounterDataType {
   if (!target) {
    target = new ServiceCounterDataType();

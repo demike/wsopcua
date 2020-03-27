@@ -41,6 +41,21 @@ export class SubscriptionAcknowledgement {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SubscriptionId = this.subscriptionId;
+  out.SequenceNumber = this.sequenceNumber;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.subscriptionId = inp.SubscriptionId;
+  this.sequenceNumber = inp.SequenceNumber;
+
+ }
+
+
  clone( target?: SubscriptionAcknowledgement): SubscriptionAcknowledgement {
   if (!target) {
    target = new SubscriptionAcknowledgement();

@@ -42,6 +42,21 @@ export class DeleteSubscriptionsRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.SubscriptionIds = this.subscriptionIds;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.subscriptionIds = inp.SubscriptionIds;
+
+ }
+
+
  clone( target?: DeleteSubscriptionsRequest): DeleteSubscriptionsRequest {
   if (!target) {
    target = new DeleteSubscriptionsRequest();

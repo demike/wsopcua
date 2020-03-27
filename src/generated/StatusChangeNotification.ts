@@ -44,6 +44,21 @@ export class StatusChangeNotification extends NotificationData {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Status = ec.jsonEncodeStatusCode(this.status);
+  out.DiagnosticInfo = this.diagnosticInfo;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.status  = ec.jsonDecodeStatusCode(inp.Status);
+  this.diagnosticInfo.fromJSON(inp);
+
+ }
+
+
  clone( target?: StatusChangeNotification): StatusChangeNotification {
   if (!target) {
    target = new StatusChangeNotification();

@@ -41,6 +41,21 @@ export class AddNodesResult {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
+  out.AddedNodeId = ec.jsonEncodeNodeId(this.addedNodeId);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.addedNodeId  = ec.jsonDecodeNodeId(inp.AddedNodeId);
+
+ }
+
+
  clone( target?: AddNodesResult): AddNodesResult {
   if (!target) {
    target = new AddNodesResult();

@@ -51,6 +51,25 @@ export class ServerOnNetwork {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RecordId = this.recordId;
+  out.ServerName = this.serverName;
+  out.DiscoveryUrl = this.discoveryUrl;
+  out.ServerCapabilities = this.serverCapabilities;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.recordId = inp.RecordId;
+  this.serverName = inp.ServerName;
+  this.discoveryUrl = inp.DiscoveryUrl;
+  this.serverCapabilities = inp.ServerCapabilities;
+
+ }
+
+
  clone( target?: ServerOnNetwork): ServerOnNetwork {
   if (!target) {
    target = new ServerOnNetwork();

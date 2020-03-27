@@ -44,6 +44,21 @@ export class FindServersResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.Servers = this.servers;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.servers = inp.Servers.map(m => { const mem = new ApplicationDescription(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: FindServersResponse): FindServersResponse {
   if (!target) {
    target = new FindServersResponse();

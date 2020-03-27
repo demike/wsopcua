@@ -42,6 +42,21 @@ export class CancelRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.RequestHandle = this.requestHandle;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.requestHandle = inp.RequestHandle;
+
+ }
+
+
  clone( target?: CancelRequest): CancelRequest {
   if (!target) {
    target = new CancelRequest();

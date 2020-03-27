@@ -47,6 +47,21 @@ export class DataChangeNotification extends NotificationData {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.MonitoredItems = this.monitoredItems;
+  out.DiagnosticInfos = this.diagnosticInfos;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.monitoredItems = inp.MonitoredItems.map(m => { const mem = new MonitoredItemNotification(); mem.fromJSON(m); return mem;});
+  this.diagnosticInfos = inp.DiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: DataChangeNotification): DataChangeNotification {
   if (!target) {
    target = new DataChangeNotification();

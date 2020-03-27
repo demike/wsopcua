@@ -43,6 +43,21 @@ export class BrowsePathResult {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
+  out.Targets = this.targets;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.targets = inp.Targets.map(m => { const mem = new BrowsePathTarget(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: BrowsePathResult): BrowsePathResult {
   if (!target) {
    target = new BrowsePathResult();

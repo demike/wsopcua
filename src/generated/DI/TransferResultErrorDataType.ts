@@ -44,6 +44,21 @@ export class TransferResultErrorDataType extends FetchResultDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Status = this.status;
+  out.Diagnostics = this.diagnostics;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.status = inp.Status;
+  this.diagnostics.fromJSON(inp);
+
+ }
+
+
  clone( target?: TransferResultErrorDataType): TransferResultErrorDataType {
   if (!target) {
    target = new TransferResultErrorDataType();

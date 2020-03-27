@@ -80,6 +80,35 @@ export class DataSetWriterDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Name = this.name;
+  out.Enabled = this.enabled;
+  out.DataSetWriterId = this.dataSetWriterId;
+  out.DataSetFieldContentMask = this.dataSetFieldContentMask;
+  out.KeyFrameCount = this.keyFrameCount;
+  out.DataSetName = this.dataSetName;
+  out.DataSetWriterProperties = this.dataSetWriterProperties;
+  out.TransportSettings = this.transportSettings;
+  out.MessageSettings = this.messageSettings;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.name = inp.Name;
+  this.enabled = inp.Enabled;
+  this.dataSetWriterId = inp.DataSetWriterId;
+  this.dataSetFieldContentMask = inp.DataSetFieldContentMask;
+  this.keyFrameCount = inp.KeyFrameCount;
+  this.dataSetName = inp.DataSetName;
+  this.dataSetWriterProperties = inp.DataSetWriterProperties.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
+  this.transportSettings = inp.TransportSettings;
+  this.messageSettings = inp.MessageSettings;
+
+ }
+
+
  clone( target?: DataSetWriterDataType): DataSetWriterDataType {
   if (!target) {
    target = new DataSetWriterDataType();

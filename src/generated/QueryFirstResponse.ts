@@ -69,6 +69,29 @@ export class QueryFirstResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.QueryDataSets = this.queryDataSets;
+  out.ContinuationPoint = this.continuationPoint;
+  out.ParsingResults = this.parsingResults;
+  out.DiagnosticInfos = this.diagnosticInfos;
+  out.FilterResult = this.filterResult;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.queryDataSets = inp.QueryDataSets.map(m => { const mem = new QueryDataSet(); mem.fromJSON(m); return mem;});
+  this.continuationPoint = inp.ContinuationPoint;
+  this.parsingResults = inp.ParsingResults.map(m => { const mem = new ParsingResult(); mem.fromJSON(m); return mem;});
+  this.diagnosticInfos = inp.DiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+  this.filterResult.fromJSON(inp);
+
+ }
+
+
  clone( target?: QueryFirstResponse): QueryFirstResponse {
   if (!target) {
    target = new QueryFirstResponse();

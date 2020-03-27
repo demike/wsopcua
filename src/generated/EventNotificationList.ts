@@ -40,6 +40,19 @@ export class EventNotificationList extends NotificationData {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Events = this.events;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.events = inp.Events.map(m => { const mem = new EventFieldList(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: EventNotificationList): EventNotificationList {
   if (!target) {
    target = new EventNotificationList();

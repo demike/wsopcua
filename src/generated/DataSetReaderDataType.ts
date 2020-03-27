@@ -125,6 +125,51 @@ export class DataSetReaderDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Name = this.name;
+  out.Enabled = this.enabled;
+  out.PublisherId = this.publisherId;
+  out.WriterGroupId = this.writerGroupId;
+  out.DataSetWriterId = this.dataSetWriterId;
+  out.DataSetMetaData = this.dataSetMetaData;
+  out.DataSetFieldContentMask = this.dataSetFieldContentMask;
+  out.MessageReceiveTimeout = this.messageReceiveTimeout;
+  out.KeyFrameCount = this.keyFrameCount;
+  out.HeaderLayoutUri = this.headerLayoutUri;
+  out.SecurityMode = this.securityMode;
+  out.SecurityGroupId = this.securityGroupId;
+  out.SecurityKeyServices = this.securityKeyServices;
+  out.DataSetReaderProperties = this.dataSetReaderProperties;
+  out.TransportSettings = this.transportSettings;
+  out.MessageSettings = this.messageSettings;
+  out.SubscribedDataSet = this.subscribedDataSet;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.name = inp.Name;
+  this.enabled = inp.Enabled;
+  this.publisherId.fromJSON(inp);
+  this.writerGroupId = inp.WriterGroupId;
+  this.dataSetWriterId = inp.DataSetWriterId;
+  this.dataSetMetaData.fromJSON(inp);
+  this.dataSetFieldContentMask = inp.DataSetFieldContentMask;
+  this.messageReceiveTimeout = inp.MessageReceiveTimeout;
+  this.keyFrameCount = inp.KeyFrameCount;
+  this.headerLayoutUri = inp.HeaderLayoutUri;
+  this.securityMode = inp.SecurityMode;
+  this.securityGroupId = inp.SecurityGroupId;
+  this.securityKeyServices = inp.SecurityKeyServices.map(m => { const mem = new EndpointDescription(); mem.fromJSON(m); return mem;});
+  this.dataSetReaderProperties = inp.DataSetReaderProperties.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
+  this.transportSettings = inp.TransportSettings;
+  this.messageSettings = inp.MessageSettings;
+  this.subscribedDataSet = inp.SubscribedDataSet;
+
+ }
+
+
  clone( target?: DataSetReaderDataType): DataSetReaderDataType {
   if (!target) {
    target = new DataSetReaderDataType();

@@ -58,6 +58,27 @@ export class ReadRawModifiedDetails extends HistoryReadDetails {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.IsReadModified = this.isReadModified;
+  out.StartTime = ec.jsonEncodeDateTime(this.startTime);
+  out.EndTime = ec.jsonEncodeDateTime(this.endTime);
+  out.NumValuesPerNode = this.numValuesPerNode;
+  out.ReturnBounds = this.returnBounds;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.isReadModified = inp.IsReadModified;
+  this.startTime  = ec.jsonDecodeDateTime(inp.StartTime);
+  this.endTime  = ec.jsonDecodeDateTime(inp.EndTime);
+  this.numValuesPerNode = inp.NumValuesPerNode;
+  this.returnBounds = inp.ReturnBounds;
+
+ }
+
+
  clone( target?: ReadRawModifiedDetails): ReadRawModifiedDetails {
   if (!target) {
    target = new ReadRawModifiedDetails();

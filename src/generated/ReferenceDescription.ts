@@ -69,6 +69,31 @@ export class ReferenceDescription {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ReferenceTypeId = ec.jsonEncodeNodeId(this.referenceTypeId);
+  out.IsForward = this.isForward;
+  out.NodeId = ec.jsonEncodeExpandedNodeId(this.nodeId);
+  out.BrowseName = this.browseName;
+  out.DisplayName = this.displayName;
+  out.NodeClass = this.nodeClass;
+  out.TypeDefinition = ec.jsonEncodeExpandedNodeId(this.typeDefinition);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+  this.isForward = inp.IsForward;
+  this.nodeId  = ec.jsonDecodeExpandedNodeId(inp.NodeId);
+  this.browseName.fromJSON(inp);
+  this.displayName.fromJSON(inp);
+  this.nodeClass = inp.NodeClass;
+  this.typeDefinition  = ec.jsonDecodeExpandedNodeId(inp.TypeDefinition);
+
+ }
+
+
  clone( target?: ReferenceDescription): ReferenceDescription {
   if (!target) {
    target = new ReferenceDescription();

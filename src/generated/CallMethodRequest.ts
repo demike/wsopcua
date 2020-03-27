@@ -48,6 +48,23 @@ export class CallMethodRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ObjectId = ec.jsonEncodeNodeId(this.objectId);
+  out.MethodId = ec.jsonEncodeNodeId(this.methodId);
+  out.InputArguments = this.inputArguments;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.objectId  = ec.jsonDecodeNodeId(inp.ObjectId);
+  this.methodId  = ec.jsonDecodeNodeId(inp.MethodId);
+  this.inputArguments = inp.InputArguments.map(m => { const mem = new Variant(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: CallMethodRequest): CallMethodRequest {
   if (!target) {
    target = new CallMethodRequest();

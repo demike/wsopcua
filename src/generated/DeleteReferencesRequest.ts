@@ -44,6 +44,21 @@ export class DeleteReferencesRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.ReferencesToDelete = this.referencesToDelete;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.referencesToDelete = inp.ReferencesToDelete.map(m => { const mem = new DeleteReferencesItem(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: DeleteReferencesRequest): DeleteReferencesRequest {
   if (!target) {
    target = new DeleteReferencesRequest();

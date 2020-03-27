@@ -49,6 +49,22 @@ export class UpdateStructureDataDetails extends HistoryUpdateDetails {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.PerformInsertReplace = this.performInsertReplace;
+  out.UpdateValues = this.updateValues;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.performInsertReplace = inp.PerformInsertReplace;
+  this.updateValues = inp.UpdateValues.map(m => { const mem = new DataValue(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: UpdateStructureDataDetails): UpdateStructureDataDetails {
   if (!target) {
    target = new UpdateStructureDataDetails();

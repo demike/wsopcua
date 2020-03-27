@@ -59,6 +59,27 @@ export class ReadProcessedDetails extends HistoryReadDetails {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StartTime = ec.jsonEncodeDateTime(this.startTime);
+  out.EndTime = ec.jsonEncodeDateTime(this.endTime);
+  out.ProcessingInterval = this.processingInterval;
+  out.AggregateType = this.aggregateType.map(m => ec.jsonEncodeNodeId);
+  out.AggregateConfiguration = this.aggregateConfiguration;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.startTime  = ec.jsonDecodeDateTime(inp.StartTime);
+  this.endTime  = ec.jsonDecodeDateTime(inp.EndTime);
+  this.processingInterval = inp.ProcessingInterval;
+  this.aggregateType = inp.AggregateType.map(m => ec.jsonDecodeNodeId);
+  this.aggregateConfiguration.fromJSON(inp);
+
+ }
+
+
  clone( target?: ReadProcessedDetails): ReadProcessedDetails {
   if (!target) {
    target = new ReadProcessedDetails();

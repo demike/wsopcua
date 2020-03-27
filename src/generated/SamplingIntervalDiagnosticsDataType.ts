@@ -51,6 +51,25 @@ export class SamplingIntervalDiagnosticsDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SamplingInterval = this.samplingInterval;
+  out.MonitoredItemCount = this.monitoredItemCount;
+  out.MaxMonitoredItemCount = this.maxMonitoredItemCount;
+  out.DisabledMonitoredItemCount = this.disabledMonitoredItemCount;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.samplingInterval = inp.SamplingInterval;
+  this.monitoredItemCount = inp.MonitoredItemCount;
+  this.maxMonitoredItemCount = inp.MaxMonitoredItemCount;
+  this.disabledMonitoredItemCount = inp.DisabledMonitoredItemCount;
+
+ }
+
+
  clone( target?: SamplingIntervalDiagnosticsDataType): SamplingIntervalDiagnosticsDataType {
   if (!target) {
    target = new SamplingIntervalDiagnosticsDataType();

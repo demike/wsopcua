@@ -57,6 +57,27 @@ export class UserTokenPolicy {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.PolicyId = this.policyId;
+  out.TokenType = this.tokenType;
+  out.IssuedTokenType = this.issuedTokenType;
+  out.IssuerEndpointUrl = this.issuerEndpointUrl;
+  out.SecurityPolicyUri = this.securityPolicyUri;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.policyId = inp.PolicyId;
+  this.tokenType = inp.TokenType;
+  this.issuedTokenType = inp.IssuedTokenType;
+  this.issuerEndpointUrl = inp.IssuerEndpointUrl;
+  this.securityPolicyUri = inp.SecurityPolicyUri;
+
+ }
+
+
  clone( target?: UserTokenPolicy): UserTokenPolicy {
   if (!target) {
    target = new UserTokenPolicy();

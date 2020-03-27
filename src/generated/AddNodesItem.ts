@@ -69,6 +69,31 @@ export class AddNodesItem {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ParentNodeId = ec.jsonEncodeExpandedNodeId(this.parentNodeId);
+  out.ReferenceTypeId = ec.jsonEncodeNodeId(this.referenceTypeId);
+  out.RequestedNewNodeId = ec.jsonEncodeExpandedNodeId(this.requestedNewNodeId);
+  out.BrowseName = this.browseName;
+  out.NodeClass = this.nodeClass;
+  out.NodeAttributes = this.nodeAttributes;
+  out.TypeDefinition = ec.jsonEncodeExpandedNodeId(this.typeDefinition);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.parentNodeId  = ec.jsonDecodeExpandedNodeId(inp.ParentNodeId);
+  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+  this.requestedNewNodeId  = ec.jsonDecodeExpandedNodeId(inp.RequestedNewNodeId);
+  this.browseName.fromJSON(inp);
+  this.nodeClass = inp.NodeClass;
+  this.nodeAttributes = inp.NodeAttributes;
+  this.typeDefinition  = ec.jsonDecodeExpandedNodeId(inp.TypeDefinition);
+
+ }
+
+
  clone( target?: AddNodesItem): AddNodesItem {
   if (!target) {
    target = new AddNodesItem();

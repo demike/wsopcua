@@ -46,6 +46,22 @@ export class ViewNode extends InstanceNode {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.ContainsNoLoops = this.containsNoLoops;
+  out.EventNotifier = this.eventNotifier;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.containsNoLoops = inp.ContainsNoLoops;
+  this.eventNotifier = inp.EventNotifier;
+
+ }
+
+
  clone( target?: ViewNode): ViewNode {
   if (!target) {
    target = new ViewNode();

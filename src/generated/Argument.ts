@@ -57,6 +57,27 @@ export class Argument {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Name = this.name;
+  out.DataType = ec.jsonEncodeNodeId(this.dataType);
+  out.ValueRank = this.valueRank;
+  out.ArrayDimensions = this.arrayDimensions;
+  out.Description = this.description;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.name = inp.Name;
+  this.dataType  = ec.jsonDecodeNodeId(inp.DataType);
+  this.valueRank = inp.ValueRank;
+  this.arrayDimensions = inp.ArrayDimensions;
+  this.description.fromJSON(inp);
+
+ }
+
+
  clone( target?: Argument): Argument {
   if (!target) {
    target = new Argument();

@@ -43,6 +43,21 @@ export class DatagramWriterGroupTransportDataType extends WriterGroupTransportDa
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.MessageRepeatCount = this.messageRepeatCount;
+  out.MessageRepeatDelay = this.messageRepeatDelay;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.messageRepeatCount = inp.MessageRepeatCount;
+  this.messageRepeatDelay = inp.MessageRepeatDelay;
+
+ }
+
+
  clone( target?: DatagramWriterGroupTransportDataType): DatagramWriterGroupTransportDataType {
   if (!target) {
    target = new DatagramWriterGroupTransportDataType();

@@ -52,6 +52,25 @@ export class MonitoredItemModifyResult {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
+  out.RevisedSamplingInterval = this.revisedSamplingInterval;
+  out.RevisedQueueSize = this.revisedQueueSize;
+  out.FilterResult = this.filterResult;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.revisedSamplingInterval = inp.RevisedSamplingInterval;
+  this.revisedQueueSize = inp.RevisedQueueSize;
+  this.filterResult = inp.FilterResult;
+
+ }
+
+
  clone( target?: MonitoredItemModifyResult): MonitoredItemModifyResult {
   if (!target) {
    target = new MonitoredItemModifyResult();

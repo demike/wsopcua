@@ -46,6 +46,23 @@ export class ViewDescription {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ViewId = ec.jsonEncodeNodeId(this.viewId);
+  out.Timestamp = ec.jsonEncodeDateTime(this.timestamp);
+  out.ViewVersion = this.viewVersion;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.viewId  = ec.jsonDecodeNodeId(inp.ViewId);
+  this.timestamp  = ec.jsonDecodeDateTime(inp.Timestamp);
+  this.viewVersion = inp.ViewVersion;
+
+ }
+
+
  clone( target?: ViewDescription): ViewDescription {
   if (!target) {
    target = new ViewDescription();

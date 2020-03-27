@@ -61,6 +61,29 @@ export class BuildInfo {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ProductUri = this.productUri;
+  out.ManufacturerName = this.manufacturerName;
+  out.ProductName = this.productName;
+  out.SoftwareVersion = this.softwareVersion;
+  out.BuildNumber = this.buildNumber;
+  out.BuildDate = ec.jsonEncodeDateTime(this.buildDate);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.productUri = inp.ProductUri;
+  this.manufacturerName = inp.ManufacturerName;
+  this.productName = inp.ProductName;
+  this.softwareVersion = inp.SoftwareVersion;
+  this.buildNumber = inp.BuildNumber;
+  this.buildDate  = ec.jsonDecodeDateTime(inp.BuildDate);
+
+ }
+
+
  clone( target?: BuildInfo): BuildInfo {
   if (!target) {
    target = new BuildInfo();

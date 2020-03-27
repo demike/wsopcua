@@ -38,6 +38,19 @@ export class ContentFilter {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Elements = this.elements;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.elements = inp.Elements.map(m => { const mem = new ContentFilterElement(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: ContentFilter): ContentFilter {
   if (!target) {
    target = new ContentFilter();

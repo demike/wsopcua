@@ -51,6 +51,23 @@ export class EventFilterResult extends MonitoringFilterResult {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SelectClauseResults = this.selectClauseResults.map(m => ec.jsonEncodeStatusCode);
+  out.SelectClauseDiagnosticInfos = this.selectClauseDiagnosticInfos;
+  out.WhereClauseResult = this.whereClauseResult;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.selectClauseResults = inp.SelectClauseResults.map(m => ec.jsonDecodeStatusCode);
+  this.selectClauseDiagnosticInfos = inp.SelectClauseDiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+  this.whereClauseResult.fromJSON(inp);
+
+ }
+
+
  clone( target?: EventFilterResult): EventFilterResult {
   if (!target) {
    target = new EventFilterResult();

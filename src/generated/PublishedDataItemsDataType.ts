@@ -40,6 +40,19 @@ export class PublishedDataItemsDataType extends PublishedDataSetSourceDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.PublishedData = this.publishedData;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.publishedData = inp.PublishedData.map(m => { const mem = new PublishedVariableDataType(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: PublishedDataItemsDataType): PublishedDataItemsDataType {
   if (!target) {
    target = new PublishedDataItemsDataType();

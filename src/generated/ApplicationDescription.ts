@@ -68,6 +68,31 @@ export class ApplicationDescription {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ApplicationUri = this.applicationUri;
+  out.ProductUri = this.productUri;
+  out.ApplicationName = this.applicationName;
+  out.ApplicationType = this.applicationType;
+  out.GatewayServerUri = this.gatewayServerUri;
+  out.DiscoveryProfileUri = this.discoveryProfileUri;
+  out.DiscoveryUrls = this.discoveryUrls;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.applicationUri = inp.ApplicationUri;
+  this.productUri = inp.ProductUri;
+  this.applicationName.fromJSON(inp);
+  this.applicationType = inp.ApplicationType;
+  this.gatewayServerUri = inp.GatewayServerUri;
+  this.discoveryProfileUri = inp.DiscoveryProfileUri;
+  this.discoveryUrls = inp.DiscoveryUrls;
+
+ }
+
+
  clone( target?: ApplicationDescription): ApplicationDescription {
   if (!target) {
    target = new ApplicationDescription();

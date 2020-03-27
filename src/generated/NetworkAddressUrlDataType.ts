@@ -41,6 +41,20 @@ export class NetworkAddressUrlDataType extends NetworkAddressDataType {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.Url = this.url;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.url = inp.Url;
+
+ }
+
+
  clone( target?: NetworkAddressUrlDataType): NetworkAddressUrlDataType {
   if (!target) {
    target = new NetworkAddressUrlDataType();

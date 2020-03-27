@@ -46,6 +46,22 @@ export class MethodAttributes extends NodeAttributes {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.Executable = this.executable;
+  out.UserExecutable = this.userExecutable;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.executable = inp.Executable;
+  this.userExecutable = inp.UserExecutable;
+
+ }
+
+
  clone( target?: MethodAttributes): MethodAttributes {
   if (!target) {
    target = new MethodAttributes();

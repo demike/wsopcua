@@ -52,6 +52,25 @@ export class EUInformation {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NamespaceUri = this.namespaceUri;
+  out.UnitId = this.unitId;
+  out.DisplayName = this.displayName;
+  out.Description = this.description;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.namespaceUri = inp.NamespaceUri;
+  this.unitId = inp.UnitId;
+  this.displayName.fromJSON(inp);
+  this.description.fromJSON(inp);
+
+ }
+
+
  clone( target?: EUInformation): EUInformation {
   if (!target) {
    target = new EUInformation();

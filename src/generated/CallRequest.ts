@@ -44,6 +44,21 @@ export class CallRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.MethodsToCall = this.methodsToCall;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.methodsToCall = inp.MethodsToCall.map(m => { const mem = new CallMethodRequest(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: CallRequest): CallRequest {
   if (!target) {
    target = new CallRequest();

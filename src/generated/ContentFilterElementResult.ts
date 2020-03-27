@@ -48,6 +48,23 @@ export class ContentFilterElementResult {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
+  out.OperandStatusCodes = this.operandStatusCodes.map(m => ec.jsonEncodeStatusCode);
+  out.OperandDiagnosticInfos = this.operandDiagnosticInfos;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.operandStatusCodes = inp.OperandStatusCodes.map(m => ec.jsonDecodeStatusCode);
+  this.operandDiagnosticInfos = inp.OperandDiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: ContentFilterElementResult): ContentFilterElementResult {
   if (!target) {
    target = new ContentFilterElementResult();

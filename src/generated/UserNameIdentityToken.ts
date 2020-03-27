@@ -51,6 +51,24 @@ export class UserNameIdentityToken extends UserIdentityToken {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.UserName = this.userName;
+  out.Password = this.password;
+  out.EncryptionAlgorithm = this.encryptionAlgorithm;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.userName = inp.UserName;
+  this.password = inp.Password;
+  this.encryptionAlgorithm = inp.EncryptionAlgorithm;
+
+ }
+
+
  clone( target?: UserNameIdentityToken): UserNameIdentityToken {
   if (!target) {
    target = new UserNameIdentityToken();

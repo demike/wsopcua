@@ -54,6 +54,25 @@ export class AggregateFilter extends MonitoringFilter {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.StartTime = ec.jsonEncodeDateTime(this.startTime);
+  out.AggregateType = ec.jsonEncodeNodeId(this.aggregateType);
+  out.ProcessingInterval = this.processingInterval;
+  out.AggregateConfiguration = this.aggregateConfiguration;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.startTime  = ec.jsonDecodeDateTime(inp.StartTime);
+  this.aggregateType  = ec.jsonDecodeNodeId(inp.AggregateType);
+  this.processingInterval = inp.ProcessingInterval;
+  this.aggregateConfiguration.fromJSON(inp);
+
+ }
+
+
  clone( target?: AggregateFilter): AggregateFilter {
   if (!target) {
    target = new AggregateFilter();

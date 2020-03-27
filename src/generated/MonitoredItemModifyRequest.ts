@@ -42,6 +42,21 @@ export class MonitoredItemModifyRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.MonitoredItemId = this.monitoredItemId;
+  out.RequestedParameters = this.requestedParameters;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.monitoredItemId = inp.MonitoredItemId;
+  this.requestedParameters.fromJSON(inp);
+
+ }
+
+
  clone( target?: MonitoredItemModifyRequest): MonitoredItemModifyRequest {
   if (!target) {
    target = new MonitoredItemModifyRequest();

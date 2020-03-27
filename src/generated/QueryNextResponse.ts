@@ -49,6 +49,23 @@ export class QueryNextResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.QueryDataSets = this.queryDataSets;
+  out.RevisedContinuationPoint = this.revisedContinuationPoint;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.queryDataSets = inp.QueryDataSets.map(m => { const mem = new QueryDataSet(); mem.fromJSON(m); return mem;});
+  this.revisedContinuationPoint = inp.RevisedContinuationPoint;
+
+ }
+
+
  clone( target?: QueryNextResponse): QueryNextResponse {
   if (!target) {
    target = new QueryNextResponse();

@@ -35,6 +35,18 @@ export class InstanceNode extends Node {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+
+ }
+
+
  clone( target?: InstanceNode): InstanceNode {
   if (!target) {
    target = new InstanceNode();

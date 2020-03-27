@@ -91,6 +91,41 @@ export class ServerDiagnosticsSummaryDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ServerViewCount = this.serverViewCount;
+  out.CurrentSessionCount = this.currentSessionCount;
+  out.CumulatedSessionCount = this.cumulatedSessionCount;
+  out.SecurityRejectedSessionCount = this.securityRejectedSessionCount;
+  out.RejectedSessionCount = this.rejectedSessionCount;
+  out.SessionTimeoutCount = this.sessionTimeoutCount;
+  out.SessionAbortCount = this.sessionAbortCount;
+  out.CurrentSubscriptionCount = this.currentSubscriptionCount;
+  out.CumulatedSubscriptionCount = this.cumulatedSubscriptionCount;
+  out.PublishingIntervalCount = this.publishingIntervalCount;
+  out.SecurityRejectedRequestsCount = this.securityRejectedRequestsCount;
+  out.RejectedRequestsCount = this.rejectedRequestsCount;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.serverViewCount = inp.ServerViewCount;
+  this.currentSessionCount = inp.CurrentSessionCount;
+  this.cumulatedSessionCount = inp.CumulatedSessionCount;
+  this.securityRejectedSessionCount = inp.SecurityRejectedSessionCount;
+  this.rejectedSessionCount = inp.RejectedSessionCount;
+  this.sessionTimeoutCount = inp.SessionTimeoutCount;
+  this.sessionAbortCount = inp.SessionAbortCount;
+  this.currentSubscriptionCount = inp.CurrentSubscriptionCount;
+  this.cumulatedSubscriptionCount = inp.CumulatedSubscriptionCount;
+  this.publishingIntervalCount = inp.PublishingIntervalCount;
+  this.securityRejectedRequestsCount = inp.SecurityRejectedRequestsCount;
+  this.rejectedRequestsCount = inp.RejectedRequestsCount;
+
+ }
+
+
  clone( target?: ServerDiagnosticsSummaryDataType): ServerDiagnosticsSummaryDataType {
   if (!target) {
    target = new ServerDiagnosticsSummaryDataType();

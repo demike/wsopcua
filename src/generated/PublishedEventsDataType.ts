@@ -51,6 +51,23 @@ export class PublishedEventsDataType extends PublishedDataSetSourceDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.EventNotifier = ec.jsonEncodeNodeId(this.eventNotifier);
+  out.SelectedFields = this.selectedFields;
+  out.Filter = this.filter;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.eventNotifier  = ec.jsonDecodeNodeId(inp.EventNotifier);
+  this.selectedFields = inp.SelectedFields.map(m => { const mem = new SimpleAttributeOperand(); mem.fromJSON(m); return mem;});
+  this.filter.fromJSON(inp);
+
+ }
+
+
  clone( target?: PublishedEventsDataType): PublishedEventsDataType {
   if (!target) {
    target = new PublishedEventsDataType();

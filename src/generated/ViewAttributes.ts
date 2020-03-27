@@ -46,6 +46,22 @@ export class ViewAttributes extends NodeAttributes {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.ContainsNoLoops = this.containsNoLoops;
+  out.EventNotifier = this.eventNotifier;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.containsNoLoops = inp.ContainsNoLoops;
+  this.eventNotifier = inp.EventNotifier;
+
+ }
+
+
  clone( target?: ViewAttributes): ViewAttributes {
   if (!target) {
    target = new ViewAttributes();

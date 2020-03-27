@@ -52,6 +52,25 @@ export class GetEndpointsRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.EndpointUrl = this.endpointUrl;
+  out.LocaleIds = this.localeIds;
+  out.ProfileUris = this.profileUris;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.endpointUrl = inp.EndpointUrl;
+  this.localeIds = inp.LocaleIds;
+  this.profileUris = inp.ProfileUris;
+
+ }
+
+
  clone( target?: GetEndpointsRequest): GetEndpointsRequest {
   if (!target) {
    target = new GetEndpointsRequest();

@@ -41,6 +41,21 @@ export class DeleteNodesItem {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
+  out.DeleteTargetReferences = this.deleteTargetReferences;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+  this.deleteTargetReferences = inp.DeleteTargetReferences;
+
+ }
+
+
  clone( target?: DeleteNodesItem): DeleteNodesItem {
   if (!target) {
    target = new DeleteNodesItem();

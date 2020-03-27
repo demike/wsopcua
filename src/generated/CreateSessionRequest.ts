@@ -78,6 +78,35 @@ export class CreateSessionRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.ClientDescription = this.clientDescription;
+  out.ServerUri = this.serverUri;
+  out.EndpointUrl = this.endpointUrl;
+  out.SessionName = this.sessionName;
+  out.ClientNonce = this.clientNonce;
+  out.ClientCertificate = this.clientCertificate;
+  out.RequestedSessionTimeout = this.requestedSessionTimeout;
+  out.MaxResponseMessageSize = this.maxResponseMessageSize;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.clientDescription.fromJSON(inp);
+  this.serverUri = inp.ServerUri;
+  this.endpointUrl = inp.EndpointUrl;
+  this.sessionName = inp.SessionName;
+  this.clientNonce = inp.ClientNonce;
+  this.clientCertificate = inp.ClientCertificate;
+  this.requestedSessionTimeout = inp.RequestedSessionTimeout;
+  this.maxResponseMessageSize = inp.MaxResponseMessageSize;
+
+ }
+
+
  clone( target?: CreateSessionRequest): CreateSessionRequest {
   if (!target) {
    target = new CreateSessionRequest();

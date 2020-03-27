@@ -42,6 +42,21 @@ export class CancelResponse {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ResponseHeader = this.responseHeader;
+  out.CancelCount = this.cancelCount;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.responseHeader.fromJSON(inp);
+  this.cancelCount = inp.CancelCount;
+
+ }
+
+
  clone( target?: CancelResponse): CancelResponse {
   if (!target) {
    target = new CancelResponse();

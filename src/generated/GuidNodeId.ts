@@ -41,6 +41,21 @@ export class GuidNodeId {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NamespaceIndex = this.namespaceIndex;
+  out.Identifier = this.identifier;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.namespaceIndex = inp.NamespaceIndex;
+  this.identifier = inp.Identifier;
+
+ }
+
+
  clone( target?: GuidNodeId): GuidNodeId {
   if (!target) {
    target = new GuidNodeId();

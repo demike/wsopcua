@@ -36,6 +36,19 @@ export class EndpointUrlListDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.EndpointUrlList = this.endpointUrlList;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.endpointUrlList = inp.EndpointUrlList;
+
+ }
+
+
  clone( target?: EndpointUrlListDataType): EndpointUrlListDataType {
   if (!target) {
    target = new EndpointUrlListDataType();

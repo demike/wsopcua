@@ -57,6 +57,27 @@ export class SetTriggeringRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.SubscriptionId = this.subscriptionId;
+  out.TriggeringItemId = this.triggeringItemId;
+  out.LinksToAdd = this.linksToAdd;
+  out.LinksToRemove = this.linksToRemove;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.subscriptionId = inp.SubscriptionId;
+  this.triggeringItemId = inp.TriggeringItemId;
+  this.linksToAdd = inp.LinksToAdd;
+  this.linksToRemove = inp.LinksToRemove;
+
+ }
+
+
  clone( target?: SetTriggeringRequest): SetTriggeringRequest {
   if (!target) {
    target = new SetTriggeringRequest();

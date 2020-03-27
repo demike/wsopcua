@@ -36,6 +36,19 @@ export class HistoryUpdateDetails {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+
+ }
+
+
  clone( target?: HistoryUpdateDetails): HistoryUpdateDetails {
   if (!target) {
    target = new HistoryUpdateDetails();

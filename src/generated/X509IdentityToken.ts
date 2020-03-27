@@ -41,6 +41,20 @@ export class X509IdentityToken extends UserIdentityToken {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.CertificateData = this.certificateData;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.certificateData = inp.CertificateData;
+
+ }
+
+
  clone( target?: X509IdentityToken): X509IdentityToken {
   if (!target) {
    target = new X509IdentityToken();

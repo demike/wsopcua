@@ -57,6 +57,27 @@ export class NodeAttributes {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SpecifiedAttributes = this.specifiedAttributes;
+  out.DisplayName = this.displayName;
+  out.Description = this.description;
+  out.WriteMask = this.writeMask;
+  out.UserWriteMask = this.userWriteMask;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.specifiedAttributes = inp.SpecifiedAttributes;
+  this.displayName.fromJSON(inp);
+  this.description.fromJSON(inp);
+  this.writeMask = inp.WriteMask;
+  this.userWriteMask = inp.UserWriteMask;
+
+ }
+
+
  clone( target?: NodeAttributes): NodeAttributes {
   if (!target) {
    target = new NodeAttributes();

@@ -50,6 +50,23 @@ export class TransferResultDataDataType extends FetchResultDataType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.SequenceNumber = this.sequenceNumber;
+  out.EndOfResults = this.endOfResults;
+  out.ParameterDefs = this.parameterDefs;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.sequenceNumber = inp.SequenceNumber;
+  this.endOfResults = inp.EndOfResults;
+  this.parameterDefs = inp.ParameterDefs.map(m => { const mem = new ParameterResultDataType(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: TransferResultDataDataType): TransferResultDataDataType {
   if (!target) {
    target = new TransferResultDataDataType();

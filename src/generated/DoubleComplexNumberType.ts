@@ -41,6 +41,21 @@ export class DoubleComplexNumberType {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Real = this.real;
+  out.Imaginary = this.imaginary;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.real = inp.Real;
+  this.imaginary = inp.Imaginary;
+
+ }
+
+
  clone( target?: DoubleComplexNumberType): DoubleComplexNumberType {
   if (!target) {
    target = new DoubleComplexNumberType();

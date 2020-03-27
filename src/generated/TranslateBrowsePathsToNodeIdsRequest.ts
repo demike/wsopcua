@@ -44,6 +44,21 @@ export class TranslateBrowsePathsToNodeIdsRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.BrowsePaths = this.browsePaths;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.browsePaths = inp.BrowsePaths.map(m => { const mem = new BrowsePath(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: TranslateBrowsePathsToNodeIdsRequest): TranslateBrowsePathsToNodeIdsRequest {
   if (!target) {
    target = new TranslateBrowsePathsToNodeIdsRequest();

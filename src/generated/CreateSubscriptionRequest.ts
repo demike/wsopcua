@@ -67,6 +67,31 @@ export class CreateSubscriptionRequest {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.RequestHeader = this.requestHeader;
+  out.RequestedPublishingInterval = this.requestedPublishingInterval;
+  out.RequestedLifetimeCount = this.requestedLifetimeCount;
+  out.RequestedMaxKeepAliveCount = this.requestedMaxKeepAliveCount;
+  out.MaxNotificationsPerPublish = this.maxNotificationsPerPublish;
+  out.PublishingEnabled = this.publishingEnabled;
+  out.Priority = this.priority;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.requestHeader.fromJSON(inp);
+  this.requestedPublishingInterval = inp.RequestedPublishingInterval;
+  this.requestedLifetimeCount = inp.RequestedLifetimeCount;
+  this.requestedMaxKeepAliveCount = inp.RequestedMaxKeepAliveCount;
+  this.maxNotificationsPerPublish = inp.MaxNotificationsPerPublish;
+  this.publishingEnabled = inp.PublishingEnabled;
+  this.priority = inp.Priority;
+
+ }
+
+
  clone( target?: CreateSubscriptionRequest): CreateSubscriptionRequest {
   if (!target) {
    target = new CreateSubscriptionRequest();

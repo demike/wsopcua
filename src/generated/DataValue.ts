@@ -91,6 +91,41 @@ export class DataValue {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  if(this.value != null) { out.Value = this.value; }
+  if(this.statusCode != null) { out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode); }
+  if(this.sourceTimestamp != null) { out.SourceTimestamp = ec.jsonEncodeDateTime(this.sourceTimestamp); }
+  if(this.sourcePicoseconds != null) { out.SourcePicoseconds = this.sourcePicoseconds; }
+  if(this.serverTimestamp != null) { out.ServerTimestamp = ec.jsonEncodeDateTime(this.serverTimestamp); }
+  if(this.serverPicoseconds != null) { out.ServerPicoseconds = this.serverPicoseconds; }
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  if(inp.Value) {
+   this.value.fromJSON(inp);
+  }
+  if(inp.StatusCode) {
+   this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+  }
+  if(inp.SourceTimestamp) {
+   this.sourceTimestamp  = ec.jsonDecodeDateTime(inp.SourceTimestamp);
+  }
+  if(inp.SourcePicoseconds) {
+   this.sourcePicoseconds = inp.SourcePicoseconds;
+  }
+  if(inp.ServerTimestamp) {
+   this.serverTimestamp  = ec.jsonDecodeDateTime(inp.ServerTimestamp);
+  }
+  if(inp.ServerPicoseconds) {
+   this.serverPicoseconds = inp.ServerPicoseconds;
+  }
+
+ }
+
+
  clone( target?: DataValue): DataValue {
   if (!target) {
    target = new DataValue();

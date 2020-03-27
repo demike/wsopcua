@@ -84,6 +84,36 @@ export class WriterGroupDataType extends PubSubGroupDataType {
  }
 
 
+ toJSON() {
+  const out: any = super.toJSON();
+  out.WriterGroupId = this.writerGroupId;
+  out.PublishingInterval = this.publishingInterval;
+  out.KeepAliveTime = this.keepAliveTime;
+  out.Priority = this.priority;
+  out.LocaleIds = this.localeIds;
+  out.HeaderLayoutUri = this.headerLayoutUri;
+  out.TransportSettings = this.transportSettings;
+  out.MessageSettings = this.messageSettings;
+  out.DataSetWriters = this.dataSetWriters;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  super.fromJSON(inp);
+  this.writerGroupId = inp.WriterGroupId;
+  this.publishingInterval = inp.PublishingInterval;
+  this.keepAliveTime = inp.KeepAliveTime;
+  this.priority = inp.Priority;
+  this.localeIds = inp.LocaleIds;
+  this.headerLayoutUri = inp.HeaderLayoutUri;
+  this.transportSettings = inp.TransportSettings;
+  this.messageSettings = inp.MessageSettings;
+  this.dataSetWriters = inp.DataSetWriters.map(m => { const mem = new DataSetWriterDataType(); mem.fromJSON(m); return mem;});
+
+ }
+
+
  clone( target?: WriterGroupDataType): WriterGroupDataType {
   if (!target) {
    target = new WriterGroupDataType();

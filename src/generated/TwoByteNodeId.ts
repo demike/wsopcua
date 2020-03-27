@@ -36,6 +36,19 @@ export class TwoByteNodeId {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.Identifier = this.identifier;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.identifier = inp.Identifier;
+
+ }
+
+
  clone( target?: TwoByteNodeId): TwoByteNodeId {
   if (!target) {
    target = new TwoByteNodeId();

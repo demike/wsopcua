@@ -51,6 +51,25 @@ export class ChannelSecurityToken {
  }
 
 
+ toJSON() {
+  const out: any = {};
+  out.ChannelId = this.channelId;
+  out.TokenId = this.tokenId;
+  out.CreatedAt = ec.jsonEncodeDateTime(this.createdAt);
+  out.RevisedLifetime = this.revisedLifetime;
+ return out;
+ }
+
+
+ fromJSON( inp: any) {
+  this.channelId = inp.ChannelId;
+  this.tokenId = inp.TokenId;
+  this.createdAt  = ec.jsonDecodeDateTime(inp.CreatedAt);
+  this.revisedLifetime = inp.RevisedLifetime;
+
+ }
+
+
  clone( target?: ChannelSecurityToken): ChannelSecurityToken {
   if (!target) {
    target = new ChannelSecurityToken();
