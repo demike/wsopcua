@@ -36,6 +36,8 @@ import { IEncodable } from '../factory/factories_baseobject';
 import { IRequestHeader } from '../generated/RequestHeader';
 import { SecureMessageChunkManagerOptions } from './secure_message_chunk_manager';
 import { ISymmetricAlgortihmSecurityHeader } from '../service-secure-channel/SymmetricAlgorithmSecurityHeader';
+import { JSONMessageBuilder } from '../transport/json_message_builder';
+import { MessageBuilderEvents } from '../transport/message_builder_base';
 
 const OpenSecureChannelRequest = secure_channel_service.OpenSecureChannelRequest;
 const CloseSecureChannelRequest = secure_channel_service.CloseSecureChannelRequest;
@@ -124,6 +126,7 @@ export interface ClientSecureChannelLayerEvents {
 }
 
 export interface ClientSecureChannelLayerOptions {
+    encoding?: 'opcua+uacp'|'opcua+json'; // default: 'opcua+uacp'
     defaultSecureTokenLifeTime?: number;
     tokenRenewalInterval?: number;
     securityMode?: MessageSecurityMode;
@@ -200,6 +203,8 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
         return this._transport.endpointUrl;
     }
 
+    public readonly encoding:  'opcua+uacp'|'opcua+json';
+
     constructor(options: ClientSecureChannelLayerOptions) {
     super();
     options = options || {};
@@ -209,6 +214,8 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     this.parent = options.parent;
     this._clientNonce = null; // will be created when needed
     this.protocolVersion = 0;
+
+    this.encoding = options.encoding || 'opcua+uacp';
 
 
     this.messageChunker = new MessageChunker({
@@ -230,18 +237,18 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
         assert(this.securityPolicy !== SecurityPolicy.None, 'Security Policy None is not a valid choice');
     }
 
-    this.messageBuilder = new MessageBuilder();
-    this.messageBuilder.securityMode = this._securityMode;
-    this.messageBuilder.privateKey = this.getPrivateKey();
-
     this._request_data = new Map();
+    if( this.encoding === 'opcua+uacp') {
+        this.messageBuilder = new MessageBuilder();
+        this.messageBuilder.securityMode = this._securityMode;
+        this.messageBuilder.privateKey = this.getPrivateKey();
+    } else {
+        this.messageBuilder =  new JSONMessageBuilder();
+    }
 
-    this.messageBuilder
+    (this.messageBuilder as EventEmitter<MessageBuilderEvents>)
     .on('message', (response, msgType: string, requestId: number) => this._on_message_received(response, msgType, requestId))
-    .on('start_chunk', function () {
-        // record tick2: when the first response chunk is received
-        // request_data._tick2 = get_clock_tick();
-    }).on('error', (err, requestId) => {
+    .on('error', (err, requestId) => {
         //
         debugLog('request id = ' + requestId + err);
         let request_data = this._request_data.get(requestId);
@@ -602,14 +609,14 @@ protected _open_secure_channel_request(is_initial: boolean, callback: ErrorCallb
             }
 
 
-            const cryptoFactory = this.messageBuilder.cryptoFactory;
+            const cryptoFactory = (this.messageBuilder as MessageBuilder).cryptoFactory;
             if (cryptoFactory) {
                 assert(this._serverNonce instanceof Uint8Array);
                 this._derivedKeys = cryptoFactory.compute_derived_keys(this._serverNonce, this._clientNonce);
             }
 
             const derivedServerKeys = this._derivedKeys ? this._derivedKeys.derivedServerKeys : null;
-            this.messageBuilder.pushNewToken(this._securityToken, derivedServerKeys);
+            (this.messageBuilder as MessageBuilder).pushNewToken(this._securityToken, derivedServerKeys);
 
             this._install_security_token_watchdog();
             this._isOpened = true;
@@ -634,14 +641,20 @@ protected _on_connection(transport: ClientWSTransport, callback: ErrorCallback, 
 
         this._transport = transport;
 
-        this._transport.on('message', (message_chunk: DataView) => {
-            /**
+        this._transport.on('message', (message_chunk: DataView| string) => {
+
+           if (typeof message_chunk !== 'string') {
+                   /**
              * notify the observers that ClientSecureChannelLayer has received a message chunk
              * @event receive_chunk
              * @param message_chunk {Buffer}
              */
             this.emit('receive_chunk', message_chunk);
-            this._on_receive_message_chunk(message_chunk);
+                this._on_receive_message_chunk(message_chunk);
+            } else {
+                this._on_receive_json_message(message_chunk);
+            }
+
         });
 
 
@@ -656,6 +669,10 @@ protected _on_connection(transport: ClientWSTransport, callback: ErrorCallback, 
             debugLog(' ERROR', err1);
         });
 
+        if (this.encoding === 'opcua+json') {
+            // no need to issue an open secure channel request
+            this._isOpened = true;
+        }
 
         const is_initial = true;
         this._open_secure_channel_request(is_initial, callback);
@@ -727,7 +744,7 @@ public create(endpoint_url: string , callback: ErrorCallback) {
         */
     }
 
-    const transp = new ClientWSTransport();
+    const transp = new ClientWSTransport(this.encoding);
     transp.timeout = this.transportTimeout;
     transp.protocolVersion = this.protocolVersion;
 
@@ -906,8 +923,6 @@ protected _renew_security_token() {
 
 protected _on_receive_message_chunk(message_chunk: DataView) {
 
-
-
     /* istanbul ignore next */
     if (doDebug) {
         const _stream = new DataStream(message_chunk);
@@ -916,7 +931,14 @@ protected _on_receive_message_chunk(message_chunk: DataView) {
         debugLog('\n' + hexDump(message_chunk));
         debugLog(messageHeaderToString(message_chunk));
     }
-    this.messageBuilder.feed(message_chunk);
+    (this.messageBuilder as MessageBuilder).feed(message_chunk);
+}
+
+protected _on_receive_json_message(message: string) {
+    if (doDebug) {
+        debugLog('CLIENT RECEIVED JSON Message:\n' + message);
+    }
+    (this.messageBuilder as JSONMessageBuilder).decodeResponse(message);
 }
 
 /**
@@ -1180,6 +1202,26 @@ protected _send_chunk(requestId: number, messageChunk?: ArrayBuffer) {
     }
 }
 
+protected _send_json(requestId: number) {
+
+    const request_data = this._request_data.get(requestId);
+
+        assert(this._transport);
+        this._transport.write(JSON.stringify(request_data.request));
+        request_data.chunk_count += 1;
+
+        if (doDebug) {
+            debugLog('CLIENT SEND done.');
+        }
+        if (request_data) {
+            // record tick1: when request has been sent to server
+            request_data._tick1 = get_clock_tick();
+            request_data.bytesWritten_after = this.bytesWritten;
+        }
+}
+
+
+
 protected _construct_security_header() {
 
     assert(this.hasOwnProperty('securityMode'));
@@ -1311,7 +1353,11 @@ protected _sendSecureOpcUARequest(msgType: string, requestMessage: IEncodable & 
      */
     this.emit('send_request', requestMessage);
 
+    if(this.encoding === 'opcua+uacp') {
     this.messageChunker.chunkSecureMessage(msgType, options, requestMessage, this._send_chunk.bind(this, requestId));
+    } else {
+        this._send_json(requestId)
+    }
 
 }
 
@@ -1419,7 +1465,7 @@ public close(callback: ErrorCallback) {
     protected defaultSecureTokenLifetime: number;
     protected tokenRenewalInterval: number;
     protected serverCertificate: string;
-    protected messageBuilder: MessageBuilder;
+    protected messageBuilder: MessageBuilder| JSONMessageBuilder;
 
     protected _request_data: Map<number, RequestData>;
     protected __in_normal_close_operation = false;

@@ -12,6 +12,7 @@ export class SimpleType extends ClassFile {
      */
     protected _jsType?:  string;
     private _hasEnDeCodeFunctions = true;
+    private _hasJsonEnDeCodeFunctions = false;
     protected _defaultValue?: string;
 
     constructor(modulePath: ProjectModulePath, name?: string, baseClass?: string|ClassFile ,
@@ -36,6 +37,13 @@ export class SimpleType extends ClassFile {
         this._hasEnDeCodeFunctions = value;
     }
 
+    public get hasJsonEnDeCodeFunctions() {
+        return this._hasJsonEnDeCodeFunctions;
+    }
+    public set hasJsonEnDeCodeFunctions(value) {
+        this._hasJsonEnDeCodeFunctions = value;
+    }
+
     /**
      * the string representation of the default value used
      * in the constructor, if not set null will be used
@@ -54,7 +62,6 @@ export class SimpleType extends ClassFile {
     //     null,
     //     "return in.get" + this.name + "(data);"
     //         );
-        
     //     this.utilityFunctions.push(enc);
     // }
 
@@ -66,7 +73,6 @@ export class SimpleType extends ClassFile {
     //     null,
     //     "out.set" + this.name + "(data);"
     //         );
-        
     //     this.utilityFunctions.push(enc);
     // }
 

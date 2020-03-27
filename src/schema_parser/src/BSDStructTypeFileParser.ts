@@ -2,6 +2,7 @@
 import { ClassMember } from './ClassMember';
 */
 import { ClassMember, ClassMethod, BSDClassFileParser, EnumTypeFile, ClassFile, StructTypeFile, SimpleType } from './SchemaParser.module';
+import { toUnicode } from 'punycode';
 
 export class BSDStructTypeFileParser extends BSDClassFileParser {
 
@@ -105,7 +106,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
                     alternativeCode = mem.Type.defaultValue || 'null';
                 }
 
-                body += '  this.' + mem.Name + ' = (options.' + mem.Name + 
+                body += '  this.' + mem.Name + ' = (options.' + mem.Name +
                         ' != null) ? options.' + mem.Name + ' : ' + alternativeCode + ';\n';
             }
         }
@@ -321,5 +322,104 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
         }
         str += '}\n';
         this.cls.Defines = str;
+    }
+
+    protected createJsonEncodeMethod(): void {
+        if (!this.cls || !this.cls.hasAnyMembers()) {
+            return;
+        }
+
+        let body = '  ';
+
+        if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
+            body += 'const out: any = super.toJSON();\n';
+        } else {
+            body += 'const out: any = {};\n';
+        }
+
+        for (const mem of this.cls.Members) {
+            body += '  ';
+            const checkUndefined = this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified');
+            if (checkUndefined) {
+                body += 'if(this.' + mem.Name + ' != null) { ';
+            }
+
+            body += 'out.' + mem.OrigName + ' = ';
+            if (mem.IsArray) {
+                if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
+                    body += 'this.' + mem.Name + '.map(m => ec.jsonEncode' + mem.Type.Name + ');';
+                } else {
+                    body += 'this.' + mem.Name + ';';
+                }
+            } else {
+                if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
+                    body += 'ec.jsonEncode' + mem.Type.Name + '(this.' + mem.Name +  ');';
+                } else {
+                    body += 'this.' + mem.Name + ';';
+                }
+            }
+
+            if (checkUndefined) {
+                body += ' }';
+            }
+            body += '\n';
+        }
+
+        body += ' return out;';
+
+        const enc = new ClassMethod('', null, 'toJSON',
+            null,
+            null,
+            body);
+        this.cls.addMethod(enc);
+    }
+
+    protected createJsonDecodeMethod(): void {
+        let body = '';
+        if (!this.cls || !this.cls.hasAnyMembers()) {
+            return;
+        }
+        if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
+            body += '  super.fromJSON(inp);\n';
+        }
+
+        for (const mem of this.cls.Members) {
+            let addIf = false;
+            if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
+                addIf = true;
+                body += '  if(inp.' + mem.OrigName + ') {\n ';
+            }
+
+            body += '  this.' + mem.Name;
+            if (mem.IsArray) {
+                body += ' = inp.' + mem.OrigName;
+                if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
+                    body +=  '.map(m => ec.jsonDecode' + mem.Type.Name + ')';
+                } else if (mem.Type instanceof StructTypeFile) {
+                    body += '.map(m => { const mem = new ' + mem.Type.FullName + '(); mem.fromJSON(m); return mem;})';
+                }
+                body += ';\n';
+            } else {
+                if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
+                    body +=  '  = ec.jsonDecode' + mem.Type.Name + '(inp.' + mem.OrigName + ');\n';
+                } else if (mem.Type instanceof StructTypeFile) {
+                        body += '.fromJSON(inp);\n';
+                } else {
+                    body += ' = inp.' + mem.OrigName + ';\n';
+                }
+
+            }
+
+            if (addIf) {
+                body += '  }\n';
+            }
+        }
+
+        const dec = new ClassMethod('', null, 'fromJSON',
+            [new ClassMember('inp')],
+            null,
+            body);
+        this.cls.addMethod(dec);
+
     }
 }

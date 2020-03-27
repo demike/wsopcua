@@ -3,7 +3,6 @@ import {ClassMember} from './ClassMember';
 import {TypeRegistry} from './TypeRegistry';
 */
 import {ClassMember, ClassMethod, TypeRegistry, SimpleType} from './SchemaParser.module';
-import * as path from 'path';
 import { ProjectModulePath, getModuleImportPath } from './SchemaParserConfig';
 import { PathGenUtil } from './PathGenUtil';
 
@@ -237,6 +236,8 @@ export class ClassFile {
 
     public getEncodeMethod(): ClassMethod|null { return this.getMethodByName(ClassFile.DEFAULT_ENCODE_METHOD); }
     public getDecodeMethod(): ClassMethod|null { return this.getMethodByName(ClassFile.DEFAULT_DECODE_METHOD); }
+    public getJsonEncodeMethod(): ClassMethod|null { return this.getMethodByName(ClassFile.TO_JSON_METHOD); }
+    public getJsonDecodeMethod(): ClassMethod|null { return this.getMethodByName(ClassFile.FROM_JSON_METHOD); }
 
     public static getTypeByName(typeName: string): ClassFile {
         const i = typeName.indexOf(':');
@@ -370,6 +371,8 @@ export class ClassFile {
 
     public static readonly DEFAULT_ENCODE_METHOD = 'encode';
     public static readonly DEFAULT_DECODE_METHOD = 'decode';
+    public static readonly FROM_JSON_METHOD = 'fromJSON';
+    public static readonly TO_JSON_METHOD = 'toJSON';
     protected id: string;
     protected namespace: string|number;
 

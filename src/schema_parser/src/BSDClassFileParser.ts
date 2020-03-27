@@ -107,12 +107,17 @@ export abstract class BSDClassFileParser {
         this.createConstructor();
         this.createEncodeMethod();
         this.createDecodeMethod();
+        this.createJsonEncodeMethod();
+        this.createJsonDecodeMethod();
         this.createCloneMethod();
+
     }
 
     protected  createConstructor(): void {}
     protected  createEncodeMethod(): void {}
     protected  createDecodeMethod(): void {}
+    protected  createJsonEncodeMethod(): void {}
+    protected  createJsonDecodeMethod(): void {}
     protected  createCloneMethod(): void {}
 
     protected createImports(): void {
@@ -134,7 +139,7 @@ export abstract class BSDClassFileParser {
 
         // iterate over methods, ignore self
         for (const met of this.cls.Methods) {
-            if (met.Name == 'constructor') {
+            if (met.Name === 'constructor') {
                 continue;
             }
             const args = met.Arguments || [];
@@ -159,10 +164,10 @@ export abstract class BSDClassFileParser {
     }
 
     protected createImport( cls: ClassFile|null, importInterface: boolean = false, importDecodeMethod: boolean = false) {
-        if (!this.cls || !cls) {
+        if (!this.cls || !cls || cls === ClassMember.UNKNOWN_TYPE) {
             return;
         }
-        if (cls.Path != this.cls.Path ) {
+        if (cls.Path !== this.cls.Path ) {
             this.cls.addImport(cls.getImportSrc(this.cls));
             if (importInterface) {
                 const str = cls.getInterfaceImportSrc(this.cls);

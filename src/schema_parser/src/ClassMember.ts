@@ -30,8 +30,7 @@ export class ClassMember {
 
     constructor(name?: string|null, type?: string|ClassFile|null, required: boolean= true, visibility?: string|null, length: number= 1, isArray: boolean= false) {
         if (name) {
-            this._name = name;
-            this.nameToLowerCase();
+            this.Name = name;
         }
 
         this._length = length;
@@ -63,11 +62,16 @@ export class ClassMember {
 
     public set Name(name: string) {
         this._name = name;
+        this._origName = name;
         this.nameToLowerCase();
     }
 
     public get Name(): string {
         return this._name;
+    }
+
+    public get OrigName(): string {
+        return this._origName;
     }
 
     public set Type(type: ClassFile) {
@@ -134,6 +138,10 @@ export class ClassMember {
             typeName = this._type.ImportAs + '.' + typeName;
         }
 
+        if (this._type === ClassMember.UNKNOWN_TYPE) {
+            typeName = 'any';
+        }
+
         str += this._name;
         if (!required) {
             str += '?';
@@ -182,6 +190,7 @@ export class ClassMember {
      */
     protected static bitCounter = 0;
     protected _name = '';
+    protected _origName = '';
     protected _type: ClassFile = ClassMember.UNKNOWN_TYPE;
     protected _length: number; // for array types
     protected _visibility?: string|null; // public protected ""

@@ -47,6 +47,7 @@ export class TypeRegistry {
        structtype.Written = true;
        structtype.Complete = true;
 
+
         structtype = new StructTypeFile(new ProjectModulePath(PathGenUtil.PROJECT_NAME, '/variant', false), 'Variant');
         structtype.Complete = true;
         structtype.Written = true;
@@ -58,6 +59,7 @@ export class TypeRegistry {
         // type.Path = this.BASIC_TYPES_PATH + "nodeid";
         type.ImportAs = 'ec';
         type.defaultValue = 'ec.NodeId.NullNodeId';
+        type.hasJsonEnDeCodeFunctions = true;
         this.addType(type.Name, type);
 
 
@@ -66,6 +68,7 @@ export class TypeRegistry {
 //        type.Path = this.BASIC_TYPES_PATH + "nodeid";
         type.ImportAs = 'ec';
         type.defaultValue = 'ec.ExpandedNodeId.NullExpandedNodeId';
+        type.hasJsonEnDeCodeFunctions = true;
         this.addType(type.Name, type);
 
 
@@ -131,10 +134,12 @@ export class TypeRegistry {
 //        type.Path = this.BASIC_TYPES_PATH + "date_time";
         type.ImportAs = 'ec';
         type.defaultValue = 'new Date()';
+        type.hasJsonEnDeCodeFunctions = true;
         this.addType(type.Name, type);
         type.JsType = 'Date';
         // UtcTime: 8.38
         this.addType('UtcTime', type);
+        
 
         // Double: 8.12
         type = new SimpleType(this.BASIC_TYPES_PATH, 'Double');
@@ -288,6 +293,7 @@ export class TypeRegistry {
         type = new SimpleType(this.BASIC_TYPES_PATH, 'StatusCode');
 //        type.Path = this.BASIC_TYPES_PATH + "/status_code";
         type.ImportAs = 'ec';
+        type.hasJsonEnDeCodeFunctions = true;
         this.addType(type.Name, type);
 
         // ExtensionObject:
