@@ -1,9 +1,9 @@
 import { OPCUAClient } from '../src/client/opcua_client';
 import { ClientSession } from '../src/client/client_session';
 import { NodeId } from '../src/basic-types';
-import { NodeIdType, makeNodeId } from '../src/nodeid/nodeid';
+import { makeNodeId } from '../src/nodeid/nodeid';
 import { BrowseResult, BrowseDirection, BrowseDescription } from '../src/service-browse';
-import { DiagnosticInfo } from '../src/data-model';
+import { DiagnosticInfo, BrowseResultMask } from '../src/data-model';
 import { EndpointDescription } from '../src/service-endpoints';
 import { ReferenceTypeIds, StatusCodes, AttributeIds } from '../src/constants';
 import { BrowsePath } from '../src/generated/BrowsePath';
@@ -16,7 +16,7 @@ import { MonitoredItemBase } from '../src/client/MonitoredItemBase';
 import { IReadValueId } from '../src/generated/ReadValueId';
 import { Variant, DataType, VariantArrayType } from '../src/variant';
 import { CallMethodRequest, CallMethodResult } from '../src/service-call';
-import { OPCUAClientEvents } from '../src/client/client_base';
+import { NodeIdType } from '../src/generated/NodeIdType';
 
 
 function sleep(ms) {
@@ -28,8 +28,8 @@ const cli = new OPCUAClient(
     {
         applicationName: 'testapp',
         clientName: 'theClient',
-        endpoint_must_exist: false // <-- necessary for the websocket proxying to work
-
+        endpoint_must_exist: false, // <-- necessary for the websocket proxying to work
+        encoding: 'opcua+uajson'
         // TODO: add some more
     });
 let cliSession: ClientSession = null;
@@ -37,8 +37,9 @@ let cliSession: ClientSession = null;
 export function exectest() {
 
     // cli.findServers({endpointUrl : "192.168.110.10:4840"},onFindServers);
-    connect("ws://192.168.110.10:4444");
+    // connect("ws://192.168.110.10:4444");
     //connect('ws://10.36.64.1:4444');
+    connect('wss://prototyping.opcfoundation.org:65200');
 }
 
 function connect(uri: string) {
@@ -49,7 +50,7 @@ function connect(uri: string) {
             console.log(err.name + ': ' + err.message);
             return;
         } else {
-            cli.getEndpoints({ endpointUrl: 'ws://192.168.110.10:4444' }, onGetEndpoints);
+           cli.getEndpoints({ endpointUrl: 'wss://prototyping.opcfoundation.org:65200' }, onGetEndpoints);
         }
 
         // next step
@@ -121,7 +122,7 @@ function browse(nodeId: NodeId | NodeId[], elemId: string | string[]) {
         arBd.push(
             new BrowseDescription({
                 'nodeId': id, 'browseDirection': BrowseDirection.Forward, 'includeSubtypes': true,
-                nodeClassMask: 0, resultMask: 61, referenceTypeId: new NodeId(NodeIdType.NUMERIC, ReferenceTypeIds.HierarchicalReferences)
+                nodeClassMask: 0 , resultMask: BrowseResultMask.All, referenceTypeId: new NodeId(NodeIdType.Numeric, ReferenceTypeIds.HierarchicalReferences)
             })
         );
     }
@@ -139,6 +140,7 @@ function browse(nodeId: NodeId | NodeId[], elemId: string | string[]) {
 }
 
 async function onBrowse(err: Error, result: BrowseResult, ulId: string) {
+    readValues();
     if (err) {
         console.log(err.name + ': ' + err.message);
         return;
@@ -153,7 +155,6 @@ async function onBrowse(err: Error, result: BrowseResult, ulId: string) {
         logToElem('#' + ulId, liId, text);
         if ( nodeCnt > maxNodeCnt) {
             // quit recursive browsing and start the next test
-            readValues();
           return;
         }
         arNodesToBrowse.push(ref.nodeId);
@@ -218,9 +219,9 @@ function onTranslateBrowsePaths(err: Error|null, results: BrowsePathResult[]) {
             strResult = targetId.value;
             translatedIds.push(targetId);
             logToElem('#translateBrowsePath_UL', strResult, arPathsBNF[ii] + ': id=' + strResult);
-            createInput('#' + strResult, strResult + '_in');
+            createInput('#' + strResult, + 'in_' + strResult );
         } else {
-            logToElem('#translateBrowsePath_UL','', arPathsBNF[ii] + ': id=' + 'not found');
+            logToElem('#translateBrowsePath_UL','unknown', arPathsBNF[ii] + ': id=' + 'not found');
         }
 
 
@@ -253,23 +254,45 @@ function registerMonitoredItems() {
     console.log('subscription created');
 
     const arIds: IReadValueId[] = [];
+    /*
     for (const id of translatedIds) {
         arIds.push({
             nodeId : id,
             attributeId : AttributeIds.Value,
         });
     }
-    monItemGroup = cliSubscription.monitorItems(arIds, {samplingInterval : 100, discardOldest : true, queueSize : 1}, TimestampsToReturn.Both, onRegisterMonitoredItems);
+    */
+    arIds.push({nodeId: new NodeId(NodeIdType.Numeric, 2258, 0), attributeId: AttributeIds.Value});
+    logToElem('#translateBrowsePath_UL', '_2258', 'i=2258:');
+    createInput('#_2258', 'in_2258');
+
+    arIds.push({nodeId: new NodeId(NodeIdType.Numeric, 2256, 0), attributeId: AttributeIds.Value});
+    logToElem('#translateBrowsePath_UL', '_2256', 'i=2256:');
+    createTextArea('#_2256', 'in_2256');
+
+
+    arIds.forEach(rids => translatedIds.push(rids.nodeId));
+
+    monItemGroup = cliSubscription.monitorItems(arIds, {samplingInterval : 1000, discardOldest : true, queueSize : 1}, TimestampsToReturn.Both, onRegisterMonitoredItems);
     monItemGroup.onChanged(onItemChanged);
 }
 function onRegisterMonitoredItems(err: Error, mg: MonitoredItemGroup) {
 
    console.log('Monitored items registered!');
-   browse(new NodeId(NodeIdType.NUMERIC, 50510), 'browseResults');
+   browse(new NodeId(NodeIdType.Numeric, 84), 'browseResults');
 }
 
 function onItemChanged(item: MonitoredItemBase, dataValue: DataValue, index: number) {
-    setInputValue('#' + item.nodeId.value + '_in', dataValue.value.value);
+    if(!dataValue || !dataValue.value ) {
+        return;
+    }
+
+    if(dataValue.value.dataType === DataType.ExtensionObject ) {
+        setContent('#in_' + item.nodeId.value, JSON.stringify(dataValue.value.value, null, ' '));
+    } else {
+        setInputValue('#in_' + item.nodeId.value, dataValue.value.value);
+    }
+
 }
 
 // function createBrowsePath(str : string) : BrowsePath {
@@ -290,7 +313,8 @@ function onReadValues(err: Error, results?: DataValue[], diagInf?: DiagnosticInf
     }
 
     for (let ii = 0; ii < translatedIds.length; ++ii) {
-        str += translatedIds[ii].value + ': ' + results[ii].value.value + ', '
+        
+        str += translatedIds[ii].value + ': ' + JSON.stringify(results[ii].value.value, undefined, ' ') + ', ';
     }
    console.log(str);
    createUL('#readValues','readValuesUL');
@@ -319,13 +343,28 @@ function createInput(parentSelector: string, id: string ) {
     const inp = window.document.createElement('input');
     parentSelector = parentSelector.replace(/[.\[\]]/g, '_');
     inp.id = id.replace(/[.\[\]]/g, '_');
-    window.document.querySelector(parentSelector).appendChild(inp);
+    const parent = window.document.querySelector(parentSelector);
+    parent.appendChild(inp);
+}
+
+function createTextArea(parentSelector: string, id: string ) {
+    const inp = window.document.createElement('pre');
+    parentSelector = parentSelector.replace(/[.\[\]]/g, '_');
+    inp.id = id.replace(/[.\[\]]/g, '_');
+    const parent = window.document.querySelector(parentSelector);
+    parent.appendChild(inp);
 }
 
 function setInputValue(inputSelector: string, value: any) {
     inputSelector = inputSelector.replace(/[.\[\]]/g, '_');
     const inp: HTMLInputElement = window.document.querySelector(inputSelector);
     inp.value = value;
+}
+
+function setContent(inputSelector: string, value: any) {
+    inputSelector = inputSelector.replace(/[.\[\]]/g, '_');
+    const inp: HTMLInputElement = window.document.querySelector(inputSelector);
+    inp.innerHTML = value;
 }
 
 let newValue = 100;
@@ -357,8 +396,8 @@ function callMethodTest() {
 
     const request = new CallMethodRequest({
               inputArguments: [phraseNames, languageKey],
-              objectId: new NodeId(NodeIdType.STRING,'ResourceService', 2),
-              methodId: new NodeId(NodeIdType.STRING, "getPhrases", 2) });
+              objectId: new NodeId(NodeIdType.String, 'ResourceService', 2),
+              methodId: new NodeId(NodeIdType.String, 'getPhrases', 2) });
 
 
     cliSession.call([request], (err, response) => {
