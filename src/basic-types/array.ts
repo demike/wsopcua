@@ -1,6 +1,7 @@
 'use strict';
 import {assert} from '../assert';
 import {DataStream} from './DataStream';
+import { IEncodable } from '../factory/factories_baseobject';
 /**
  * @method encodeArray
  * @param arr {Array} the array to encode.
@@ -131,3 +132,32 @@ export function concatArrayBuffers(arrays: ArrayBuffer[]): ArrayBuffer {
     }
     return buf.buffer;
 }
+
+export function jsonDecodeArray<T> (array: any[]|undefined, decode_element_func: (obj: any) => T ): T[] {
+    if (!array) {
+        return [];
+    }
+    return array.map(decode_element_func);
+}
+
+export function jsonEncodeArray<T>(array: any[]|undefined, encode_element_func?: (obj: any) => T ): T[] {
+    if (!array || array.length === 0) {
+        return undefined;
+    }
+    return array.map(encode_element_func);
+}
+
+export function jsonDecodeStructArray<T extends IEncodable> (array: any[]|undefined, struct: new () => T): T[] {
+    if (!array) {
+        return [];
+    }
+    return array.map(obj => { const s = new struct(); s.fromJSON(obj);  return s;});
+}
+
+export function jsonEncodeStructArray<T extends IEncodable> (array: T[]|undefined): any[] {
+    if (!array || array.length === 0) {
+        return undefined;
+    }
+    return array;
+}
+

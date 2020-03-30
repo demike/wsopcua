@@ -7,7 +7,7 @@ import {get_clock_tick} from '../utils';
 import * as factory from '../factory';
 
 import { IEncodable } from '../factory/factories_baseobject';
-import { jsonDecodeExpandedNodeId, jsonEncodeExpandedNodeId } from '../wsopcua';
+import { jsonDecodeExpandedNodeId, jsonEncodeExpandedNodeId } from '../basic-types/nodeid';
 
 const doPerfMonitoring = false;
 
@@ -73,7 +73,7 @@ export class JSONMessageBuilder extends EventEmitter<JSONMessageBuilderEvents> {
 
     public encodeRequest(request: IEncodable) {
         return JSON.stringify({
-            TypeId: request.encodingDefaultBinary,
+            TypeId: jsonEncodeExpandedNodeId(request.encodingDefaultBinary),
             Body: request
         });
     }
@@ -86,11 +86,14 @@ export class JSONMessageBuilder extends EventEmitter<JSONMessageBuilderEvents> {
         let requestHandle;
         try {
 
-            const ojbJSON: ExtensionObject = JSON.parse(message);
+            const objJSON: ExtensionObject = JSON.parse(message);
             this._tick1 = get_clock_tick();
-            requestHandle = ojbJSON.Body.ResponseHeader.RequestHandle;
-            const nodeId = jsonDecodeExpandedNodeId(ojbJSON.TypeId);
-            const objMessage = factory.constructObject(nodeId);
+            requestHandle = objJSON.Body.ResponseHeader.RequestHandle;
+            const nodeId = jsonDecodeExpandedNodeId(objJSON.TypeId);
+
+            (nodeId.value as number) += 2;
+            const objMessage: IEncodable = factory.constructObject(nodeId);
+            objMessage.fromJSON(objJSON.Body);
 
             this.emit('message', objMessage, 'MSG', requestHandle, this.secureChannelId);
             return objMessage;

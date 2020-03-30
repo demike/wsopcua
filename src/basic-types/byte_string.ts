@@ -48,11 +48,15 @@ export function coerceByteString(value): Uint8Array {
     return value;
 }
 
-export function jsonEncodeByteString(byteString: Uint8Array): string {
-    return buf2base64(byteString);
+export function jsonEncodeByteString(byteString?: Uint8Array): string | undefined{
+    if (byteString) {
+        return buf2base64(byteString);
+    }
 }
 
-export function jsonDecodeByteString(b64ByteString: string) {
-    return base64ToBuf(b64ByteString);
+export function jsonDecodeByteString(b64ByteString?: string) {
+    if (b64ByteString) {
+        return base64ToBuf(b64ByteString);
+    }
 }
 

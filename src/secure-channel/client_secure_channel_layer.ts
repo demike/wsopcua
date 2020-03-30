@@ -126,7 +126,7 @@ export interface ClientSecureChannelLayerEvents {
 }
 
 export interface ClientSecureChannelLayerOptions {
-    encoding?: 'opcua+uacp'|'opcua+json'; // default: 'opcua+uacp'
+    encoding?: 'opcua+uacp'|'opcua+uajson'; // default: 'opcua+uacp'
     defaultSecureTokenLifeTime?: number;
     tokenRenewalInterval?: number;
     securityMode?: MessageSecurityMode;
@@ -203,7 +203,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
         return this._transport.endpointUrl;
     }
 
-    public readonly encoding:  'opcua+uacp'|'opcua+json';
+    public readonly encoding:  'opcua+uacp'|'opcua+uajson';
 
     constructor(options: ClientSecureChannelLayerOptions) {
     super();
@@ -669,9 +669,11 @@ protected _on_connection(transport: ClientWSTransport, callback: ErrorCallback, 
             debugLog(' ERROR', err1);
         });
 
-        if (this.encoding === 'opcua+json') {
+        if (this.encoding === 'opcua+uajson') {
             // no need to issue an open secure channel request
             this._isOpened = true;
+            callback();
+            return;
         }
 
         const is_initial = true;
@@ -1207,7 +1209,7 @@ protected _send_json(requestId: number) {
     const request_data = this._request_data.get(requestId);
 
         assert(this._transport);
-        this._transport.write(JSON.stringify(request_data.request));
+        this._transport.write((this.messageBuilder as JSONMessageBuilder).encodeRequest(request_data.request));
         request_data.chunk_count += 1;
 
         if (doDebug) {

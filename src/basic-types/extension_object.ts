@@ -132,7 +132,8 @@ export function jsonEncodeExtensionObject(object: any) {
     const out: any = {};
 
     if (!object) {
-        out.TypeId = jsonDecodeNodeId(NodeId.NullNodeId);
+        //out.TypeId = jsonEncodeNodeId(NodeId.NullNodeId);
+        return undefined;
         // no body is encoded, end of the job!
     } else {
         // ensure we have a valid encoding Default Binary ID !!!
@@ -161,6 +162,9 @@ export function jsonEncodeExtensionObject(object: any) {
 
 export function jsonDecodeExtensionObject(jsonObj: any) {
 
+    if (!jsonObj) {
+        return null;
+    }
     if (jsonObj.TypeId === undefined) {
         // the non reverseable form, just return the body
         return jsonObj.Body;
@@ -171,11 +175,13 @@ export function jsonDecodeExtensionObject(jsonObj: any) {
         throw new Error('not supported');
     }
 
-    const object = constructEmptyExtensionObject(nodeId);
+    let object = constructEmptyExtensionObject(nodeId);
 
     if (object === null) {
         // this object is unknown to us ..
-        return null;
+        // lets try TODO: fix this
+        (nodeId.value as number) +=2;
+        object = constructEmptyExtensionObject(nodeId);
     }
 
     try {

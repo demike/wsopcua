@@ -148,7 +148,7 @@ const _defaultType = [
         defaultValue: makeExpandedNodeId,
         coerce: coerceExpandedNodeId,
         jsonDecode: jsonDecodeExpandedNodeId,
-        jsonEnocde: jsonEncodeExpandedNodeId
+        jsonEncode: jsonEncodeExpandedNodeId
     },
 
     // ----------------------------------------------------------------------------------------

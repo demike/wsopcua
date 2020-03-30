@@ -339,21 +339,23 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
 
         for (const mem of this.cls.Members) {
             body += '  ';
+            const prefix = (mem.Type.ImportAs) ? (mem.Type.ImportAs + '.') : '';
             const checkUndefined = this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified');
             if (checkUndefined) {
                 body += 'if(this.' + mem.Name + ' != null) { ';
             }
 
             body += 'out.' + mem.OrigName + ' = ';
+
             if (mem.IsArray) {
                 if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
-                    body += 'this.' + mem.Name + '.map(m => ec.jsonEncode' + mem.Type.Name + ');';
+                    body += 'ec.jsonEncodeArray(this.' + mem.Name + ', ' + prefix + 'jsonEncode' + mem.Type.Name + ');';
                 } else {
                     body += 'this.' + mem.Name + ';';
                 }
             } else {
                 if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
-                    body += 'ec.jsonEncode' + mem.Type.Name + '(this.' + mem.Name +  ');';
+                    body += prefix + 'jsonEncode' + mem.Type.Name + '(this.' + mem.Name +  ');';
                 } else {
                     body += 'this.' + mem.Name + ';';
                 }
@@ -375,16 +377,17 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
     }
 
     protected createJsonDecodeMethod(): void {
-        let body = '';
         if (!this.cls || !this.cls.hasAnyMembers()) {
             return;
         }
+        let body = 'if (!inp) { return; }\n';
         if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
             body += '  super.fromJSON(inp);\n';
         }
 
         for (const mem of this.cls.Members) {
             let addIf = false;
+            const prefix = (mem.Type.ImportAs) ? (mem.Type.ImportAs + '.') : '';
             if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
                 addIf = true;
                 body += '  if(inp.' + mem.OrigName + ') {\n ';
@@ -392,18 +395,19 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
 
             body += '  this.' + mem.Name;
             if (mem.IsArray) {
-                body += ' = inp.' + mem.OrigName;
                 if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
-                    body +=  '.map(m => ec.jsonDecode' + mem.Type.Name + ')';
+                    body +=  ' = ec.jsonDecodeArray( inp.' + mem.OrigName + ', ' + prefix + 'jsonDecode' + mem.Type.Name + ')';
                 } else if (mem.Type instanceof StructTypeFile) {
-                    body += '.map(m => { const mem = new ' + mem.Type.FullName + '(); mem.fromJSON(m); return mem;})';
+                    body += ' = ec.jsonDecodeStructArray( inp.' + mem.OrigName + ',' +  mem.Type.Name + ')';
+                } else {
+                    body += ' = inp.' + mem.OrigName;
                 }
                 body += ';\n';
             } else {
                 if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
-                    body +=  '  = ec.jsonDecode' + mem.Type.Name + '(inp.' + mem.OrigName + ');\n';
+                    body += ' = ' + prefix + 'jsonDecode' + mem.Type.Name + '(inp.' + mem.OrigName + ');\n';
                 } else if (mem.Type instanceof StructTypeFile) {
-                        body += '.fromJSON(inp);\n';
+                        body += '.fromJSON(inp.' + mem.OrigName + ');\n';
                 } else {
                     body += ' = inp.' + mem.OrigName + ';\n';
                 }

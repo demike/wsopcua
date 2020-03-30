@@ -34,7 +34,7 @@ let counter = 0;
 
 interface WSTransportEvents {
     'connect': () => void;
-    'message': (message_chunk: DataView) => void;
+    'message': (message_chunk: DataView| string) => void;
     'socket_closed': ErrorCallback;
     'close': ErrorCallback;
     'socket_error': (evt: CloseEvent) => void;
@@ -387,6 +387,14 @@ public on_socket_closed(err: Error) {
 }
 
 protected _on_socket_data(evt: MessageEvent): void {
+    if(typeof evt.data !== 'string') {
+        this._on_binary_data(evt);
+    } else {
+        this._on_json_data(evt);
+    }
+}
+
+protected _on_binary_data(evt: MessageEvent): void {
     if (!this.packetAssembler) {
         throw new Error('internal Error');
     }
@@ -394,6 +402,11 @@ protected _on_socket_data(evt: MessageEvent): void {
     if (evt.data.byteLength > 0) {
         this.packetAssembler.feed(new DataView(evt.data));
     }
+
+}
+
+protected _on_json_data(evt: MessageEvent): void {
+    this._on_message_received(evt.data);
 }
 
 private _on_socket_close(evt: CloseEvent) {

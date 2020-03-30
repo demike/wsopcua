@@ -89,8 +89,12 @@ export class SimpleType extends ClassFile {
                  getModuleImportPath(targetClassFile.ModulePath, this.ModulePath) + "';";
         }
         if (this._hasEnDeCodeFunctions) {
-            return "import {" + this.Name + ", encode" + this.Name + ", decode" + this.Name + "} from '" +
-                 getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + "';";
+            let ret = "import {" + this.Name + ", encode" + this.Name + ", decode" + this.Name ;
+            if (this._hasJsonEnDeCodeFunctions) {
+               ret +=  ", jsonEncode" + this.Name + ", jsonDecode" + this.Name ;
+            }
+            ret += "} from '" + getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + "';";
+            return ret;
         }
         return "import {" + this.Name + "} from '" +
         getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + "';";

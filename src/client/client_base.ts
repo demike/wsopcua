@@ -84,7 +84,7 @@ export interface ConnectionStrategy {
 
 export interface OPCUAClientOptions {
 
-    encoding?: 'opcua+uacp'|'opcua+json'; // default: 'opcua+uacp'
+    encoding?: 'opcua+uacp'|'opcua+uajson'; // default: 'opcua+uacp'
 
     defaultSecureTokenLifetime?: number; // default secure token lifetime in ms
     serverCertificate?: any; // =null] {Certificate} the server certificate.
@@ -178,7 +178,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     protected _endpointUrl: string;
     protected connectionStrategy: ConnectionStrategy;
 
-    public readonly encoding: 'opcua+uacp'|'opcua+json';
+    public readonly encoding: 'opcua+uacp'|'opcua+uajson';
 
     /**
  * true if session shall periodically probe the server to keep the session alive and prevent timeout

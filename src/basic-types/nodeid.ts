@@ -257,6 +257,8 @@ export function jsonEncodeNodeId(id: NodeId) {
 
     if(id.identifierType === NodeIdType.ByteString) {
         out.Id = jsonEncodeByteString(id.value as Uint8Array);
+    } else {
+        out.Id = id.value;
     }
     return out;
 
@@ -284,7 +286,8 @@ export function jsonEncodeExpandedNodeId(id: ExpandedNodeId) {
 export function jsonDecodeExpandedNodeId(id: any) {
     const idType = (id.IdType === undefined) ? NodeIdType.Numeric : id.IdType + 2; // yes there is a difference between BIN and JSON types!
     let namespace = (id.Namespace !== undefined) ? id.Namespace : 0;
-    const value = (idType === NodeIdType.ByteString) ? jsonDecodeByteString(id.Id) : id.Id;
+    let value = (idType === NodeIdType.ByteString) ? jsonDecodeByteString(id.Id) : id.Id;
+   // value -= 2; // TODO: check if this is right
     let namespaceUri;
     if (typeof namespace === 'string') {
         namespaceUri = namespace;

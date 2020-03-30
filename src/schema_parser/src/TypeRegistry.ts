@@ -115,6 +115,7 @@ export class TypeRegistry {
         type = new SimpleType(this.BASIC_TYPES_PATH, 'ByteString');
 //        type.Path = this.BASIC_TYPES_PATH + "byte_string";
         type.ImportAs = 'ec';
+        type.hasJsonEnDeCodeFunctions = true;
         this.addType(type.Name, type);
         type.JsType = 'Uint8Array';
         // Image: 8.19
@@ -303,6 +304,7 @@ export class TypeRegistry {
         extensionObjectPath.isDirectory = false;
         type = new SimpleType(extensionObjectPath, 'ExtensionObject');
         // type.ImportAs = "ec";
+        type.hasJsonEnDeCodeFunctions = true;
         this.addType(type.Name, type);
         /*
 QualifiedName:     20 ,

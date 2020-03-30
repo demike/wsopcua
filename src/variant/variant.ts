@@ -200,8 +200,8 @@ public clone(): Variant {
 
 public fromJSON(inp: any) {
     const body = inp.Body;
-    if (inp.DataType) {
-        this.dataType = inp.DataType;
+    if (inp.Type) {
+        this.dataType = inp.Type;
     } else {
         // it is the non reversable form --> just store the variant body to value as is
         this.value = body;
@@ -223,7 +223,7 @@ public fromJSON(inp: any) {
 
 public toJSON() {
     const out: any = {};
-    out.DataType = this.dataType;
+    out.Type = this.dataType;
     out.Dimensions = this.dimensions;
 
     if (this.dataType === DataType.Null) {

@@ -80,7 +80,11 @@ for (const codeName in StatusCodes) {
     statusCodesReversedMap[csc.value] = csc;
 }
 
-export function jsonDecodeStatusCode(statusCode: number | {Code: number}) {
+export function jsonDecodeStatusCode(statusCode?: number | {Code: number}) {
+
+    if(!statusCode) {
+        return StatusCodes.Good;
+    }
     const code = ( (statusCode as any).Code !== undefined) ? (statusCode as any).Code : statusCode;
     return getStatusCodeFromCode(code);
 }

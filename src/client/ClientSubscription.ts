@@ -349,7 +349,7 @@ public onNotificationMessage(notificationMessage: subscription_service.Notificat
                     this.__on_publish_response_EventNotificationList(<subscription_service.EventNotificationList>notification);
                     break;
                 default:
-                    console.log(' Invalid notification :', notification.toString());
+                    console.log(' Invalid notification :', notification);
             }
         });
     }
