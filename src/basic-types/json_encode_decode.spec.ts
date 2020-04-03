@@ -6,6 +6,7 @@ import * as ec from './';
 import {makeNodeId, NodeId} from '../nodeid/nodeid';
 import {makeExpandedNodeId, ExpandedNodeId} from '../nodeid/expanded_nodeid';
 import { NodeIdType } from '../generated/NodeIdType';
+import { StatusCodes } from '../constants/raw_status_codes';
 
 const crypto: Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
 
@@ -202,6 +203,18 @@ describe('testing built-in type encoding', function() {
             expect(json.ServerUri).toBe(2);
         });
     });
+
+    it('should encode decode a StatusCode', () => {
+        const code = StatusCodes.BadWaitingForInitialData;
+        test_encode_decode(code, ec.jsonEncodeStatusCode, ec.jsonDecodeStatusCode);
+    })
+
+    it('should not encode a StatusCodes.Good, and it should decode as StatusCodes.Good if not present in json  ', () => {
+        const code = StatusCodes.Good;
+        test_encode_decode(code, ec.jsonEncodeStatusCode, ec.jsonDecodeStatusCode, (json) => {
+            expect(json).toBeUndefined();
+        });
+    })
 });
 
 describe('encoding and decoding arrays', function() {

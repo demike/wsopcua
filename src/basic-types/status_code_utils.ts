@@ -90,6 +90,10 @@ export function jsonDecodeStatusCode(statusCode?: number | {Code: number}) {
 }
 
 export function jsonEncodeStatusCode(statusCode: StatusCode) {
+
+    if (!statusCode || statusCode === StatusCodes.Good) {
+        return;
+    }
     return statusCode.value;
 }
 
