@@ -65,6 +65,7 @@ export class UadpDataSetWriterMessageDataType extends DataSetWriterMessageDataTy
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.dataSetMessageContentMask = inp.DataSetMessageContentMask;
   this.configuredSize = inp.ConfiguredSize;
   this.networkMessageNumber = inp.NetworkMessageNumber;

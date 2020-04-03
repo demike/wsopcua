@@ -49,8 +49,9 @@ export class StructureDescription extends DataTypeDescription {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
-  this.structureDefinition.fromJSON(inp);
+  this.structureDefinition.fromJSON(inp.StructureDefinition);
 
  }
 

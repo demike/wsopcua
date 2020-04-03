@@ -44,6 +44,7 @@ export class UserIdentityToken {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.policyId = inp.PolicyId;
 
  }

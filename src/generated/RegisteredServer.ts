@@ -89,9 +89,10 @@ export class RegisteredServer {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.serverUri = inp.ServerUri;
   this.productUri = inp.ProductUri;
-  this.serverNames = inp.ServerNames.map(m => { const mem = new LocalizedText(); mem.fromJSON(m); return mem;});
+  this.serverNames = ec.jsonDecodeStructArray( inp.ServerNames,LocalizedText);
   this.serverType = inp.ServerType;
   this.gatewayServerUri = inp.GatewayServerUri;
   this.discoveryUrls = inp.DiscoveryUrls;

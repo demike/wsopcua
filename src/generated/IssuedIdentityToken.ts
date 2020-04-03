@@ -48,15 +48,16 @@ export class IssuedIdentityToken extends UserIdentityToken {
 
  toJSON() {
   const out: any = super.toJSON();
-  out.TokenData = this.tokenData;
+  out.TokenData = ec.jsonEncodeByteString(this.tokenData);
   out.EncryptionAlgorithm = this.encryptionAlgorithm;
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
-  this.tokenData = inp.TokenData;
+  this.tokenData = ec.jsonDecodeByteString(inp.TokenData);
   this.encryptionAlgorithm = inp.EncryptionAlgorithm;
 
  }

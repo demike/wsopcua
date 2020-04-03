@@ -51,16 +51,17 @@ export class HistoryUpdateResult {
  toJSON() {
   const out: any = {};
   out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
-  out.OperationResults = this.operationResults.map(m => ec.jsonEncodeStatusCode);
+  out.OperationResults = ec.jsonEncodeArray(this.operationResults, ec.jsonEncodeStatusCode);
   out.DiagnosticInfos = this.diagnosticInfos;
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
-  this.operationResults = inp.OperationResults.map(m => ec.jsonDecodeStatusCode);
-  this.diagnosticInfos = inp.DiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.operationResults = ec.jsonDecodeArray( inp.OperationResults, ec.jsonDecodeStatusCode);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
 
  }
 

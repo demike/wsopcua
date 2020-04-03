@@ -58,9 +58,10 @@ export class MonitoredItemCreateRequest {
 
 
  fromJSON( inp: any) {
-  this.itemToMonitor.fromJSON(inp);
+if (!inp) { return; }
+  this.itemToMonitor.fromJSON(inp.ItemToMonitor);
   this.monitoringMode = inp.MonitoringMode;
-  this.requestedParameters.fromJSON(inp);
+  this.requestedParameters.fromJSON(inp.RequestedParameters);
 
  }
 

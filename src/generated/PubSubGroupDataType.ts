@@ -85,13 +85,14 @@ export class PubSubGroupDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.name = inp.Name;
   this.enabled = inp.Enabled;
   this.securityMode = inp.SecurityMode;
   this.securityGroupId = inp.SecurityGroupId;
-  this.securityKeyServices = inp.SecurityKeyServices.map(m => { const mem = new EndpointDescription(); mem.fromJSON(m); return mem;});
+  this.securityKeyServices = ec.jsonDecodeStructArray( inp.SecurityKeyServices,EndpointDescription);
   this.maxNetworkMessageSize = inp.MaxNetworkMessageSize;
-  this.groupProperties = inp.GroupProperties.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
+  this.groupProperties = ec.jsonDecodeStructArray( inp.GroupProperties,KeyValuePair);
 
  }
 

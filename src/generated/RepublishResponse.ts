@@ -51,8 +51,9 @@ export class RepublishResponse {
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
-  this.notificationMessage.fromJSON(inp);
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
+  this.notificationMessage.fromJSON(inp.NotificationMessage);
 
  }
 

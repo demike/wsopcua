@@ -51,8 +51,9 @@ export class StatusResult {
 
 
  fromJSON( inp: any) {
-  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
-  this.diagnosticInfo.fromJSON(inp);
+if (!inp) { return; }
+  this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.diagnosticInfo.fromJSON(inp.DiagnosticInfo);
 
  }
 

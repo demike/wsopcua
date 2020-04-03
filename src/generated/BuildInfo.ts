@@ -74,12 +74,13 @@ export class BuildInfo {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.productUri = inp.ProductUri;
   this.manufacturerName = inp.ManufacturerName;
   this.productName = inp.ProductName;
   this.softwareVersion = inp.SoftwareVersion;
   this.buildNumber = inp.BuildNumber;
-  this.buildDate  = ec.jsonDecodeDateTime(inp.BuildDate);
+  this.buildDate = ec.jsonDecodeDateTime(inp.BuildDate);
 
  }
 

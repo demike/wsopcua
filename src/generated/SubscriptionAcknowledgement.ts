@@ -50,6 +50,7 @@ export class SubscriptionAcknowledgement {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.subscriptionId = inp.SubscriptionId;
   this.sequenceNumber = inp.SequenceNumber;
 

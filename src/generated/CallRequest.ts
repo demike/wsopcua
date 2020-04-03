@@ -53,8 +53,9 @@ export class CallRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.methodsToCall = inp.MethodsToCall.map(m => { const mem = new CallMethodRequest(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.methodsToCall = ec.jsonDecodeStructArray( inp.MethodsToCall,CallMethodRequest);
 
  }
 

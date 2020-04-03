@@ -43,15 +43,16 @@ export class OptionSet {
 
  toJSON() {
   const out: any = {};
-  out.Value = this.value;
-  out.ValidBits = this.validBits;
+  out.Value = ec.jsonEncodeByteString(this.value);
+  out.ValidBits = ec.jsonEncodeByteString(this.validBits);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.value = inp.Value;
-  this.validBits = inp.ValidBits;
+if (!inp) { return; }
+  this.value = ec.jsonDecodeByteString(inp.Value);
+  this.validBits = ec.jsonDecodeByteString(inp.ValidBits);
 
  }
 

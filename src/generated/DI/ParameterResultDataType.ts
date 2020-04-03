@@ -59,9 +59,10 @@ export class ParameterResultDataType {
 
 
  fromJSON( inp: any) {
-  this.nodePath = inp.NodePath.map(m => { const mem = new QualifiedName(); mem.fromJSON(m); return mem;});
-  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
-  this.diagnostics.fromJSON(inp);
+if (!inp) { return; }
+  this.nodePath = ec.jsonDecodeStructArray( inp.NodePath,QualifiedName);
+  this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.diagnostics.fromJSON(inp.Diagnostics);
 
  }
 

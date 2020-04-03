@@ -46,6 +46,7 @@ export class ElementOperand extends FilterOperand {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.index = inp.Index;
 
  }

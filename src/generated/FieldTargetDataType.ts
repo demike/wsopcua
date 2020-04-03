@@ -82,13 +82,14 @@ export class FieldTargetDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.dataSetFieldId = inp.DataSetFieldId;
   this.receiverIndexRange = inp.ReceiverIndexRange;
-  this.targetNodeId  = ec.jsonDecodeNodeId(inp.TargetNodeId);
+  this.targetNodeId = ec.jsonDecodeNodeId(inp.TargetNodeId);
   this.attributeId = inp.AttributeId;
   this.writeIndexRange = inp.WriteIndexRange;
   this.overrideValueHandling = inp.OverrideValueHandling;
-  this.overrideValue.fromJSON(inp);
+  this.overrideValue.fromJSON(inp.OverrideValue);
 
  }
 

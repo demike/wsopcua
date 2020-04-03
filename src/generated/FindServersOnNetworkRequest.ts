@@ -63,7 +63,8 @@ export class FindServersOnNetworkRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.startingRecordId = inp.StartingRecordId;
   this.maxRecordsToReturn = inp.MaxRecordsToReturn;
   this.serverCapabilityFilter = inp.ServerCapabilityFilter;

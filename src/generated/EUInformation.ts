@@ -63,10 +63,11 @@ export class EUInformation {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.namespaceUri = inp.NamespaceUri;
   this.unitId = inp.UnitId;
-  this.displayName.fromJSON(inp);
-  this.description.fromJSON(inp);
+  this.displayName.fromJSON(inp.DisplayName);
+  this.description.fromJSON(inp.Description);
 
  }
 

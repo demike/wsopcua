@@ -65,10 +65,11 @@ export class UpdateEventDetails extends HistoryUpdateDetails {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.performInsertReplace = inp.PerformInsertReplace;
-  this.filter.fromJSON(inp);
-  this.eventData = inp.EventData.map(m => { const mem = new HistoryEventFieldList(); mem.fromJSON(m); return mem;});
+  this.filter.fromJSON(inp.Filter);
+  this.eventData = ec.jsonDecodeStructArray( inp.EventData,HistoryEventFieldList);
 
  }
 

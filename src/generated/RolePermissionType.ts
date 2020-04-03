@@ -51,7 +51,8 @@ export class RolePermissionType {
 
 
  fromJSON( inp: any) {
-  this.roleId  = ec.jsonDecodeNodeId(inp.RoleId);
+if (!inp) { return; }
+  this.roleId = ec.jsonDecodeNodeId(inp.RoleId);
   this.permissions = inp.Permissions;
 
  }

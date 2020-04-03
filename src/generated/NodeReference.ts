@@ -56,16 +56,17 @@ export class NodeReference {
   out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
   out.ReferenceTypeId = ec.jsonEncodeNodeId(this.referenceTypeId);
   out.IsForward = this.isForward;
-  out.ReferencedNodeIds = this.referencedNodeIds.map(m => ec.jsonEncodeNodeId);
+  out.ReferencedNodeIds = ec.jsonEncodeArray(this.referencedNodeIds, ec.jsonEncodeNodeId);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
-  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+if (!inp) { return; }
+  this.nodeId = ec.jsonDecodeNodeId(inp.NodeId);
+  this.referenceTypeId = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
   this.isForward = inp.IsForward;
-  this.referencedNodeIds = inp.ReferencedNodeIds.map(m => ec.jsonDecodeNodeId);
+  this.referencedNodeIds = ec.jsonDecodeArray( inp.ReferencedNodeIds, ec.jsonDecodeNodeId);
 
  }
 

@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataSetReaderDataType} from './DataSetReaderDataType';
 import {decodeDataSetReaderDataType} from './DataSetReaderDataType';
 import * as ec from '../basic-types';
@@ -56,18 +56,19 @@ export class ReaderGroupDataType extends PubSubGroupDataType {
 
  toJSON() {
   const out: any = super.toJSON();
-  out.TransportSettings = this.transportSettings;
-  out.MessageSettings = this.messageSettings;
+  out.TransportSettings = jsonEncodeExtensionObject(this.transportSettings);
+  out.MessageSettings = jsonEncodeExtensionObject(this.messageSettings);
   out.DataSetReaders = this.dataSetReaders;
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
-  this.transportSettings = inp.TransportSettings;
-  this.messageSettings = inp.MessageSettings;
-  this.dataSetReaders = inp.DataSetReaders.map(m => { const mem = new DataSetReaderDataType(); mem.fromJSON(m); return mem;});
+  this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
+  this.messageSettings = jsonDecodeExtensionObject(inp.MessageSettings);
+  this.dataSetReaders = ec.jsonDecodeStructArray( inp.DataSetReaders,DataSetReaderDataType);
 
  }
 

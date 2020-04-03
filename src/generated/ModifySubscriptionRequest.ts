@@ -81,7 +81,8 @@ export class ModifySubscriptionRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.subscriptionId = inp.SubscriptionId;
   this.requestedPublishingInterval = inp.RequestedPublishingInterval;
   this.requestedLifetimeCount = inp.RequestedLifetimeCount;

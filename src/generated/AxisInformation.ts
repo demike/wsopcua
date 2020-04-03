@@ -72,9 +72,10 @@ export class AxisInformation {
 
 
  fromJSON( inp: any) {
-  this.engineeringUnits.fromJSON(inp);
-  this.eURange.fromJSON(inp);
-  this.title.fromJSON(inp);
+if (!inp) { return; }
+  this.engineeringUnits.fromJSON(inp.EngineeringUnits);
+  this.eURange.fromJSON(inp.EURange);
+  this.title.fromJSON(inp.Title);
   this.axisScaleType = inp.AxisScaleType;
   this.axisSteps = inp.AxisSteps;
 

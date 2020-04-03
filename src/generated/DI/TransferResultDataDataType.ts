@@ -60,9 +60,10 @@ export class TransferResultDataDataType extends FetchResultDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.sequenceNumber = inp.SequenceNumber;
   this.endOfResults = inp.EndOfResults;
-  this.parameterDefs = inp.ParameterDefs.map(m => { const mem = new ParameterResultDataType(); mem.fromJSON(m); return mem;});
+  this.parameterDefs = ec.jsonDecodeStructArray( inp.ParameterDefs,ParameterResultDataType);
 
  }
 

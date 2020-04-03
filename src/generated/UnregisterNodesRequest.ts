@@ -45,14 +45,15 @@ export class UnregisterNodesRequest {
  toJSON() {
   const out: any = {};
   out.RequestHeader = this.requestHeader;
-  out.NodesToUnregister = this.nodesToUnregister.map(m => ec.jsonEncodeNodeId);
+  out.NodesToUnregister = ec.jsonEncodeArray(this.nodesToUnregister, ec.jsonEncodeNodeId);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.nodesToUnregister = inp.NodesToUnregister.map(m => ec.jsonDecodeNodeId);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.nodesToUnregister = ec.jsonDecodeArray( inp.NodesToUnregister, ec.jsonDecodeNodeId);
 
  }
 

@@ -66,10 +66,11 @@ export class ModifyMonitoredItemsRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.subscriptionId = inp.SubscriptionId;
   this.timestampsToReturn = inp.TimestampsToReturn;
-  this.itemsToModify = inp.ItemsToModify.map(m => { const mem = new MonitoredItemModifyRequest(); mem.fromJSON(m); return mem;});
+  this.itemsToModify = ec.jsonDecodeStructArray( inp.ItemsToModify,MonitoredItemModifyRequest);
 
  }
 

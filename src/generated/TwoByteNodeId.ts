@@ -44,6 +44,7 @@ export class TwoByteNodeId {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.identifier = inp.Identifier;
 
  }

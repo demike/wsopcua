@@ -46,6 +46,7 @@ export class JsonWriterGroupMessageDataType extends WriterGroupMessageDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.networkMessageContentMask = inp.NetworkMessageContentMask;
 
  }

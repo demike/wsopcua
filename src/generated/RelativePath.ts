@@ -46,7 +46,8 @@ export class RelativePath {
 
 
  fromJSON( inp: any) {
-  this.elements = inp.Elements.map(m => { const mem = new RelativePathElement(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.elements = ec.jsonDecodeStructArray( inp.Elements,RelativePathElement);
 
  }
 

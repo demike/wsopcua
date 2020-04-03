@@ -65,10 +65,11 @@ export class ReadEventDetails extends HistoryReadDetails {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.numValuesPerNode = inp.NumValuesPerNode;
-  this.startTime  = ec.jsonDecodeDateTime(inp.StartTime);
-  this.endTime  = ec.jsonDecodeDateTime(inp.EndTime);
-  this.filter.fromJSON(inp);
+  this.startTime = ec.jsonDecodeDateTime(inp.StartTime);
+  this.endTime = ec.jsonDecodeDateTime(inp.EndTime);
+  this.filter.fromJSON(inp.Filter);
 
  }
 

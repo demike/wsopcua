@@ -52,8 +52,9 @@ export class NetworkGroupDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.serverUri = inp.ServerUri;
-  this.networkPaths = inp.NetworkPaths.map(m => { const mem = new EndpointUrlListDataType(); mem.fromJSON(m); return mem;});
+  this.networkPaths = ec.jsonDecodeStructArray( inp.NetworkPaths,EndpointUrlListDataType);
 
  }
 

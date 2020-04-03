@@ -57,7 +57,8 @@ export class RepublishRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.subscriptionId = inp.SubscriptionId;
   this.retransmitSequenceNumber = inp.RetransmitSequenceNumber;
 

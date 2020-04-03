@@ -79,7 +79,7 @@ export class EndpointDescription {
   const out: any = {};
   out.EndpointUrl = this.endpointUrl;
   out.Server = this.server;
-  out.ServerCertificate = this.serverCertificate;
+  out.ServerCertificate = ec.jsonEncodeByteString(this.serverCertificate);
   out.SecurityMode = this.securityMode;
   out.SecurityPolicyUri = this.securityPolicyUri;
   out.UserIdentityTokens = this.userIdentityTokens;
@@ -90,12 +90,13 @@ export class EndpointDescription {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.endpointUrl = inp.EndpointUrl;
-  this.server.fromJSON(inp);
-  this.serverCertificate = inp.ServerCertificate;
+  this.server.fromJSON(inp.Server);
+  this.serverCertificate = ec.jsonDecodeByteString(inp.ServerCertificate);
   this.securityMode = inp.SecurityMode;
   this.securityPolicyUri = inp.SecurityPolicyUri;
-  this.userIdentityTokens = inp.UserIdentityTokens.map(m => { const mem = new UserTokenPolicy(); mem.fromJSON(m); return mem;});
+  this.userIdentityTokens = ec.jsonDecodeStructArray( inp.UserIdentityTokens,UserTokenPolicy);
   this.transportProfileUri = inp.TransportProfileUri;
   this.securityLevel = inp.SecurityLevel;
 

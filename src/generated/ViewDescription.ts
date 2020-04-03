@@ -56,8 +56,9 @@ export class ViewDescription {
 
 
  fromJSON( inp: any) {
-  this.viewId  = ec.jsonDecodeNodeId(inp.ViewId);
-  this.timestamp  = ec.jsonDecodeDateTime(inp.Timestamp);
+if (!inp) { return; }
+  this.viewId = ec.jsonDecodeNodeId(inp.ViewId);
+  this.timestamp = ec.jsonDecodeDateTime(inp.Timestamp);
   this.viewVersion = inp.ViewVersion;
 
  }

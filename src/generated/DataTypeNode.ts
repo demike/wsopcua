@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 import {TypeNode} from './TypeNode';
 import {ITypeNode} from './TypeNode';
@@ -50,15 +50,16 @@ export class DataTypeNode extends TypeNode {
  toJSON() {
   const out: any = super.toJSON();
   out.IsAbstract = this.isAbstract;
-  out.DataTypeDefinition = this.dataTypeDefinition;
+  out.DataTypeDefinition = jsonEncodeExtensionObject(this.dataTypeDefinition);
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.isAbstract = inp.IsAbstract;
-  this.dataTypeDefinition = inp.DataTypeDefinition;
+  this.dataTypeDefinition = jsonDecodeExtensionObject(inp.DataTypeDefinition);
 
  }
 

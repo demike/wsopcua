@@ -50,6 +50,7 @@ export class ConfigurationVersionDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.majorVersion = inp.MajorVersion;
   this.minorVersion = inp.MinorVersion;
 

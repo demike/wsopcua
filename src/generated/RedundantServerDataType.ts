@@ -57,6 +57,7 @@ export class RedundantServerDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.serverId = inp.ServerId;
   this.serviceLevel = inp.ServiceLevel;
   this.serverState = inp.ServerState;

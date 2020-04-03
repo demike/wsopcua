@@ -50,6 +50,7 @@ export class Range {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.low = inp.Low;
   this.high = inp.High;
 

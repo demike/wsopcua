@@ -298,49 +298,50 @@ export class SessionDiagnosticsDataType {
 
 
  fromJSON( inp: any) {
-  this.sessionId  = ec.jsonDecodeNodeId(inp.SessionId);
+if (!inp) { return; }
+  this.sessionId = ec.jsonDecodeNodeId(inp.SessionId);
   this.sessionName = inp.SessionName;
-  this.clientDescription.fromJSON(inp);
+  this.clientDescription.fromJSON(inp.ClientDescription);
   this.serverUri = inp.ServerUri;
   this.endpointUrl = inp.EndpointUrl;
   this.localeIds = inp.LocaleIds;
   this.actualSessionTimeout = inp.ActualSessionTimeout;
   this.maxResponseMessageSize = inp.MaxResponseMessageSize;
-  this.clientConnectionTime  = ec.jsonDecodeDateTime(inp.ClientConnectionTime);
-  this.clientLastContactTime  = ec.jsonDecodeDateTime(inp.ClientLastContactTime);
+  this.clientConnectionTime = ec.jsonDecodeDateTime(inp.ClientConnectionTime);
+  this.clientLastContactTime = ec.jsonDecodeDateTime(inp.ClientLastContactTime);
   this.currentSubscriptionsCount = inp.CurrentSubscriptionsCount;
   this.currentMonitoredItemsCount = inp.CurrentMonitoredItemsCount;
   this.currentPublishRequestsInQueue = inp.CurrentPublishRequestsInQueue;
-  this.totalRequestCount.fromJSON(inp);
+  this.totalRequestCount.fromJSON(inp.TotalRequestCount);
   this.unauthorizedRequestCount = inp.UnauthorizedRequestCount;
-  this.readCount.fromJSON(inp);
-  this.historyReadCount.fromJSON(inp);
-  this.writeCount.fromJSON(inp);
-  this.historyUpdateCount.fromJSON(inp);
-  this.callCount.fromJSON(inp);
-  this.createMonitoredItemsCount.fromJSON(inp);
-  this.modifyMonitoredItemsCount.fromJSON(inp);
-  this.setMonitoringModeCount.fromJSON(inp);
-  this.setTriggeringCount.fromJSON(inp);
-  this.deleteMonitoredItemsCount.fromJSON(inp);
-  this.createSubscriptionCount.fromJSON(inp);
-  this.modifySubscriptionCount.fromJSON(inp);
-  this.setPublishingModeCount.fromJSON(inp);
-  this.publishCount.fromJSON(inp);
-  this.republishCount.fromJSON(inp);
-  this.transferSubscriptionsCount.fromJSON(inp);
-  this.deleteSubscriptionsCount.fromJSON(inp);
-  this.addNodesCount.fromJSON(inp);
-  this.addReferencesCount.fromJSON(inp);
-  this.deleteNodesCount.fromJSON(inp);
-  this.deleteReferencesCount.fromJSON(inp);
-  this.browseCount.fromJSON(inp);
-  this.browseNextCount.fromJSON(inp);
-  this.translateBrowsePathsToNodeIdsCount.fromJSON(inp);
-  this.queryFirstCount.fromJSON(inp);
-  this.queryNextCount.fromJSON(inp);
-  this.registerNodesCount.fromJSON(inp);
-  this.unregisterNodesCount.fromJSON(inp);
+  this.readCount.fromJSON(inp.ReadCount);
+  this.historyReadCount.fromJSON(inp.HistoryReadCount);
+  this.writeCount.fromJSON(inp.WriteCount);
+  this.historyUpdateCount.fromJSON(inp.HistoryUpdateCount);
+  this.callCount.fromJSON(inp.CallCount);
+  this.createMonitoredItemsCount.fromJSON(inp.CreateMonitoredItemsCount);
+  this.modifyMonitoredItemsCount.fromJSON(inp.ModifyMonitoredItemsCount);
+  this.setMonitoringModeCount.fromJSON(inp.SetMonitoringModeCount);
+  this.setTriggeringCount.fromJSON(inp.SetTriggeringCount);
+  this.deleteMonitoredItemsCount.fromJSON(inp.DeleteMonitoredItemsCount);
+  this.createSubscriptionCount.fromJSON(inp.CreateSubscriptionCount);
+  this.modifySubscriptionCount.fromJSON(inp.ModifySubscriptionCount);
+  this.setPublishingModeCount.fromJSON(inp.SetPublishingModeCount);
+  this.publishCount.fromJSON(inp.PublishCount);
+  this.republishCount.fromJSON(inp.RepublishCount);
+  this.transferSubscriptionsCount.fromJSON(inp.TransferSubscriptionsCount);
+  this.deleteSubscriptionsCount.fromJSON(inp.DeleteSubscriptionsCount);
+  this.addNodesCount.fromJSON(inp.AddNodesCount);
+  this.addReferencesCount.fromJSON(inp.AddReferencesCount);
+  this.deleteNodesCount.fromJSON(inp.DeleteNodesCount);
+  this.deleteReferencesCount.fromJSON(inp.DeleteReferencesCount);
+  this.browseCount.fromJSON(inp.BrowseCount);
+  this.browseNextCount.fromJSON(inp.BrowseNextCount);
+  this.translateBrowsePathsToNodeIdsCount.fromJSON(inp.TranslateBrowsePathsToNodeIdsCount);
+  this.queryFirstCount.fromJSON(inp.QueryFirstCount);
+  this.queryNextCount.fromJSON(inp.QueryNextCount);
+  this.registerNodesCount.fromJSON(inp.RegisterNodesCount);
+  this.unregisterNodesCount.fromJSON(inp.UnregisterNodesCount);
 
  }
 

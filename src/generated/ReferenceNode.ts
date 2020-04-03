@@ -56,9 +56,10 @@ export class ReferenceNode {
 
 
  fromJSON( inp: any) {
-  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+if (!inp) { return; }
+  this.referenceTypeId = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
   this.isInverse = inp.IsInverse;
-  this.targetId  = ec.jsonDecodeExpandedNodeId(inp.TargetId);
+  this.targetId = ec.jsonDecodeExpandedNodeId(inp.TargetId);
 
  }
 

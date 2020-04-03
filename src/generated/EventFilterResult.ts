@@ -53,7 +53,7 @@ export class EventFilterResult extends MonitoringFilterResult {
 
  toJSON() {
   const out: any = {};
-  out.SelectClauseResults = this.selectClauseResults.map(m => ec.jsonEncodeStatusCode);
+  out.SelectClauseResults = ec.jsonEncodeArray(this.selectClauseResults, ec.jsonEncodeStatusCode);
   out.SelectClauseDiagnosticInfos = this.selectClauseDiagnosticInfos;
   out.WhereClauseResult = this.whereClauseResult;
  return out;
@@ -61,9 +61,10 @@ export class EventFilterResult extends MonitoringFilterResult {
 
 
  fromJSON( inp: any) {
-  this.selectClauseResults = inp.SelectClauseResults.map(m => ec.jsonDecodeStatusCode);
-  this.selectClauseDiagnosticInfos = inp.SelectClauseDiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
-  this.whereClauseResult.fromJSON(inp);
+if (!inp) { return; }
+  this.selectClauseResults = ec.jsonDecodeArray( inp.SelectClauseResults, ec.jsonDecodeStatusCode);
+  this.selectClauseDiagnosticInfos = ec.jsonDecodeStructArray( inp.SelectClauseDiagnosticInfos,DiagnosticInfo);
+  this.whereClauseResult.fromJSON(inp.WhereClauseResult);
 
  }
 

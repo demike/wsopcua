@@ -69,11 +69,12 @@ export class Argument {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.name = inp.Name;
-  this.dataType  = ec.jsonDecodeNodeId(inp.DataType);
+  this.dataType = ec.jsonDecodeNodeId(inp.DataType);
   this.valueRank = inp.ValueRank;
   this.arrayDimensions = inp.ArrayDimensions;
-  this.description.fromJSON(inp);
+  this.description.fromJSON(inp.Description);
 
  }
 

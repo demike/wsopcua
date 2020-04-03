@@ -43,14 +43,15 @@ export class X509IdentityToken extends UserIdentityToken {
 
  toJSON() {
   const out: any = super.toJSON();
-  out.CertificateData = this.certificateData;
+  out.CertificateData = ec.jsonEncodeByteString(this.certificateData);
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
-  this.certificateData = inp.CertificateData;
+  this.certificateData = ec.jsonDecodeByteString(inp.CertificateData);
 
  }
 

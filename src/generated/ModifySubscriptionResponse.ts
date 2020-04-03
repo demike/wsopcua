@@ -63,7 +63,8 @@ export class ModifySubscriptionResponse {
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
   this.revisedPublishingInterval = inp.RevisedPublishingInterval;
   this.revisedLifetimeCount = inp.RevisedLifetimeCount;
   this.revisedMaxKeepAliveCount = inp.RevisedMaxKeepAliveCount;

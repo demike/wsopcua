@@ -83,13 +83,14 @@ export class ReferenceDescription {
 
 
  fromJSON( inp: any) {
-  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+if (!inp) { return; }
+  this.referenceTypeId = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
   this.isForward = inp.IsForward;
-  this.nodeId  = ec.jsonDecodeExpandedNodeId(inp.NodeId);
-  this.browseName.fromJSON(inp);
-  this.displayName.fromJSON(inp);
+  this.nodeId = ec.jsonDecodeExpandedNodeId(inp.NodeId);
+  this.browseName.fromJSON(inp.BrowseName);
+  this.displayName.fromJSON(inp.DisplayName);
   this.nodeClass = inp.NodeClass;
-  this.typeDefinition  = ec.jsonDecodeExpandedNodeId(inp.TypeDefinition);
+  this.typeDefinition = ec.jsonDecodeExpandedNodeId(inp.TypeDefinition);
 
  }
 

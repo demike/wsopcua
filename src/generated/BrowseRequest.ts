@@ -66,10 +66,11 @@ export class BrowseRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.view.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.view.fromJSON(inp.View);
   this.requestedMaxReferencesPerNode = inp.RequestedMaxReferencesPerNode;
-  this.nodesToBrowse = inp.NodesToBrowse.map(m => { const mem = new BrowseDescription(); mem.fromJSON(m); return mem;});
+  this.nodesToBrowse = ec.jsonDecodeStructArray( inp.NodesToBrowse,BrowseDescription);
 
  }
 

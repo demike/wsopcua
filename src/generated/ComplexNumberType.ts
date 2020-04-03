@@ -50,6 +50,7 @@ export class ComplexNumberType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.real = inp.Real;
   this.imaginary = inp.Imaginary;
 

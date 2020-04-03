@@ -4,7 +4,7 @@
 */
 
 import {RequestHeader} from './RequestHeader';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
@@ -46,14 +46,15 @@ export class HistoryUpdateRequest {
  toJSON() {
   const out: any = {};
   out.RequestHeader = this.requestHeader;
-  out.HistoryUpdateDetails = this.historyUpdateDetails;
+  out.HistoryUpdateDetails = ec.jsonEncodeArray(this.historyUpdateDetails, jsonEncodeExtensionObject);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.historyUpdateDetails = inp.HistoryUpdateDetails;
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.historyUpdateDetails = ec.jsonDecodeArray( inp.HistoryUpdateDetails, jsonDecodeExtensionObject);
 
  }
 

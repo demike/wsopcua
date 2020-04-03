@@ -55,6 +55,7 @@ export class MethodNode extends InstanceNode {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.executable = inp.Executable;
   this.userExecutable = inp.UserExecutable;

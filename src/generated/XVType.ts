@@ -50,6 +50,7 @@ export class XVType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.x = inp.X;
   this.value = inp.Value;
 

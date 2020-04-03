@@ -48,7 +48,8 @@ export class PublishedDataItemsDataType extends PublishedDataSetSourceDataType {
 
 
  fromJSON( inp: any) {
-  this.publishedData = inp.PublishedData.map(m => { const mem = new PublishedVariableDataType(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.publishedData = ec.jsonDecodeStructArray( inp.PublishedData,PublishedVariableDataType);
 
  }
 

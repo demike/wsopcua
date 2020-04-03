@@ -69,9 +69,10 @@ export class NodeAttributes {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.specifiedAttributes = inp.SpecifiedAttributes;
-  this.displayName.fromJSON(inp);
-  this.description.fromJSON(inp);
+  this.displayName.fromJSON(inp.DisplayName);
+  this.description.fromJSON(inp.Description);
   this.writeMask = inp.WriteMask;
   this.userWriteMask = inp.UserWriteMask;
 

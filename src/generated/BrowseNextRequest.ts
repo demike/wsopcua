@@ -51,15 +51,16 @@ export class BrowseNextRequest {
   const out: any = {};
   out.RequestHeader = this.requestHeader;
   out.ReleaseContinuationPoints = this.releaseContinuationPoints;
-  out.ContinuationPoints = this.continuationPoints;
+  out.ContinuationPoints = ec.jsonEncodeArray(this.continuationPoints, ec.jsonEncodeByteString);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.releaseContinuationPoints = inp.ReleaseContinuationPoints;
-  this.continuationPoints = inp.ContinuationPoints;
+  this.continuationPoints = ec.jsonDecodeArray( inp.ContinuationPoints, ec.jsonDecodeByteString);
 
  }
 

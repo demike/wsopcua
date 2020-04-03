@@ -63,10 +63,11 @@ export class WriteValue {
 
 
  fromJSON( inp: any) {
-  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+if (!inp) { return; }
+  this.nodeId = ec.jsonDecodeNodeId(inp.NodeId);
   this.attributeId = inp.AttributeId;
   this.indexRange = inp.IndexRange;
-  this.value.fromJSON(inp);
+  this.value.fromJSON(inp.Value);
 
  }
 

@@ -44,14 +44,15 @@ export class DecimalDataType {
  toJSON() {
   const out: any = {};
   out.Scale = this.scale;
-  out.Value = this.value;
+  out.Value = ec.jsonEncodeByteString(this.value);
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.scale = inp.Scale;
-  this.value = inp.Value;
+  this.value = ec.jsonDecodeByteString(inp.Value);
 
  }
 

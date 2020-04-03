@@ -92,9 +92,10 @@ export class VariableAttributes extends NodeAttributes {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
-  this.value.fromJSON(inp);
-  this.dataType  = ec.jsonDecodeNodeId(inp.DataType);
+  this.value.fromJSON(inp.Value);
+  this.dataType = ec.jsonDecodeNodeId(inp.DataType);
   this.valueRank = inp.ValueRank;
   this.arrayDimensions = inp.ArrayDimensions;
   this.accessLevel = inp.AccessLevel;

@@ -96,6 +96,7 @@ export class UadpDataSetReaderMessageDataType extends DataSetReaderMessageDataTy
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.groupVersion = inp.GroupVersion;
   this.networkMessageNumber = inp.NetworkMessageNumber;
   this.dataSetOffset = inp.DataSetOffset;

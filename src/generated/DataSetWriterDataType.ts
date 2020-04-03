@@ -7,7 +7,7 @@ import * as ec from '../basic-types';
 import {DataSetFieldContentMask, encodeDataSetFieldContentMask, decodeDataSetFieldContentMask} from './DataSetFieldContentMask';
 import {KeyValuePair} from './KeyValuePair';
 import {decodeKeyValuePair} from './KeyValuePair';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDataSetWriterDataType {
@@ -89,22 +89,23 @@ export class DataSetWriterDataType {
   out.KeyFrameCount = this.keyFrameCount;
   out.DataSetName = this.dataSetName;
   out.DataSetWriterProperties = this.dataSetWriterProperties;
-  out.TransportSettings = this.transportSettings;
-  out.MessageSettings = this.messageSettings;
+  out.TransportSettings = jsonEncodeExtensionObject(this.transportSettings);
+  out.MessageSettings = jsonEncodeExtensionObject(this.messageSettings);
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.name = inp.Name;
   this.enabled = inp.Enabled;
   this.dataSetWriterId = inp.DataSetWriterId;
   this.dataSetFieldContentMask = inp.DataSetFieldContentMask;
   this.keyFrameCount = inp.KeyFrameCount;
   this.dataSetName = inp.DataSetName;
-  this.dataSetWriterProperties = inp.DataSetWriterProperties.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
-  this.transportSettings = inp.TransportSettings;
-  this.messageSettings = inp.MessageSettings;
+  this.dataSetWriterProperties = ec.jsonDecodeStructArray( inp.DataSetWriterProperties,KeyValuePair);
+  this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
+  this.messageSettings = jsonDecodeExtensionObject(inp.MessageSettings);
 
  }
 

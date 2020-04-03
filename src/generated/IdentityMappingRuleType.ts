@@ -51,6 +51,7 @@ export class IdentityMappingRuleType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.criteriaType = inp.CriteriaType;
   this.criteria = inp.Criteria;
 

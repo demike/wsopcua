@@ -66,10 +66,11 @@ export class ReadRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.maxAge = inp.MaxAge;
   this.timestampsToReturn = inp.TimestampsToReturn;
-  this.nodesToRead = inp.NodesToRead.map(m => { const mem = new ReadValueId(); mem.fromJSON(m); return mem;});
+  this.nodesToRead = ec.jsonDecodeStructArray( inp.NodesToRead,ReadValueId);
 
  }
 

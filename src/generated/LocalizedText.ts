@@ -62,6 +62,7 @@ export class LocalizedText {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   if(inp.Locale) {
    this.locale = inp.Locale;
   }

@@ -50,7 +50,8 @@ export class TransferResult {
 
 
  fromJSON( inp: any) {
-  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+if (!inp) { return; }
+  this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.availableSequenceNumbers = inp.AvailableSequenceNumbers;
 
  }

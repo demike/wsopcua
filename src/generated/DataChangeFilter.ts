@@ -59,6 +59,7 @@ export class DataChangeFilter extends MonitoringFilter {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.trigger = inp.Trigger;
   this.deadbandType = inp.DeadbandType;
   this.deadbandValue = inp.DeadbandValue;

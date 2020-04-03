@@ -68,6 +68,7 @@ export class SessionlessInvokeRequestType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.urisVersion = inp.UrisVersion;
   this.namespaceUris = inp.NamespaceUris;
   this.serverUris = inp.ServerUris;

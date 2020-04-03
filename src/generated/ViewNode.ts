@@ -55,6 +55,7 @@ export class ViewNode extends InstanceNode {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.containsNoLoops = inp.ContainsNoLoops;
   this.eventNotifier = inp.EventNotifier;

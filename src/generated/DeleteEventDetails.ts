@@ -43,14 +43,15 @@ export class DeleteEventDetails extends HistoryUpdateDetails {
 
  toJSON() {
   const out: any = super.toJSON();
-  out.EventIds = this.eventIds;
+  out.EventIds = ec.jsonEncodeArray(this.eventIds, ec.jsonEncodeByteString);
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
-  this.eventIds = inp.EventIds;
+  this.eventIds = ec.jsonDecodeArray( inp.EventIds, ec.jsonDecodeByteString);
 
  }
 

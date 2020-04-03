@@ -5,7 +5,7 @@
 
 import {RequestHeader} from './RequestHeader';
 import {RegisteredServer} from './RegisteredServer';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
@@ -53,15 +53,16 @@ export class RegisterServer2Request {
   const out: any = {};
   out.RequestHeader = this.requestHeader;
   out.Server = this.server;
-  out.DiscoveryConfiguration = this.discoveryConfiguration;
+  out.DiscoveryConfiguration = ec.jsonEncodeArray(this.discoveryConfiguration, jsonEncodeExtensionObject);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.server.fromJSON(inp);
-  this.discoveryConfiguration = inp.DiscoveryConfiguration;
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.server.fromJSON(inp.Server);
+  this.discoveryConfiguration = ec.jsonDecodeArray( inp.DiscoveryConfiguration, jsonDecodeExtensionObject);
 
  }
 

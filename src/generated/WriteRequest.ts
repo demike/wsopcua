@@ -53,8 +53,9 @@ export class WriteRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.nodesToWrite = inp.NodesToWrite.map(m => { const mem = new WriteValue(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.nodesToWrite = ec.jsonDecodeStructArray( inp.NodesToWrite,WriteValue);
 
  }
 

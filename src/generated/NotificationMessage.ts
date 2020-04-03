@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface INotificationMessage {
@@ -51,15 +51,16 @@ export class NotificationMessage {
   const out: any = {};
   out.SequenceNumber = this.sequenceNumber;
   out.PublishTime = ec.jsonEncodeDateTime(this.publishTime);
-  out.NotificationData = this.notificationData;
+  out.NotificationData = ec.jsonEncodeArray(this.notificationData, jsonEncodeExtensionObject);
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.sequenceNumber = inp.SequenceNumber;
-  this.publishTime  = ec.jsonDecodeDateTime(inp.PublishTime);
-  this.notificationData = inp.NotificationData;
+  this.publishTime = ec.jsonDecodeDateTime(inp.PublishTime);
+  this.notificationData = ec.jsonDecodeArray( inp.NotificationData, jsonDecodeExtensionObject);
 
  }
 

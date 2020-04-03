@@ -50,6 +50,7 @@ export class DoubleComplexNumberType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.real = inp.Real;
   this.imaginary = inp.Imaginary;
 

@@ -59,20 +59,21 @@ export class TrustListDataType {
  toJSON() {
   const out: any = {};
   out.SpecifiedLists = this.specifiedLists;
-  out.TrustedCertificates = this.trustedCertificates;
-  out.TrustedCrls = this.trustedCrls;
-  out.IssuerCertificates = this.issuerCertificates;
-  out.IssuerCrls = this.issuerCrls;
+  out.TrustedCertificates = ec.jsonEncodeArray(this.trustedCertificates, ec.jsonEncodeByteString);
+  out.TrustedCrls = ec.jsonEncodeArray(this.trustedCrls, ec.jsonEncodeByteString);
+  out.IssuerCertificates = ec.jsonEncodeArray(this.issuerCertificates, ec.jsonEncodeByteString);
+  out.IssuerCrls = ec.jsonEncodeArray(this.issuerCrls, ec.jsonEncodeByteString);
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.specifiedLists = inp.SpecifiedLists;
-  this.trustedCertificates = inp.TrustedCertificates;
-  this.trustedCrls = inp.TrustedCrls;
-  this.issuerCertificates = inp.IssuerCertificates;
-  this.issuerCrls = inp.IssuerCrls;
+  this.trustedCertificates = ec.jsonDecodeArray( inp.TrustedCertificates, ec.jsonDecodeByteString);
+  this.trustedCrls = ec.jsonDecodeArray( inp.TrustedCrls, ec.jsonDecodeByteString);
+  this.issuerCertificates = ec.jsonDecodeArray( inp.IssuerCertificates, ec.jsonDecodeByteString);
+  this.issuerCrls = ec.jsonDecodeArray( inp.IssuerCrls, ec.jsonDecodeByteString);
 
  }
 

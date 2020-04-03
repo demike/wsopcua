@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 import {ConnectionTransportDataType} from './ConnectionTransportDataType';
 
@@ -40,13 +40,14 @@ export class DatagramConnectionTransportDataType extends ConnectionTransportData
 
  toJSON() {
   const out: any = {};
-  out.DiscoveryAddress = this.discoveryAddress;
+  out.DiscoveryAddress = jsonEncodeExtensionObject(this.discoveryAddress);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.discoveryAddress = inp.DiscoveryAddress;
+if (!inp) { return; }
+  this.discoveryAddress = jsonDecodeExtensionObject(inp.DiscoveryAddress);
 
  }
 

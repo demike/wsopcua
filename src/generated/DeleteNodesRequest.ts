@@ -53,8 +53,9 @@ export class DeleteNodesRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.nodesToDelete = inp.NodesToDelete.map(m => { const mem = new DeleteNodesItem(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.nodesToDelete = ec.jsonDecodeStructArray( inp.NodesToDelete,DeleteNodesItem);
 
  }
 

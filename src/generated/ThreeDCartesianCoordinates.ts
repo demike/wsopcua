@@ -58,6 +58,7 @@ export class ThreeDCartesianCoordinates extends CartesianCoordinates {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.x = inp.X;
   this.y = inp.Y;
   this.z = inp.Z;

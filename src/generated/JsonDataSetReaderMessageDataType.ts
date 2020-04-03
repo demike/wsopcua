@@ -53,6 +53,7 @@ export class JsonDataSetReaderMessageDataType extends DataSetReaderMessageDataTy
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.networkMessageContentMask = inp.NetworkMessageContentMask;
   this.dataSetMessageContentMask = inp.DataSetMessageContentMask;
 

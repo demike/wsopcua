@@ -61,10 +61,11 @@ export class DeleteRawModifiedDetails extends HistoryUpdateDetails {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.isDeleteModified = inp.IsDeleteModified;
-  this.startTime  = ec.jsonDecodeDateTime(inp.StartTime);
-  this.endTime  = ec.jsonDecodeDateTime(inp.EndTime);
+  this.startTime = ec.jsonDecodeDateTime(inp.StartTime);
+  this.endTime = ec.jsonDecodeDateTime(inp.EndTime);
 
  }
 

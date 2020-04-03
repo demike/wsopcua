@@ -51,8 +51,9 @@ export class KeyValuePair {
 
 
  fromJSON( inp: any) {
-  this.key.fromJSON(inp);
-  this.value.fromJSON(inp);
+if (!inp) { return; }
+  this.key.fromJSON(inp.Key);
+  this.value.fromJSON(inp.Value);
 
  }
 

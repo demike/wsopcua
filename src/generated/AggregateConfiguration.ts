@@ -68,6 +68,7 @@ export class AggregateConfiguration {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.useServerCapabilitiesDefaults = inp.UseServerCapabilitiesDefaults;
   this.treatUncertainAsBad = inp.TreatUncertainAsBad;
   this.percentDataBad = inp.PercentDataBad;

@@ -50,6 +50,7 @@ export class TimeZoneDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.offset = inp.Offset;
   this.daylightSavingInOffset = inp.DaylightSavingInOffset;
 

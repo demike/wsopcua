@@ -85,8 +85,8 @@ export class CreateSessionRequest {
   out.ServerUri = this.serverUri;
   out.EndpointUrl = this.endpointUrl;
   out.SessionName = this.sessionName;
-  out.ClientNonce = this.clientNonce;
-  out.ClientCertificate = this.clientCertificate;
+  out.ClientNonce = ec.jsonEncodeByteString(this.clientNonce);
+  out.ClientCertificate = ec.jsonEncodeByteString(this.clientCertificate);
   out.RequestedSessionTimeout = this.requestedSessionTimeout;
   out.MaxResponseMessageSize = this.maxResponseMessageSize;
  return out;
@@ -94,13 +94,14 @@ export class CreateSessionRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.clientDescription.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.clientDescription.fromJSON(inp.ClientDescription);
   this.serverUri = inp.ServerUri;
   this.endpointUrl = inp.EndpointUrl;
   this.sessionName = inp.SessionName;
-  this.clientNonce = inp.ClientNonce;
-  this.clientCertificate = inp.ClientCertificate;
+  this.clientNonce = ec.jsonDecodeByteString(inp.ClientNonce);
+  this.clientCertificate = ec.jsonDecodeByteString(inp.ClientCertificate);
   this.requestedSessionTimeout = inp.RequestedSessionTimeout;
   this.maxResponseMessageSize = inp.MaxResponseMessageSize;
 

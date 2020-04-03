@@ -50,6 +50,7 @@ export class RationalNumber {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.numerator = inp.Numerator;
   this.denominator = inp.Denominator;
 

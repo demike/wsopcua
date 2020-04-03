@@ -44,6 +44,7 @@ export class EndpointUrlListDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.endpointUrlList = inp.EndpointUrlList;
 
  }

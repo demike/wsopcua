@@ -55,8 +55,9 @@ export class SimpleTypeDescription extends DataTypeDescription {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
-  this.baseDataType  = ec.jsonDecodeNodeId(inp.BaseDataType);
+  this.baseDataType = ec.jsonDecodeNodeId(inp.BaseDataType);
   this.builtInType = inp.BuiltInType;
 
  }

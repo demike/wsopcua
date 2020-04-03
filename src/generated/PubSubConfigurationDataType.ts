@@ -60,8 +60,9 @@ export class PubSubConfigurationDataType {
 
 
  fromJSON( inp: any) {
-  this.publishedDataSets = inp.PublishedDataSets.map(m => { const mem = new PublishedDataSetDataType(); mem.fromJSON(m); return mem;});
-  this.connections = inp.Connections.map(m => { const mem = new PubSubConnectionDataType(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.publishedDataSets = ec.jsonDecodeStructArray( inp.PublishedDataSets,PublishedDataSetDataType);
+  this.connections = ec.jsonDecodeStructArray( inp.Connections,PubSubConnectionDataType);
   this.enabled = inp.Enabled;
 
  }

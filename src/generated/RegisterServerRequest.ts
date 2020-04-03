@@ -51,8 +51,9 @@ export class RegisterServerRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.server.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.server.fromJSON(inp.Server);
 
  }
 

@@ -89,14 +89,15 @@ export class PublishedVariableDataType {
 
 
  fromJSON( inp: any) {
-  this.publishedVariable  = ec.jsonDecodeNodeId(inp.PublishedVariable);
+if (!inp) { return; }
+  this.publishedVariable = ec.jsonDecodeNodeId(inp.PublishedVariable);
   this.attributeId = inp.AttributeId;
   this.samplingIntervalHint = inp.SamplingIntervalHint;
   this.deadbandType = inp.DeadbandType;
   this.deadbandValue = inp.DeadbandValue;
   this.indexRange = inp.IndexRange;
-  this.substituteValue.fromJSON(inp);
-  this.metaDataProperties = inp.MetaDataProperties.map(m => { const mem = new QualifiedName(); mem.fromJSON(m); return mem;});
+  this.substituteValue.fromJSON(inp.SubstituteValue);
+  this.metaDataProperties = ec.jsonDecodeStructArray( inp.MetaDataProperties,QualifiedName);
 
  }
 

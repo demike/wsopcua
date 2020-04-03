@@ -43,15 +43,16 @@ export class SignedSoftwareCertificate {
 
  toJSON() {
   const out: any = {};
-  out.CertificateData = this.certificateData;
-  out.Signature = this.signature;
+  out.CertificateData = ec.jsonEncodeByteString(this.certificateData);
+  out.Signature = ec.jsonEncodeByteString(this.signature);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.certificateData = inp.CertificateData;
-  this.signature = inp.Signature;
+if (!inp) { return; }
+  this.certificateData = ec.jsonDecodeByteString(inp.CertificateData);
+  this.signature = ec.jsonDecodeByteString(inp.Signature);
 
  }
 

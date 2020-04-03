@@ -62,9 +62,10 @@ export class ChannelSecurityToken {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.channelId = inp.ChannelId;
   this.tokenId = inp.TokenId;
-  this.createdAt  = ec.jsonDecodeDateTime(inp.CreatedAt);
+  this.createdAt = ec.jsonDecodeDateTime(inp.CreatedAt);
   this.revisedLifetime = inp.RevisedLifetime;
 
  }

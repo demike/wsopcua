@@ -53,8 +53,9 @@ export class GetEndpointsResponse {
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
-  this.endpoints = inp.Endpoints.map(m => { const mem = new EndpointDescription(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
+  this.endpoints = ec.jsonDecodeStructArray( inp.Endpoints,EndpointDescription);
 
  }
 

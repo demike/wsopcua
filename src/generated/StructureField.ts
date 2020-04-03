@@ -81,9 +81,10 @@ export class StructureField {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.name = inp.Name;
-  this.description.fromJSON(inp);
-  this.dataType  = ec.jsonDecodeNodeId(inp.DataType);
+  this.description.fromJSON(inp.Description);
+  this.dataType = ec.jsonDecodeNodeId(inp.DataType);
   this.valueRank = inp.ValueRank;
   this.arrayDimensions = inp.ArrayDimensions;
   this.maxStringLength = inp.MaxStringLength;

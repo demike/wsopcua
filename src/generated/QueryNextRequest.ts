@@ -51,15 +51,16 @@ export class QueryNextRequest {
   const out: any = {};
   out.RequestHeader = this.requestHeader;
   out.ReleaseContinuationPoint = this.releaseContinuationPoint;
-  out.ContinuationPoint = this.continuationPoint;
+  out.ContinuationPoint = ec.jsonEncodeByteString(this.continuationPoint);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.releaseContinuationPoint = inp.ReleaseContinuationPoint;
-  this.continuationPoint = inp.ContinuationPoint;
+  this.continuationPoint = ec.jsonDecodeByteString(inp.ContinuationPoint);
 
  }
 

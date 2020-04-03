@@ -50,7 +50,8 @@ export class BrowsePathTarget {
 
 
  fromJSON( inp: any) {
-  this.targetId  = ec.jsonDecodeExpandedNodeId(inp.TargetId);
+if (!inp) { return; }
+  this.targetId = ec.jsonDecodeExpandedNodeId(inp.TargetId);
   this.remainingPathIndex = inp.RemainingPathIndex;
 
  }

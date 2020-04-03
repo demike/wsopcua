@@ -52,8 +52,9 @@ export class BrowsePathResult {
 
 
  fromJSON( inp: any) {
-  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
-  this.targets = inp.Targets.map(m => { const mem = new BrowsePathTarget(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.targets = ec.jsonDecodeStructArray( inp.Targets,BrowsePathTarget);
 
  }
 

@@ -64,7 +64,8 @@ export class SetMonitoringModeRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.subscriptionId = inp.SubscriptionId;
   this.monitoringMode = inp.MonitoringMode;
   this.monitoredItemIds = inp.MonitoredItemIds;

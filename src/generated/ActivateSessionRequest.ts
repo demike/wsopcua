@@ -8,7 +8,7 @@ import {SignatureData} from './SignatureData';
 import {SignedSoftwareCertificate} from './SignedSoftwareCertificate';
 import {decodeSignedSoftwareCertificate} from './SignedSoftwareCertificate';
 import * as ec from '../basic-types';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IActivateSessionRequest {
@@ -72,19 +72,20 @@ export class ActivateSessionRequest {
   out.ClientSignature = this.clientSignature;
   out.ClientSoftwareCertificates = this.clientSoftwareCertificates;
   out.LocaleIds = this.localeIds;
-  out.UserIdentityToken = this.userIdentityToken;
+  out.UserIdentityToken = jsonEncodeExtensionObject(this.userIdentityToken);
   out.UserTokenSignature = this.userTokenSignature;
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.clientSignature.fromJSON(inp);
-  this.clientSoftwareCertificates = inp.ClientSoftwareCertificates.map(m => { const mem = new SignedSoftwareCertificate(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.clientSignature.fromJSON(inp.ClientSignature);
+  this.clientSoftwareCertificates = ec.jsonDecodeStructArray( inp.ClientSoftwareCertificates,SignedSoftwareCertificate);
   this.localeIds = inp.LocaleIds;
-  this.userIdentityToken = inp.UserIdentityToken;
-  this.userTokenSignature.fromJSON(inp);
+  this.userIdentityToken = jsonDecodeExtensionObject(inp.UserIdentityToken);
+  this.userTokenSignature.fromJSON(inp.UserTokenSignature);
 
  }
 

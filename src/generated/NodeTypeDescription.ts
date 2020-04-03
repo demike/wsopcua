@@ -58,9 +58,10 @@ export class NodeTypeDescription {
 
 
  fromJSON( inp: any) {
-  this.typeDefinitionNode  = ec.jsonDecodeExpandedNodeId(inp.TypeDefinitionNode);
+if (!inp) { return; }
+  this.typeDefinitionNode = ec.jsonDecodeExpandedNodeId(inp.TypeDefinitionNode);
   this.includeSubTypes = inp.IncludeSubTypes;
-  this.dataToReturn = inp.DataToReturn.map(m => { const mem = new QueryDataDescription(); mem.fromJSON(m); return mem;});
+  this.dataToReturn = ec.jsonDecodeStructArray( inp.DataToReturn,QueryDataDescription);
 
  }
 

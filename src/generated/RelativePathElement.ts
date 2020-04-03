@@ -63,10 +63,11 @@ export class RelativePathElement {
 
 
  fromJSON( inp: any) {
-  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+if (!inp) { return; }
+  this.referenceTypeId = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
   this.isInverse = inp.IsInverse;
   this.includeSubtypes = inp.IncludeSubtypes;
-  this.targetName.fromJSON(inp);
+  this.targetName.fromJSON(inp.TargetName);
 
  }
 

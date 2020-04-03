@@ -87,13 +87,14 @@ export class SessionSecurityDiagnosticsDataType {
   out.TransportProtocol = this.transportProtocol;
   out.SecurityMode = this.securityMode;
   out.SecurityPolicyUri = this.securityPolicyUri;
-  out.ClientCertificate = this.clientCertificate;
+  out.ClientCertificate = ec.jsonEncodeByteString(this.clientCertificate);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.sessionId  = ec.jsonDecodeNodeId(inp.SessionId);
+if (!inp) { return; }
+  this.sessionId = ec.jsonDecodeNodeId(inp.SessionId);
   this.clientUserIdOfSession = inp.ClientUserIdOfSession;
   this.clientUserIdHistory = inp.ClientUserIdHistory;
   this.authenticationMechanism = inp.AuthenticationMechanism;
@@ -101,7 +102,7 @@ export class SessionSecurityDiagnosticsDataType {
   this.transportProtocol = inp.TransportProtocol;
   this.securityMode = inp.SecurityMode;
   this.securityPolicyUri = inp.SecurityPolicyUri;
-  this.clientCertificate = inp.ClientCertificate;
+  this.clientCertificate = ec.jsonDecodeByteString(inp.ClientCertificate);
 
  }
 

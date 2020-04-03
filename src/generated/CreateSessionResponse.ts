@@ -93,8 +93,8 @@ export class CreateSessionResponse {
   out.SessionId = ec.jsonEncodeNodeId(this.sessionId);
   out.AuthenticationToken = ec.jsonEncodeNodeId(this.authenticationToken);
   out.RevisedSessionTimeout = this.revisedSessionTimeout;
-  out.ServerNonce = this.serverNonce;
-  out.ServerCertificate = this.serverCertificate;
+  out.ServerNonce = ec.jsonEncodeByteString(this.serverNonce);
+  out.ServerCertificate = ec.jsonEncodeByteString(this.serverCertificate);
   out.ServerEndpoints = this.serverEndpoints;
   out.ServerSoftwareCertificates = this.serverSoftwareCertificates;
   out.ServerSignature = this.serverSignature;
@@ -104,15 +104,16 @@ export class CreateSessionResponse {
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
-  this.sessionId  = ec.jsonDecodeNodeId(inp.SessionId);
-  this.authenticationToken  = ec.jsonDecodeNodeId(inp.AuthenticationToken);
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
+  this.sessionId = ec.jsonDecodeNodeId(inp.SessionId);
+  this.authenticationToken = ec.jsonDecodeNodeId(inp.AuthenticationToken);
   this.revisedSessionTimeout = inp.RevisedSessionTimeout;
-  this.serverNonce = inp.ServerNonce;
-  this.serverCertificate = inp.ServerCertificate;
-  this.serverEndpoints = inp.ServerEndpoints.map(m => { const mem = new EndpointDescription(); mem.fromJSON(m); return mem;});
-  this.serverSoftwareCertificates = inp.ServerSoftwareCertificates.map(m => { const mem = new SignedSoftwareCertificate(); mem.fromJSON(m); return mem;});
-  this.serverSignature.fromJSON(inp);
+  this.serverNonce = ec.jsonDecodeByteString(inp.ServerNonce);
+  this.serverCertificate = ec.jsonDecodeByteString(inp.ServerCertificate);
+  this.serverEndpoints = ec.jsonDecodeStructArray( inp.ServerEndpoints,EndpointDescription);
+  this.serverSoftwareCertificates = ec.jsonDecodeStructArray( inp.ServerSoftwareCertificates,SignedSoftwareCertificate);
+  this.serverSignature.fromJSON(inp.ServerSignature);
   this.maxRequestMessageSize = inp.MaxRequestMessageSize;
 
  }

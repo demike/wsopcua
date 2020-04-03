@@ -49,6 +49,7 @@ export class ObjectTypeNode extends TypeNode {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.isAbstract = inp.IsAbstract;
 

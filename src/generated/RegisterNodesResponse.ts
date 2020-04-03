@@ -45,14 +45,15 @@ export class RegisterNodesResponse {
  toJSON() {
   const out: any = {};
   out.ResponseHeader = this.responseHeader;
-  out.RegisteredNodeIds = this.registeredNodeIds.map(m => ec.jsonEncodeNodeId);
+  out.RegisteredNodeIds = ec.jsonEncodeArray(this.registeredNodeIds, ec.jsonEncodeNodeId);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
-  this.registeredNodeIds = inp.RegisteredNodeIds.map(m => ec.jsonDecodeNodeId);
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
+  this.registeredNodeIds = ec.jsonDecodeArray( inp.RegisteredNodeIds, ec.jsonDecodeNodeId);
 
  }
 

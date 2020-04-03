@@ -46,7 +46,8 @@ export class HistoryData {
 
 
  fromJSON( inp: any) {
-  this.dataValues = inp.DataValues.map(m => { const mem = new DataValue(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.dataValues = ec.jsonDecodeStructArray( inp.DataValues,DataValue);
 
  }
 

@@ -51,16 +51,17 @@ export class ParsingResult {
  toJSON() {
   const out: any = {};
   out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
-  out.DataStatusCodes = this.dataStatusCodes.map(m => ec.jsonEncodeStatusCode);
+  out.DataStatusCodes = ec.jsonEncodeArray(this.dataStatusCodes, ec.jsonEncodeStatusCode);
   out.DataDiagnosticInfos = this.dataDiagnosticInfos;
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
-  this.dataStatusCodes = inp.DataStatusCodes.map(m => ec.jsonDecodeStatusCode);
-  this.dataDiagnosticInfos = inp.DataDiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.dataStatusCodes = ec.jsonDecodeArray( inp.DataStatusCodes, ec.jsonDecodeStatusCode);
+  this.dataDiagnosticInfos = ec.jsonDecodeStructArray( inp.DataDiagnosticInfos,DiagnosticInfo);
 
  }
 

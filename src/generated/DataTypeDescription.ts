@@ -51,8 +51,9 @@ export class DataTypeDescription {
 
 
  fromJSON( inp: any) {
-  this.dataTypeId  = ec.jsonDecodeNodeId(inp.DataTypeId);
-  this.name.fromJSON(inp);
+if (!inp) { return; }
+  this.dataTypeId = ec.jsonDecodeNodeId(inp.DataTypeId);
+  this.name.fromJSON(inp.Name);
 
  }
 

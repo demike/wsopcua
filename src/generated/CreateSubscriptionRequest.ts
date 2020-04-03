@@ -81,7 +81,8 @@ export class CreateSubscriptionRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.requestedPublishingInterval = inp.RequestedPublishingInterval;
   this.requestedLifetimeCount = inp.RequestedLifetimeCount;
   this.requestedMaxKeepAliveCount = inp.RequestedMaxKeepAliveCount;

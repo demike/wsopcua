@@ -53,8 +53,9 @@ export class PublishRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.subscriptionAcknowledgements = inp.SubscriptionAcknowledgements.map(m => { const mem = new SubscriptionAcknowledgement(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.subscriptionAcknowledgements = ec.jsonDecodeStructArray( inp.SubscriptionAcknowledgements,SubscriptionAcknowledgement);
 
  }
 

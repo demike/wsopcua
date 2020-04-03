@@ -51,8 +51,9 @@ export class MonitoredItemNotification {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.clientHandle = inp.ClientHandle;
-  this.value.fromJSON(inp);
+  this.value.fromJSON(inp.Value);
 
  }
 

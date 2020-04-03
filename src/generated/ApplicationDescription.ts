@@ -82,9 +82,10 @@ export class ApplicationDescription {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.applicationUri = inp.ApplicationUri;
   this.productUri = inp.ProductUri;
-  this.applicationName.fromJSON(inp);
+  this.applicationName.fromJSON(inp.ApplicationName);
   this.applicationType = inp.ApplicationType;
   this.gatewayServerUri = inp.GatewayServerUri;
   this.discoveryProfileUri = inp.DiscoveryProfileUri;

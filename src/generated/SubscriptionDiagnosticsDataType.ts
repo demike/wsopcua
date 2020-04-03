@@ -224,7 +224,8 @@ export class SubscriptionDiagnosticsDataType {
 
 
  fromJSON( inp: any) {
-  this.sessionId  = ec.jsonDecodeNodeId(inp.SessionId);
+if (!inp) { return; }
+  this.sessionId = ec.jsonDecodeNodeId(inp.SessionId);
   this.subscriptionId = inp.SubscriptionId;
   this.priority = inp.Priority;
   this.publishingInterval = inp.PublishingInterval;

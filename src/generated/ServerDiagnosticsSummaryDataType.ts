@@ -110,6 +110,7 @@ export class ServerDiagnosticsSummaryDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.serverViewCount = inp.ServerViewCount;
   this.currentSessionCount = inp.CurrentSessionCount;
   this.cumulatedSessionCount = inp.CumulatedSessionCount;

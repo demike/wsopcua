@@ -62,6 +62,7 @@ export class ServerOnNetwork {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.recordId = inp.RecordId;
   this.serverName = inp.ServerName;
   this.discoveryUrl = inp.DiscoveryUrl;

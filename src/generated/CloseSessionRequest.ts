@@ -51,7 +51,8 @@ export class CloseSessionRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.deleteSubscriptions = inp.DeleteSubscriptions;
 
  }

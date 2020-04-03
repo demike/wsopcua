@@ -69,7 +69,8 @@ export class CreateSubscriptionResponse {
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
   this.subscriptionId = inp.SubscriptionId;
   this.revisedPublishingInterval = inp.RevisedPublishingInterval;
   this.revisedLifetimeCount = inp.RevisedLifetimeCount;

@@ -58,16 +58,17 @@ export class OpenSecureChannelResponse {
   out.ResponseHeader = this.responseHeader;
   out.ServerProtocolVersion = this.serverProtocolVersion;
   out.SecurityToken = this.securityToken;
-  out.ServerNonce = this.serverNonce;
+  out.ServerNonce = ec.jsonEncodeByteString(this.serverNonce);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
   this.serverProtocolVersion = inp.ServerProtocolVersion;
-  this.securityToken.fromJSON(inp);
-  this.serverNonce = inp.ServerNonce;
+  this.securityToken.fromJSON(inp.SecurityToken);
+  this.serverNonce = ec.jsonDecodeByteString(inp.ServerNonce);
 
  }
 

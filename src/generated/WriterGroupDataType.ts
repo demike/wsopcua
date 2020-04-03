@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataSetWriterDataType} from './DataSetWriterDataType';
 import {decodeDataSetWriterDataType} from './DataSetWriterDataType';
 import {DataStream} from '../basic-types/DataStream';
@@ -92,14 +92,15 @@ export class WriterGroupDataType extends PubSubGroupDataType {
   out.Priority = this.priority;
   out.LocaleIds = this.localeIds;
   out.HeaderLayoutUri = this.headerLayoutUri;
-  out.TransportSettings = this.transportSettings;
-  out.MessageSettings = this.messageSettings;
+  out.TransportSettings = jsonEncodeExtensionObject(this.transportSettings);
+  out.MessageSettings = jsonEncodeExtensionObject(this.messageSettings);
   out.DataSetWriters = this.dataSetWriters;
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.writerGroupId = inp.WriterGroupId;
   this.publishingInterval = inp.PublishingInterval;
@@ -107,9 +108,9 @@ export class WriterGroupDataType extends PubSubGroupDataType {
   this.priority = inp.Priority;
   this.localeIds = inp.LocaleIds;
   this.headerLayoutUri = inp.HeaderLayoutUri;
-  this.transportSettings = inp.TransportSettings;
-  this.messageSettings = inp.MessageSettings;
-  this.dataSetWriters = inp.DataSetWriters.map(m => { const mem = new DataSetWriterDataType(); mem.fromJSON(m); return mem;});
+  this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
+  this.messageSettings = jsonDecodeExtensionObject(inp.MessageSettings);
+  this.dataSetWriters = ec.jsonDecodeStructArray( inp.DataSetWriters,DataSetWriterDataType);
 
  }
 

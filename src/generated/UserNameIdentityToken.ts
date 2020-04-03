@@ -54,16 +54,17 @@ export class UserNameIdentityToken extends UserIdentityToken {
  toJSON() {
   const out: any = super.toJSON();
   out.UserName = this.userName;
-  out.Password = this.password;
+  out.Password = ec.jsonEncodeByteString(this.password);
   out.EncryptionAlgorithm = this.encryptionAlgorithm;
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.userName = inp.UserName;
-  this.password = inp.Password;
+  this.password = ec.jsonDecodeByteString(inp.Password);
   this.encryptionAlgorithm = inp.EncryptionAlgorithm;
 
  }

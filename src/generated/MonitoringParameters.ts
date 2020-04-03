@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IMonitoringParameters {
@@ -61,7 +61,7 @@ export class MonitoringParameters {
   const out: any = {};
   out.ClientHandle = this.clientHandle;
   out.SamplingInterval = this.samplingInterval;
-  out.Filter = this.filter;
+  out.Filter = jsonEncodeExtensionObject(this.filter);
   out.QueueSize = this.queueSize;
   out.DiscardOldest = this.discardOldest;
  return out;
@@ -69,9 +69,10 @@ export class MonitoringParameters {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.clientHandle = inp.ClientHandle;
   this.samplingInterval = inp.SamplingInterval;
-  this.filter = inp.Filter;
+  this.filter = jsonDecodeExtensionObject(inp.Filter);
   this.queueSize = inp.QueueSize;
   this.discardOldest = inp.DiscardOldest;
 

@@ -62,6 +62,7 @@ export class SamplingIntervalDiagnosticsDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.samplingInterval = inp.SamplingInterval;
   this.monitoredItemCount = inp.MonitoredItemCount;
   this.maxMonitoredItemCount = inp.MaxMonitoredItemCount;

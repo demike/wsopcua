@@ -42,6 +42,7 @@ export class InstanceNode extends Node {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
 
  }

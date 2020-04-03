@@ -102,16 +102,17 @@ export class FieldMetaData {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.name = inp.Name;
-  this.description.fromJSON(inp);
+  this.description.fromJSON(inp.Description);
   this.fieldFlags = inp.FieldFlags;
   this.builtInType = inp.BuiltInType;
-  this.dataType  = ec.jsonDecodeNodeId(inp.DataType);
+  this.dataType = ec.jsonDecodeNodeId(inp.DataType);
   this.valueRank = inp.ValueRank;
   this.arrayDimensions = inp.ArrayDimensions;
   this.maxStringLength = inp.MaxStringLength;
   this.dataSetFieldId = inp.DataSetFieldId;
-  this.properties = inp.Properties.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
+  this.properties = ec.jsonDecodeStructArray( inp.Properties,KeyValuePair);
 
  }
 

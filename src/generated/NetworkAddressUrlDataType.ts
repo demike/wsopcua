@@ -49,6 +49,7 @@ export class NetworkAddressUrlDataType extends NetworkAddressDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.url = inp.Url;
 

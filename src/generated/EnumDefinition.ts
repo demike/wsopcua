@@ -46,7 +46,8 @@ export class EnumDefinition {
 
 
  fromJSON( inp: any) {
-  this.fields = inp.Fields.map(m => { const mem = new EnumField(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.fields = ec.jsonDecodeStructArray( inp.Fields,EnumField);
 
  }
 

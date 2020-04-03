@@ -69,6 +69,7 @@ export class UserTokenPolicy {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.policyId = inp.PolicyId;
   this.tokenType = inp.TokenType;
   this.issuedTokenType = inp.IssuedTokenType;

@@ -55,8 +55,9 @@ export class EventFilter extends MonitoringFilter {
 
 
  fromJSON( inp: any) {
-  this.selectClauses = inp.SelectClauses.map(m => { const mem = new SimpleAttributeOperand(); mem.fromJSON(m); return mem;});
-  this.whereClause.fromJSON(inp);
+if (!inp) { return; }
+  this.selectClauses = ec.jsonDecodeStructArray( inp.SelectClauses,SimpleAttributeOperand);
+  this.whereClause.fromJSON(inp.WhereClause);
 
  }
 

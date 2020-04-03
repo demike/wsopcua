@@ -50,6 +50,7 @@ export class QualifiedName {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.namespaceIndex = inp.NamespaceIndex;
   this.name = inp.Name;
 

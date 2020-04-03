@@ -46,7 +46,8 @@ export class HistoryEvent {
 
 
  fromJSON( inp: any) {
-  this.events = inp.Events.map(m => { const mem = new HistoryEventFieldList(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.events = ec.jsonDecodeStructArray( inp.Events,HistoryEventFieldList);
 
  }
 

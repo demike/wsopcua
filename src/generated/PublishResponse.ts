@@ -77,20 +77,21 @@ export class PublishResponse {
   out.AvailableSequenceNumbers = this.availableSequenceNumbers;
   out.MoreNotifications = this.moreNotifications;
   out.NotificationMessage = this.notificationMessage;
-  out.Results = this.results.map(m => ec.jsonEncodeStatusCode);
+  out.Results = ec.jsonEncodeArray(this.results, ec.jsonEncodeStatusCode);
   out.DiagnosticInfos = this.diagnosticInfos;
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
   this.subscriptionId = inp.SubscriptionId;
   this.availableSequenceNumbers = inp.AvailableSequenceNumbers;
   this.moreNotifications = inp.MoreNotifications;
-  this.notificationMessage.fromJSON(inp);
-  this.results = inp.Results.map(m => ec.jsonDecodeStatusCode);
-  this.diagnosticInfos = inp.DiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+  this.notificationMessage.fromJSON(inp.NotificationMessage);
+  this.results = ec.jsonDecodeArray( inp.Results, ec.jsonDecodeStatusCode);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
 
  }
 

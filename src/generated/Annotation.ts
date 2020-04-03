@@ -56,9 +56,10 @@ export class Annotation {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.message = inp.Message;
   this.userName = inp.UserName;
-  this.annotationTime  = ec.jsonDecodeDateTime(inp.AnnotationTime);
+  this.annotationTime = ec.jsonDecodeDateTime(inp.AnnotationTime);
 
  }
 

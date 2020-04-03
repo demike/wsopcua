@@ -57,16 +57,17 @@ export class HistoryReadValueId {
   out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
   out.IndexRange = this.indexRange;
   out.DataEncoding = this.dataEncoding;
-  out.ContinuationPoint = this.continuationPoint;
+  out.ContinuationPoint = ec.jsonEncodeByteString(this.continuationPoint);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+if (!inp) { return; }
+  this.nodeId = ec.jsonDecodeNodeId(inp.NodeId);
   this.indexRange = inp.IndexRange;
-  this.dataEncoding.fromJSON(inp);
-  this.continuationPoint = inp.ContinuationPoint;
+  this.dataEncoding.fromJSON(inp.DataEncoding);
+  this.continuationPoint = ec.jsonDecodeByteString(inp.ContinuationPoint);
 
  }
 

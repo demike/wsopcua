@@ -65,10 +65,11 @@ export class StructureDefinition {
 
 
  fromJSON( inp: any) {
-  this.defaultEncodingId  = ec.jsonDecodeNodeId(inp.DefaultEncodingId);
-  this.baseDataType  = ec.jsonDecodeNodeId(inp.BaseDataType);
+if (!inp) { return; }
+  this.defaultEncodingId = ec.jsonDecodeNodeId(inp.DefaultEncodingId);
+  this.baseDataType = ec.jsonDecodeNodeId(inp.BaseDataType);
   this.structureType = inp.StructureType;
-  this.fields = inp.Fields.map(m => { const mem = new StructureField(); mem.fromJSON(m); return mem;});
+  this.fields = ec.jsonDecodeStructArray( inp.Fields,StructureField);
 
  }
 

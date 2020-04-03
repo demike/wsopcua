@@ -70,18 +70,19 @@ export class OpenSecureChannelRequest {
   out.ClientProtocolVersion = this.clientProtocolVersion;
   out.RequestType = this.requestType;
   out.SecurityMode = this.securityMode;
-  out.ClientNonce = this.clientNonce;
+  out.ClientNonce = ec.jsonEncodeByteString(this.clientNonce);
   out.RequestedLifetime = this.requestedLifetime;
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.clientProtocolVersion = inp.ClientProtocolVersion;
   this.requestType = inp.RequestType;
   this.securityMode = inp.SecurityMode;
-  this.clientNonce = inp.ClientNonce;
+  this.clientNonce = ec.jsonDecodeByteString(inp.ClientNonce);
   this.requestedLifetime = inp.RequestedLifetime;
 
  }

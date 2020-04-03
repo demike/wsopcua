@@ -52,6 +52,7 @@ export class DatagramWriterGroupTransportDataType extends WriterGroupTransportDa
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.messageRepeatCount = inp.MessageRepeatCount;
   this.messageRepeatDelay = inp.MessageRepeatDelay;
 

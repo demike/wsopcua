@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IMonitoredItemCreateResult {
@@ -63,17 +63,18 @@ export class MonitoredItemCreateResult {
   out.MonitoredItemId = this.monitoredItemId;
   out.RevisedSamplingInterval = this.revisedSamplingInterval;
   out.RevisedQueueSize = this.revisedQueueSize;
-  out.FilterResult = this.filterResult;
+  out.FilterResult = jsonEncodeExtensionObject(this.filterResult);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+if (!inp) { return; }
+  this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.monitoredItemId = inp.MonitoredItemId;
   this.revisedSamplingInterval = inp.RevisedSamplingInterval;
   this.revisedQueueSize = inp.RevisedQueueSize;
-  this.filterResult = inp.FilterResult;
+  this.filterResult = jsonDecodeExtensionObject(inp.FilterResult);
 
  }
 

@@ -92,6 +92,7 @@ export class EndpointConfiguration {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.operationTimeout = inp.OperationTimeout;
   this.useBinaryEncoding = inp.UseBinaryEncoding;
   this.maxStringLength = inp.MaxStringLength;

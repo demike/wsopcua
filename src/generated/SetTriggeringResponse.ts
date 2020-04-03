@@ -62,20 +62,21 @@ export class SetTriggeringResponse {
  toJSON() {
   const out: any = {};
   out.ResponseHeader = this.responseHeader;
-  out.AddResults = this.addResults.map(m => ec.jsonEncodeStatusCode);
+  out.AddResults = ec.jsonEncodeArray(this.addResults, ec.jsonEncodeStatusCode);
   out.AddDiagnosticInfos = this.addDiagnosticInfos;
-  out.RemoveResults = this.removeResults.map(m => ec.jsonEncodeStatusCode);
+  out.RemoveResults = ec.jsonEncodeArray(this.removeResults, ec.jsonEncodeStatusCode);
   out.RemoveDiagnosticInfos = this.removeDiagnosticInfos;
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
-  this.addResults = inp.AddResults.map(m => ec.jsonDecodeStatusCode);
-  this.addDiagnosticInfos = inp.AddDiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
-  this.removeResults = inp.RemoveResults.map(m => ec.jsonDecodeStatusCode);
-  this.removeDiagnosticInfos = inp.RemoveDiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
+  this.addResults = ec.jsonDecodeArray( inp.AddResults, ec.jsonDecodeStatusCode);
+  this.addDiagnosticInfos = ec.jsonDecodeStructArray( inp.AddDiagnosticInfos,DiagnosticInfo);
+  this.removeResults = ec.jsonDecodeArray( inp.RemoveResults, ec.jsonDecodeStatusCode);
+  this.removeDiagnosticInfos = ec.jsonDecodeStructArray( inp.RemoveDiagnosticInfos,DiagnosticInfo);
 
  }
 

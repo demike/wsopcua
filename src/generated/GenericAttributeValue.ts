@@ -51,8 +51,9 @@ export class GenericAttributeValue {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.attributeId = inp.AttributeId;
-  this.value.fromJSON(inp);
+  this.value.fromJSON(inp.Value);
 
  }
 

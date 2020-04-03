@@ -52,16 +52,17 @@ export class SetMonitoringModeResponse {
  toJSON() {
   const out: any = {};
   out.ResponseHeader = this.responseHeader;
-  out.Results = this.results.map(m => ec.jsonEncodeStatusCode);
+  out.Results = ec.jsonEncodeArray(this.results, ec.jsonEncodeStatusCode);
   out.DiagnosticInfos = this.diagnosticInfos;
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
-  this.results = inp.Results.map(m => ec.jsonDecodeStatusCode);
-  this.diagnosticInfos = inp.DiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
+  this.results = ec.jsonDecodeArray( inp.Results, ec.jsonDecodeStatusCode);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
 
  }
 

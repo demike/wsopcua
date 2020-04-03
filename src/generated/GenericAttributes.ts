@@ -51,8 +51,9 @@ export class GenericAttributes extends NodeAttributes {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
-  this.attributeValues = inp.AttributeValues.map(m => { const mem = new GenericAttributeValue(); mem.fromJSON(m); return mem;});
+  this.attributeValues = ec.jsonDecodeStructArray( inp.AttributeValues,GenericAttributeValue);
 
  }
 

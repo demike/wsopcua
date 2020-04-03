@@ -59,9 +59,10 @@ export class AggregateFilterResult extends MonitoringFilterResult {
 
 
  fromJSON( inp: any) {
-  this.revisedStartTime  = ec.jsonDecodeDateTime(inp.RevisedStartTime);
+if (!inp) { return; }
+  this.revisedStartTime = ec.jsonDecodeDateTime(inp.RevisedStartTime);
   this.revisedProcessingInterval = inp.RevisedProcessingInterval;
-  this.revisedAggregateConfiguration.fromJSON(inp);
+  this.revisedAggregateConfiguration.fromJSON(inp.RevisedAggregateConfiguration);
 
  }
 

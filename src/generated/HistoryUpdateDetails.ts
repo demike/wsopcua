@@ -44,7 +44,8 @@ export class HistoryUpdateDetails {
 
 
  fromJSON( inp: any) {
-  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+if (!inp) { return; }
+  this.nodeId = ec.jsonDecodeNodeId(inp.NodeId);
 
  }
 

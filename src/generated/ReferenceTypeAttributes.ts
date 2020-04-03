@@ -62,10 +62,11 @@ export class ReferenceTypeAttributes extends NodeAttributes {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.isAbstract = inp.IsAbstract;
   this.symmetric = inp.Symmetric;
-  this.inverseName.fromJSON(inp);
+  this.inverseName.fromJSON(inp.InverseName);
 
  }
 

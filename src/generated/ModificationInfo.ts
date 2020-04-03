@@ -57,7 +57,8 @@ export class ModificationInfo {
 
 
  fromJSON( inp: any) {
-  this.modificationTime  = ec.jsonDecodeDateTime(inp.ModificationTime);
+if (!inp) { return; }
+  this.modificationTime = ec.jsonDecodeDateTime(inp.ModificationTime);
   this.updateType = inp.UpdateType;
   this.userName = inp.UserName;
 

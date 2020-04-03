@@ -46,7 +46,8 @@ export class LiteralOperand extends FilterOperand {
 
 
  fromJSON( inp: any) {
-  this.value.fromJSON(inp);
+if (!inp) { return; }
+  this.value.fromJSON(inp.Value);
 
  }
 

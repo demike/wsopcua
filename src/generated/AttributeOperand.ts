@@ -71,9 +71,10 @@ export class AttributeOperand extends FilterOperand {
 
 
  fromJSON( inp: any) {
-  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+if (!inp) { return; }
+  this.nodeId = ec.jsonDecodeNodeId(inp.NodeId);
   this.alias = inp.Alias;
-  this.browsePath.fromJSON(inp);
+  this.browsePath.fromJSON(inp.BrowsePath);
   this.attributeId = inp.AttributeId;
   this.indexRange = inp.IndexRange;
 

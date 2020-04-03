@@ -63,10 +63,11 @@ export class ReadValueId {
 
 
  fromJSON( inp: any) {
-  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+if (!inp) { return; }
+  this.nodeId = ec.jsonDecodeNodeId(inp.NodeId);
   this.attributeId = inp.AttributeId;
   this.indexRange = inp.IndexRange;
-  this.dataEncoding.fromJSON(inp);
+  this.dataEncoding.fromJSON(inp.DataEncoding);
 
  }
 

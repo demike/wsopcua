@@ -56,6 +56,7 @@ export class SessionlessInvokeResponseType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.namespaceUris = inp.NamespaceUris;
   this.serverUris = inp.ServerUris;
   this.serviceId = inp.ServiceId;

@@ -12,7 +12,7 @@ import {EndpointDescription} from './EndpointDescription';
 import {decodeEndpointDescription} from './EndpointDescription';
 import {KeyValuePair} from './KeyValuePair';
 import {decodeKeyValuePair} from './KeyValuePair';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IDataSetReaderDataType {
@@ -141,31 +141,32 @@ export class DataSetReaderDataType {
   out.SecurityGroupId = this.securityGroupId;
   out.SecurityKeyServices = this.securityKeyServices;
   out.DataSetReaderProperties = this.dataSetReaderProperties;
-  out.TransportSettings = this.transportSettings;
-  out.MessageSettings = this.messageSettings;
-  out.SubscribedDataSet = this.subscribedDataSet;
+  out.TransportSettings = jsonEncodeExtensionObject(this.transportSettings);
+  out.MessageSettings = jsonEncodeExtensionObject(this.messageSettings);
+  out.SubscribedDataSet = jsonEncodeExtensionObject(this.subscribedDataSet);
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.name = inp.Name;
   this.enabled = inp.Enabled;
-  this.publisherId.fromJSON(inp);
+  this.publisherId.fromJSON(inp.PublisherId);
   this.writerGroupId = inp.WriterGroupId;
   this.dataSetWriterId = inp.DataSetWriterId;
-  this.dataSetMetaData.fromJSON(inp);
+  this.dataSetMetaData.fromJSON(inp.DataSetMetaData);
   this.dataSetFieldContentMask = inp.DataSetFieldContentMask;
   this.messageReceiveTimeout = inp.MessageReceiveTimeout;
   this.keyFrameCount = inp.KeyFrameCount;
   this.headerLayoutUri = inp.HeaderLayoutUri;
   this.securityMode = inp.SecurityMode;
   this.securityGroupId = inp.SecurityGroupId;
-  this.securityKeyServices = inp.SecurityKeyServices.map(m => { const mem = new EndpointDescription(); mem.fromJSON(m); return mem;});
-  this.dataSetReaderProperties = inp.DataSetReaderProperties.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
-  this.transportSettings = inp.TransportSettings;
-  this.messageSettings = inp.MessageSettings;
-  this.subscribedDataSet = inp.SubscribedDataSet;
+  this.securityKeyServices = ec.jsonDecodeStructArray( inp.SecurityKeyServices,EndpointDescription);
+  this.dataSetReaderProperties = ec.jsonDecodeStructArray( inp.DataSetReaderProperties,KeyValuePair);
+  this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
+  this.messageSettings = jsonDecodeExtensionObject(inp.MessageSettings);
+  this.subscribedDataSet = jsonDecodeExtensionObject(inp.SubscribedDataSet);
 
  }
 

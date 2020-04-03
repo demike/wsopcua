@@ -45,14 +45,15 @@ export class RegisterNodesRequest {
  toJSON() {
   const out: any = {};
   out.RequestHeader = this.requestHeader;
-  out.NodesToRegister = this.nodesToRegister.map(m => ec.jsonEncodeNodeId);
+  out.NodesToRegister = ec.jsonEncodeArray(this.nodesToRegister, ec.jsonEncodeNodeId);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.nodesToRegister = inp.NodesToRegister.map(m => ec.jsonDecodeNodeId);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.nodesToRegister = ec.jsonDecodeArray( inp.NodesToRegister, ec.jsonDecodeNodeId);
 
  }
 

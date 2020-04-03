@@ -53,8 +53,9 @@ export class FindServersResponse {
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
-  this.servers = inp.Servers.map(m => { const mem = new ApplicationDescription(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
+  this.servers = ec.jsonDecodeStructArray( inp.Servers,ApplicationDescription);
 
  }
 

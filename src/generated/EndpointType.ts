@@ -63,6 +63,7 @@ export class EndpointType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.endpointUrl = inp.EndpointUrl;
   this.securityMode = inp.SecurityMode;
   this.securityPolicyUri = inp.SecurityPolicyUri;

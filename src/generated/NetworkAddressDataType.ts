@@ -44,6 +44,7 @@ export class NetworkAddressDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.networkInterface = inp.NetworkInterface;
 
  }

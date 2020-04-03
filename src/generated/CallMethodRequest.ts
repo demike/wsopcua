@@ -58,9 +58,10 @@ export class CallMethodRequest {
 
 
  fromJSON( inp: any) {
-  this.objectId  = ec.jsonDecodeNodeId(inp.ObjectId);
-  this.methodId  = ec.jsonDecodeNodeId(inp.MethodId);
-  this.inputArguments = inp.InputArguments.map(m => { const mem = new Variant(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.objectId = ec.jsonDecodeNodeId(inp.ObjectId);
+  this.methodId = ec.jsonDecodeNodeId(inp.MethodId);
+  this.inputArguments = ec.jsonDecodeStructArray( inp.InputArguments,Variant);
 
  }
 

@@ -42,6 +42,7 @@ export class AnonymousIdentityToken extends UserIdentityToken {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
 
  }

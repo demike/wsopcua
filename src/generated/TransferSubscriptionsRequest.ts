@@ -57,7 +57,8 @@ export class TransferSubscriptionsRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.subscriptionIds = inp.SubscriptionIds;
   this.sendInitialValues = inp.SendInitialValues;
 

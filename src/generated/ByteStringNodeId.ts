@@ -44,14 +44,15 @@ export class ByteStringNodeId {
  toJSON() {
   const out: any = {};
   out.NamespaceIndex = this.namespaceIndex;
-  out.Identifier = this.identifier;
+  out.Identifier = ec.jsonEncodeByteString(this.identifier);
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.namespaceIndex = inp.NamespaceIndex;
-  this.identifier = inp.Identifier;
+  this.identifier = ec.jsonDecodeByteString(inp.Identifier);
 
  }
 

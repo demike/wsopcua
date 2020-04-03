@@ -72,6 +72,7 @@ export class UadpWriterGroupMessageDataType extends WriterGroupMessageDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.groupVersion = inp.GroupVersion;
   this.dataSetOrdering = inp.DataSetOrdering;
   this.networkMessageContentMask = inp.NetworkMessageContentMask;

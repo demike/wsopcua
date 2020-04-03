@@ -50,6 +50,7 @@ export class GuidNodeId {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.namespaceIndex = inp.NamespaceIndex;
   this.identifier = inp.Identifier;
 

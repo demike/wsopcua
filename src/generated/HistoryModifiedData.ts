@@ -51,8 +51,9 @@ export class HistoryModifiedData extends HistoryData {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
-  this.modificationInfos = inp.ModificationInfos.map(m => { const mem = new ModificationInfo(); mem.fromJSON(m); return mem;});
+  this.modificationInfos = ec.jsonDecodeStructArray( inp.ModificationInfos,ModificationInfo);
 
  }
 

@@ -56,8 +56,9 @@ export class EnumDescription extends DataTypeDescription {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
-  this.enumDefinition.fromJSON(inp);
+  this.enumDefinition.fromJSON(inp.EnumDefinition);
   this.builtInType = inp.BuiltInType;
 
  }

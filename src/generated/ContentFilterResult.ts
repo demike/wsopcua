@@ -54,8 +54,9 @@ export class ContentFilterResult {
 
 
  fromJSON( inp: any) {
-  this.elementResults = inp.ElementResults.map(m => { const mem = new ContentFilterElementResult(); mem.fromJSON(m); return mem;});
-  this.elementDiagnosticInfos = inp.ElementDiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.elementResults = ec.jsonDecodeStructArray( inp.ElementResults,ContentFilterElementResult);
+  this.elementDiagnosticInfos = ec.jsonDecodeStructArray( inp.ElementDiagnosticInfos,DiagnosticInfo);
 
  }
 

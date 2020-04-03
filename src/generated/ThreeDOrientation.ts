@@ -58,6 +58,7 @@ export class ThreeDOrientation extends Orientation {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.a = inp.A;
   this.b = inp.B;
   this.c = inp.C;

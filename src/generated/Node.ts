@@ -111,17 +111,18 @@ export class Node {
 
 
  fromJSON( inp: any) {
-  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+if (!inp) { return; }
+  this.nodeId = ec.jsonDecodeNodeId(inp.NodeId);
   this.nodeClass = inp.NodeClass;
-  this.browseName.fromJSON(inp);
-  this.displayName.fromJSON(inp);
-  this.description.fromJSON(inp);
+  this.browseName.fromJSON(inp.BrowseName);
+  this.displayName.fromJSON(inp.DisplayName);
+  this.description.fromJSON(inp.Description);
   this.writeMask = inp.WriteMask;
   this.userWriteMask = inp.UserWriteMask;
-  this.rolePermissions = inp.RolePermissions.map(m => { const mem = new RolePermissionType(); mem.fromJSON(m); return mem;});
-  this.userRolePermissions = inp.UserRolePermissions.map(m => { const mem = new RolePermissionType(); mem.fromJSON(m); return mem;});
+  this.rolePermissions = ec.jsonDecodeStructArray( inp.RolePermissions,RolePermissionType);
+  this.userRolePermissions = ec.jsonDecodeStructArray( inp.UserRolePermissions,RolePermissionType);
   this.accessRestrictions = inp.AccessRestrictions;
-  this.references = inp.References.map(m => { const mem = new ReferenceNode(); mem.fromJSON(m); return mem;});
+  this.references = ec.jsonDecodeStructArray( inp.References,ReferenceNode);
 
  }
 

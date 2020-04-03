@@ -5,7 +5,7 @@
 
 import * as ec from '../basic-types';
 import {DiagnosticInfo} from './DiagnosticInfo';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IResponseHeader {
@@ -70,18 +70,19 @@ export class ResponseHeader {
   out.ServiceResult = ec.jsonEncodeStatusCode(this.serviceResult);
   out.ServiceDiagnostics = this.serviceDiagnostics;
   out.StringTable = this.stringTable;
-  out.AdditionalHeader = this.additionalHeader;
+  out.AdditionalHeader = jsonEncodeExtensionObject(this.additionalHeader);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.timestamp  = ec.jsonDecodeDateTime(inp.Timestamp);
+if (!inp) { return; }
+  this.timestamp = ec.jsonDecodeDateTime(inp.Timestamp);
   this.requestHandle = inp.RequestHandle;
-  this.serviceResult  = ec.jsonDecodeStatusCode(inp.ServiceResult);
-  this.serviceDiagnostics.fromJSON(inp);
+  this.serviceResult = ec.jsonDecodeStatusCode(inp.ServiceResult);
+  this.serviceDiagnostics.fromJSON(inp.ServiceDiagnostics);
   this.stringTable = inp.StringTable;
-  this.additionalHeader = inp.AdditionalHeader;
+  this.additionalHeader = jsonDecodeExtensionObject(inp.AdditionalHeader);
 
  }
 

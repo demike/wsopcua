@@ -63,7 +63,8 @@ export class FindServersRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.endpointUrl = inp.EndpointUrl;
   this.localeIds = inp.LocaleIds;
   this.serverUris = inp.ServerUris;

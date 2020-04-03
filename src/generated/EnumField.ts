@@ -49,6 +49,7 @@ export class EnumField extends EnumValueType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.name = inp.Name;
 

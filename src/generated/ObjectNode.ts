@@ -49,6 +49,7 @@ export class ObjectNode extends InstanceNode {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.eventNotifier = inp.EventNotifier;
 

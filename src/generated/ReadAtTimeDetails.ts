@@ -45,14 +45,15 @@ export class ReadAtTimeDetails extends HistoryReadDetails {
 
  toJSON() {
   const out: any = {};
-  out.ReqTimes = this.reqTimes.map(m => ec.jsonEncodeDateTime);
+  out.ReqTimes = ec.jsonEncodeArray(this.reqTimes, ec.jsonEncodeDateTime);
   out.UseSimpleBounds = this.useSimpleBounds;
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.reqTimes = inp.ReqTimes.map(m => ec.jsonDecodeDateTime);
+if (!inp) { return; }
+  this.reqTimes = ec.jsonDecodeArray( inp.ReqTimes, ec.jsonDecodeDateTime);
   this.useSimpleBounds = inp.UseSimpleBounds;
 
  }

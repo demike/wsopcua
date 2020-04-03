@@ -5,7 +5,7 @@
 
 import * as ec from '../basic-types';
 import {Variant} from '../variant';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {KeyValuePair} from './KeyValuePair';
 import {decodeKeyValuePair} from './KeyValuePair';
 import {WriterGroupDataType} from './WriterGroupDataType';
@@ -90,9 +90,9 @@ export class PubSubConnectionDataType {
   out.Enabled = this.enabled;
   out.PublisherId = this.publisherId;
   out.TransportProfileUri = this.transportProfileUri;
-  out.Address = this.address;
+  out.Address = jsonEncodeExtensionObject(this.address);
   out.ConnectionProperties = this.connectionProperties;
-  out.TransportSettings = this.transportSettings;
+  out.TransportSettings = jsonEncodeExtensionObject(this.transportSettings);
   out.WriterGroups = this.writerGroups;
   out.ReaderGroups = this.readerGroups;
  return out;
@@ -100,15 +100,16 @@ export class PubSubConnectionDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.name = inp.Name;
   this.enabled = inp.Enabled;
-  this.publisherId.fromJSON(inp);
+  this.publisherId.fromJSON(inp.PublisherId);
   this.transportProfileUri = inp.TransportProfileUri;
-  this.address = inp.Address;
-  this.connectionProperties = inp.ConnectionProperties.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
-  this.transportSettings = inp.TransportSettings;
-  this.writerGroups = inp.WriterGroups.map(m => { const mem = new WriterGroupDataType(); mem.fromJSON(m); return mem;});
-  this.readerGroups = inp.ReaderGroups.map(m => { const mem = new ReaderGroupDataType(); mem.fromJSON(m); return mem;});
+  this.address = jsonDecodeExtensionObject(inp.Address);
+  this.connectionProperties = ec.jsonDecodeStructArray( inp.ConnectionProperties,KeyValuePair);
+  this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
+  this.writerGroups = ec.jsonDecodeStructArray( inp.WriterGroups,WriterGroupDataType);
+  this.readerGroups = ec.jsonDecodeStructArray( inp.ReaderGroups,ReaderGroupDataType);
 
  }
 

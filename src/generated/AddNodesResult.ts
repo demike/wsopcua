@@ -50,8 +50,9 @@ export class AddNodesResult {
 
 
  fromJSON( inp: any) {
-  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
-  this.addedNodeId  = ec.jsonDecodeNodeId(inp.AddedNodeId);
+if (!inp) { return; }
+  this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.addedNodeId = ec.jsonDecodeNodeId(inp.AddedNodeId);
 
  }
 

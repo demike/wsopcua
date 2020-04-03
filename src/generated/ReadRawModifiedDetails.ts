@@ -70,9 +70,10 @@ export class ReadRawModifiedDetails extends HistoryReadDetails {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.isReadModified = inp.IsReadModified;
-  this.startTime  = ec.jsonDecodeDateTime(inp.StartTime);
-  this.endTime  = ec.jsonDecodeDateTime(inp.EndTime);
+  this.startTime = ec.jsonDecodeDateTime(inp.StartTime);
+  this.endTime = ec.jsonDecodeDateTime(inp.EndTime);
   this.numValuesPerNode = inp.NumValuesPerNode;
   this.returnBounds = inp.ReturnBounds;
 

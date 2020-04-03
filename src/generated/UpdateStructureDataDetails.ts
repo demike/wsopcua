@@ -58,9 +58,10 @@ export class UpdateStructureDataDetails extends HistoryUpdateDetails {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.performInsertReplace = inp.PerformInsertReplace;
-  this.updateValues = inp.UpdateValues.map(m => { const mem = new DataValue(); mem.fromJSON(m); return mem;});
+  this.updateValues = ec.jsonDecodeStructArray( inp.UpdateValues,DataValue);
 
  }
 

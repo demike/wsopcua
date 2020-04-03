@@ -52,6 +52,7 @@ export class BrokerConnectionTransportDataType extends ConnectionTransportDataTy
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.resourceUri = inp.ResourceUri;
   this.authenticationProfileUri = inp.AuthenticationProfileUri;
 

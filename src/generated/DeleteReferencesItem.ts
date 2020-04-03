@@ -68,10 +68,11 @@ export class DeleteReferencesItem {
 
 
  fromJSON( inp: any) {
-  this.sourceNodeId  = ec.jsonDecodeNodeId(inp.SourceNodeId);
-  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+if (!inp) { return; }
+  this.sourceNodeId = ec.jsonDecodeNodeId(inp.SourceNodeId);
+  this.referenceTypeId = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
   this.isForward = inp.IsForward;
-  this.targetNodeId  = ec.jsonDecodeExpandedNodeId(inp.TargetNodeId);
+  this.targetNodeId = ec.jsonDecodeExpandedNodeId(inp.TargetNodeId);
   this.deleteBidirectional = inp.DeleteBidirectional;
 
  }

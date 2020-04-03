@@ -51,8 +51,9 @@ export class MonitoredItemModifyRequest {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.monitoredItemId = inp.MonitoredItemId;
-  this.requestedParameters.fromJSON(inp);
+  this.requestedParameters.fromJSON(inp.RequestedParameters);
 
  }
 

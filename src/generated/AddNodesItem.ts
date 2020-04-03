@@ -6,7 +6,7 @@
 import * as ec from '../basic-types';
 import {QualifiedName} from './QualifiedName';
 import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IAddNodesItem {
@@ -76,20 +76,21 @@ export class AddNodesItem {
   out.RequestedNewNodeId = ec.jsonEncodeExpandedNodeId(this.requestedNewNodeId);
   out.BrowseName = this.browseName;
   out.NodeClass = this.nodeClass;
-  out.NodeAttributes = this.nodeAttributes;
+  out.NodeAttributes = jsonEncodeExtensionObject(this.nodeAttributes);
   out.TypeDefinition = ec.jsonEncodeExpandedNodeId(this.typeDefinition);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.parentNodeId  = ec.jsonDecodeExpandedNodeId(inp.ParentNodeId);
-  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
-  this.requestedNewNodeId  = ec.jsonDecodeExpandedNodeId(inp.RequestedNewNodeId);
-  this.browseName.fromJSON(inp);
+if (!inp) { return; }
+  this.parentNodeId = ec.jsonDecodeExpandedNodeId(inp.ParentNodeId);
+  this.referenceTypeId = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+  this.requestedNewNodeId = ec.jsonDecodeExpandedNodeId(inp.RequestedNewNodeId);
+  this.browseName.fromJSON(inp.BrowseName);
   this.nodeClass = inp.NodeClass;
-  this.nodeAttributes = inp.NodeAttributes;
-  this.typeDefinition  = ec.jsonDecodeExpandedNodeId(inp.TypeDefinition);
+  this.nodeAttributes = jsonDecodeExtensionObject(inp.NodeAttributes);
+  this.typeDefinition = ec.jsonDecodeExpandedNodeId(inp.TypeDefinition);
 
  }
 

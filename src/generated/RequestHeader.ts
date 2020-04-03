@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IRequestHeader {
@@ -75,19 +75,20 @@ export class RequestHeader {
   out.ReturnDiagnostics = this.returnDiagnostics;
   out.AuditEntryId = this.auditEntryId;
   out.TimeoutHint = this.timeoutHint;
-  out.AdditionalHeader = this.additionalHeader;
+  out.AdditionalHeader = jsonEncodeExtensionObject(this.additionalHeader);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.authenticationToken  = ec.jsonDecodeNodeId(inp.AuthenticationToken);
-  this.timestamp  = ec.jsonDecodeDateTime(inp.Timestamp);
+if (!inp) { return; }
+  this.authenticationToken = ec.jsonDecodeNodeId(inp.AuthenticationToken);
+  this.timestamp = ec.jsonDecodeDateTime(inp.Timestamp);
   this.requestHandle = inp.RequestHandle;
   this.returnDiagnostics = inp.ReturnDiagnostics;
   this.auditEntryId = inp.AuditEntryId;
   this.timeoutHint = inp.TimeoutHint;
-  this.additionalHeader = inp.AdditionalHeader;
+  this.additionalHeader = jsonDecodeExtensionObject(inp.AdditionalHeader);
 
  }
 

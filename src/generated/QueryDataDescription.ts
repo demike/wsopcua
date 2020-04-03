@@ -57,7 +57,8 @@ export class QueryDataDescription {
 
 
  fromJSON( inp: any) {
-  this.relativePath.fromJSON(inp);
+if (!inp) { return; }
+  this.relativePath.fromJSON(inp.RelativePath);
   this.attributeId = inp.AttributeId;
   this.indexRange = inp.IndexRange;
 

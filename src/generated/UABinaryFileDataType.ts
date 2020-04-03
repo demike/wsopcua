@@ -64,10 +64,11 @@ export class UABinaryFileDataType extends DataTypeSchemaHeader {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   super.fromJSON(inp);
   this.schemaLocation = inp.SchemaLocation;
-  this.fileHeader = inp.FileHeader.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
-  this.body.fromJSON(inp);
+  this.fileHeader = ec.jsonDecodeStructArray( inp.FileHeader,KeyValuePair);
+  this.body.fromJSON(inp.Body);
 
  }
 

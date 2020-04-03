@@ -75,9 +75,10 @@ export class BrowseDescription {
 
 
  fromJSON( inp: any) {
-  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+if (!inp) { return; }
+  this.nodeId = ec.jsonDecodeNodeId(inp.NodeId);
   this.browseDirection = inp.BrowseDirection;
-  this.referenceTypeId  = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
+  this.referenceTypeId = ec.jsonDecodeNodeId(inp.ReferenceTypeId);
   this.includeSubtypes = inp.IncludeSubtypes;
   this.nodeClassMask = inp.NodeClassMask;
   this.resultMask = inp.ResultMask;

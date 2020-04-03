@@ -101,16 +101,17 @@ export class ProgramDiagnosticDataType {
 
 
  fromJSON( inp: any) {
-  this.createSessionId  = ec.jsonDecodeNodeId(inp.CreateSessionId);
+if (!inp) { return; }
+  this.createSessionId = ec.jsonDecodeNodeId(inp.CreateSessionId);
   this.createClientName = inp.CreateClientName;
-  this.invocationCreationTime  = ec.jsonDecodeDateTime(inp.InvocationCreationTime);
-  this.lastTransitionTime  = ec.jsonDecodeDateTime(inp.LastTransitionTime);
+  this.invocationCreationTime = ec.jsonDecodeDateTime(inp.InvocationCreationTime);
+  this.lastTransitionTime = ec.jsonDecodeDateTime(inp.LastTransitionTime);
   this.lastMethodCall = inp.LastMethodCall;
-  this.lastMethodSessionId  = ec.jsonDecodeNodeId(inp.LastMethodSessionId);
-  this.lastMethodInputArguments = inp.LastMethodInputArguments.map(m => { const mem = new Argument(); mem.fromJSON(m); return mem;});
-  this.lastMethodOutputArguments = inp.LastMethodOutputArguments.map(m => { const mem = new Argument(); mem.fromJSON(m); return mem;});
-  this.lastMethodCallTime  = ec.jsonDecodeDateTime(inp.LastMethodCallTime);
-  this.lastMethodReturnStatus.fromJSON(inp);
+  this.lastMethodSessionId = ec.jsonDecodeNodeId(inp.LastMethodSessionId);
+  this.lastMethodInputArguments = ec.jsonDecodeStructArray( inp.LastMethodInputArguments,Argument);
+  this.lastMethodOutputArguments = ec.jsonDecodeStructArray( inp.LastMethodOutputArguments,Argument);
+  this.lastMethodCallTime = ec.jsonDecodeDateTime(inp.LastMethodCallTime);
+  this.lastMethodReturnStatus.fromJSON(inp.LastMethodReturnStatus);
 
  }
 

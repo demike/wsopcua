@@ -51,8 +51,9 @@ export class BrowsePath {
 
 
  fromJSON( inp: any) {
-  this.startingNode  = ec.jsonDecodeNodeId(inp.StartingNode);
-  this.relativePath.fromJSON(inp);
+if (!inp) { return; }
+  this.startingNode = ec.jsonDecodeNodeId(inp.StartingNode);
+  this.relativePath.fromJSON(inp.RelativePath);
 
  }
 

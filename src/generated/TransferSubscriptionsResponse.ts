@@ -61,9 +61,10 @@ export class TransferSubscriptionsResponse {
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
-  this.results = inp.Results.map(m => { const mem = new TransferResult(); mem.fromJSON(m); return mem;});
-  this.diagnosticInfos = inp.DiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
+  this.results = ec.jsonDecodeStructArray( inp.Results,TransferResult);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
 
  }
 

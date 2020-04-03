@@ -50,7 +50,8 @@ export class DeleteNodesItem {
 
 
  fromJSON( inp: any) {
-  this.nodeId  = ec.jsonDecodeNodeId(inp.NodeId);
+if (!inp) { return; }
+  this.nodeId = ec.jsonDecodeNodeId(inp.NodeId);
   this.deleteTargetReferences = inp.DeleteTargetReferences;
 
  }

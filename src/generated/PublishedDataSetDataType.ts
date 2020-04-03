@@ -7,7 +7,7 @@ import * as ec from '../basic-types';
 import {DataSetMetaDataType} from './DataSetMetaDataType';
 import {KeyValuePair} from './KeyValuePair';
 import {decodeKeyValuePair} from './KeyValuePair';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IPublishedDataSetDataType {
@@ -66,17 +66,18 @@ export class PublishedDataSetDataType {
   out.DataSetFolder = this.dataSetFolder;
   out.DataSetMetaData = this.dataSetMetaData;
   out.ExtensionFields = this.extensionFields;
-  out.DataSetSource = this.dataSetSource;
+  out.DataSetSource = jsonEncodeExtensionObject(this.dataSetSource);
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.name = inp.Name;
   this.dataSetFolder = inp.DataSetFolder;
-  this.dataSetMetaData.fromJSON(inp);
-  this.extensionFields = inp.ExtensionFields.map(m => { const mem = new KeyValuePair(); mem.fromJSON(m); return mem;});
-  this.dataSetSource = inp.DataSetSource;
+  this.dataSetMetaData.fromJSON(inp.DataSetMetaData);
+  this.extensionFields = ec.jsonDecodeStructArray( inp.ExtensionFields,KeyValuePair);
+  this.dataSetSource = jsonDecodeExtensionObject(inp.DataSetSource);
 
  }
 

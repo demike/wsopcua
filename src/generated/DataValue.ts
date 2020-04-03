@@ -104,20 +104,22 @@ export class DataValue {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   if(inp.Value) {
-   this.value.fromJSON(inp);
+   this.value= new Variant();
+   this.value.fromJSON(inp.Value);
   }
   if(inp.StatusCode) {
-   this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
+   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   }
   if(inp.SourceTimestamp) {
-   this.sourceTimestamp  = ec.jsonDecodeDateTime(inp.SourceTimestamp);
+   this.sourceTimestamp = ec.jsonDecodeDateTime(inp.SourceTimestamp);
   }
   if(inp.SourcePicoseconds) {
    this.sourcePicoseconds = inp.SourcePicoseconds;
   }
   if(inp.ServerTimestamp) {
-   this.serverTimestamp  = ec.jsonDecodeDateTime(inp.ServerTimestamp);
+   this.serverTimestamp = ec.jsonDecodeDateTime(inp.ServerTimestamp);
   }
   if(inp.ServerPicoseconds) {
    this.serverPicoseconds = inp.ServerPicoseconds;

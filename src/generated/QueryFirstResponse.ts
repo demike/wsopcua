@@ -73,7 +73,7 @@ export class QueryFirstResponse {
   const out: any = {};
   out.ResponseHeader = this.responseHeader;
   out.QueryDataSets = this.queryDataSets;
-  out.ContinuationPoint = this.continuationPoint;
+  out.ContinuationPoint = ec.jsonEncodeByteString(this.continuationPoint);
   out.ParsingResults = this.parsingResults;
   out.DiagnosticInfos = this.diagnosticInfos;
   out.FilterResult = this.filterResult;
@@ -82,12 +82,13 @@ export class QueryFirstResponse {
 
 
  fromJSON( inp: any) {
-  this.responseHeader.fromJSON(inp);
-  this.queryDataSets = inp.QueryDataSets.map(m => { const mem = new QueryDataSet(); mem.fromJSON(m); return mem;});
-  this.continuationPoint = inp.ContinuationPoint;
-  this.parsingResults = inp.ParsingResults.map(m => { const mem = new ParsingResult(); mem.fromJSON(m); return mem;});
-  this.diagnosticInfos = inp.DiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
-  this.filterResult.fromJSON(inp);
+if (!inp) { return; }
+  this.responseHeader.fromJSON(inp.ResponseHeader);
+  this.queryDataSets = ec.jsonDecodeStructArray( inp.QueryDataSets,QueryDataSet);
+  this.continuationPoint = ec.jsonDecodeByteString(inp.ContinuationPoint);
+  this.parsingResults = ec.jsonDecodeStructArray( inp.ParsingResults,ParsingResult);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
+  this.filterResult.fromJSON(inp.FilterResult);
 
  }
 

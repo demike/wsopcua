@@ -57,7 +57,8 @@ export class SetPublishingModeRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
   this.publishingEnabled = inp.PublishingEnabled;
   this.subscriptionIds = inp.SubscriptionIds;
 

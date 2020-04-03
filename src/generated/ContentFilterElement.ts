@@ -4,7 +4,7 @@
 */
 
 import {FilterOperator, encodeFilterOperator, decodeFilterOperator} from './FilterOperator';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
@@ -46,14 +46,15 @@ export class ContentFilterElement {
  toJSON() {
   const out: any = {};
   out.FilterOperator = this.filterOperator;
-  out.FilterOperands = this.filterOperands;
+  out.FilterOperands = ec.jsonEncodeArray(this.filterOperands, jsonEncodeExtensionObject);
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.filterOperator = inp.FilterOperator;
-  this.filterOperands = inp.FilterOperands;
+  this.filterOperands = ec.jsonDecodeArray( inp.FilterOperands, jsonDecodeExtensionObject);
 
  }
 

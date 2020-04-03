@@ -58,7 +58,7 @@ export class CallMethodResult {
  toJSON() {
   const out: any = {};
   out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
-  out.InputArgumentResults = this.inputArgumentResults.map(m => ec.jsonEncodeStatusCode);
+  out.InputArgumentResults = ec.jsonEncodeArray(this.inputArgumentResults, ec.jsonEncodeStatusCode);
   out.InputArgumentDiagnosticInfos = this.inputArgumentDiagnosticInfos;
   out.OutputArguments = this.outputArguments;
  return out;
@@ -66,10 +66,11 @@ export class CallMethodResult {
 
 
  fromJSON( inp: any) {
-  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
-  this.inputArgumentResults = inp.InputArgumentResults.map(m => ec.jsonDecodeStatusCode);
-  this.inputArgumentDiagnosticInfos = inp.InputArgumentDiagnosticInfos.map(m => { const mem = new DiagnosticInfo(); mem.fromJSON(m); return mem;});
-  this.outputArguments = inp.OutputArguments.map(m => { const mem = new Variant(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.inputArgumentResults = ec.jsonDecodeArray( inp.InputArgumentResults, ec.jsonDecodeStatusCode);
+  this.inputArgumentDiagnosticInfos = ec.jsonDecodeStructArray( inp.InputArgumentDiagnosticInfos,DiagnosticInfo);
+  this.outputArguments = ec.jsonDecodeStructArray( inp.OutputArguments,Variant);
 
  }
 

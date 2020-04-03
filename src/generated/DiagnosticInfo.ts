@@ -113,6 +113,7 @@ export class DiagnosticInfo {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   if(inp.SymbolicId) {
    this.symbolicId = inp.SymbolicId;
   }
@@ -129,10 +130,10 @@ export class DiagnosticInfo {
    this.additionalInfo = inp.AdditionalInfo;
   }
   if(inp.InnerStatusCode) {
-   this.innerStatusCode  = ec.jsonDecodeStatusCode(inp.InnerStatusCode);
+   this.innerStatusCode = ec.jsonDecodeStatusCode(inp.InnerStatusCode);
   }
   if(inp.InnerDiagnosticInfo) {
-   this.innerDiagnosticInfo.fromJSON(inp);
+   this.innerDiagnosticInfo.fromJSON(inp.InnerDiagnosticInfo);
   }
 
  }

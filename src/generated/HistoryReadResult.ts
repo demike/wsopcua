@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryReadResult {
@@ -50,16 +50,17 @@ export class HistoryReadResult {
  toJSON() {
   const out: any = {};
   out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode);
-  out.ContinuationPoint = this.continuationPoint;
-  out.HistoryData = this.historyData;
+  out.ContinuationPoint = ec.jsonEncodeByteString(this.continuationPoint);
+  out.HistoryData = jsonEncodeExtensionObject(this.historyData);
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.statusCode  = ec.jsonDecodeStatusCode(inp.StatusCode);
-  this.continuationPoint = inp.ContinuationPoint;
-  this.historyData = inp.HistoryData;
+if (!inp) { return; }
+  this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
+  this.continuationPoint = ec.jsonDecodeByteString(inp.ContinuationPoint);
+  this.historyData = jsonDecodeExtensionObject(inp.HistoryData);
 
  }
 

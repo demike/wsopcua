@@ -53,8 +53,9 @@ export class TransferResultErrorDataType extends FetchResultDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.status = inp.Status;
-  this.diagnostics.fromJSON(inp);
+  this.diagnostics.fromJSON(inp.Diagnostics);
 
  }
 

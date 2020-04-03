@@ -52,6 +52,7 @@ export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.mdnsServerName = inp.MdnsServerName;
   this.serverCapabilities = inp.ServerCapabilities;
 

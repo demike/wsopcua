@@ -4,7 +4,7 @@
 */
 
 import {RequestHeader} from './RequestHeader';
-import {ExtensionObject, encodeExtensionObject, decodeExtensionObject} from '../basic-types/extension_object';
+import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {TimestampsToReturn, encodeTimestampsToReturn, decodeTimestampsToReturn} from './TimestampsToReturn';
 import * as ec from '../basic-types';
 import {HistoryReadValueId} from './HistoryReadValueId';
@@ -64,7 +64,7 @@ export class HistoryReadRequest {
  toJSON() {
   const out: any = {};
   out.RequestHeader = this.requestHeader;
-  out.HistoryReadDetails = this.historyReadDetails;
+  out.HistoryReadDetails = jsonEncodeExtensionObject(this.historyReadDetails);
   out.TimestampsToReturn = this.timestampsToReturn;
   out.ReleaseContinuationPoints = this.releaseContinuationPoints;
   out.NodesToRead = this.nodesToRead;
@@ -73,11 +73,12 @@ export class HistoryReadRequest {
 
 
  fromJSON( inp: any) {
-  this.requestHeader.fromJSON(inp);
-  this.historyReadDetails = inp.HistoryReadDetails;
+if (!inp) { return; }
+  this.requestHeader.fromJSON(inp.RequestHeader);
+  this.historyReadDetails = jsonDecodeExtensionObject(inp.HistoryReadDetails);
   this.timestampsToReturn = inp.TimestampsToReturn;
   this.releaseContinuationPoints = inp.ReleaseContinuationPoints;
-  this.nodesToRead = inp.NodesToRead.map(m => { const mem = new HistoryReadValueId(); mem.fromJSON(m); return mem;});
+  this.nodesToRead = ec.jsonDecodeStructArray( inp.NodesToRead,HistoryReadValueId);
 
  }
 

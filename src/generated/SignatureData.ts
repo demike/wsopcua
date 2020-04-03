@@ -44,14 +44,15 @@ export class SignatureData {
  toJSON() {
   const out: any = {};
   out.Algorithm = this.algorithm;
-  out.Signature = this.signature;
+  out.Signature = ec.jsonEncodeByteString(this.signature);
  return out;
  }
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.algorithm = inp.Algorithm;
-  this.signature = inp.Signature;
+  this.signature = ec.jsonDecodeByteString(inp.Signature);
 
  }
 

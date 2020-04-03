@@ -71,6 +71,7 @@ export class BrokerDataSetReaderTransportDataType extends DataSetReaderTransport
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.queueName = inp.QueueName;
   this.resourceUri = inp.ResourceUri;
   this.authenticationProfileUri = inp.AuthenticationProfileUri;

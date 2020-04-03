@@ -64,18 +64,19 @@ export class ReadProcessedDetails extends HistoryReadDetails {
   out.StartTime = ec.jsonEncodeDateTime(this.startTime);
   out.EndTime = ec.jsonEncodeDateTime(this.endTime);
   out.ProcessingInterval = this.processingInterval;
-  out.AggregateType = this.aggregateType.map(m => ec.jsonEncodeNodeId);
+  out.AggregateType = ec.jsonEncodeArray(this.aggregateType, ec.jsonEncodeNodeId);
   out.AggregateConfiguration = this.aggregateConfiguration;
  return out;
  }
 
 
  fromJSON( inp: any) {
-  this.startTime  = ec.jsonDecodeDateTime(inp.StartTime);
-  this.endTime  = ec.jsonDecodeDateTime(inp.EndTime);
+if (!inp) { return; }
+  this.startTime = ec.jsonDecodeDateTime(inp.StartTime);
+  this.endTime = ec.jsonDecodeDateTime(inp.EndTime);
   this.processingInterval = inp.ProcessingInterval;
-  this.aggregateType = inp.AggregateType.map(m => ec.jsonDecodeNodeId);
-  this.aggregateConfiguration.fromJSON(inp);
+  this.aggregateType = ec.jsonDecodeArray( inp.AggregateType, ec.jsonDecodeNodeId);
+  this.aggregateConfiguration.fromJSON(inp.AggregateConfiguration);
 
  }
 

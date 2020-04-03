@@ -50,8 +50,9 @@ export class SemanticChangeStructureDataType {
 
 
  fromJSON( inp: any) {
-  this.affected  = ec.jsonDecodeNodeId(inp.Affected);
-  this.affectedType  = ec.jsonDecodeNodeId(inp.AffectedType);
+if (!inp) { return; }
+  this.affected = ec.jsonDecodeNodeId(inp.Affected);
+  this.affectedType = ec.jsonDecodeNodeId(inp.AffectedType);
 
  }
 

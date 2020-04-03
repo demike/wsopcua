@@ -48,7 +48,8 @@ export class TargetVariablesDataType extends SubscribedDataSetDataType {
 
 
  fromJSON( inp: any) {
-  this.targetVariables = inp.TargetVariables.map(m => { const mem = new FieldTargetDataType(); mem.fromJSON(m); return mem;});
+if (!inp) { return; }
+  this.targetVariables = ec.jsonDecodeStructArray( inp.TargetVariables,FieldTargetDataType);
 
  }
 

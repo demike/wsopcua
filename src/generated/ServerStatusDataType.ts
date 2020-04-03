@@ -77,12 +77,13 @@ export class ServerStatusDataType {
 
 
  fromJSON( inp: any) {
-  this.startTime  = ec.jsonDecodeDateTime(inp.StartTime);
-  this.currentTime  = ec.jsonDecodeDateTime(inp.CurrentTime);
+if (!inp) { return; }
+  this.startTime = ec.jsonDecodeDateTime(inp.StartTime);
+  this.currentTime = ec.jsonDecodeDateTime(inp.CurrentTime);
   this.state = inp.State;
-  this.buildInfo.fromJSON(inp);
+  this.buildInfo.fromJSON(inp.BuildInfo);
   this.secondsTillShutdown = inp.SecondsTillShutdown;
-  this.shutdownReason.fromJSON(inp);
+  this.shutdownReason.fromJSON(inp.ShutdownReason);
 
  }
 

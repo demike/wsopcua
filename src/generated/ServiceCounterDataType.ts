@@ -50,6 +50,7 @@ export class ServiceCounterDataType {
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.totalCount = inp.TotalCount;
   this.errorCount = inp.ErrorCount;
 

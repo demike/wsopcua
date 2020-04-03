@@ -46,6 +46,7 @@ export class JsonDataSetWriterMessageDataType extends DataSetWriterMessageDataTy
 
 
  fromJSON( inp: any) {
+if (!inp) { return; }
   this.dataSetMessageContentMask = inp.DataSetMessageContentMask;
 
  }
