@@ -137,14 +137,15 @@ export function jsonDecodeArray<T> (array: any[]|undefined, decode_element_func:
     if (!array) {
         return [];
     }
-    return array.map(decode_element_func);
+    return array.map(el => {const retVal = decode_element_func(el); return (retVal === undefined) ? null : retVal; });
 }
 
-export function jsonEncodeArray<T>(array: any[]|undefined, encode_element_func?: (obj: any) => T ): T[] {
+export function jsonEncodeArray<T>(array: any[]|undefined, encode_element_func: (obj: any) => T ): T[] {
     if (!array || array.length === 0) {
         return undefined;
     }
-    return array.map(encode_element_func);
+    // every undefined / null value in the array shall be encoded as null
+    return array.map(el => {const retVal = encode_element_func(el); return (retVal === undefined) ? null : retVal; });
 }
 
 export function jsonDecodeStructArray<T extends IEncodable> (array: any[]|undefined, struct: new () => T): T[] {

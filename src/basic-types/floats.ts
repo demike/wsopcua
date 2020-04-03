@@ -103,3 +103,22 @@ export function coerceDouble(value: string) {
     return parseFloat(value);
 }
 
+export function jsonEncodeDouble(value: number) {
+    if(value == null) {
+        return null;
+    }
+    if(Number.isFinite(value)) {
+        return value;
+    }
+    // NaN, Infinity and -Infinity should be encoded as string 'NaN' 'Infinity' and -Infinity
+    return value.toString();
+}
+export {jsonEncodeDouble as jsonEncodeFloat};
+
+export function jsonDecodeDouble(json: any) {
+    return parseFloat(json);
+}
+export {jsonDecodeDouble as jsonDecodeFloat};
+
+
+

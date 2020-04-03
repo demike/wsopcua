@@ -13,7 +13,7 @@ import {encodeByteString, decodeByteString, coerceByteString, jsonEncodeByteStri
 import {encodeGuid, decodeGuid, emptyGuid} from '../basic-types/guid';
 import {encodeDateTime, decodeDateTime, coerceDateTime, jsonEncodeDateTime, jsonDecodeDateTime} from '../basic-types/date_time';
 import { encodeString, decodeString} from '../basic-types/string';
-import {encodeDouble, decodeDouble, encodeFloat, decodeFloat, coerceFloat} from '../basic-types/floats';
+import {encodeDouble, decodeDouble, encodeFloat, decodeFloat, coerceFloat, jsonDecodeFloat, jsonEncodeFloat, jsonEncodeDouble, jsonDecodeDouble} from '../basic-types/floats';
 import {encodeInt8, decodeInt8, coerceInt8, encodeUInt8, decodeUInt8, coerceUInt8, coerceSByte, coerceByte,
     encodeInt16, decodeInt16, coerceInt16, encodeUInt16, decodeUInt16, coerceUInt16, encodeInt32, decodeInt32, coerceInt32,
     encodeUInt32, decodeUInt32, coerceUInt32, encodeUInt64, decodeUInt64,
@@ -88,8 +88,22 @@ const _defaultType = [
         defaultValue: 0, // coerceUInt64(0),
         coerce: coerceUInt64
     },
-    {name: 'Float', encode: encodeFloat, decode: decodeFloat, defaultValue: 0.0, coerce: coerceFloat},
-    {name: 'Double', encode: encodeDouble, decode: decodeDouble, defaultValue: 0.0, coerce: coerceFloat},
+    {
+        name: 'Float',
+        encode: encodeFloat,
+        decode: decodeFloat,
+        jsonEncode: jsonEncodeFloat,
+        jsonDecode: jsonDecodeFloat,
+        defaultValue: 0.0,
+        coerce: coerceFloat},
+    {
+        name: 'Double',
+        encode: encodeDouble,
+        decode: decodeDouble,
+        jsonEncode: jsonEncodeDouble,
+        jsonDecode: jsonDecodeDouble,
+        defaultValue: 0.0,
+        coerce: coerceFloat},
     {name: 'String', encode: encodeString, decode: decodeString, defaultValue: ''},
     // OPC Unified Architecture, part 3.0 $8.26 page 67
     {

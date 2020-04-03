@@ -448,7 +448,7 @@ function slice<U, T extends ArrayLike<U>>(arr: T, start: number, end: number): T
         // xx console.log("XXXX ERN ERN ERN 3");
 
         assert(typeof (arr as any).slice === 'function');
-        assert(arr instanceof Array || typeof arr === 'string');
+        assert(arr instanceof Array || arr instanceof ArrayBuffer || typeof arr === 'string', arr);
         res = (arr as any).slice(start, end);
     }
     /*

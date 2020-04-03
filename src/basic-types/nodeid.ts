@@ -273,7 +273,7 @@ export function jsonDecodeNodeId(id: any) {
 
 export function jsonEncodeExpandedNodeId(id: ExpandedNodeId) {
     const out = jsonEncodeNodeId(id);
-    if (id.namespace !== 1 && id.namespaceUri) {
+    if (id.namespace <= 0 /*!== 1*/ && id.namespaceUri) {
         out.Namespace = id.namespaceUri;
     }
 
