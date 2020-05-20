@@ -1968,4 +1968,15 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         assert(this._namespaceArray, 'please make sure that readNamespaceArray has been called');
         return this._namespaceArray.indexOf(namespaceUri);
     }
+
+    /**
+     * returns the namespace index or undefined if not present
+     * throws an error if
+     * @param index
+     */
+    public getNamespaceUri(index: number) {
+        assert(this._namespaceArray, 'please make sure that readNamespaceArray has been called');
+        return this._namespaceArray[0];
+    }
+
 }
