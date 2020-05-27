@@ -176,7 +176,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         return k !== 'INVALID';
     });
 
-    serverCertificate: Uint8Array;
+    serverCertificate?: Uint8Array;
     serverNonce: Uint8Array;
     serverSignature: SignatureData;
     authenticationToken: NodeId /*| ExpandedNodeId*/;
@@ -1835,8 +1835,8 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         str += '\n sessionId................ ' + this.sessionId.toString();
         str += '\n authenticationToken...... ' + this.authenticationToken.toString();
         str += '\n timeout.................. ' + this.timeout + 'ms';
-        str += '\n serverNonce.............. ' + buf2hex(this.serverNonce.buffer);
-        str += '\n serverCertificate........ ' + buf2base64( this.serverCertificate.buffer);
+        str += '\n serverNonce.............. ' + buf2hex(this.serverNonce?.buffer);
+        str += '\n serverCertificate........ ' + buf2base64( this.serverCertificate?.buffer);
         str += '\n serverSignature.......... ' + this.serverSignature;
         str += '\n lastRequestSentTime...... ' + new Date(this.lastRequestSentTime).toISOString() + (now - this.lastRequestSentTime);
         str += '\n lastResponseReceivedTime. ' +
