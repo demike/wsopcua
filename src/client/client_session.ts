@@ -976,7 +976,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             }
             assert(response instanceof read_service.ReadResponse);
             return callback(null, isArray ? response.results : response.results[0],
-                isArray ? response.diagnosticInfos : response.diagnosticInfos[0]);
+                (isArray || !response.diagnosticInfos)  ? response.diagnosticInfos : response.diagnosticInfos[0]);
 
         });
     }
