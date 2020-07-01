@@ -78,7 +78,7 @@ export class EnumTypeFile extends ClassFile {
     protected getFactoryCode(): string {
         let str = 'import {registerEnumeration} from \'' +
             getModuleImportPath(this.modulePath, PathGenUtil.FactoryModulePath) + '/factories_enumerations\';\n';
-        str += 'registerEnumeration(\'' + this.name + '\', ' + this.name + ', encode' + this.name + ' , decode' + this.name + ' , null);\n';
+        str += 'registerEnumeration(\'' + this.name + '\', ' + this.name + ', encode' + this.name + ' , decode' + this.name + ' , undefined);\n';
         return str;
     }
 
