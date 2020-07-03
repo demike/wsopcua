@@ -24,4 +24,4 @@ export function decodeHistoryUpdateType( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('HistoryUpdateType', HistoryUpdateType, encodeHistoryUpdateType , decodeHistoryUpdateType , null);
+registerEnumeration('HistoryUpdateType', HistoryUpdateType, encodeHistoryUpdateType , decodeHistoryUpdateType , undefined);

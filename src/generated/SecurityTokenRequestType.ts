@@ -22,4 +22,4 @@ export function decodeSecurityTokenRequestType( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('SecurityTokenRequestType', SecurityTokenRequestType, encodeSecurityTokenRequestType , decodeSecurityTokenRequestType , null);
+registerEnumeration('SecurityTokenRequestType', SecurityTokenRequestType, encodeSecurityTokenRequestType , decodeSecurityTokenRequestType , undefined);

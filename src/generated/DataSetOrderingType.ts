@@ -23,4 +23,4 @@ export function decodeDataSetOrderingType( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('DataSetOrderingType', DataSetOrderingType, encodeDataSetOrderingType , decodeDataSetOrderingType , null);
+registerEnumeration('DataSetOrderingType', DataSetOrderingType, encodeDataSetOrderingType , decodeDataSetOrderingType , undefined);

@@ -28,4 +28,4 @@ export function decodeServerState( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('ServerState', ServerState, encodeServerState , decodeServerState , null);
+registerEnumeration('ServerState', ServerState, encodeServerState , decodeServerState , undefined);

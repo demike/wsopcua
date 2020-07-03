@@ -23,4 +23,4 @@ export function decodeOverrideValueHandling( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('OverrideValueHandling', OverrideValueHandling, encodeOverrideValueHandling , decodeOverrideValueHandling , null);
+registerEnumeration('OverrideValueHandling', OverrideValueHandling, encodeOverrideValueHandling , decodeOverrideValueHandling , undefined);

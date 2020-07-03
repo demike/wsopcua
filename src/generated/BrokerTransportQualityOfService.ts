@@ -25,4 +25,4 @@ export function decodeBrokerTransportQualityOfService( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('BrokerTransportQualityOfService', BrokerTransportQualityOfService, encodeBrokerTransportQualityOfService , decodeBrokerTransportQualityOfService , null);
+registerEnumeration('BrokerTransportQualityOfService', BrokerTransportQualityOfService, encodeBrokerTransportQualityOfService , decodeBrokerTransportQualityOfService , undefined);

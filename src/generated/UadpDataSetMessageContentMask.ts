@@ -27,4 +27,4 @@ export function decodeUadpDataSetMessageContentMask( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('UadpDataSetMessageContentMask', UadpDataSetMessageContentMask, encodeUadpDataSetMessageContentMask , decodeUadpDataSetMessageContentMask , null);
+registerEnumeration('UadpDataSetMessageContentMask', UadpDataSetMessageContentMask, encodeUadpDataSetMessageContentMask , decodeUadpDataSetMessageContentMask , undefined);

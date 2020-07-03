@@ -25,4 +25,4 @@ export function decodeModelChangeStructureVerbMask( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('ModelChangeStructureVerbMask', ModelChangeStructureVerbMask, encodeModelChangeStructureVerbMask , decodeModelChangeStructureVerbMask , null);
+registerEnumeration('ModelChangeStructureVerbMask', ModelChangeStructureVerbMask, encodeModelChangeStructureVerbMask , decodeModelChangeStructureVerbMask , undefined);

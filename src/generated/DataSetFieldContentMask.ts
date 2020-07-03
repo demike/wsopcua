@@ -27,4 +27,4 @@ export function decodeDataSetFieldContentMask( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('DataSetFieldContentMask', DataSetFieldContentMask, encodeDataSetFieldContentMask , decodeDataSetFieldContentMask , null);
+registerEnumeration('DataSetFieldContentMask', DataSetFieldContentMask, encodeDataSetFieldContentMask , decodeDataSetFieldContentMask , undefined);

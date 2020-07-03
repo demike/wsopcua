@@ -25,4 +25,4 @@ export function decodeExceptionDeviationFormat( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('ExceptionDeviationFormat', ExceptionDeviationFormat, encodeExceptionDeviationFormat , decodeExceptionDeviationFormat , null);
+registerEnumeration('ExceptionDeviationFormat', ExceptionDeviationFormat, encodeExceptionDeviationFormat , decodeExceptionDeviationFormat , undefined);

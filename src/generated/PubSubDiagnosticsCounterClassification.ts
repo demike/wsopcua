@@ -22,4 +22,4 @@ export function decodePubSubDiagnosticsCounterClassification( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('PubSubDiagnosticsCounterClassification', PubSubDiagnosticsCounterClassification, encodePubSubDiagnosticsCounterClassification , decodePubSubDiagnosticsCounterClassification , null);
+registerEnumeration('PubSubDiagnosticsCounterClassification', PubSubDiagnosticsCounterClassification, encodePubSubDiagnosticsCounterClassification , decodePubSubDiagnosticsCounterClassification , undefined);

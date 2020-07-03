@@ -23,4 +23,4 @@ export function decodeNamingRuleType( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('NamingRuleType', NamingRuleType, encodeNamingRuleType , decodeNamingRuleType , null);
+registerEnumeration('NamingRuleType', NamingRuleType, encodeNamingRuleType , decodeNamingRuleType , undefined);

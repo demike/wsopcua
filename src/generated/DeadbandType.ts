@@ -23,4 +23,4 @@ export function decodeDeadbandType( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('DeadbandType', DeadbandType, encodeDeadbandType , decodeDeadbandType , null);
+registerEnumeration('DeadbandType', DeadbandType, encodeDeadbandType , decodeDeadbandType , undefined);

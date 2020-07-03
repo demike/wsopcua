@@ -31,4 +31,4 @@ export function decodeAccessLevelExType( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('AccessLevelExType', AccessLevelExType, encodeAccessLevelExType , decodeAccessLevelExType , null);
+registerEnumeration('AccessLevelExType', AccessLevelExType, encodeAccessLevelExType , decodeAccessLevelExType , undefined);

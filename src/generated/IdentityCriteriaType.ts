@@ -26,4 +26,4 @@ export function decodeIdentityCriteriaType( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('IdentityCriteriaType', IdentityCriteriaType, encodeIdentityCriteriaType , decodeIdentityCriteriaType , null);
+registerEnumeration('IdentityCriteriaType', IdentityCriteriaType, encodeIdentityCriteriaType , decodeIdentityCriteriaType , undefined);

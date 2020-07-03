@@ -38,4 +38,4 @@ export function decodeFilterOperator( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('FilterOperator', FilterOperator, encodeFilterOperator , decodeFilterOperator , null);
+registerEnumeration('FilterOperator', FilterOperator, encodeFilterOperator , decodeFilterOperator , undefined);

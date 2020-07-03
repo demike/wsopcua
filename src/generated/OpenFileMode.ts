@@ -24,4 +24,4 @@ export function decodeOpenFileMode( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('OpenFileMode', OpenFileMode, encodeOpenFileMode , decodeOpenFileMode , null);
+registerEnumeration('OpenFileMode', OpenFileMode, encodeOpenFileMode , decodeOpenFileMode , undefined);

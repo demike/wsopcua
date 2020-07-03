@@ -24,4 +24,4 @@ export function decodePubSubState( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('PubSubState', PubSubState, encodePubSubState , decodePubSubState , null);
+registerEnumeration('PubSubState', PubSubState, encodePubSubState , decodePubSubState , undefined);

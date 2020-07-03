@@ -25,4 +25,4 @@ export function decodeDiagnosticsLevel( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('DiagnosticsLevel', DiagnosticsLevel, encodeDiagnosticsLevel , decodeDiagnosticsLevel , null);
+registerEnumeration('DiagnosticsLevel', DiagnosticsLevel, encodeDiagnosticsLevel , decodeDiagnosticsLevel , undefined);

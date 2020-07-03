@@ -25,4 +25,4 @@ export function decodeTimestampsToReturn( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('TimestampsToReturn', TimestampsToReturn, encodeTimestampsToReturn , decodeTimestampsToReturn , null);
+registerEnumeration('TimestampsToReturn', TimestampsToReturn, encodeTimestampsToReturn , decodeTimestampsToReturn , undefined);

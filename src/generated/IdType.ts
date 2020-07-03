@@ -24,4 +24,4 @@ export function decodeIdType( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('IdType', IdType, encodeIdType , decodeIdType , null);
+registerEnumeration('IdType', IdType, encodeIdType , decodeIdType , undefined);

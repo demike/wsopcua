@@ -24,4 +24,4 @@ export function decodeAccessRestrictionType( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('AccessRestrictionType', AccessRestrictionType, encodeAccessRestrictionType , decodeAccessRestrictionType , null);
+registerEnumeration('AccessRestrictionType', AccessRestrictionType, encodeAccessRestrictionType , decodeAccessRestrictionType , undefined);

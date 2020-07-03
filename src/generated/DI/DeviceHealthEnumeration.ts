@@ -25,4 +25,4 @@ export function decodeDeviceHealthEnumeration( inp: DataStream) {
 
 
 import {registerEnumeration} from '../../factory/factories_enumerations';
-registerEnumeration('DeviceHealthEnumeration', DeviceHealthEnumeration, encodeDeviceHealthEnumeration , decodeDeviceHealthEnumeration , null);
+registerEnumeration('DeviceHealthEnumeration', DeviceHealthEnumeration, encodeDeviceHealthEnumeration , decodeDeviceHealthEnumeration , undefined);

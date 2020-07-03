@@ -32,4 +32,4 @@ export function decodeUadpNetworkMessageContentMask( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('UadpNetworkMessageContentMask', UadpNetworkMessageContentMask, encodeUadpNetworkMessageContentMask , decodeUadpNetworkMessageContentMask , null);
+registerEnumeration('UadpNetworkMessageContentMask', UadpNetworkMessageContentMask, encodeUadpNetworkMessageContentMask , decodeUadpNetworkMessageContentMask , undefined);

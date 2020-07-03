@@ -38,4 +38,4 @@ export function decodePermissionType( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('PermissionType', PermissionType, encodePermissionType , decodePermissionType , null);
+registerEnumeration('PermissionType', PermissionType, encodePermissionType , decodePermissionType , undefined);

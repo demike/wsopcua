@@ -23,4 +23,4 @@ export function decodeAxisScaleEnumeration( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('AxisScaleEnumeration', AxisScaleEnumeration, encodeAxisScaleEnumeration , decodeAxisScaleEnumeration , null);
+registerEnumeration('AxisScaleEnumeration', AxisScaleEnumeration, encodeAxisScaleEnumeration , decodeAxisScaleEnumeration , undefined);

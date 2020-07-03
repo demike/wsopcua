@@ -26,4 +26,4 @@ export function decodeJsonDataSetMessageContentMask( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('JsonDataSetMessageContentMask', JsonDataSetMessageContentMask, encodeJsonDataSetMessageContentMask , decodeJsonDataSetMessageContentMask , null);
+registerEnumeration('JsonDataSetMessageContentMask', JsonDataSetMessageContentMask, encodeJsonDataSetMessageContentMask , decodeJsonDataSetMessageContentMask , undefined);

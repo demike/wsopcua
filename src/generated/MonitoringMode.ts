@@ -23,4 +23,4 @@ export function decodeMonitoringMode( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('MonitoringMode', MonitoringMode, encodeMonitoringMode , decodeMonitoringMode , null);
+registerEnumeration('MonitoringMode', MonitoringMode, encodeMonitoringMode , decodeMonitoringMode , undefined);

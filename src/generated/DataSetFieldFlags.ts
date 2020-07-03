@@ -22,4 +22,4 @@ export function decodeDataSetFieldFlags( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('DataSetFieldFlags', DataSetFieldFlags, encodeDataSetFieldFlags , decodeDataSetFieldFlags , null);
+registerEnumeration('DataSetFieldFlags', DataSetFieldFlags, encodeDataSetFieldFlags , decodeDataSetFieldFlags , undefined);

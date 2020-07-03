@@ -23,4 +23,4 @@ export function decodeDataChangeTrigger( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('DataChangeTrigger', DataChangeTrigger, encodeDataChangeTrigger , decodeDataChangeTrigger , null);
+registerEnumeration('DataChangeTrigger', DataChangeTrigger, encodeDataChangeTrigger , decodeDataChangeTrigger , undefined);

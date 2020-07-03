@@ -106,7 +106,6 @@ export class DataValue {
  fromJSON( inp: any) {
 if (!inp) { return; }
   if(inp.Value) {
-   this.value= new Variant();
    this.value.fromJSON(inp.Value);
   }
   if(inp.StatusCode) {

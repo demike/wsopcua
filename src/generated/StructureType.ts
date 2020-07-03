@@ -23,4 +23,4 @@ export function decodeStructureType( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('StructureType', StructureType, encodeStructureType , decodeStructureType , null);
+registerEnumeration('StructureType', StructureType, encodeStructureType , decodeStructureType , undefined);

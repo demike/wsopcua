@@ -30,4 +30,4 @@ export function decodeBrowseResultMask( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('BrowseResultMask', BrowseResultMask, encodeBrowseResultMask , decodeBrowseResultMask , null);
+registerEnumeration('BrowseResultMask', BrowseResultMask, encodeBrowseResultMask , decodeBrowseResultMask , undefined);

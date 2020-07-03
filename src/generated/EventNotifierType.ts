@@ -24,4 +24,4 @@ export function decodeEventNotifierType( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('EventNotifierType', EventNotifierType, encodeEventNotifierType , decodeEventNotifierType , null);
+registerEnumeration('EventNotifierType', EventNotifierType, encodeEventNotifierType , decodeEventNotifierType , undefined);

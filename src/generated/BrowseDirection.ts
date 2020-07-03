@@ -24,4 +24,4 @@ export function decodeBrowseDirection( inp: DataStream) {
 
 
 import {registerEnumeration} from '../factory/factories_enumerations';
-registerEnumeration('BrowseDirection', BrowseDirection, encodeBrowseDirection , decodeBrowseDirection , null);
+registerEnumeration('BrowseDirection', BrowseDirection, encodeBrowseDirection , decodeBrowseDirection , undefined);
