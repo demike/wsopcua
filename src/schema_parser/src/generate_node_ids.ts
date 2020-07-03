@@ -80,9 +80,9 @@ function writeToFile() {
             outFile.write('// this file has been automatically generated\n');
             outFile.write('// using schema_parser/generate_node_ids.ts\n');
             typeMap = metaTypeMap[typeName];
-            outFile.write(' export var '+ typeName + 'Ids = { \n');
+            outFile.write(' export class ' + typeName + 'Ids {\n');
 
-            let names = Object.keys(typeMap);
+            const names = Object.keys(typeMap);
 
             for (let i = 0; i < names.length; i++) {
                 name = names[i];
@@ -93,13 +93,13 @@ function writeToFile() {
                     id   = parseInt(e[1], 10);
                     type = e[2];
                     if (i + 1 < names.length) {
-                        outFile.write(' ' + name + ': ' + id + ',\n');
+                        outFile.write(' static readonly ' + name + ' = ' + id + ';\n');
                     } else {
-                        outFile.write(' ' + name + ': ' + id + '\n');
+                        outFile.write(' static readonly ' + name + ' = ' + id + ';\n');
                     }
                 }
             }
-            outFile.write('};\n');
+            outFile.write('}\n');
             // outFile.close();
         }
     }
