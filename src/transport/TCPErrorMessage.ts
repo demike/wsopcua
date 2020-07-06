@@ -86,6 +86,7 @@ public toJSON() {
     const out: any = {};
     out.StatusCode = jsonEncodeStatusCode(this.statusCode);
     out.Reason = this.reason;
+    return out;
 }
 
 public fromJSON(json: any) {

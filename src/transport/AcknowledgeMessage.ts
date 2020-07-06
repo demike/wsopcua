@@ -132,6 +132,7 @@ export class AcknowledgeMessage extends BaseUAObject {
     out.SendBufferSize = this.sendBufferSize;
     out.MaxMessageSize = this.maxMessageSize;
     out.MaxChunkCount = this.maxChunkCount;
+    return out;
   }
 
   public fromJSON(json: any) {

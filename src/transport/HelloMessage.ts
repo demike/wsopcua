@@ -140,12 +140,25 @@ public clone(target: any): BaseUAObject {
   throw new Error('Method not implemented.');
 }
 
-public toJSON() {
-  throw new Error("Method not implemented.");
-}
-public fromJSON(json: any): void {
-  throw new Error("Method not implemented.");
-}
+ public toJSON() {
+    const out: any = {};
+    out.ProtocolVersion = this.protocolVersion;
+    out.ReceiveBufferSize = this.receiveBufferSize;
+    out.SendBufferSize = this.sendBufferSize;
+    out.MaxMessageSize = this.maxMessageSize;
+    out.MaxChunkCount = this.maxChunkCount;
+    out.EndpointUrl = this.endpointUrl;
+    return out;
+  }
+
+  public fromJSON(json: any) {
+    this.protocolVersion = json.ProtocolVersion;
+    this.receiveBufferSize = json.ReceiveBufferSize;
+    this.sendBufferSize = json.SendBufferSize;
+    this.maxMessageSize = json.MaxMessageSize;
+    this.maxChunkCount = json.MaxChunkCount;
+    this.endpointUrl = json.EndpointUrl;
+  }
 
 }
 

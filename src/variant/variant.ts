@@ -208,7 +208,7 @@ public fromJSON(inp: any) {
         return;
     }
 
-    if(inp.Dimensions) {
+    if (inp.Dimensions) {
         this.arrayType = VariantArrayType.Matrix;
         this.dimensions = inp.Dimensions;
         this.value = jsonDecodeMatrix(this.dataType, body);

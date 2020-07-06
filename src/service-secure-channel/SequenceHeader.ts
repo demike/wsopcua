@@ -97,11 +97,17 @@ public clone(target?: SequenceHeader): BaseUAObject {
 }
 
 public toJSON() {
-  throw new Error('Method not implemented.');
+  const out: any = {};
+  out.SequenceNumber = this.sequenceNumber;
+  out.RequestId = this.requestId;
+  return out;
 }
-public fromJSON(json: any): void {
-  throw new Error('Method not implemented.');
+
+public fromJSON(json: any) {
+  this.sequenceNumber = json.SequenceNumber;
+  this.requestId = json.RequestId;
 }
+
 
 }
 
