@@ -250,23 +250,35 @@ function expand_map(direct_index: {[name: string]: number}) {
     }
 }
 
+function expand_class<T>(clazz: new () => T) {
+    for (const name of Object.keys(clazz)/*Object.getOwnPropertyNames(clazz)*/) {
+        const value = clazz[name];
+        _nodeid_to_name_index[value] = name;
+        _name_to_nodeid_index[name] = new NodeId(NodeIdType.Numeric, value, 0);
+    }
+}
+
 (function build_standard_nodeid_indexes() {
 
 
     _nodeid_to_name_index = {};
     _name_to_nodeid_index = {};
-//    expand_map(ObjectIds);
-    expand_map(ObjectTypeIds);
-//    expand_map(VariableIds);
-    expand_map(VariableTypeIds);
-//    expand_map(MethodIds);
-    expand_map(ReferenceTypeIds);
-    expand_map(DataTypeIds);
+//  expand_class(ObjectIds);
+    expand_class(ObjectTypeIds);
+//    expand_class(VariableIds);
+    expand_class(VariableTypeIds);
+//    expand_class(MethodIds);
+    expand_class(ReferenceTypeIds);
+    expand_class(DataTypeIds);
 
 })();
 
 export function build_nodid_indexes_for_map(map: {[name: string]: number}) {
     expand_map(map);
+}
+
+export function build_nodid_indexes_for_class_map<T>(clazz:  new() => T ) {
+    expand_class(clazz);
 }
 
 function reverse_map(nodeId: number) {

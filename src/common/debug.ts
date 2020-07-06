@@ -1,9 +1,12 @@
 export var doDebug = false;
 
+export function setDebug(debug: boolean) {
+    doDebug = debug;
+}
 
 export function debugLog(...args) {
     if (doDebug) {
-        console.debug(args.join(''));
+        console.debug(...args);
     }
 }
 

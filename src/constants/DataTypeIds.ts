@@ -1,401 +1,401 @@
 // this file has been automatically generated
 // using schema_parser/generate_node_ids.ts
- export var DataTypeIds = { 
- Boolean: 1,
- SByte: 2,
- Byte: 3,
- Int16: 4,
- UInt16: 5,
- Int32: 6,
- UInt32: 7,
- Int64: 8,
- UInt64: 9,
- Float: 10,
- Double: 11,
- String: 12,
- DateTime: 13,
- Guid: 14,
- ByteString: 15,
- XmlElement: 16,
- NodeId: 17,
- ExpandedNodeId: 18,
- StatusCode: 19,
- QualifiedName: 20,
- LocalizedText: 21,
- Structure: 22,
- DataValue: 23,
- BaseDataType: 24,
- DiagnosticInfo: 25,
- Number: 26,
- Integer: 27,
- UInteger: 28,
- Enumeration: 29,
- Image: 30,
- Decimal: 50,
- PermissionType: 94,
- AccessRestrictionType: 95,
- RolePermissionType: 96,
- DataTypeDefinition: 97,
- StructureType: 98,
- StructureDefinition: 99,
- EnumDefinition: 100,
- StructureField: 101,
- EnumField: 102,
- NamingRuleType: 120,
- IdType: 256,
- NodeClass: 257,
- Node: 258,
- ObjectNode: 261,
- ObjectTypeNode: 264,
- VariableNode: 267,
- VariableTypeNode: 270,
- ReferenceTypeNode: 273,
- MethodNode: 276,
- ViewNode: 279,
- DataTypeNode: 282,
- ReferenceNode: 285,
- IntegerId: 288,
- Counter: 289,
- Duration: 290,
- NumericRange: 291,
- Time: 292,
- Date: 293,
- UtcTime: 294,
- LocaleId: 295,
- Argument: 296,
- StatusResult: 299,
- MessageSecurityMode: 302,
- UserTokenType: 303,
- UserTokenPolicy: 304,
- ApplicationType: 307,
- ApplicationDescription: 308,
- ApplicationInstanceCertificate: 311,
- EndpointDescription: 312,
- SecurityTokenRequestType: 315,
- UserIdentityToken: 316,
- AnonymousIdentityToken: 319,
- UserNameIdentityToken: 322,
- X509IdentityToken: 325,
- EndpointConfiguration: 331,
- BuildInfo: 338,
- SignedSoftwareCertificate: 344,
- AttributeWriteMask: 347,
- NodeAttributesMask: 348,
- NodeAttributes: 349,
- ObjectAttributes: 352,
- VariableAttributes: 355,
- MethodAttributes: 358,
- ObjectTypeAttributes: 361,
- VariableTypeAttributes: 364,
- ReferenceTypeAttributes: 367,
- DataTypeAttributes: 370,
- ViewAttributes: 373,
- AddNodesItem: 376,
- AddReferencesItem: 379,
- DeleteNodesItem: 382,
- DeleteReferencesItem: 385,
- SessionAuthenticationToken: 388,
- RequestHeader: 389,
- ResponseHeader: 392,
- ServiceFault: 395,
- FindServersRequest: 420,
- FindServersResponse: 423,
- GetEndpointsRequest: 426,
- GetEndpointsResponse: 429,
- RegisteredServer: 432,
- RegisterServerRequest: 435,
- RegisterServerResponse: 438,
- ChannelSecurityToken: 441,
- OpenSecureChannelRequest: 444,
- OpenSecureChannelResponse: 447,
- CloseSecureChannelRequest: 450,
- CloseSecureChannelResponse: 453,
- SignatureData: 456,
- CreateSessionRequest: 459,
- CreateSessionResponse: 462,
- ActivateSessionRequest: 465,
- ActivateSessionResponse: 468,
- CloseSessionRequest: 471,
- CloseSessionResponse: 474,
- CancelRequest: 477,
- CancelResponse: 480,
- AddNodesResult: 483,
- AddNodesRequest: 486,
- AddNodesResponse: 489,
- AddReferencesRequest: 492,
- AddReferencesResponse: 495,
- DeleteNodesRequest: 498,
- DeleteNodesResponse: 501,
- DeleteReferencesRequest: 504,
- DeleteReferencesResponse: 507,
- BrowseDirection: 510,
- ViewDescription: 511,
- BrowseDescription: 514,
- BrowseResultMask: 517,
- ReferenceDescription: 518,
- ContinuationPoint: 521,
- BrowseResult: 522,
- BrowseRequest: 525,
- BrowseResponse: 528,
- BrowseNextRequest: 531,
- BrowseNextResponse: 534,
- RelativePathElement: 537,
- RelativePath: 540,
- BrowsePath: 543,
- BrowsePathTarget: 546,
- BrowsePathResult: 549,
- TranslateBrowsePathsToNodeIdsRequest: 552,
- TranslateBrowsePathsToNodeIdsResponse: 555,
- RegisterNodesRequest: 558,
- RegisterNodesResponse: 561,
- UnregisterNodesRequest: 564,
- UnregisterNodesResponse: 567,
- QueryDataDescription: 570,
- NodeTypeDescription: 573,
- FilterOperator: 576,
- QueryDataSet: 577,
- NodeReference: 580,
- ContentFilterElement: 583,
- ContentFilter: 586,
- FilterOperand: 589,
- ElementOperand: 592,
- LiteralOperand: 595,
- AttributeOperand: 598,
- SimpleAttributeOperand: 601,
- ContentFilterElementResult: 604,
- ContentFilterResult: 607,
- ParsingResult: 610,
- QueryFirstRequest: 613,
- QueryFirstResponse: 616,
- QueryNextRequest: 619,
- QueryNextResponse: 622,
- TimestampsToReturn: 625,
- ReadValueId: 626,
- ReadRequest: 629,
- ReadResponse: 632,
- HistoryReadValueId: 635,
- HistoryReadResult: 638,
- HistoryReadDetails: 641,
- ReadEventDetails: 644,
- ReadRawModifiedDetails: 647,
- ReadProcessedDetails: 650,
- ReadAtTimeDetails: 653,
- HistoryData: 656,
- HistoryEvent: 659,
- HistoryReadRequest: 662,
- HistoryReadResponse: 665,
- WriteValue: 668,
- WriteRequest: 671,
- WriteResponse: 674,
- HistoryUpdateDetails: 677,
- UpdateDataDetails: 680,
- UpdateEventDetails: 683,
- DeleteRawModifiedDetails: 686,
- DeleteAtTimeDetails: 689,
- DeleteEventDetails: 692,
- HistoryUpdateResult: 695,
- HistoryUpdateRequest: 698,
- HistoryUpdateResponse: 701,
- CallMethodRequest: 704,
- CallMethodResult: 707,
- CallRequest: 710,
- CallResponse: 713,
- MonitoringMode: 716,
- DataChangeTrigger: 717,
- DeadbandType: 718,
- MonitoringFilter: 719,
- DataChangeFilter: 722,
- EventFilter: 725,
- AggregateFilter: 728,
- MonitoringFilterResult: 731,
- EventFilterResult: 734,
- AggregateFilterResult: 737,
- MonitoringParameters: 740,
- MonitoredItemCreateRequest: 743,
- MonitoredItemCreateResult: 746,
- CreateMonitoredItemsRequest: 749,
- CreateMonitoredItemsResponse: 752,
- MonitoredItemModifyRequest: 755,
- MonitoredItemModifyResult: 758,
- ModifyMonitoredItemsRequest: 761,
- ModifyMonitoredItemsResponse: 764,
- SetMonitoringModeRequest: 767,
- SetMonitoringModeResponse: 770,
- SetTriggeringRequest: 773,
- SetTriggeringResponse: 776,
- DeleteMonitoredItemsRequest: 779,
- DeleteMonitoredItemsResponse: 782,
- CreateSubscriptionRequest: 785,
- CreateSubscriptionResponse: 788,
- ModifySubscriptionRequest: 791,
- ModifySubscriptionResponse: 794,
- SetPublishingModeRequest: 797,
- SetPublishingModeResponse: 800,
- NotificationMessage: 803,
- MonitoredItemNotification: 806,
- DataChangeNotification: 809,
- StatusChangeNotification: 818,
- SubscriptionAcknowledgement: 821,
- PublishRequest: 824,
- PublishResponse: 827,
- RepublishRequest: 830,
- RepublishResponse: 833,
- TransferResult: 836,
- TransferSubscriptionsRequest: 839,
- TransferSubscriptionsResponse: 842,
- DeleteSubscriptionsRequest: 845,
- DeleteSubscriptionsResponse: 848,
- RedundancySupport: 851,
- ServerState: 852,
- RedundantServerDataType: 853,
- SamplingIntervalDiagnosticsDataType: 856,
- ServerDiagnosticsSummaryDataType: 859,
- ServerStatusDataType: 862,
- SessionDiagnosticsDataType: 865,
- SessionSecurityDiagnosticsDataType: 868,
- ServiceCounterDataType: 871,
- SubscriptionDiagnosticsDataType: 874,
- ModelChangeStructureDataType: 877,
- Range: 884,
- EUInformation: 887,
- ExceptionDeviationFormat: 890,
- Annotation: 891,
- ProgramDiagnosticDataType: 894,
- SemanticChangeStructureDataType: 897,
- EventNotificationList: 914,
- EventFieldList: 917,
- HistoryEventFieldList: 920,
- IssuedIdentityToken: 938,
- NotificationData: 945,
- AggregateConfiguration: 948,
- ImageBMP: 2000,
- ImageGIF: 2001,
- ImageJPG: 2002,
- ImagePNG: 2003,
- EnumValueType: 7594,
- TimeZoneDataType: 8912,
- ModificationInfo: 11216,
- HistoryModifiedData: 11217,
- HistoryUpdateType: 11234,
- PerformUpdateType: 11293,
- UpdateStructureDataDetails: 11295,
- BitFieldMaskDataType: 11737,
- InstanceNode: 11879,
- TypeNode: 11880,
- OpenFileMode: 11939,
- ModelChangeStructureVerbMask: 11941,
- EndpointUrlListDataType: 11943,
- NetworkGroupDataType: 11944,
- AxisScaleEnumeration: 12077,
- AxisInformation: 12079,
- XVType: 12080,
- ComplexNumberType: 12171,
- DoubleComplexNumberType: 12172,
- ServerOnNetwork: 12189,
- FindServersOnNetworkRequest: 12190,
- FindServersOnNetworkResponse: 12191,
- RegisterServer2Request: 12193,
- RegisterServer2Response: 12194,
- TrustListMasks: 12552,
- TrustListDataType: 12554,
- OptionSet: 12755,
- Union: 12756,
- NormalizedString: 12877,
- DecimalString: 12878,
- DurationString: 12879,
- TimeString: 12880,
- DateString: 12881,
- DiscoveryConfiguration: 12890,
- MdnsDiscoveryConfiguration: 12891,
- PublishedVariableDataType: 14273,
- DataSetMetaDataType: 14523,
- FieldMetaData: 14524,
- DataTypeDescription: 14525,
- KeyValuePair: 14533,
- ConfigurationVersionDataType: 14593,
- PubSubState: 14647,
- FieldTargetDataType: 14744,
- SimpleTypeDescription: 15005,
- UABinaryFileDataType: 15006,
- BrokerConnectionTransportDataType: 15007,
- BrokerTransportQualityOfService: 15008,
- AccessLevelType: 15031,
- EventNotifierType: 15033,
- ProgramDiagnostic2DataType: 15396,
- AccessLevelExType: 15406,
- WriterGroupDataType: 15480,
- StructureDescription: 15487,
- EnumDescription: 15488,
- NetworkAddressDataType: 15502,
- NetworkAddressUrlDataType: 15510,
- ReaderGroupDataType: 15520,
- EndpointType: 15528,
- PubSubConfigurationDataType: 15530,
- DatagramWriterGroupTransportDataType: 15532,
- DataTypeSchemaHeader: 15534,
- PublishedDataSetDataType: 15578,
- PublishedDataSetSourceDataType: 15580,
- PublishedDataItemsDataType: 15581,
- PublishedEventsDataType: 15582,
- DataSetFieldContentMask: 15583,
- DataSetWriterDataType: 15597,
- DataSetWriterTransportDataType: 15598,
- DataSetWriterMessageDataType: 15605,
- PubSubGroupDataType: 15609,
- WriterGroupTransportDataType: 15611,
- WriterGroupMessageDataType: 15616,
- PubSubConnectionDataType: 15617,
- ConnectionTransportDataType: 15618,
- ReaderGroupTransportDataType: 15621,
- ReaderGroupMessageDataType: 15622,
- DataSetReaderDataType: 15623,
- DataSetReaderTransportDataType: 15628,
- DataSetReaderMessageDataType: 15629,
- SubscribedDataSetDataType: 15630,
- TargetVariablesDataType: 15631,
- IdentityCriteriaType: 15632,
- IdentityMappingRuleType: 15634,
- SubscribedDataSetMirrorDataType: 15635,
- UadpNetworkMessageContentMask: 15642,
- UadpWriterGroupMessageDataType: 15645,
- UadpDataSetMessageContentMask: 15646,
- UadpDataSetWriterMessageDataType: 15652,
- UadpDataSetReaderMessageDataType: 15653,
- JsonNetworkMessageContentMask: 15654,
- JsonWriterGroupMessageDataType: 15657,
- JsonDataSetMessageContentMask: 15658,
- JsonDataSetWriterMessageDataType: 15664,
- JsonDataSetReaderMessageDataType: 15665,
- BrokerWriterGroupTransportDataType: 15667,
- BrokerDataSetWriterTransportDataType: 15669,
- BrokerDataSetReaderTransportDataType: 15670,
- OverrideValueHandling: 15874,
- SessionlessInvokeRequestType: 15901,
- DataSetFieldFlags: 15904,
- AudioDataType: 16307,
- AdditionalParametersType: 16313,
- DatagramConnectionTransportDataType: 17467,
- RsaEncryptedSecret: 17545,
- EccEncryptedSecret: 17546,
- EphemeralKeyType: 17548,
- Index: 17588,
- GenericAttributeValue: 17606,
- GenericAttributes: 17607,
- DecimalDataType: 17861,
- RationalNumber: 18806,
- Vector: 18807,
- ThreeDVector: 18808,
- CartesianCoordinates: 18809,
- ThreeDCartesianCoordinates: 18810,
- Orientation: 18811,
- ThreeDOrientation: 18812,
- Frame: 18813,
- ThreeDFrame: 18814,
- DiagnosticsLevel: 19723,
- PubSubDiagnosticsCounterClassification: 19730,
- DataSetOrderingType: 20408,
- VersionTime: 20998,
- SessionlessInvokeResponseType: 20999,
- AliasNameDataType: 23468,
- ReadAnnotationDataDetails: 23497
-};
+ export class DataTypeIds {
+ static readonly Boolean = 1;
+ static readonly SByte = 2;
+ static readonly Byte = 3;
+ static readonly Int16 = 4;
+ static readonly UInt16 = 5;
+ static readonly Int32 = 6;
+ static readonly UInt32 = 7;
+ static readonly Int64 = 8;
+ static readonly UInt64 = 9;
+ static readonly Float = 10;
+ static readonly Double = 11;
+ static readonly String = 12;
+ static readonly DateTime = 13;
+ static readonly Guid = 14;
+ static readonly ByteString = 15;
+ static readonly XmlElement = 16;
+ static readonly NodeId = 17;
+ static readonly ExpandedNodeId = 18;
+ static readonly StatusCode = 19;
+ static readonly QualifiedName = 20;
+ static readonly LocalizedText = 21;
+ static readonly Structure = 22;
+ static readonly DataValue = 23;
+ static readonly BaseDataType = 24;
+ static readonly DiagnosticInfo = 25;
+ static readonly Number = 26;
+ static readonly Integer = 27;
+ static readonly UInteger = 28;
+ static readonly Enumeration = 29;
+ static readonly Image = 30;
+ static readonly Decimal = 50;
+ static readonly PermissionType = 94;
+ static readonly AccessRestrictionType = 95;
+ static readonly RolePermissionType = 96;
+ static readonly DataTypeDefinition = 97;
+ static readonly StructureType = 98;
+ static readonly StructureDefinition = 99;
+ static readonly EnumDefinition = 100;
+ static readonly StructureField = 101;
+ static readonly EnumField = 102;
+ static readonly NamingRuleType = 120;
+ static readonly IdType = 256;
+ static readonly NodeClass = 257;
+ static readonly Node = 258;
+ static readonly ObjectNode = 261;
+ static readonly ObjectTypeNode = 264;
+ static readonly VariableNode = 267;
+ static readonly VariableTypeNode = 270;
+ static readonly ReferenceTypeNode = 273;
+ static readonly MethodNode = 276;
+ static readonly ViewNode = 279;
+ static readonly DataTypeNode = 282;
+ static readonly ReferenceNode = 285;
+ static readonly IntegerId = 288;
+ static readonly Counter = 289;
+ static readonly Duration = 290;
+ static readonly NumericRange = 291;
+ static readonly Time = 292;
+ static readonly Date = 293;
+ static readonly UtcTime = 294;
+ static readonly LocaleId = 295;
+ static readonly Argument = 296;
+ static readonly StatusResult = 299;
+ static readonly MessageSecurityMode = 302;
+ static readonly UserTokenType = 303;
+ static readonly UserTokenPolicy = 304;
+ static readonly ApplicationType = 307;
+ static readonly ApplicationDescription = 308;
+ static readonly ApplicationInstanceCertificate = 311;
+ static readonly EndpointDescription = 312;
+ static readonly SecurityTokenRequestType = 315;
+ static readonly UserIdentityToken = 316;
+ static readonly AnonymousIdentityToken = 319;
+ static readonly UserNameIdentityToken = 322;
+ static readonly X509IdentityToken = 325;
+ static readonly EndpointConfiguration = 331;
+ static readonly BuildInfo = 338;
+ static readonly SignedSoftwareCertificate = 344;
+ static readonly AttributeWriteMask = 347;
+ static readonly NodeAttributesMask = 348;
+ static readonly NodeAttributes = 349;
+ static readonly ObjectAttributes = 352;
+ static readonly VariableAttributes = 355;
+ static readonly MethodAttributes = 358;
+ static readonly ObjectTypeAttributes = 361;
+ static readonly VariableTypeAttributes = 364;
+ static readonly ReferenceTypeAttributes = 367;
+ static readonly DataTypeAttributes = 370;
+ static readonly ViewAttributes = 373;
+ static readonly AddNodesItem = 376;
+ static readonly AddReferencesItem = 379;
+ static readonly DeleteNodesItem = 382;
+ static readonly DeleteReferencesItem = 385;
+ static readonly SessionAuthenticationToken = 388;
+ static readonly RequestHeader = 389;
+ static readonly ResponseHeader = 392;
+ static readonly ServiceFault = 395;
+ static readonly FindServersRequest = 420;
+ static readonly FindServersResponse = 423;
+ static readonly GetEndpointsRequest = 426;
+ static readonly GetEndpointsResponse = 429;
+ static readonly RegisteredServer = 432;
+ static readonly RegisterServerRequest = 435;
+ static readonly RegisterServerResponse = 438;
+ static readonly ChannelSecurityToken = 441;
+ static readonly OpenSecureChannelRequest = 444;
+ static readonly OpenSecureChannelResponse = 447;
+ static readonly CloseSecureChannelRequest = 450;
+ static readonly CloseSecureChannelResponse = 453;
+ static readonly SignatureData = 456;
+ static readonly CreateSessionRequest = 459;
+ static readonly CreateSessionResponse = 462;
+ static readonly ActivateSessionRequest = 465;
+ static readonly ActivateSessionResponse = 468;
+ static readonly CloseSessionRequest = 471;
+ static readonly CloseSessionResponse = 474;
+ static readonly CancelRequest = 477;
+ static readonly CancelResponse = 480;
+ static readonly AddNodesResult = 483;
+ static readonly AddNodesRequest = 486;
+ static readonly AddNodesResponse = 489;
+ static readonly AddReferencesRequest = 492;
+ static readonly AddReferencesResponse = 495;
+ static readonly DeleteNodesRequest = 498;
+ static readonly DeleteNodesResponse = 501;
+ static readonly DeleteReferencesRequest = 504;
+ static readonly DeleteReferencesResponse = 507;
+ static readonly BrowseDirection = 510;
+ static readonly ViewDescription = 511;
+ static readonly BrowseDescription = 514;
+ static readonly BrowseResultMask = 517;
+ static readonly ReferenceDescription = 518;
+ static readonly ContinuationPoint = 521;
+ static readonly BrowseResult = 522;
+ static readonly BrowseRequest = 525;
+ static readonly BrowseResponse = 528;
+ static readonly BrowseNextRequest = 531;
+ static readonly BrowseNextResponse = 534;
+ static readonly RelativePathElement = 537;
+ static readonly RelativePath = 540;
+ static readonly BrowsePath = 543;
+ static readonly BrowsePathTarget = 546;
+ static readonly BrowsePathResult = 549;
+ static readonly TranslateBrowsePathsToNodeIdsRequest = 552;
+ static readonly TranslateBrowsePathsToNodeIdsResponse = 555;
+ static readonly RegisterNodesRequest = 558;
+ static readonly RegisterNodesResponse = 561;
+ static readonly UnregisterNodesRequest = 564;
+ static readonly UnregisterNodesResponse = 567;
+ static readonly QueryDataDescription = 570;
+ static readonly NodeTypeDescription = 573;
+ static readonly FilterOperator = 576;
+ static readonly QueryDataSet = 577;
+ static readonly NodeReference = 580;
+ static readonly ContentFilterElement = 583;
+ static readonly ContentFilter = 586;
+ static readonly FilterOperand = 589;
+ static readonly ElementOperand = 592;
+ static readonly LiteralOperand = 595;
+ static readonly AttributeOperand = 598;
+ static readonly SimpleAttributeOperand = 601;
+ static readonly ContentFilterElementResult = 604;
+ static readonly ContentFilterResult = 607;
+ static readonly ParsingResult = 610;
+ static readonly QueryFirstRequest = 613;
+ static readonly QueryFirstResponse = 616;
+ static readonly QueryNextRequest = 619;
+ static readonly QueryNextResponse = 622;
+ static readonly TimestampsToReturn = 625;
+ static readonly ReadValueId = 626;
+ static readonly ReadRequest = 629;
+ static readonly ReadResponse = 632;
+ static readonly HistoryReadValueId = 635;
+ static readonly HistoryReadResult = 638;
+ static readonly HistoryReadDetails = 641;
+ static readonly ReadEventDetails = 644;
+ static readonly ReadRawModifiedDetails = 647;
+ static readonly ReadProcessedDetails = 650;
+ static readonly ReadAtTimeDetails = 653;
+ static readonly HistoryData = 656;
+ static readonly HistoryEvent = 659;
+ static readonly HistoryReadRequest = 662;
+ static readonly HistoryReadResponse = 665;
+ static readonly WriteValue = 668;
+ static readonly WriteRequest = 671;
+ static readonly WriteResponse = 674;
+ static readonly HistoryUpdateDetails = 677;
+ static readonly UpdateDataDetails = 680;
+ static readonly UpdateEventDetails = 683;
+ static readonly DeleteRawModifiedDetails = 686;
+ static readonly DeleteAtTimeDetails = 689;
+ static readonly DeleteEventDetails = 692;
+ static readonly HistoryUpdateResult = 695;
+ static readonly HistoryUpdateRequest = 698;
+ static readonly HistoryUpdateResponse = 701;
+ static readonly CallMethodRequest = 704;
+ static readonly CallMethodResult = 707;
+ static readonly CallRequest = 710;
+ static readonly CallResponse = 713;
+ static readonly MonitoringMode = 716;
+ static readonly DataChangeTrigger = 717;
+ static readonly DeadbandType = 718;
+ static readonly MonitoringFilter = 719;
+ static readonly DataChangeFilter = 722;
+ static readonly EventFilter = 725;
+ static readonly AggregateFilter = 728;
+ static readonly MonitoringFilterResult = 731;
+ static readonly EventFilterResult = 734;
+ static readonly AggregateFilterResult = 737;
+ static readonly MonitoringParameters = 740;
+ static readonly MonitoredItemCreateRequest = 743;
+ static readonly MonitoredItemCreateResult = 746;
+ static readonly CreateMonitoredItemsRequest = 749;
+ static readonly CreateMonitoredItemsResponse = 752;
+ static readonly MonitoredItemModifyRequest = 755;
+ static readonly MonitoredItemModifyResult = 758;
+ static readonly ModifyMonitoredItemsRequest = 761;
+ static readonly ModifyMonitoredItemsResponse = 764;
+ static readonly SetMonitoringModeRequest = 767;
+ static readonly SetMonitoringModeResponse = 770;
+ static readonly SetTriggeringRequest = 773;
+ static readonly SetTriggeringResponse = 776;
+ static readonly DeleteMonitoredItemsRequest = 779;
+ static readonly DeleteMonitoredItemsResponse = 782;
+ static readonly CreateSubscriptionRequest = 785;
+ static readonly CreateSubscriptionResponse = 788;
+ static readonly ModifySubscriptionRequest = 791;
+ static readonly ModifySubscriptionResponse = 794;
+ static readonly SetPublishingModeRequest = 797;
+ static readonly SetPublishingModeResponse = 800;
+ static readonly NotificationMessage = 803;
+ static readonly MonitoredItemNotification = 806;
+ static readonly DataChangeNotification = 809;
+ static readonly StatusChangeNotification = 818;
+ static readonly SubscriptionAcknowledgement = 821;
+ static readonly PublishRequest = 824;
+ static readonly PublishResponse = 827;
+ static readonly RepublishRequest = 830;
+ static readonly RepublishResponse = 833;
+ static readonly TransferResult = 836;
+ static readonly TransferSubscriptionsRequest = 839;
+ static readonly TransferSubscriptionsResponse = 842;
+ static readonly DeleteSubscriptionsRequest = 845;
+ static readonly DeleteSubscriptionsResponse = 848;
+ static readonly RedundancySupport = 851;
+ static readonly ServerState = 852;
+ static readonly RedundantServerDataType = 853;
+ static readonly SamplingIntervalDiagnosticsDataType = 856;
+ static readonly ServerDiagnosticsSummaryDataType = 859;
+ static readonly ServerStatusDataType = 862;
+ static readonly SessionDiagnosticsDataType = 865;
+ static readonly SessionSecurityDiagnosticsDataType = 868;
+ static readonly ServiceCounterDataType = 871;
+ static readonly SubscriptionDiagnosticsDataType = 874;
+ static readonly ModelChangeStructureDataType = 877;
+ static readonly Range = 884;
+ static readonly EUInformation = 887;
+ static readonly ExceptionDeviationFormat = 890;
+ static readonly Annotation = 891;
+ static readonly ProgramDiagnosticDataType = 894;
+ static readonly SemanticChangeStructureDataType = 897;
+ static readonly EventNotificationList = 914;
+ static readonly EventFieldList = 917;
+ static readonly HistoryEventFieldList = 920;
+ static readonly IssuedIdentityToken = 938;
+ static readonly NotificationData = 945;
+ static readonly AggregateConfiguration = 948;
+ static readonly ImageBMP = 2000;
+ static readonly ImageGIF = 2001;
+ static readonly ImageJPG = 2002;
+ static readonly ImagePNG = 2003;
+ static readonly EnumValueType = 7594;
+ static readonly TimeZoneDataType = 8912;
+ static readonly ModificationInfo = 11216;
+ static readonly HistoryModifiedData = 11217;
+ static readonly HistoryUpdateType = 11234;
+ static readonly PerformUpdateType = 11293;
+ static readonly UpdateStructureDataDetails = 11295;
+ static readonly BitFieldMaskDataType = 11737;
+ static readonly InstanceNode = 11879;
+ static readonly TypeNode = 11880;
+ static readonly OpenFileMode = 11939;
+ static readonly ModelChangeStructureVerbMask = 11941;
+ static readonly EndpointUrlListDataType = 11943;
+ static readonly NetworkGroupDataType = 11944;
+ static readonly AxisScaleEnumeration = 12077;
+ static readonly AxisInformation = 12079;
+ static readonly XVType = 12080;
+ static readonly ComplexNumberType = 12171;
+ static readonly DoubleComplexNumberType = 12172;
+ static readonly ServerOnNetwork = 12189;
+ static readonly FindServersOnNetworkRequest = 12190;
+ static readonly FindServersOnNetworkResponse = 12191;
+ static readonly RegisterServer2Request = 12193;
+ static readonly RegisterServer2Response = 12194;
+ static readonly TrustListMasks = 12552;
+ static readonly TrustListDataType = 12554;
+ static readonly OptionSet = 12755;
+ static readonly Union = 12756;
+ static readonly NormalizedString = 12877;
+ static readonly DecimalString = 12878;
+ static readonly DurationString = 12879;
+ static readonly TimeString = 12880;
+ static readonly DateString = 12881;
+ static readonly DiscoveryConfiguration = 12890;
+ static readonly MdnsDiscoveryConfiguration = 12891;
+ static readonly PublishedVariableDataType = 14273;
+ static readonly DataSetMetaDataType = 14523;
+ static readonly FieldMetaData = 14524;
+ static readonly DataTypeDescription = 14525;
+ static readonly KeyValuePair = 14533;
+ static readonly ConfigurationVersionDataType = 14593;
+ static readonly PubSubState = 14647;
+ static readonly FieldTargetDataType = 14744;
+ static readonly SimpleTypeDescription = 15005;
+ static readonly UABinaryFileDataType = 15006;
+ static readonly BrokerConnectionTransportDataType = 15007;
+ static readonly BrokerTransportQualityOfService = 15008;
+ static readonly AccessLevelType = 15031;
+ static readonly EventNotifierType = 15033;
+ static readonly ProgramDiagnostic2DataType = 15396;
+ static readonly AccessLevelExType = 15406;
+ static readonly WriterGroupDataType = 15480;
+ static readonly StructureDescription = 15487;
+ static readonly EnumDescription = 15488;
+ static readonly NetworkAddressDataType = 15502;
+ static readonly NetworkAddressUrlDataType = 15510;
+ static readonly ReaderGroupDataType = 15520;
+ static readonly EndpointType = 15528;
+ static readonly PubSubConfigurationDataType = 15530;
+ static readonly DatagramWriterGroupTransportDataType = 15532;
+ static readonly DataTypeSchemaHeader = 15534;
+ static readonly PublishedDataSetDataType = 15578;
+ static readonly PublishedDataSetSourceDataType = 15580;
+ static readonly PublishedDataItemsDataType = 15581;
+ static readonly PublishedEventsDataType = 15582;
+ static readonly DataSetFieldContentMask = 15583;
+ static readonly DataSetWriterDataType = 15597;
+ static readonly DataSetWriterTransportDataType = 15598;
+ static readonly DataSetWriterMessageDataType = 15605;
+ static readonly PubSubGroupDataType = 15609;
+ static readonly WriterGroupTransportDataType = 15611;
+ static readonly WriterGroupMessageDataType = 15616;
+ static readonly PubSubConnectionDataType = 15617;
+ static readonly ConnectionTransportDataType = 15618;
+ static readonly ReaderGroupTransportDataType = 15621;
+ static readonly ReaderGroupMessageDataType = 15622;
+ static readonly DataSetReaderDataType = 15623;
+ static readonly DataSetReaderTransportDataType = 15628;
+ static readonly DataSetReaderMessageDataType = 15629;
+ static readonly SubscribedDataSetDataType = 15630;
+ static readonly TargetVariablesDataType = 15631;
+ static readonly IdentityCriteriaType = 15632;
+ static readonly IdentityMappingRuleType = 15634;
+ static readonly SubscribedDataSetMirrorDataType = 15635;
+ static readonly UadpNetworkMessageContentMask = 15642;
+ static readonly UadpWriterGroupMessageDataType = 15645;
+ static readonly UadpDataSetMessageContentMask = 15646;
+ static readonly UadpDataSetWriterMessageDataType = 15652;
+ static readonly UadpDataSetReaderMessageDataType = 15653;
+ static readonly JsonNetworkMessageContentMask = 15654;
+ static readonly JsonWriterGroupMessageDataType = 15657;
+ static readonly JsonDataSetMessageContentMask = 15658;
+ static readonly JsonDataSetWriterMessageDataType = 15664;
+ static readonly JsonDataSetReaderMessageDataType = 15665;
+ static readonly BrokerWriterGroupTransportDataType = 15667;
+ static readonly BrokerDataSetWriterTransportDataType = 15669;
+ static readonly BrokerDataSetReaderTransportDataType = 15670;
+ static readonly OverrideValueHandling = 15874;
+ static readonly SessionlessInvokeRequestType = 15901;
+ static readonly DataSetFieldFlags = 15904;
+ static readonly AudioDataType = 16307;
+ static readonly AdditionalParametersType = 16313;
+ static readonly DatagramConnectionTransportDataType = 17467;
+ static readonly RsaEncryptedSecret = 17545;
+ static readonly EccEncryptedSecret = 17546;
+ static readonly EphemeralKeyType = 17548;
+ static readonly Index = 17588;
+ static readonly GenericAttributeValue = 17606;
+ static readonly GenericAttributes = 17607;
+ static readonly DecimalDataType = 17861;
+ static readonly RationalNumber = 18806;
+ static readonly Vector = 18807;
+ static readonly ThreeDVector = 18808;
+ static readonly CartesianCoordinates = 18809;
+ static readonly ThreeDCartesianCoordinates = 18810;
+ static readonly Orientation = 18811;
+ static readonly ThreeDOrientation = 18812;
+ static readonly Frame = 18813;
+ static readonly ThreeDFrame = 18814;
+ static readonly DiagnosticsLevel = 19723;
+ static readonly PubSubDiagnosticsCounterClassification = 19730;
+ static readonly DataSetOrderingType = 20408;
+ static readonly VersionTime = 20998;
+ static readonly SessionlessInvokeResponseType = 20999;
+ static readonly AliasNameDataType = 23468;
+ static readonly ReadAnnotationDataDetails = 23497;
+}

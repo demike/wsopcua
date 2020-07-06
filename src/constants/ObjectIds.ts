@@ -1,1359 +1,1359 @@
 // this file has been automatically generated
 // using schema_parser/generate_node_ids.ts
- export var ObjectIds = { 
- ModellingRule_Mandatory: 78,
- ModellingRule_Optional: 80,
- ModellingRule_ExposesItsArray: 83,
- RootFolder: 84,
- ObjectsFolder: 85,
- TypesFolder: 86,
- ViewsFolder: 87,
- ObjectTypesFolder: 88,
- VariableTypesFolder: 89,
- DataTypesFolder: 90,
- ReferenceTypesFolder: 91,
- XmlSchema_TypeSystem: 92,
- OPCBinarySchema_TypeSystem: 93,
- DataTypeDefinition_Encoding_DefaultBinary: 121,
- StructureDefinition_Encoding_DefaultBinary: 122,
- EnumDefinition_Encoding_DefaultBinary: 123,
- DataSetMetaDataType_Encoding_DefaultBinary: 124,
- DataTypeDescription_Encoding_DefaultBinary: 125,
- StructureDescription_Encoding_DefaultBinary: 126,
- EnumDescription_Encoding_DefaultBinary: 127,
- RolePermissionType_Encoding_DefaultBinary: 128,
- Node_Encoding_DefaultXml: 259,
- Node_Encoding_DefaultBinary: 260,
- ObjectNode_Encoding_DefaultXml: 262,
- ObjectNode_Encoding_DefaultBinary: 263,
- ObjectTypeNode_Encoding_DefaultXml: 265,
- ObjectTypeNode_Encoding_DefaultBinary: 266,
- VariableNode_Encoding_DefaultXml: 268,
- VariableNode_Encoding_DefaultBinary: 269,
- VariableTypeNode_Encoding_DefaultXml: 271,
- VariableTypeNode_Encoding_DefaultBinary: 272,
- ReferenceTypeNode_Encoding_DefaultXml: 274,
- ReferenceTypeNode_Encoding_DefaultBinary: 275,
- MethodNode_Encoding_DefaultXml: 277,
- MethodNode_Encoding_DefaultBinary: 278,
- ViewNode_Encoding_DefaultXml: 280,
- ViewNode_Encoding_DefaultBinary: 281,
- DataTypeNode_Encoding_DefaultXml: 283,
- DataTypeNode_Encoding_DefaultBinary: 284,
- ReferenceNode_Encoding_DefaultXml: 286,
- ReferenceNode_Encoding_DefaultBinary: 287,
- Argument_Encoding_DefaultXml: 297,
- Argument_Encoding_DefaultBinary: 298,
- StatusResult_Encoding_DefaultXml: 300,
- StatusResult_Encoding_DefaultBinary: 301,
- UserTokenPolicy_Encoding_DefaultXml: 305,
- UserTokenPolicy_Encoding_DefaultBinary: 306,
- ApplicationDescription_Encoding_DefaultXml: 309,
- ApplicationDescription_Encoding_DefaultBinary: 310,
- EndpointDescription_Encoding_DefaultXml: 313,
- EndpointDescription_Encoding_DefaultBinary: 314,
- UserIdentityToken_Encoding_DefaultXml: 317,
- UserIdentityToken_Encoding_DefaultBinary: 318,
- AnonymousIdentityToken_Encoding_DefaultXml: 320,
- AnonymousIdentityToken_Encoding_DefaultBinary: 321,
- UserNameIdentityToken_Encoding_DefaultXml: 323,
- UserNameIdentityToken_Encoding_DefaultBinary: 324,
- X509IdentityToken_Encoding_DefaultXml: 326,
- X509IdentityToken_Encoding_DefaultBinary: 327,
- EndpointConfiguration_Encoding_DefaultXml: 332,
- EndpointConfiguration_Encoding_DefaultBinary: 333,
- BuildInfo_Encoding_DefaultXml: 339,
- BuildInfo_Encoding_DefaultBinary: 340,
- SignedSoftwareCertificate_Encoding_DefaultXml: 345,
- SignedSoftwareCertificate_Encoding_DefaultBinary: 346,
- NodeAttributes_Encoding_DefaultXml: 350,
- NodeAttributes_Encoding_DefaultBinary: 351,
- ObjectAttributes_Encoding_DefaultXml: 353,
- ObjectAttributes_Encoding_DefaultBinary: 354,
- VariableAttributes_Encoding_DefaultXml: 356,
- VariableAttributes_Encoding_DefaultBinary: 357,
- MethodAttributes_Encoding_DefaultXml: 359,
- MethodAttributes_Encoding_DefaultBinary: 360,
- ObjectTypeAttributes_Encoding_DefaultXml: 362,
- ObjectTypeAttributes_Encoding_DefaultBinary: 363,
- VariableTypeAttributes_Encoding_DefaultXml: 365,
- VariableTypeAttributes_Encoding_DefaultBinary: 366,
- ReferenceTypeAttributes_Encoding_DefaultXml: 368,
- ReferenceTypeAttributes_Encoding_DefaultBinary: 369,
- DataTypeAttributes_Encoding_DefaultXml: 371,
- DataTypeAttributes_Encoding_DefaultBinary: 372,
- ViewAttributes_Encoding_DefaultXml: 374,
- ViewAttributes_Encoding_DefaultBinary: 375,
- AddNodesItem_Encoding_DefaultXml: 377,
- AddNodesItem_Encoding_DefaultBinary: 378,
- AddReferencesItem_Encoding_DefaultXml: 380,
- AddReferencesItem_Encoding_DefaultBinary: 381,
- DeleteNodesItem_Encoding_DefaultXml: 383,
- DeleteNodesItem_Encoding_DefaultBinary: 384,
- DeleteReferencesItem_Encoding_DefaultXml: 386,
- DeleteReferencesItem_Encoding_DefaultBinary: 387,
- RequestHeader_Encoding_DefaultXml: 390,
- RequestHeader_Encoding_DefaultBinary: 391,
- ResponseHeader_Encoding_DefaultXml: 393,
- ResponseHeader_Encoding_DefaultBinary: 394,
- ServiceFault_Encoding_DefaultXml: 396,
- ServiceFault_Encoding_DefaultBinary: 397,
- FindServersRequest_Encoding_DefaultXml: 421,
- FindServersRequest_Encoding_DefaultBinary: 422,
- FindServersResponse_Encoding_DefaultXml: 424,
- FindServersResponse_Encoding_DefaultBinary: 425,
- GetEndpointsRequest_Encoding_DefaultXml: 427,
- GetEndpointsRequest_Encoding_DefaultBinary: 428,
- GetEndpointsResponse_Encoding_DefaultXml: 430,
- GetEndpointsResponse_Encoding_DefaultBinary: 431,
- RegisteredServer_Encoding_DefaultXml: 433,
- RegisteredServer_Encoding_DefaultBinary: 434,
- RegisterServerRequest_Encoding_DefaultXml: 436,
- RegisterServerRequest_Encoding_DefaultBinary: 437,
- RegisterServerResponse_Encoding_DefaultXml: 439,
- RegisterServerResponse_Encoding_DefaultBinary: 440,
- ChannelSecurityToken_Encoding_DefaultXml: 442,
- ChannelSecurityToken_Encoding_DefaultBinary: 443,
- OpenSecureChannelRequest_Encoding_DefaultXml: 445,
- OpenSecureChannelRequest_Encoding_DefaultBinary: 446,
- OpenSecureChannelResponse_Encoding_DefaultXml: 448,
- OpenSecureChannelResponse_Encoding_DefaultBinary: 449,
- CloseSecureChannelRequest_Encoding_DefaultXml: 451,
- CloseSecureChannelRequest_Encoding_DefaultBinary: 452,
- CloseSecureChannelResponse_Encoding_DefaultXml: 454,
- CloseSecureChannelResponse_Encoding_DefaultBinary: 455,
- SignatureData_Encoding_DefaultXml: 457,
- SignatureData_Encoding_DefaultBinary: 458,
- CreateSessionRequest_Encoding_DefaultXml: 460,
- CreateSessionRequest_Encoding_DefaultBinary: 461,
- CreateSessionResponse_Encoding_DefaultXml: 463,
- CreateSessionResponse_Encoding_DefaultBinary: 464,
- ActivateSessionRequest_Encoding_DefaultXml: 466,
- ActivateSessionRequest_Encoding_DefaultBinary: 467,
- ActivateSessionResponse_Encoding_DefaultXml: 469,
- ActivateSessionResponse_Encoding_DefaultBinary: 470,
- CloseSessionRequest_Encoding_DefaultXml: 472,
- CloseSessionRequest_Encoding_DefaultBinary: 473,
- CloseSessionResponse_Encoding_DefaultXml: 475,
- CloseSessionResponse_Encoding_DefaultBinary: 476,
- CancelRequest_Encoding_DefaultXml: 478,
- CancelRequest_Encoding_DefaultBinary: 479,
- CancelResponse_Encoding_DefaultXml: 481,
- CancelResponse_Encoding_DefaultBinary: 482,
- AddNodesResult_Encoding_DefaultXml: 484,
- AddNodesResult_Encoding_DefaultBinary: 485,
- AddNodesRequest_Encoding_DefaultXml: 487,
- AddNodesRequest_Encoding_DefaultBinary: 488,
- AddNodesResponse_Encoding_DefaultXml: 490,
- AddNodesResponse_Encoding_DefaultBinary: 491,
- AddReferencesRequest_Encoding_DefaultXml: 493,
- AddReferencesRequest_Encoding_DefaultBinary: 494,
- AddReferencesResponse_Encoding_DefaultXml: 496,
- AddReferencesResponse_Encoding_DefaultBinary: 497,
- DeleteNodesRequest_Encoding_DefaultXml: 499,
- DeleteNodesRequest_Encoding_DefaultBinary: 500,
- DeleteNodesResponse_Encoding_DefaultXml: 502,
- DeleteNodesResponse_Encoding_DefaultBinary: 503,
- DeleteReferencesRequest_Encoding_DefaultXml: 505,
- DeleteReferencesRequest_Encoding_DefaultBinary: 506,
- DeleteReferencesResponse_Encoding_DefaultXml: 508,
- DeleteReferencesResponse_Encoding_DefaultBinary: 509,
- ViewDescription_Encoding_DefaultXml: 512,
- ViewDescription_Encoding_DefaultBinary: 513,
- BrowseDescription_Encoding_DefaultXml: 515,
- BrowseDescription_Encoding_DefaultBinary: 516,
- ReferenceDescription_Encoding_DefaultXml: 519,
- ReferenceDescription_Encoding_DefaultBinary: 520,
- BrowseResult_Encoding_DefaultXml: 523,
- BrowseResult_Encoding_DefaultBinary: 524,
- BrowseRequest_Encoding_DefaultXml: 526,
- BrowseRequest_Encoding_DefaultBinary: 527,
- BrowseResponse_Encoding_DefaultXml: 529,
- BrowseResponse_Encoding_DefaultBinary: 530,
- BrowseNextRequest_Encoding_DefaultXml: 532,
- BrowseNextRequest_Encoding_DefaultBinary: 533,
- BrowseNextResponse_Encoding_DefaultXml: 535,
- BrowseNextResponse_Encoding_DefaultBinary: 536,
- RelativePathElement_Encoding_DefaultXml: 538,
- RelativePathElement_Encoding_DefaultBinary: 539,
- RelativePath_Encoding_DefaultXml: 541,
- RelativePath_Encoding_DefaultBinary: 542,
- BrowsePath_Encoding_DefaultXml: 544,
- BrowsePath_Encoding_DefaultBinary: 545,
- BrowsePathTarget_Encoding_DefaultXml: 547,
- BrowsePathTarget_Encoding_DefaultBinary: 548,
- BrowsePathResult_Encoding_DefaultXml: 550,
- BrowsePathResult_Encoding_DefaultBinary: 551,
- TranslateBrowsePathsToNodeIdsRequest_Encoding_DefaultXml: 553,
- TranslateBrowsePathsToNodeIdsRequest_Encoding_DefaultBinary: 554,
- TranslateBrowsePathsToNodeIdsResponse_Encoding_DefaultXml: 556,
- TranslateBrowsePathsToNodeIdsResponse_Encoding_DefaultBinary: 557,
- RegisterNodesRequest_Encoding_DefaultXml: 559,
- RegisterNodesRequest_Encoding_DefaultBinary: 560,
- RegisterNodesResponse_Encoding_DefaultXml: 562,
- RegisterNodesResponse_Encoding_DefaultBinary: 563,
- UnregisterNodesRequest_Encoding_DefaultXml: 565,
- UnregisterNodesRequest_Encoding_DefaultBinary: 566,
- UnregisterNodesResponse_Encoding_DefaultXml: 568,
- UnregisterNodesResponse_Encoding_DefaultBinary: 569,
- QueryDataDescription_Encoding_DefaultXml: 571,
- QueryDataDescription_Encoding_DefaultBinary: 572,
- NodeTypeDescription_Encoding_DefaultXml: 574,
- NodeTypeDescription_Encoding_DefaultBinary: 575,
- QueryDataSet_Encoding_DefaultXml: 578,
- QueryDataSet_Encoding_DefaultBinary: 579,
- NodeReference_Encoding_DefaultXml: 581,
- NodeReference_Encoding_DefaultBinary: 582,
- ContentFilterElement_Encoding_DefaultXml: 584,
- ContentFilterElement_Encoding_DefaultBinary: 585,
- ContentFilter_Encoding_DefaultXml: 587,
- ContentFilter_Encoding_DefaultBinary: 588,
- FilterOperand_Encoding_DefaultXml: 590,
- FilterOperand_Encoding_DefaultBinary: 591,
- ElementOperand_Encoding_DefaultXml: 593,
- ElementOperand_Encoding_DefaultBinary: 594,
- LiteralOperand_Encoding_DefaultXml: 596,
- LiteralOperand_Encoding_DefaultBinary: 597,
- AttributeOperand_Encoding_DefaultXml: 599,
- AttributeOperand_Encoding_DefaultBinary: 600,
- SimpleAttributeOperand_Encoding_DefaultXml: 602,
- SimpleAttributeOperand_Encoding_DefaultBinary: 603,
- ContentFilterElementResult_Encoding_DefaultXml: 605,
- ContentFilterElementResult_Encoding_DefaultBinary: 606,
- ContentFilterResult_Encoding_DefaultXml: 608,
- ContentFilterResult_Encoding_DefaultBinary: 609,
- ParsingResult_Encoding_DefaultXml: 611,
- ParsingResult_Encoding_DefaultBinary: 612,
- QueryFirstRequest_Encoding_DefaultXml: 614,
- QueryFirstRequest_Encoding_DefaultBinary: 615,
- QueryFirstResponse_Encoding_DefaultXml: 617,
- QueryFirstResponse_Encoding_DefaultBinary: 618,
- QueryNextRequest_Encoding_DefaultXml: 620,
- QueryNextRequest_Encoding_DefaultBinary: 621,
- QueryNextResponse_Encoding_DefaultXml: 623,
- QueryNextResponse_Encoding_DefaultBinary: 624,
- ReadValueId_Encoding_DefaultXml: 627,
- ReadValueId_Encoding_DefaultBinary: 628,
- ReadRequest_Encoding_DefaultXml: 630,
- ReadRequest_Encoding_DefaultBinary: 631,
- ReadResponse_Encoding_DefaultXml: 633,
- ReadResponse_Encoding_DefaultBinary: 634,
- HistoryReadValueId_Encoding_DefaultXml: 636,
- HistoryReadValueId_Encoding_DefaultBinary: 637,
- HistoryReadResult_Encoding_DefaultXml: 639,
- HistoryReadResult_Encoding_DefaultBinary: 640,
- HistoryReadDetails_Encoding_DefaultXml: 642,
- HistoryReadDetails_Encoding_DefaultBinary: 643,
- ReadEventDetails_Encoding_DefaultXml: 645,
- ReadEventDetails_Encoding_DefaultBinary: 646,
- ReadRawModifiedDetails_Encoding_DefaultXml: 648,
- ReadRawModifiedDetails_Encoding_DefaultBinary: 649,
- ReadProcessedDetails_Encoding_DefaultXml: 651,
- ReadProcessedDetails_Encoding_DefaultBinary: 652,
- ReadAtTimeDetails_Encoding_DefaultXml: 654,
- ReadAtTimeDetails_Encoding_DefaultBinary: 655,
- HistoryData_Encoding_DefaultXml: 657,
- HistoryData_Encoding_DefaultBinary: 658,
- HistoryEvent_Encoding_DefaultXml: 660,
- HistoryEvent_Encoding_DefaultBinary: 661,
- HistoryReadRequest_Encoding_DefaultXml: 663,
- HistoryReadRequest_Encoding_DefaultBinary: 664,
- HistoryReadResponse_Encoding_DefaultXml: 666,
- HistoryReadResponse_Encoding_DefaultBinary: 667,
- WriteValue_Encoding_DefaultXml: 669,
- WriteValue_Encoding_DefaultBinary: 670,
- WriteRequest_Encoding_DefaultXml: 672,
- WriteRequest_Encoding_DefaultBinary: 673,
- WriteResponse_Encoding_DefaultXml: 675,
- WriteResponse_Encoding_DefaultBinary: 676,
- HistoryUpdateDetails_Encoding_DefaultXml: 678,
- HistoryUpdateDetails_Encoding_DefaultBinary: 679,
- UpdateDataDetails_Encoding_DefaultXml: 681,
- UpdateDataDetails_Encoding_DefaultBinary: 682,
- UpdateEventDetails_Encoding_DefaultXml: 684,
- UpdateEventDetails_Encoding_DefaultBinary: 685,
- DeleteRawModifiedDetails_Encoding_DefaultXml: 687,
- DeleteRawModifiedDetails_Encoding_DefaultBinary: 688,
- DeleteAtTimeDetails_Encoding_DefaultXml: 690,
- DeleteAtTimeDetails_Encoding_DefaultBinary: 691,
- DeleteEventDetails_Encoding_DefaultXml: 693,
- DeleteEventDetails_Encoding_DefaultBinary: 694,
- HistoryUpdateResult_Encoding_DefaultXml: 696,
- HistoryUpdateResult_Encoding_DefaultBinary: 697,
- HistoryUpdateRequest_Encoding_DefaultXml: 699,
- HistoryUpdateRequest_Encoding_DefaultBinary: 700,
- HistoryUpdateResponse_Encoding_DefaultXml: 702,
- HistoryUpdateResponse_Encoding_DefaultBinary: 703,
- CallMethodRequest_Encoding_DefaultXml: 705,
- CallMethodRequest_Encoding_DefaultBinary: 706,
- CallMethodResult_Encoding_DefaultXml: 708,
- CallMethodResult_Encoding_DefaultBinary: 709,
- CallRequest_Encoding_DefaultXml: 711,
- CallRequest_Encoding_DefaultBinary: 712,
- CallResponse_Encoding_DefaultXml: 714,
- CallResponse_Encoding_DefaultBinary: 715,
- MonitoringFilter_Encoding_DefaultXml: 720,
- MonitoringFilter_Encoding_DefaultBinary: 721,
- DataChangeFilter_Encoding_DefaultXml: 723,
- DataChangeFilter_Encoding_DefaultBinary: 724,
- EventFilter_Encoding_DefaultXml: 726,
- EventFilter_Encoding_DefaultBinary: 727,
- AggregateFilter_Encoding_DefaultXml: 729,
- AggregateFilter_Encoding_DefaultBinary: 730,
- MonitoringFilterResult_Encoding_DefaultXml: 732,
- MonitoringFilterResult_Encoding_DefaultBinary: 733,
- EventFilterResult_Encoding_DefaultXml: 735,
- EventFilterResult_Encoding_DefaultBinary: 736,
- AggregateFilterResult_Encoding_DefaultXml: 738,
- AggregateFilterResult_Encoding_DefaultBinary: 739,
- MonitoringParameters_Encoding_DefaultXml: 741,
- MonitoringParameters_Encoding_DefaultBinary: 742,
- MonitoredItemCreateRequest_Encoding_DefaultXml: 744,
- MonitoredItemCreateRequest_Encoding_DefaultBinary: 745,
- MonitoredItemCreateResult_Encoding_DefaultXml: 747,
- MonitoredItemCreateResult_Encoding_DefaultBinary: 748,
- CreateMonitoredItemsRequest_Encoding_DefaultXml: 750,
- CreateMonitoredItemsRequest_Encoding_DefaultBinary: 751,
- CreateMonitoredItemsResponse_Encoding_DefaultXml: 753,
- CreateMonitoredItemsResponse_Encoding_DefaultBinary: 754,
- MonitoredItemModifyRequest_Encoding_DefaultXml: 756,
- MonitoredItemModifyRequest_Encoding_DefaultBinary: 757,
- MonitoredItemModifyResult_Encoding_DefaultXml: 759,
- MonitoredItemModifyResult_Encoding_DefaultBinary: 760,
- ModifyMonitoredItemsRequest_Encoding_DefaultXml: 762,
- ModifyMonitoredItemsRequest_Encoding_DefaultBinary: 763,
- ModifyMonitoredItemsResponse_Encoding_DefaultXml: 765,
- ModifyMonitoredItemsResponse_Encoding_DefaultBinary: 766,
- SetMonitoringModeRequest_Encoding_DefaultXml: 768,
- SetMonitoringModeRequest_Encoding_DefaultBinary: 769,
- SetMonitoringModeResponse_Encoding_DefaultXml: 771,
- SetMonitoringModeResponse_Encoding_DefaultBinary: 772,
- SetTriggeringRequest_Encoding_DefaultXml: 774,
- SetTriggeringRequest_Encoding_DefaultBinary: 775,
- SetTriggeringResponse_Encoding_DefaultXml: 777,
- SetTriggeringResponse_Encoding_DefaultBinary: 778,
- DeleteMonitoredItemsRequest_Encoding_DefaultXml: 780,
- DeleteMonitoredItemsRequest_Encoding_DefaultBinary: 781,
- DeleteMonitoredItemsResponse_Encoding_DefaultXml: 783,
- DeleteMonitoredItemsResponse_Encoding_DefaultBinary: 784,
- CreateSubscriptionRequest_Encoding_DefaultXml: 786,
- CreateSubscriptionRequest_Encoding_DefaultBinary: 787,
- CreateSubscriptionResponse_Encoding_DefaultXml: 789,
- CreateSubscriptionResponse_Encoding_DefaultBinary: 790,
- ModifySubscriptionRequest_Encoding_DefaultXml: 792,
- ModifySubscriptionRequest_Encoding_DefaultBinary: 793,
- ModifySubscriptionResponse_Encoding_DefaultXml: 795,
- ModifySubscriptionResponse_Encoding_DefaultBinary: 796,
- SetPublishingModeRequest_Encoding_DefaultXml: 798,
- SetPublishingModeRequest_Encoding_DefaultBinary: 799,
- SetPublishingModeResponse_Encoding_DefaultXml: 801,
- SetPublishingModeResponse_Encoding_DefaultBinary: 802,
- NotificationMessage_Encoding_DefaultXml: 804,
- NotificationMessage_Encoding_DefaultBinary: 805,
- MonitoredItemNotification_Encoding_DefaultXml: 807,
- MonitoredItemNotification_Encoding_DefaultBinary: 808,
- DataChangeNotification_Encoding_DefaultXml: 810,
- DataChangeNotification_Encoding_DefaultBinary: 811,
- StatusChangeNotification_Encoding_DefaultXml: 819,
- StatusChangeNotification_Encoding_DefaultBinary: 820,
- SubscriptionAcknowledgement_Encoding_DefaultXml: 822,
- SubscriptionAcknowledgement_Encoding_DefaultBinary: 823,
- PublishRequest_Encoding_DefaultXml: 825,
- PublishRequest_Encoding_DefaultBinary: 826,
- PublishResponse_Encoding_DefaultXml: 828,
- PublishResponse_Encoding_DefaultBinary: 829,
- RepublishRequest_Encoding_DefaultXml: 831,
- RepublishRequest_Encoding_DefaultBinary: 832,
- RepublishResponse_Encoding_DefaultXml: 834,
- RepublishResponse_Encoding_DefaultBinary: 835,
- TransferResult_Encoding_DefaultXml: 837,
- TransferResult_Encoding_DefaultBinary: 838,
- TransferSubscriptionsRequest_Encoding_DefaultXml: 840,
- TransferSubscriptionsRequest_Encoding_DefaultBinary: 841,
- TransferSubscriptionsResponse_Encoding_DefaultXml: 843,
- TransferSubscriptionsResponse_Encoding_DefaultBinary: 844,
- DeleteSubscriptionsRequest_Encoding_DefaultXml: 846,
- DeleteSubscriptionsRequest_Encoding_DefaultBinary: 847,
- DeleteSubscriptionsResponse_Encoding_DefaultXml: 849,
- DeleteSubscriptionsResponse_Encoding_DefaultBinary: 850,
- RedundantServerDataType_Encoding_DefaultXml: 854,
- RedundantServerDataType_Encoding_DefaultBinary: 855,
- SamplingIntervalDiagnosticsDataType_Encoding_DefaultXml: 857,
- SamplingIntervalDiagnosticsDataType_Encoding_DefaultBinary: 858,
- ServerDiagnosticsSummaryDataType_Encoding_DefaultXml: 860,
- ServerDiagnosticsSummaryDataType_Encoding_DefaultBinary: 861,
- ServerStatusDataType_Encoding_DefaultXml: 863,
- ServerStatusDataType_Encoding_DefaultBinary: 864,
- SessionDiagnosticsDataType_Encoding_DefaultXml: 866,
- SessionDiagnosticsDataType_Encoding_DefaultBinary: 867,
- SessionSecurityDiagnosticsDataType_Encoding_DefaultXml: 869,
- SessionSecurityDiagnosticsDataType_Encoding_DefaultBinary: 870,
- ServiceCounterDataType_Encoding_DefaultXml: 872,
- ServiceCounterDataType_Encoding_DefaultBinary: 873,
- SubscriptionDiagnosticsDataType_Encoding_DefaultXml: 875,
- SubscriptionDiagnosticsDataType_Encoding_DefaultBinary: 876,
- ModelChangeStructureDataType_Encoding_DefaultXml: 878,
- ModelChangeStructureDataType_Encoding_DefaultBinary: 879,
- Range_Encoding_DefaultXml: 885,
- Range_Encoding_DefaultBinary: 886,
- EUInformation_Encoding_DefaultXml: 888,
- EUInformation_Encoding_DefaultBinary: 889,
- Annotation_Encoding_DefaultXml: 892,
- Annotation_Encoding_DefaultBinary: 893,
- ProgramDiagnosticDataType_Encoding_DefaultXml: 895,
- ProgramDiagnosticDataType_Encoding_DefaultBinary: 896,
- SemanticChangeStructureDataType_Encoding_DefaultXml: 898,
- SemanticChangeStructureDataType_Encoding_DefaultBinary: 899,
- EventNotificationList_Encoding_DefaultXml: 915,
- EventNotificationList_Encoding_DefaultBinary: 916,
- EventFieldList_Encoding_DefaultXml: 918,
- EventFieldList_Encoding_DefaultBinary: 919,
- HistoryEventFieldList_Encoding_DefaultXml: 921,
- HistoryEventFieldList_Encoding_DefaultBinary: 922,
- IssuedIdentityToken_Encoding_DefaultXml: 939,
- IssuedIdentityToken_Encoding_DefaultBinary: 940,
- NotificationData_Encoding_DefaultXml: 946,
- NotificationData_Encoding_DefaultBinary: 947,
- AggregateConfiguration_Encoding_DefaultXml: 949,
- AggregateConfiguration_Encoding_DefaultBinary: 950,
- ServerType_ServerCapabilities: 2009,
- ServerType_ServerDiagnostics: 2010,
- ServerType_VendorServerInfo: 2011,
- ServerType_ServerRedundancy: 2012,
- ServerCapabilitiesType_ModellingRules: 2019,
- Server: 2253,
- Server_ServerCapabilities: 2268,
- Server_ServerDiagnostics: 2274,
- Server_VendorServerInfo: 2295,
- Server_ServerRedundancy: 2296,
- AggregateFunction_Interpolative: 2341,
- AggregateFunction_Average: 2342,
- AggregateFunction_TimeAverage: 2343,
- AggregateFunction_Total: 2344,
- AggregateFunction_Minimum: 2346,
- AggregateFunction_Maximum: 2347,
- AggregateFunction_MinimumActualTime: 2348,
- AggregateFunction_MaximumActualTime: 2349,
- AggregateFunction_Range: 2350,
- AggregateFunction_AnnotationCount: 2351,
- AggregateFunction_Count: 2352,
- AggregateFunction_NumberOfTransitions: 2355,
- AggregateFunction_Start: 2357,
- AggregateFunction_End: 2358,
- AggregateFunction_Delta: 2359,
- AggregateFunction_DurationGood: 2360,
- AggregateFunction_DurationBad: 2361,
- AggregateFunction_PercentGood: 2362,
- AggregateFunction_PercentBad: 2363,
- AggregateFunction_WorstQuality: 2364,
- ProgramStateMachineType_Ready: 2400,
- ProgramStateMachineType_Running: 2402,
- ProgramStateMachineType_Suspended: 2404,
- ProgramStateMachineType_Halted: 2406,
- ProgramStateMachineType_HaltedToReady: 2408,
- ProgramStateMachineType_ReadyToRunning: 2410,
- ProgramStateMachineType_RunningToHalted: 2412,
- ProgramStateMachineType_RunningToReady: 2414,
- ProgramStateMachineType_RunningToSuspended: 2416,
- ProgramStateMachineType_SuspendedToRunning: 2418,
- ProgramStateMachineType_SuspendedToHalted: 2420,
- ProgramStateMachineType_SuspendedToReady: 2422,
- ProgramStateMachineType_ReadyToHalted: 2424,
- ServerDiagnosticsType_SessionsDiagnosticsSummary: 2744,
- ServerCapabilitiesType_AggregateFunctions: 2754,
- ShelvedStateMachineType_Unshelved: 2930,
- ShelvedStateMachineType_TimedShelved: 2932,
- ShelvedStateMachineType_OneShotShelved: 2933,
- ShelvedStateMachineType_UnshelvedToTimedShelved: 2935,
- ShelvedStateMachineType_UnshelvedToOneShotShelved: 2936,
- ShelvedStateMachineType_TimedShelvedToUnshelved: 2940,
- ShelvedStateMachineType_TimedShelvedToOneShotShelved: 2942,
- ShelvedStateMachineType_OneShotShelvedToUnshelved: 2943,
- ShelvedStateMachineType_OneShotShelvedToTimedShelved: 2945,
- Server_ServerCapabilities_ModellingRules: 2996,
- Server_ServerCapabilities_AggregateFunctions: 2997,
- EventTypesFolder: 3048,
- HistoricalDataConfigurationType_AggregateConfiguration: 3059,
- DefaultBinary: 3062,
- DefaultXml: 3063,
- ServerType_ServerCapabilities_ModellingRules: 3093,
- ServerType_ServerCapabilities_AggregateFunctions: 3094,
- ServerType_ServerDiagnostics_SessionsDiagnosticsSummary: 3111,
- Server_ServerDiagnostics_SessionsDiagnosticsSummary: 3706,
- ProgramStateMachineType_FinalResultData: 3850,
- EnumValueType_Encoding_DefaultXml: 7616,
- EnumValueType_Encoding_DefaultBinary: 8251,
- TimeZoneDataType_Encoding_DefaultXml: 8913,
- TimeZoneDataType_Encoding_DefaultBinary: 8917,
- AlarmConditionType_ShelvingState: 9178,
- LimitAlarmType_ShelvingState: 9279,
- ExclusiveLimitStateMachineType_HighHigh: 9329,
- ExclusiveLimitStateMachineType_High: 9331,
- ExclusiveLimitStateMachineType_Low: 9333,
- ExclusiveLimitStateMachineType_LowLow: 9335,
- ExclusiveLimitStateMachineType_LowLowToLow: 9337,
- ExclusiveLimitStateMachineType_LowToLowLow: 9338,
- ExclusiveLimitStateMachineType_HighHighToHigh: 9339,
- ExclusiveLimitStateMachineType_HighToHighHigh: 9340,
- ExclusiveLimitAlarmType_ShelvingState: 9416,
- ExclusiveLimitAlarmType_LimitState: 9455,
- ExclusiveLevelAlarmType_ShelvingState: 9557,
- ExclusiveLevelAlarmType_LimitState: 9596,
- ExclusiveRateOfChangeAlarmType_ShelvingState: 9698,
- ExclusiveRateOfChangeAlarmType_LimitState: 9737,
- ExclusiveDeviationAlarmType_ShelvingState: 9839,
- ExclusiveDeviationAlarmType_LimitState: 9878,
- NonExclusiveLimitAlarmType_ShelvingState: 9981,
- NonExclusiveLevelAlarmType_ShelvingState: 10135,
- NonExclusiveRateOfChangeAlarmType_ShelvingState: 10289,
- NonExclusiveDeviationAlarmType_ShelvingState: 10443,
- DiscreteAlarmType_ShelvingState: 10598,
- OffNormalAlarmType_ShelvingState: 10712,
- TripAlarmType_ShelvingState: 10826,
- HistoryServerCapabilitiesType_AggregateFunctions: 11172,
- HistoryServerCapabilities: 11192,
- HistoryServerCapabilities_AggregateFunctions: 11201,
- HAConfiguration: 11202,
- HAConfiguration_AggregateConfiguration: 11203,
- ModificationInfo_Encoding_DefaultXml: 11218,
- HistoryModifiedData_Encoding_DefaultXml: 11219,
- ModificationInfo_Encoding_DefaultBinary: 11226,
- HistoryModifiedData_Encoding_DefaultBinary: 11227,
- AggregateFunction_TimeAverage2: 11285,
- AggregateFunction_Minimum2: 11286,
- AggregateFunction_Maximum2: 11287,
- AggregateFunction_Range2: 11288,
- AggregateFunction_WorstQuality2: 11292,
- UpdateStructureDataDetails_Encoding_DefaultXml: 11296,
- UpdateStructureDataDetails_Encoding_DefaultBinary: 11300,
- AggregateFunction_Total2: 11304,
- AggregateFunction_MinimumActualTime2: 11305,
- AggregateFunction_MaximumActualTime2: 11306,
- AggregateFunction_DurationInStateZero: 11307,
- AggregateFunction_DurationInStateNonZero: 11308,
- AggregateFunction_StandardDeviationSample: 11426,
- AggregateFunction_StandardDeviationPopulation: 11427,
- AggregateFunction_VarianceSample: 11428,
- AggregateFunction_VariancePopulation: 11429,
- AggregateFunction_StartBound: 11505,
- AggregateFunction_EndBound: 11506,
- AggregateFunction_DeltaBounds: 11507,
- ModellingRule_OptionalPlaceholder: 11508,
- ModellingRule_MandatoryPlaceholder: 11510,
- ServerType_ServerCapabilities_OperationLimits: 11516,
- ServerType_Namespaces: 11527,
- ServerCapabilitiesType_OperationLimits: 11551,
- NamespaceMetadataType_NamespaceFile: 11624,
- NamespacesType_NamespaceIdentifier_Placeholder: 11646,
- NamespacesType_NamespaceIdentifier_Placeholder_NamespaceFile: 11654,
- Server_ServerCapabilities_OperationLimits: 11704,
- Server_Namespaces: 11715,
- SystemOffNormalAlarmType_ShelvingState: 11831,
- HistoricalDataConfigurationType_AggregateFunctions: 11876,
- HAConfiguration_AggregateFunctions: 11877,
- InstanceNode_Encoding_DefaultXml: 11887,
- TypeNode_Encoding_DefaultXml: 11888,
- InstanceNode_Encoding_DefaultBinary: 11889,
- TypeNode_Encoding_DefaultBinary: 11890,
- EndpointUrlListDataType_Encoding_DefaultXml: 11949,
- NetworkGroupDataType_Encoding_DefaultXml: 11950,
- EndpointUrlListDataType_Encoding_DefaultBinary: 11957,
- NetworkGroupDataType_Encoding_DefaultBinary: 11958,
- AxisInformation_Encoding_DefaultXml: 12081,
- XVType_Encoding_DefaultXml: 12082,
- AxisInformation_Encoding_DefaultBinary: 12089,
- XVType_Encoding_DefaultBinary: 12090,
- SessionsDiagnosticsSummaryType_ClientName_Placeholder: 12097,
- ComplexNumberType_Encoding_DefaultXml: 12173,
- DoubleComplexNumberType_Encoding_DefaultXml: 12174,
- ComplexNumberType_Encoding_DefaultBinary: 12181,
- DoubleComplexNumberType_Encoding_DefaultBinary: 12182,
- ServerOnNetwork_Encoding_DefaultXml: 12195,
- FindServersOnNetworkRequest_Encoding_DefaultXml: 12196,
- FindServersOnNetworkResponse_Encoding_DefaultXml: 12197,
- RegisterServer2Request_Encoding_DefaultXml: 12199,
- RegisterServer2Response_Encoding_DefaultXml: 12200,
- ServerOnNetwork_Encoding_DefaultBinary: 12207,
- FindServersOnNetworkRequest_Encoding_DefaultBinary: 12208,
- FindServersOnNetworkResponse_Encoding_DefaultBinary: 12209,
- RegisterServer2Request_Encoding_DefaultBinary: 12211,
- RegisterServer2Response_Encoding_DefaultBinary: 12212,
- ServerConfiguration: 12637,
- ServerConfiguration_CertificateGroups_DefaultApplicationGroup_TrustList: 12642,
- TrustListDataType_Encoding_DefaultXml: 12676,
- TrustListDataType_Encoding_DefaultBinary: 12680,
- OptionSet_Encoding_DefaultXml: 12757,
- Union_Encoding_DefaultXml: 12758,
- OptionSet_Encoding_DefaultBinary: 12765,
- Union_Encoding_DefaultBinary: 12766,
- DiscoveryConfiguration_Encoding_DefaultXml: 12892,
- MdnsDiscoveryConfiguration_Encoding_DefaultXml: 12893,
- DiscoveryConfiguration_Encoding_DefaultBinary: 12900,
- MdnsDiscoveryConfiguration_Encoding_DefaultBinary: 12901,
- CertificateExpirationAlarmType_ShelvingState: 13305,
- FileDirectoryType_FileDirectoryName_Placeholder: 13354,
- FileDirectoryType_FileName_Placeholder: 13366,
- CertificateGroupType_TrustList: 13599,
- CertificateGroupFolderType_DefaultApplicationGroup: 13814,
- CertificateGroupFolderType_DefaultApplicationGroup_TrustList: 13815,
- CertificateGroupFolderType_DefaultHttpsGroup: 13848,
- CertificateGroupFolderType_DefaultHttpsGroup_TrustList: 13849,
- CertificateGroupFolderType_DefaultUserTokenGroup: 13882,
- CertificateGroupFolderType_DefaultUserTokenGroup_TrustList: 13883,
- CertificateGroupFolderType_AdditionalGroup_Placeholder: 13916,
- CertificateGroupFolderType_AdditionalGroup_Placeholder_TrustList: 13917,
- ServerConfigurationType_CertificateGroups: 13950,
- ServerConfigurationType_CertificateGroups_DefaultApplicationGroup: 13951,
- ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_TrustList: 13952,
- ServerConfigurationType_CertificateGroups_DefaultHttpsGroup: 13985,
- ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_TrustList: 13986,
- ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup: 14019,
- ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_TrustList: 14020,
- ServerConfiguration_CertificateGroups: 14053,
- ServerConfiguration_CertificateGroups_DefaultHttpsGroup: 14088,
- ServerConfiguration_CertificateGroups_DefaultHttpsGroup_TrustList: 14089,
- ServerConfiguration_CertificateGroups_DefaultUserTokenGroup: 14122,
- ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_TrustList: 14123,
- ServerConfiguration_CertificateGroups_DefaultApplicationGroup: 14156,
- PubSubConnectionType_Address: 14221,
- PublishedVariableDataType_Encoding_DefaultXml: 14319,
- PublishedVariableDataType_Encoding_DefaultBinary: 14323,
- PublishSubscribeType_ConnectionName_Placeholder: 14417,
- PublishSubscribeType_ConnectionName_Placeholder_Status: 14419,
- PublishSubscribeType_ConnectionName_Placeholder_Address: 14423,
- PublishSubscribeType_PublishedDataSets: 14434,
- PublishSubscribe: 14443,
- DataSetFolderType_DataSetFolderName_Placeholder: 14478,
- DataSetFolderType_PublishedDataSetName_Placeholder: 14487,
- PubSubConnectionType_Status: 14600,
- DataSetMetaDataType_Encoding_DefaultXml: 14794,
- FieldMetaData_Encoding_DefaultXml: 14795,
- DataTypeDescription_Encoding_DefaultXml: 14796,
- DataTypeDefinition_Encoding_DefaultXml: 14797,
- StructureDefinition_Encoding_DefaultXml: 14798,
- EnumDefinition_Encoding_DefaultXml: 14799,
- StructureField_Encoding_DefaultXml: 14800,
- EnumField_Encoding_DefaultXml: 14801,
- KeyValuePair_Encoding_DefaultXml: 14802,
- ConfigurationVersionDataType_Encoding_DefaultXml: 14803,
- FieldTargetDataType_Encoding_DefaultXml: 14804,
- FieldMetaData_Encoding_DefaultBinary: 14839,
- StructureField_Encoding_DefaultBinary: 14844,
- EnumField_Encoding_DefaultBinary: 14845,
- KeyValuePair_Encoding_DefaultBinary: 14846,
- ConfigurationVersionDataType_Encoding_DefaultBinary: 14847,
- FieldTargetDataType_Encoding_DefaultBinary: 14848,
- KeyValuePair_Encoding_DefaultJson: 15041,
- IdentityMappingRuleType_Encoding_DefaultJson: 15042,
- TrustListDataType_Encoding_DefaultJson: 15044,
- DecimalDataType_Encoding_DefaultJson: 15045,
- ConfigurationVersionDataType_Encoding_DefaultJson: 15049,
- DataSetMetaDataType_Encoding_DefaultJson: 15050,
- FieldMetaData_Encoding_DefaultJson: 15051,
- DataTypeDescription_Encoding_DefaultJson: 15057,
- StructureDescription_Encoding_DefaultJson: 15058,
- EnumDescription_Encoding_DefaultJson: 15059,
- PublishedVariableDataType_Encoding_DefaultJson: 15060,
- FieldTargetDataType_Encoding_DefaultJson: 15061,
- RolePermissionType_Encoding_DefaultJson: 15062,
- DataTypeDefinition_Encoding_DefaultJson: 15063,
- StructureField_Encoding_DefaultJson: 15065,
- StructureDefinition_Encoding_DefaultJson: 15066,
- EnumDefinition_Encoding_DefaultJson: 15067,
- Node_Encoding_DefaultJson: 15068,
- InstanceNode_Encoding_DefaultJson: 15069,
- TypeNode_Encoding_DefaultJson: 15070,
- ObjectNode_Encoding_DefaultJson: 15071,
- DatagramConnectionTransportType_DiscoveryAddress: 15072,
- ObjectTypeNode_Encoding_DefaultJson: 15073,
- VariableNode_Encoding_DefaultJson: 15074,
- VariableTypeNode_Encoding_DefaultJson: 15075,
- ReferenceTypeNode_Encoding_DefaultJson: 15076,
- MethodNode_Encoding_DefaultJson: 15077,
- ViewNode_Encoding_DefaultJson: 15078,
- DataTypeNode_Encoding_DefaultJson: 15079,
- ReferenceNode_Encoding_DefaultJson: 15080,
- Argument_Encoding_DefaultJson: 15081,
- EnumValueType_Encoding_DefaultJson: 15082,
- EnumField_Encoding_DefaultJson: 15083,
- OptionSet_Encoding_DefaultJson: 15084,
- Union_Encoding_DefaultJson: 15085,
- TimeZoneDataType_Encoding_DefaultJson: 15086,
- ApplicationDescription_Encoding_DefaultJson: 15087,
- RequestHeader_Encoding_DefaultJson: 15088,
- ResponseHeader_Encoding_DefaultJson: 15089,
- ServiceFault_Encoding_DefaultJson: 15090,
- SessionlessInvokeRequestType_Encoding_DefaultJson: 15091,
- SessionlessInvokeResponseType_Encoding_DefaultJson: 15092,
- FindServersRequest_Encoding_DefaultJson: 15093,
- FindServersResponse_Encoding_DefaultJson: 15094,
- ServerOnNetwork_Encoding_DefaultJson: 15095,
- FindServersOnNetworkRequest_Encoding_DefaultJson: 15096,
- FindServersOnNetworkResponse_Encoding_DefaultJson: 15097,
- UserTokenPolicy_Encoding_DefaultJson: 15098,
- EndpointDescription_Encoding_DefaultJson: 15099,
- GetEndpointsRequest_Encoding_DefaultJson: 15100,
- GetEndpointsResponse_Encoding_DefaultJson: 15101,
- RegisteredServer_Encoding_DefaultJson: 15102,
- RegisterServerRequest_Encoding_DefaultJson: 15103,
- RegisterServerResponse_Encoding_DefaultJson: 15104,
- DiscoveryConfiguration_Encoding_DefaultJson: 15105,
- MdnsDiscoveryConfiguration_Encoding_DefaultJson: 15106,
- RegisterServer2Request_Encoding_DefaultJson: 15107,
- RegisterServer2Response_Encoding_DefaultJson: 15130,
- ChannelSecurityToken_Encoding_DefaultJson: 15131,
- OpenSecureChannelRequest_Encoding_DefaultJson: 15132,
- OpenSecureChannelResponse_Encoding_DefaultJson: 15133,
- CloseSecureChannelRequest_Encoding_DefaultJson: 15134,
- CloseSecureChannelResponse_Encoding_DefaultJson: 15135,
- SignedSoftwareCertificate_Encoding_DefaultJson: 15136,
- SignatureData_Encoding_DefaultJson: 15137,
- CreateSessionRequest_Encoding_DefaultJson: 15138,
- CreateSessionResponse_Encoding_DefaultJson: 15139,
- UserIdentityToken_Encoding_DefaultJson: 15140,
- AnonymousIdentityToken_Encoding_DefaultJson: 15141,
- UserNameIdentityToken_Encoding_DefaultJson: 15142,
- X509IdentityToken_Encoding_DefaultJson: 15143,
- IssuedIdentityToken_Encoding_DefaultJson: 15144,
- ActivateSessionRequest_Encoding_DefaultJson: 15145,
- ActivateSessionResponse_Encoding_DefaultJson: 15146,
- CloseSessionRequest_Encoding_DefaultJson: 15147,
- CloseSessionResponse_Encoding_DefaultJson: 15148,
- CancelRequest_Encoding_DefaultJson: 15149,
- CancelResponse_Encoding_DefaultJson: 15150,
- NodeAttributes_Encoding_DefaultJson: 15151,
- ObjectAttributes_Encoding_DefaultJson: 15152,
- VariableAttributes_Encoding_DefaultJson: 15153,
- MethodAttributes_Encoding_DefaultJson: 15157,
- ObjectTypeAttributes_Encoding_DefaultJson: 15158,
- VariableTypeAttributes_Encoding_DefaultJson: 15159,
- ReferenceTypeAttributes_Encoding_DefaultJson: 15160,
- DataTypeAttributes_Encoding_DefaultJson: 15161,
- ViewAttributes_Encoding_DefaultJson: 15162,
- GenericAttributeValue_Encoding_DefaultJson: 15163,
- GenericAttributes_Encoding_DefaultJson: 15164,
- AddNodesItem_Encoding_DefaultJson: 15165,
- AddNodesResult_Encoding_DefaultJson: 15166,
- AddNodesRequest_Encoding_DefaultJson: 15167,
- AddNodesResponse_Encoding_DefaultJson: 15168,
- AddReferencesItem_Encoding_DefaultJson: 15169,
- AddReferencesRequest_Encoding_DefaultJson: 15170,
- AddReferencesResponse_Encoding_DefaultJson: 15171,
- DeleteNodesItem_Encoding_DefaultJson: 15172,
- DeleteNodesRequest_Encoding_DefaultJson: 15173,
- DeleteNodesResponse_Encoding_DefaultJson: 15174,
- DeleteReferencesItem_Encoding_DefaultJson: 15175,
- DeleteReferencesRequest_Encoding_DefaultJson: 15176,
- DeleteReferencesResponse_Encoding_DefaultJson: 15177,
- ViewDescription_Encoding_DefaultJson: 15179,
- BrowseDescription_Encoding_DefaultJson: 15180,
- ReferenceDescription_Encoding_DefaultJson: 15182,
- BrowseResult_Encoding_DefaultJson: 15183,
- BrowseRequest_Encoding_DefaultJson: 15184,
- BrowseResponse_Encoding_DefaultJson: 15185,
- BrowseNextRequest_Encoding_DefaultJson: 15186,
- BrowseNextResponse_Encoding_DefaultJson: 15187,
- RelativePathElement_Encoding_DefaultJson: 15188,
- RelativePath_Encoding_DefaultJson: 15189,
- BrowsePath_Encoding_DefaultJson: 15190,
- BrowsePathTarget_Encoding_DefaultJson: 15191,
- BrowsePathResult_Encoding_DefaultJson: 15192,
- TranslateBrowsePathsToNodeIdsRequest_Encoding_DefaultJson: 15193,
- TranslateBrowsePathsToNodeIdsResponse_Encoding_DefaultJson: 15194,
- RegisterNodesRequest_Encoding_DefaultJson: 15195,
- RegisterNodesResponse_Encoding_DefaultJson: 15196,
- UnregisterNodesRequest_Encoding_DefaultJson: 15197,
- UnregisterNodesResponse_Encoding_DefaultJson: 15198,
- EndpointConfiguration_Encoding_DefaultJson: 15199,
- QueryDataDescription_Encoding_DefaultJson: 15200,
- NodeTypeDescription_Encoding_DefaultJson: 15201,
- QueryDataSet_Encoding_DefaultJson: 15202,
- NodeReference_Encoding_DefaultJson: 15203,
- ContentFilterElement_Encoding_DefaultJson: 15204,
- ContentFilter_Encoding_DefaultJson: 15205,
- FilterOperand_Encoding_DefaultJson: 15206,
- ElementOperand_Encoding_DefaultJson: 15207,
- LiteralOperand_Encoding_DefaultJson: 15208,
- AttributeOperand_Encoding_DefaultJson: 15209,
- SimpleAttributeOperand_Encoding_DefaultJson: 15210,
- ContentFilterElementResult_Encoding_DefaultJson: 15211,
- PublishedDataSetType_DataSetWriterName_Placeholder: 15222,
- PublishedDataSetType_DataSetWriterName_Placeholder_Status: 15223,
- PublishedDataSetType_DataSetWriterName_Placeholder_TransportSettings: 15227,
- ContentFilterResult_Encoding_DefaultJson: 15228,
- PublishedDataItemsType_DataSetWriterName_Placeholder: 15230,
- PublishedDataItemsType_DataSetWriterName_Placeholder_Status: 15231,
- PublishedDataItemsType_DataSetWriterName_Placeholder_TransportSettings: 15235,
- ParsingResult_Encoding_DefaultJson: 15236,
- PublishedEventsType_DataSetWriterName_Placeholder: 15238,
- PublishedEventsType_DataSetWriterName_Placeholder_Status: 15239,
- PublishedEventsType_DataSetWriterName_Placeholder_TransportSettings: 15243,
- QueryFirstRequest_Encoding_DefaultJson: 15244,
- QueryFirstResponse_Encoding_DefaultJson: 15252,
- QueryNextRequest_Encoding_DefaultJson: 15254,
- QueryNextResponse_Encoding_DefaultJson: 15255,
- ReadValueId_Encoding_DefaultJson: 15256,
- ReadRequest_Encoding_DefaultJson: 15257,
- ReadResponse_Encoding_DefaultJson: 15258,
- HistoryReadValueId_Encoding_DefaultJson: 15259,
- HistoryReadResult_Encoding_DefaultJson: 15260,
- HistoryReadDetails_Encoding_DefaultJson: 15261,
- ReadEventDetails_Encoding_DefaultJson: 15262,
- ReadRawModifiedDetails_Encoding_DefaultJson: 15263,
- ReadProcessedDetails_Encoding_DefaultJson: 15264,
- PubSubGroupType_Status: 15265,
- ReadAtTimeDetails_Encoding_DefaultJson: 15269,
- HistoryData_Encoding_DefaultJson: 15270,
- ModificationInfo_Encoding_DefaultJson: 15271,
- HistoryModifiedData_Encoding_DefaultJson: 15272,
- HistoryEvent_Encoding_DefaultJson: 15273,
- HistoryReadRequest_Encoding_DefaultJson: 15274,
- HistoryReadResponse_Encoding_DefaultJson: 15275,
- WriteValue_Encoding_DefaultJson: 15276,
- WriteRequest_Encoding_DefaultJson: 15277,
- WriteResponse_Encoding_DefaultJson: 15278,
- HistoryUpdateDetails_Encoding_DefaultJson: 15279,
- UpdateDataDetails_Encoding_DefaultJson: 15280,
- UpdateStructureDataDetails_Encoding_DefaultJson: 15281,
- UpdateEventDetails_Encoding_DefaultJson: 15282,
- DeleteRawModifiedDetails_Encoding_DefaultJson: 15283,
- DeleteAtTimeDetails_Encoding_DefaultJson: 15284,
- DeleteEventDetails_Encoding_DefaultJson: 15285,
- HistoryUpdateResult_Encoding_DefaultJson: 15286,
- HistoryUpdateRequest_Encoding_DefaultJson: 15287,
- HistoryUpdateResponse_Encoding_DefaultJson: 15288,
- CallMethodRequest_Encoding_DefaultJson: 15289,
- CallMethodResult_Encoding_DefaultJson: 15290,
- CallRequest_Encoding_DefaultJson: 15291,
- CallResponse_Encoding_DefaultJson: 15292,
- MonitoringFilter_Encoding_DefaultJson: 15293,
- DataChangeFilter_Encoding_DefaultJson: 15294,
- EventFilter_Encoding_DefaultJson: 15295,
- DataSetWriterType_Status: 15299,
- DataSetWriterType_TransportSettings: 15303,
- AggregateConfiguration_Encoding_DefaultJson: 15304,
- DataSetReaderType_Status: 15307,
- DataSetReaderType_TransportSettings: 15311,
- AggregateFilter_Encoding_DefaultJson: 15312,
- MonitoringFilterResult_Encoding_DefaultJson: 15313,
- EventFilterResult_Encoding_DefaultJson: 15314,
- AggregateFilterResult_Encoding_DefaultJson: 15315,
- DataSetReaderType_SubscribedDataSet: 15316,
- MonitoringParameters_Encoding_DefaultJson: 15320,
- MonitoredItemCreateRequest_Encoding_DefaultJson: 15321,
- MonitoredItemCreateResult_Encoding_DefaultJson: 15322,
- CreateMonitoredItemsRequest_Encoding_DefaultJson: 15323,
- CreateMonitoredItemsResponse_Encoding_DefaultJson: 15324,
- MonitoredItemModifyRequest_Encoding_DefaultJson: 15325,
- MonitoredItemModifyResult_Encoding_DefaultJson: 15326,
- ModifyMonitoredItemsRequest_Encoding_DefaultJson: 15327,
- ModifyMonitoredItemsResponse_Encoding_DefaultJson: 15328,
- SetMonitoringModeRequest_Encoding_DefaultJson: 15329,
- SetMonitoringModeResponse_Encoding_DefaultJson: 15331,
- SetTriggeringRequest_Encoding_DefaultJson: 15332,
- SetTriggeringResponse_Encoding_DefaultJson: 15333,
- DeleteMonitoredItemsRequest_Encoding_DefaultJson: 15335,
- DeleteMonitoredItemsResponse_Encoding_DefaultJson: 15336,
- CreateSubscriptionRequest_Encoding_DefaultJson: 15337,
- CreateSubscriptionResponse_Encoding_DefaultJson: 15338,
- ModifySubscriptionRequest_Encoding_DefaultJson: 15339,
- ModifySubscriptionResponse_Encoding_DefaultJson: 15340,
- SetPublishingModeRequest_Encoding_DefaultJson: 15341,
- SetPublishingModeResponse_Encoding_DefaultJson: 15342,
- NotificationMessage_Encoding_DefaultJson: 15343,
- NotificationData_Encoding_DefaultJson: 15344,
- DataChangeNotification_Encoding_DefaultJson: 15345,
- MonitoredItemNotification_Encoding_DefaultJson: 15346,
- EventNotificationList_Encoding_DefaultJson: 15347,
- EventFieldList_Encoding_DefaultJson: 15348,
- HistoryEventFieldList_Encoding_DefaultJson: 15349,
- StatusChangeNotification_Encoding_DefaultJson: 15350,
- SubscriptionAcknowledgement_Encoding_DefaultJson: 15351,
- PublishRequest_Encoding_DefaultJson: 15352,
- PublishResponse_Encoding_DefaultJson: 15353,
- RepublishRequest_Encoding_DefaultJson: 15354,
- RepublishResponse_Encoding_DefaultJson: 15355,
- TransferResult_Encoding_DefaultJson: 15356,
- TransferSubscriptionsRequest_Encoding_DefaultJson: 15357,
- TransferSubscriptionsResponse_Encoding_DefaultJson: 15358,
- DeleteSubscriptionsRequest_Encoding_DefaultJson: 15359,
- DeleteSubscriptionsResponse_Encoding_DefaultJson: 15360,
- BuildInfo_Encoding_DefaultJson: 15361,
- RedundantServerDataType_Encoding_DefaultJson: 15362,
- EndpointUrlListDataType_Encoding_DefaultJson: 15363,
- NetworkGroupDataType_Encoding_DefaultJson: 15364,
- SamplingIntervalDiagnosticsDataType_Encoding_DefaultJson: 15365,
- ServerDiagnosticsSummaryDataType_Encoding_DefaultJson: 15366,
- ServerStatusDataType_Encoding_DefaultJson: 15367,
- SessionDiagnosticsDataType_Encoding_DefaultJson: 15368,
- SessionSecurityDiagnosticsDataType_Encoding_DefaultJson: 15369,
- ServiceCounterDataType_Encoding_DefaultJson: 15370,
- StatusResult_Encoding_DefaultJson: 15371,
- SubscriptionDiagnosticsDataType_Encoding_DefaultJson: 15372,
- ModelChangeStructureDataType_Encoding_DefaultJson: 15373,
- SemanticChangeStructureDataType_Encoding_DefaultJson: 15374,
- Range_Encoding_DefaultJson: 15375,
- EUInformation_Encoding_DefaultJson: 15376,
- ComplexNumberType_Encoding_DefaultJson: 15377,
- DoubleComplexNumberType_Encoding_DefaultJson: 15378,
- AxisInformation_Encoding_DefaultJson: 15379,
- XVType_Encoding_DefaultJson: 15380,
- ProgramDiagnosticDataType_Encoding_DefaultJson: 15381,
- Annotation_Encoding_DefaultJson: 15382,
- ProgramDiagnostic2DataType_Encoding_DefaultBinary: 15397,
- ProgramDiagnostic2DataType_Encoding_DefaultXml: 15401,
- ProgramDiagnostic2DataType_Encoding_DefaultJson: 15405,
- SimpleTypeDescription_Encoding_DefaultBinary: 15421,
- UABinaryFileDataType_Encoding_DefaultBinary: 15422,
- PublishSubscribeType_SecurityGroups: 15434,
- PublishSubscribe_SecurityGroups: 15443,
- SecurityGroupFolderType_SecurityGroupFolderName_Placeholder: 15453,
- SecurityGroupFolderType_SecurityGroupName_Placeholder: 15459,
- DataSetFolderType_PublishedDataSetName_Placeholder_ExtensionFields: 15473,
- BrokerConnectionTransportDataType_Encoding_DefaultBinary: 15479,
- PublishedDataSetType_ExtensionFields: 15481,
- PublishedDataItemsType_ExtensionFields: 15503,
- PublishedEventsType_ExtensionFields: 15511,
- SimpleTypeDescription_Encoding_DefaultXml: 15529,
- UABinaryFileDataType_Encoding_DefaultXml: 15531,
- BrokerConnectionTransportDataType_Encoding_DefaultXml: 15579,
- StructureDescription_Encoding_DefaultXml: 15589,
- EnumDescription_Encoding_DefaultXml: 15590,
- Server_ServerCapabilities_RoleSet: 15606,
- RoleSetType_RoleName_Placeholder: 15608,
- WellKnownRole_Anonymous: 15644,
- WellKnownRole_AuthenticatedUser: 15656,
- WellKnownRole_Observer: 15668,
- EndpointType_Encoding_DefaultBinary: 15671,
- DataTypeSchemaHeader_Encoding_DefaultBinary: 15676,
- PublishedDataSetDataType_Encoding_DefaultBinary: 15677,
- PublishedDataSetSourceDataType_Encoding_DefaultBinary: 15678,
- PublishedDataItemsDataType_Encoding_DefaultBinary: 15679,
- WellKnownRole_Operator: 15680,
- PublishedEventsDataType_Encoding_DefaultBinary: 15681,
- DataSetWriterDataType_Encoding_DefaultBinary: 15682,
- DataSetWriterTransportDataType_Encoding_DefaultBinary: 15683,
- DataSetWriterMessageDataType_Encoding_DefaultBinary: 15688,
- PubSubGroupDataType_Encoding_DefaultBinary: 15689,
- WriterGroupTransportDataType_Encoding_DefaultBinary: 15691,
- WellKnownRole_Supervisor: 15692,
- WriterGroupMessageDataType_Encoding_DefaultBinary: 15693,
- PubSubConnectionDataType_Encoding_DefaultBinary: 15694,
- ConnectionTransportDataType_Encoding_DefaultBinary: 15695,
- SimpleTypeDescription_Encoding_DefaultJson: 15700,
- ReaderGroupTransportDataType_Encoding_DefaultBinary: 15701,
- ReaderGroupMessageDataType_Encoding_DefaultBinary: 15702,
- DataSetReaderDataType_Encoding_DefaultBinary: 15703,
- WellKnownRole_SecurityAdmin: 15704,
- DataSetReaderTransportDataType_Encoding_DefaultBinary: 15705,
- DataSetReaderMessageDataType_Encoding_DefaultBinary: 15706,
- SubscribedDataSetDataType_Encoding_DefaultBinary: 15707,
- TargetVariablesDataType_Encoding_DefaultBinary: 15712,
- SubscribedDataSetMirrorDataType_Encoding_DefaultBinary: 15713,
- UABinaryFileDataType_Encoding_DefaultJson: 15714,
- UadpWriterGroupMessageDataType_Encoding_DefaultBinary: 15715,
- WellKnownRole_ConfigureAdmin: 15716,
- UadpDataSetWriterMessageDataType_Encoding_DefaultBinary: 15717,
- UadpDataSetReaderMessageDataType_Encoding_DefaultBinary: 15718,
- JsonWriterGroupMessageDataType_Encoding_DefaultBinary: 15719,
- JsonDataSetWriterMessageDataType_Encoding_DefaultBinary: 15724,
- JsonDataSetReaderMessageDataType_Encoding_DefaultBinary: 15725,
- BrokerConnectionTransportDataType_Encoding_DefaultJson: 15726,
- BrokerWriterGroupTransportDataType_Encoding_DefaultBinary: 15727,
- IdentityMappingRuleType_Encoding_DefaultXml: 15728,
- BrokerDataSetWriterTransportDataType_Encoding_DefaultBinary: 15729,
- BrokerDataSetReaderTransportDataType_Encoding_DefaultBinary: 15733,
- IdentityMappingRuleType_Encoding_DefaultBinary: 15736,
- TemporaryFileTransferType_TransferState_Placeholder: 15754,
- PublishSubscribe_ConnectionName_Placeholder: 15790,
- FileTransferStateMachineType_Idle: 15815,
- FileTransferStateMachineType_ReadPrepare: 15817,
- FileTransferStateMachineType_ReadTransfer: 15819,
- FileTransferStateMachineType_ApplyWrite: 15821,
- FileTransferStateMachineType_Error: 15823,
- FileTransferStateMachineType_IdleToReadPrepare: 15825,
- FileTransferStateMachineType_ReadPrepareToReadTransfer: 15827,
- FileTransferStateMachineType_ReadTransferToIdle: 15829,
- FileTransferStateMachineType_IdleToApplyWrite: 15831,
- FileTransferStateMachineType_ApplyWriteToIdle: 15833,
- FileTransferStateMachineType_ReadPrepareToError: 15835,
- FileTransferStateMachineType_ReadTransferToError: 15837,
- FileTransferStateMachineType_ApplyWriteToError: 15839,
- FileTransferStateMachineType_ErrorToIdle: 15841,
- PublishSubscribeType_Status: 15844,
- PublishSubscribe_ConnectionName_Placeholder_Address: 15851,
- PublishSubscribe_ConnectionName_Placeholder_TransportSettings: 15864,
- PublishSubscribe_ConnectionName_Placeholder_Status: 15865,
- SessionlessInvokeRequestType_Encoding_DefaultXml: 15902,
- SessionlessInvokeRequestType_Encoding_DefaultBinary: 15903,
- PublishSubscribeType_ConnectionName_Placeholder_TransportSettings: 15905,
- PubSubKeyServiceType_SecurityGroups: 15913,
- PublishSubscribe_ConnectionName_Placeholder_Diagnostics: 15937,
- EndpointType_Encoding_DefaultXml: 15949,
- DataTypeSchemaHeader_Encoding_DefaultXml: 15950,
- PublishedDataSetDataType_Encoding_DefaultXml: 15951,
- PublishedDataSetSourceDataType_Encoding_DefaultXml: 15952,
- PublishedDataItemsDataType_Encoding_DefaultXml: 15953,
- PublishedEventsDataType_Encoding_DefaultXml: 15954,
- DataSetWriterDataType_Encoding_DefaultXml: 15955,
- DataSetWriterTransportDataType_Encoding_DefaultXml: 15956,
- OPCUANamespaceMetadata: 15957,
- OPCUANamespaceMetadata_NamespaceFile: 15965,
- DataSetWriterMessageDataType_Encoding_DefaultXml: 15987,
- PubSubGroupDataType_Encoding_DefaultXml: 15988,
- WriterGroupTransportDataType_Encoding_DefaultXml: 15990,
- WriterGroupMessageDataType_Encoding_DefaultXml: 15991,
- PubSubConnectionDataType_Encoding_DefaultXml: 15992,
- ConnectionTransportDataType_Encoding_DefaultXml: 15993,
- ReaderGroupTransportDataType_Encoding_DefaultXml: 15995,
- ReaderGroupMessageDataType_Encoding_DefaultXml: 15996,
- DataSetReaderDataType_Encoding_DefaultXml: 16007,
- DataSetReaderTransportDataType_Encoding_DefaultXml: 16008,
- DataSetReaderMessageDataType_Encoding_DefaultXml: 16009,
- SubscribedDataSetDataType_Encoding_DefaultXml: 16010,
- TargetVariablesDataType_Encoding_DefaultXml: 16011,
- SubscribedDataSetMirrorDataType_Encoding_DefaultXml: 16012,
- UadpWriterGroupMessageDataType_Encoding_DefaultXml: 16014,
- UadpDataSetWriterMessageDataType_Encoding_DefaultXml: 16015,
- UadpDataSetReaderMessageDataType_Encoding_DefaultXml: 16016,
- JsonWriterGroupMessageDataType_Encoding_DefaultXml: 16017,
- JsonDataSetWriterMessageDataType_Encoding_DefaultXml: 16018,
- JsonDataSetReaderMessageDataType_Encoding_DefaultXml: 16019,
- BrokerWriterGroupTransportDataType_Encoding_DefaultXml: 16021,
- BrokerDataSetWriterTransportDataType_Encoding_DefaultXml: 16022,
- BrokerDataSetReaderTransportDataType_Encoding_DefaultXml: 16023,
- WellKnownRole_Engineer: 16036,
- PublishSubscribe_ConnectionName_Placeholder_Diagnostics_Counters: 16102,
- RolePermissionType_Encoding_DefaultXml: 16126,
- EndpointType_Encoding_DefaultJson: 16150,
- DataTypeSchemaHeader_Encoding_DefaultJson: 16151,
- PublishedDataSetDataType_Encoding_DefaultJson: 16152,
- PublishedDataSetSourceDataType_Encoding_DefaultJson: 16153,
- PublishedDataItemsDataType_Encoding_DefaultJson: 16154,
- PublishedEventsDataType_Encoding_DefaultJson: 16155,
- DataSetWriterDataType_Encoding_DefaultJson: 16156,
- DataSetWriterTransportDataType_Encoding_DefaultJson: 16157,
- DataSetWriterMessageDataType_Encoding_DefaultJson: 16158,
- PubSubGroupDataType_Encoding_DefaultJson: 16159,
- WriterGroupTransportDataType_Encoding_DefaultJson: 16161,
- WriterGroupMessageDataType_Encoding_DefaultJson: 16280,
- PubSubConnectionDataType_Encoding_DefaultJson: 16281,
- ConnectionTransportDataType_Encoding_DefaultJson: 16282,
- ReaderGroupTransportDataType_Encoding_DefaultJson: 16284,
- ReaderGroupMessageDataType_Encoding_DefaultJson: 16285,
- DataSetReaderDataType_Encoding_DefaultJson: 16286,
- DataSetReaderTransportDataType_Encoding_DefaultJson: 16287,
- DataSetReaderMessageDataType_Encoding_DefaultJson: 16288,
- ServerType_ServerCapabilities_RoleSet: 16289,
- ServerCapabilitiesType_RoleSet: 16295,
- SubscribedDataSetDataType_Encoding_DefaultJson: 16308,
- TargetVariablesDataType_Encoding_DefaultJson: 16310,
- SubscribedDataSetMirrorDataType_Encoding_DefaultJson: 16311,
- FileSystem: 16314,
- FileSystem_FileDirectoryName_Placeholder: 16315,
- UadpWriterGroupMessageDataType_Encoding_DefaultJson: 16323,
- FileSystem_FileName_Placeholder: 16327,
- UadpDataSetWriterMessageDataType_Encoding_DefaultJson: 16391,
- UadpDataSetReaderMessageDataType_Encoding_DefaultJson: 16392,
- JsonWriterGroupMessageDataType_Encoding_DefaultJson: 16393,
- JsonDataSetWriterMessageDataType_Encoding_DefaultJson: 16394,
- AlarmConditionType_FirstInGroup: 16398,
- AlarmConditionType_AlarmGroup_Placeholder: 16399,
- JsonDataSetReaderMessageDataType_Encoding_DefaultJson: 16404,
- AlarmGroupType_AlarmConditionInstance_Placeholder: 16406,
- AlarmGroupType_AlarmConditionInstance_Placeholder_ShelvingState: 16502,
- BrokerWriterGroupTransportDataType_Encoding_DefaultJson: 16524,
- BrokerDataSetWriterTransportDataType_Encoding_DefaultJson: 16525,
- BrokerDataSetReaderTransportDataType_Encoding_DefaultJson: 16526,
- AlarmGroupType_AlarmConditionInstance_Placeholder_FirstInGroup: 16530,
- LimitAlarmType_FirstInGroup: 16565,
- LimitAlarmType_AlarmGroup_Placeholder: 16566,
- ExclusiveLimitAlarmType_FirstInGroup: 16605,
- ExclusiveLimitAlarmType_AlarmGroup_Placeholder: 16606,
- NonExclusiveLimitAlarmType_FirstInGroup: 16645,
- NonExclusiveLimitAlarmType_AlarmGroup_Placeholder: 16646,
- NonExclusiveLevelAlarmType_FirstInGroup: 16685,
- NonExclusiveLevelAlarmType_AlarmGroup_Placeholder: 16686,
- ExclusiveLevelAlarmType_FirstInGroup: 16725,
- ExclusiveLevelAlarmType_AlarmGroup_Placeholder: 16726,
- PublishedDataSetType_DataSetWriterName_Placeholder_MessageSettings: 16758,
- NonExclusiveDeviationAlarmType_FirstInGroup: 16765,
- NonExclusiveDeviationAlarmType_AlarmGroup_Placeholder: 16766,
- PublishedDataItemsType_DataSetWriterName_Placeholder_MessageSettings: 16799,
- ExclusiveDeviationAlarmType_FirstInGroup: 16806,
- ExclusiveDeviationAlarmType_AlarmGroup_Placeholder: 16807,
- PublishedEventsType_DataSetWriterName_Placeholder_MessageSettings: 16840,
- NonExclusiveRateOfChangeAlarmType_FirstInGroup: 16847,
- NonExclusiveRateOfChangeAlarmType_AlarmGroup_Placeholder: 16848,
- ExclusiveRateOfChangeAlarmType_FirstInGroup: 16888,
- ExclusiveRateOfChangeAlarmType_AlarmGroup_Placeholder: 16889,
- DiscreteAlarmType_FirstInGroup: 16929,
- DiscreteAlarmType_AlarmGroup_Placeholder: 16930,
- OffNormalAlarmType_FirstInGroup: 16965,
- OffNormalAlarmType_AlarmGroup_Placeholder: 16966,
- SystemOffNormalAlarmType_FirstInGroup: 17001,
- SystemOffNormalAlarmType_AlarmGroup_Placeholder: 17002,
- TripAlarmType_FirstInGroup: 17037,
- TripAlarmType_AlarmGroup_Placeholder: 17038,
- CertificateExpirationAlarmType_FirstInGroup: 17073,
- CertificateExpirationAlarmType_AlarmGroup_Placeholder: 17074,
- DiscrepancyAlarmType_ShelvingState: 17180,
- PubSubConnectionType_TransportSettings: 17203,
- DiscrepancyAlarmType_FirstInGroup: 17208,
- DiscrepancyAlarmType_AlarmGroup_Placeholder: 17209,
- PubSubConnectionType_WriterGroupName_Placeholder_TransportSettings: 17290,
- PubSubConnectionType_WriterGroupName_Placeholder_MessageSettings: 17291,
- PubSubConnectionType_ReaderGroupName_Placeholder_TransportSettings: 17307,
- PubSubConnectionType_ReaderGroupName_Placeholder_MessageSettings: 17308,
- PubSubConnectionType_WriterGroupName_Placeholder: 17310,
- PubSubConnectionType_WriterGroupName_Placeholder_Status: 17314,
- PubSubConnectionType_ReaderGroupName_Placeholder: 17325,
- PubSubConnectionType_ReaderGroupName_Placeholder_Status: 17329,
- PublishSubscribe_ConnectionName_Placeholder_Diagnostics_LiveValues: 17352,
- PublishSubscribe_PublishedDataSets: 17371,
- PublishSubscribe_Status: 17405,
- PublishSubscribe_Diagnostics: 17409,
- PublishSubscribe_Diagnostics_Counters: 17423,
- PublishSubscribe_Diagnostics_LiveValues: 17457,
- DatagramConnectionTransportDataType_Encoding_DefaultBinary: 17468,
- DatagramConnectionTransportDataType_Encoding_DefaultXml: 17472,
- DatagramConnectionTransportDataType_Encoding_DefaultJson: 17476,
- KeyCredentialConfigurationFolderType_ServiceName_Placeholder: 17511,
- AdditionalParametersType_Encoding_DefaultBinary: 17537,
- AdditionalParametersType_Encoding_DefaultXml: 17541,
- AdditionalParametersType_Encoding_DefaultJson: 17547,
- EphemeralKeyType_Encoding_DefaultBinary: 17549,
- EphemeralKeyType_Encoding_DefaultXml: 17553,
- EphemeralKeyType_Encoding_DefaultJson: 17557,
- DictionaryEntryType_DictionaryEntryName_Placeholder: 17590,
- DictionaryFolderType_DictionaryFolderName_Placeholder: 17592,
- DictionaryFolderType_DictionaryEntryName_Placeholder: 17593,
- Dictionaries: 17594,
- Dictionaries_DictionaryFolderName_Placeholder: 17595,
- Dictionaries_DictionaryEntryName_Placeholder: 17596,
- IrdiDictionaryEntryType_DictionaryEntryName_Placeholder: 17599,
- UriDictionaryEntryType_DictionaryEntryName_Placeholder: 17601,
- GenericAttributeValue_Encoding_DefaultXml: 17608,
- GenericAttributes_Encoding_DefaultXml: 17609,
- GenericAttributeValue_Encoding_DefaultBinary: 17610,
- GenericAttributes_Encoding_DefaultBinary: 17611,
- InterfaceTypes: 17708,
- WriterGroupType_Status: 17730,
- AuthorizationServices: 17732,
- AuthorizationServices_ServiceName_Placeholder: 17733,
- WriterGroupType_TransportSettings: 17741,
- WriterGroupType_MessageSettings: 17742,
- WriterGroupType_DataSetWriterName_Placeholder: 17743,
- WriterGroupType_DataSetWriterName_Placeholder_TransportSettings: 17747,
- WriterGroupType_DataSetWriterName_Placeholder_MessageSettings: 17748,
- WriterGroupType_DataSetWriterName_Placeholder_Status: 17749,
- WriterGroupType_DataSetWriterName_Placeholder_Diagnostics: 17753,
- WriterGroupType_DataSetWriterName_Placeholder_Diagnostics_Counters: 17767,
- WriterGroupType_DataSetWriterName_Placeholder_Diagnostics_LiveValues: 17798,
- WriterGroupType_Diagnostics: 17812,
- WriterGroupType_Diagnostics_Counters: 17826,
- WriterGroupType_Diagnostics_LiveValues: 17858,
- DecimalDataType_Encoding_DefaultXml: 17862,
- DecimalDataType_Encoding_DefaultBinary: 17863,
- ReaderGroupType_Status: 18067,
- ReaderGroupType_DataSetReaderName_Placeholder: 18076,
- ReaderGroupType_DataSetReaderName_Placeholder_TransportSettings: 18086,
- ReaderGroupType_DataSetReaderName_Placeholder_MessageSettings: 18087,
- ReaderGroupType_DataSetReaderName_Placeholder_Status: 18088,
- ReaderGroupType_DataSetReaderName_Placeholder_Diagnostics: 18092,
- ReaderGroupType_DataSetReaderName_Placeholder_Diagnostics_Counters: 18106,
- ReaderGroupType_DataSetReaderName_Placeholder_Diagnostics_LiveValues: 18137,
- KeyCredentialConfiguration: 18155,
- KeyCredentialConfiguration_ServiceName_Placeholder: 18156,
- InstrumentDiagnosticAlarmType_ShelvingState: 18438,
- InstrumentDiagnosticAlarmType_FirstInGroup: 18476,
- InstrumentDiagnosticAlarmType_AlarmGroup_Placeholder: 18486,
- SystemDiagnosticAlarmType_ShelvingState: 18587,
- SystemDiagnosticAlarmType_FirstInGroup: 18625,
- SystemDiagnosticAlarmType_AlarmGroup_Placeholder: 18635,
- PublishSubscribeType_ConnectionName_Placeholder_Diagnostics: 18667,
- PublishSubscribeType_ConnectionName_Placeholder_Diagnostics_Counters: 18681,
- PublishSubscribeType_ConnectionName_Placeholder_Diagnostics_LiveValues: 18712,
- PublishSubscribeType_Diagnostics: 18715,
- PublishSubscribeType_Diagnostics_Counters: 18729,
- PublishSubscribeType_Diagnostics_LiveValues: 18760,
- RationalNumber_Encoding_DefaultBinary: 18815,
- Vector_Encoding_DefaultBinary: 18816,
- ThreeDVector_Encoding_DefaultBinary: 18817,
- CartesianCoordinates_Encoding_DefaultBinary: 18818,
- ThreeDCartesianCoordinates_Encoding_DefaultBinary: 18819,
- Orientation_Encoding_DefaultBinary: 18820,
- ThreeDOrientation_Encoding_DefaultBinary: 18821,
- Frame_Encoding_DefaultBinary: 18822,
- ThreeDFrame_Encoding_DefaultBinary: 18823,
- RationalNumber_Encoding_DefaultXml: 18851,
- Vector_Encoding_DefaultXml: 18852,
- ThreeDVector_Encoding_DefaultXml: 18853,
- CartesianCoordinates_Encoding_DefaultXml: 18854,
- ThreeDCartesianCoordinates_Encoding_DefaultXml: 18855,
- Orientation_Encoding_DefaultXml: 18856,
- ThreeDOrientation_Encoding_DefaultXml: 18857,
- Frame_Encoding_DefaultXml: 18858,
- ThreeDFrame_Encoding_DefaultXml: 18859,
- PublishedDataSetType_DataSetWriterName_Placeholder_Diagnostics: 18871,
- PublishedDataSetType_DataSetWriterName_Placeholder_Diagnostics_Counters: 18885,
- PublishedDataSetType_DataSetWriterName_Placeholder_Diagnostics_LiveValues: 18916,
- PublishedDataItemsType_DataSetWriterName_Placeholder_Diagnostics: 18930,
- PublishedDataItemsType_DataSetWriterName_Placeholder_Diagnostics_Counters: 18944,
- PublishedDataItemsType_DataSetWriterName_Placeholder_Diagnostics_LiveValues: 18975,
- PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics: 18989,
- PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics_Counters: 19003,
- PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics_LiveValues: 19034,
- RationalNumber_Encoding_DefaultJson: 19064,
- Vector_Encoding_DefaultJson: 19065,
- ThreeDVector_Encoding_DefaultJson: 19066,
- CartesianCoordinates_Encoding_DefaultJson: 19067,
- ThreeDCartesianCoordinates_Encoding_DefaultJson: 19068,
- Orientation_Encoding_DefaultJson: 19069,
- ThreeDOrientation_Encoding_DefaultJson: 19070,
- Frame_Encoding_DefaultJson: 19071,
- ThreeDFrame_Encoding_DefaultJson: 19072,
- PubSubConnectionType_WriterGroupName_Placeholder_Diagnostics: 19107,
- PubSubConnectionType_WriterGroupName_Placeholder_Diagnostics_Counters: 19121,
- PubSubConnectionType_WriterGroupName_Placeholder_Diagnostics_LiveValues: 19152,
- PubSubConnectionType_ReaderGroupName_Placeholder_Diagnostics: 19176,
- PubSubConnectionType_ReaderGroupName_Placeholder_Diagnostics_Counters: 19190,
- PubSubConnectionType_ReaderGroupName_Placeholder_Diagnostics_LiveValues: 19221,
- PubSubConnectionType_Diagnostics: 19241,
- PubSubConnectionType_Diagnostics_Counters: 19255,
- PubSubConnectionType_Diagnostics_LiveValues: 19286,
- TrustListOutOfDateAlarmType_ShelvingState: 19388,
- TrustListOutOfDateAlarmType_FirstInGroup: 19426,
- TrustListOutOfDateAlarmType_AlarmGroup_Placeholder: 19436,
- CertificateGroupType_CertificateExpired: 19450,
- CertificateGroupType_CertificateExpired_ShelvingState: 19537,
- DataSetWriterType_Diagnostics: 19550,
- DataSetWriterType_Diagnostics_Counters: 19564,
- DataSetWriterType_Diagnostics_LiveValues: 19595,
- DataSetReaderType_Diagnostics: 19609,
- DataSetReaderType_Diagnostics_Counters: 19623,
- DataSetReaderType_Diagnostics_LiveValues: 19654,
- PubSubDiagnosticsType_Counters: 19691,
- PubSubDiagnosticsType_LiveValues: 19722,
- PubSubDiagnosticsRootType_Counters: 19746,
- PubSubDiagnosticsRootType_LiveValues: 19777,
- PubSubDiagnosticsConnectionType_Counters: 19800,
- PubSubDiagnosticsConnectionType_LiveValues: 19831,
- PubSubDiagnosticsWriterGroupType_Counters: 19848,
- PubSubDiagnosticsWriterGroupType_LiveValues: 19879,
- PubSubDiagnosticsReaderGroupType_Counters: 19917,
- PubSubDiagnosticsReaderGroupType_LiveValues: 19948,
- PubSubDiagnosticsDataSetWriterType_Counters: 19982,
- PubSubDiagnosticsDataSetWriterType_LiveValues: 20013,
- PubSubDiagnosticsDataSetReaderType_Counters: 20041,
- PubSubDiagnosticsDataSetReaderType_LiveValues: 20072,
- CertificateGroupType_CertificateExpired_FirstInGroup: 20120,
- CertificateGroupType_TrustListOutOfDate: 20143,
- CertificateGroupType_TrustListOutOfDate_ShelvingState: 20230,
- CertificateGroupType_TrustListOutOfDate_FirstInGroup: 20268,
- CertificateGroupFolderType_DefaultApplicationGroup_CertificateExpired: 20291,
- CertificateGroupFolderType_DefaultApplicationGroup_CertificateExpired_ShelvingState: 20378,
- CertificateGroupFolderType_DefaultApplicationGroup_CertificateExpired_FirstInGroup: 20418,
- CertificateGroupFolderType_DefaultApplicationGroup_TrustListOutOfDate: 20441,
- CertificateGroupFolderType_DefaultApplicationGroup_TrustListOutOfDate_ShelvingState: 20528,
- CertificateGroupFolderType_DefaultApplicationGroup_TrustListOutOfDate_FirstInGroup: 20566,
- CertificateGroupFolderType_DefaultHttpsGroup_CertificateExpired: 20589,
- CertificateGroupFolderType_DefaultHttpsGroup_CertificateExpired_ShelvingState: 20676,
- CertificateGroupFolderType_DefaultHttpsGroup_CertificateExpired_FirstInGroup: 20714,
- CertificateGroupFolderType_DefaultHttpsGroup_TrustListOutOfDate: 20737,
- CertificateGroupFolderType_DefaultHttpsGroup_TrustListOutOfDate_ShelvingState: 20824,
- CertificateGroupFolderType_DefaultHttpsGroup_TrustListOutOfDate_FirstInGroup: 20862,
- CertificateGroupFolderType_DefaultUserTokenGroup_CertificateExpired: 20885,
- CertificateGroupFolderType_DefaultUserTokenGroup_CertificateExpired_ShelvingState: 20972,
- SessionlessInvokeResponseType_Encoding_DefaultXml: 21000,
- SessionlessInvokeResponseType_Encoding_DefaultBinary: 21001,
- ReaderGroupType_DataSetReaderName_Placeholder_SubscribedDataSet: 21006,
- ReaderGroupType_Diagnostics: 21015,
- ReaderGroupType_Diagnostics_Counters: 21029,
- ReaderGroupType_Diagnostics_LiveValues: 21060,
- ReaderGroupType_TransportSettings: 21080,
- ReaderGroupType_MessageSettings: 21081,
- DataSetWriterType_MessageSettings: 21095,
- DataSetReaderType_MessageSettings: 21103,
- WriterGroupDataType_Encoding_DefaultBinary: 21150,
- NetworkAddressDataType_Encoding_DefaultBinary: 21151,
- NetworkAddressUrlDataType_Encoding_DefaultBinary: 21152,
- ReaderGroupDataType_Encoding_DefaultBinary: 21153,
- PubSubConfigurationDataType_Encoding_DefaultBinary: 21154,
- DatagramWriterGroupTransportDataType_Encoding_DefaultBinary: 21155,
- WriterGroupDataType_Encoding_DefaultXml: 21174,
- NetworkAddressDataType_Encoding_DefaultXml: 21175,
- NetworkAddressUrlDataType_Encoding_DefaultXml: 21176,
- ReaderGroupDataType_Encoding_DefaultXml: 21177,
- PubSubConfigurationDataType_Encoding_DefaultXml: 21178,
- DatagramWriterGroupTransportDataType_Encoding_DefaultXml: 21179,
- WriterGroupDataType_Encoding_DefaultJson: 21198,
- NetworkAddressDataType_Encoding_DefaultJson: 21199,
- NetworkAddressUrlDataType_Encoding_DefaultJson: 21200,
- ReaderGroupDataType_Encoding_DefaultJson: 21201,
- PubSubConfigurationDataType_Encoding_DefaultJson: 21202,
- DatagramWriterGroupTransportDataType_Encoding_DefaultJson: 21203,
- CertificateGroupFolderType_DefaultUserTokenGroup_CertificateExpired_FirstInGroup: 21213,
- CertificateGroupFolderType_DefaultUserTokenGroup_TrustListOutOfDate: 21236,
- CertificateGroupFolderType_DefaultUserTokenGroup_TrustListOutOfDate_ShelvingState: 21323,
- CertificateGroupFolderType_DefaultUserTokenGroup_TrustListOutOfDate_FirstInGroup: 21361,
- CertificateGroupFolderType_AdditionalGroup_Placeholder_CertificateExpired: 21384,
- CertificateGroupFolderType_AdditionalGroup_Placeholder_CertificateExpired_ShelvingState: 21471,
- CertificateGroupFolderType_AdditionalGroup_Placeholder_CertificateExpired_FirstInGroup: 21509,
- CertificateGroupFolderType_AdditionalGroup_Placeholder_TrustListOutOfDate: 21532,
- CertificateGroupFolderType_AdditionalGroup_Placeholder_TrustListOutOfDate_ShelvingState: 21619,
- CertificateGroupFolderType_AdditionalGroup_Placeholder_TrustListOutOfDate_FirstInGroup: 21657,
- ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_CertificateExpired: 21680,
- ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_CertificateExpired_ShelvingState: 21767,
- ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_CertificateExpired_FirstInGroup: 21805,
- ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_TrustListOutOfDate: 21828,
- ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_TrustListOutOfDate_ShelvingState: 21915,
- ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_TrustListOutOfDate_FirstInGroup: 21953,
- ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_CertificateExpired: 21976,
- ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_CertificateExpired_ShelvingState: 22063,
- ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_CertificateExpired_FirstInGroup: 22101,
- ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_TrustListOutOfDate: 22124,
- ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_TrustListOutOfDate_ShelvingState: 22211,
- ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_TrustListOutOfDate_FirstInGroup: 22249,
- ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_CertificateExpired: 22272,
- ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_CertificateExpired_ShelvingState: 22359,
- ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_CertificateExpired_FirstInGroup: 22397,
- ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_TrustListOutOfDate: 22420,
- ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_TrustListOutOfDate_ShelvingState: 22507,
- ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_TrustListOutOfDate_FirstInGroup: 22545,
- ServerConfiguration_CertificateGroups_DefaultApplicationGroup_CertificateExpired: 22568,
- ServerConfiguration_CertificateGroups_DefaultApplicationGroup_CertificateExpired_ShelvingState: 22655,
- ServerConfiguration_CertificateGroups_DefaultApplicationGroup_CertificateExpired_FirstInGroup: 22693,
- ServerConfiguration_CertificateGroups_DefaultApplicationGroup_TrustListOutOfDate: 22716,
- ServerConfiguration_CertificateGroups_DefaultApplicationGroup_TrustListOutOfDate_ShelvingState: 22803,
- ServerConfiguration_CertificateGroups_DefaultApplicationGroup_TrustListOutOfDate_FirstInGroup: 22841,
- ServerConfiguration_CertificateGroups_DefaultHttpsGroup_CertificateExpired: 22864,
- ServerConfiguration_CertificateGroups_DefaultHttpsGroup_CertificateExpired_ShelvingState: 22951,
- ServerConfiguration_CertificateGroups_DefaultHttpsGroup_CertificateExpired_FirstInGroup: 22989,
- ServerConfiguration_CertificateGroups_DefaultHttpsGroup_TrustListOutOfDate: 23012,
- ServerConfiguration_CertificateGroups_DefaultHttpsGroup_TrustListOutOfDate_ShelvingState: 23099,
- ServerConfiguration_CertificateGroups_DefaultHttpsGroup_TrustListOutOfDate_FirstInGroup: 23137,
- ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_CertificateExpired: 23160,
- ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_CertificateExpired_ShelvingState: 23247,
- ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_CertificateExpired_FirstInGroup: 23285,
- ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_TrustListOutOfDate: 23308,
- ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_TrustListOutOfDate_ShelvingState: 23395,
- ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_TrustListOutOfDate_FirstInGroup: 23433,
- AliasNameCategoryType_Alias_Placeholder: 23457,
- AliasNameCategoryType_SubAliasNameCategories_Placeholder: 23458,
- Aliases: 23470,
- Aliases_Alias_Placeholder: 23471,
- Aliases_SubAliasNameCategories_Placeholder: 23472,
- Tags: 23479,
- Tags_Alias_Placeholder: 23480,
- Tags_SubAliasNameCategories_Placeholder: 23481,
- Topics: 23488,
- Topics_Alias_Placeholder: 23489,
- Topics_SubAliasNameCategories_Placeholder: 23490,
- AliasNameDataType_Encoding_DefaultBinary: 23499,
- ReadAnnotationDataDetails_Encoding_DefaultBinary: 23500,
- AliasNameDataType_Encoding_DefaultXml: 23505,
- ReadAnnotationDataDetails_Encoding_DefaultXml: 23506,
- AliasNameDataType_Encoding_DefaultJson: 23511,
- ReadAnnotationDataDetails_Encoding_DefaultJson: 23512
-};
+ export class ObjectIds {
+ static readonly ModellingRule_Mandatory = 78;
+ static readonly ModellingRule_Optional = 80;
+ static readonly ModellingRule_ExposesItsArray = 83;
+ static readonly RootFolder = 84;
+ static readonly ObjectsFolder = 85;
+ static readonly TypesFolder = 86;
+ static readonly ViewsFolder = 87;
+ static readonly ObjectTypesFolder = 88;
+ static readonly VariableTypesFolder = 89;
+ static readonly DataTypesFolder = 90;
+ static readonly ReferenceTypesFolder = 91;
+ static readonly XmlSchema_TypeSystem = 92;
+ static readonly OPCBinarySchema_TypeSystem = 93;
+ static readonly DataTypeDefinition_Encoding_DefaultBinary = 121;
+ static readonly StructureDefinition_Encoding_DefaultBinary = 122;
+ static readonly EnumDefinition_Encoding_DefaultBinary = 123;
+ static readonly DataSetMetaDataType_Encoding_DefaultBinary = 124;
+ static readonly DataTypeDescription_Encoding_DefaultBinary = 125;
+ static readonly StructureDescription_Encoding_DefaultBinary = 126;
+ static readonly EnumDescription_Encoding_DefaultBinary = 127;
+ static readonly RolePermissionType_Encoding_DefaultBinary = 128;
+ static readonly Node_Encoding_DefaultXml = 259;
+ static readonly Node_Encoding_DefaultBinary = 260;
+ static readonly ObjectNode_Encoding_DefaultXml = 262;
+ static readonly ObjectNode_Encoding_DefaultBinary = 263;
+ static readonly ObjectTypeNode_Encoding_DefaultXml = 265;
+ static readonly ObjectTypeNode_Encoding_DefaultBinary = 266;
+ static readonly VariableNode_Encoding_DefaultXml = 268;
+ static readonly VariableNode_Encoding_DefaultBinary = 269;
+ static readonly VariableTypeNode_Encoding_DefaultXml = 271;
+ static readonly VariableTypeNode_Encoding_DefaultBinary = 272;
+ static readonly ReferenceTypeNode_Encoding_DefaultXml = 274;
+ static readonly ReferenceTypeNode_Encoding_DefaultBinary = 275;
+ static readonly MethodNode_Encoding_DefaultXml = 277;
+ static readonly MethodNode_Encoding_DefaultBinary = 278;
+ static readonly ViewNode_Encoding_DefaultXml = 280;
+ static readonly ViewNode_Encoding_DefaultBinary = 281;
+ static readonly DataTypeNode_Encoding_DefaultXml = 283;
+ static readonly DataTypeNode_Encoding_DefaultBinary = 284;
+ static readonly ReferenceNode_Encoding_DefaultXml = 286;
+ static readonly ReferenceNode_Encoding_DefaultBinary = 287;
+ static readonly Argument_Encoding_DefaultXml = 297;
+ static readonly Argument_Encoding_DefaultBinary = 298;
+ static readonly StatusResult_Encoding_DefaultXml = 300;
+ static readonly StatusResult_Encoding_DefaultBinary = 301;
+ static readonly UserTokenPolicy_Encoding_DefaultXml = 305;
+ static readonly UserTokenPolicy_Encoding_DefaultBinary = 306;
+ static readonly ApplicationDescription_Encoding_DefaultXml = 309;
+ static readonly ApplicationDescription_Encoding_DefaultBinary = 310;
+ static readonly EndpointDescription_Encoding_DefaultXml = 313;
+ static readonly EndpointDescription_Encoding_DefaultBinary = 314;
+ static readonly UserIdentityToken_Encoding_DefaultXml = 317;
+ static readonly UserIdentityToken_Encoding_DefaultBinary = 318;
+ static readonly AnonymousIdentityToken_Encoding_DefaultXml = 320;
+ static readonly AnonymousIdentityToken_Encoding_DefaultBinary = 321;
+ static readonly UserNameIdentityToken_Encoding_DefaultXml = 323;
+ static readonly UserNameIdentityToken_Encoding_DefaultBinary = 324;
+ static readonly X509IdentityToken_Encoding_DefaultXml = 326;
+ static readonly X509IdentityToken_Encoding_DefaultBinary = 327;
+ static readonly EndpointConfiguration_Encoding_DefaultXml = 332;
+ static readonly EndpointConfiguration_Encoding_DefaultBinary = 333;
+ static readonly BuildInfo_Encoding_DefaultXml = 339;
+ static readonly BuildInfo_Encoding_DefaultBinary = 340;
+ static readonly SignedSoftwareCertificate_Encoding_DefaultXml = 345;
+ static readonly SignedSoftwareCertificate_Encoding_DefaultBinary = 346;
+ static readonly NodeAttributes_Encoding_DefaultXml = 350;
+ static readonly NodeAttributes_Encoding_DefaultBinary = 351;
+ static readonly ObjectAttributes_Encoding_DefaultXml = 353;
+ static readonly ObjectAttributes_Encoding_DefaultBinary = 354;
+ static readonly VariableAttributes_Encoding_DefaultXml = 356;
+ static readonly VariableAttributes_Encoding_DefaultBinary = 357;
+ static readonly MethodAttributes_Encoding_DefaultXml = 359;
+ static readonly MethodAttributes_Encoding_DefaultBinary = 360;
+ static readonly ObjectTypeAttributes_Encoding_DefaultXml = 362;
+ static readonly ObjectTypeAttributes_Encoding_DefaultBinary = 363;
+ static readonly VariableTypeAttributes_Encoding_DefaultXml = 365;
+ static readonly VariableTypeAttributes_Encoding_DefaultBinary = 366;
+ static readonly ReferenceTypeAttributes_Encoding_DefaultXml = 368;
+ static readonly ReferenceTypeAttributes_Encoding_DefaultBinary = 369;
+ static readonly DataTypeAttributes_Encoding_DefaultXml = 371;
+ static readonly DataTypeAttributes_Encoding_DefaultBinary = 372;
+ static readonly ViewAttributes_Encoding_DefaultXml = 374;
+ static readonly ViewAttributes_Encoding_DefaultBinary = 375;
+ static readonly AddNodesItem_Encoding_DefaultXml = 377;
+ static readonly AddNodesItem_Encoding_DefaultBinary = 378;
+ static readonly AddReferencesItem_Encoding_DefaultXml = 380;
+ static readonly AddReferencesItem_Encoding_DefaultBinary = 381;
+ static readonly DeleteNodesItem_Encoding_DefaultXml = 383;
+ static readonly DeleteNodesItem_Encoding_DefaultBinary = 384;
+ static readonly DeleteReferencesItem_Encoding_DefaultXml = 386;
+ static readonly DeleteReferencesItem_Encoding_DefaultBinary = 387;
+ static readonly RequestHeader_Encoding_DefaultXml = 390;
+ static readonly RequestHeader_Encoding_DefaultBinary = 391;
+ static readonly ResponseHeader_Encoding_DefaultXml = 393;
+ static readonly ResponseHeader_Encoding_DefaultBinary = 394;
+ static readonly ServiceFault_Encoding_DefaultXml = 396;
+ static readonly ServiceFault_Encoding_DefaultBinary = 397;
+ static readonly FindServersRequest_Encoding_DefaultXml = 421;
+ static readonly FindServersRequest_Encoding_DefaultBinary = 422;
+ static readonly FindServersResponse_Encoding_DefaultXml = 424;
+ static readonly FindServersResponse_Encoding_DefaultBinary = 425;
+ static readonly GetEndpointsRequest_Encoding_DefaultXml = 427;
+ static readonly GetEndpointsRequest_Encoding_DefaultBinary = 428;
+ static readonly GetEndpointsResponse_Encoding_DefaultXml = 430;
+ static readonly GetEndpointsResponse_Encoding_DefaultBinary = 431;
+ static readonly RegisteredServer_Encoding_DefaultXml = 433;
+ static readonly RegisteredServer_Encoding_DefaultBinary = 434;
+ static readonly RegisterServerRequest_Encoding_DefaultXml = 436;
+ static readonly RegisterServerRequest_Encoding_DefaultBinary = 437;
+ static readonly RegisterServerResponse_Encoding_DefaultXml = 439;
+ static readonly RegisterServerResponse_Encoding_DefaultBinary = 440;
+ static readonly ChannelSecurityToken_Encoding_DefaultXml = 442;
+ static readonly ChannelSecurityToken_Encoding_DefaultBinary = 443;
+ static readonly OpenSecureChannelRequest_Encoding_DefaultXml = 445;
+ static readonly OpenSecureChannelRequest_Encoding_DefaultBinary = 446;
+ static readonly OpenSecureChannelResponse_Encoding_DefaultXml = 448;
+ static readonly OpenSecureChannelResponse_Encoding_DefaultBinary = 449;
+ static readonly CloseSecureChannelRequest_Encoding_DefaultXml = 451;
+ static readonly CloseSecureChannelRequest_Encoding_DefaultBinary = 452;
+ static readonly CloseSecureChannelResponse_Encoding_DefaultXml = 454;
+ static readonly CloseSecureChannelResponse_Encoding_DefaultBinary = 455;
+ static readonly SignatureData_Encoding_DefaultXml = 457;
+ static readonly SignatureData_Encoding_DefaultBinary = 458;
+ static readonly CreateSessionRequest_Encoding_DefaultXml = 460;
+ static readonly CreateSessionRequest_Encoding_DefaultBinary = 461;
+ static readonly CreateSessionResponse_Encoding_DefaultXml = 463;
+ static readonly CreateSessionResponse_Encoding_DefaultBinary = 464;
+ static readonly ActivateSessionRequest_Encoding_DefaultXml = 466;
+ static readonly ActivateSessionRequest_Encoding_DefaultBinary = 467;
+ static readonly ActivateSessionResponse_Encoding_DefaultXml = 469;
+ static readonly ActivateSessionResponse_Encoding_DefaultBinary = 470;
+ static readonly CloseSessionRequest_Encoding_DefaultXml = 472;
+ static readonly CloseSessionRequest_Encoding_DefaultBinary = 473;
+ static readonly CloseSessionResponse_Encoding_DefaultXml = 475;
+ static readonly CloseSessionResponse_Encoding_DefaultBinary = 476;
+ static readonly CancelRequest_Encoding_DefaultXml = 478;
+ static readonly CancelRequest_Encoding_DefaultBinary = 479;
+ static readonly CancelResponse_Encoding_DefaultXml = 481;
+ static readonly CancelResponse_Encoding_DefaultBinary = 482;
+ static readonly AddNodesResult_Encoding_DefaultXml = 484;
+ static readonly AddNodesResult_Encoding_DefaultBinary = 485;
+ static readonly AddNodesRequest_Encoding_DefaultXml = 487;
+ static readonly AddNodesRequest_Encoding_DefaultBinary = 488;
+ static readonly AddNodesResponse_Encoding_DefaultXml = 490;
+ static readonly AddNodesResponse_Encoding_DefaultBinary = 491;
+ static readonly AddReferencesRequest_Encoding_DefaultXml = 493;
+ static readonly AddReferencesRequest_Encoding_DefaultBinary = 494;
+ static readonly AddReferencesResponse_Encoding_DefaultXml = 496;
+ static readonly AddReferencesResponse_Encoding_DefaultBinary = 497;
+ static readonly DeleteNodesRequest_Encoding_DefaultXml = 499;
+ static readonly DeleteNodesRequest_Encoding_DefaultBinary = 500;
+ static readonly DeleteNodesResponse_Encoding_DefaultXml = 502;
+ static readonly DeleteNodesResponse_Encoding_DefaultBinary = 503;
+ static readonly DeleteReferencesRequest_Encoding_DefaultXml = 505;
+ static readonly DeleteReferencesRequest_Encoding_DefaultBinary = 506;
+ static readonly DeleteReferencesResponse_Encoding_DefaultXml = 508;
+ static readonly DeleteReferencesResponse_Encoding_DefaultBinary = 509;
+ static readonly ViewDescription_Encoding_DefaultXml = 512;
+ static readonly ViewDescription_Encoding_DefaultBinary = 513;
+ static readonly BrowseDescription_Encoding_DefaultXml = 515;
+ static readonly BrowseDescription_Encoding_DefaultBinary = 516;
+ static readonly ReferenceDescription_Encoding_DefaultXml = 519;
+ static readonly ReferenceDescription_Encoding_DefaultBinary = 520;
+ static readonly BrowseResult_Encoding_DefaultXml = 523;
+ static readonly BrowseResult_Encoding_DefaultBinary = 524;
+ static readonly BrowseRequest_Encoding_DefaultXml = 526;
+ static readonly BrowseRequest_Encoding_DefaultBinary = 527;
+ static readonly BrowseResponse_Encoding_DefaultXml = 529;
+ static readonly BrowseResponse_Encoding_DefaultBinary = 530;
+ static readonly BrowseNextRequest_Encoding_DefaultXml = 532;
+ static readonly BrowseNextRequest_Encoding_DefaultBinary = 533;
+ static readonly BrowseNextResponse_Encoding_DefaultXml = 535;
+ static readonly BrowseNextResponse_Encoding_DefaultBinary = 536;
+ static readonly RelativePathElement_Encoding_DefaultXml = 538;
+ static readonly RelativePathElement_Encoding_DefaultBinary = 539;
+ static readonly RelativePath_Encoding_DefaultXml = 541;
+ static readonly RelativePath_Encoding_DefaultBinary = 542;
+ static readonly BrowsePath_Encoding_DefaultXml = 544;
+ static readonly BrowsePath_Encoding_DefaultBinary = 545;
+ static readonly BrowsePathTarget_Encoding_DefaultXml = 547;
+ static readonly BrowsePathTarget_Encoding_DefaultBinary = 548;
+ static readonly BrowsePathResult_Encoding_DefaultXml = 550;
+ static readonly BrowsePathResult_Encoding_DefaultBinary = 551;
+ static readonly TranslateBrowsePathsToNodeIdsRequest_Encoding_DefaultXml = 553;
+ static readonly TranslateBrowsePathsToNodeIdsRequest_Encoding_DefaultBinary = 554;
+ static readonly TranslateBrowsePathsToNodeIdsResponse_Encoding_DefaultXml = 556;
+ static readonly TranslateBrowsePathsToNodeIdsResponse_Encoding_DefaultBinary = 557;
+ static readonly RegisterNodesRequest_Encoding_DefaultXml = 559;
+ static readonly RegisterNodesRequest_Encoding_DefaultBinary = 560;
+ static readonly RegisterNodesResponse_Encoding_DefaultXml = 562;
+ static readonly RegisterNodesResponse_Encoding_DefaultBinary = 563;
+ static readonly UnregisterNodesRequest_Encoding_DefaultXml = 565;
+ static readonly UnregisterNodesRequest_Encoding_DefaultBinary = 566;
+ static readonly UnregisterNodesResponse_Encoding_DefaultXml = 568;
+ static readonly UnregisterNodesResponse_Encoding_DefaultBinary = 569;
+ static readonly QueryDataDescription_Encoding_DefaultXml = 571;
+ static readonly QueryDataDescription_Encoding_DefaultBinary = 572;
+ static readonly NodeTypeDescription_Encoding_DefaultXml = 574;
+ static readonly NodeTypeDescription_Encoding_DefaultBinary = 575;
+ static readonly QueryDataSet_Encoding_DefaultXml = 578;
+ static readonly QueryDataSet_Encoding_DefaultBinary = 579;
+ static readonly NodeReference_Encoding_DefaultXml = 581;
+ static readonly NodeReference_Encoding_DefaultBinary = 582;
+ static readonly ContentFilterElement_Encoding_DefaultXml = 584;
+ static readonly ContentFilterElement_Encoding_DefaultBinary = 585;
+ static readonly ContentFilter_Encoding_DefaultXml = 587;
+ static readonly ContentFilter_Encoding_DefaultBinary = 588;
+ static readonly FilterOperand_Encoding_DefaultXml = 590;
+ static readonly FilterOperand_Encoding_DefaultBinary = 591;
+ static readonly ElementOperand_Encoding_DefaultXml = 593;
+ static readonly ElementOperand_Encoding_DefaultBinary = 594;
+ static readonly LiteralOperand_Encoding_DefaultXml = 596;
+ static readonly LiteralOperand_Encoding_DefaultBinary = 597;
+ static readonly AttributeOperand_Encoding_DefaultXml = 599;
+ static readonly AttributeOperand_Encoding_DefaultBinary = 600;
+ static readonly SimpleAttributeOperand_Encoding_DefaultXml = 602;
+ static readonly SimpleAttributeOperand_Encoding_DefaultBinary = 603;
+ static readonly ContentFilterElementResult_Encoding_DefaultXml = 605;
+ static readonly ContentFilterElementResult_Encoding_DefaultBinary = 606;
+ static readonly ContentFilterResult_Encoding_DefaultXml = 608;
+ static readonly ContentFilterResult_Encoding_DefaultBinary = 609;
+ static readonly ParsingResult_Encoding_DefaultXml = 611;
+ static readonly ParsingResult_Encoding_DefaultBinary = 612;
+ static readonly QueryFirstRequest_Encoding_DefaultXml = 614;
+ static readonly QueryFirstRequest_Encoding_DefaultBinary = 615;
+ static readonly QueryFirstResponse_Encoding_DefaultXml = 617;
+ static readonly QueryFirstResponse_Encoding_DefaultBinary = 618;
+ static readonly QueryNextRequest_Encoding_DefaultXml = 620;
+ static readonly QueryNextRequest_Encoding_DefaultBinary = 621;
+ static readonly QueryNextResponse_Encoding_DefaultXml = 623;
+ static readonly QueryNextResponse_Encoding_DefaultBinary = 624;
+ static readonly ReadValueId_Encoding_DefaultXml = 627;
+ static readonly ReadValueId_Encoding_DefaultBinary = 628;
+ static readonly ReadRequest_Encoding_DefaultXml = 630;
+ static readonly ReadRequest_Encoding_DefaultBinary = 631;
+ static readonly ReadResponse_Encoding_DefaultXml = 633;
+ static readonly ReadResponse_Encoding_DefaultBinary = 634;
+ static readonly HistoryReadValueId_Encoding_DefaultXml = 636;
+ static readonly HistoryReadValueId_Encoding_DefaultBinary = 637;
+ static readonly HistoryReadResult_Encoding_DefaultXml = 639;
+ static readonly HistoryReadResult_Encoding_DefaultBinary = 640;
+ static readonly HistoryReadDetails_Encoding_DefaultXml = 642;
+ static readonly HistoryReadDetails_Encoding_DefaultBinary = 643;
+ static readonly ReadEventDetails_Encoding_DefaultXml = 645;
+ static readonly ReadEventDetails_Encoding_DefaultBinary = 646;
+ static readonly ReadRawModifiedDetails_Encoding_DefaultXml = 648;
+ static readonly ReadRawModifiedDetails_Encoding_DefaultBinary = 649;
+ static readonly ReadProcessedDetails_Encoding_DefaultXml = 651;
+ static readonly ReadProcessedDetails_Encoding_DefaultBinary = 652;
+ static readonly ReadAtTimeDetails_Encoding_DefaultXml = 654;
+ static readonly ReadAtTimeDetails_Encoding_DefaultBinary = 655;
+ static readonly HistoryData_Encoding_DefaultXml = 657;
+ static readonly HistoryData_Encoding_DefaultBinary = 658;
+ static readonly HistoryEvent_Encoding_DefaultXml = 660;
+ static readonly HistoryEvent_Encoding_DefaultBinary = 661;
+ static readonly HistoryReadRequest_Encoding_DefaultXml = 663;
+ static readonly HistoryReadRequest_Encoding_DefaultBinary = 664;
+ static readonly HistoryReadResponse_Encoding_DefaultXml = 666;
+ static readonly HistoryReadResponse_Encoding_DefaultBinary = 667;
+ static readonly WriteValue_Encoding_DefaultXml = 669;
+ static readonly WriteValue_Encoding_DefaultBinary = 670;
+ static readonly WriteRequest_Encoding_DefaultXml = 672;
+ static readonly WriteRequest_Encoding_DefaultBinary = 673;
+ static readonly WriteResponse_Encoding_DefaultXml = 675;
+ static readonly WriteResponse_Encoding_DefaultBinary = 676;
+ static readonly HistoryUpdateDetails_Encoding_DefaultXml = 678;
+ static readonly HistoryUpdateDetails_Encoding_DefaultBinary = 679;
+ static readonly UpdateDataDetails_Encoding_DefaultXml = 681;
+ static readonly UpdateDataDetails_Encoding_DefaultBinary = 682;
+ static readonly UpdateEventDetails_Encoding_DefaultXml = 684;
+ static readonly UpdateEventDetails_Encoding_DefaultBinary = 685;
+ static readonly DeleteRawModifiedDetails_Encoding_DefaultXml = 687;
+ static readonly DeleteRawModifiedDetails_Encoding_DefaultBinary = 688;
+ static readonly DeleteAtTimeDetails_Encoding_DefaultXml = 690;
+ static readonly DeleteAtTimeDetails_Encoding_DefaultBinary = 691;
+ static readonly DeleteEventDetails_Encoding_DefaultXml = 693;
+ static readonly DeleteEventDetails_Encoding_DefaultBinary = 694;
+ static readonly HistoryUpdateResult_Encoding_DefaultXml = 696;
+ static readonly HistoryUpdateResult_Encoding_DefaultBinary = 697;
+ static readonly HistoryUpdateRequest_Encoding_DefaultXml = 699;
+ static readonly HistoryUpdateRequest_Encoding_DefaultBinary = 700;
+ static readonly HistoryUpdateResponse_Encoding_DefaultXml = 702;
+ static readonly HistoryUpdateResponse_Encoding_DefaultBinary = 703;
+ static readonly CallMethodRequest_Encoding_DefaultXml = 705;
+ static readonly CallMethodRequest_Encoding_DefaultBinary = 706;
+ static readonly CallMethodResult_Encoding_DefaultXml = 708;
+ static readonly CallMethodResult_Encoding_DefaultBinary = 709;
+ static readonly CallRequest_Encoding_DefaultXml = 711;
+ static readonly CallRequest_Encoding_DefaultBinary = 712;
+ static readonly CallResponse_Encoding_DefaultXml = 714;
+ static readonly CallResponse_Encoding_DefaultBinary = 715;
+ static readonly MonitoringFilter_Encoding_DefaultXml = 720;
+ static readonly MonitoringFilter_Encoding_DefaultBinary = 721;
+ static readonly DataChangeFilter_Encoding_DefaultXml = 723;
+ static readonly DataChangeFilter_Encoding_DefaultBinary = 724;
+ static readonly EventFilter_Encoding_DefaultXml = 726;
+ static readonly EventFilter_Encoding_DefaultBinary = 727;
+ static readonly AggregateFilter_Encoding_DefaultXml = 729;
+ static readonly AggregateFilter_Encoding_DefaultBinary = 730;
+ static readonly MonitoringFilterResult_Encoding_DefaultXml = 732;
+ static readonly MonitoringFilterResult_Encoding_DefaultBinary = 733;
+ static readonly EventFilterResult_Encoding_DefaultXml = 735;
+ static readonly EventFilterResult_Encoding_DefaultBinary = 736;
+ static readonly AggregateFilterResult_Encoding_DefaultXml = 738;
+ static readonly AggregateFilterResult_Encoding_DefaultBinary = 739;
+ static readonly MonitoringParameters_Encoding_DefaultXml = 741;
+ static readonly MonitoringParameters_Encoding_DefaultBinary = 742;
+ static readonly MonitoredItemCreateRequest_Encoding_DefaultXml = 744;
+ static readonly MonitoredItemCreateRequest_Encoding_DefaultBinary = 745;
+ static readonly MonitoredItemCreateResult_Encoding_DefaultXml = 747;
+ static readonly MonitoredItemCreateResult_Encoding_DefaultBinary = 748;
+ static readonly CreateMonitoredItemsRequest_Encoding_DefaultXml = 750;
+ static readonly CreateMonitoredItemsRequest_Encoding_DefaultBinary = 751;
+ static readonly CreateMonitoredItemsResponse_Encoding_DefaultXml = 753;
+ static readonly CreateMonitoredItemsResponse_Encoding_DefaultBinary = 754;
+ static readonly MonitoredItemModifyRequest_Encoding_DefaultXml = 756;
+ static readonly MonitoredItemModifyRequest_Encoding_DefaultBinary = 757;
+ static readonly MonitoredItemModifyResult_Encoding_DefaultXml = 759;
+ static readonly MonitoredItemModifyResult_Encoding_DefaultBinary = 760;
+ static readonly ModifyMonitoredItemsRequest_Encoding_DefaultXml = 762;
+ static readonly ModifyMonitoredItemsRequest_Encoding_DefaultBinary = 763;
+ static readonly ModifyMonitoredItemsResponse_Encoding_DefaultXml = 765;
+ static readonly ModifyMonitoredItemsResponse_Encoding_DefaultBinary = 766;
+ static readonly SetMonitoringModeRequest_Encoding_DefaultXml = 768;
+ static readonly SetMonitoringModeRequest_Encoding_DefaultBinary = 769;
+ static readonly SetMonitoringModeResponse_Encoding_DefaultXml = 771;
+ static readonly SetMonitoringModeResponse_Encoding_DefaultBinary = 772;
+ static readonly SetTriggeringRequest_Encoding_DefaultXml = 774;
+ static readonly SetTriggeringRequest_Encoding_DefaultBinary = 775;
+ static readonly SetTriggeringResponse_Encoding_DefaultXml = 777;
+ static readonly SetTriggeringResponse_Encoding_DefaultBinary = 778;
+ static readonly DeleteMonitoredItemsRequest_Encoding_DefaultXml = 780;
+ static readonly DeleteMonitoredItemsRequest_Encoding_DefaultBinary = 781;
+ static readonly DeleteMonitoredItemsResponse_Encoding_DefaultXml = 783;
+ static readonly DeleteMonitoredItemsResponse_Encoding_DefaultBinary = 784;
+ static readonly CreateSubscriptionRequest_Encoding_DefaultXml = 786;
+ static readonly CreateSubscriptionRequest_Encoding_DefaultBinary = 787;
+ static readonly CreateSubscriptionResponse_Encoding_DefaultXml = 789;
+ static readonly CreateSubscriptionResponse_Encoding_DefaultBinary = 790;
+ static readonly ModifySubscriptionRequest_Encoding_DefaultXml = 792;
+ static readonly ModifySubscriptionRequest_Encoding_DefaultBinary = 793;
+ static readonly ModifySubscriptionResponse_Encoding_DefaultXml = 795;
+ static readonly ModifySubscriptionResponse_Encoding_DefaultBinary = 796;
+ static readonly SetPublishingModeRequest_Encoding_DefaultXml = 798;
+ static readonly SetPublishingModeRequest_Encoding_DefaultBinary = 799;
+ static readonly SetPublishingModeResponse_Encoding_DefaultXml = 801;
+ static readonly SetPublishingModeResponse_Encoding_DefaultBinary = 802;
+ static readonly NotificationMessage_Encoding_DefaultXml = 804;
+ static readonly NotificationMessage_Encoding_DefaultBinary = 805;
+ static readonly MonitoredItemNotification_Encoding_DefaultXml = 807;
+ static readonly MonitoredItemNotification_Encoding_DefaultBinary = 808;
+ static readonly DataChangeNotification_Encoding_DefaultXml = 810;
+ static readonly DataChangeNotification_Encoding_DefaultBinary = 811;
+ static readonly StatusChangeNotification_Encoding_DefaultXml = 819;
+ static readonly StatusChangeNotification_Encoding_DefaultBinary = 820;
+ static readonly SubscriptionAcknowledgement_Encoding_DefaultXml = 822;
+ static readonly SubscriptionAcknowledgement_Encoding_DefaultBinary = 823;
+ static readonly PublishRequest_Encoding_DefaultXml = 825;
+ static readonly PublishRequest_Encoding_DefaultBinary = 826;
+ static readonly PublishResponse_Encoding_DefaultXml = 828;
+ static readonly PublishResponse_Encoding_DefaultBinary = 829;
+ static readonly RepublishRequest_Encoding_DefaultXml = 831;
+ static readonly RepublishRequest_Encoding_DefaultBinary = 832;
+ static readonly RepublishResponse_Encoding_DefaultXml = 834;
+ static readonly RepublishResponse_Encoding_DefaultBinary = 835;
+ static readonly TransferResult_Encoding_DefaultXml = 837;
+ static readonly TransferResult_Encoding_DefaultBinary = 838;
+ static readonly TransferSubscriptionsRequest_Encoding_DefaultXml = 840;
+ static readonly TransferSubscriptionsRequest_Encoding_DefaultBinary = 841;
+ static readonly TransferSubscriptionsResponse_Encoding_DefaultXml = 843;
+ static readonly TransferSubscriptionsResponse_Encoding_DefaultBinary = 844;
+ static readonly DeleteSubscriptionsRequest_Encoding_DefaultXml = 846;
+ static readonly DeleteSubscriptionsRequest_Encoding_DefaultBinary = 847;
+ static readonly DeleteSubscriptionsResponse_Encoding_DefaultXml = 849;
+ static readonly DeleteSubscriptionsResponse_Encoding_DefaultBinary = 850;
+ static readonly RedundantServerDataType_Encoding_DefaultXml = 854;
+ static readonly RedundantServerDataType_Encoding_DefaultBinary = 855;
+ static readonly SamplingIntervalDiagnosticsDataType_Encoding_DefaultXml = 857;
+ static readonly SamplingIntervalDiagnosticsDataType_Encoding_DefaultBinary = 858;
+ static readonly ServerDiagnosticsSummaryDataType_Encoding_DefaultXml = 860;
+ static readonly ServerDiagnosticsSummaryDataType_Encoding_DefaultBinary = 861;
+ static readonly ServerStatusDataType_Encoding_DefaultXml = 863;
+ static readonly ServerStatusDataType_Encoding_DefaultBinary = 864;
+ static readonly SessionDiagnosticsDataType_Encoding_DefaultXml = 866;
+ static readonly SessionDiagnosticsDataType_Encoding_DefaultBinary = 867;
+ static readonly SessionSecurityDiagnosticsDataType_Encoding_DefaultXml = 869;
+ static readonly SessionSecurityDiagnosticsDataType_Encoding_DefaultBinary = 870;
+ static readonly ServiceCounterDataType_Encoding_DefaultXml = 872;
+ static readonly ServiceCounterDataType_Encoding_DefaultBinary = 873;
+ static readonly SubscriptionDiagnosticsDataType_Encoding_DefaultXml = 875;
+ static readonly SubscriptionDiagnosticsDataType_Encoding_DefaultBinary = 876;
+ static readonly ModelChangeStructureDataType_Encoding_DefaultXml = 878;
+ static readonly ModelChangeStructureDataType_Encoding_DefaultBinary = 879;
+ static readonly Range_Encoding_DefaultXml = 885;
+ static readonly Range_Encoding_DefaultBinary = 886;
+ static readonly EUInformation_Encoding_DefaultXml = 888;
+ static readonly EUInformation_Encoding_DefaultBinary = 889;
+ static readonly Annotation_Encoding_DefaultXml = 892;
+ static readonly Annotation_Encoding_DefaultBinary = 893;
+ static readonly ProgramDiagnosticDataType_Encoding_DefaultXml = 895;
+ static readonly ProgramDiagnosticDataType_Encoding_DefaultBinary = 896;
+ static readonly SemanticChangeStructureDataType_Encoding_DefaultXml = 898;
+ static readonly SemanticChangeStructureDataType_Encoding_DefaultBinary = 899;
+ static readonly EventNotificationList_Encoding_DefaultXml = 915;
+ static readonly EventNotificationList_Encoding_DefaultBinary = 916;
+ static readonly EventFieldList_Encoding_DefaultXml = 918;
+ static readonly EventFieldList_Encoding_DefaultBinary = 919;
+ static readonly HistoryEventFieldList_Encoding_DefaultXml = 921;
+ static readonly HistoryEventFieldList_Encoding_DefaultBinary = 922;
+ static readonly IssuedIdentityToken_Encoding_DefaultXml = 939;
+ static readonly IssuedIdentityToken_Encoding_DefaultBinary = 940;
+ static readonly NotificationData_Encoding_DefaultXml = 946;
+ static readonly NotificationData_Encoding_DefaultBinary = 947;
+ static readonly AggregateConfiguration_Encoding_DefaultXml = 949;
+ static readonly AggregateConfiguration_Encoding_DefaultBinary = 950;
+ static readonly ServerType_ServerCapabilities = 2009;
+ static readonly ServerType_ServerDiagnostics = 2010;
+ static readonly ServerType_VendorServerInfo = 2011;
+ static readonly ServerType_ServerRedundancy = 2012;
+ static readonly ServerCapabilitiesType_ModellingRules = 2019;
+ static readonly Server = 2253;
+ static readonly Server_ServerCapabilities = 2268;
+ static readonly Server_ServerDiagnostics = 2274;
+ static readonly Server_VendorServerInfo = 2295;
+ static readonly Server_ServerRedundancy = 2296;
+ static readonly AggregateFunction_Interpolative = 2341;
+ static readonly AggregateFunction_Average = 2342;
+ static readonly AggregateFunction_TimeAverage = 2343;
+ static readonly AggregateFunction_Total = 2344;
+ static readonly AggregateFunction_Minimum = 2346;
+ static readonly AggregateFunction_Maximum = 2347;
+ static readonly AggregateFunction_MinimumActualTime = 2348;
+ static readonly AggregateFunction_MaximumActualTime = 2349;
+ static readonly AggregateFunction_Range = 2350;
+ static readonly AggregateFunction_AnnotationCount = 2351;
+ static readonly AggregateFunction_Count = 2352;
+ static readonly AggregateFunction_NumberOfTransitions = 2355;
+ static readonly AggregateFunction_Start = 2357;
+ static readonly AggregateFunction_End = 2358;
+ static readonly AggregateFunction_Delta = 2359;
+ static readonly AggregateFunction_DurationGood = 2360;
+ static readonly AggregateFunction_DurationBad = 2361;
+ static readonly AggregateFunction_PercentGood = 2362;
+ static readonly AggregateFunction_PercentBad = 2363;
+ static readonly AggregateFunction_WorstQuality = 2364;
+ static readonly ProgramStateMachineType_Ready = 2400;
+ static readonly ProgramStateMachineType_Running = 2402;
+ static readonly ProgramStateMachineType_Suspended = 2404;
+ static readonly ProgramStateMachineType_Halted = 2406;
+ static readonly ProgramStateMachineType_HaltedToReady = 2408;
+ static readonly ProgramStateMachineType_ReadyToRunning = 2410;
+ static readonly ProgramStateMachineType_RunningToHalted = 2412;
+ static readonly ProgramStateMachineType_RunningToReady = 2414;
+ static readonly ProgramStateMachineType_RunningToSuspended = 2416;
+ static readonly ProgramStateMachineType_SuspendedToRunning = 2418;
+ static readonly ProgramStateMachineType_SuspendedToHalted = 2420;
+ static readonly ProgramStateMachineType_SuspendedToReady = 2422;
+ static readonly ProgramStateMachineType_ReadyToHalted = 2424;
+ static readonly ServerDiagnosticsType_SessionsDiagnosticsSummary = 2744;
+ static readonly ServerCapabilitiesType_AggregateFunctions = 2754;
+ static readonly ShelvedStateMachineType_Unshelved = 2930;
+ static readonly ShelvedStateMachineType_TimedShelved = 2932;
+ static readonly ShelvedStateMachineType_OneShotShelved = 2933;
+ static readonly ShelvedStateMachineType_UnshelvedToTimedShelved = 2935;
+ static readonly ShelvedStateMachineType_UnshelvedToOneShotShelved = 2936;
+ static readonly ShelvedStateMachineType_TimedShelvedToUnshelved = 2940;
+ static readonly ShelvedStateMachineType_TimedShelvedToOneShotShelved = 2942;
+ static readonly ShelvedStateMachineType_OneShotShelvedToUnshelved = 2943;
+ static readonly ShelvedStateMachineType_OneShotShelvedToTimedShelved = 2945;
+ static readonly Server_ServerCapabilities_ModellingRules = 2996;
+ static readonly Server_ServerCapabilities_AggregateFunctions = 2997;
+ static readonly EventTypesFolder = 3048;
+ static readonly HistoricalDataConfigurationType_AggregateConfiguration = 3059;
+ static readonly DefaultBinary = 3062;
+ static readonly DefaultXml = 3063;
+ static readonly ServerType_ServerCapabilities_ModellingRules = 3093;
+ static readonly ServerType_ServerCapabilities_AggregateFunctions = 3094;
+ static readonly ServerType_ServerDiagnostics_SessionsDiagnosticsSummary = 3111;
+ static readonly Server_ServerDiagnostics_SessionsDiagnosticsSummary = 3706;
+ static readonly ProgramStateMachineType_FinalResultData = 3850;
+ static readonly EnumValueType_Encoding_DefaultXml = 7616;
+ static readonly EnumValueType_Encoding_DefaultBinary = 8251;
+ static readonly TimeZoneDataType_Encoding_DefaultXml = 8913;
+ static readonly TimeZoneDataType_Encoding_DefaultBinary = 8917;
+ static readonly AlarmConditionType_ShelvingState = 9178;
+ static readonly LimitAlarmType_ShelvingState = 9279;
+ static readonly ExclusiveLimitStateMachineType_HighHigh = 9329;
+ static readonly ExclusiveLimitStateMachineType_High = 9331;
+ static readonly ExclusiveLimitStateMachineType_Low = 9333;
+ static readonly ExclusiveLimitStateMachineType_LowLow = 9335;
+ static readonly ExclusiveLimitStateMachineType_LowLowToLow = 9337;
+ static readonly ExclusiveLimitStateMachineType_LowToLowLow = 9338;
+ static readonly ExclusiveLimitStateMachineType_HighHighToHigh = 9339;
+ static readonly ExclusiveLimitStateMachineType_HighToHighHigh = 9340;
+ static readonly ExclusiveLimitAlarmType_ShelvingState = 9416;
+ static readonly ExclusiveLimitAlarmType_LimitState = 9455;
+ static readonly ExclusiveLevelAlarmType_ShelvingState = 9557;
+ static readonly ExclusiveLevelAlarmType_LimitState = 9596;
+ static readonly ExclusiveRateOfChangeAlarmType_ShelvingState = 9698;
+ static readonly ExclusiveRateOfChangeAlarmType_LimitState = 9737;
+ static readonly ExclusiveDeviationAlarmType_ShelvingState = 9839;
+ static readonly ExclusiveDeviationAlarmType_LimitState = 9878;
+ static readonly NonExclusiveLimitAlarmType_ShelvingState = 9981;
+ static readonly NonExclusiveLevelAlarmType_ShelvingState = 10135;
+ static readonly NonExclusiveRateOfChangeAlarmType_ShelvingState = 10289;
+ static readonly NonExclusiveDeviationAlarmType_ShelvingState = 10443;
+ static readonly DiscreteAlarmType_ShelvingState = 10598;
+ static readonly OffNormalAlarmType_ShelvingState = 10712;
+ static readonly TripAlarmType_ShelvingState = 10826;
+ static readonly HistoryServerCapabilitiesType_AggregateFunctions = 11172;
+ static readonly HistoryServerCapabilities = 11192;
+ static readonly HistoryServerCapabilities_AggregateFunctions = 11201;
+ static readonly HAConfiguration = 11202;
+ static readonly HAConfiguration_AggregateConfiguration = 11203;
+ static readonly ModificationInfo_Encoding_DefaultXml = 11218;
+ static readonly HistoryModifiedData_Encoding_DefaultXml = 11219;
+ static readonly ModificationInfo_Encoding_DefaultBinary = 11226;
+ static readonly HistoryModifiedData_Encoding_DefaultBinary = 11227;
+ static readonly AggregateFunction_TimeAverage2 = 11285;
+ static readonly AggregateFunction_Minimum2 = 11286;
+ static readonly AggregateFunction_Maximum2 = 11287;
+ static readonly AggregateFunction_Range2 = 11288;
+ static readonly AggregateFunction_WorstQuality2 = 11292;
+ static readonly UpdateStructureDataDetails_Encoding_DefaultXml = 11296;
+ static readonly UpdateStructureDataDetails_Encoding_DefaultBinary = 11300;
+ static readonly AggregateFunction_Total2 = 11304;
+ static readonly AggregateFunction_MinimumActualTime2 = 11305;
+ static readonly AggregateFunction_MaximumActualTime2 = 11306;
+ static readonly AggregateFunction_DurationInStateZero = 11307;
+ static readonly AggregateFunction_DurationInStateNonZero = 11308;
+ static readonly AggregateFunction_StandardDeviationSample = 11426;
+ static readonly AggregateFunction_StandardDeviationPopulation = 11427;
+ static readonly AggregateFunction_VarianceSample = 11428;
+ static readonly AggregateFunction_VariancePopulation = 11429;
+ static readonly AggregateFunction_StartBound = 11505;
+ static readonly AggregateFunction_EndBound = 11506;
+ static readonly AggregateFunction_DeltaBounds = 11507;
+ static readonly ModellingRule_OptionalPlaceholder = 11508;
+ static readonly ModellingRule_MandatoryPlaceholder = 11510;
+ static readonly ServerType_ServerCapabilities_OperationLimits = 11516;
+ static readonly ServerType_Namespaces = 11527;
+ static readonly ServerCapabilitiesType_OperationLimits = 11551;
+ static readonly NamespaceMetadataType_NamespaceFile = 11624;
+ static readonly NamespacesType_NamespaceIdentifier_Placeholder = 11646;
+ static readonly NamespacesType_NamespaceIdentifier_Placeholder_NamespaceFile = 11654;
+ static readonly Server_ServerCapabilities_OperationLimits = 11704;
+ static readonly Server_Namespaces = 11715;
+ static readonly SystemOffNormalAlarmType_ShelvingState = 11831;
+ static readonly HistoricalDataConfigurationType_AggregateFunctions = 11876;
+ static readonly HAConfiguration_AggregateFunctions = 11877;
+ static readonly InstanceNode_Encoding_DefaultXml = 11887;
+ static readonly TypeNode_Encoding_DefaultXml = 11888;
+ static readonly InstanceNode_Encoding_DefaultBinary = 11889;
+ static readonly TypeNode_Encoding_DefaultBinary = 11890;
+ static readonly EndpointUrlListDataType_Encoding_DefaultXml = 11949;
+ static readonly NetworkGroupDataType_Encoding_DefaultXml = 11950;
+ static readonly EndpointUrlListDataType_Encoding_DefaultBinary = 11957;
+ static readonly NetworkGroupDataType_Encoding_DefaultBinary = 11958;
+ static readonly AxisInformation_Encoding_DefaultXml = 12081;
+ static readonly XVType_Encoding_DefaultXml = 12082;
+ static readonly AxisInformation_Encoding_DefaultBinary = 12089;
+ static readonly XVType_Encoding_DefaultBinary = 12090;
+ static readonly SessionsDiagnosticsSummaryType_ClientName_Placeholder = 12097;
+ static readonly ComplexNumberType_Encoding_DefaultXml = 12173;
+ static readonly DoubleComplexNumberType_Encoding_DefaultXml = 12174;
+ static readonly ComplexNumberType_Encoding_DefaultBinary = 12181;
+ static readonly DoubleComplexNumberType_Encoding_DefaultBinary = 12182;
+ static readonly ServerOnNetwork_Encoding_DefaultXml = 12195;
+ static readonly FindServersOnNetworkRequest_Encoding_DefaultXml = 12196;
+ static readonly FindServersOnNetworkResponse_Encoding_DefaultXml = 12197;
+ static readonly RegisterServer2Request_Encoding_DefaultXml = 12199;
+ static readonly RegisterServer2Response_Encoding_DefaultXml = 12200;
+ static readonly ServerOnNetwork_Encoding_DefaultBinary = 12207;
+ static readonly FindServersOnNetworkRequest_Encoding_DefaultBinary = 12208;
+ static readonly FindServersOnNetworkResponse_Encoding_DefaultBinary = 12209;
+ static readonly RegisterServer2Request_Encoding_DefaultBinary = 12211;
+ static readonly RegisterServer2Response_Encoding_DefaultBinary = 12212;
+ static readonly ServerConfiguration = 12637;
+ static readonly ServerConfiguration_CertificateGroups_DefaultApplicationGroup_TrustList = 12642;
+ static readonly TrustListDataType_Encoding_DefaultXml = 12676;
+ static readonly TrustListDataType_Encoding_DefaultBinary = 12680;
+ static readonly OptionSet_Encoding_DefaultXml = 12757;
+ static readonly Union_Encoding_DefaultXml = 12758;
+ static readonly OptionSet_Encoding_DefaultBinary = 12765;
+ static readonly Union_Encoding_DefaultBinary = 12766;
+ static readonly DiscoveryConfiguration_Encoding_DefaultXml = 12892;
+ static readonly MdnsDiscoveryConfiguration_Encoding_DefaultXml = 12893;
+ static readonly DiscoveryConfiguration_Encoding_DefaultBinary = 12900;
+ static readonly MdnsDiscoveryConfiguration_Encoding_DefaultBinary = 12901;
+ static readonly CertificateExpirationAlarmType_ShelvingState = 13305;
+ static readonly FileDirectoryType_FileDirectoryName_Placeholder = 13354;
+ static readonly FileDirectoryType_FileName_Placeholder = 13366;
+ static readonly CertificateGroupType_TrustList = 13599;
+ static readonly CertificateGroupFolderType_DefaultApplicationGroup = 13814;
+ static readonly CertificateGroupFolderType_DefaultApplicationGroup_TrustList = 13815;
+ static readonly CertificateGroupFolderType_DefaultHttpsGroup = 13848;
+ static readonly CertificateGroupFolderType_DefaultHttpsGroup_TrustList = 13849;
+ static readonly CertificateGroupFolderType_DefaultUserTokenGroup = 13882;
+ static readonly CertificateGroupFolderType_DefaultUserTokenGroup_TrustList = 13883;
+ static readonly CertificateGroupFolderType_AdditionalGroup_Placeholder = 13916;
+ static readonly CertificateGroupFolderType_AdditionalGroup_Placeholder_TrustList = 13917;
+ static readonly ServerConfigurationType_CertificateGroups = 13950;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultApplicationGroup = 13951;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_TrustList = 13952;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultHttpsGroup = 13985;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_TrustList = 13986;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup = 14019;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_TrustList = 14020;
+ static readonly ServerConfiguration_CertificateGroups = 14053;
+ static readonly ServerConfiguration_CertificateGroups_DefaultHttpsGroup = 14088;
+ static readonly ServerConfiguration_CertificateGroups_DefaultHttpsGroup_TrustList = 14089;
+ static readonly ServerConfiguration_CertificateGroups_DefaultUserTokenGroup = 14122;
+ static readonly ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_TrustList = 14123;
+ static readonly ServerConfiguration_CertificateGroups_DefaultApplicationGroup = 14156;
+ static readonly PubSubConnectionType_Address = 14221;
+ static readonly PublishedVariableDataType_Encoding_DefaultXml = 14319;
+ static readonly PublishedVariableDataType_Encoding_DefaultBinary = 14323;
+ static readonly PublishSubscribeType_ConnectionName_Placeholder = 14417;
+ static readonly PublishSubscribeType_ConnectionName_Placeholder_Status = 14419;
+ static readonly PublishSubscribeType_ConnectionName_Placeholder_Address = 14423;
+ static readonly PublishSubscribeType_PublishedDataSets = 14434;
+ static readonly PublishSubscribe = 14443;
+ static readonly DataSetFolderType_DataSetFolderName_Placeholder = 14478;
+ static readonly DataSetFolderType_PublishedDataSetName_Placeholder = 14487;
+ static readonly PubSubConnectionType_Status = 14600;
+ static readonly DataSetMetaDataType_Encoding_DefaultXml = 14794;
+ static readonly FieldMetaData_Encoding_DefaultXml = 14795;
+ static readonly DataTypeDescription_Encoding_DefaultXml = 14796;
+ static readonly DataTypeDefinition_Encoding_DefaultXml = 14797;
+ static readonly StructureDefinition_Encoding_DefaultXml = 14798;
+ static readonly EnumDefinition_Encoding_DefaultXml = 14799;
+ static readonly StructureField_Encoding_DefaultXml = 14800;
+ static readonly EnumField_Encoding_DefaultXml = 14801;
+ static readonly KeyValuePair_Encoding_DefaultXml = 14802;
+ static readonly ConfigurationVersionDataType_Encoding_DefaultXml = 14803;
+ static readonly FieldTargetDataType_Encoding_DefaultXml = 14804;
+ static readonly FieldMetaData_Encoding_DefaultBinary = 14839;
+ static readonly StructureField_Encoding_DefaultBinary = 14844;
+ static readonly EnumField_Encoding_DefaultBinary = 14845;
+ static readonly KeyValuePair_Encoding_DefaultBinary = 14846;
+ static readonly ConfigurationVersionDataType_Encoding_DefaultBinary = 14847;
+ static readonly FieldTargetDataType_Encoding_DefaultBinary = 14848;
+ static readonly KeyValuePair_Encoding_DefaultJson = 15041;
+ static readonly IdentityMappingRuleType_Encoding_DefaultJson = 15042;
+ static readonly TrustListDataType_Encoding_DefaultJson = 15044;
+ static readonly DecimalDataType_Encoding_DefaultJson = 15045;
+ static readonly ConfigurationVersionDataType_Encoding_DefaultJson = 15049;
+ static readonly DataSetMetaDataType_Encoding_DefaultJson = 15050;
+ static readonly FieldMetaData_Encoding_DefaultJson = 15051;
+ static readonly DataTypeDescription_Encoding_DefaultJson = 15057;
+ static readonly StructureDescription_Encoding_DefaultJson = 15058;
+ static readonly EnumDescription_Encoding_DefaultJson = 15059;
+ static readonly PublishedVariableDataType_Encoding_DefaultJson = 15060;
+ static readonly FieldTargetDataType_Encoding_DefaultJson = 15061;
+ static readonly RolePermissionType_Encoding_DefaultJson = 15062;
+ static readonly DataTypeDefinition_Encoding_DefaultJson = 15063;
+ static readonly StructureField_Encoding_DefaultJson = 15065;
+ static readonly StructureDefinition_Encoding_DefaultJson = 15066;
+ static readonly EnumDefinition_Encoding_DefaultJson = 15067;
+ static readonly Node_Encoding_DefaultJson = 15068;
+ static readonly InstanceNode_Encoding_DefaultJson = 15069;
+ static readonly TypeNode_Encoding_DefaultJson = 15070;
+ static readonly ObjectNode_Encoding_DefaultJson = 15071;
+ static readonly DatagramConnectionTransportType_DiscoveryAddress = 15072;
+ static readonly ObjectTypeNode_Encoding_DefaultJson = 15073;
+ static readonly VariableNode_Encoding_DefaultJson = 15074;
+ static readonly VariableTypeNode_Encoding_DefaultJson = 15075;
+ static readonly ReferenceTypeNode_Encoding_DefaultJson = 15076;
+ static readonly MethodNode_Encoding_DefaultJson = 15077;
+ static readonly ViewNode_Encoding_DefaultJson = 15078;
+ static readonly DataTypeNode_Encoding_DefaultJson = 15079;
+ static readonly ReferenceNode_Encoding_DefaultJson = 15080;
+ static readonly Argument_Encoding_DefaultJson = 15081;
+ static readonly EnumValueType_Encoding_DefaultJson = 15082;
+ static readonly EnumField_Encoding_DefaultJson = 15083;
+ static readonly OptionSet_Encoding_DefaultJson = 15084;
+ static readonly Union_Encoding_DefaultJson = 15085;
+ static readonly TimeZoneDataType_Encoding_DefaultJson = 15086;
+ static readonly ApplicationDescription_Encoding_DefaultJson = 15087;
+ static readonly RequestHeader_Encoding_DefaultJson = 15088;
+ static readonly ResponseHeader_Encoding_DefaultJson = 15089;
+ static readonly ServiceFault_Encoding_DefaultJson = 15090;
+ static readonly SessionlessInvokeRequestType_Encoding_DefaultJson = 15091;
+ static readonly SessionlessInvokeResponseType_Encoding_DefaultJson = 15092;
+ static readonly FindServersRequest_Encoding_DefaultJson = 15093;
+ static readonly FindServersResponse_Encoding_DefaultJson = 15094;
+ static readonly ServerOnNetwork_Encoding_DefaultJson = 15095;
+ static readonly FindServersOnNetworkRequest_Encoding_DefaultJson = 15096;
+ static readonly FindServersOnNetworkResponse_Encoding_DefaultJson = 15097;
+ static readonly UserTokenPolicy_Encoding_DefaultJson = 15098;
+ static readonly EndpointDescription_Encoding_DefaultJson = 15099;
+ static readonly GetEndpointsRequest_Encoding_DefaultJson = 15100;
+ static readonly GetEndpointsResponse_Encoding_DefaultJson = 15101;
+ static readonly RegisteredServer_Encoding_DefaultJson = 15102;
+ static readonly RegisterServerRequest_Encoding_DefaultJson = 15103;
+ static readonly RegisterServerResponse_Encoding_DefaultJson = 15104;
+ static readonly DiscoveryConfiguration_Encoding_DefaultJson = 15105;
+ static readonly MdnsDiscoveryConfiguration_Encoding_DefaultJson = 15106;
+ static readonly RegisterServer2Request_Encoding_DefaultJson = 15107;
+ static readonly RegisterServer2Response_Encoding_DefaultJson = 15130;
+ static readonly ChannelSecurityToken_Encoding_DefaultJson = 15131;
+ static readonly OpenSecureChannelRequest_Encoding_DefaultJson = 15132;
+ static readonly OpenSecureChannelResponse_Encoding_DefaultJson = 15133;
+ static readonly CloseSecureChannelRequest_Encoding_DefaultJson = 15134;
+ static readonly CloseSecureChannelResponse_Encoding_DefaultJson = 15135;
+ static readonly SignedSoftwareCertificate_Encoding_DefaultJson = 15136;
+ static readonly SignatureData_Encoding_DefaultJson = 15137;
+ static readonly CreateSessionRequest_Encoding_DefaultJson = 15138;
+ static readonly CreateSessionResponse_Encoding_DefaultJson = 15139;
+ static readonly UserIdentityToken_Encoding_DefaultJson = 15140;
+ static readonly AnonymousIdentityToken_Encoding_DefaultJson = 15141;
+ static readonly UserNameIdentityToken_Encoding_DefaultJson = 15142;
+ static readonly X509IdentityToken_Encoding_DefaultJson = 15143;
+ static readonly IssuedIdentityToken_Encoding_DefaultJson = 15144;
+ static readonly ActivateSessionRequest_Encoding_DefaultJson = 15145;
+ static readonly ActivateSessionResponse_Encoding_DefaultJson = 15146;
+ static readonly CloseSessionRequest_Encoding_DefaultJson = 15147;
+ static readonly CloseSessionResponse_Encoding_DefaultJson = 15148;
+ static readonly CancelRequest_Encoding_DefaultJson = 15149;
+ static readonly CancelResponse_Encoding_DefaultJson = 15150;
+ static readonly NodeAttributes_Encoding_DefaultJson = 15151;
+ static readonly ObjectAttributes_Encoding_DefaultJson = 15152;
+ static readonly VariableAttributes_Encoding_DefaultJson = 15153;
+ static readonly MethodAttributes_Encoding_DefaultJson = 15157;
+ static readonly ObjectTypeAttributes_Encoding_DefaultJson = 15158;
+ static readonly VariableTypeAttributes_Encoding_DefaultJson = 15159;
+ static readonly ReferenceTypeAttributes_Encoding_DefaultJson = 15160;
+ static readonly DataTypeAttributes_Encoding_DefaultJson = 15161;
+ static readonly ViewAttributes_Encoding_DefaultJson = 15162;
+ static readonly GenericAttributeValue_Encoding_DefaultJson = 15163;
+ static readonly GenericAttributes_Encoding_DefaultJson = 15164;
+ static readonly AddNodesItem_Encoding_DefaultJson = 15165;
+ static readonly AddNodesResult_Encoding_DefaultJson = 15166;
+ static readonly AddNodesRequest_Encoding_DefaultJson = 15167;
+ static readonly AddNodesResponse_Encoding_DefaultJson = 15168;
+ static readonly AddReferencesItem_Encoding_DefaultJson = 15169;
+ static readonly AddReferencesRequest_Encoding_DefaultJson = 15170;
+ static readonly AddReferencesResponse_Encoding_DefaultJson = 15171;
+ static readonly DeleteNodesItem_Encoding_DefaultJson = 15172;
+ static readonly DeleteNodesRequest_Encoding_DefaultJson = 15173;
+ static readonly DeleteNodesResponse_Encoding_DefaultJson = 15174;
+ static readonly DeleteReferencesItem_Encoding_DefaultJson = 15175;
+ static readonly DeleteReferencesRequest_Encoding_DefaultJson = 15176;
+ static readonly DeleteReferencesResponse_Encoding_DefaultJson = 15177;
+ static readonly ViewDescription_Encoding_DefaultJson = 15179;
+ static readonly BrowseDescription_Encoding_DefaultJson = 15180;
+ static readonly ReferenceDescription_Encoding_DefaultJson = 15182;
+ static readonly BrowseResult_Encoding_DefaultJson = 15183;
+ static readonly BrowseRequest_Encoding_DefaultJson = 15184;
+ static readonly BrowseResponse_Encoding_DefaultJson = 15185;
+ static readonly BrowseNextRequest_Encoding_DefaultJson = 15186;
+ static readonly BrowseNextResponse_Encoding_DefaultJson = 15187;
+ static readonly RelativePathElement_Encoding_DefaultJson = 15188;
+ static readonly RelativePath_Encoding_DefaultJson = 15189;
+ static readonly BrowsePath_Encoding_DefaultJson = 15190;
+ static readonly BrowsePathTarget_Encoding_DefaultJson = 15191;
+ static readonly BrowsePathResult_Encoding_DefaultJson = 15192;
+ static readonly TranslateBrowsePathsToNodeIdsRequest_Encoding_DefaultJson = 15193;
+ static readonly TranslateBrowsePathsToNodeIdsResponse_Encoding_DefaultJson = 15194;
+ static readonly RegisterNodesRequest_Encoding_DefaultJson = 15195;
+ static readonly RegisterNodesResponse_Encoding_DefaultJson = 15196;
+ static readonly UnregisterNodesRequest_Encoding_DefaultJson = 15197;
+ static readonly UnregisterNodesResponse_Encoding_DefaultJson = 15198;
+ static readonly EndpointConfiguration_Encoding_DefaultJson = 15199;
+ static readonly QueryDataDescription_Encoding_DefaultJson = 15200;
+ static readonly NodeTypeDescription_Encoding_DefaultJson = 15201;
+ static readonly QueryDataSet_Encoding_DefaultJson = 15202;
+ static readonly NodeReference_Encoding_DefaultJson = 15203;
+ static readonly ContentFilterElement_Encoding_DefaultJson = 15204;
+ static readonly ContentFilter_Encoding_DefaultJson = 15205;
+ static readonly FilterOperand_Encoding_DefaultJson = 15206;
+ static readonly ElementOperand_Encoding_DefaultJson = 15207;
+ static readonly LiteralOperand_Encoding_DefaultJson = 15208;
+ static readonly AttributeOperand_Encoding_DefaultJson = 15209;
+ static readonly SimpleAttributeOperand_Encoding_DefaultJson = 15210;
+ static readonly ContentFilterElementResult_Encoding_DefaultJson = 15211;
+ static readonly PublishedDataSetType_DataSetWriterName_Placeholder = 15222;
+ static readonly PublishedDataSetType_DataSetWriterName_Placeholder_Status = 15223;
+ static readonly PublishedDataSetType_DataSetWriterName_Placeholder_TransportSettings = 15227;
+ static readonly ContentFilterResult_Encoding_DefaultJson = 15228;
+ static readonly PublishedDataItemsType_DataSetWriterName_Placeholder = 15230;
+ static readonly PublishedDataItemsType_DataSetWriterName_Placeholder_Status = 15231;
+ static readonly PublishedDataItemsType_DataSetWriterName_Placeholder_TransportSettings = 15235;
+ static readonly ParsingResult_Encoding_DefaultJson = 15236;
+ static readonly PublishedEventsType_DataSetWriterName_Placeholder = 15238;
+ static readonly PublishedEventsType_DataSetWriterName_Placeholder_Status = 15239;
+ static readonly PublishedEventsType_DataSetWriterName_Placeholder_TransportSettings = 15243;
+ static readonly QueryFirstRequest_Encoding_DefaultJson = 15244;
+ static readonly QueryFirstResponse_Encoding_DefaultJson = 15252;
+ static readonly QueryNextRequest_Encoding_DefaultJson = 15254;
+ static readonly QueryNextResponse_Encoding_DefaultJson = 15255;
+ static readonly ReadValueId_Encoding_DefaultJson = 15256;
+ static readonly ReadRequest_Encoding_DefaultJson = 15257;
+ static readonly ReadResponse_Encoding_DefaultJson = 15258;
+ static readonly HistoryReadValueId_Encoding_DefaultJson = 15259;
+ static readonly HistoryReadResult_Encoding_DefaultJson = 15260;
+ static readonly HistoryReadDetails_Encoding_DefaultJson = 15261;
+ static readonly ReadEventDetails_Encoding_DefaultJson = 15262;
+ static readonly ReadRawModifiedDetails_Encoding_DefaultJson = 15263;
+ static readonly ReadProcessedDetails_Encoding_DefaultJson = 15264;
+ static readonly PubSubGroupType_Status = 15265;
+ static readonly ReadAtTimeDetails_Encoding_DefaultJson = 15269;
+ static readonly HistoryData_Encoding_DefaultJson = 15270;
+ static readonly ModificationInfo_Encoding_DefaultJson = 15271;
+ static readonly HistoryModifiedData_Encoding_DefaultJson = 15272;
+ static readonly HistoryEvent_Encoding_DefaultJson = 15273;
+ static readonly HistoryReadRequest_Encoding_DefaultJson = 15274;
+ static readonly HistoryReadResponse_Encoding_DefaultJson = 15275;
+ static readonly WriteValue_Encoding_DefaultJson = 15276;
+ static readonly WriteRequest_Encoding_DefaultJson = 15277;
+ static readonly WriteResponse_Encoding_DefaultJson = 15278;
+ static readonly HistoryUpdateDetails_Encoding_DefaultJson = 15279;
+ static readonly UpdateDataDetails_Encoding_DefaultJson = 15280;
+ static readonly UpdateStructureDataDetails_Encoding_DefaultJson = 15281;
+ static readonly UpdateEventDetails_Encoding_DefaultJson = 15282;
+ static readonly DeleteRawModifiedDetails_Encoding_DefaultJson = 15283;
+ static readonly DeleteAtTimeDetails_Encoding_DefaultJson = 15284;
+ static readonly DeleteEventDetails_Encoding_DefaultJson = 15285;
+ static readonly HistoryUpdateResult_Encoding_DefaultJson = 15286;
+ static readonly HistoryUpdateRequest_Encoding_DefaultJson = 15287;
+ static readonly HistoryUpdateResponse_Encoding_DefaultJson = 15288;
+ static readonly CallMethodRequest_Encoding_DefaultJson = 15289;
+ static readonly CallMethodResult_Encoding_DefaultJson = 15290;
+ static readonly CallRequest_Encoding_DefaultJson = 15291;
+ static readonly CallResponse_Encoding_DefaultJson = 15292;
+ static readonly MonitoringFilter_Encoding_DefaultJson = 15293;
+ static readonly DataChangeFilter_Encoding_DefaultJson = 15294;
+ static readonly EventFilter_Encoding_DefaultJson = 15295;
+ static readonly DataSetWriterType_Status = 15299;
+ static readonly DataSetWriterType_TransportSettings = 15303;
+ static readonly AggregateConfiguration_Encoding_DefaultJson = 15304;
+ static readonly DataSetReaderType_Status = 15307;
+ static readonly DataSetReaderType_TransportSettings = 15311;
+ static readonly AggregateFilter_Encoding_DefaultJson = 15312;
+ static readonly MonitoringFilterResult_Encoding_DefaultJson = 15313;
+ static readonly EventFilterResult_Encoding_DefaultJson = 15314;
+ static readonly AggregateFilterResult_Encoding_DefaultJson = 15315;
+ static readonly DataSetReaderType_SubscribedDataSet = 15316;
+ static readonly MonitoringParameters_Encoding_DefaultJson = 15320;
+ static readonly MonitoredItemCreateRequest_Encoding_DefaultJson = 15321;
+ static readonly MonitoredItemCreateResult_Encoding_DefaultJson = 15322;
+ static readonly CreateMonitoredItemsRequest_Encoding_DefaultJson = 15323;
+ static readonly CreateMonitoredItemsResponse_Encoding_DefaultJson = 15324;
+ static readonly MonitoredItemModifyRequest_Encoding_DefaultJson = 15325;
+ static readonly MonitoredItemModifyResult_Encoding_DefaultJson = 15326;
+ static readonly ModifyMonitoredItemsRequest_Encoding_DefaultJson = 15327;
+ static readonly ModifyMonitoredItemsResponse_Encoding_DefaultJson = 15328;
+ static readonly SetMonitoringModeRequest_Encoding_DefaultJson = 15329;
+ static readonly SetMonitoringModeResponse_Encoding_DefaultJson = 15331;
+ static readonly SetTriggeringRequest_Encoding_DefaultJson = 15332;
+ static readonly SetTriggeringResponse_Encoding_DefaultJson = 15333;
+ static readonly DeleteMonitoredItemsRequest_Encoding_DefaultJson = 15335;
+ static readonly DeleteMonitoredItemsResponse_Encoding_DefaultJson = 15336;
+ static readonly CreateSubscriptionRequest_Encoding_DefaultJson = 15337;
+ static readonly CreateSubscriptionResponse_Encoding_DefaultJson = 15338;
+ static readonly ModifySubscriptionRequest_Encoding_DefaultJson = 15339;
+ static readonly ModifySubscriptionResponse_Encoding_DefaultJson = 15340;
+ static readonly SetPublishingModeRequest_Encoding_DefaultJson = 15341;
+ static readonly SetPublishingModeResponse_Encoding_DefaultJson = 15342;
+ static readonly NotificationMessage_Encoding_DefaultJson = 15343;
+ static readonly NotificationData_Encoding_DefaultJson = 15344;
+ static readonly DataChangeNotification_Encoding_DefaultJson = 15345;
+ static readonly MonitoredItemNotification_Encoding_DefaultJson = 15346;
+ static readonly EventNotificationList_Encoding_DefaultJson = 15347;
+ static readonly EventFieldList_Encoding_DefaultJson = 15348;
+ static readonly HistoryEventFieldList_Encoding_DefaultJson = 15349;
+ static readonly StatusChangeNotification_Encoding_DefaultJson = 15350;
+ static readonly SubscriptionAcknowledgement_Encoding_DefaultJson = 15351;
+ static readonly PublishRequest_Encoding_DefaultJson = 15352;
+ static readonly PublishResponse_Encoding_DefaultJson = 15353;
+ static readonly RepublishRequest_Encoding_DefaultJson = 15354;
+ static readonly RepublishResponse_Encoding_DefaultJson = 15355;
+ static readonly TransferResult_Encoding_DefaultJson = 15356;
+ static readonly TransferSubscriptionsRequest_Encoding_DefaultJson = 15357;
+ static readonly TransferSubscriptionsResponse_Encoding_DefaultJson = 15358;
+ static readonly DeleteSubscriptionsRequest_Encoding_DefaultJson = 15359;
+ static readonly DeleteSubscriptionsResponse_Encoding_DefaultJson = 15360;
+ static readonly BuildInfo_Encoding_DefaultJson = 15361;
+ static readonly RedundantServerDataType_Encoding_DefaultJson = 15362;
+ static readonly EndpointUrlListDataType_Encoding_DefaultJson = 15363;
+ static readonly NetworkGroupDataType_Encoding_DefaultJson = 15364;
+ static readonly SamplingIntervalDiagnosticsDataType_Encoding_DefaultJson = 15365;
+ static readonly ServerDiagnosticsSummaryDataType_Encoding_DefaultJson = 15366;
+ static readonly ServerStatusDataType_Encoding_DefaultJson = 15367;
+ static readonly SessionDiagnosticsDataType_Encoding_DefaultJson = 15368;
+ static readonly SessionSecurityDiagnosticsDataType_Encoding_DefaultJson = 15369;
+ static readonly ServiceCounterDataType_Encoding_DefaultJson = 15370;
+ static readonly StatusResult_Encoding_DefaultJson = 15371;
+ static readonly SubscriptionDiagnosticsDataType_Encoding_DefaultJson = 15372;
+ static readonly ModelChangeStructureDataType_Encoding_DefaultJson = 15373;
+ static readonly SemanticChangeStructureDataType_Encoding_DefaultJson = 15374;
+ static readonly Range_Encoding_DefaultJson = 15375;
+ static readonly EUInformation_Encoding_DefaultJson = 15376;
+ static readonly ComplexNumberType_Encoding_DefaultJson = 15377;
+ static readonly DoubleComplexNumberType_Encoding_DefaultJson = 15378;
+ static readonly AxisInformation_Encoding_DefaultJson = 15379;
+ static readonly XVType_Encoding_DefaultJson = 15380;
+ static readonly ProgramDiagnosticDataType_Encoding_DefaultJson = 15381;
+ static readonly Annotation_Encoding_DefaultJson = 15382;
+ static readonly ProgramDiagnostic2DataType_Encoding_DefaultBinary = 15397;
+ static readonly ProgramDiagnostic2DataType_Encoding_DefaultXml = 15401;
+ static readonly ProgramDiagnostic2DataType_Encoding_DefaultJson = 15405;
+ static readonly SimpleTypeDescription_Encoding_DefaultBinary = 15421;
+ static readonly UABinaryFileDataType_Encoding_DefaultBinary = 15422;
+ static readonly PublishSubscribeType_SecurityGroups = 15434;
+ static readonly PublishSubscribe_SecurityGroups = 15443;
+ static readonly SecurityGroupFolderType_SecurityGroupFolderName_Placeholder = 15453;
+ static readonly SecurityGroupFolderType_SecurityGroupName_Placeholder = 15459;
+ static readonly DataSetFolderType_PublishedDataSetName_Placeholder_ExtensionFields = 15473;
+ static readonly BrokerConnectionTransportDataType_Encoding_DefaultBinary = 15479;
+ static readonly PublishedDataSetType_ExtensionFields = 15481;
+ static readonly PublishedDataItemsType_ExtensionFields = 15503;
+ static readonly PublishedEventsType_ExtensionFields = 15511;
+ static readonly SimpleTypeDescription_Encoding_DefaultXml = 15529;
+ static readonly UABinaryFileDataType_Encoding_DefaultXml = 15531;
+ static readonly BrokerConnectionTransportDataType_Encoding_DefaultXml = 15579;
+ static readonly StructureDescription_Encoding_DefaultXml = 15589;
+ static readonly EnumDescription_Encoding_DefaultXml = 15590;
+ static readonly Server_ServerCapabilities_RoleSet = 15606;
+ static readonly RoleSetType_RoleName_Placeholder = 15608;
+ static readonly WellKnownRole_Anonymous = 15644;
+ static readonly WellKnownRole_AuthenticatedUser = 15656;
+ static readonly WellKnownRole_Observer = 15668;
+ static readonly EndpointType_Encoding_DefaultBinary = 15671;
+ static readonly DataTypeSchemaHeader_Encoding_DefaultBinary = 15676;
+ static readonly PublishedDataSetDataType_Encoding_DefaultBinary = 15677;
+ static readonly PublishedDataSetSourceDataType_Encoding_DefaultBinary = 15678;
+ static readonly PublishedDataItemsDataType_Encoding_DefaultBinary = 15679;
+ static readonly WellKnownRole_Operator = 15680;
+ static readonly PublishedEventsDataType_Encoding_DefaultBinary = 15681;
+ static readonly DataSetWriterDataType_Encoding_DefaultBinary = 15682;
+ static readonly DataSetWriterTransportDataType_Encoding_DefaultBinary = 15683;
+ static readonly DataSetWriterMessageDataType_Encoding_DefaultBinary = 15688;
+ static readonly PubSubGroupDataType_Encoding_DefaultBinary = 15689;
+ static readonly WriterGroupTransportDataType_Encoding_DefaultBinary = 15691;
+ static readonly WellKnownRole_Supervisor = 15692;
+ static readonly WriterGroupMessageDataType_Encoding_DefaultBinary = 15693;
+ static readonly PubSubConnectionDataType_Encoding_DefaultBinary = 15694;
+ static readonly ConnectionTransportDataType_Encoding_DefaultBinary = 15695;
+ static readonly SimpleTypeDescription_Encoding_DefaultJson = 15700;
+ static readonly ReaderGroupTransportDataType_Encoding_DefaultBinary = 15701;
+ static readonly ReaderGroupMessageDataType_Encoding_DefaultBinary = 15702;
+ static readonly DataSetReaderDataType_Encoding_DefaultBinary = 15703;
+ static readonly WellKnownRole_SecurityAdmin = 15704;
+ static readonly DataSetReaderTransportDataType_Encoding_DefaultBinary = 15705;
+ static readonly DataSetReaderMessageDataType_Encoding_DefaultBinary = 15706;
+ static readonly SubscribedDataSetDataType_Encoding_DefaultBinary = 15707;
+ static readonly TargetVariablesDataType_Encoding_DefaultBinary = 15712;
+ static readonly SubscribedDataSetMirrorDataType_Encoding_DefaultBinary = 15713;
+ static readonly UABinaryFileDataType_Encoding_DefaultJson = 15714;
+ static readonly UadpWriterGroupMessageDataType_Encoding_DefaultBinary = 15715;
+ static readonly WellKnownRole_ConfigureAdmin = 15716;
+ static readonly UadpDataSetWriterMessageDataType_Encoding_DefaultBinary = 15717;
+ static readonly UadpDataSetReaderMessageDataType_Encoding_DefaultBinary = 15718;
+ static readonly JsonWriterGroupMessageDataType_Encoding_DefaultBinary = 15719;
+ static readonly JsonDataSetWriterMessageDataType_Encoding_DefaultBinary = 15724;
+ static readonly JsonDataSetReaderMessageDataType_Encoding_DefaultBinary = 15725;
+ static readonly BrokerConnectionTransportDataType_Encoding_DefaultJson = 15726;
+ static readonly BrokerWriterGroupTransportDataType_Encoding_DefaultBinary = 15727;
+ static readonly IdentityMappingRuleType_Encoding_DefaultXml = 15728;
+ static readonly BrokerDataSetWriterTransportDataType_Encoding_DefaultBinary = 15729;
+ static readonly BrokerDataSetReaderTransportDataType_Encoding_DefaultBinary = 15733;
+ static readonly IdentityMappingRuleType_Encoding_DefaultBinary = 15736;
+ static readonly TemporaryFileTransferType_TransferState_Placeholder = 15754;
+ static readonly PublishSubscribe_ConnectionName_Placeholder = 15790;
+ static readonly FileTransferStateMachineType_Idle = 15815;
+ static readonly FileTransferStateMachineType_ReadPrepare = 15817;
+ static readonly FileTransferStateMachineType_ReadTransfer = 15819;
+ static readonly FileTransferStateMachineType_ApplyWrite = 15821;
+ static readonly FileTransferStateMachineType_Error = 15823;
+ static readonly FileTransferStateMachineType_IdleToReadPrepare = 15825;
+ static readonly FileTransferStateMachineType_ReadPrepareToReadTransfer = 15827;
+ static readonly FileTransferStateMachineType_ReadTransferToIdle = 15829;
+ static readonly FileTransferStateMachineType_IdleToApplyWrite = 15831;
+ static readonly FileTransferStateMachineType_ApplyWriteToIdle = 15833;
+ static readonly FileTransferStateMachineType_ReadPrepareToError = 15835;
+ static readonly FileTransferStateMachineType_ReadTransferToError = 15837;
+ static readonly FileTransferStateMachineType_ApplyWriteToError = 15839;
+ static readonly FileTransferStateMachineType_ErrorToIdle = 15841;
+ static readonly PublishSubscribeType_Status = 15844;
+ static readonly PublishSubscribe_ConnectionName_Placeholder_Address = 15851;
+ static readonly PublishSubscribe_ConnectionName_Placeholder_TransportSettings = 15864;
+ static readonly PublishSubscribe_ConnectionName_Placeholder_Status = 15865;
+ static readonly SessionlessInvokeRequestType_Encoding_DefaultXml = 15902;
+ static readonly SessionlessInvokeRequestType_Encoding_DefaultBinary = 15903;
+ static readonly PublishSubscribeType_ConnectionName_Placeholder_TransportSettings = 15905;
+ static readonly PubSubKeyServiceType_SecurityGroups = 15913;
+ static readonly PublishSubscribe_ConnectionName_Placeholder_Diagnostics = 15937;
+ static readonly EndpointType_Encoding_DefaultXml = 15949;
+ static readonly DataTypeSchemaHeader_Encoding_DefaultXml = 15950;
+ static readonly PublishedDataSetDataType_Encoding_DefaultXml = 15951;
+ static readonly PublishedDataSetSourceDataType_Encoding_DefaultXml = 15952;
+ static readonly PublishedDataItemsDataType_Encoding_DefaultXml = 15953;
+ static readonly PublishedEventsDataType_Encoding_DefaultXml = 15954;
+ static readonly DataSetWriterDataType_Encoding_DefaultXml = 15955;
+ static readonly DataSetWriterTransportDataType_Encoding_DefaultXml = 15956;
+ static readonly OPCUANamespaceMetadata = 15957;
+ static readonly OPCUANamespaceMetadata_NamespaceFile = 15965;
+ static readonly DataSetWriterMessageDataType_Encoding_DefaultXml = 15987;
+ static readonly PubSubGroupDataType_Encoding_DefaultXml = 15988;
+ static readonly WriterGroupTransportDataType_Encoding_DefaultXml = 15990;
+ static readonly WriterGroupMessageDataType_Encoding_DefaultXml = 15991;
+ static readonly PubSubConnectionDataType_Encoding_DefaultXml = 15992;
+ static readonly ConnectionTransportDataType_Encoding_DefaultXml = 15993;
+ static readonly ReaderGroupTransportDataType_Encoding_DefaultXml = 15995;
+ static readonly ReaderGroupMessageDataType_Encoding_DefaultXml = 15996;
+ static readonly DataSetReaderDataType_Encoding_DefaultXml = 16007;
+ static readonly DataSetReaderTransportDataType_Encoding_DefaultXml = 16008;
+ static readonly DataSetReaderMessageDataType_Encoding_DefaultXml = 16009;
+ static readonly SubscribedDataSetDataType_Encoding_DefaultXml = 16010;
+ static readonly TargetVariablesDataType_Encoding_DefaultXml = 16011;
+ static readonly SubscribedDataSetMirrorDataType_Encoding_DefaultXml = 16012;
+ static readonly UadpWriterGroupMessageDataType_Encoding_DefaultXml = 16014;
+ static readonly UadpDataSetWriterMessageDataType_Encoding_DefaultXml = 16015;
+ static readonly UadpDataSetReaderMessageDataType_Encoding_DefaultXml = 16016;
+ static readonly JsonWriterGroupMessageDataType_Encoding_DefaultXml = 16017;
+ static readonly JsonDataSetWriterMessageDataType_Encoding_DefaultXml = 16018;
+ static readonly JsonDataSetReaderMessageDataType_Encoding_DefaultXml = 16019;
+ static readonly BrokerWriterGroupTransportDataType_Encoding_DefaultXml = 16021;
+ static readonly BrokerDataSetWriterTransportDataType_Encoding_DefaultXml = 16022;
+ static readonly BrokerDataSetReaderTransportDataType_Encoding_DefaultXml = 16023;
+ static readonly WellKnownRole_Engineer = 16036;
+ static readonly PublishSubscribe_ConnectionName_Placeholder_Diagnostics_Counters = 16102;
+ static readonly RolePermissionType_Encoding_DefaultXml = 16126;
+ static readonly EndpointType_Encoding_DefaultJson = 16150;
+ static readonly DataTypeSchemaHeader_Encoding_DefaultJson = 16151;
+ static readonly PublishedDataSetDataType_Encoding_DefaultJson = 16152;
+ static readonly PublishedDataSetSourceDataType_Encoding_DefaultJson = 16153;
+ static readonly PublishedDataItemsDataType_Encoding_DefaultJson = 16154;
+ static readonly PublishedEventsDataType_Encoding_DefaultJson = 16155;
+ static readonly DataSetWriterDataType_Encoding_DefaultJson = 16156;
+ static readonly DataSetWriterTransportDataType_Encoding_DefaultJson = 16157;
+ static readonly DataSetWriterMessageDataType_Encoding_DefaultJson = 16158;
+ static readonly PubSubGroupDataType_Encoding_DefaultJson = 16159;
+ static readonly WriterGroupTransportDataType_Encoding_DefaultJson = 16161;
+ static readonly WriterGroupMessageDataType_Encoding_DefaultJson = 16280;
+ static readonly PubSubConnectionDataType_Encoding_DefaultJson = 16281;
+ static readonly ConnectionTransportDataType_Encoding_DefaultJson = 16282;
+ static readonly ReaderGroupTransportDataType_Encoding_DefaultJson = 16284;
+ static readonly ReaderGroupMessageDataType_Encoding_DefaultJson = 16285;
+ static readonly DataSetReaderDataType_Encoding_DefaultJson = 16286;
+ static readonly DataSetReaderTransportDataType_Encoding_DefaultJson = 16287;
+ static readonly DataSetReaderMessageDataType_Encoding_DefaultJson = 16288;
+ static readonly ServerType_ServerCapabilities_RoleSet = 16289;
+ static readonly ServerCapabilitiesType_RoleSet = 16295;
+ static readonly SubscribedDataSetDataType_Encoding_DefaultJson = 16308;
+ static readonly TargetVariablesDataType_Encoding_DefaultJson = 16310;
+ static readonly SubscribedDataSetMirrorDataType_Encoding_DefaultJson = 16311;
+ static readonly FileSystem = 16314;
+ static readonly FileSystem_FileDirectoryName_Placeholder = 16315;
+ static readonly UadpWriterGroupMessageDataType_Encoding_DefaultJson = 16323;
+ static readonly FileSystem_FileName_Placeholder = 16327;
+ static readonly UadpDataSetWriterMessageDataType_Encoding_DefaultJson = 16391;
+ static readonly UadpDataSetReaderMessageDataType_Encoding_DefaultJson = 16392;
+ static readonly JsonWriterGroupMessageDataType_Encoding_DefaultJson = 16393;
+ static readonly JsonDataSetWriterMessageDataType_Encoding_DefaultJson = 16394;
+ static readonly AlarmConditionType_FirstInGroup = 16398;
+ static readonly AlarmConditionType_AlarmGroup_Placeholder = 16399;
+ static readonly JsonDataSetReaderMessageDataType_Encoding_DefaultJson = 16404;
+ static readonly AlarmGroupType_AlarmConditionInstance_Placeholder = 16406;
+ static readonly AlarmGroupType_AlarmConditionInstance_Placeholder_ShelvingState = 16502;
+ static readonly BrokerWriterGroupTransportDataType_Encoding_DefaultJson = 16524;
+ static readonly BrokerDataSetWriterTransportDataType_Encoding_DefaultJson = 16525;
+ static readonly BrokerDataSetReaderTransportDataType_Encoding_DefaultJson = 16526;
+ static readonly AlarmGroupType_AlarmConditionInstance_Placeholder_FirstInGroup = 16530;
+ static readonly LimitAlarmType_FirstInGroup = 16565;
+ static readonly LimitAlarmType_AlarmGroup_Placeholder = 16566;
+ static readonly ExclusiveLimitAlarmType_FirstInGroup = 16605;
+ static readonly ExclusiveLimitAlarmType_AlarmGroup_Placeholder = 16606;
+ static readonly NonExclusiveLimitAlarmType_FirstInGroup = 16645;
+ static readonly NonExclusiveLimitAlarmType_AlarmGroup_Placeholder = 16646;
+ static readonly NonExclusiveLevelAlarmType_FirstInGroup = 16685;
+ static readonly NonExclusiveLevelAlarmType_AlarmGroup_Placeholder = 16686;
+ static readonly ExclusiveLevelAlarmType_FirstInGroup = 16725;
+ static readonly ExclusiveLevelAlarmType_AlarmGroup_Placeholder = 16726;
+ static readonly PublishedDataSetType_DataSetWriterName_Placeholder_MessageSettings = 16758;
+ static readonly NonExclusiveDeviationAlarmType_FirstInGroup = 16765;
+ static readonly NonExclusiveDeviationAlarmType_AlarmGroup_Placeholder = 16766;
+ static readonly PublishedDataItemsType_DataSetWriterName_Placeholder_MessageSettings = 16799;
+ static readonly ExclusiveDeviationAlarmType_FirstInGroup = 16806;
+ static readonly ExclusiveDeviationAlarmType_AlarmGroup_Placeholder = 16807;
+ static readonly PublishedEventsType_DataSetWriterName_Placeholder_MessageSettings = 16840;
+ static readonly NonExclusiveRateOfChangeAlarmType_FirstInGroup = 16847;
+ static readonly NonExclusiveRateOfChangeAlarmType_AlarmGroup_Placeholder = 16848;
+ static readonly ExclusiveRateOfChangeAlarmType_FirstInGroup = 16888;
+ static readonly ExclusiveRateOfChangeAlarmType_AlarmGroup_Placeholder = 16889;
+ static readonly DiscreteAlarmType_FirstInGroup = 16929;
+ static readonly DiscreteAlarmType_AlarmGroup_Placeholder = 16930;
+ static readonly OffNormalAlarmType_FirstInGroup = 16965;
+ static readonly OffNormalAlarmType_AlarmGroup_Placeholder = 16966;
+ static readonly SystemOffNormalAlarmType_FirstInGroup = 17001;
+ static readonly SystemOffNormalAlarmType_AlarmGroup_Placeholder = 17002;
+ static readonly TripAlarmType_FirstInGroup = 17037;
+ static readonly TripAlarmType_AlarmGroup_Placeholder = 17038;
+ static readonly CertificateExpirationAlarmType_FirstInGroup = 17073;
+ static readonly CertificateExpirationAlarmType_AlarmGroup_Placeholder = 17074;
+ static readonly DiscrepancyAlarmType_ShelvingState = 17180;
+ static readonly PubSubConnectionType_TransportSettings = 17203;
+ static readonly DiscrepancyAlarmType_FirstInGroup = 17208;
+ static readonly DiscrepancyAlarmType_AlarmGroup_Placeholder = 17209;
+ static readonly PubSubConnectionType_WriterGroupName_Placeholder_TransportSettings = 17290;
+ static readonly PubSubConnectionType_WriterGroupName_Placeholder_MessageSettings = 17291;
+ static readonly PubSubConnectionType_ReaderGroupName_Placeholder_TransportSettings = 17307;
+ static readonly PubSubConnectionType_ReaderGroupName_Placeholder_MessageSettings = 17308;
+ static readonly PubSubConnectionType_WriterGroupName_Placeholder = 17310;
+ static readonly PubSubConnectionType_WriterGroupName_Placeholder_Status = 17314;
+ static readonly PubSubConnectionType_ReaderGroupName_Placeholder = 17325;
+ static readonly PubSubConnectionType_ReaderGroupName_Placeholder_Status = 17329;
+ static readonly PublishSubscribe_ConnectionName_Placeholder_Diagnostics_LiveValues = 17352;
+ static readonly PublishSubscribe_PublishedDataSets = 17371;
+ static readonly PublishSubscribe_Status = 17405;
+ static readonly PublishSubscribe_Diagnostics = 17409;
+ static readonly PublishSubscribe_Diagnostics_Counters = 17423;
+ static readonly PublishSubscribe_Diagnostics_LiveValues = 17457;
+ static readonly DatagramConnectionTransportDataType_Encoding_DefaultBinary = 17468;
+ static readonly DatagramConnectionTransportDataType_Encoding_DefaultXml = 17472;
+ static readonly DatagramConnectionTransportDataType_Encoding_DefaultJson = 17476;
+ static readonly KeyCredentialConfigurationFolderType_ServiceName_Placeholder = 17511;
+ static readonly AdditionalParametersType_Encoding_DefaultBinary = 17537;
+ static readonly AdditionalParametersType_Encoding_DefaultXml = 17541;
+ static readonly AdditionalParametersType_Encoding_DefaultJson = 17547;
+ static readonly EphemeralKeyType_Encoding_DefaultBinary = 17549;
+ static readonly EphemeralKeyType_Encoding_DefaultXml = 17553;
+ static readonly EphemeralKeyType_Encoding_DefaultJson = 17557;
+ static readonly DictionaryEntryType_DictionaryEntryName_Placeholder = 17590;
+ static readonly DictionaryFolderType_DictionaryFolderName_Placeholder = 17592;
+ static readonly DictionaryFolderType_DictionaryEntryName_Placeholder = 17593;
+ static readonly Dictionaries = 17594;
+ static readonly Dictionaries_DictionaryFolderName_Placeholder = 17595;
+ static readonly Dictionaries_DictionaryEntryName_Placeholder = 17596;
+ static readonly IrdiDictionaryEntryType_DictionaryEntryName_Placeholder = 17599;
+ static readonly UriDictionaryEntryType_DictionaryEntryName_Placeholder = 17601;
+ static readonly GenericAttributeValue_Encoding_DefaultXml = 17608;
+ static readonly GenericAttributes_Encoding_DefaultXml = 17609;
+ static readonly GenericAttributeValue_Encoding_DefaultBinary = 17610;
+ static readonly GenericAttributes_Encoding_DefaultBinary = 17611;
+ static readonly InterfaceTypes = 17708;
+ static readonly WriterGroupType_Status = 17730;
+ static readonly AuthorizationServices = 17732;
+ static readonly AuthorizationServices_ServiceName_Placeholder = 17733;
+ static readonly WriterGroupType_TransportSettings = 17741;
+ static readonly WriterGroupType_MessageSettings = 17742;
+ static readonly WriterGroupType_DataSetWriterName_Placeholder = 17743;
+ static readonly WriterGroupType_DataSetWriterName_Placeholder_TransportSettings = 17747;
+ static readonly WriterGroupType_DataSetWriterName_Placeholder_MessageSettings = 17748;
+ static readonly WriterGroupType_DataSetWriterName_Placeholder_Status = 17749;
+ static readonly WriterGroupType_DataSetWriterName_Placeholder_Diagnostics = 17753;
+ static readonly WriterGroupType_DataSetWriterName_Placeholder_Diagnostics_Counters = 17767;
+ static readonly WriterGroupType_DataSetWriterName_Placeholder_Diagnostics_LiveValues = 17798;
+ static readonly WriterGroupType_Diagnostics = 17812;
+ static readonly WriterGroupType_Diagnostics_Counters = 17826;
+ static readonly WriterGroupType_Diagnostics_LiveValues = 17858;
+ static readonly DecimalDataType_Encoding_DefaultXml = 17862;
+ static readonly DecimalDataType_Encoding_DefaultBinary = 17863;
+ static readonly ReaderGroupType_Status = 18067;
+ static readonly ReaderGroupType_DataSetReaderName_Placeholder = 18076;
+ static readonly ReaderGroupType_DataSetReaderName_Placeholder_TransportSettings = 18086;
+ static readonly ReaderGroupType_DataSetReaderName_Placeholder_MessageSettings = 18087;
+ static readonly ReaderGroupType_DataSetReaderName_Placeholder_Status = 18088;
+ static readonly ReaderGroupType_DataSetReaderName_Placeholder_Diagnostics = 18092;
+ static readonly ReaderGroupType_DataSetReaderName_Placeholder_Diagnostics_Counters = 18106;
+ static readonly ReaderGroupType_DataSetReaderName_Placeholder_Diagnostics_LiveValues = 18137;
+ static readonly KeyCredentialConfiguration = 18155;
+ static readonly KeyCredentialConfiguration_ServiceName_Placeholder = 18156;
+ static readonly InstrumentDiagnosticAlarmType_ShelvingState = 18438;
+ static readonly InstrumentDiagnosticAlarmType_FirstInGroup = 18476;
+ static readonly InstrumentDiagnosticAlarmType_AlarmGroup_Placeholder = 18486;
+ static readonly SystemDiagnosticAlarmType_ShelvingState = 18587;
+ static readonly SystemDiagnosticAlarmType_FirstInGroup = 18625;
+ static readonly SystemDiagnosticAlarmType_AlarmGroup_Placeholder = 18635;
+ static readonly PublishSubscribeType_ConnectionName_Placeholder_Diagnostics = 18667;
+ static readonly PublishSubscribeType_ConnectionName_Placeholder_Diagnostics_Counters = 18681;
+ static readonly PublishSubscribeType_ConnectionName_Placeholder_Diagnostics_LiveValues = 18712;
+ static readonly PublishSubscribeType_Diagnostics = 18715;
+ static readonly PublishSubscribeType_Diagnostics_Counters = 18729;
+ static readonly PublishSubscribeType_Diagnostics_LiveValues = 18760;
+ static readonly RationalNumber_Encoding_DefaultBinary = 18815;
+ static readonly Vector_Encoding_DefaultBinary = 18816;
+ static readonly ThreeDVector_Encoding_DefaultBinary = 18817;
+ static readonly CartesianCoordinates_Encoding_DefaultBinary = 18818;
+ static readonly ThreeDCartesianCoordinates_Encoding_DefaultBinary = 18819;
+ static readonly Orientation_Encoding_DefaultBinary = 18820;
+ static readonly ThreeDOrientation_Encoding_DefaultBinary = 18821;
+ static readonly Frame_Encoding_DefaultBinary = 18822;
+ static readonly ThreeDFrame_Encoding_DefaultBinary = 18823;
+ static readonly RationalNumber_Encoding_DefaultXml = 18851;
+ static readonly Vector_Encoding_DefaultXml = 18852;
+ static readonly ThreeDVector_Encoding_DefaultXml = 18853;
+ static readonly CartesianCoordinates_Encoding_DefaultXml = 18854;
+ static readonly ThreeDCartesianCoordinates_Encoding_DefaultXml = 18855;
+ static readonly Orientation_Encoding_DefaultXml = 18856;
+ static readonly ThreeDOrientation_Encoding_DefaultXml = 18857;
+ static readonly Frame_Encoding_DefaultXml = 18858;
+ static readonly ThreeDFrame_Encoding_DefaultXml = 18859;
+ static readonly PublishedDataSetType_DataSetWriterName_Placeholder_Diagnostics = 18871;
+ static readonly PublishedDataSetType_DataSetWriterName_Placeholder_Diagnostics_Counters = 18885;
+ static readonly PublishedDataSetType_DataSetWriterName_Placeholder_Diagnostics_LiveValues = 18916;
+ static readonly PublishedDataItemsType_DataSetWriterName_Placeholder_Diagnostics = 18930;
+ static readonly PublishedDataItemsType_DataSetWriterName_Placeholder_Diagnostics_Counters = 18944;
+ static readonly PublishedDataItemsType_DataSetWriterName_Placeholder_Diagnostics_LiveValues = 18975;
+ static readonly PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics = 18989;
+ static readonly PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics_Counters = 19003;
+ static readonly PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics_LiveValues = 19034;
+ static readonly RationalNumber_Encoding_DefaultJson = 19064;
+ static readonly Vector_Encoding_DefaultJson = 19065;
+ static readonly ThreeDVector_Encoding_DefaultJson = 19066;
+ static readonly CartesianCoordinates_Encoding_DefaultJson = 19067;
+ static readonly ThreeDCartesianCoordinates_Encoding_DefaultJson = 19068;
+ static readonly Orientation_Encoding_DefaultJson = 19069;
+ static readonly ThreeDOrientation_Encoding_DefaultJson = 19070;
+ static readonly Frame_Encoding_DefaultJson = 19071;
+ static readonly ThreeDFrame_Encoding_DefaultJson = 19072;
+ static readonly PubSubConnectionType_WriterGroupName_Placeholder_Diagnostics = 19107;
+ static readonly PubSubConnectionType_WriterGroupName_Placeholder_Diagnostics_Counters = 19121;
+ static readonly PubSubConnectionType_WriterGroupName_Placeholder_Diagnostics_LiveValues = 19152;
+ static readonly PubSubConnectionType_ReaderGroupName_Placeholder_Diagnostics = 19176;
+ static readonly PubSubConnectionType_ReaderGroupName_Placeholder_Diagnostics_Counters = 19190;
+ static readonly PubSubConnectionType_ReaderGroupName_Placeholder_Diagnostics_LiveValues = 19221;
+ static readonly PubSubConnectionType_Diagnostics = 19241;
+ static readonly PubSubConnectionType_Diagnostics_Counters = 19255;
+ static readonly PubSubConnectionType_Diagnostics_LiveValues = 19286;
+ static readonly TrustListOutOfDateAlarmType_ShelvingState = 19388;
+ static readonly TrustListOutOfDateAlarmType_FirstInGroup = 19426;
+ static readonly TrustListOutOfDateAlarmType_AlarmGroup_Placeholder = 19436;
+ static readonly CertificateGroupType_CertificateExpired = 19450;
+ static readonly CertificateGroupType_CertificateExpired_ShelvingState = 19537;
+ static readonly DataSetWriterType_Diagnostics = 19550;
+ static readonly DataSetWriterType_Diagnostics_Counters = 19564;
+ static readonly DataSetWriterType_Diagnostics_LiveValues = 19595;
+ static readonly DataSetReaderType_Diagnostics = 19609;
+ static readonly DataSetReaderType_Diagnostics_Counters = 19623;
+ static readonly DataSetReaderType_Diagnostics_LiveValues = 19654;
+ static readonly PubSubDiagnosticsType_Counters = 19691;
+ static readonly PubSubDiagnosticsType_LiveValues = 19722;
+ static readonly PubSubDiagnosticsRootType_Counters = 19746;
+ static readonly PubSubDiagnosticsRootType_LiveValues = 19777;
+ static readonly PubSubDiagnosticsConnectionType_Counters = 19800;
+ static readonly PubSubDiagnosticsConnectionType_LiveValues = 19831;
+ static readonly PubSubDiagnosticsWriterGroupType_Counters = 19848;
+ static readonly PubSubDiagnosticsWriterGroupType_LiveValues = 19879;
+ static readonly PubSubDiagnosticsReaderGroupType_Counters = 19917;
+ static readonly PubSubDiagnosticsReaderGroupType_LiveValues = 19948;
+ static readonly PubSubDiagnosticsDataSetWriterType_Counters = 19982;
+ static readonly PubSubDiagnosticsDataSetWriterType_LiveValues = 20013;
+ static readonly PubSubDiagnosticsDataSetReaderType_Counters = 20041;
+ static readonly PubSubDiagnosticsDataSetReaderType_LiveValues = 20072;
+ static readonly CertificateGroupType_CertificateExpired_FirstInGroup = 20120;
+ static readonly CertificateGroupType_TrustListOutOfDate = 20143;
+ static readonly CertificateGroupType_TrustListOutOfDate_ShelvingState = 20230;
+ static readonly CertificateGroupType_TrustListOutOfDate_FirstInGroup = 20268;
+ static readonly CertificateGroupFolderType_DefaultApplicationGroup_CertificateExpired = 20291;
+ static readonly CertificateGroupFolderType_DefaultApplicationGroup_CertificateExpired_ShelvingState = 20378;
+ static readonly CertificateGroupFolderType_DefaultApplicationGroup_CertificateExpired_FirstInGroup = 20418;
+ static readonly CertificateGroupFolderType_DefaultApplicationGroup_TrustListOutOfDate = 20441;
+ static readonly CertificateGroupFolderType_DefaultApplicationGroup_TrustListOutOfDate_ShelvingState = 20528;
+ static readonly CertificateGroupFolderType_DefaultApplicationGroup_TrustListOutOfDate_FirstInGroup = 20566;
+ static readonly CertificateGroupFolderType_DefaultHttpsGroup_CertificateExpired = 20589;
+ static readonly CertificateGroupFolderType_DefaultHttpsGroup_CertificateExpired_ShelvingState = 20676;
+ static readonly CertificateGroupFolderType_DefaultHttpsGroup_CertificateExpired_FirstInGroup = 20714;
+ static readonly CertificateGroupFolderType_DefaultHttpsGroup_TrustListOutOfDate = 20737;
+ static readonly CertificateGroupFolderType_DefaultHttpsGroup_TrustListOutOfDate_ShelvingState = 20824;
+ static readonly CertificateGroupFolderType_DefaultHttpsGroup_TrustListOutOfDate_FirstInGroup = 20862;
+ static readonly CertificateGroupFolderType_DefaultUserTokenGroup_CertificateExpired = 20885;
+ static readonly CertificateGroupFolderType_DefaultUserTokenGroup_CertificateExpired_ShelvingState = 20972;
+ static readonly SessionlessInvokeResponseType_Encoding_DefaultXml = 21000;
+ static readonly SessionlessInvokeResponseType_Encoding_DefaultBinary = 21001;
+ static readonly ReaderGroupType_DataSetReaderName_Placeholder_SubscribedDataSet = 21006;
+ static readonly ReaderGroupType_Diagnostics = 21015;
+ static readonly ReaderGroupType_Diagnostics_Counters = 21029;
+ static readonly ReaderGroupType_Diagnostics_LiveValues = 21060;
+ static readonly ReaderGroupType_TransportSettings = 21080;
+ static readonly ReaderGroupType_MessageSettings = 21081;
+ static readonly DataSetWriterType_MessageSettings = 21095;
+ static readonly DataSetReaderType_MessageSettings = 21103;
+ static readonly WriterGroupDataType_Encoding_DefaultBinary = 21150;
+ static readonly NetworkAddressDataType_Encoding_DefaultBinary = 21151;
+ static readonly NetworkAddressUrlDataType_Encoding_DefaultBinary = 21152;
+ static readonly ReaderGroupDataType_Encoding_DefaultBinary = 21153;
+ static readonly PubSubConfigurationDataType_Encoding_DefaultBinary = 21154;
+ static readonly DatagramWriterGroupTransportDataType_Encoding_DefaultBinary = 21155;
+ static readonly WriterGroupDataType_Encoding_DefaultXml = 21174;
+ static readonly NetworkAddressDataType_Encoding_DefaultXml = 21175;
+ static readonly NetworkAddressUrlDataType_Encoding_DefaultXml = 21176;
+ static readonly ReaderGroupDataType_Encoding_DefaultXml = 21177;
+ static readonly PubSubConfigurationDataType_Encoding_DefaultXml = 21178;
+ static readonly DatagramWriterGroupTransportDataType_Encoding_DefaultXml = 21179;
+ static readonly WriterGroupDataType_Encoding_DefaultJson = 21198;
+ static readonly NetworkAddressDataType_Encoding_DefaultJson = 21199;
+ static readonly NetworkAddressUrlDataType_Encoding_DefaultJson = 21200;
+ static readonly ReaderGroupDataType_Encoding_DefaultJson = 21201;
+ static readonly PubSubConfigurationDataType_Encoding_DefaultJson = 21202;
+ static readonly DatagramWriterGroupTransportDataType_Encoding_DefaultJson = 21203;
+ static readonly CertificateGroupFolderType_DefaultUserTokenGroup_CertificateExpired_FirstInGroup = 21213;
+ static readonly CertificateGroupFolderType_DefaultUserTokenGroup_TrustListOutOfDate = 21236;
+ static readonly CertificateGroupFolderType_DefaultUserTokenGroup_TrustListOutOfDate_ShelvingState = 21323;
+ static readonly CertificateGroupFolderType_DefaultUserTokenGroup_TrustListOutOfDate_FirstInGroup = 21361;
+ static readonly CertificateGroupFolderType_AdditionalGroup_Placeholder_CertificateExpired = 21384;
+ static readonly CertificateGroupFolderType_AdditionalGroup_Placeholder_CertificateExpired_ShelvingState = 21471;
+ static readonly CertificateGroupFolderType_AdditionalGroup_Placeholder_CertificateExpired_FirstInGroup = 21509;
+ static readonly CertificateGroupFolderType_AdditionalGroup_Placeholder_TrustListOutOfDate = 21532;
+ static readonly CertificateGroupFolderType_AdditionalGroup_Placeholder_TrustListOutOfDate_ShelvingState = 21619;
+ static readonly CertificateGroupFolderType_AdditionalGroup_Placeholder_TrustListOutOfDate_FirstInGroup = 21657;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_CertificateExpired = 21680;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_CertificateExpired_ShelvingState = 21767;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_CertificateExpired_FirstInGroup = 21805;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_TrustListOutOfDate = 21828;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_TrustListOutOfDate_ShelvingState = 21915;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultApplicationGroup_TrustListOutOfDate_FirstInGroup = 21953;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_CertificateExpired = 21976;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_CertificateExpired_ShelvingState = 22063;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_CertificateExpired_FirstInGroup = 22101;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_TrustListOutOfDate = 22124;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_TrustListOutOfDate_ShelvingState = 22211;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultHttpsGroup_TrustListOutOfDate_FirstInGroup = 22249;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_CertificateExpired = 22272;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_CertificateExpired_ShelvingState = 22359;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_CertificateExpired_FirstInGroup = 22397;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_TrustListOutOfDate = 22420;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_TrustListOutOfDate_ShelvingState = 22507;
+ static readonly ServerConfigurationType_CertificateGroups_DefaultUserTokenGroup_TrustListOutOfDate_FirstInGroup = 22545;
+ static readonly ServerConfiguration_CertificateGroups_DefaultApplicationGroup_CertificateExpired = 22568;
+ static readonly ServerConfiguration_CertificateGroups_DefaultApplicationGroup_CertificateExpired_ShelvingState = 22655;
+ static readonly ServerConfiguration_CertificateGroups_DefaultApplicationGroup_CertificateExpired_FirstInGroup = 22693;
+ static readonly ServerConfiguration_CertificateGroups_DefaultApplicationGroup_TrustListOutOfDate = 22716;
+ static readonly ServerConfiguration_CertificateGroups_DefaultApplicationGroup_TrustListOutOfDate_ShelvingState = 22803;
+ static readonly ServerConfiguration_CertificateGroups_DefaultApplicationGroup_TrustListOutOfDate_FirstInGroup = 22841;
+ static readonly ServerConfiguration_CertificateGroups_DefaultHttpsGroup_CertificateExpired = 22864;
+ static readonly ServerConfiguration_CertificateGroups_DefaultHttpsGroup_CertificateExpired_ShelvingState = 22951;
+ static readonly ServerConfiguration_CertificateGroups_DefaultHttpsGroup_CertificateExpired_FirstInGroup = 22989;
+ static readonly ServerConfiguration_CertificateGroups_DefaultHttpsGroup_TrustListOutOfDate = 23012;
+ static readonly ServerConfiguration_CertificateGroups_DefaultHttpsGroup_TrustListOutOfDate_ShelvingState = 23099;
+ static readonly ServerConfiguration_CertificateGroups_DefaultHttpsGroup_TrustListOutOfDate_FirstInGroup = 23137;
+ static readonly ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_CertificateExpired = 23160;
+ static readonly ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_CertificateExpired_ShelvingState = 23247;
+ static readonly ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_CertificateExpired_FirstInGroup = 23285;
+ static readonly ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_TrustListOutOfDate = 23308;
+ static readonly ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_TrustListOutOfDate_ShelvingState = 23395;
+ static readonly ServerConfiguration_CertificateGroups_DefaultUserTokenGroup_TrustListOutOfDate_FirstInGroup = 23433;
+ static readonly AliasNameCategoryType_Alias_Placeholder = 23457;
+ static readonly AliasNameCategoryType_SubAliasNameCategories_Placeholder = 23458;
+ static readonly Aliases = 23470;
+ static readonly Aliases_Alias_Placeholder = 23471;
+ static readonly Aliases_SubAliasNameCategories_Placeholder = 23472;
+ static readonly Tags = 23479;
+ static readonly Tags_Alias_Placeholder = 23480;
+ static readonly Tags_SubAliasNameCategories_Placeholder = 23481;
+ static readonly Topics = 23488;
+ static readonly Topics_Alias_Placeholder = 23489;
+ static readonly Topics_SubAliasNameCategories_Placeholder = 23490;
+ static readonly AliasNameDataType_Encoding_DefaultBinary = 23499;
+ static readonly ReadAnnotationDataDetails_Encoding_DefaultBinary = 23500;
+ static readonly AliasNameDataType_Encoding_DefaultXml = 23505;
+ static readonly ReadAnnotationDataDetails_Encoding_DefaultXml = 23506;
+ static readonly AliasNameDataType_Encoding_DefaultJson = 23511;
+ static readonly ReadAnnotationDataDetails_Encoding_DefaultJson = 23512;
+}

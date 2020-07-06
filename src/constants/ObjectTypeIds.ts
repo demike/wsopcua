@@ -1,213 +1,213 @@
 // this file has been automatically generated
 // using schema_parser/generate_node_ids.ts
- export var ObjectTypeIds = { 
- BaseObjectType: 58,
- FolderType: 61,
- DataTypeSystemType: 75,
- DataTypeEncodingType: 76,
- ModellingRuleType: 77,
- ServerType: 2004,
- ServerCapabilitiesType: 2013,
- ServerDiagnosticsType: 2020,
- SessionsDiagnosticsSummaryType: 2026,
- SessionDiagnosticsObjectType: 2029,
- VendorServerInfoType: 2033,
- ServerRedundancyType: 2034,
- TransparentRedundancyType: 2036,
- NonTransparentRedundancyType: 2039,
- BaseEventType: 2041,
- AuditEventType: 2052,
- AuditSecurityEventType: 2058,
- AuditChannelEventType: 2059,
- AuditOpenSecureChannelEventType: 2060,
- AuditSessionEventType: 2069,
- AuditCreateSessionEventType: 2071,
- AuditActivateSessionEventType: 2075,
- AuditCancelEventType: 2078,
- AuditCertificateEventType: 2080,
- AuditCertificateDataMismatchEventType: 2082,
- AuditCertificateExpiredEventType: 2085,
- AuditCertificateInvalidEventType: 2086,
- AuditCertificateUntrustedEventType: 2087,
- AuditCertificateRevokedEventType: 2088,
- AuditCertificateMismatchEventType: 2089,
- AuditNodeManagementEventType: 2090,
- AuditAddNodesEventType: 2091,
- AuditDeleteNodesEventType: 2093,
- AuditAddReferencesEventType: 2095,
- AuditDeleteReferencesEventType: 2097,
- AuditUpdateEventType: 2099,
- AuditWriteUpdateEventType: 2100,
- AuditHistoryUpdateEventType: 2104,
- AuditUpdateMethodEventType: 2127,
- SystemEventType: 2130,
- DeviceFailureEventType: 2131,
- BaseModelChangeEventType: 2132,
- GeneralModelChangeEventType: 2133,
- StateMachineType: 2299,
- StateType: 2307,
- InitialStateType: 2309,
- TransitionType: 2310,
- TransitionEventType: 2311,
- AuditUpdateStateEventType: 2315,
- HistoricalDataConfigurationType: 2318,
- HistoryServerCapabilitiesType: 2330,
- AggregateFunctionType: 2340,
- ProgramTransitionEventType: 2378,
- ProgramStateMachineType: 2391,
- SemanticChangeEventType: 2738,
- AuditUrlMismatchEventType: 2748,
- FiniteStateMachineType: 2771,
- ConditionType: 2782,
- RefreshStartEventType: 2787,
- RefreshEndEventType: 2788,
- RefreshRequiredEventType: 2789,
- AuditConditionEventType: 2790,
- AuditConditionEnableEventType: 2803,
- AuditConditionCommentEventType: 2829,
- DialogConditionType: 2830,
- AcknowledgeableConditionType: 2881,
- AlarmConditionType: 2915,
- ShelvedStateMachineType: 2929,
- LimitAlarmType: 2955,
- AuditHistoryEventUpdateEventType: 2999,
- AuditHistoryValueUpdateEventType: 3006,
- AuditHistoryDeleteEventType: 3012,
- AuditHistoryRawModifyDeleteEventType: 3014,
- AuditHistoryAtTimeDeleteEventType: 3019,
- AuditHistoryEventDeleteEventType: 3022,
- EventQueueOverflowEventType: 3035,
- ProgramTransitionAuditEventType: 3806,
- AuditConditionRespondEventType: 8927,
- AuditConditionAcknowledgeEventType: 8944,
- AuditConditionConfirmEventType: 8961,
- ExclusiveLimitStateMachineType: 9318,
- ExclusiveLimitAlarmType: 9341,
- ExclusiveLevelAlarmType: 9482,
- ExclusiveRateOfChangeAlarmType: 9623,
- ExclusiveDeviationAlarmType: 9764,
- NonExclusiveLimitAlarmType: 9906,
- NonExclusiveLevelAlarmType: 10060,
- NonExclusiveRateOfChangeAlarmType: 10214,
- NonExclusiveDeviationAlarmType: 10368,
- DiscreteAlarmType: 10523,
- OffNormalAlarmType: 10637,
- TripAlarmType: 10751,
- AuditConditionShelvingEventType: 11093,
- BaseConditionClassType: 11163,
- ProcessConditionClassType: 11164,
- MaintenanceConditionClassType: 11165,
- SystemConditionClassType: 11166,
- AggregateConfigurationType: 11187,
- ProgressEventType: 11436,
- SystemStatusChangeEventType: 11446,
- OperationLimitsType: 11564,
- FileType: 11575,
- AddressSpaceFileType: 11595,
- NamespaceMetadataType: 11616,
- NamespacesType: 11645,
- SystemOffNormalAlarmType: 11753,
- AuditProgramTransitionEventType: 11856,
- NonTransparentNetworkRedundancyType: 11945,
- TrustListType: 12522,
- CertificateGroupType: 12555,
- CertificateType: 12556,
- ApplicationCertificateType: 12557,
- HttpsCertificateType: 12558,
- RsaMinApplicationCertificateType: 12559,
- RsaSha256ApplicationCertificateType: 12560,
- TrustListUpdatedAuditEventType: 12561,
- ServerConfigurationType: 12581,
- CertificateUpdatedAuditEventType: 12620,
- CertificateExpirationAlarmType: 13225,
- FileDirectoryType: 13353,
- CertificateGroupFolderType: 13813,
- PubSubConnectionType: 14209,
- PubSubGroupType: 14232,
- PublishSubscribeType: 14416,
- DataSetFolderType: 14477,
- PublishedDataSetType: 14509,
- PublishedDataItemsType: 14534,
- PublishedEventsType: 14572,
- PubSubStatusType: 14643,
- AuditConditionResetEventType: 15013,
- DatagramConnectionTransportType: 15064,
- SubscribedDataSetType: 15108,
- ChoiceStateType: 15109,
- TargetVariablesType: 15111,
- SubscribedDataSetMirrorType: 15127,
- BrokerConnectionTransportType: 15155,
- UserCredentialCertificateType: 15181,
- DataSetWriterType: 15298,
- DataSetWriterTransportType: 15305,
- DataSetReaderType: 15306,
- DataSetReaderTransportType: 15319,
- SecurityGroupFolderType: 15452,
- SecurityGroupType: 15471,
- ExtensionFieldsType: 15489,
- PubSubStatusEventType: 15535,
- PubSubTransportLimitsExceedEventType: 15548,
- PubSubCommunicationFailureEventType: 15563,
- RoleSetType: 15607,
- RoleType: 15620,
- TemporaryFileTransferType: 15744,
- FileTransferStateMachineType: 15803,
- PubSubKeyServiceType: 15906,
- AlarmGroupType: 16405,
- DiscrepancyAlarmType: 17080,
- SafetyConditionClassType: 17218,
- HighlyManagedAlarmConditionClassType: 17219,
- TrainingConditionClassType: 17220,
- TestingConditionSubClassType: 17221,
- AuditConditionSuppressionEventType: 17225,
- AuditConditionSilenceEventType: 17242,
- AuditConditionOutOfServiceEventType: 17259,
- AlarmMetricsType: 17279,
- KeyCredentialConfigurationFolderType: 17496,
- DictionaryEntryType: 17589,
- DictionaryFolderType: 17591,
- IrdiDictionaryEntryType: 17598,
- UriDictionaryEntryType: 17600,
- BaseInterfaceType: 17602,
- RoleMappingRuleChangedAuditEventType: 17641,
- ConnectionTransportType: 17721,
- WriterGroupType: 17725,
- AuthorizationServiceConfigurationType: 17852,
- WriterGroupTransportType: 17997,
- WriterGroupMessageType: 17998,
- ReaderGroupType: 17999,
- KeyCredentialConfigurationType: 18001,
- KeyCredentialAuditEventType: 18011,
- KeyCredentialUpdatedAuditEventType: 18029,
- KeyCredentialDeletedAuditEventType: 18047,
- InstrumentDiagnosticAlarmType: 18347,
- SystemDiagnosticAlarmType: 18496,
- StatisticalConditionClassType: 18665,
- AuditHistoryAnnotationUpdateEventType: 19095,
- TrustListOutOfDateAlarmType: 19297,
- PubSubDiagnosticsType: 19677,
- PubSubDiagnosticsRootType: 19732,
- PubSubDiagnosticsConnectionType: 19786,
- PubSubDiagnosticsWriterGroupType: 19834,
- PubSubDiagnosticsReaderGroupType: 19903,
- PubSubDiagnosticsDataSetWriterType: 19968,
- PubSubDiagnosticsDataSetReaderType: 20027,
- ReaderGroupTransportType: 21090,
- ReaderGroupMessageType: 21091,
- DataSetWriterMessageType: 21096,
- DataSetReaderMessageType: 21104,
- UadpWriterGroupMessageType: 21105,
- UadpDataSetWriterMessageType: 21111,
- UadpDataSetReaderMessageType: 21116,
- JsonWriterGroupMessageType: 21126,
- JsonDataSetWriterMessageType: 21128,
- JsonDataSetReaderMessageType: 21130,
- DatagramWriterGroupTransportType: 21133,
- BrokerWriterGroupTransportType: 21136,
- BrokerDataSetWriterTransportType: 21138,
- BrokerDataSetReaderTransportType: 21142,
- NetworkAddressType: 21145,
- NetworkAddressUrlType: 21147,
- AliasNameType: 23455,
- AliasNameCategoryType: 23456
-};
+ export class ObjectTypeIds {
+ static readonly BaseObjectType = 58;
+ static readonly FolderType = 61;
+ static readonly DataTypeSystemType = 75;
+ static readonly DataTypeEncodingType = 76;
+ static readonly ModellingRuleType = 77;
+ static readonly ServerType = 2004;
+ static readonly ServerCapabilitiesType = 2013;
+ static readonly ServerDiagnosticsType = 2020;
+ static readonly SessionsDiagnosticsSummaryType = 2026;
+ static readonly SessionDiagnosticsObjectType = 2029;
+ static readonly VendorServerInfoType = 2033;
+ static readonly ServerRedundancyType = 2034;
+ static readonly TransparentRedundancyType = 2036;
+ static readonly NonTransparentRedundancyType = 2039;
+ static readonly BaseEventType = 2041;
+ static readonly AuditEventType = 2052;
+ static readonly AuditSecurityEventType = 2058;
+ static readonly AuditChannelEventType = 2059;
+ static readonly AuditOpenSecureChannelEventType = 2060;
+ static readonly AuditSessionEventType = 2069;
+ static readonly AuditCreateSessionEventType = 2071;
+ static readonly AuditActivateSessionEventType = 2075;
+ static readonly AuditCancelEventType = 2078;
+ static readonly AuditCertificateEventType = 2080;
+ static readonly AuditCertificateDataMismatchEventType = 2082;
+ static readonly AuditCertificateExpiredEventType = 2085;
+ static readonly AuditCertificateInvalidEventType = 2086;
+ static readonly AuditCertificateUntrustedEventType = 2087;
+ static readonly AuditCertificateRevokedEventType = 2088;
+ static readonly AuditCertificateMismatchEventType = 2089;
+ static readonly AuditNodeManagementEventType = 2090;
+ static readonly AuditAddNodesEventType = 2091;
+ static readonly AuditDeleteNodesEventType = 2093;
+ static readonly AuditAddReferencesEventType = 2095;
+ static readonly AuditDeleteReferencesEventType = 2097;
+ static readonly AuditUpdateEventType = 2099;
+ static readonly AuditWriteUpdateEventType = 2100;
+ static readonly AuditHistoryUpdateEventType = 2104;
+ static readonly AuditUpdateMethodEventType = 2127;
+ static readonly SystemEventType = 2130;
+ static readonly DeviceFailureEventType = 2131;
+ static readonly BaseModelChangeEventType = 2132;
+ static readonly GeneralModelChangeEventType = 2133;
+ static readonly StateMachineType = 2299;
+ static readonly StateType = 2307;
+ static readonly InitialStateType = 2309;
+ static readonly TransitionType = 2310;
+ static readonly TransitionEventType = 2311;
+ static readonly AuditUpdateStateEventType = 2315;
+ static readonly HistoricalDataConfigurationType = 2318;
+ static readonly HistoryServerCapabilitiesType = 2330;
+ static readonly AggregateFunctionType = 2340;
+ static readonly ProgramTransitionEventType = 2378;
+ static readonly ProgramStateMachineType = 2391;
+ static readonly SemanticChangeEventType = 2738;
+ static readonly AuditUrlMismatchEventType = 2748;
+ static readonly FiniteStateMachineType = 2771;
+ static readonly ConditionType = 2782;
+ static readonly RefreshStartEventType = 2787;
+ static readonly RefreshEndEventType = 2788;
+ static readonly RefreshRequiredEventType = 2789;
+ static readonly AuditConditionEventType = 2790;
+ static readonly AuditConditionEnableEventType = 2803;
+ static readonly AuditConditionCommentEventType = 2829;
+ static readonly DialogConditionType = 2830;
+ static readonly AcknowledgeableConditionType = 2881;
+ static readonly AlarmConditionType = 2915;
+ static readonly ShelvedStateMachineType = 2929;
+ static readonly LimitAlarmType = 2955;
+ static readonly AuditHistoryEventUpdateEventType = 2999;
+ static readonly AuditHistoryValueUpdateEventType = 3006;
+ static readonly AuditHistoryDeleteEventType = 3012;
+ static readonly AuditHistoryRawModifyDeleteEventType = 3014;
+ static readonly AuditHistoryAtTimeDeleteEventType = 3019;
+ static readonly AuditHistoryEventDeleteEventType = 3022;
+ static readonly EventQueueOverflowEventType = 3035;
+ static readonly ProgramTransitionAuditEventType = 3806;
+ static readonly AuditConditionRespondEventType = 8927;
+ static readonly AuditConditionAcknowledgeEventType = 8944;
+ static readonly AuditConditionConfirmEventType = 8961;
+ static readonly ExclusiveLimitStateMachineType = 9318;
+ static readonly ExclusiveLimitAlarmType = 9341;
+ static readonly ExclusiveLevelAlarmType = 9482;
+ static readonly ExclusiveRateOfChangeAlarmType = 9623;
+ static readonly ExclusiveDeviationAlarmType = 9764;
+ static readonly NonExclusiveLimitAlarmType = 9906;
+ static readonly NonExclusiveLevelAlarmType = 10060;
+ static readonly NonExclusiveRateOfChangeAlarmType = 10214;
+ static readonly NonExclusiveDeviationAlarmType = 10368;
+ static readonly DiscreteAlarmType = 10523;
+ static readonly OffNormalAlarmType = 10637;
+ static readonly TripAlarmType = 10751;
+ static readonly AuditConditionShelvingEventType = 11093;
+ static readonly BaseConditionClassType = 11163;
+ static readonly ProcessConditionClassType = 11164;
+ static readonly MaintenanceConditionClassType = 11165;
+ static readonly SystemConditionClassType = 11166;
+ static readonly AggregateConfigurationType = 11187;
+ static readonly ProgressEventType = 11436;
+ static readonly SystemStatusChangeEventType = 11446;
+ static readonly OperationLimitsType = 11564;
+ static readonly FileType = 11575;
+ static readonly AddressSpaceFileType = 11595;
+ static readonly NamespaceMetadataType = 11616;
+ static readonly NamespacesType = 11645;
+ static readonly SystemOffNormalAlarmType = 11753;
+ static readonly AuditProgramTransitionEventType = 11856;
+ static readonly NonTransparentNetworkRedundancyType = 11945;
+ static readonly TrustListType = 12522;
+ static readonly CertificateGroupType = 12555;
+ static readonly CertificateType = 12556;
+ static readonly ApplicationCertificateType = 12557;
+ static readonly HttpsCertificateType = 12558;
+ static readonly RsaMinApplicationCertificateType = 12559;
+ static readonly RsaSha256ApplicationCertificateType = 12560;
+ static readonly TrustListUpdatedAuditEventType = 12561;
+ static readonly ServerConfigurationType = 12581;
+ static readonly CertificateUpdatedAuditEventType = 12620;
+ static readonly CertificateExpirationAlarmType = 13225;
+ static readonly FileDirectoryType = 13353;
+ static readonly CertificateGroupFolderType = 13813;
+ static readonly PubSubConnectionType = 14209;
+ static readonly PubSubGroupType = 14232;
+ static readonly PublishSubscribeType = 14416;
+ static readonly DataSetFolderType = 14477;
+ static readonly PublishedDataSetType = 14509;
+ static readonly PublishedDataItemsType = 14534;
+ static readonly PublishedEventsType = 14572;
+ static readonly PubSubStatusType = 14643;
+ static readonly AuditConditionResetEventType = 15013;
+ static readonly DatagramConnectionTransportType = 15064;
+ static readonly SubscribedDataSetType = 15108;
+ static readonly ChoiceStateType = 15109;
+ static readonly TargetVariablesType = 15111;
+ static readonly SubscribedDataSetMirrorType = 15127;
+ static readonly BrokerConnectionTransportType = 15155;
+ static readonly UserCredentialCertificateType = 15181;
+ static readonly DataSetWriterType = 15298;
+ static readonly DataSetWriterTransportType = 15305;
+ static readonly DataSetReaderType = 15306;
+ static readonly DataSetReaderTransportType = 15319;
+ static readonly SecurityGroupFolderType = 15452;
+ static readonly SecurityGroupType = 15471;
+ static readonly ExtensionFieldsType = 15489;
+ static readonly PubSubStatusEventType = 15535;
+ static readonly PubSubTransportLimitsExceedEventType = 15548;
+ static readonly PubSubCommunicationFailureEventType = 15563;
+ static readonly RoleSetType = 15607;
+ static readonly RoleType = 15620;
+ static readonly TemporaryFileTransferType = 15744;
+ static readonly FileTransferStateMachineType = 15803;
+ static readonly PubSubKeyServiceType = 15906;
+ static readonly AlarmGroupType = 16405;
+ static readonly DiscrepancyAlarmType = 17080;
+ static readonly SafetyConditionClassType = 17218;
+ static readonly HighlyManagedAlarmConditionClassType = 17219;
+ static readonly TrainingConditionClassType = 17220;
+ static readonly TestingConditionSubClassType = 17221;
+ static readonly AuditConditionSuppressionEventType = 17225;
+ static readonly AuditConditionSilenceEventType = 17242;
+ static readonly AuditConditionOutOfServiceEventType = 17259;
+ static readonly AlarmMetricsType = 17279;
+ static readonly KeyCredentialConfigurationFolderType = 17496;
+ static readonly DictionaryEntryType = 17589;
+ static readonly DictionaryFolderType = 17591;
+ static readonly IrdiDictionaryEntryType = 17598;
+ static readonly UriDictionaryEntryType = 17600;
+ static readonly BaseInterfaceType = 17602;
+ static readonly RoleMappingRuleChangedAuditEventType = 17641;
+ static readonly ConnectionTransportType = 17721;
+ static readonly WriterGroupType = 17725;
+ static readonly AuthorizationServiceConfigurationType = 17852;
+ static readonly WriterGroupTransportType = 17997;
+ static readonly WriterGroupMessageType = 17998;
+ static readonly ReaderGroupType = 17999;
+ static readonly KeyCredentialConfigurationType = 18001;
+ static readonly KeyCredentialAuditEventType = 18011;
+ static readonly KeyCredentialUpdatedAuditEventType = 18029;
+ static readonly KeyCredentialDeletedAuditEventType = 18047;
+ static readonly InstrumentDiagnosticAlarmType = 18347;
+ static readonly SystemDiagnosticAlarmType = 18496;
+ static readonly StatisticalConditionClassType = 18665;
+ static readonly AuditHistoryAnnotationUpdateEventType = 19095;
+ static readonly TrustListOutOfDateAlarmType = 19297;
+ static readonly PubSubDiagnosticsType = 19677;
+ static readonly PubSubDiagnosticsRootType = 19732;
+ static readonly PubSubDiagnosticsConnectionType = 19786;
+ static readonly PubSubDiagnosticsWriterGroupType = 19834;
+ static readonly PubSubDiagnosticsReaderGroupType = 19903;
+ static readonly PubSubDiagnosticsDataSetWriterType = 19968;
+ static readonly PubSubDiagnosticsDataSetReaderType = 20027;
+ static readonly ReaderGroupTransportType = 21090;
+ static readonly ReaderGroupMessageType = 21091;
+ static readonly DataSetWriterMessageType = 21096;
+ static readonly DataSetReaderMessageType = 21104;
+ static readonly UadpWriterGroupMessageType = 21105;
+ static readonly UadpDataSetWriterMessageType = 21111;
+ static readonly UadpDataSetReaderMessageType = 21116;
+ static readonly JsonWriterGroupMessageType = 21126;
+ static readonly JsonDataSetWriterMessageType = 21128;
+ static readonly JsonDataSetReaderMessageType = 21130;
+ static readonly DatagramWriterGroupTransportType = 21133;
+ static readonly BrokerWriterGroupTransportType = 21136;
+ static readonly BrokerDataSetWriterTransportType = 21138;
+ static readonly BrokerDataSetReaderTransportType = 21142;
+ static readonly NetworkAddressType = 21145;
+ static readonly NetworkAddressUrlType = 21147;
+ static readonly AliasNameType = 23455;
+ static readonly AliasNameCategoryType = 23456;
+}

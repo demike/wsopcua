@@ -313,8 +313,8 @@ protected process_request_callback(request_data: RequestData, err: Error, respon
 
         response.responseHeader.stringTable = response.responseHeader.stringTable || [];
         response.responseHeader.stringTable = [response.responseHeader.stringTable.join('\n')];
-        err = new Error(' ServiceFault returned by server ' + JSON.stringify(response));
-        (<any>err).response = response;
+        err = new Error(' serviceResult = ' + response.responseHeader.serviceResult.toString() + '  returned by server \n response:' + response.toString() + '\n  request: ' + request_data.toString());
+        (err as any).response = response;
         response = null;
     }
 
@@ -1043,7 +1043,7 @@ protected _performMessageTransaction(msgType: string, requestMessage: IEncodable
         if (doDebug) {
             debugLog('------------------- client receiving response');
             if (response) {
-                debugLog(response.toString());
+                debugLog(response);
             }
         }
 
@@ -1340,7 +1340,7 @@ protected _sendSecureOpcUARequest(msgType: string, requestMessage: IEncodable & 
     if (doDebug) {
         debugLog('------------------------------------- Client Sending a request');
         debugLog(' CHANNEL ID ' + options.secureChannelId);
-        debugLog(requestMessage.toString());
+        debugLog(requestMessage);
     }
 
 

@@ -1,50 +1,50 @@
 // this file has been automatically generated
 // using schema_parser/generate_node_ids.ts
- export var ReferenceTypeIds = { 
- References: 31,
- NonHierarchicalReferences: 32,
- HierarchicalReferences: 33,
- HasChild: 34,
- Organizes: 35,
- HasEventSource: 36,
- HasModellingRule: 37,
- HasEncoding: 38,
- HasDescription: 39,
- HasTypeDefinition: 40,
- GeneratesEvent: 41,
- Aggregates: 44,
- HasSubtype: 45,
- HasProperty: 46,
- HasComponent: 47,
- HasNotifier: 48,
- HasOrderedComponent: 49,
- FromState: 51,
- ToState: 52,
- HasCause: 53,
- HasEffect: 54,
- HasHistoricalConfiguration: 56,
- HasSubStateMachine: 117,
- HasArgumentDescription: 129,
- HasOptionalInputArgumentDescription: 131,
- AlwaysGeneratesEvent: 3065,
- HasTrueSubState: 9004,
- HasFalseSubState: 9005,
- HasCondition: 9006,
- HasPubSubConnection: 14476,
- DataSetToWriter: 14936,
- HasGuard: 15112,
- HasDataSetWriter: 15296,
- HasDataSetReader: 15297,
- HasAlarmSuppressionGroup: 16361,
- AlarmGroupMember: 16362,
- HasEffectDisable: 17276,
- HasDictionaryEntry: 17597,
- HasInterface: 17603,
- HasAddIn: 17604,
- HasEffectEnable: 17983,
- HasEffectSuppressed: 17984,
- HasEffectUnsuppressed: 17985,
- HasWriterGroup: 18804,
- HasReaderGroup: 18805,
- AliasFor: 23469
-};
+ export class ReferenceTypeIds {
+ static readonly References = 31;
+ static readonly NonHierarchicalReferences = 32;
+ static readonly HierarchicalReferences = 33;
+ static readonly HasChild = 34;
+ static readonly Organizes = 35;
+ static readonly HasEventSource = 36;
+ static readonly HasModellingRule = 37;
+ static readonly HasEncoding = 38;
+ static readonly HasDescription = 39;
+ static readonly HasTypeDefinition = 40;
+ static readonly GeneratesEvent = 41;
+ static readonly Aggregates = 44;
+ static readonly HasSubtype = 45;
+ static readonly HasProperty = 46;
+ static readonly HasComponent = 47;
+ static readonly HasNotifier = 48;
+ static readonly HasOrderedComponent = 49;
+ static readonly FromState = 51;
+ static readonly ToState = 52;
+ static readonly HasCause = 53;
+ static readonly HasEffect = 54;
+ static readonly HasHistoricalConfiguration = 56;
+ static readonly HasSubStateMachine = 117;
+ static readonly HasArgumentDescription = 129;
+ static readonly HasOptionalInputArgumentDescription = 131;
+ static readonly AlwaysGeneratesEvent = 3065;
+ static readonly HasTrueSubState = 9004;
+ static readonly HasFalseSubState = 9005;
+ static readonly HasCondition = 9006;
+ static readonly HasPubSubConnection = 14476;
+ static readonly DataSetToWriter = 14936;
+ static readonly HasGuard = 15112;
+ static readonly HasDataSetWriter = 15296;
+ static readonly HasDataSetReader = 15297;
+ static readonly HasAlarmSuppressionGroup = 16361;
+ static readonly AlarmGroupMember = 16362;
+ static readonly HasEffectDisable = 17276;
+ static readonly HasDictionaryEntry = 17597;
+ static readonly HasInterface = 17603;
+ static readonly HasAddIn = 17604;
+ static readonly HasEffectEnable = 17983;
+ static readonly HasEffectSuppressed = 17984;
+ static readonly HasEffectUnsuppressed = 17985;
+ static readonly HasWriterGroup = 18804;
+ static readonly HasReaderGroup = 18805;
+ static readonly AliasFor = 23469;
+}
