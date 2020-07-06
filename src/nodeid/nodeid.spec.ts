@@ -1,4 +1,4 @@
-import { NodeId, coerceNodeId, makeNodeId, resolveNodeId, from_hex, build_nodid_indexes_for_map } from './nodeid';
+import { NodeId, coerceNodeId, makeNodeId, resolveNodeId, from_hex, build_nodid_indexes_for_class_map } from './nodeid';
 import { assert } from '../assert';
 import { ObjectIds} from '../constants/ObjectIds';
 import { VariableIds} from '../constants/VariableIds';
@@ -6,8 +6,8 @@ import { NodeIdType } from '../generated/NodeIdType';
 import { stringToUint8Array } from '../basic-types/DataStream';
 
 beforeAll( () => {
-    build_nodid_indexes_for_map(ObjectIds);
-    build_nodid_indexes_for_map(VariableIds);
+    build_nodid_indexes_for_class_map(ObjectIds);
+    build_nodid_indexes_for_class_map(VariableIds);
 })
 
 describe('testing NodeIds', function() {
