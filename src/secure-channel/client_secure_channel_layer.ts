@@ -96,8 +96,8 @@ export function dump_transaction_statistics(stats: ITransactionStats ) {
 
     console.log('--------------------------------------------------------------------->> Stats');
     console.log('   request                   : ',
-      stats.request.constructor.name.toString().yellow, ' / ',
-      stats.response.constructor.name.toString().yellow, ' - ',
+      stats.request.constructor.name.toString(), ' / ',
+      stats.response.constructor.name.toString(), ' - ',
       stats.response.responseHeader.serviceResult.toString());
     console.log('   Bytes Read                : ', w(stats.bytesRead), ' bytes');
     console.log('   Bytes Written             : ', w(stats.bytesWritten), ' bytes');
