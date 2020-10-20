@@ -518,13 +518,9 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     }
 
 
-    /**
+   /**
      * @method readHistoryValue
      * @async
-     * @example:
-     *
-     * session.readHistoryValue("ns=5;s=Simulation Examples.Functions.Sine1",
-     *          "2015-06-10T09:00:00.000Z","2015-06-10T09:01:00.000Z",function(err,dataValues,diagnostics) {} );
      *
      * @param nodes  {ReadValueId[]} - the read value id
      * @param start - the starttime in UTC format
@@ -535,18 +531,23 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.diagnosticInfos {DiagnosticInfo[]} - the diagnostic infos.
      */
 
-    public readHistoryValue(nodes: string | NodeId | read_service.ReadValueId, start: Date, end: Date,
-        callback: ResponseCallback<DataValue, DiagnosticInfo>): void;
-    public readHistoryValue(nodes: string[] | NodeId[] | read_service.ReadValueId[], start: Date, end: Date,
-        callback: ResponseCallback<DataValue[], DiagnosticInfo[]>): void;
-    public readHistoryValue(nodes: string | string[] | NodeId | NodeId[] | read_service.ReadValueId | read_service.ReadValueId[],
-        start: Date, end: Date,
-        callback: ResponseCallback<DataValue, DiagnosticInfo> | ResponseCallback<DataValue[], DiagnosticInfo[]>): void {
+    public readHistoryValue(nodes: string[] | NodeId[] |
+        historizing_service.HistoryReadValueId[], details: historizing_service.ReadRawModifiedDetails,
+        callback: ResponseCallback<historizing_service.HistoryReadRawResult
+        | historizing_service.HistoryReadModifiedResult[], DiagnosticInfo[]>): void;
+    public readHistoryValue(nodes: string[] | NodeId[] |
+        historizing_service.HistoryReadValueId[], details: historizing_service.ReadProcessedDetails,
+        callback: ResponseCallback<historizing_service.HistoryReadRawResult[], DiagnosticInfo[]>): void;
+    public readHistoryValue(nodes: string[] | NodeId[] |
+            historizing_service.HistoryReadValueId[], details: historizing_service.ReadEventDetails,
+            callback: ResponseCallback<historizing_service.HistoryReadEventResult[], DiagnosticInfo[]>): void;
+    public readHistoryValue(nodes: string[] | NodeId[] | historizing_service.HistoryReadValueId[],
+         details: historizing_service.ReadEventDetails |
+                    historizing_service.ReadRawModifiedDetails | historizing_service.ReadProcessedDetails,
+        callback: ResponseCallback<historizing_service.HistoryReadEventResult[], DiagnosticInfo[]> |
+                  ResponseCallback<historizing_service.HistoryReadRawResult[], DiagnosticInfo[]> |
+                  ResponseCallback<historizing_service.HistoryReadModifiedResult[], DiagnosticInfo[]>): void {
         assert('function' === typeof callback);
-        const isArr = Array.isArray(nodes);
-        if (!isArr) {
-            nodes = [<any>nodes];
-        }
 
         const nodesToRead: historizing_service.HistoryReadValueId[] = [];
         for (const node of nodes as any[]) {
@@ -558,17 +559,9 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             }));
         }
 
-        const ReadRawModifiedDetails = new historizing_service.ReadRawModifiedDetails({
-            isReadModified: false,
-            startTime: start,
-            endTime: end,
-            numValuesPerNode: 0,
-            returnBounds: true
-        });
-
         const request = new historizing_service.HistoryReadRequest({
             nodesToRead: nodesToRead,
-            historyReadDetails: ReadRawModifiedDetails,
+            historyReadDetails: details,
             timestampsToReturn: read_service.TimestampsToReturn.Both,
             releaseContinuationPoints: false
         });
@@ -587,25 +580,85 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             assert(response instanceof historizing_service.HistoryReadResponse);
             assert( (nodes as any[]).length === response.results.length);
 
-            if ( isArr ) {
-                (callback as ResponseCallback<DataValue[], DiagnosticInfo[]> )(null, response.results, response.diagnosticInfos);
-            } else {
-                (callback as ResponseCallback<DataValue, DiagnosticInfo> )(null, response.results[0], response.diagnosticInfos[0]);
-            }
+            (callback as ResponseCallback<historizing_service.HistoryReadResult[], DiagnosticInfo[]> )
+                    (null, response.results, response.diagnosticInfos);
+
         });
     }
-    public readHistoryValueP(nodes: string | NodeId | read_service.ReadValueId, start: Date, end: Date):
-        Promise<{value: DataValue, diagnosticInfos: DiagnosticInfo }>;
-    public readHistoryValueP(nodes: string[] | NodeId[] | read_service.ReadValueId[], start: Date, end: Date):
-        Promise<{value: DataValue[], diagnosticInfos: DiagnosticInfo[] }>;
-    public readHistoryValueP(nodes: string | string[] | NodeId | NodeId[] | read_service.ReadValueId | read_service.ReadValueId[],
-        start: Date, end: Date):
-        Promise<{value: DataValue, diagnosticInfos: DiagnosticInfo } | {value: DataValue[], diagnosticInfos: DiagnosticInfo[] }> {
-            return new Promise((res, rej) => {this.readHistoryValue(nodes as any, start, end,
+
+        public readHistoryValueP(nodes: string[] | NodeId[] |
+            historizing_service.HistoryReadValueId[], details: historizing_service.ReadRawModifiedDetails)
+            : Promise<{value: historizing_service.HistoryReadRawResult[]
+            | historizing_service.HistoryReadModifiedResult[], diagnosticInfos: DiagnosticInfo[]}>;
+        public readHistoryValueP(nodes: string[] | NodeId[] |
+            historizing_service.HistoryReadValueId[], details: historizing_service.ReadProcessedDetails)
+            : Promise<{value: historizing_service.HistoryReadRawResult[], diagnosticInfo: DiagnosticInfo[]}>;
+        public readHistoryValueP(nodes: string[] | NodeId[] |
+            historizing_service.HistoryReadValueId[], details: historizing_service.ReadEventDetails)
+            : Promise<{value: historizing_service.HistoryReadEventResult[], diagnosticInfo: DiagnosticInfo[]}>;
+        public readHistoryValueP(nodes: string[] | NodeId[] | historizing_service.HistoryReadValueId[],
+             details: historizing_service.ReadEventDetails |
+                        historizing_service.ReadRawModifiedDetails | historizing_service.ReadProcessedDetails) {
+            return new Promise((res, rej) => {
+                this.readHistoryValue(nodes, details as historizing_service.ReadRawModifiedDetails,
                 (err, value, diagnosticInfos) => {
                 if (err) { rej(err); } else { res({value, diagnosticInfos}); }
             }); });
     }
+
+    /**
+     * @async
+     *
+     * @param nodes  {ReadValueId[]} - the read value id
+     * @parma details request details (note that isReadModified will be set to false)
+     * @param {Function} callback -   the callback function
+     * @param callback.err {object|null} the error if write has failed or null if OK
+     * @param callback.results {DataValue[]} - an array of dataValue each read
+     * @param callback.diagnosticInfos {DiagnosticInfo[]} - the diagnostic infos.
+     */
+
+    public readHistoryRawValue(nodes: string | NodeId | read_service.ReadValueId, details: historizing_service.ReadRawModifiedDetails,
+        callback: ResponseCallback<historizing_service.HistoryReadRawResult, DiagnosticInfo>): void;
+    public readHistoryRawValue(nodes: string[] | NodeId[] | read_service.ReadValueId[], details: historizing_service.ReadRawModifiedDetails,
+        callback: ResponseCallback<historizing_service.HistoryReadRawResult[], DiagnosticInfo[]>): void;
+    public readHistoryRawValue(nodes: string | string[] | NodeId | NodeId[] | read_service.ReadValueId | read_service.ReadValueId[],
+        details: historizing_service.ReadRawModifiedDetails,
+        callback: ResponseCallback<historizing_service.HistoryReadRawResult,
+        DiagnosticInfo> | ResponseCallback<historizing_service.HistoryReadRawResult[], DiagnosticInfo[]>): void {
+        assert('function' === typeof callback);
+        const isArr = Array.isArray(nodes);
+        if (!isArr) {
+            nodes = [<any>nodes];
+        }
+
+        details.isReadModified = false;
+
+        this.readHistoryValue(nodes as any, details, (error, value, diagnosticInfos ) => {
+            if ( isArr ) {
+                (callback as ResponseCallback<historizing_service.HistoryReadRawResult[], DiagnosticInfo[]> )
+                    (error, value as historizing_service.HistoryReadRawResult[], diagnosticInfos);
+            } else {
+                (callback as ResponseCallback<historizing_service.HistoryReadRawResult, DiagnosticInfo> )
+                    (error, value[0], diagnosticInfos[0]);
+            }
+        });
+    }
+    public readHistoryValueRawP(nodes: string | NodeId | read_service.ReadValueId, details: historizing_service.ReadRawModifiedDetails):
+        Promise<{value: historizing_service.HistoryReadResult, diagnosticInfos: DiagnosticInfo }>;
+    public readHistoryValueRawP(nodes: string[] | NodeId[] | read_service.ReadValueId[],
+        details: historizing_service.ReadRawModifiedDetails):
+        Promise<{value: historizing_service.HistoryReadResult[], diagnosticInfos: DiagnosticInfo[] }>;
+    public readHistoryValueRawP(nodes: string | string[] | NodeId | NodeId[] | read_service.ReadValueId | read_service.ReadValueId[],
+        details: historizing_service.ReadRawModifiedDetails,):
+        Promise<{value: historizing_service.HistoryReadResult, diagnosticInfos: DiagnosticInfo } |
+        {value: historizing_service.HistoryReadResult[], diagnosticInfos: DiagnosticInfo[] }> {
+            return new Promise((res, rej) => {this.readHistoryRawValue(nodes as any, details,
+                (err, value, diagnosticInfos) => {
+                if (err) { rej(err); } else { res({value, diagnosticInfos}); }
+            }); });
+    }
+
+
 
 
     /**
