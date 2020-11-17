@@ -1,0 +1,285 @@
+import { coerceNodeId, NodeId } from '../../nodeid/nodeid';
+import {
+  NodeIdType,
+  MessageSecurityMode,
+  ICreateSubscriptionRequest,
+  EndpointDescription,
+  CallMethodRequest,
+  CallMethodResult,
+} from '../../generated';
+import {
+  ConnectionStrategy,
+  OPCUAClientOptions,
+} from '../../client/client_base';
+import { SecurityPolicy } from '../../secure-channel';
+import { OPCUAClient } from '../../client/opcua_client';
+import { ClientSession } from '../../client/client_session';
+import { DataType, Variant, VariantArrayType } from '../../variant';
+import { StatusCodes } from '../../wsopcua';
+
+const OPCUA_CONTROL_SERVER_URI = 'ws://localhost:4444';
+const OPCUA_TEST_SERVER_URI = 'ws://localhost:4445';
+
+const DEFAULT_CLIENT_CONNECTION_STRATEGY: ConnectionStrategy = {
+  maxRetry: 10,
+  initialDelay: 1000,
+  maxDelay: 10000,
+  randomisationFactor: 0.1,
+};
+
+const DEFAULT_CLIENT_OPTIONS: OPCUAClientOptions = {
+  securityMode: MessageSecurityMode.None,
+  securityPolicy: SecurityPolicy.None,
+  applicationName: 'testapp',
+  clientName: 'testclient',
+  endpoint_must_exist: false, // <-- necessary for the websocket proxying to work
+  connectionStrategy: DEFAULT_CLIENT_CONNECTION_STRATEGY,
+  keepSessionAlive: true,
+  requestedSessionTimeout: 1000000,
+};
+
+const DEFAULT_SUBSCRIPTION_REQ_OPTIONS: ICreateSubscriptionRequest = {
+  requestedPublishingInterval: 100,
+  requestedLifetimeCount: 100,
+  requestedMaxKeepAliveCount: 100,
+  maxNotificationsPerPublish: 10000,
+  publishingEnabled: true,
+  priority: 10,
+};
+
+export interface E2ESetup {
+  client: OPCUAClient;
+  session: ClientSession;
+}
+
+export interface E2ETestController {
+  testClient: OPCUAClient;
+  testSession?: ClientSession;
+  startTestServer(namespaces?: string[]): Promise<E2ESetup>;
+  stopTestServer(): Promise<{
+    result: CallMethodResult[];
+    diagnosticInfo?: any;
+  }>;
+  restartTestServer(namespaces?: string[]): Promise<E2ESetup>;
+  addObject(options: {
+    nodeId: string | NodeId | number;
+    browseName: string;
+    parent: string | NodeId | number;
+  }): Promise<NodeId>;
+  addVariable(options: {
+    nodeId: string | NodeId | number;
+    browseName: string;
+    parent: string | NodeId | number;
+    value: Variant;
+  }): Promise<NodeId>;
+}
+
+export class E2ETestControllerImpl implements E2ETestController {
+  public static readonly controllerNodeId = new NodeId(
+    NodeIdType.String,
+    'Controller',
+    1
+  );
+  public static readonly startTestServerNodeId = new NodeId(
+    NodeIdType.String,
+    'Controller.startTestServer',
+    1
+  );
+  public static readonly stopTestServerNodeId = new NodeId(
+    NodeIdType.String,
+    'Controller.stopTestServer',
+    1
+  );
+
+  public static readonly nodeManagerNodeId = new NodeId(
+    NodeIdType.String,
+    'NodeManager',
+    1
+  );
+  public static readonly addVariableNodeId = new NodeId(
+    NodeIdType.String,
+    'NodeManager.addVariable',
+    1
+  );
+  public static readonly addObjectNodeId = new NodeId(
+    NodeIdType.String,
+    'NodeManager.addObject',
+    1
+  );
+
+  private controlClient: OPCUAClient;
+  private controlSession$: Promise<ClientSession>;
+  public testClient: OPCUAClient;
+  public testSession?: ClientSession;
+
+  constructor() {
+    this.controlClient = this.createClient();
+    this.testClient = this.createClient();
+    this.controlSession$ = this.initControlConnection();
+  }
+
+  private initControlConnection() {
+    return this.createSession(this.controlClient, OPCUA_CONTROL_SERVER_URI);
+  }
+
+  private createClient() {
+    return new OPCUAClient({
+      endpoint_must_exist: false,
+      connectionStrategy: {
+        maxDelay: 1000,
+        maxRetry: 0,
+      },
+    });
+  }
+
+  private async createSession(client: OPCUAClient, url: string) {
+    await client.connectP(url);
+    return client.createSessionP(null);
+  }
+
+  /**
+   * @async
+   */
+  public async startTestServer(namespaces?: string[]) {
+    const session = await this.controlSession$;
+
+    const inputArguments = [
+      new Variant({
+        arrayType: VariantArrayType.Array,
+        dataType: DataType.String,
+        value: namespaces ?? [],
+      }),
+    ];
+
+    const response = await session.callP([
+      new CallMethodRequest({
+        objectId: E2ETestControllerImpl.controllerNodeId,
+        methodId: E2ETestControllerImpl.startTestServerNodeId,
+        inputArguments,
+      }),
+    ]);
+
+    if (response.result[0].statusCode !== StatusCodes.Good) {
+      throw new Error(
+        'Error starting the test server' + response.result[0].toJSON()
+      );
+    }
+
+    this.testSession = await this.createSession(
+      this.testClient,
+      OPCUA_TEST_SERVER_URI
+    );
+    return { session: this.testSession, client: this.testClient };
+  }
+
+  public async stopTestServer() {
+    const controlSession = await this.controlSession$;
+    await this.testClient.disconnectP();
+    this.testClient = this.createClient();
+    this.testSession = undefined;
+
+    return controlSession.callP([
+      new CallMethodRequest({
+        objectId: E2ETestControllerImpl.controllerNodeId,
+        methodId: E2ETestControllerImpl.stopTestServerNodeId,
+      }),
+    ]);
+  }
+
+  public async restartTestServer(namespaces?: string[]) {
+    await this.stopTestServer();
+    return this.startTestServer(namespaces);
+  }
+
+  public async addObject(options: {
+    nodeId: string | NodeId | number;
+    browseName: string;
+    parent: string | NodeId | number;
+  }) {
+    const session = await this.controlSession$;
+    const nodeId = coerceNodeId(options.nodeId);
+    const inputArguments = [
+      new Variant({
+        arrayType: VariantArrayType.Scalar,
+        dataType: DataType.NodeId,
+        value: nodeId,
+      }),
+      new Variant({
+        arrayType: VariantArrayType.Scalar,
+        dataType: DataType.String,
+        value: options.browseName,
+      }),
+      new Variant({
+        arrayType: VariantArrayType.Scalar,
+        dataType: DataType.NodeId,
+        value: coerceNodeId(options.parent),
+      }),
+    ];
+
+    const response = await session.callP([
+      new CallMethodRequest({
+        objectId: E2ETestControllerImpl.nodeManagerNodeId,
+        methodId: E2ETestControllerImpl.addObjectNodeId,
+        inputArguments,
+      }),
+    ]);
+
+    if (response.result[0].statusCode !== StatusCodes.Good) {
+      throw new Error('Error adding an object ' + response.result[0].toJSON());
+    }
+
+    return nodeId;
+  }
+
+  public async addVariable(options: {
+    nodeId: string | NodeId | number;
+    browseName: string;
+    parent: string | NodeId | number;
+    value: Variant;
+  }) {
+    const session = await this.controlSession$;
+    const nodeId = coerceNodeId(options.nodeId);
+    const inputArguments = [
+      new Variant({
+        arrayType: VariantArrayType.Scalar,
+        dataType: DataType.NodeId,
+        value: nodeId,
+      }),
+      new Variant({
+        arrayType: VariantArrayType.Scalar,
+        dataType: DataType.String,
+        value: options.browseName,
+      }),
+      new Variant({
+        arrayType: VariantArrayType.Scalar,
+        dataType: DataType.NodeId,
+        value: coerceNodeId(options.parent),
+      }),
+      new Variant({
+        arrayType: VariantArrayType.Scalar,
+        dataType: DataType.Variant,
+        value: options.value,
+      }),
+    ];
+
+    const response = await session.callP([
+      new CallMethodRequest({
+        objectId: E2ETestControllerImpl.nodeManagerNodeId,
+        methodId: E2ETestControllerImpl.addVariableNodeId,
+        inputArguments,
+      }),
+    ]);
+
+    if (response.result[0].statusCode !== StatusCodes.Good) {
+      throw new Error('Error adding an object ' + response.result[0].toJSON());
+    }
+
+    return nodeId;
+  }
+}
+
+const e2eTestController = new E2ETestControllerImpl();
+
+export function getE2ETestController(): E2ETestController {
+  return e2eTestController;
+}

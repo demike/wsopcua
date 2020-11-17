@@ -95,7 +95,8 @@ export class AssertionError extends Error {
             // try to throw an error now, and from the stack property
             // work out the line that called in to assert.js.
             try {
-                this.stack = (new Error).stack.toString();
+                // tslint:disable-next-line: no-non-null-assertion
+                this.stack = (new Error).stack!.toString();
             } catch (e) { }
         }
     }

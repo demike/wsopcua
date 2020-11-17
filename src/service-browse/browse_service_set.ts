@@ -1,11 +1,13 @@
 import { ResponseCallback } from "../client/client_base";
-import { BrowseDescription, BrowseResult } from "../generated";
+import { BrowseNextResponse, BrowseResponse, BrowseResult, DiagnosticInfo, IBrowseDescription } from "../generated";
+import { NodeId } from "../nodeid/nodeid";
 
 export interface BrowseServiceSet {
-        browse(nodeToBrowse: BrowseDescription, callback: ResponseCallback<BrowseResult>): void;
-        browse(nodesToBrowse: BrowseDescription[], callback: ResponseCallback<BrowseResult[]>): void;
-        browse(nodeToBrowse: BrowseDescription): Promise<BrowseResult>;
-        browse(nodesToBrowse: BrowseDescription[]): Promise<BrowseResult[]>;
+        browse(nodesToBrowse: string | string[] | NodeId | NodeId[] | IBrowseDescription | IBrowseDescription[],
+                callback: (err: Error | null, results: BrowseResult[],
+                   diagnostInfos: DiagnosticInfo[] | BrowseResponse) => void);
+        browseP(nodesToBrowse: string | string[] | NodeId | NodeId[] | IBrowseDescription | IBrowseDescription[]):
+                Promise<{results: BrowseResult[], diagnosticInfos: DiagnosticInfo[] | BrowseResponse}>;
         /**
          *
          * @param continuationPoint
@@ -21,8 +23,9 @@ export interface BrowseServiceSet {
          *      BrowseNext shall be called with this parameter set to TRUE.
          * @param callback
          */
-        browseNext(continuationPoint: Uint8Array, releaseContinuationPoints: boolean, callback: ResponseCallback<BrowseResult>): void;
-        browseNext(continuationPoints: Uint8Array[], releaseContinuationPoints: boolean, callback: ResponseCallback<BrowseResult[]>): void;
-        browseNext(continuationPoint: Uint8Array, releaseContinuationPoints: boolean): Promise<BrowseResult>;
-        browseNext(continuationPoints: Uint8Array[], releaseContinuationPoints: boolean): Promise<BrowseResult[]>;
+        browseNext(continuationPoints: Uint8Array | Uint8Array[], releaseContinuationPoints: boolean,
+                callback: (err: Error, results: BrowseResult[],
+                   diagnostInfos: DiagnosticInfo[] | BrowseNextResponse) => void);
+        browseNextP(continuationPoints: Uint8Array | Uint8Array[], releaseContinuationPoints?: boolean):
+                Promise<{results: BrowseResult[], diagnosticInfos: DiagnosticInfo[] | BrowseNextResponse}>;
 }

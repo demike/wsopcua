@@ -638,10 +638,6 @@ protected _closeSession(session: ClientSession,
     }
     assert(this._secureChannel);
 
-    const request = new CloseSessionRequest({
-        deleteSubscriptions: deleteSubscriptions
-    });
-
     if (!this._secureChannel.isValid()) {
         return callback(null);
     }
@@ -650,6 +646,10 @@ protected _closeSession(session: ClientSession,
         console.log('OPCUAClient#_closeSession called while reconnection in progress ! What shall we do');
         return callback(null);
     }
+
+    const request = new CloseSessionRequest({
+        deleteSubscriptions: deleteSubscriptions
+    });
 
     session.performMessageTransaction(request, function (err, response) {
 

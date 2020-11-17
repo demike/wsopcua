@@ -120,6 +120,9 @@
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
-    "directive-class-suffix": true
+    "directive-class-suffix": true,
+    "no-unbound-method": true,
+    "no-unnecessary-callback-wrapper": true,
+    "no-unnecessary-type-assertion": true
   }
 }

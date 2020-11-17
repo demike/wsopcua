@@ -1,6 +1,6 @@
 {
-  "name": "@engel/wsopcua",
-  "version": "0.0.25",
+  "name": "wsopcua",
+  "version": "0.0.27",
   "license": "MYLicense",
   "author": "Michael Derfler",
   "private": true,
@@ -32,12 +32,14 @@
     "karma-source-map-support": "^1.4.0",
     "karma-typescript": "^4.0.0",
     "karma-typescript-es6-transform": "^4.0.0",
+    "start-server-and-test": "^1.10.8",
     "ts-loader": "^5.3.3",
-    "tslint": "^5.14.0",
+    "tslint": "^5.20.1",
     "tslint-loader": "^3.6.0",
     "typescript": "^3.7.2",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "wsopcua-test-server": "file:D:/wsopcua-test-server"
   },
   "scripts": {
     "start": "webpack --watch --config webpack.dev.js",
@@ -49,12 +51,16 @@
     "build-es2015": "tsc -p ./tsconfig.json --module es2015 --outDir ./dist/es2015",
     "build-examples": "webpack --config webpack.example.js",
     "test": "karma start",
+    "test-server": "wsopcua-test-server",
+    "e2e:run": "karma start ./karma.e2e.conf.js",
+    "test-e2e": "start-server-and-test test-server tcp:4444 e2e:run",
     "docs": "typedoc --json docs/json/docs.json && python parse.py"
   },
   "files": [
     "documentation/**/*",
     "dist/es2015/**/*",
     "!dist/es2015/**/*.spec.*",
+    "!dist/es2015/**/*.e2e-spec.*",
     "src/schema_parser/dist/wsopcua-schema-gen.js",
     "src/schema_parser/schemas/**/*"
   ]

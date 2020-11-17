@@ -286,6 +286,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
      * @param callback.results         {BrowseResult[]|BrowseResult}  an array containing the BrowseResult of each BrowseDescription.
      * @param callback.diagnosticInfos {DiagnosticInfo}  an array containing the BrowseResult of each BrowseDescription.
      */
+
     browse(nodesToBrowse: string | string[] | NodeId | NodeId[] | IBrowseDescription | IBrowseDescription[],
          callback: (err: Error, results: browse_service.BrowseResult[],
             diagnostInfos: DiagnosticInfo[] | browse_service.BrowseResponse) => void) {

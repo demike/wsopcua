@@ -7,4 +7,5 @@ const getBaseKarmaConfig = require('./karma.conf');
 module.exports = function(config) {
     getBaseKarmaConfig(config);
     config.karmaTypescriptConfig.bundlerOptions.entrypoints = /\.e2e-spec\.ts$/;
+ 
 };
