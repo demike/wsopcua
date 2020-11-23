@@ -3,7 +3,6 @@ import {
   NodeIdType,
   MessageSecurityMode,
   ICreateSubscriptionRequest,
-  EndpointDescription,
   CallMethodRequest,
   CallMethodResult,
 } from '../../generated';
@@ -17,7 +16,7 @@ import { ClientSession } from '../../client/client_session';
 import { DataType, Variant, VariantArrayType } from '../../variant';
 import { StatusCodes } from '../../wsopcua';
 
-const OPCUA_CONTROL_SERVER_URI = 'ws://localhost:4444';
+export const OPCUA_CONTROL_SERVER_URI = 'ws://localhost:4444';
 const OPCUA_TEST_SERVER_URI = 'ws://localhost:4445';
 
 const DEFAULT_CLIENT_CONNECTION_STRATEGY: ConnectionStrategy = {
@@ -72,6 +71,7 @@ export interface E2ETestController {
     parent: string | NodeId | number;
     value: Variant;
   }): Promise<NodeId>;
+  addComplianceTestNamespace(): Promise<number>;
 }
 
 export class E2ETestControllerImpl implements E2ETestController {
@@ -104,6 +104,12 @@ export class E2ETestControllerImpl implements E2ETestController {
   public static readonly addObjectNodeId = new NodeId(
     NodeIdType.String,
     'NodeManager.addObject',
+    1
+  );
+
+  public static readonly addComplianceTestNamespace = new NodeId(
+    NodeIdType.String,
+    'NodeManager.addComplianceTestNamespace',
     1
   );
 
@@ -275,6 +281,28 @@ export class E2ETestControllerImpl implements E2ETestController {
     }
 
     return nodeId;
+  }
+
+  /**
+   * returns the create namespace index
+   */
+  public async addComplianceTestNamespace(): Promise<number> {
+    const session = await this.controlSession$;
+
+    const response = await session.callP([
+      new CallMethodRequest({
+        objectId: E2ETestControllerImpl.nodeManagerNodeId,
+        methodId: E2ETestControllerImpl.addComplianceTestNamespace,
+      }),
+    ]);
+
+    if (response.result[0].statusCode !== StatusCodes.Good) {
+      throw new Error(
+        'Error adding compliance test namespace ' + response.result[0].toJSON()
+      );
+    }
+
+    return response.result[0].outputArguments[0].value;
   }
 }
 
