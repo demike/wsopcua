@@ -17,7 +17,7 @@ import { DataType, Variant, VariantArrayType } from '../../variant';
 import { StatusCodes } from '../../wsopcua';
 
 export const OPCUA_CONTROL_SERVER_URI = 'ws://localhost:4444';
-const OPCUA_TEST_SERVER_URI = 'ws://localhost:4445';
+export const OPCUA_TEST_SERVER_URI = 'ws://localhost:4445';
 
 const DEFAULT_CLIENT_CONNECTION_STRATEGY: ConnectionStrategy = {
   maxRetry: 10,

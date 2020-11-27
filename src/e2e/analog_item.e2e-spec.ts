@@ -44,7 +44,7 @@ describe('AnalogItem', function () {
     });
   });
 
-  it("readUAAnalogItem should return an error if not doesn't exist", function (done) {
+  it("readUAAnalogItem should return an error if it doesn't exist", function (done) {
     const nodeId = coerceNodeId('ns=4;s=invalidnode');
     readUAAnalogItem(session, nodeId, function (err, data) {
       expect(err instanceof Error).toBeTruthy();
