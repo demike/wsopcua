@@ -24,6 +24,7 @@ describe('OPCUA-Service Discovery Endpoint', function () {
     // accessed as an ordinary OPC UA  Server.
 
     controller.testClient.findServers({}, function (err, servers) {
+      expect(err).toBeFalsy();
       if (!err) {
         expect(servers.length).toBe(1);
       }

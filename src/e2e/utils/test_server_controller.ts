@@ -14,7 +14,7 @@ import { SecurityPolicy } from '../../secure-channel';
 import { OPCUAClient } from '../../client/opcua_client';
 import { ClientSession } from '../../client/client_session';
 import { DataType, Variant, VariantArrayType } from '../../variant';
-import { StatusCodes } from '../../wsopcua';
+import { ClientSubscription, StatusCodes } from '../../wsopcua';
 
 export const OPCUA_CONTROL_SERVER_URI = 'ws://localhost:4444';
 export const OPCUA_TEST_SERVER_URI = 'ws://localhost:4445';
@@ -72,6 +72,14 @@ export interface E2ETestController {
     value: Variant;
   }): Promise<NodeId>;
   addComplianceTestNamespace(): Promise<number>;
+
+  /**
+   * creates a subscription with sane default test settings
+   * also wait for
+   */
+  createSubscription(
+    options?: ICreateSubscriptionRequest
+  ): Promise<ClientSubscription>;
 }
 
 export class E2ETestControllerImpl implements E2ETestController {
@@ -303,6 +311,33 @@ export class E2ETestControllerImpl implements E2ETestController {
     }
 
     return response.result[0].outputArguments[0].value;
+  }
+
+  /**
+   * creates a subscription with sane default test settings
+   */
+  public async createSubscription(
+    options?: ICreateSubscriptionRequest
+  ): Promise<ClientSubscription> {
+    const subscription = new ClientSubscription(
+      this.testSession,
+      options || {
+        requestedPublishingInterval: 100,
+        requestedLifetimeCount: 6000,
+        requestedMaxKeepAliveCount: 100,
+        maxNotificationsPerPublish: 4,
+        publishingEnabled: true,
+        priority: 6,
+      }
+    );
+
+    return new Promise((resolve, reject) => {
+      const onStarted = () => {
+        subscription.off('started', onStarted);
+        resolve(subscription);
+      };
+      subscription.on('started', onStarted);
+    });
   }
 }
 
