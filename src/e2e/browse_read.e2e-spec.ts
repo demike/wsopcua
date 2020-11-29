@@ -38,11 +38,15 @@ describe('Browse-Read-Write Services', function () {
   let session: ClientSession;
   let controller: E2ETestController;
   let client: OPCUAClient;
+  const CurrentTimeVariableId = coerceNodeId(
+    'ns=2;s=Scalar_Simulation_Interval'
+  );
 
   beforeAll(async () => {
     controller = getE2ETestController();
     const setup = await controller.startTestServer();
-    controller.addComplianceTestNamespace();
+    CurrentTimeVariableId.namespace = await controller.addComplianceTestNamespace();
+
     session = setup.session;
     client = setup.client;
   });
@@ -50,13 +54,11 @@ describe('Browse-Read-Write Services', function () {
     controller.stopTestServer();
   });
 
-  const CurrentTimeVariableId = coerceNodeId('i=2258');
-
   it('T8-1 - should browse RootFolder', function (done) {
     session.browse(RootFolderNodeId, function (err, browseResult) {
       if (!err) {
         expect(Array.isArray(browseResult)).toBeTruthy();
-        expect(Array.isArray(browseResult.length)).toBe(1);
+        expect(browseResult.length).toBe(1);
         expect(browseResult[0] instanceof BrowseResult).toBeTruthy();
       }
 
@@ -64,13 +66,13 @@ describe('Browse-Read-Write Services', function () {
 
       expect(browseResult[0].statusCode).toEqual(StatusCodes.Good);
       expect(browseResult[0].references.length).toEqual(3);
-      expect(browseResult[0].references[0].browseName.toString()).toEqual(
+      expect(browseResult[0].references[0].browseName.name.toString()).toEqual(
         'Objects'
       );
-      expect(browseResult[0].references[1].browseName.toString()).toEqual(
+      expect(browseResult[0].references[1].browseName.name.toString()).toEqual(
         'Types'
       );
-      expect(browseResult[0].references[2].browseName.toString()).toEqual(
+      expect(browseResult[0].references[2].browseName.name.toString()).toEqual(
         'Views'
       );
       done();
@@ -89,7 +91,7 @@ describe('Browse-Read-Write Services', function () {
       browseResult /*, diagnosticInfos*/
     ) {
       expect(Array.isArray(browseResult)).toBeTruthy();
-      expect(Array.isArray(browseResult.length)).toBe(1);
+      expect(browseResult.length).toBe(1);
       expect(browseResult[0] instanceof BrowseResult).toBeTruthy();
       expect(browseResult[0].statusCode).toEqual(
         StatusCodes.BadReferenceTypeIdInvalid
@@ -276,7 +278,7 @@ describe('Browse-Read-Write Services', function () {
     // write a single value
     session.writeSingleNode(
       CurrentTimeVariableId,
-      new Variant({ dataType: DataType.Double, value: 37.5 }),
+      new Variant({ dataType: DataType.UInt16, value: 3000 }),
       function (err, statusCode /*,diagnosticInfo*/) {
         if (!err) {
           expect(statusCode).toEqual(StatusCodes.Good);

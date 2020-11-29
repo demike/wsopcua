@@ -14,16 +14,12 @@ import { Variant } from '../variant';
 import {
   E2ETestController,
   getE2ETestController,
-  OPCUA_TEST_SERVER_URI,
 } from './utils/test_server_controller';
-
-const doDebug = true;
 
 describe('Testing ClientMonitoredItemGroup', function () {
   let session: ClientSession;
   let controller: E2ETestController;
   let client: OPCUAClient;
-  const endpointUrl = OPCUA_TEST_SERVER_URI;
   let subscription: ClientSubscription;
 
   beforeAll(async () => {
