@@ -16,6 +16,8 @@ import {
   getE2ETestController,
 } from './utils/test_server_controller';
 
+const doDebug = false;
+
 describe('Testing ClientMonitoredItemGroup', function () {
   let session: ClientSession;
   let controller: E2ETestController;
@@ -30,7 +32,7 @@ describe('Testing ClientMonitoredItemGroup', function () {
   });
 
   afterAll(async () => {
-    controller.stopTestServer();
+    await controller.stopTestServer();
   });
 
   beforeEach(async () => {

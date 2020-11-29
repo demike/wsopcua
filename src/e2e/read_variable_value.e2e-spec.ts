@@ -22,7 +22,7 @@ describe('ClientSession#readVariableValue', function () {
   });
 
   afterAll(async () => {
-    controller.stopTestServer();
+    await controller.stopTestServer();
   });
 
   beforeEach(async () => {

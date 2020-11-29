@@ -51,7 +51,7 @@ describe('Browse-Read-Write Services', function () {
     client = setup.client;
   });
   afterAll(async () => {
-    controller.stopTestServer();
+    await controller.stopTestServer();
   });
 
   it('T8-1 - should browse RootFolder', function (done) {

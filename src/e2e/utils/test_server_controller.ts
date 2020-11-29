@@ -20,7 +20,7 @@ export const OPCUA_CONTROL_SERVER_URI = 'ws://localhost:4444';
 export const OPCUA_TEST_SERVER_URI = 'ws://localhost:4445';
 
 const DEFAULT_CLIENT_CONNECTION_STRATEGY: ConnectionStrategy = {
-  maxRetry: 10,
+  maxRetry: 0,
   initialDelay: 1000,
   maxDelay: 10000,
   randomisationFactor: 0.1,
@@ -35,6 +35,7 @@ const DEFAULT_CLIENT_OPTIONS: OPCUAClientOptions = {
   connectionStrategy: DEFAULT_CLIENT_CONNECTION_STRATEGY,
   keepSessionAlive: true,
   requestedSessionTimeout: 1000000,
+  keepPendingSessionsOnDisconnect: false,
 };
 
 const DEFAULT_SUBSCRIPTION_REQ_OPTIONS: ICreateSubscriptionRequest = {
@@ -137,13 +138,7 @@ export class E2ETestControllerImpl implements E2ETestController {
   }
 
   private createClient() {
-    return new OPCUAClient({
-      endpoint_must_exist: false,
-      connectionStrategy: {
-        maxDelay: 1000,
-        maxRetry: 0,
-      },
-    });
+    return new OPCUAClient(DEFAULT_CLIENT_OPTIONS);
   }
 
   private async createSession(client: OPCUAClient, url: string) {

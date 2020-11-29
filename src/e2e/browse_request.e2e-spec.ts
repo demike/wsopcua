@@ -28,7 +28,7 @@ describe('Test Browse Request', function () {
   });
 
   afterAll(async () => {
-    controller.stopTestServer();
+    await controller.stopTestServer();
   });
 
   it('T1 - #Browse should return BadNothingToDo if nodesToBrowse is empty ', function (done) {
