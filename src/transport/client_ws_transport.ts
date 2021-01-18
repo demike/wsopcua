@@ -3,63 +3,62 @@
  * @module opcua.transport
  */
 
-
 // system requires
-import {assert} from '../assert';
+import { assert } from '../assert';
 
 // opcua requires
-import {DataStream} from '../basic-types/DataStream';
+import { DataStream } from '../basic-types/DataStream';
 
 // this modules
-import {WSTransport, getFakeTransport} from './ws_transport';
+import { WSTransport, getFakeTransport } from './ws_transport';
 
-import {packTcpMessage, parseEndpointUrl} from './tools';
+import { packTcpMessage, parseEndpointUrl } from './tools';
 
+import { HelloMessage } from './HelloMessage';
+import { TCPErrorMessage } from './TCPErrorMessage';
+import { AcknowledgeMessage } from './AcknowledgeMessage';
 
+import { debugLog } from '../common/debug';
+import { readMessageHeader } from '../chunkmanager';
 
-import {HelloMessage} from './HelloMessage';
-import {TCPErrorMessage} from './TCPErrorMessage';
-import {AcknowledgeMessage} from './AcknowledgeMessage';
-
-import {debugLog} from '../common/debug';
-import {readMessageHeader} from '../chunkmanager';
-
-
-import {decodeMessage} from './tools';
+import { decodeMessage } from './tools';
 import { ErrorCallback } from '../client/client_base';
 
-function createClientSocket(endpointUrl: string, protocol: 'opcua+uacp'|'opcua+uajson'): WebSocket {
-    // create a socket based on Url
-    const ep = parseEndpointUrl(endpointUrl);
-    const port = ep.port;
-    const hostname = ep.hostname;
-    switch (ep.protocol) {
-        case 'websocket':
-        case 'opc.tcp':
-        case 'ws':
-        case 'wss':
-            // TODO: that's it --> implement me
-            const websocket = new WebSocket(endpointUrl, protocol);
-            websocket.binaryType  = 'arraybuffer';
-           return websocket;
-            break;
-        case 'fake':
-            const fakeSocket = getFakeTransport();
-            assert(ep.protocol === 'fake', ' Unsupported transport protocol');
-            setTimeout(function () {
-                (<any>fakeSocket).emit('connect');
-            }, 0);
-            return <WebSocket>fakeSocket;
-        case 'http':
-        case 'https':
+function createClientSocket(
+  endpointUrl: string,
+  protocol: 'opcua+uacp' | 'opcua+uajson'
+): WebSocket {
+  // create a socket based on Url
+  const ep = parseEndpointUrl(endpointUrl);
+  const port = ep.port;
+  const hostname = ep.hostname;
+  switch (ep.protocol) {
+    case 'websocket':
+    case 'opc.tcp':
+    case 'ws':
+    case 'wss':
+      // TODO: that's it --> implement me
+      const websocket = new WebSocket(endpointUrl, protocol);
+      websocket.binaryType = 'arraybuffer';
+      return websocket;
+      break;
+    case 'fake':
+      const fakeSocket = getFakeTransport();
+      assert(ep.protocol === 'fake', ' Unsupported transport protocol');
+      setTimeout(function () {
+        (<any>fakeSocket).emit('connect');
+      }, 0);
+      return <WebSocket>fakeSocket;
+    case 'http':
+    case 'https':
 
-            // var socket = net.connect({host: hostname, port: port});
-            // socket.setNoDelay(true);
+    // var socket = net.connect({host: hostname, port: port});
+    // socket.setNoDelay(true);
 
-            //  return socket;
-        default:
-            throw new Error('this transport protocol is currently not supported :' + ep.protocol);
-    }
+    //  return socket;
+    default:
+      throw new Error('this transport protocol is currently not supported :' + ep.protocol);
+  }
 }
 
 /**
@@ -103,55 +102,55 @@ function createClientSocket(endpointUrl: string, protocol: 'opcua+uacp'|'opcua+u
  *
  */
 export class ClientWSTransport extends WSTransport {
-    numberOfRetry: number;
-    _connected: boolean;
-    serverUri: string;
-    endpointUrl: string;
-    _protocolVersion: number;
-    _parameters: any;
+  numberOfRetry: number;
+  _connected: boolean;
+  serverUri: string;
+  endpointUrl: string;
+  _protocolVersion: number;
+  _parameters: any;
 
-    get protocolVersion() {
-        return this._protocolVersion;
-    }
+  get protocolVersion() {
+    return this._protocolVersion;
+  }
 
-    set protocolVersion(v: number) {
-        this._protocolVersion = v;
-    }
+  set protocolVersion(v: number) {
+    this._protocolVersion = v;
+  }
 
-    get connected() {
-        return this._connected;
-    }
+  get connected() {
+    return this._connected;
+  }
 
-    get parameters() {
-        return this._parameters;
-    }
+  get parameters() {
+    return this._parameters;
+  }
 
-constructor(public readonly encoding: 'opcua+uacp'|'opcua+uajson') {
+  constructor(public readonly encoding: 'opcua+uacp' | 'opcua+uajson') {
     super();
 
     this._connected = false;
-}
+  }
 
-public on_socket_ended(err: Error) {
+  public on_socket_ended(err: Error) {
     if (this._connected) {
-        super.on_socket_ended(err);
+      super.on_socket_ended(err);
     }
-}
+  }
 
-/**
- * @method connect
- * @async
- * @param endpointUrl {String}
- * @param callback {ErrorCallback} the callback function
- * @param [options={}]
- */
-public connect(endpointUrl: string, callback: ErrorCallback, options?) {
-
+  /**
+   * @method connect
+   * @async
+   * @param endpointUrl {String}
+   * @param callback {ErrorCallback} the callback function
+   * @param [options={}]
+   */
+  public connect(endpointUrl: string, callback: ErrorCallback, options?) {
     assert('function' === typeof callback);
 
     options = options || {};
 
-    this._protocolVersion = (options.protocolVersion !== undefined) ? options.protocolVersion : this._protocolVersion;
+    this._protocolVersion =
+      options.protocolVersion !== undefined ? options.protocolVersion : this._protocolVersion;
     assert(Number.isFinite(this._protocolVersion));
 
     const ep = parseEndpointUrl(endpointUrl);
@@ -163,106 +162,95 @@ public connect(endpointUrl: string, callback: ErrorCallback, options?) {
 
     debugLog('endpointUrl =', endpointUrl, 'ep', ep);
 
-
     try {
-        this._socket = createClientSocket(endpointUrl, this.encoding);
+      this._socket = createClientSocket(endpointUrl, this.encoding);
     } catch (err) {
-        return callback(err);
+      return callback(err);
     }
-//    this._socket.name = "CLIENT";
+    //    this._socket.name = "CLIENT";
     this._install_socket(this._socket);
 
     /* listening to errors onling during connection */
     // ----------------------------------------------------------------------------
     const _on_socket_error_for_connect = (err: Event) => {
-        // this handler will catch attempt to connect to an inaccessible address.
-//        this._socket.removeEventListener('error', _on_socket_error_for_connect);
-        this.off('socket_error', _on_socket_error_for_connect);
-        callback(new Error('failed to connect'));
+      // this handler will catch attempt to connect to an inaccessible address.
+      //        this._socket.removeEventListener('error', _on_socket_error_for_connect);
+      this.off('socket_error', _on_socket_error_for_connect);
+      callback(new Error('failed to connect'));
     };
- //   this._socket.addEventListener('error', _on_socket_error_for_connect); /* TODO think about listening on the close event, it has mor */
+    //   this._socket.addEventListener('error', _on_socket_error_for_connect); /* TODO think about listening on the close event, it has mor */
     this.on('socket_error', _on_socket_error_for_connect);
     // ---------------------------------------------------------------------------
 
+    this._socket.onopen = () => {
+      /* remove the connect error listener  */
+      // this._socket.removeEventListener('error', _on_socket_error_for_connect);
+      this.off('socket_error', _on_socket_error_for_connect);
 
-    this._socket.onopen =  () => {
+      // HEL ACK transaction is used to determine the maximum size of the message chunk
+      // this is only necessary for 'opcua+uacp' binary protocol not for 'opcua+uajson'
+      // https://reference.opcfoundation.org/v104/Core/docs/Part6/7.5.2/
+      if (this.encoding === 'opcua+uajson') {
+        this._connected = true;
+        this.emit('connect');
+        callback();
+        return;
+      }
 
-        /* remove the connect error listener  */
-        // this._socket.removeEventListener('error', _on_socket_error_for_connect);
-        this.off('socket_error', _on_socket_error_for_connect)
+      this._perform_HEL_ACK_transaction((err) => {
+        if (!err) {
+          // install error handler to detect connection break
+          this.on('socket_error', this._on_socket_error_after_connection);
 
-        // HEL ACK transaction is used to determine the maximum size of the message chunk
-        // this is only necessary for 'opcua+uacp' binary protocol not for 'opcua+uajson'
-        // https://reference.opcfoundation.org/v104/Core/docs/Part6/7.5.2/
-        if(this.encoding === 'opcua+uajson') {
-            this._connected = true;
-            this.emit('connect');
-            callback();
-            return;
+          this._connected = true;
+          /**
+           * notify the observers that the transport is connected (the socket is connected and the the HEL/ACK
+           * transaction has been done)
+           * @event connect
+           *
+           */
+          this.emit('connect');
+        } else {
+          debugLog('_perform_HEL_ACK_transaction has failed with err=', err.message);
         }
-
-        this._perform_HEL_ACK_transaction((err) => {
-            if (!err) {
-
-                // install error handler to detect connection break
-                this.on('socket_error', this._on_socket_error_after_connection);
-
-
-                this._connected = true;
-                /**
-                 * notify the observers that the transport is connected (the socket is connected and the the HEL/ACK
-                 * transaction has been done)
-                 * @event connect
-                 *
-                 */
-                this.emit('connect');
-            } else {
-                debugLog('_perform_HEL_ACK_transaction has failed with err=', err.message);
-            }
-            callback(err);
-        });
+        callback(err);
+      });
     };
-}
+  }
 
-
-
-protected _handle_ACK_response(message_chunk: DataView | ArrayBuffer, callback: ErrorCallback) {
-
+  protected _handle_ACK_response(message_chunk: DataView | ArrayBuffer, callback: ErrorCallback) {
     const _stream = new DataStream(message_chunk);
     const messageHeader = readMessageHeader(_stream);
 
-
     if (messageHeader.isFinal !== 'F') {
-        const err = new Error(' invalid ACK message');
-        callback(err);
-        return;
+      const err = new Error(' invalid ACK message');
+      callback(err);
+      return;
     }
 
     let responseClass;
     let response;
 
     if (messageHeader.msgType === 'ERR') {
-        responseClass = TCPErrorMessage;
-        _stream.rewind();
-        response = <TCPErrorMessage>decodeMessage(_stream, responseClass);
+      responseClass = TCPErrorMessage;
+      _stream.rewind();
+      response = <TCPErrorMessage>decodeMessage(_stream, responseClass);
 
-        const err = new Error('ACK: ERR received ' + response.statusCode.toString() + ' : ' + response.reason);
-        (<any>err).statusCode =  response.statusCode;
-        callback(err);
-
+      const err = new Error(
+        'ACK: ERR received ' + response.statusCode.toString() + ' : ' + response.reason
+      );
+      (<any>err).statusCode = response.statusCode;
+      callback(err);
     } else {
-        responseClass = AcknowledgeMessage;
-        _stream.rewind();
-        response = decodeMessage(_stream, responseClass);
-        this._parameters = response;
-        callback(null);
+      responseClass = AcknowledgeMessage;
+      _stream.rewind();
+      response = decodeMessage(_stream, responseClass);
+      this._parameters = response;
+      callback(null);
     }
+  }
 
-}
-
-protected _send_HELLO_request() {
-
-
+  protected _send_HELLO_request() {
     assert(this._socket);
     assert(Number.isFinite(this._protocolVersion));
     assert(this.endpointUrl.length > 0, ' expecting a valid endpoint url');
@@ -270,48 +258,43 @@ protected _send_HELLO_request() {
     // Write a message to the socket as soon as the client is connected,
     // the server will receive it as message from the client
     const request = new HelloMessage({
-        protocolVersion: this._protocolVersion,
-        receiveBufferSize:    1024 * 64 * 10,
-        sendBufferSize:       1024 * 64 * 10, // 8192 min,
-        maxMessageSize:       0, // 0 - no limits
-        maxChunkCount:        0, // 0 - no limits
-        endpointUrl: this.endpointUrl
+      protocolVersion: this._protocolVersion,
+      receiveBufferSize: 1024 * 64 * 10,
+      sendBufferSize: 1024 * 64 * 10, // 8192 min,
+      maxMessageSize: 0, // 0 - no limits
+      maxChunkCount: 0, // 0 - no limits
+      endpointUrl: this.endpointUrl,
     });
 
     const messageChunk = packTcpMessage('HEL', request);
     this._write_chunk(messageChunk);
+  }
 
-}
-
-
-protected _perform_HEL_ACK_transaction(callback: ErrorCallback) {
-
-
+  protected _perform_HEL_ACK_transaction(callback: ErrorCallback) {
     assert(this._socket);
     assert('function' === typeof callback);
 
     let counter = 0;
 
     this._install_one_time_message_receiver((err, data) => {
+      assert(counter === 0);
+      counter += 1;
 
-        assert(counter === 0);
-        counter += 1;
-
-        if (err) {
-            callback(err);
-            if (this._socket) {
-                this._socket.close(1000, 'OPC-UA: HELLO - ACK failed');
-            }
-        } else {
-            this._handle_ACK_response(data, function (inner_err) {
-                callback(inner_err);
-            });
+      if (err) {
+        callback(err);
+        if (this._socket) {
+          this._socket.close(1000, 'OPC-UA: HELLO - ACK failed');
         }
+      } else {
+        this._handle_ACK_response(data, function (inner_err) {
+          callback(inner_err);
+        });
+      }
     });
     this._send_HELLO_request();
-}
+  }
 
-protected _on_socket_error_after_connection = (evt: CloseEvent) => {
+  protected _on_socket_error_after_connection = (evt: CloseEvent) => {
     debugLog(' ClientWSTransport Socket Error', evt);
 
     // EPIPE : EPIPE (Broken pipe): A write on a pipe, socket, or FIFO for which there is no process to read the
@@ -322,21 +305,20 @@ protected _on_socket_error_after_connection = (evt: CloseEvent) => {
     // from a loss of the connection on the remote socket due to a timeout or reboot. Commonly encountered via the
     // http and net modu
 
-
-    if ( evt.code !== 1000  /*all kinds of errors*/) {
-        /**
-         * @event connection_break
-         */
-        this.emit('connection_break');
+    if (
+      evt.code !== 1000 /*all kinds of errors*/ &&
+      evt.code !== 1005 /* 1005 = no status received */
+    ) {
+      /**
+       * @event connection_break
+       */
+      this.emit('connection_break');
     }
-}
+  };
 
-protected dispose() {
+  protected dispose() {
     super.dispose();
     this.off('socket_error', this._on_socket_error_after_connection);
     //this._socket.removeEventListener('socket_error', this._on_socket_error_after_connection);
+  }
 }
-
-}
-
-

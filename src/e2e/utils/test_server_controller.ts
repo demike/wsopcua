@@ -143,6 +143,11 @@ export class E2ETestControllerImpl implements E2ETestController {
 
   private async createSession(client: OPCUAClient, url: string) {
     await client.connectP(url);
+
+    window.onbeforeunload = () => {
+      return client.disconnectP();
+    };
+
     return client.createSessionP(null);
   }
 
