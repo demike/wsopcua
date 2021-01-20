@@ -3,41 +3,42 @@
  * @module opcua.miscellaneous
  */
 
+import { assert } from '../assert';
+import { EventEmitter } from '../eventemitter';
 
-import {assert} from '../assert';
-import {EventEmitter} from '../eventemitter';
+import { ChunkManager } from '../chunkmanager';
+import { DataStream } from '../basic-types/DataStream';
 
-import {ChunkManager} from '../chunkmanager';
-import {DataStream} from '../basic-types/DataStream';
-
-import {SequenceHeader, AsymmetricAlgorithmSecurityHeader, SymmetricAlgorithmSecurityHeader} from '../service-secure-channel';
+import {
+  SequenceHeader,
+  AsymmetricAlgorithmSecurityHeader,
+  SymmetricAlgorithmSecurityHeader,
+} from '../service-secure-channel';
 import { SequenceNumberGenerator } from './sequence_number_generator';
 
 export interface SecureMessageChunkManagerEvents {
-    'chunk': (chunk: ArrayBuffer, is_last: boolean) => void;
-    'finished': () => void;
-
+  chunk: (chunk: ArrayBuffer, is_last: boolean) => void;
+  finished: () => void;
 }
 
 export function chooseSecurityHeader(msgType: string) {
-
-    const securityHeader = (msgType === 'OPN') ?
-        new AsymmetricAlgorithmSecurityHeader() :
-        new SymmetricAlgorithmSecurityHeader();
-    return securityHeader;
+  const securityHeader =
+    msgType === 'OPN'
+      ? new AsymmetricAlgorithmSecurityHeader()
+      : new SymmetricAlgorithmSecurityHeader();
+  return securityHeader;
 }
 
-
 export interface SecureMessageChunkManagerOptions {
-    sequenceHeaderSize?: number;
-    secureChannelId?: number;
-    chunkSize?: number;
-    requestId?: number;
-    signatureLength?: number;
-    signingFunc?: Function;
-    plainBlockSize?: number;
-    cipherBlockSize?: number;
-    encrypt_buffer?: ArrayBuffer;
+  sequenceHeaderSize: number;
+  secureChannelId?: number;
+  chunkSize?: number;
+  requestId: number;
+  signatureLength: number;
+  signingFunc?: Function;
+  plainBlockSize: number;
+  cipherBlockSize: number;
+  encrypt_buffer?: ArrayBuffer;
 }
 
 /**
@@ -56,19 +57,21 @@ export interface SecureMessageChunkManagerOptions {
  * @constructor
  */
 export class SecureMessageChunkManager extends EventEmitter<SecureMessageChunkManagerEvents> {
-    protected _chunkManager: ChunkManager;
-    protected _sequenceHeader: SequenceHeader;
-    protected _securityHeader: any;
-    protected _sequenceNumberGenerator: SequenceNumberGenerator;
-    protected _secureChannelId: number;
-    protected _msgType: string;
-    protected _chunkSize: number;
-    protected _aborted: boolean;
-    protected _headerSize: number;
-constructor (msgType: string, options: SecureMessageChunkManagerOptions,
-    securityHeader: AsymmetricAlgorithmSecurityHeader | SymmetricAlgorithmSecurityHeader,
-    sequenceNumberGenerator: SequenceNumberGenerator) {
-
+  protected _chunkManager: ChunkManager;
+  protected _sequenceHeader: SequenceHeader;
+  protected _securityHeader: AsymmetricAlgorithmSecurityHeader | SymmetricAlgorithmSecurityHeader;
+  protected _sequenceNumberGenerator: SequenceNumberGenerator;
+  protected _secureChannelId: number;
+  protected _msgType: string;
+  protected _chunkSize: number;
+  protected _aborted: boolean;
+  protected _headerSize: number;
+  constructor(
+    msgType: string,
+    options: SecureMessageChunkManagerOptions,
+    securityHeader: AsymmetricAlgorithmSecurityHeader | SymmetricAlgorithmSecurityHeader | null,
+    sequenceNumberGenerator: SequenceNumberGenerator
+  ) {
     super();
     this._aborted = false;
 
@@ -95,7 +98,7 @@ constructor (msgType: string, options: SecureMessageChunkManagerOptions,
 
     assert(requestId > 0, 'expecting a valid request ID');
 
-    this._sequenceHeader = new SequenceHeader({requestId: requestId, sequenceNumber: -1});
+    this._sequenceHeader = new SequenceHeader({ requestId: requestId, sequenceNumber: -1 });
 
     const securityHeaderSize = DataStream.binaryStoreSize(this._securityHeader);
     const sequenceHeaderSize = DataStream.binaryStoreSize(this._sequenceHeader);
@@ -104,51 +107,48 @@ constructor (msgType: string, options: SecureMessageChunkManagerOptions,
     this._headerSize = 12 + securityHeaderSize;
     const self = this;
     const params = {
-        chunkSize: this._chunkSize,
+      chunkSize: this._chunkSize,
 
-        headerSize: this._headerSize,
-        writeHeaderFunc:  (block: DataStream | DataView, isLast: boolean, totalLength: number) => {
+      headerSize: this._headerSize,
+      writeHeaderFunc: (block: DataStream | DataView, isLast: boolean, totalLength: number) => {
+        let finalC: 'A' | 'F' | 'C' = isLast ? 'F' : 'C';
+        finalC = this._aborted ? 'A' : finalC;
+        this.write_header(finalC, block, totalLength);
+      },
 
-            let finalC: 'A'|'F'|'C' = isLast ? 'F' : 'C';
-            finalC = this._aborted ? 'A' : finalC;
-            this.write_header(finalC, block, totalLength);
-        },
+      sequenceHeaderSize: options.sequenceHeaderSize,
+      writeSequenceHeaderFunc: function (block: DataStream | DataView) {
+        assert(block.byteLength === this.sequenceHeaderSize);
+        self.writeSequenceHeader(block);
+      },
 
-        sequenceHeaderSize: options.sequenceHeaderSize,
-        writeSequenceHeaderFunc: function (block: DataStream | DataView) {
-            assert(block.byteLength === this.sequenceHeaderSize);
-            self.writeSequenceHeader(block);
-        },
+      // ---------------------------------------- Signing stuff
+      signatureLength: options.signatureLength,
+      compute_signature: options.signingFunc,
 
-        // ---------------------------------------- Signing stuff
-        signatureLength: options.signatureLength,
-        compute_signature: options.signingFunc,
-
-        // ---------------------------------------- Encrypting stuff
-        plainBlockSize: options.plainBlockSize,
-        cipherBlockSize: options.cipherBlockSize,
-        encrypt_buffer: options.encrypt_buffer
+      // ---------------------------------------- Encrypting stuff
+      plainBlockSize: options.plainBlockSize,
+      cipherBlockSize: options.cipherBlockSize,
+      encrypt_buffer: options.encrypt_buffer,
     };
 
     this._chunkManager = new ChunkManager(params);
 
     this._chunkManager.on('chunk', (chunk: ArrayBuffer, is_last) => {
-        /**
-         * @event chunk
-         * @param chunk {Buffer}
-         */
-        this.emit('chunk', chunk, is_last || this._aborted);
-
+      /**
+       * @event chunk
+       * @param chunk {Buffer}
+       */
+      this.emit('chunk', chunk, is_last || this._aborted);
     });
-}
+  }
 
-public write_header(finalC: 'A'|'F'|'C', buf: DataStream | DataView, length: number) {
-
+  public write_header(finalC: 'A' | 'F' | 'C', buf: DataStream | DataView, length: number) {
     assert(buf.byteLength > 12);
     assert(finalC.length === 1);
 
     if (buf instanceof DataView) {
-        buf = new DataStream(buf);
+      buf = new DataStream(buf);
     }
 
     // message header --------------------------
@@ -174,44 +174,42 @@ public write_header(finalC: 'A'|'F'|'C', buf: DataStream | DataView, length: num
     // write Security Header -----------------
     this._securityHeader.encode(buf);
     assert(buf.length === this._headerSize);
-}
+  }
 
-public writeSequenceHeader(block: DataStream | DataView) {
+  public writeSequenceHeader(block: DataStream | DataView) {
     if (block instanceof DataView) {
-        block = new DataStream(block);
+      block = new DataStream(block);
     }
     // write Sequence Header -----------------
     this._sequenceHeader.sequenceNumber = this._sequenceNumberGenerator.next();
     this._sequenceHeader.encode(block);
     assert(block.length === 8);
+  }
 
-}
-
-/**
- * @method write
- * @param buffer {Buffer}
- * @param length {Integer} - optional if not provided  buffer.length is used instead.
- */
-public write(buffer: ArrayBuffer, length: number) {
+  /**
+   * @method write
+   * @param buffer {Buffer}
+   * @param length {Integer} - optional if not provided  buffer.length is used instead.
+   */
+  public write(buffer: ArrayBuffer, length: number) {
     length = length || buffer.byteLength;
     this._chunkManager.write(buffer, length);
-}
+  }
 
-/**
- * @method abort
- *
- */
-public abort() {
+  /**
+   * @method abort
+   *
+   */
+  public abort() {
     this._aborted = true;
     this.end();
-}
+  }
 
-/**
- * @method end
- */
-public end() {
+  /**
+   * @method end
+   */
+  public end() {
     this._chunkManager.end();
     this.emit('finished');
-}
-
+  }
 }
