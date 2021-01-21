@@ -19,7 +19,7 @@ import { ObjectRegistry } from '../object-registry/objectRegistry';
 
 let fakeSocket: any = { invalid: true };
 
-export function setFakeTransport(socket_like_mock) {
+export function setFakeTransport(socket_like_mock: any) {
   fakeSocket = socket_like_mock;
 }
 

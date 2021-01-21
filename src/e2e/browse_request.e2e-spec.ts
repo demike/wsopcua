@@ -91,7 +91,7 @@ describe('Test Browse Request', function () {
       nodesToBrowse: [browseDesc],
     });
 
-    await new Promise((resolve, reject) =>
+    await new Promise<void>((resolve, reject) =>
       session.performMessageTransaction(browseRequest1, function (err, response) {
         if (err) {
           return reject(err);
@@ -109,7 +109,7 @@ describe('Test Browse Request', function () {
       requestedMaxReferencesPerNode: 1,
       nodesToBrowse: [browseDesc],
     });
-    await new Promise((resolve, reject) =>
+    await new Promise<void>((resolve, reject) =>
       session.performMessageTransaction(browseRequest2, function (err, response) {
         if (err) {
           return reject(err);
@@ -127,7 +127,7 @@ describe('Test Browse Request', function () {
     const browseNextRequest = new BrowseNextRequest({
       continuationPoints: null,
     });
-    await new Promise((resolve) =>
+    await new Promise<void>((resolve) =>
       session.performMessageTransaction(browseNextRequest, function (err, response) {
         expect(err.message).toMatch(/BadNothingToDo/);
         // console.log(response.toString());
@@ -154,7 +154,7 @@ describe('Test Browse Request', function () {
       requestedMaxReferencesPerNode: 10,
       nodesToBrowse: [browseDesc],
     });
-    await new Promise((resolve, reject) =>
+    await new Promise<void>((resolve, reject) =>
       session.performMessageTransaction(browseRequest1, function (err, response) {
         if (err) {
           return reject(err);
@@ -173,7 +173,7 @@ describe('Test Browse Request', function () {
       requestedMaxReferencesPerNode: 2,
       nodesToBrowse: [browseDesc],
     });
-    await new Promise((resolve, reject) =>
+    await new Promise<void>((resolve, reject) =>
       session.performMessageTransaction(browseRequest2, function (err, response) {
         if (err) {
           return reject(err);
@@ -197,7 +197,7 @@ describe('Test Browse Request', function () {
       continuationPoints: [continuationPoint],
       // xx                    releaseContinuationPoints: true
     });
-    await new Promise((resolve, reject) =>
+    await new Promise<void>((resolve, reject) =>
       session.performMessageTransaction(
         browseNextRequest,
         function (err, response: BrowseNextResponse) {
@@ -228,7 +228,7 @@ describe('Test Browse Request', function () {
       continuationPoints: [continuationPoint],
       releaseContinuationPoints: true,
     });
-    await new Promise((resolve, reject) =>
+    await new Promise<void>((resolve, reject) =>
       session.performMessageTransaction(
         browseNextRequest,
         function (err, response: BrowseNextResponse) {
@@ -294,7 +294,7 @@ describe('Test Browse Request', function () {
         requestedMaxReferencesPerNode: 100,
         nodesToBrowse: [browseDesc],
       });
-      await new Promise((resolve, reject) =>
+      await new Promise<void>((resolve, reject) =>
         session.performMessageTransaction(browseRequestAll, function (err, response) {
           if (err) {
             return reject(err);
@@ -314,7 +314,7 @@ describe('Test Browse Request', function () {
         nodesToBrowse: [browseDesc],
       });
 
-      await new Promise((resolve, reject) =>
+      await new Promise<void>((resolve, reject) =>
         session.performMessageTransaction(browseRequest1, function (err, response) {
           if (err) {
             return reject(err);
@@ -335,7 +335,7 @@ describe('Test Browse Request', function () {
         releaseContinuationPoints: false,
         continuationPoints: [continuationPoint],
       });
-      await new Promise((resolve, reject) =>
+      await new Promise<void>((resolve, reject) =>
         session.performMessageTransaction(browseNextRequest, function (err, response) {
           if (err) {
             return reject(err);
@@ -358,7 +358,7 @@ describe('Test Browse Request', function () {
         releaseContinuationPoints: true,
         continuationPoints: [continuationPoint],
       });
-      await new Promise((resolve, reject) =>
+      await new Promise<void>((resolve, reject) =>
         session.performMessageTransaction(browseNextRequest, function (err, response) {
           if (err) {
             return reject(err);

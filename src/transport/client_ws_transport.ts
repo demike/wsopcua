@@ -144,7 +144,11 @@ export class ClientWSTransport extends WSTransport {
    * @param callback {ErrorCallback} the callback function
    * @param [options={}]
    */
-  public connect(endpointUrl: string, callback: ErrorCallback, options?) {
+  public connect(
+    endpointUrl: string,
+    callback: ErrorCallback,
+    options?: { protocolVersion?: number }
+  ) {
     assert('function' === typeof callback);
 
     options = options || {};
