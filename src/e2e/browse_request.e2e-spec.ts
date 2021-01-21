@@ -9,11 +9,8 @@ import {
 } from '../generated';
 import { BrowseDirection } from '../generated/BrowseDirection';
 import { BrowseRequest } from '../generated/BrowseRequest';
-import { coerceNodeId, resolveNodeId } from '../nodeid/nodeid';
-import {
-  E2ETestController,
-  getE2ETestController,
-} from './utils/test_server_controller';
+import { coerceNodeId, NodeId, resolveNodeId } from '../nodeid/nodeid';
+import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 
 const rootFolderId = coerceNodeId('i=84');
 
@@ -95,19 +92,16 @@ describe('Test Browse Request', function () {
     });
 
     await new Promise((resolve, reject) =>
-      session.performMessageTransaction(
-        browseRequest1,
-        function (err, response) {
-          if (err) {
-            return reject(err);
-          }
-          // console.log(response.toString());
-          expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
-          expect(response.results[0].references.length).toBeGreaterThan(3);
-          expect(response.results[0].continuationPoint).toEqual(null);
-          resolve();
+      session.performMessageTransaction(browseRequest1, function (err, response) {
+        if (err) {
+          return reject(err);
         }
-      )
+        // console.log(response.toString());
+        expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
+        expect(response.results[0].references.length).toBeGreaterThan(3);
+        expect(response.results[0].continuationPoint).toEqual(null);
+        resolve();
+      })
     );
 
     const browseRequest2 = new BrowseRequest({
@@ -116,19 +110,16 @@ describe('Test Browse Request', function () {
       nodesToBrowse: [browseDesc],
     });
     await new Promise((resolve, reject) =>
-      session.performMessageTransaction(
-        browseRequest2,
-        function (err, response) {
-          if (err) {
-            return reject(err);
-          }
-          // xx console.log(response.toString());
-          expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
-          expect(response.results[0].references.length).toEqual(1);
-          expect(response.results[0].continuationPoint).toBeTruthy();
-          resolve();
+      session.performMessageTransaction(browseRequest2, function (err, response) {
+        if (err) {
+          return reject(err);
         }
-      )
+        // xx console.log(response.toString());
+        expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
+        expect(response.results[0].references.length).toEqual(1);
+        expect(response.results[0].continuationPoint).toBeTruthy();
+        resolve();
+      })
     );
   });
 
@@ -137,17 +128,12 @@ describe('Test Browse Request', function () {
       continuationPoints: null,
     });
     await new Promise((resolve) =>
-      session.performMessageTransaction(
-        browseNextRequest,
-        function (err, response) {
-          expect(err.message).toMatch(/BadNothingToDo/);
-          // console.log(response.toString());
-          expect(response.responseHeader.serviceResult).toEqual(
-            StatusCodes.BadNothingToDo
-          );
-          resolve();
-        }
-      )
+      session.performMessageTransaction(browseNextRequest, function (err, response) {
+        expect(err.message).toMatch(/BadNothingToDo/);
+        // console.log(response.toString());
+        expect(response.responseHeader.serviceResult).toEqual(StatusCodes.BadNothingToDo);
+        resolve();
+      })
     );
   });
 
@@ -160,7 +146,7 @@ describe('Test Browse Request', function () {
       resultMask: 63,
     });
 
-    let allReferences;
+    let allReferences: any[];
     let continuationPoint;
 
     const browseRequest1 = new BrowseRequest({
@@ -169,20 +155,17 @@ describe('Test Browse Request', function () {
       nodesToBrowse: [browseDesc],
     });
     await new Promise((resolve, reject) =>
-      session.performMessageTransaction(
-        browseRequest1,
-        function (err, response) {
-          if (err) {
-            return reject(err);
-          }
-          // console.log(response.toString());
-          expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
-          expect(response.results[0].references.length).toBeGreaterThan(3); // want 4 at least
-          expect(response.results[0].continuationPoint).toBeNull();
-          allReferences = response.results[0].references;
-          resolve();
+      session.performMessageTransaction(browseRequest1, function (err, response) {
+        if (err) {
+          return reject(err);
         }
-      )
+        // console.log(response.toString());
+        expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
+        expect(response.results[0].references.length).toBeGreaterThan(3); // want 4 at least
+        expect(response.results[0].continuationPoint).toBeNull();
+        allReferences = response.results[0].references;
+        resolve();
+      })
     );
 
     const browseRequest2 = new BrowseRequest({
@@ -191,26 +174,23 @@ describe('Test Browse Request', function () {
       nodesToBrowse: [browseDesc],
     });
     await new Promise((resolve, reject) =>
-      session.performMessageTransaction(
-        browseRequest2,
-        function (err, response) {
-          if (err) {
-            return reject(err);
-          }
-          // xx console.log(response.toString());
-
-          expect(response.results.length).toEqual(1);
-          expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
-          expect(response.results[0].references.length).toEqual(2);
-          expect(response.results[0].continuationPoint).toBeTruthy();
-          expect(response.results[0].references[0]).toEqual(allReferences[0]);
-          expect(response.results[0].references[1]).toEqual(allReferences[1]);
-
-          continuationPoint = response.results[0].continuationPoint;
-
-          resolve();
+      session.performMessageTransaction(browseRequest2, function (err, response) {
+        if (err) {
+          return reject(err);
         }
-      )
+        // xx console.log(response.toString());
+
+        expect(response.results.length).toEqual(1);
+        expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
+        expect(response.results[0].references.length).toEqual(2);
+        expect(response.results[0].continuationPoint).toBeTruthy();
+        expect(response.results[0].references[0]).toEqual(allReferences[0]);
+        expect(response.results[0].references[1]).toEqual(allReferences[1]);
+
+        continuationPoint = response.results[0].continuationPoint;
+
+        resolve();
+      })
     );
 
     let browseNextRequest = new BrowseNextRequest({
@@ -225,9 +205,7 @@ describe('Test Browse Request', function () {
             return reject(err);
           }
           // console.log(response.toString());
-          expect(response.responseHeader.serviceResult).toEqual(
-            StatusCodes.Good
-          );
+          expect(response.responseHeader.serviceResult).toEqual(StatusCodes.Good);
 
           expect(response.results.length).toEqual(1);
           expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
@@ -258,13 +236,9 @@ describe('Test Browse Request', function () {
             return reject(err);
           }
           // console.log(response.toString());
-          expect(response.responseHeader.serviceResult).toEqual(
-            StatusCodes.Good
-          );
+          expect(response.responseHeader.serviceResult).toEqual(StatusCodes.Good);
           expect(response.results.length).toEqual(1);
-          expect(response.results[0].statusCode).toEqual(
-            StatusCodes.BadContinuationPointInvalid
-          );
+          expect(response.results[0].statusCode).toEqual(StatusCodes.BadContinuationPointInvalid);
           resolve();
         }
       )
@@ -293,7 +267,7 @@ describe('Test Browse Request', function () {
      *     Browse one reference followed by BrowseNext.
      */
 
-    async function test_5_7_2__9(nodeId) {
+    async function test_5_7_2__9(nodeId: string | NodeId) {
       //     And RequestedMaxReferencesPerNode is 1
       //     And ReferenceTypeId is set to a ReferenceType NodeId
       //     And IncludeSubtypes is true
@@ -312,7 +286,7 @@ describe('Test Browse Request', function () {
 
       let continuationPoint;
 
-      let allReferences;
+      let allReferences: any[];
 
       // browse all references
       const browseRequestAll = new BrowseRequest({
@@ -321,20 +295,17 @@ describe('Test Browse Request', function () {
         nodesToBrowse: [browseDesc],
       });
       await new Promise((resolve, reject) =>
-        session.performMessageTransaction(
-          browseRequestAll,
-          function (err, response) {
-            if (err) {
-              return reject(err);
-            }
-            // console.log(response.toString());
-            expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
-            expect(response.results[0].references.length).toBeGreaterThan(3); // want 4 at lest
-            expect(response.results[0].continuationPoint).toBeFalsy();
-            allReferences = response.results[0].references;
-            resolve();
+        session.performMessageTransaction(browseRequestAll, function (err, response) {
+          if (err) {
+            return reject(err);
           }
-        )
+          // console.log(response.toString());
+          expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
+          expect(response.results[0].references.length).toBeGreaterThan(3); // want 4 at lest
+          expect(response.results[0].continuationPoint).toBeFalsy();
+          allReferences = response.results[0].references;
+          resolve();
+        })
       );
 
       const browseRequest1 = new BrowseRequest({
@@ -344,23 +315,20 @@ describe('Test Browse Request', function () {
       });
 
       await new Promise((resolve, reject) =>
-        session.performMessageTransaction(
-          browseRequest1,
-          function (err, response) {
-            if (err) {
-              return reject(err);
-            }
-            // xx console.log(response.toString());
-
-            expect(response.results.length).toEqual(1);
-            expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
-            expect(response.results[0].references.length).toEqual(1);
-            expect(response.results[0].continuationPoint).toBeTruthy();
-            expect(response.results[0].references[0]).toEqual(allReferences[0]);
-            continuationPoint = response.results[0].continuationPoint;
-            resolve();
+        session.performMessageTransaction(browseRequest1, function (err, response) {
+          if (err) {
+            return reject(err);
           }
-        )
+          // xx console.log(response.toString());
+
+          expect(response.results.length).toEqual(1);
+          expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
+          expect(response.results[0].references.length).toEqual(1);
+          expect(response.results[0].continuationPoint).toBeTruthy();
+          expect(response.results[0].references[0]).toEqual(allReferences[0]);
+          continuationPoint = response.results[0].continuationPoint;
+          resolve();
+        })
       );
 
       let browseNextRequest = new BrowseNextRequest({
@@ -368,27 +336,22 @@ describe('Test Browse Request', function () {
         continuationPoints: [continuationPoint],
       });
       await new Promise((resolve, reject) =>
-        session.performMessageTransaction(
-          browseNextRequest,
-          function (err, response) {
-            if (err) {
-              return reject(err);
-            }
-            // console.log(response.toString());
-            expect(response.responseHeader.serviceResult).toEqual(
-              StatusCodes.Good
-            );
-
-            expect(response.results.length).toEqual(1);
-            expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
-            expect(response.results[0].references.length).toEqual(1);
-
-            // continuation point should not be null
-            expect(response.results[0].continuationPoint).toBeTruthy();
-            expect(response.results[0].references[0]).toEqual(allReferences[1]);
-            resolve();
+        session.performMessageTransaction(browseNextRequest, function (err, response) {
+          if (err) {
+            return reject(err);
           }
-        )
+          // console.log(response.toString());
+          expect(response.responseHeader.serviceResult).toEqual(StatusCodes.Good);
+
+          expect(response.results.length).toEqual(1);
+          expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
+          expect(response.results[0].references.length).toEqual(1);
+
+          // continuation point should not be null
+          expect(response.results[0].continuationPoint).toBeTruthy();
+          expect(response.results[0].references[0]).toEqual(allReferences[1]);
+          resolve();
+        })
       );
 
       browseNextRequest = new BrowseNextRequest({
@@ -396,25 +359,20 @@ describe('Test Browse Request', function () {
         continuationPoints: [continuationPoint],
       });
       await new Promise((resolve, reject) =>
-        session.performMessageTransaction(
-          browseNextRequest,
-          function (err, response) {
-            if (err) {
-              return reject(err);
-            }
-            // console.log(response.toString());
-            expect(response.responseHeader.serviceResult).toEqual(
-              StatusCodes.Good
-            );
-
-            expect(response.results.length).toEqual(1);
-            expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
-            expect(response.results[0].references.length).toEqual(0);
-
-            expect(response.results[0].continuationPoint).toBeFalsy();
-            resolve();
+        session.performMessageTransaction(browseNextRequest, function (err, response) {
+          if (err) {
+            return reject(err);
           }
-        )
+          // console.log(response.toString());
+          expect(response.responseHeader.serviceResult).toEqual(StatusCodes.Good);
+
+          expect(response.results.length).toEqual(1);
+          expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
+          expect(response.results[0].references.length).toEqual(0);
+
+          expect(response.results[0].continuationPoint).toBeFalsy();
+          resolve();
+        })
       );
     }
 
