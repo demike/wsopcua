@@ -61,11 +61,7 @@ export function perform_operation_on_client_session(
 export function perform_operation_on_subscription(
   client: OPCUAClient,
   endpointUrl: string,
-  do_func: (
-    session: ClientSession,
-    subscription: ClientSubscription,
-    done: any
-  ) => void,
+  do_func: (session: ClientSession, subscription: ClientSubscription, done: any) => void,
   done_func: ErrorCallback
 ) {
   perform_operation_on_client_session(
@@ -90,7 +86,7 @@ export function perform_operation_on_subscription(
 
       await new Promise((resolve) => {
         try {
-          do_func(session, subscription, function (err) {
+          do_func(session, subscription, function (err: Error) {
             do_func_err = err;
             resolve();
           });
@@ -120,27 +116,18 @@ export function perform_operation_on_subscription(
 }
 
 export async function perform_operation_on_subscriptionP(
-  client,
-  endpointUrl,
-  do_func: (
-    session: ClientSession,
-    subscription: ClientSubscription,
-    done: any
-  ) => void
+  client: OPCUAClient,
+  endpointUrl: string,
+  do_func: (session: ClientSession, subscription: ClientSubscription, done: any) => void
 ) {
   return new Promise((resolve, reject) => {
-    perform_operation_on_subscription(
-      client,
-      endpointUrl,
-      do_func,
-      (err?: Error, value?: any) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(value);
-        }
+    perform_operation_on_subscription(client, endpointUrl, do_func, (err?: Error, value?: any) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(value);
       }
-    );
+    });
   });
 }
 
@@ -148,7 +135,7 @@ export function perform_operation_on_raw_subscription(
   client: OPCUAClient,
   endpointUrl: string,
   f: (session: ClientSession, result: any, done: ErrorCallback) => void,
-  done
+  done: (value?: unknown) => void
 ) {
   perform_operation_on_client_session(
     client,
@@ -186,7 +173,7 @@ export async function perform_operation_on_monitoredItemP(
     done: (value?: unknown) => void
   ) => void
 ) {
-  let itemToMonitor;
+  let itemToMonitor: IReadValueId;
   if (typeof monitoredItemId === 'string') {
     itemToMonitor = {
       nodeId: resolveNodeId(monitoredItemId),
@@ -200,8 +187,7 @@ export async function perform_operation_on_monitoredItemP(
     client,
     endpointUrl,
     async (session, subscription, inner_done) => {
-      let monitoredItem;
-      monitoredItem = new MonitoredItem(subscription, itemToMonitor, {
+      const monitoredItem = new MonitoredItem(subscription, itemToMonitor, {
         samplingInterval: 1000,
         discardOldest: true,
         queueSize: 1,
@@ -213,9 +199,7 @@ export async function perform_operation_on_monitoredItemP(
         })
       );
 
-      await new Promise((resolve) =>
-        func(session, subscription, monitoredItem, resolve)
-      );
+      await new Promise((resolve) => func(session, subscription, monitoredItem, resolve));
 
       await new Promise((resolve) => monitoredItem.terminate(resolve));
 
