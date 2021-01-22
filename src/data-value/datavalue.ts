@@ -88,7 +88,7 @@ export function apply_timestamps(
  * @private
  * @static
  */
-function _clone_with_array_replacement(dataValue: DataValue, result) {
+function _clone_with_array_replacement(dataValue: DataValue, result: any) {
   const statusCode =
     !result.statusCode || result.statusCode === StatusCodes.Good
       ? dataValue.statusCode
@@ -149,10 +149,7 @@ function sameDate(date1: Date, date2: Date) {
   return date1.getTime() === date2.getTime();
 }
 
-export function sourceTimestampHasChanged(
-  dataValue1: DataValue,
-  dataValue2: DataValue
-) {
+export function sourceTimestampHasChanged(dataValue1: DataValue, dataValue2: DataValue) {
   assert(dataValue1, 'expecting valid dataValue1');
   assert(dataValue2, 'expecting valid dataValue2');
   const hasChanged =
@@ -161,10 +158,7 @@ export function sourceTimestampHasChanged(
   return hasChanged;
 }
 
-export function serverTimestampHasChanged(
-  dataValue1: DataValue,
-  dataValue2: DataValue
-) {
+export function serverTimestampHasChanged(dataValue1: DataValue, dataValue2: DataValue) {
   assert(dataValue1, 'expecting valid dataValue1');
   assert(dataValue2, 'expecting valid dataValue2');
   const hasChanged =
@@ -198,9 +192,7 @@ export function timestampHasChanged(
     case TimestampsToReturn.Server:
       return serverTimestampHasChanged(dataValue1, dataValue2);
     default:
-      throw new Error(
-        'timesampHasChanged function called with TimestampsToReturn.Invalid'
-      );
+      throw new Error('timesampHasChanged function called with TimestampsToReturn.Invalid');
   }
   //    return sourceTimestampHasChanged(dataValue1,dataValue2) || serverTimestampHasChanged(dataValue1,dataValue2);
 }
@@ -237,11 +229,7 @@ export function sameDataValue(
   // This will prevent us to deep compare potential large arrays.
   // but before this is possible, we need to implement a mechanism
   // that ensure that date() is always strictly increasing
-  if (
-    v1.sourceTimestamp &&
-    v2.sourceTimestamp &&
-    !sourceTimestampHasChanged(v1, v2)
-  ) {
+  if (v1.sourceTimestamp && v2.sourceTimestamp && !sourceTimestampHasChanged(v1, v2)) {
     return true;
   }
   if (timestampHasChanged(v1, v2, timestampsToReturn)) {

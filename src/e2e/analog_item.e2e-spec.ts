@@ -4,15 +4,13 @@ import { AttributeIds, ReferenceTypeIds, StatusCodes } from '../constants';
 import {
   BrowseDescription,
   BrowseDirection,
+  BrowseResult,
   NodeIdType,
   ReadValueId,
 } from '../generated';
 import { coerceNodeId, NodeId } from '../nodeid/nodeid';
 import { DataType } from '../variant/DataTypeEnum';
-import {
-  E2ETestController,
-  getE2ETestController,
-} from './utils/test_server_controller';
+import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 
 describe('AnalogItem', function () {
   let session: ClientSession;
@@ -61,16 +59,12 @@ describe('AnalogItem', function () {
   function findProperty(
     sess: ClientSession,
     nodeId: NodeId,
-    browseName,
-    callback
+    browseName: string,
+    callback: (err: Error | null, propertyId?: NodeId) => void
   ) {
     const browseDescription = new BrowseDescription({
       nodeId: nodeId,
-      referenceTypeId: new NodeId(
-        NodeIdType.Numeric,
-        ReferenceTypeIds.HasProperty,
-        0
-      ),
+      referenceTypeId: new NodeId(NodeIdType.Numeric, ReferenceTypeIds.HasProperty, 0),
       browseDirection: BrowseDirection.Forward,
       resultMask: 0x3f,
     });

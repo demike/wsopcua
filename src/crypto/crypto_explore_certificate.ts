@@ -52,8 +52,8 @@
 //  - http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art030
 //  openssl can be also used to discover the content of a DER file
 //  $ openssl asn1parse -in cert.pem
-import {Certificate, PEM, DER} from './common';
-import {PublicKeyLength} from './explore_certificate';
+import { Certificate, PEM, DER } from './common';
+import { PublicKeyLength } from './explore_certificate';
 import { buf2hex, buf2string, base64ToBuf } from './crypto_utils';
 import { assert } from '../assert';
 import { concatTypedArrays } from '../basic-types/array';
@@ -65,408 +65,461 @@ import { concatTypedArrays } from '../basic-types/array';
 
 // https://github.com/lapo-luchini/asn1js/blob/master/asn1.js
 const tagTypes = {
-    BOOLEAN: 0x01,
-    INTEGER: 0x02,
-    BIT_STRING: 0x03,
-    OCTET_STRING: 0x04,
-    NULL: 0x05,
-    OBJECT_IDENTIFIER: 0x06,
-    UTF8String: 0x0C,
-    NumericString: 0x12,
-    PrintableString: 0x13,
-    TeletexString: 0x14,
-    IA5String: 0x16,
-    UTCTime: 0x17,
-    GeneralizedTime: 0x18
+  BOOLEAN: 0x01,
+  INTEGER: 0x02,
+  BIT_STRING: 0x03,
+  OCTET_STRING: 0x04,
+  NULL: 0x05,
+  OBJECT_IDENTIFIER: 0x06,
+  UTF8String: 0x0c,
+  NumericString: 0x12,
+  PrintableString: 0x13,
+  TeletexString: 0x14,
+  IA5String: 0x16,
+  UTCTime: 0x17,
+  GeneralizedTime: 0x18,
 };
 
 // https://github.com/lapo-luchini/asn1js/blob/master/oids.js
 const oid_map: any = {
+  '1.2.840.113549.1.1': { d: 'pkcs-1', c: '', w: false },
+  '1.2.840.113549.1.1.1': { d: 'rsaEncryption', c: 'PKCS #1', w: false },
+  '1.2.840.113549.1.1.2': { d: 'md2WithRSAEncryption', c: 'PKCS #1', w: false },
+  '1.2.840.113549.1.1.3': { d: 'md4WithRSAEncryption', c: 'PKCS #1', w: false },
+  '1.2.840.113549.1.1.4': { d: 'md5WithRSAEncryption', c: 'PKCS #1', w: false },
+  '1.2.840.113549.1.1.5': { d: 'sha1WithRSAEncryption', c: 'PKCS #1', w: false },
+  '1.2.840.113549.1.1.7': { d: 'rsaOAEP', c: 'PKCS #1', w: false },
+  '1.2.840.113549.1.1.8': { d: 'pkcs1-MGF', c: 'PKCS #1', w: false },
+  '1.2.840.113549.1.1.9': { d: 'rsaOAEP-pSpecified', c: 'PKCS #1', w: false },
+  '1.2.840.113549.1.1.10': { d: 'rsaPSS', c: 'PKCS #1', w: false },
+  '1.2.840.113549.1.1.11': { d: 'sha256WithRSAEncryption', c: 'PKCS #1', w: false },
+  '1.2.840.113549.1.1.12': { d: 'sha384WithRSAEncryption', c: 'PKCS #1', w: false },
+  '1.2.840.113549.1.1.13': { d: 'sha512WithRSAEncryption', c: 'PKCS #1', w: false },
+  '1.2.840.113549.1.1.14': { d: 'sha224WithRSAEncryption', c: 'PKCS #1', w: false },
 
-    '1.2.840.113549.1.1': {d: 'pkcs-1', c: '', w: false},
-    '1.2.840.113549.1.1.1': {d: 'rsaEncryption', c: 'PKCS #1', w: false},
-    '1.2.840.113549.1.1.2': {d: 'md2WithRSAEncryption', c: 'PKCS #1', w: false},
-    '1.2.840.113549.1.1.3': {d: 'md4WithRSAEncryption', c: 'PKCS #1', w: false},
-    '1.2.840.113549.1.1.4': {d: 'md5WithRSAEncryption', c: 'PKCS #1', w: false},
-    '1.2.840.113549.1.1.5': {d: 'sha1WithRSAEncryption', c: 'PKCS #1', w: false},
-    '1.2.840.113549.1.1.7': {d: 'rsaOAEP', c: 'PKCS #1', w: false},
-    '1.2.840.113549.1.1.8': {d: 'pkcs1-MGF', c: 'PKCS #1', w: false},
-    '1.2.840.113549.1.1.9': {d: 'rsaOAEP-pSpecified', c: 'PKCS #1', w: false},
-    '1.2.840.113549.1.1.10': {d: 'rsaPSS', c: 'PKCS #1', w: false},
-    '1.2.840.113549.1.1.11': {d: 'sha256WithRSAEncryption', c: 'PKCS #1', w: false},
-    '1.2.840.113549.1.1.12': {d: 'sha384WithRSAEncryption', c: 'PKCS #1', w: false},
-    '1.2.840.113549.1.1.13': {d: 'sha512WithRSAEncryption', c: 'PKCS #1', w: false},
-    '1.2.840.113549.1.1.14': {d: 'sha224WithRSAEncryption', c: 'PKCS #1', w: false},
+  '1.2.840.113549.1.9.1': {
+    d: 'emailAddress',
+    c: 'PKCS #9. Deprecated, use an altName extension instead',
+    w: false,
+  },
+  '1.2.840.113549.1.9.2': { d: 'unstructuredName', c: 'PKCS #9', w: false },
+  '1.2.840.113549.1.9.3': { d: 'contentType', c: 'PKCS #9', w: false },
+  '1.2.840.113549.1.9.4': { d: 'messageDigest', c: 'PKCS #9', w: false },
+  '1.2.840.113549.1.9.5': { d: 'signingTime', c: 'PKCS #9', w: false },
+  '1.2.840.113549.1.9.6': { d: 'countersignature', c: 'PKCS #9', w: false },
+  '1.2.840.113549.1.9.7': { d: 'challengePassword', c: 'PKCS #9', w: false },
+  '1.2.840.113549.1.9.8': { d: 'unstructuredAddress', c: 'PKCS #9', w: false },
+  '1.2.840.113549.1.9.9': { d: 'extendedCertificateAttributes', c: 'PKCS #9', w: false },
+  '1.2.840.113549.1.9.10': { d: 'issuerAndSerialNumber', c: 'PKCS #9 experimental', w: true },
+  '1.2.840.113549.1.9.11': { d: 'passwordCheck', c: 'PKCS #9 experimental', w: true },
+  '1.2.840.113549.1.9.12': { d: 'publicKey', c: 'PKCS #9 experimental', w: true },
+  '1.2.840.113549.1.9.13': { d: 'signingDescription', c: 'PKCS #9', w: false },
+  '1.2.840.113549.1.9.14': { d: 'extensionRequest', c: 'PKCS #9 via CRMF', w: false },
 
-    '1.2.840.113549.1.9.1': {
-        d: 'emailAddress',
-        c: 'PKCS #9. Deprecated, use an altName extension instead',
-        w: false
-    },
-    '1.2.840.113549.1.9.2': {d: 'unstructuredName', c: 'PKCS #9', w: false},
-    '1.2.840.113549.1.9.3': {d: 'contentType', c: 'PKCS #9', w: false},
-    '1.2.840.113549.1.9.4': {d: 'messageDigest', c: 'PKCS #9', w: false},
-    '1.2.840.113549.1.9.5': {d: 'signingTime', c: 'PKCS #9', w: false},
-    '1.2.840.113549.1.9.6': {d: 'countersignature', c: 'PKCS #9', w: false},
-    '1.2.840.113549.1.9.7': {d: 'challengePassword', c: 'PKCS #9', w: false},
-    '1.2.840.113549.1.9.8': {d: 'unstructuredAddress', c: 'PKCS #9', w: false},
-    '1.2.840.113549.1.9.9': {d: 'extendedCertificateAttributes', c: 'PKCS #9', w: false},
-    '1.2.840.113549.1.9.10': {d: 'issuerAndSerialNumber', c: 'PKCS #9 experimental', w: true},
-    '1.2.840.113549.1.9.11': {d: 'passwordCheck', c: 'PKCS #9 experimental', w: true},
-    '1.2.840.113549.1.9.12': {d: 'publicKey', c: 'PKCS #9 experimental', w: true},
-    '1.2.840.113549.1.9.13': {d: 'signingDescription', c: 'PKCS #9', w: false},
-    '1.2.840.113549.1.9.14': {d: 'extensionRequest', c: 'PKCS #9 via CRMF', w: false},
+  '2.5.4.0': { d: 'objectClass', c: 'X.520 DN component', w: false },
+  '2.5.4.1': { d: 'aliasedEntryName', c: 'X.520 DN component', w: false },
+  '2.5.4.2': { d: 'knowledgeInformation', c: 'X.520 DN component', w: false },
+  '2.5.4.3': { d: 'commonName', c: 'X.520 DN component', w: false },
+  '2.5.4.4': { d: 'surname', c: 'X.520 DN component', w: false },
+  '2.5.4.5': { d: 'serialNumber', c: 'X.520 DN component', w: false },
+  '2.5.4.6': { d: 'countryName', c: 'X.520 DN component', w: false },
+  '2.5.4.7': { d: 'localityName', c: 'X.520 DN component', w: false },
+  '2.5.4.7.1': { d: 'collectiveLocalityName', c: 'X.520 DN component', w: false },
+  '2.5.4.8': { d: 'stateOrProvinceName', c: 'X.520 DN component', w: false },
+  '2.5.4.8.1': { d: 'collectiveStateOrProvinceName', c: 'X.520 DN component', w: false },
+  '2.5.4.9': { d: 'streetAddress', c: 'X.520 DN component', w: false },
+  '2.5.4.9.1': { d: 'collectiveStreetAddress', c: 'X.520 DN component', w: false },
+  '2.5.4.10': { d: 'organizationName', c: 'X.520 DN component', w: false },
+  '2.5.4.10.1': { d: 'collectiveOrganizationName', c: 'X.520 DN component', w: false },
+  '2.5.4.11': { d: 'organizationalUnitName', c: 'X.520 DN component', w: false },
+  '2.5.4.11.1': { d: 'collectiveOrganizationalUnitName', c: 'X.520 DN component', w: false },
+  '2.5.4.12': { d: 'title', c: 'X.520 DN component', w: false },
+  '2.5.4.13': { d: 'description', c: 'X.520 DN component', w: false },
+  '2.5.4.14': { d: 'searchGuide', c: 'X.520 DN component', w: false },
+  '2.5.4.15': { d: 'businessCategory', c: 'X.520 DN component', w: false },
+  '2.5.4.16': { d: 'postalAddress', c: 'X.520 DN component', w: false },
+  '2.5.4.16.1': { d: 'collectivePostalAddress', c: 'X.520 DN component', w: false },
+  '2.5.4.17': { d: 'postalCode', c: 'X.520 DN component', w: false },
+  '2.5.4.17.1': { d: 'collectivePostalCode', c: 'X.520 DN component', w: false },
+  '2.5.4.18': { d: 'postOfficeBox', c: 'X.520 DN component', w: false },
+  '2.5.4.18.1': { d: 'collectivePostOfficeBox', c: 'X.520 DN component', w: false },
+  '2.5.4.19': { d: 'physicalDeliveryOfficeName', c: 'X.520 DN component', w: false },
+  '2.5.4.19.1': { d: 'collectivePhysicalDeliveryOfficeName', c: 'X.520 DN component', w: false },
+  '2.5.4.20': { d: 'telephoneNumber', c: 'X.520 DN component', w: false },
+  '2.5.4.20.1': { d: 'collectiveTelephoneNumber', c: 'X.520 DN component', w: false },
+  '2.5.4.21': { d: 'telexNumber', c: 'X.520 DN component', w: false },
+  '2.5.4.21.1': { d: 'collectiveTelexNumber', c: 'X.520 DN component', w: false },
+  '2.5.4.22': { d: 'teletexTerminalIdentifier', c: 'X.520 DN component', w: false },
+  '2.5.4.22.1': { d: 'collectiveTeletexTerminalIdentifier', c: 'X.520 DN component', w: false },
+  '2.5.4.23': { d: 'facsimileTelephoneNumber', c: 'X.520 DN component', w: false },
+  '2.5.4.23.1': { d: 'collectiveFacsimileTelephoneNumber', c: 'X.520 DN component', w: false },
+  '2.5.4.24': { d: 'x121Address', c: 'X.520 DN component', w: false },
+  '2.5.4.25': { d: 'internationalISDNNumber', c: 'X.520 DN component', w: false },
+  '2.5.4.25.1': { d: 'collectiveInternationalISDNNumber', c: 'X.520 DN component', w: false },
+  '2.5.4.26': { d: 'registeredAddress', c: 'X.520 DN component', w: false },
+  '2.5.4.27': { d: 'destinationIndicator', c: 'X.520 DN component', w: false },
+  '2.5.4.28': { d: 'preferredDeliveryMehtod', c: 'X.520 DN component', w: false },
+  '2.5.4.29': { d: 'presentationAddress', c: 'X.520 DN component', w: false },
+  '2.5.4.30': { d: 'supportedApplicationContext', c: 'X.520 DN component', w: false },
+  '2.5.4.31': { d: 'member', c: 'X.520 DN component', w: false },
+  '2.5.4.32': { d: 'owner', c: 'X.520 DN component', w: false },
+  '2.5.4.33': { d: 'roleOccupant', c: 'X.520 DN component', w: false },
+  '2.5.4.34': { d: 'seeAlso', c: 'X.520 DN component', w: false },
+  '2.5.4.35': { d: 'userPassword', c: 'X.520 DN component', w: false },
+  '2.5.4.36': { d: 'userCertificate', c: 'X.520 DN component', w: false },
+  '2.5.4.37': { d: 'caCertificate', c: 'X.520 DN component', w: false },
+  '2.5.4.38': { d: 'authorityRevocationList', c: 'X.520 DN component', w: false },
+  '2.5.4.39': { d: 'certificateRevocationList', c: 'X.520 DN component', w: false },
+  '2.5.4.40': { d: 'crossCertificatePair', c: 'X.520 DN component', w: false },
+  '2.5.4.41': { d: 'name', c: 'X.520 DN component', w: false },
+  '2.5.4.42': { d: 'givenName', c: 'X.520 DN component', w: false },
+  '2.5.4.43': { d: 'initials', c: 'X.520 DN component', w: false },
+  '2.5.4.44': { d: 'generationQualifier', c: 'X.520 DN component', w: false },
+  '2.5.4.45': { d: 'uniqueIdentifier', c: 'X.520 DN component', w: false },
+  '2.5.4.46': { d: 'dnQualifier', c: 'X.520 DN component', w: false },
+  '2.5.4.47': { d: 'enhancedSearchGuide', c: 'X.520 DN component', w: false },
+  '2.5.4.48': { d: 'protocolInformation', c: 'X.520 DN component', w: false },
+  '2.5.4.49': { d: 'distinguishedName', c: 'X.520 DN component', w: false },
+  '2.5.4.50': { d: 'uniqueMember', c: 'X.520 DN component', w: false },
+  '2.5.4.51': { d: 'houseIdentifier', c: 'X.520 DN component', w: false },
+  '2.5.4.52': { d: 'supportedAlgorithms', c: 'X.520 DN component', w: false },
+  '2.5.4.53': { d: 'deltaRevocationList', c: 'X.520 DN component', w: false },
+  '2.5.4.54': { d: 'dmdName', c: 'X.520 DN component', w: false },
+  '2.5.4.55': { d: 'clearance', c: 'X.520 DN component', w: false },
+  '2.5.4.56': { d: 'defaultDirQop', c: 'X.520 DN component', w: false },
+  '2.5.4.57': { d: 'attributeIntegrityInfo', c: 'X.520 DN component', w: false },
+  '2.5.4.58': { d: 'attributeCertificate', c: 'X.520 DN component', w: false },
+  '2.5.4.59': { d: 'attributeCertificateRevocationList', c: 'X.520 DN component', w: false },
+  '2.5.4.60': { d: 'confKeyInfo', c: 'X.520 DN component', w: false },
+  '2.5.4.61': { d: 'aACertificate', c: 'X.520 DN component', w: false },
+  '2.5.4.62': { d: 'attributeDescriptorCertificate', c: 'X.520 DN component', w: false },
+  '2.5.4.63': { d: 'attributeAuthorityRevocationList', c: 'X.520 DN component', w: false },
+  '2.5.4.64': { d: 'familyInformation', c: 'X.520 DN component', w: false },
+  '2.5.4.65': { d: 'pseudonym', c: 'X.520 DN component', w: false },
+  '2.5.4.66': { d: 'communicationsService', c: 'X.520 DN component', w: false },
+  '2.5.4.67': { d: 'communicationsNetwork', c: 'X.520 DN component', w: false },
+  '2.5.4.68': { d: 'certificationPracticeStmt', c: 'X.520 DN component', w: false },
+  '2.5.4.69': { d: 'certificatePolicy', c: 'X.520 DN component', w: false },
+  '2.5.4.70': { d: 'pkiPath', c: 'X.520 DN component', w: false },
+  '2.5.4.71': { d: 'privPolicy', c: 'X.520 DN component', w: false },
+  '2.5.4.72': { d: 'role', c: 'X.520 DN component', w: false },
+  '2.5.4.73': { d: 'delegationPath', c: 'X.520 DN component', w: false },
+  '2.5.4.74': { d: 'protPrivPolicy', c: 'X.520 DN component', w: false },
+  '2.5.4.75': { d: 'xMLPrivilegeInfo', c: 'X.520 DN component', w: false },
+  '2.5.4.76': { d: 'xmlPrivPolicy', c: 'X.520 DN component', w: false },
+  '2.5.4.82': { d: 'permission', c: 'X.520 DN component', w: false },
+  '2.5.6.0': { d: 'top', c: 'X.520 objectClass', w: false },
+  '2.5.6.1': { d: 'alias', c: 'X.520 objectClass', w: false },
+  '2.5.6.2': { d: 'country', c: 'X.520 objectClass', w: false },
+  '2.5.6.3': { d: 'locality', c: 'X.520 objectClass', w: false },
+  '2.5.6.4': { d: 'organization', c: 'X.520 objectClass', w: false },
+  '2.5.6.5': { d: 'organizationalUnit', c: 'X.520 objectClass', w: false },
+  '2.5.6.6': { d: 'person', c: 'X.520 objectClass', w: false },
+  '2.5.6.7': { d: 'organizationalPerson', c: 'X.520 objectClass', w: false },
+  '2.5.6.8': { d: 'organizationalRole', c: 'X.520 objectClass', w: false },
+  '2.5.6.9': { d: 'groupOfNames', c: 'X.520 objectClass', w: false },
+  '2.5.6.10': { d: 'residentialPerson', c: 'X.520 objectClass', w: false },
+  '2.5.6.11': { d: 'applicationProcess', c: 'X.520 objectClass', w: false },
+  '2.5.6.12': { d: 'applicationEntity', c: 'X.520 objectClass', w: false },
+  '2.5.6.13': { d: 'dSA', c: 'X.520 objectClass', w: false },
+  '2.5.6.14': { d: 'device', c: 'X.520 objectClass', w: false },
+  '2.5.6.15': { d: 'strongAuthenticationUser', c: 'X.520 objectClass', w: false },
+  '2.5.6.16': { d: 'certificateAuthority', c: 'X.520 objectClass', w: false },
+  '2.5.6.17': { d: 'groupOfUniqueNames', c: 'X.520 objectClass', w: false },
+  '2.5.6.21': { d: 'pkiUser', c: 'X.520 objectClass', w: false },
+  '2.5.6.22': { d: 'pkiCA', c: 'X.520 objectClass', w: false },
 
-    '2.5.4.0': {d: 'objectClass', c: 'X.520 DN component', w: false},
-    '2.5.4.1': {d: 'aliasedEntryName', c: 'X.520 DN component', w: false},
-    '2.5.4.2': {d: 'knowledgeInformation', c: 'X.520 DN component', w: false},
-    '2.5.4.3': {d: 'commonName', c: 'X.520 DN component', w: false},
-    '2.5.4.4': {d: 'surname', c: 'X.520 DN component', w: false},
-    '2.5.4.5': {d: 'serialNumber', c: 'X.520 DN component', w: false},
-    '2.5.4.6': {d: 'countryName', c: 'X.520 DN component', w: false},
-    '2.5.4.7': {d: 'localityName', c: 'X.520 DN component', w: false},
-    '2.5.4.7.1': {d: 'collectiveLocalityName', c: 'X.520 DN component', w: false},
-    '2.5.4.8': {d: 'stateOrProvinceName', c: 'X.520 DN component', w: false},
-    '2.5.4.8.1': {d: 'collectiveStateOrProvinceName', c: 'X.520 DN component', w: false},
-    '2.5.4.9': {d: 'streetAddress', c: 'X.520 DN component', w: false},
-    '2.5.4.9.1': {d: 'collectiveStreetAddress', c: 'X.520 DN component', w: false},
-    '2.5.4.10': {d: 'organizationName', c: 'X.520 DN component', w: false},
-    '2.5.4.10.1': {d: 'collectiveOrganizationName', c: 'X.520 DN component', w: false},
-    '2.5.4.11': {d: 'organizationalUnitName', c: 'X.520 DN component', w: false},
-    '2.5.4.11.1': {d: 'collectiveOrganizationalUnitName', c: 'X.520 DN component', w: false},
-    '2.5.4.12': {d: 'title', c: 'X.520 DN component', w: false},
-    '2.5.4.13': {d: 'description', c: 'X.520 DN component', w: false},
-    '2.5.4.14': {d: 'searchGuide', c: 'X.520 DN component', w: false},
-    '2.5.4.15': {d: 'businessCategory', c: 'X.520 DN component', w: false},
-    '2.5.4.16': {d: 'postalAddress', c: 'X.520 DN component', w: false},
-    '2.5.4.16.1': {d: 'collectivePostalAddress', c: 'X.520 DN component', w: false},
-    '2.5.4.17': {d: 'postalCode', c: 'X.520 DN component', w: false},
-    '2.5.4.17.1': {d: 'collectivePostalCode', c: 'X.520 DN component', w: false},
-    '2.5.4.18': {d: 'postOfficeBox', c: 'X.520 DN component', w: false},
-    '2.5.4.18.1': {d: 'collectivePostOfficeBox', c: 'X.520 DN component', w: false},
-    '2.5.4.19': {d: 'physicalDeliveryOfficeName', c: 'X.520 DN component', w: false},
-    '2.5.4.19.1': {d: 'collectivePhysicalDeliveryOfficeName', c: 'X.520 DN component', w: false},
-    '2.5.4.20': {d: 'telephoneNumber', c: 'X.520 DN component', w: false},
-    '2.5.4.20.1': {d: 'collectiveTelephoneNumber', c: 'X.520 DN component', w: false},
-    '2.5.4.21': {d: 'telexNumber', c: 'X.520 DN component', w: false},
-    '2.5.4.21.1': {d: 'collectiveTelexNumber', c: 'X.520 DN component', w: false},
-    '2.5.4.22': {d: 'teletexTerminalIdentifier', c: 'X.520 DN component', w: false},
-    '2.5.4.22.1': {d: 'collectiveTeletexTerminalIdentifier', c: 'X.520 DN component', w: false},
-    '2.5.4.23': {d: 'facsimileTelephoneNumber', c: 'X.520 DN component', w: false},
-    '2.5.4.23.1': {d: 'collectiveFacsimileTelephoneNumber', c: 'X.520 DN component', w: false},
-    '2.5.4.24': {d: 'x121Address', c: 'X.520 DN component', w: false},
-    '2.5.4.25': {d: 'internationalISDNNumber', c: 'X.520 DN component', w: false},
-    '2.5.4.25.1': {d: 'collectiveInternationalISDNNumber', c: 'X.520 DN component', w: false},
-    '2.5.4.26': {d: 'registeredAddress', c: 'X.520 DN component', w: false},
-    '2.5.4.27': {d: 'destinationIndicator', c: 'X.520 DN component', w: false},
-    '2.5.4.28': {d: 'preferredDeliveryMehtod', c: 'X.520 DN component', w: false},
-    '2.5.4.29': {d: 'presentationAddress', c: 'X.520 DN component', w: false},
-    '2.5.4.30': {d: 'supportedApplicationContext', c: 'X.520 DN component', w: false},
-    '2.5.4.31': {d: 'member', c: 'X.520 DN component', w: false},
-    '2.5.4.32': {d: 'owner', c: 'X.520 DN component', w: false},
-    '2.5.4.33': {d: 'roleOccupant', c: 'X.520 DN component', w: false},
-    '2.5.4.34': {d: 'seeAlso', c: 'X.520 DN component', w: false},
-    '2.5.4.35': {d: 'userPassword', c: 'X.520 DN component', w: false},
-    '2.5.4.36': {d: 'userCertificate', c: 'X.520 DN component', w: false},
-    '2.5.4.37': {d: 'caCertificate', c: 'X.520 DN component', w: false},
-    '2.5.4.38': {d: 'authorityRevocationList', c: 'X.520 DN component', w: false},
-    '2.5.4.39': {d: 'certificateRevocationList', c: 'X.520 DN component', w: false},
-    '2.5.4.40': {d: 'crossCertificatePair', c: 'X.520 DN component', w: false},
-    '2.5.4.41': {d: 'name', c: 'X.520 DN component', w: false},
-    '2.5.4.42': {d: 'givenName', c: 'X.520 DN component', w: false},
-    '2.5.4.43': {d: 'initials', c: 'X.520 DN component', w: false},
-    '2.5.4.44': {d: 'generationQualifier', c: 'X.520 DN component', w: false},
-    '2.5.4.45': {d: 'uniqueIdentifier', c: 'X.520 DN component', w: false},
-    '2.5.4.46': {d: 'dnQualifier', c: 'X.520 DN component', w: false},
-    '2.5.4.47': {d: 'enhancedSearchGuide', c: 'X.520 DN component', w: false},
-    '2.5.4.48': {d: 'protocolInformation', c: 'X.520 DN component', w: false},
-    '2.5.4.49': {d: 'distinguishedName', c: 'X.520 DN component', w: false},
-    '2.5.4.50': {d: 'uniqueMember', c: 'X.520 DN component', w: false},
-    '2.5.4.51': {d: 'houseIdentifier', c: 'X.520 DN component', w: false},
-    '2.5.4.52': {d: 'supportedAlgorithms', c: 'X.520 DN component', w: false},
-    '2.5.4.53': {d: 'deltaRevocationList', c: 'X.520 DN component', w: false},
-    '2.5.4.54': {d: 'dmdName', c: 'X.520 DN component', w: false},
-    '2.5.4.55': {d: 'clearance', c: 'X.520 DN component', w: false},
-    '2.5.4.56': {d: 'defaultDirQop', c: 'X.520 DN component', w: false},
-    '2.5.4.57': {d: 'attributeIntegrityInfo', c: 'X.520 DN component', w: false},
-    '2.5.4.58': {d: 'attributeCertificate', c: 'X.520 DN component', w: false},
-    '2.5.4.59': {d: 'attributeCertificateRevocationList', c: 'X.520 DN component', w: false},
-    '2.5.4.60': {d: 'confKeyInfo', c: 'X.520 DN component', w: false},
-    '2.5.4.61': {d: 'aACertificate', c: 'X.520 DN component', w: false},
-    '2.5.4.62': {d: 'attributeDescriptorCertificate', c: 'X.520 DN component', w: false},
-    '2.5.4.63': {d: 'attributeAuthorityRevocationList', c: 'X.520 DN component', w: false},
-    '2.5.4.64': {d: 'familyInformation', c: 'X.520 DN component', w: false},
-    '2.5.4.65': {d: 'pseudonym', c: 'X.520 DN component', w: false},
-    '2.5.4.66': {d: 'communicationsService', c: 'X.520 DN component', w: false},
-    '2.5.4.67': {d: 'communicationsNetwork', c: 'X.520 DN component', w: false},
-    '2.5.4.68': {d: 'certificationPracticeStmt', c: 'X.520 DN component', w: false},
-    '2.5.4.69': {d: 'certificatePolicy', c: 'X.520 DN component', w: false},
-    '2.5.4.70': {d: 'pkiPath', c: 'X.520 DN component', w: false},
-    '2.5.4.71': {d: 'privPolicy', c: 'X.520 DN component', w: false},
-    '2.5.4.72': {d: 'role', c: 'X.520 DN component', w: false},
-    '2.5.4.73': {d: 'delegationPath', c: 'X.520 DN component', w: false},
-    '2.5.4.74': {d: 'protPrivPolicy', c: 'X.520 DN component', w: false},
-    '2.5.4.75': {d: 'xMLPrivilegeInfo', c: 'X.520 DN component', w: false},
-    '2.5.4.76': {d: 'xmlPrivPolicy', c: 'X.520 DN component', w: false},
-    '2.5.4.82': {d: 'permission', c: 'X.520 DN component', w: false},
-    '2.5.6.0': {d: 'top', c: 'X.520 objectClass', w: false},
-    '2.5.6.1': {d: 'alias', c: 'X.520 objectClass', w: false},
-    '2.5.6.2': {d: 'country', c: 'X.520 objectClass', w: false},
-    '2.5.6.3': {d: 'locality', c: 'X.520 objectClass', w: false},
-    '2.5.6.4': {d: 'organization', c: 'X.520 objectClass', w: false},
-    '2.5.6.5': {d: 'organizationalUnit', c: 'X.520 objectClass', w: false},
-    '2.5.6.6': {d: 'person', c: 'X.520 objectClass', w: false},
-    '2.5.6.7': {d: 'organizationalPerson', c: 'X.520 objectClass', w: false},
-    '2.5.6.8': {d: 'organizationalRole', c: 'X.520 objectClass', w: false},
-    '2.5.6.9': {d: 'groupOfNames', c: 'X.520 objectClass', w: false},
-    '2.5.6.10': {d: 'residentialPerson', c: 'X.520 objectClass', w: false},
-    '2.5.6.11': {d: 'applicationProcess', c: 'X.520 objectClass', w: false},
-    '2.5.6.12': {d: 'applicationEntity', c: 'X.520 objectClass', w: false},
-    '2.5.6.13': {d: 'dSA', c: 'X.520 objectClass', w: false},
-    '2.5.6.14': {d: 'device', c: 'X.520 objectClass', w: false},
-    '2.5.6.15': {d: 'strongAuthenticationUser', c: 'X.520 objectClass', w: false},
-    '2.5.6.16': {d: 'certificateAuthority', c: 'X.520 objectClass', w: false},
-    '2.5.6.17': {d: 'groupOfUniqueNames', c: 'X.520 objectClass', w: false},
-    '2.5.6.21': {d: 'pkiUser', c: 'X.520 objectClass', w: false},
-    '2.5.6.22': {d: 'pkiCA', c: 'X.520 objectClass', w: false},
-
-    '2.5.29.1': {d: 'authorityKeyIdentifier', c: 'X.509 extension. Deprecated, use 2 5 29 35 instead', w: true},
-    '2.5.29.2': {d: 'keyAttributes', c: 'X.509 extension. Obsolete, use keyUsage/extKeyUsage instead', w: true},
-    '2.5.29.3': {d: 'certificatePolicies', c: 'X.509 extension. Deprecated, use 2 5 29 32 instead', w: true},
-    '2.5.29.4': {
-        d: 'keyUsageRestriction',
-        c: 'X.509 extension. Obsolete, use keyUsage/extKeyUsage instead',
-        w: true
-    },
-    '2.5.29.5': {d: 'policyMapping', c: 'X.509 extension. Deprecated, use 2 5 29 33 instead', w: true},
-    '2.5.29.6': {d: 'subtreesConstraint', c: 'X.509 extension. Obsolete, use nameConstraints instead', w: true},
-    '2.5.29.7': {d: 'subjectAltName', c: 'X.509 extension. Deprecated, use 2 5 29 17 instead', w: true},
-    '2.5.29.8': {d: 'issuerAltName', c: 'X.509 extension. Deprecated, use 2 5 29 18 instead', w: true},
-    '2.5.29.9': {d: 'subjectDirectoryAttributes', c: 'X.509 extension', w: false},
-    '2.5.29.10': {d: 'basicConstraints', c: 'X.509 extension. Deprecated, use 2 5 29 19 instead', w: true},
-    '2.5.29.11': {d: 'nameConstraints', c: 'X.509 extension. Deprecated, use 2 5 29 30 instead', w: true},
-    '2.5.29.12': {d: 'policyConstraints', c: 'X.509 extension. Deprecated, use 2 5 29 36 instead', w: true},
-    '2.5.29.13': {d: 'basicConstraints', c: 'X.509 extension. Deprecated, use 2 5 29 19 instead', w: true},
-    '2.5.29.14': {d: 'subjectKeyIdentifier', c: 'X.509 extension', w: false},
-    '2.5.29.15': {d: 'keyUsage', c: 'X.509 extension', w: false},
-    '2.5.29.16': {d: 'privateKeyUsagePeriod', c: 'X.509 extension', w: false},
-    '2.5.29.17': {d: 'subjectAltName', c: 'X.509 extension', w: false},
-    '2.5.29.18': {d: 'issuerAltName', c: 'X.509 extension', w: false},
-    '2.5.29.19': {d: 'basicConstraints', c: 'X.509 extension', w: false},
-    '2.5.29.20': {d: 'cRLNumber', c: 'X.509 extension', w: false},
-    '2.5.29.21': {d: 'cRLReason', c: 'X.509 extension', w: false},
-    '2.5.29.22': {d: 'expirationDate', c: 'X.509 extension. Deprecated, alternative OID uncertain', w: true},
-    '2.5.29.23': {d: 'instructionCode', c: 'X.509 extension', w: false},
-    '2.5.29.24': {d: 'invalidityDate', c: 'X.509 extension', w: false},
-    '2.5.29.25': {d: 'cRLDistributionPoints', c: 'X.509 extension. Deprecated, use 2 5 29 31 instead', w: true},
-    '2.5.29.26': {
-        d: 'issuingDistributionPoint',
-        c: 'X.509 extension. Deprecated, use 2 5 29 28 instead',
-        w: true
-    },
-    '2.5.29.27': {d: 'deltaCRLIndicator', c: 'X.509 extension', w: false},
-    '2.5.29.28': {d: 'issuingDistributionPoint', c: 'X.509 extension', w: false},
-    '2.5.29.29': {d: 'certificateIssuer', c: 'X.509 extension', w: false},
-    '2.5.29.30': {d: 'nameConstraints', c: 'X.509 extension', w: false},
-    '2.5.29.31': {d: 'cRLDistributionPoints', c: 'X.509 extension', w: false},
-    '2.5.29.32': {d: 'certificatePolicies', c: 'X.509 extension', w: false},
-    '2.5.29.32.0': {d: 'anyPolicy', c: 'X.509 certificate policy', w: false},
-    '2.5.29.33': {d: 'policyMappings', c: 'X.509 extension', w: false},
-    '2.5.29.34': {d: 'policyConstraints', c: 'X.509 extension. Deprecated, use 2 5 29 36 instead', w: true},
-    '2.5.29.35': {d: 'authorityKeyIdentifier', c: 'X.509 extension', w: false},
-    '2.5.29.36': {d: 'policyConstraints', c: 'X.509 extension', w: false},
-    '2.5.29.37': {d: 'extKeyUsage', c: 'X.509 extension', w: false},
-    '2.5.29.37.0': {d: 'anyExtendedKeyUsage', c: 'X.509 extended key usage', w: false},
-    '2.5.29.38': {d: 'authorityAttributeIdentifier', c: 'X.509 extension', w: false},
-    '2.5.29.39': {d: 'roleSpecCertIdentifier', c: 'X.509 extension', w: false},
-    '2.5.29.40': {d: 'cRLStreamIdentifier', c: 'X.509 extension', w: false},
-    '2.5.29.41': {d: 'basicAttConstraints', c: 'X.509 extension', w: false},
-    '2.5.29.42': {d: 'delegatedNameConstraints', c: 'X.509 extension', w: false},
-    '2.5.29.43': {d: 'timeSpecification', c: 'X.509 extension', w: false},
-    '2.5.29.44': {d: 'cRLScope', c: 'X.509 extension', w: false},
-    '2.5.29.45': {d: 'statusReferrals', c: 'X.509 extension', w: false},
-    '2.5.29.46': {d: 'freshestCRL', c: 'X.509 extension', w: false},
-    '2.5.29.47': {d: 'orderedList', c: 'X.509 extension', w: false},
-    '2.5.29.48': {d: 'attributeDescriptor', c: 'X.509 extension', w: false},
-    '2.5.29.49': {d: 'userNotice', c: 'X.509 extension', w: false},
-    '2.5.29.50': {d: 'sOAIdentifier', c: 'X.509 extension', w: false},
-    '2.5.29.51': {d: 'baseUpdateTime', c: 'X.509 extension', w: false},
-    '2.5.29.52': {d: 'acceptableCertPolicies', c: 'X.509 extension', w: false},
-    '2.5.29.53': {d: 'deltaInfo', c: 'X.509 extension', w: false},
-    '2.5.29.54': {d: 'inhibitAnyPolicy', c: 'X.509 extension', w: false},
-    '2.5.29.55': {d: 'targetInformation', c: 'X.509 extension', w: false},
-    '2.5.29.56': {d: 'noRevAvail', c: 'X.509 extension', w: false},
-    '2.5.29.57': {d: 'acceptablePrivilegePolicies', c: 'X.509 extension', w: false},
-    '2.5.29.58': {d: 'toBeRevoked', c: 'X.509 extension', w: false},
-    '2.5.29.59': {d: 'revokedGroups', c: 'X.509 extension', w: false},
-    '2.5.29.60': {d: 'expiredCertsOnCRL', c: 'X.509 extension', w: false},
-    '2.5.29.61': {d: 'indirectIssuer', c: 'X.509 extension', w: false},
-    '2.5.29.62': {d: 'noAssertion', c: 'X.509 extension', w: false},
-    '2.5.29.63': {d: 'aAissuingDistributionPoint', c: 'X.509 extension', w: false},
-    '2.5.29.64': {d: 'issuedOnBehalfOf', c: 'X.509 extension', w: false},
-    '2.5.29.65': {d: 'singleUse', c: 'X.509 extension', w: false},
-    '2.5.29.66': {d: 'groupAC', c: 'X.509 extension', w: false},
-    '2.5.29.67': {d: 'allowedAttAss', c: 'X.509 extension', w: false},
-    '2.5.29.68': {d: 'attributeMappings', c: 'X.509 extension', w: false},
-    '2.5.29.69': {d: 'holderNameConstraints', c: 'X.509 extension', w: false},
-    'done': {}
+  '2.5.29.1': {
+    d: 'authorityKeyIdentifier',
+    c: 'X.509 extension. Deprecated, use 2 5 29 35 instead',
+    w: true,
+  },
+  '2.5.29.2': {
+    d: 'keyAttributes',
+    c: 'X.509 extension. Obsolete, use keyUsage/extKeyUsage instead',
+    w: true,
+  },
+  '2.5.29.3': {
+    d: 'certificatePolicies',
+    c: 'X.509 extension. Deprecated, use 2 5 29 32 instead',
+    w: true,
+  },
+  '2.5.29.4': {
+    d: 'keyUsageRestriction',
+    c: 'X.509 extension. Obsolete, use keyUsage/extKeyUsage instead',
+    w: true,
+  },
+  '2.5.29.5': {
+    d: 'policyMapping',
+    c: 'X.509 extension. Deprecated, use 2 5 29 33 instead',
+    w: true,
+  },
+  '2.5.29.6': {
+    d: 'subtreesConstraint',
+    c: 'X.509 extension. Obsolete, use nameConstraints instead',
+    w: true,
+  },
+  '2.5.29.7': {
+    d: 'subjectAltName',
+    c: 'X.509 extension. Deprecated, use 2 5 29 17 instead',
+    w: true,
+  },
+  '2.5.29.8': {
+    d: 'issuerAltName',
+    c: 'X.509 extension. Deprecated, use 2 5 29 18 instead',
+    w: true,
+  },
+  '2.5.29.9': { d: 'subjectDirectoryAttributes', c: 'X.509 extension', w: false },
+  '2.5.29.10': {
+    d: 'basicConstraints',
+    c: 'X.509 extension. Deprecated, use 2 5 29 19 instead',
+    w: true,
+  },
+  '2.5.29.11': {
+    d: 'nameConstraints',
+    c: 'X.509 extension. Deprecated, use 2 5 29 30 instead',
+    w: true,
+  },
+  '2.5.29.12': {
+    d: 'policyConstraints',
+    c: 'X.509 extension. Deprecated, use 2 5 29 36 instead',
+    w: true,
+  },
+  '2.5.29.13': {
+    d: 'basicConstraints',
+    c: 'X.509 extension. Deprecated, use 2 5 29 19 instead',
+    w: true,
+  },
+  '2.5.29.14': { d: 'subjectKeyIdentifier', c: 'X.509 extension', w: false },
+  '2.5.29.15': { d: 'keyUsage', c: 'X.509 extension', w: false },
+  '2.5.29.16': { d: 'privateKeyUsagePeriod', c: 'X.509 extension', w: false },
+  '2.5.29.17': { d: 'subjectAltName', c: 'X.509 extension', w: false },
+  '2.5.29.18': { d: 'issuerAltName', c: 'X.509 extension', w: false },
+  '2.5.29.19': { d: 'basicConstraints', c: 'X.509 extension', w: false },
+  '2.5.29.20': { d: 'cRLNumber', c: 'X.509 extension', w: false },
+  '2.5.29.21': { d: 'cRLReason', c: 'X.509 extension', w: false },
+  '2.5.29.22': {
+    d: 'expirationDate',
+    c: 'X.509 extension. Deprecated, alternative OID uncertain',
+    w: true,
+  },
+  '2.5.29.23': { d: 'instructionCode', c: 'X.509 extension', w: false },
+  '2.5.29.24': { d: 'invalidityDate', c: 'X.509 extension', w: false },
+  '2.5.29.25': {
+    d: 'cRLDistributionPoints',
+    c: 'X.509 extension. Deprecated, use 2 5 29 31 instead',
+    w: true,
+  },
+  '2.5.29.26': {
+    d: 'issuingDistributionPoint',
+    c: 'X.509 extension. Deprecated, use 2 5 29 28 instead',
+    w: true,
+  },
+  '2.5.29.27': { d: 'deltaCRLIndicator', c: 'X.509 extension', w: false },
+  '2.5.29.28': { d: 'issuingDistributionPoint', c: 'X.509 extension', w: false },
+  '2.5.29.29': { d: 'certificateIssuer', c: 'X.509 extension', w: false },
+  '2.5.29.30': { d: 'nameConstraints', c: 'X.509 extension', w: false },
+  '2.5.29.31': { d: 'cRLDistributionPoints', c: 'X.509 extension', w: false },
+  '2.5.29.32': { d: 'certificatePolicies', c: 'X.509 extension', w: false },
+  '2.5.29.32.0': { d: 'anyPolicy', c: 'X.509 certificate policy', w: false },
+  '2.5.29.33': { d: 'policyMappings', c: 'X.509 extension', w: false },
+  '2.5.29.34': {
+    d: 'policyConstraints',
+    c: 'X.509 extension. Deprecated, use 2 5 29 36 instead',
+    w: true,
+  },
+  '2.5.29.35': { d: 'authorityKeyIdentifier', c: 'X.509 extension', w: false },
+  '2.5.29.36': { d: 'policyConstraints', c: 'X.509 extension', w: false },
+  '2.5.29.37': { d: 'extKeyUsage', c: 'X.509 extension', w: false },
+  '2.5.29.37.0': { d: 'anyExtendedKeyUsage', c: 'X.509 extended key usage', w: false },
+  '2.5.29.38': { d: 'authorityAttributeIdentifier', c: 'X.509 extension', w: false },
+  '2.5.29.39': { d: 'roleSpecCertIdentifier', c: 'X.509 extension', w: false },
+  '2.5.29.40': { d: 'cRLStreamIdentifier', c: 'X.509 extension', w: false },
+  '2.5.29.41': { d: 'basicAttConstraints', c: 'X.509 extension', w: false },
+  '2.5.29.42': { d: 'delegatedNameConstraints', c: 'X.509 extension', w: false },
+  '2.5.29.43': { d: 'timeSpecification', c: 'X.509 extension', w: false },
+  '2.5.29.44': { d: 'cRLScope', c: 'X.509 extension', w: false },
+  '2.5.29.45': { d: 'statusReferrals', c: 'X.509 extension', w: false },
+  '2.5.29.46': { d: 'freshestCRL', c: 'X.509 extension', w: false },
+  '2.5.29.47': { d: 'orderedList', c: 'X.509 extension', w: false },
+  '2.5.29.48': { d: 'attributeDescriptor', c: 'X.509 extension', w: false },
+  '2.5.29.49': { d: 'userNotice', c: 'X.509 extension', w: false },
+  '2.5.29.50': { d: 'sOAIdentifier', c: 'X.509 extension', w: false },
+  '2.5.29.51': { d: 'baseUpdateTime', c: 'X.509 extension', w: false },
+  '2.5.29.52': { d: 'acceptableCertPolicies', c: 'X.509 extension', w: false },
+  '2.5.29.53': { d: 'deltaInfo', c: 'X.509 extension', w: false },
+  '2.5.29.54': { d: 'inhibitAnyPolicy', c: 'X.509 extension', w: false },
+  '2.5.29.55': { d: 'targetInformation', c: 'X.509 extension', w: false },
+  '2.5.29.56': { d: 'noRevAvail', c: 'X.509 extension', w: false },
+  '2.5.29.57': { d: 'acceptablePrivilegePolicies', c: 'X.509 extension', w: false },
+  '2.5.29.58': { d: 'toBeRevoked', c: 'X.509 extension', w: false },
+  '2.5.29.59': { d: 'revokedGroups', c: 'X.509 extension', w: false },
+  '2.5.29.60': { d: 'expiredCertsOnCRL', c: 'X.509 extension', w: false },
+  '2.5.29.61': { d: 'indirectIssuer', c: 'X.509 extension', w: false },
+  '2.5.29.62': { d: 'noAssertion', c: 'X.509 extension', w: false },
+  '2.5.29.63': { d: 'aAissuingDistributionPoint', c: 'X.509 extension', w: false },
+  '2.5.29.64': { d: 'issuedOnBehalfOf', c: 'X.509 extension', w: false },
+  '2.5.29.65': { d: 'singleUse', c: 'X.509 extension', w: false },
+  '2.5.29.66': { d: 'groupAC', c: 'X.509 extension', w: false },
+  '2.5.29.67': { d: 'allowedAttAss', c: 'X.509 extension', w: false },
+  '2.5.29.68': { d: 'attributeMappings', c: 'X.509 extension', w: false },
+  '2.5.29.69': { d: 'holderNameConstraints', c: 'X.509 extension', w: false },
+  done: {},
 };
 
-const PEM_REGEX = /^(-----BEGIN (.*)-----\r?\n([\/+=a-zA-Z0-9\r\n]*)\r?\n-----END \2-----\r?\n)/mg;
+const PEM_REGEX = /^(-----BEGIN (.*)-----\r?\n([\/+=a-zA-Z0-9\r\n]*)\r?\n-----END \2-----\r?\n)/gm;
 const PEM_TYPE_REGEX = /^(-----BEGIN (.*)-----)/m;
 
-
 interface BlockInfo {
-    tag: number;
-    position: number;
-    length: number;
+  tag: number;
+  position: number;
+  length: number;
 }
 
 function readTag(arbuf: Uint8Array, pos: number): BlockInfo {
+  assert(arbuf instanceof Uint8Array);
+  assert(typeof pos === 'number' && pos >= 0);
+  if (arbuf.byteLength <= pos) {
+    throw new Error('Invalid position : buf.length=' + arbuf.byteLength + ' pos =' + pos);
+  }
 
-    assert(arbuf instanceof Uint8Array);
-    assert( typeof pos === 'number' && pos >= 0);
-    if (arbuf.byteLength <= pos) {
-        throw new Error('Invalid position : buf.length=' + arbuf.byteLength + ' pos =' + pos);
+  const tag = arbuf[pos];
+  pos += 1;
+
+  let length = arbuf[pos];
+  pos += 1;
+
+  // tslint:disable:no-bitwise
+  if (length > 127) {
+    const nbBytes = length & 0x7f;
+    length = 0;
+    for (let i = 0; i < nbBytes; i++) {
+      length = length * 256 + arbuf[pos];
+      pos += 1;
     }
-
-    const tag = arbuf[pos];
-    pos += 1;
-
-    let length = arbuf[pos];
-    pos += 1;
-
-    // tslint:disable:no-bitwise
-    if (length > 127) {
-        const nbBytes = (length & 0x7F);
-        length = 0;
-        for (let i = 0; i < nbBytes; i++) {
-            length = length * 256 + arbuf[pos];
-            pos += 1;
-        }
-    }
-    return {tag, position: pos, length};
+  }
+  return { tag, position: pos, length };
 }
 
 function readStruct(buf: Uint8Array, block_info: BlockInfo): BlockInfo[] {
-
-    const length = block_info.length;
-    let cursor = block_info.position;
-    const end = block_info.position + length;
-    const blocks: BlockInfo[] = [];
-    while (cursor < end) {
-        const inner = readTag(buf, cursor);
-        cursor = inner.position + inner.length;
-        blocks.push(inner);
-    }
-    return blocks;
+  const length = block_info.length;
+  let cursor = block_info.position;
+  const end = block_info.position + length;
+  const blocks: BlockInfo[] = [];
+  while (cursor < end) {
+    const inner = readTag(buf, cursor);
+    cursor = inner.position + inner.length;
+    blocks.push(inner);
+  }
+  return blocks;
 }
 
 function get_block(buffer: ArrayBuffer, block: BlockInfo): ArrayBuffer {
-    const start = block.position;
-    const end = block.position + block.length;
-    return buffer.slice(start, end);
+  const start = block.position;
+  const end = block.position + block.length;
+  return buffer.slice(start, end);
 }
 
-function parseBitString(buffer: ArrayBuffer, start: number, end: number, maxLength: number): string {
-    const buf8 = new Uint8Array(buffer);
-    const unusedBit = buf8[start],
-        lenBit = ((end - start - 1) << 3) - unusedBit,
-        intro = '(' + lenBit + ' bit)\n';
+function parseBitString(
+  buffer: ArrayBuffer,
+  start: number,
+  end: number,
+  maxLength: number
+): string {
+  const buf8 = new Uint8Array(buffer);
+  const unusedBit = buf8[start],
+    lenBit = ((end - start - 1) << 3) - unusedBit,
+    intro = '(' + lenBit + ' bit)\n';
 
-    let s = '',
-        skip = unusedBit;
+  let s = '',
+    skip = unusedBit;
 
-    for (let i = end - 1; i > start; --i) {
+  for (let i = end - 1; i > start; --i) {
+    const b = buf8[i];
 
-        const b = buf8[i];
-
-        for (let j = skip; j < 8; ++j) {
-            // noinspection JSBitwiseOperatorUsage
-            s += ((b >> j) & 1) ? '1' : '0';
-        }
-        skip = 0;
-        assert(s.length <= maxLength);
+    for (let j = skip; j < 8; ++j) {
+      // noinspection JSBitwiseOperatorUsage
+      s += (b >> j) & 1 ? '1' : '0';
     }
-    return intro + s;
+    skip = 0;
+    assert(s.length <= maxLength);
+  }
+  return intro + s;
 }
 
 interface BitString {
-    lengthInBits: number;
-    lengthInBytes: number;
-    data: ArrayBuffer;
-    debug?: any;
+  lengthInBits: number;
+  lengthInBytes: number;
+  data: ArrayBuffer;
+  debug?: any;
 }
 function read_BitString(buffer: ArrayBuffer, block: BlockInfo): BitString {
+  assert(block.tag === tagTypes.BIT_STRING);
+  const data = new Uint8Array(get_block(buffer, block));
 
-    assert(block.tag === tagTypes.BIT_STRING);
-    const data = new Uint8Array(get_block(buffer, block));
+  // number of skipped bits
+  const ignore_bits = data[0];
 
-    // number of skipped bits
-    const ignore_bits = data[0];
-
-    return {
-        lengthInBits: data.length * 8 - ignore_bits,
-        lengthInBytes: data.length - 1,
-        data: data.slice(1),
-        debug: parseBitString(buffer, block.position, block.length + block.position, 5000)
-    };
+  return {
+    lengthInBits: data.length * 8 - ignore_bits,
+    lengthInBytes: data.length - 1,
+    data: data.slice(1),
+    debug: parseBitString(buffer, block.position, block.length + block.position, 5000),
+  };
 }
 
 function read_OctetString(buf8: Uint8Array, block: BlockInfo): string {
+  assert(block.tag === tagTypes.OCTET_STRING);
+  const tag = readTag(buf8, block.position);
+  assert(tag.tag === tagTypes.OCTET_STRING);
 
-    assert(block.tag === tagTypes.OCTET_STRING);
-    const tag = readTag(buf8, block.position);
-    assert(tag.tag === tagTypes.OCTET_STRING);
+  const nbBytes = tag.length;
+  let pos = tag.position;
 
-    const nbBytes = tag.length;
-    let pos = tag.position;
-
-    const value: string[] = [];
-    for (let i = 0; i < nbBytes; i++) {
-        value.push(('00' + buf8[pos].toString(16)).substr(-2, 2));
-        pos += 1;
-    }
-    return value.join(':');
+  const value: string[] = [];
+  for (let i = 0; i < nbBytes; i++) {
+    value.push(('00' + buf8[pos].toString(16)).substr(-2, 2));
+    pos += 1;
+  }
+  return value.join(':');
 }
 
 export type SignatureValue = string;
 
 function read_SignatureValue(buffer: ArrayBuffer, block: BlockInfo): SignatureValue {
-    return buf2hex(get_block(buffer, block));
+  return buf2hex(get_block(buffer, block));
 }
 
 function read_LongIntegerValue(buffer: ArrayBuffer, block: BlockInfo): string {
-    assert(block.tag === tagTypes.INTEGER, 'expecting a INTEGER tag');
-    let pos = block.position;
-    const nbBytes = block.length;
-    const value = [];
-    const buf8 = new Uint8Array(buffer);
-    for (let i = 0; i < nbBytes; i++) {
-        value.push(('00' + buf8[pos].toString(16)).substr(-2, 2));
-        pos += 1;
-    }
-    return value.join(':');
+  assert(block.tag === tagTypes.INTEGER, 'expecting a INTEGER tag');
+  let pos = block.position;
+  const nbBytes = block.length;
+  const value = [];
+  const buf8 = new Uint8Array(buffer);
+  for (let i = 0; i < nbBytes; i++) {
+    value.push(('00' + buf8[pos].toString(16)).substr(-2, 2));
+    pos += 1;
+  }
+  return value.join(':');
 }
 
 function read_IntegerValue(buffer: ArrayBuffer, block: BlockInfo): number {
-    assert(block.tag === tagTypes.INTEGER, 'expecting a INTEGER tag');
-    let pos = block.position;
-    const nbBytes = block.length;
-    assert(nbBytes < 4);
-    let value = 0;
-    const buf8 = new Uint8Array(buffer);
-    for (let i = 0; i < nbBytes; i++) {
-        value = value * 256 + buf8[pos];
-        pos += 1;
-    }
-    return value;
-
+  assert(block.tag === tagTypes.INTEGER, 'expecting a INTEGER tag');
+  let pos = block.position;
+  const nbBytes = block.length;
+  assert(nbBytes < 4);
+  let value = 0;
+  const buf8 = new Uint8Array(buffer);
+  for (let i = 0; i < nbBytes; i++) {
+    value = value * 256 + buf8[pos];
+    pos += 1;
+  }
+  return value;
 }
 
 function read_VersionValue(buffer: Uint8Array, block: BlockInfo): number {
-    block = readTag(buffer, block.position);
-    return read_IntegerValue(buffer, block);
+  block = readTag(buffer, block.position);
+  return read_IntegerValue(buffer, block);
 }
 
 /*
@@ -500,16 +553,15 @@ function read_VersionValue(buffer: Uint8Array, block: BlockInfo): number {
  Where YY is less than 50, the year SHALL be interpreted as 20YY.
  */
 function convertUTCTime(str: string): Date {
+  let year = parseInt(str.substr(0, 2), 10);
+  const month = parseInt(str.substr(2, 2), 10) - 1;
+  const day = parseInt(str.substr(4, 2), 10);
+  const hours = parseInt(str.substr(6, 2), 10);
+  const mins = parseInt(str.substr(8, 2), 10);
+  const secs = parseInt(str.substr(10, 2), 10);
 
-    let year = parseInt(str.substr(0, 2), 10);
-    const month = parseInt(str.substr(2, 2), 10) - 1;
-    const day = parseInt(str.substr(4, 2), 10);
-    const hours = parseInt(str.substr(6, 2), 10);
-    const mins = parseInt(str.substr(8, 2), 10);
-    const secs = parseInt(str.substr(10, 2), 10);
-
-    year += year >= 50 ? 1900 : 2000;
-    return new Date(Date.UTC(year, month, day, hours, mins, secs));
+  year += year >= 50 ? 1900 : 2000;
+  return new Date(Date.UTC(year, month, day, hours, mins, secs));
 }
 
 /*
@@ -527,161 +579,161 @@ function convertUTCTime(str: string): Date {
 
  */
 function convertGeneralizedTime(str: string): Date {
+  let year, month, day, hours, mins, secs;
 
-    let year, month, day, hours, mins, secs;
+  year = parseInt(str.substr(0, 4), 10);
+  month = parseInt(str.substr(4, 2), 10) - 1;
+  day = parseInt(str.substr(6, 2), 10);
+  hours = parseInt(str.substr(8, 2), 10);
+  mins = parseInt(str.substr(10, 2), 10);
+  secs = parseInt(str.substr(12, 2), 10);
 
-    year = parseInt(str.substr(0, 4), 10);
-    month = parseInt(str.substr(4, 2), 10) - 1;
-    day = parseInt(str.substr(6, 2), 10);
-    hours = parseInt(str.substr(8, 2), 10);
-    mins = parseInt(str.substr(10, 2), 10);
-    secs = parseInt(str.substr(12, 2), 10);
-
-    return new Date(Date.UTC(year, month, day, hours, mins, secs));
-
+  return new Date(Date.UTC(year, month, day, hours, mins, secs));
 }
 
 function read_Value(buffer: ArrayBuffer, block: BlockInfo): any {
-    switch (block.tag) {
-        case tagTypes.PrintableString:
-        case tagTypes.TeletexString:
-        case tagTypes.UTF8String:
-        case tagTypes.NumericString:
-        case tagTypes.IA5String:
-            return get_block(buffer, block).toString();
-        case tagTypes.UTCTime:
-            return convertUTCTime(get_block(buffer, block).toString());
-        case tagTypes.GeneralizedTime:
-            return convertGeneralizedTime(get_block(buffer, block).toString());
-        default:
-            throw new Error('Invalid tag 0x' + block.tag.toString(16) + '');
-        // xx return " ??? <" + block.tag + ">";
-    }
+  switch (block.tag) {
+    case tagTypes.PrintableString:
+    case tagTypes.TeletexString:
+    case tagTypes.UTF8String:
+    case tagTypes.NumericString:
+    case tagTypes.IA5String:
+      return get_block(buffer, block).toString();
+    case tagTypes.UTCTime:
+      return convertUTCTime(get_block(buffer, block).toString());
+    case tagTypes.GeneralizedTime:
+      return convertGeneralizedTime(get_block(buffer, block).toString());
+    default:
+      throw new Error('Invalid tag 0x' + block.tag.toString(16) + '');
+    // xx return " ??? <" + block.tag + ">";
+  }
 }
 
 export interface AttributeTypeAndValue {
-    [key: string]: any;
+  [key: string]: any;
 }
 
 function read_AttributeTypeAndValue(buffer: Uint8Array, block: BlockInfo): AttributeTypeAndValue {
+  let inner_blocks = readStruct(buffer, block);
+  inner_blocks = readStruct(buffer, inner_blocks[0]);
 
-    let inner_blocks = readStruct(buffer, block);
-    inner_blocks = readStruct(buffer, inner_blocks[0]);
+  const data = {
+    identifier: read_ObjectIdentifier(buffer, inner_blocks[0]),
+    value: read_Value(buffer, inner_blocks[1]),
+  };
 
-    const data = {
-        identifier: read_ObjectIdentifier(buffer, inner_blocks[0]),
-        value: read_Value(buffer, inner_blocks[1])
-    };
-
-    const result: AttributeTypeAndValue = {};
-    Object.keys(data).forEach( (key) => {
-        result[key] = data[key];
-    });
-    /*
+  const result: AttributeTypeAndValue = {};
+  for (const [key, value] of Object.entries(data)) {
+    result[key] = value;
+  }
+  /*
     _.forEach(data, (value, key) => {
         result[key] = value;
     });
     */
-    return result;
+  return result;
 }
 
 interface RelativeDistinguishedName {
-    [prop: string]: any;
+  [prop: string]: any;
 }
 
-function read_RelativeDistinguishedName(buffer: Uint8Array, block: BlockInfo): RelativeDistinguishedName {
-    const inner_blocks = readStruct(buffer, block);
-    const data = inner_blocks.map((block) => read_AttributeTypeAndValue(buffer, block));
-    const result: any = {};
-    data.forEach( (e) => {
-        result[e.identifier] = e.value;
-    });
-    return result;
+function read_RelativeDistinguishedName(
+  buffer: Uint8Array,
+  block: BlockInfo
+): RelativeDistinguishedName {
+  const inner_blocks = readStruct(buffer, block);
+  const data = inner_blocks.map((block) => read_AttributeTypeAndValue(buffer, block));
+  const result: any = {};
+  data.forEach((e) => {
+    result[e.identifier] = e.value;
+  });
+  return result;
 }
 
 function read_Name(buffer: Uint8Array, block: BlockInfo): RelativeDistinguishedName {
-    return read_RelativeDistinguishedName(buffer, block);
+  return read_RelativeDistinguishedName(buffer, block);
 }
 
 function read_time(buffer: ArrayBuffer, block: BlockInfo) {
-    return read_Value(buffer, block);
+  return read_Value(buffer, block);
 }
 
 export interface Validity {
-    notBefore: Date;
-    notAfter: Date;
+  notBefore: Date;
+  notAfter: Date;
 }
 
 function read_Validity(buffer: Uint8Array, block: BlockInfo): Validity {
-    const inner_blocks = readStruct(buffer, block);
-    return {
-        notBefore: read_time(buffer, inner_blocks[0]),
-        notAfter: read_time(buffer, inner_blocks[1])
-    };
+  const inner_blocks = readStruct(buffer, block);
+  return {
+    notBefore: read_time(buffer, inner_blocks[0]),
+    notAfter: read_time(buffer, inner_blocks[1]),
+  };
 }
 
 function read_authorityKeyIdentifier(buffer: Uint8Array) {
-    // see: https://www.ietf.org/rfc/rfc3280.txt page 25
-    // AuthorityKeyIdentifier ::= SEQUENCE {
-    //      keyIdentifier             [0] KeyIdentifier           OPTIONAL,
-    //      authorityCertIssuer       [1] GeneralNames            OPTIONAL,
-    //      authorityCertSerialNumber [2] CertificateSerialNumber OPTIONAL  }
-    // KeyIdentifier ::= OCTET STRING
+  // see: https://www.ietf.org/rfc/rfc3280.txt page 25
+  // AuthorityKeyIdentifier ::= SEQUENCE {
+  //      keyIdentifier             [0] KeyIdentifier           OPTIONAL,
+  //      authorityCertIssuer       [1] GeneralNames            OPTIONAL,
+  //      authorityCertSerialNumber [2] CertificateSerialNumber OPTIONAL  }
+  // KeyIdentifier ::= OCTET STRING
 
-    const block = readTag(buffer, 0);
+  const block = readTag(buffer, 0);
+  const inner_blocks = readStruct(buffer, block);
+
+  // noinspection JSUnusedLocalSymbols
+  const keyIdentifier_block = find_block_at_index(inner_blocks, 0);
+  const authorityCertIssuer_block = find_block_at_index(inner_blocks, 1);
+  // noinspection JSUnusedLocalSymbols
+  const authorityCertSerialNumber_block = find_block_at_index(inner_blocks, 2);
+
+  function readNames(buffer: Uint8Array, block: BlockInfo) {
+    // AttributeTypeAndValue ::= SEQUENCE {
+    //    type   ATTRIBUTE.&id({SupportedAttributes}),
+    //    value  ATTRIBUTE.&Type({SupportedAttributes}{@type}),
+    const inner_blocks = readStruct(buffer, block);
+    const names: any = {};
+    inner_blocks.forEach((sequence_block) => {
+      assert(sequence_block.tag === 0x30);
+      const set_blocks = readStruct(buffer, sequence_block);
+      set_blocks.forEach((set_block) => {
+        assert(set_block.tag === 0x31);
+        const blocks = readStruct(buffer, set_block);
+        assert(blocks.length === 1);
+        assert(blocks[0].tag === 0x30);
+
+        const _blocks = readStruct(buffer, blocks[0]);
+        assert(_blocks.length === 2);
+
+        const type = read_ObjectIdentifier(buffer, _blocks[0]);
+
+        names[type] = read_Value(buffer, _blocks[1]);
+      });
+    });
+    return names;
+  }
+
+  function read_authorithyCertIssuer(block: BlockInfo) {
     const inner_blocks = readStruct(buffer, block);
 
-    // noinspection JSUnusedLocalSymbols
-    const keyIdentifier_block = find_block_at_index(inner_blocks, 0);
-    const authorityCertIssuer_block = find_block_at_index(inner_blocks, 1);
-    // noinspection JSUnusedLocalSymbols
-    const authorityCertSerialNumber_block = find_block_at_index(inner_blocks, 2);
-
-    function readNames(buffer: Uint8Array, block: BlockInfo) {
-        // AttributeTypeAndValue ::= SEQUENCE {
-        //    type   ATTRIBUTE.&id({SupportedAttributes}),
-        //    value  ATTRIBUTE.&Type({SupportedAttributes}{@type}),
-        const inner_blocks = readStruct(buffer, block);
-        const names: any = {};
-        inner_blocks.forEach((sequence_block) => {
-
-            assert(sequence_block.tag === 0x30);
-            const set_blocks = readStruct(buffer, sequence_block);
-            set_blocks.forEach((set_block) => {
-                assert(set_block.tag === 0x31);
-                const blocks = readStruct(buffer, set_block);
-                assert(blocks.length === 1);
-                assert(blocks[0].tag === 0x30);
-
-                const _blocks = readStruct(buffer, blocks[0]);
-                assert(_blocks.length === 2);
-
-                const type = read_ObjectIdentifier(buffer, _blocks[0]);
-
-                names[type] = read_Value(buffer, _blocks[1]);
-
-            });
-        });
-        return names;
+    const directoryName_block = find_block_at_index(inner_blocks, 4);
+    if (directoryName_block) {
+      return {
+        directoryName: readNames(buffer, directoryName_block),
+      };
+    } else {
+      throw new Error('Invalid read_authorithyCertIssuer');
     }
+    //  return read_GeneralNames(buffer, directoryName_block);
+  }
 
-    function read_authorithyCertIssuer(block: BlockInfo) {
-        const inner_blocks = readStruct(buffer, block);
-
-        const directoryName_block = find_block_at_index(inner_blocks, 4);
-        if (directoryName_block) {
-            return {
-                directoryName: readNames(buffer, directoryName_block)
-            };
-        } else {
-            throw new Error('Invalid read_authorithyCertIssuer');
-        }
-        //  return read_GeneralNames(buffer, directoryName_block);
-    }
-
-    return {
-        authorityCertIssuer: authorityCertIssuer_block ? read_authorithyCertIssuer(authorityCertIssuer_block) : null
-    };
+  return {
+    authorityCertIssuer: authorityCertIssuer_block
+      ? read_authorithyCertIssuer(authorityCertIssuer_block)
+      : null,
+  };
 }
 
 /*
@@ -695,97 +747,95 @@ function read_authorityKeyIdentifier(buffer: Uint8Array) {
  }
  */
 function read_Extension(buffer: Uint8Array, block: BlockInfo) {
+  const inner_blocks = readStruct(buffer, block);
 
-    const inner_blocks = readStruct(buffer, block);
+  if (inner_blocks.length === 3) {
+    assert(inner_blocks[1].tag === tagTypes.BOOLEAN);
+    inner_blocks[1] = inner_blocks[2];
+  }
 
-    if (inner_blocks.length === 3) {
-        assert(inner_blocks[1].tag === tagTypes.BOOLEAN);
-        inner_blocks[1] = inner_blocks[2];
-    }
+  const identifier = read_ObjectIdentifier(buffer, inner_blocks[0]);
+  const buf = new Uint8Array(get_block(buffer, inner_blocks[1]));
 
-    const identifier = read_ObjectIdentifier(buffer, inner_blocks[0]);
-    const buf = new Uint8Array(get_block(buffer, inner_blocks[1]));
-
-    let value = null;
-    switch (identifier) {
-        case 'subjectKeyIdentifier':
-            value = read_OctetString(buffer, inner_blocks[1]);
-            break;
-        case 'subjectAltName':
-            value = read_subjectAltNames(buf);
-            break;
-        case 'authorityKeyIdentifier':
-            value = read_authorityKeyIdentifier(buf);
-            break;
-        case 'basicConstraints':
-            break;
-        default:
-            value = 'Unknown ' + buf2hex(buf);
-    }
-    return {
-        identifier,
-        value
-    };
+  let value = null;
+  switch (identifier) {
+    case 'subjectKeyIdentifier':
+      value = read_OctetString(buffer, inner_blocks[1]);
+      break;
+    case 'subjectAltName':
+      value = read_subjectAltNames(buf);
+      break;
+    case 'authorityKeyIdentifier':
+      value = read_authorityKeyIdentifier(buf);
+      break;
+    case 'basicConstraints':
+      break;
+    default:
+      value = 'Unknown ' + buf2hex(buf);
+  }
+  return {
+    identifier,
+    value,
+  };
 }
 
 // Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
 function read_Extensions(buffer: Uint8Array, block: BlockInfo): CertificateExtension {
+  assert(block.tag === 0xa3);
 
-    assert(block.tag === 0xa3);
+  let inner_blocks = readStruct(buffer, block);
+  inner_blocks = readStruct(buffer, inner_blocks[0]);
 
-    let inner_blocks = readStruct(buffer, block);
-    inner_blocks = readStruct(buffer, inner_blocks[0]);
+  const exts = inner_blocks.map((block) => read_Extension(buffer, block));
 
-    const exts = inner_blocks.map((block) => read_Extension(buffer, block));
-
-    const result: any = {};
-    exts.forEach((e) => result[e.identifier] = e.value);
-    return result as CertificateExtension;
+  const result: any = {};
+  exts.forEach((e) => (result[e.identifier] = e.value));
+  return result as CertificateExtension;
 }
 
 function parseOID(buffer: ArrayBuffer, start: number, end: number) {
-    // ASN.1 JavaScript decoder
-    // Copyright (c) 2008-2014 Lapo Luchini <lapo@lapo.it>
-    let s = '',
-        n = 0,
-        bits = 0;
-    const buf8 = new Uint8Array(buffer);
-    for (let i = start; i < end; ++i) {
+  // ASN.1 JavaScript decoder
+  // Copyright (c) 2008-2014 Lapo Luchini <lapo@lapo.it>
+  let s = '',
+    n = 0,
+    bits = 0;
+  const buf8 = new Uint8Array(buffer);
+  for (let i = start; i < end; ++i) {
+    const v = buf8[i];
 
-        const v = buf8[i];
+    n = n * 128 + (v & 0x7f);
+    bits += 7;
 
-        n = n * 128 + (v & 0x7F);
-        bits += 7;
-
-        // noinspection JSBitwiseOperatorUsage
-        if (!(v & 0x80)) { // finished
-            if (s === '') {
-                const m = n < 80 ? n < 40 ? 0 : 1 : 2;
-                s = m + '.' + (n - m * 40);
-            } else {
-                s += '.' + n.toString();
-            }
-            n = 0;
-            bits = 0;
-        }
+    // noinspection JSBitwiseOperatorUsage
+    if (!(v & 0x80)) {
+      // finished
+      if (s === '') {
+        const m = n < 80 ? (n < 40 ? 0 : 1) : 2;
+        s = m + '.' + (n - m * 40);
+      } else {
+        s += '.' + n.toString();
+      }
+      n = 0;
+      bits = 0;
     }
-    assert(bits === 0); // if (bits > 0) { s += ".incomplete"; }
-    return s;
+  }
+  assert(bits === 0); // if (bits > 0) { s += ".incomplete"; }
+  return s;
 }
 
 function read_ObjectIdentifier(buffer: ArrayBuffer, block: BlockInfo) {
-    assert(block.tag === tagTypes.OBJECT_IDENTIFIER);
-    const b = buffer.slice(block.position, block.position + block.length);
-    const oid = parseOID(b, 0, block.length);
-    return oid_map[oid] ? oid_map[oid].d : oid;
+  assert(block.tag === tagTypes.OBJECT_IDENTIFIER);
+  const b = buffer.slice(block.position, block.position + block.length);
+  const oid = parseOID(b, 0, block.length);
+  return oid_map[oid] ? oid_map[oid].d : oid;
 }
 
 function find_block_at_index(blocks: BlockInfo[], index: number): BlockInfo | null {
-    const tmp = blocks.filter((b: BlockInfo) => b.tag === 0xa0 + index);
-    if (tmp.length === 0) {
-        return null;
-    }
-    return tmp[0];
+  const tmp = blocks.filter((b: BlockInfo) => b.tag === 0xa0 + index);
+  if (tmp.length === 0) {
+    return null;
+  }
+  return tmp[0];
 }
 
 // function read_GeneralNames
@@ -801,48 +851,47 @@ function find_block_at_index(blocks: BlockInfo[], index: number): BlockInfo | nu
 //        iPAddress                 [7]  OCTET STRING,
 //        registeredID              [8]  OBJECT IDENTIFIER }
 function read_GeneralNames(buffer: Uint8Array, block: BlockInfo) {
+  const _data: any = {
+    1: { name: 'rfc822Name', type: 'IA5String' },
+    2: { name: 'dNSName', type: 'IA5String' },
+    3: { name: 'x400Address', type: 'ORAddress' },
+    4: { name: 'directoryName', type: 'Name' },
+    5: { name: 'ediPartyName', type: 'EDIPartyName' },
+    6: { name: 'uniformResourceIdentifier', type: 'IA5String' },
+    7: { name: 'iPAddress', type: 'OCTET_STRING' },
+    8: { name: 'registeredID', type: 'OBJECT_IDENTIFIER' },
+  };
+  const blocks = readStruct(buffer, block);
 
-    const _data: any = {
-        1: {name: 'rfc822Name', type: 'IA5String'},
-        2: {name: 'dNSName', type: 'IA5String'},
-        3: {name: 'x400Address', type: 'ORAddress'},
-        4: {name: 'directoryName', type: 'Name'},
-        5: {name: 'ediPartyName', type: 'EDIPartyName'},
-        6: {name: 'uniformResourceIdentifier', type: 'IA5String'},
-        7: {name: 'iPAddress', type: 'OCTET_STRING'},
-        8: {name: 'registeredID', type: 'OBJECT_IDENTIFIER'},
-    };
-    const blocks = readStruct(buffer, block);
-
-    function read_from_type(buffer: ArrayBuffer, block: BlockInfo, type: string) {
-        switch (type) {
-            case 'IA5String':
-                const dec = new TextDecoder('utf-8');
-                return buf2string(buffer.slice(block.position, block.position + block.length));
-            default:
-                return buf2hex(buffer.slice(block.position, block.position + block.length));
-        }
+  function read_from_type(buffer: ArrayBuffer, block: BlockInfo, type: string) {
+    switch (type) {
+      case 'IA5String':
+        const dec = new TextDecoder('utf-8');
+        return buf2string(buffer.slice(block.position, block.position + block.length));
+      default:
+        return buf2hex(buffer.slice(block.position, block.position + block.length));
     }
+  }
 
-    const n: any = {};
-    for (const block of blocks) {
-        assert((block.tag & 0x80) === 0x80);
-        const t = (block.tag & 0x7F);
-        const type = _data[t];
+  const n: any = {};
+  for (const block of blocks) {
+    assert((block.tag & 0x80) === 0x80);
+    const t = block.tag & 0x7f;
+    const type = _data[t];
 
-        // istanbul ignore next
-        if (!type) {
-            throw new Error(' INVALID TYPE => ' + t + '0x' + t.toString(16));
-        }
-        n[type.name] = n[type.name] || [];
-        n[type.name].push(read_from_type(buffer, block, type.type));
+    // istanbul ignore next
+    if (!type) {
+      throw new Error(' INVALID TYPE => ' + t + '0x' + t.toString(16));
     }
-    return n;
+    n[type.name] = n[type.name] || [];
+    n[type.name].push(read_from_type(buffer, block, type.type));
+  }
+  return n;
 }
 
 function read_subjectAltNames(buffer: Uint8Array) {
-    const block_info = readTag(buffer, 0);
-    return read_GeneralNames(buffer, block_info);
+  const block_info = readTag(buffer, 0);
+  return read_GeneralNames(buffer, block_info);
 }
 
 /*
@@ -870,138 +919,135 @@ function read_subjectAltNames(buffer: Uint8Array) {
  :       }
  */
 function read_IntegerAsByteString(buffer: ArrayBuffer, block: BlockInfo) {
-    return get_block(buffer, block);
+  return get_block(buffer, block);
 }
 function read_ListOfInteger(buffer: Uint8Array) {
-    const block = readTag(buffer, 0);
-    const inner_blocks = readStruct(buffer, block);
+  const block = readTag(buffer, 0);
+  const inner_blocks = readStruct(buffer, block);
 
-    return inner_blocks.map((block) => {
-        return read_IntegerAsByteString(buffer, block);
-    });
+  return inner_blocks.map((block) => {
+    return read_IntegerAsByteString(buffer, block);
+  });
 }
 
 function read_SubjectPublicKeyInfo(buffer: Uint8Array, block: BlockInfo): SubjectPublicKeyInfo {
-    const inner_blocks = readStruct(buffer, block);
+  const inner_blocks = readStruct(buffer, block);
 
-    // algorithm identifier
-    const algorithm = read_AlgorithmIdentifier(buffer, inner_blocks[0]);
-    // const parameters         = read_BitString(buffer,inner_blocks[1]);
-    const subjectPublicKey = read_BitString(buffer, inner_blocks[1]);
+  // algorithm identifier
+  const algorithm = read_AlgorithmIdentifier(buffer, inner_blocks[0]);
+  // const parameters         = read_BitString(buffer,inner_blocks[1]);
+  const subjectPublicKey = read_BitString(buffer, inner_blocks[1]);
 
-    // read the 2 big integers of the key
-    const data = subjectPublicKey.data;
-    const values = read_ListOfInteger(new Uint8Array(data));
-    // xx const value = read_ListOfInteger(data);
-    return {
-        algorithm: algorithm.identifier,
-        keyLength: (values[0].byteLength - 1) as PublicKeyLength,
-        subjectPublicKey: subjectPublicKey.data
-        // xx values: values,
-        // xx values_length : values.map(function (a){ return a.length; })
-    };
+  // read the 2 big integers of the key
+  const data = subjectPublicKey.data;
+  const values = read_ListOfInteger(new Uint8Array(data));
+  // xx const value = read_ListOfInteger(data);
+  return {
+    algorithm: algorithm.identifier,
+    keyLength: (values[0].byteLength - 1) as PublicKeyLength,
+    subjectPublicKey: subjectPublicKey.data,
+    // xx values: values,
+    // xx values_length : values.map(function (a){ return a.length; })
+  };
 }
 
 export interface SubjectPublicKeyInfo {
-    algorithm: string;
-    keyLength: PublicKeyLength;
-    subjectPublicKey: ArrayBuffer;
+  algorithm: string;
+  keyLength: PublicKeyLength;
+  subjectPublicKey: ArrayBuffer;
 }
 export interface DirectoryName {
-    stateOrProvinceName?: string;
-    localityName?: string;
-    organizationName?: string;
-    organizationUnitName?: string;
-    commonName?: string;
+  stateOrProvinceName?: string;
+  localityName?: string;
+  organizationName?: string;
+  organizationUnitName?: string;
+  commonName?: string;
 }
 export interface CertificateExtension {
-    basicConstraints: any;
-    subjectKeyIdentitifer?: string;
-    authorityKeyIdentifier?: DirectoryName;
-    keyUsage?: any;
-    extKeyUsage?: any;
-    subjectAltName?: any;
+  basicConstraints: any;
+  subjectKeyIdentitifer?: string;
+  authorityKeyIdentifier?: DirectoryName;
+  keyUsage?: any;
+  extKeyUsage?: any;
+  subjectAltName?: any;
 }
 export interface TbsCertificate {
-    version: number;
-    serialNumber: string;
-    issuer: any;
-    signature: AlgorithmIdentifier;
-    validity: Validity;
-    subject: DirectoryName;
-    subjectPublicKeyInfo: SubjectPublicKeyInfo;
-    extensions: CertificateExtension | null;
+  version: number;
+  serialNumber: string;
+  issuer: any;
+  signature: AlgorithmIdentifier;
+  validity: Validity;
+  subject: DirectoryName;
+  subjectPublicKeyInfo: SubjectPublicKeyInfo;
+  extensions: CertificateExtension | null;
 }
 
 function read_tbsCertificate(buffer: Uint8Array, block: BlockInfo): TbsCertificate {
+  const blocks = readStruct(buffer, block);
 
-    const blocks = readStruct(buffer, block);
+  let version, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, extensions;
 
-    let version, serialNumber, signature, issuer, validity, subject, subjectPublicKeyInfo, extensions;
+  if (blocks.length === 6) {
+    // X509 Version 1:
+    version = 1;
 
-    if (blocks.length === 6) {
-        // X509 Version 1:
-        version = 1;
+    serialNumber = read_LongIntegerValue(buffer, blocks[0]);
+    signature = read_AlgorithmIdentifier(buffer, blocks[1]);
+    issuer = read_Name(buffer, blocks[2]);
+    validity = read_Validity(buffer, blocks[3]);
+    subject = read_Name(buffer, blocks[4]);
+    subjectPublicKeyInfo = read_SubjectPublicKeyInfo(buffer, blocks[5]);
 
-        serialNumber = read_LongIntegerValue(buffer, blocks[0]);
-        signature = read_AlgorithmIdentifier(buffer, blocks[1]);
-        issuer = read_Name(buffer, blocks[2]);
-        validity = read_Validity(buffer, blocks[3]);
-        subject = read_Name(buffer, blocks[4]);
-        subjectPublicKeyInfo = read_SubjectPublicKeyInfo(buffer, blocks[5]);
+    extensions = null;
+  } else {
+    // X509 Version 3:
 
-        extensions = null;
-    } else {
-        // X509 Version 3:
-
-        const version_block = find_block_at_index(blocks, 0);
-        if (!version_block) {
-            throw new Error('cannot find version block');
-        }
-        version = read_VersionValue(buffer, version_block) + 1;
-        serialNumber = read_LongIntegerValue(buffer, blocks[1]);
-        signature = read_AlgorithmIdentifier(buffer, blocks[2]);
-        issuer = read_Name(buffer, blocks[3]);
-        validity = read_Validity(buffer, blocks[4]);
-        subject = read_Name(buffer, blocks[5]);
-        subjectPublicKeyInfo = read_SubjectPublicKeyInfo(buffer, blocks[6]);
-
-        const extensionBlock = find_block_at_index(blocks, 3);
-        if (!extensionBlock) {
-            throw new Error('cannot find extention block');
-        }
-        extensions = read_Extensions(buffer, extensionBlock);
-
+    const version_block = find_block_at_index(blocks, 0);
+    if (!version_block) {
+      throw new Error('cannot find version block');
     }
+    version = read_VersionValue(buffer, version_block) + 1;
+    serialNumber = read_LongIntegerValue(buffer, blocks[1]);
+    signature = read_AlgorithmIdentifier(buffer, blocks[2]);
+    issuer = read_Name(buffer, blocks[3]);
+    validity = read_Validity(buffer, blocks[4]);
+    subject = read_Name(buffer, blocks[5]);
+    subjectPublicKeyInfo = read_SubjectPublicKeyInfo(buffer, blocks[6]);
 
-    return {
-        version,
-        serialNumber,
-        signature,
-        issuer,
-        validity,
-        subject,
-        subjectPublicKeyInfo,
-        extensions
-    };
+    const extensionBlock = find_block_at_index(blocks, 3);
+    if (!extensionBlock) {
+      throw new Error('cannot find extention block');
+    }
+    extensions = read_Extensions(buffer, extensionBlock);
+  }
 
+  return {
+    version,
+    serialNumber,
+    signature,
+    issuer,
+    validity,
+    subject,
+    subjectPublicKeyInfo,
+    extensions,
+  };
 }
 
 export interface AlgorithmIdentifier {
-    identifier: any;
+  identifier: any;
 }
 
 function read_AlgorithmIdentifier(buffer: Uint8Array, block: BlockInfo): AlgorithmIdentifier {
-    const inner_blocks = readStruct(buffer, block);
-    return {
-        identifier: read_ObjectIdentifier(buffer, inner_blocks[0])
-    };
+  const inner_blocks = readStruct(buffer, block);
+  return {
+    identifier: read_ObjectIdentifier(buffer, inner_blocks[0]),
+  };
 }
 
 export interface CertificateInternals {
-    tbsCertificate: TbsCertificate;
-    signatureAlgorithm: AlgorithmIdentifier;
-    signatureValue: SignatureValue;
+  tbsCertificate: TbsCertificate;
+  signatureAlgorithm: AlgorithmIdentifier;
+  signatureValue: SignatureValue;
 }
 
 /**
@@ -1010,40 +1056,39 @@ export interface CertificateInternals {
  * @returns a json object that exhibits the internal data of the certificate
  */
 export function exploreCertificate(certificate: Certificate): CertificateInternals {
-
-    assert(certificate instanceof Uint8Array);
-    if (!(certificate as any)._exploreCertificate_cache) {
-        const block_info = readTag(certificate, 0);
-        const blocks = readStruct(certificate, block_info);
-        (certificate as any)._exploreCertificate_cache = {
-            tbsCertificate: read_tbsCertificate(certificate, blocks[0]),
-            signatureAlgorithm: read_AlgorithmIdentifier(certificate, blocks[1]),
-            signatureValue: read_SignatureValue(certificate, blocks[2])
-        };
-    }
-    return (certificate as any)._exploreCertificate_cache;
+  assert(certificate instanceof Uint8Array);
+  if (!(certificate as any)._exploreCertificate_cache) {
+    const block_info = readTag(certificate, 0);
+    const blocks = readStruct(certificate, block_info);
+    (certificate as any)._exploreCertificate_cache = {
+      tbsCertificate: read_tbsCertificate(certificate, blocks[0]),
+      signatureAlgorithm: read_AlgorithmIdentifier(certificate, blocks[1]),
+      signatureValue: read_SignatureValue(certificate, blocks[2]),
+    };
+  }
+  return (certificate as any)._exploreCertificate_cache;
 }
 
 export function getSPKIFromCertificate(certificate: Certificate) {
-    const block_info = readTag(certificate, 0);
-    let blocks = readStruct(certificate, block_info);
-    // read the blocks of tbsCertificate
-    blocks = readStruct(certificate, blocks[0]);
-    if (blocks.length === 6) {
-        // X509 Version 1:
-        const startPos = blocks[4].position + blocks[4].length;
-        const tagLength = blocks[5].position - startPos;
-        const spkiLength = blocks[5].length + tagLength;
-        return new Uint8Array( certificate.slice(startPos, startPos + spkiLength) );
-        // return new Uint8Array(certificate, startPos /*, spkiLength*/);
-    } else {
-        // X509 Version 3:
-        const startPos = blocks[5].position + blocks[5].length;
-        const tagLength = blocks[6].position - startPos;
-        const spkiLength = blocks[6].length + tagLength;
-        return new Uint8Array( certificate.slice(startPos, startPos + spkiLength) );
-        // return new Uint8Array(certificate, startPos /*, spkiLength*/);
-    }
+  const block_info = readTag(certificate, 0);
+  let blocks = readStruct(certificate, block_info);
+  // read the blocks of tbsCertificate
+  blocks = readStruct(certificate, blocks[0]);
+  if (blocks.length === 6) {
+    // X509 Version 1:
+    const startPos = blocks[4].position + blocks[4].length;
+    const tagLength = blocks[5].position - startPos;
+    const spkiLength = blocks[5].length + tagLength;
+    return new Uint8Array(certificate.slice(startPos, startPos + spkiLength));
+    // return new Uint8Array(certificate, startPos /*, spkiLength*/);
+  } else {
+    // X509 Version 3:
+    const startPos = blocks[5].position + blocks[5].length;
+    const tagLength = blocks[6].position - startPos;
+    const spkiLength = blocks[6].length + tagLength;
+    return new Uint8Array(certificate.slice(startPos, startPos + spkiLength));
+    // return new Uint8Array(certificate, startPos /*, spkiLength*/);
+  }
 }
 
 /**
@@ -1053,24 +1098,22 @@ export function getSPKIFromCertificate(certificate: Certificate) {
  * @return a concatenated buffer containing the certificates
  */
 export function combine_der(certificates: Certificate[]): Certificate {
+  assert(Array.isArray(certificates));
 
-    assert(Array.isArray(certificates));
-
-    // perform some sanity check
-    for (const cert of certificates) {
-
-        const b = split_der(cert);
-        let sum = 0;
-        b.forEach((block) => {
-            const block_info = readTag(block, 0);
-            // xx console.log("xxxx" ,cert.length,block_info);
-            // xx console.log(cert.toString("base64"));
-            assert(block_info.position + block_info.length === block.byteLength);
-            sum += block.byteLength;
-        });
-        assert(sum === cert.byteLength);
-    }
-    return concatTypedArrays(certificates);
+  // perform some sanity check
+  for (const cert of certificates) {
+    const b = split_der(cert);
+    let sum = 0;
+    b.forEach((block) => {
+      const block_info = readTag(block, 0);
+      // xx console.log("xxxx" ,cert.length,block_info);
+      // xx console.log(cert.toString("base64"));
+      assert(block_info.position + block_info.length === block.byteLength);
+      sum += block.byteLength;
+    });
+    assert(sum === cert.byteLength);
+  }
+  return concatTypedArrays(certificates);
 }
 
 /**
@@ -1080,49 +1123,46 @@ export function combine_der(certificates: Certificate[]): Certificate {
  * @returns an array of Der , each element of the array is one certificate of the chain
  */
 export function split_der(certificateChain: Certificate): Certificate[] {
+  const certificate_chain: Uint8Array[] = [];
 
-    const certificate_chain: Uint8Array[] = [];
-
-    do {
-        const block_info = readTag(certificateChain, 0);
-        const length = block_info.position + block_info.length;
-        const der_certificate = certificateChain.slice(0, length);
-        certificate_chain.push(der_certificate);
-        certificateChain = certificateChain.slice(length);
-    } while (certificateChain.byteLength > 0);
-    return certificate_chain;
+  do {
+    const block_info = readTag(certificateChain, 0);
+    const length = block_info.position + block_info.length;
+    const der_certificate = certificateChain.slice(0, length);
+    certificate_chain.push(der_certificate);
+    certificateChain = certificateChain.slice(length);
+  } while (certificateChain.byteLength > 0);
+  return certificate_chain;
 }
 
 export function convertPEMtoDER(raw_key: PEM): DER {
+  let match: any;
+  let pemType;
+  let base64str;
 
-    let match: any;
-    let pemType;
-    let base64str;
-
-    const parts: DER[] = [];
-    // tslint:disable-next-line:no-conditional-assignment
-    while ((match = PEM_REGEX.exec(raw_key)) !== null) {
-        pemType = match[2];
-        // pemType shall be "RSA PRIVATE KEY" , "PUBLIC KEY", "CERTIFICATE"
-        base64str = match[3];
-        base64str = base64str.replace(/\r?\n/g, '');
-        parts.push(base64ToBuf(base64str));
-    }
-    return combine_der(parts);
+  const parts: DER[] = [];
+  // tslint:disable-next-line:no-conditional-assignment
+  while ((match = PEM_REGEX.exec(raw_key)) !== null) {
+    pemType = match[2];
+    // pemType shall be "RSA PRIVATE KEY" , "PUBLIC KEY", "CERTIFICATE"
+    base64str = match[3];
+    base64str = base64str.replace(/\r?\n/g, '');
+    parts.push(base64ToBuf(base64str));
+  }
+  return combine_der(parts);
 }
 
 export function generatePublicKeyFromDER(der_certificate: Uint8Array): PromiseLike<CryptoKey> {
+  if ((der_certificate as any)._publicKey) {
+    return Promise.resolve((der_certificate as any)._publicKey);
+  }
 
-    if ( (der_certificate as any)._publicKey) {
-        return Promise.resolve((der_certificate as any)._publicKey);
-    }
+  const spki = getSPKIFromCertificate(der_certificate);
 
-    const spki = getSPKIFromCertificate(der_certificate);
-
-    return crypto.subtle.importKey('spki', spki,
-    { name: 'RSA-OAEP', hash: 'SHA-1' },
-    true, ['encrypt']).then( (key) => {
-        (der_certificate as any)._publicKey  = key;
-        return key;
-    } );
+  return crypto.subtle
+    .importKey('spki', spki, { name: 'RSA-OAEP', hash: 'SHA-1' }, true, ['encrypt'])
+    .then((key) => {
+      (der_certificate as any)._publicKey = key;
+      return key;
+    });
 }
