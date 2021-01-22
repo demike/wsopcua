@@ -6,11 +6,8 @@ import {
   CallMethodRequest,
   CallMethodResult,
 } from '../../generated';
-import {
-  ConnectionStrategy,
-  OPCUAClientOptions,
-} from '../../client/client_base';
-import { SecurityPolicy } from '../../secure-channel';
+import { OPCUAClientOptions } from '../../client/client_base';
+import { ConnectionStrategy, SecurityPolicy } from '../../secure-channel';
 import { OPCUAClient } from '../../client/opcua_client';
 import { ClientSession } from '../../client/client_session';
 import { DataType, Variant, VariantArrayType } from '../../variant';
@@ -78,17 +75,11 @@ export interface E2ETestController {
    * creates a subscription with sane default test settings
    * also wait for
    */
-  createSubscription(
-    options?: ICreateSubscriptionRequest
-  ): Promise<ClientSubscription>;
+  createSubscription(options?: ICreateSubscriptionRequest): Promise<ClientSubscription>;
 }
 
 export class E2ETestControllerImpl implements E2ETestController {
-  public static readonly controllerNodeId = new NodeId(
-    NodeIdType.String,
-    'Controller',
-    1
-  );
+  public static readonly controllerNodeId = new NodeId(NodeIdType.String, 'Controller', 1);
   public static readonly startTestServerNodeId = new NodeId(
     NodeIdType.String,
     'Controller.startTestServer',
@@ -100,11 +91,7 @@ export class E2ETestControllerImpl implements E2ETestController {
     1
   );
 
-  public static readonly nodeManagerNodeId = new NodeId(
-    NodeIdType.String,
-    'NodeManager',
-    1
-  );
+  public static readonly nodeManagerNodeId = new NodeId(NodeIdType.String, 'NodeManager', 1);
   public static readonly addVariableNodeId = new NodeId(
     NodeIdType.String,
     'NodeManager.addVariable',
@@ -174,15 +161,10 @@ export class E2ETestControllerImpl implements E2ETestController {
     ]);
 
     if (response.result[0].statusCode !== StatusCodes.Good) {
-      throw new Error(
-        'Error starting the test server' + response.result[0].toJSON()
-      );
+      throw new Error('Error starting the test server' + response.result[0].toJSON());
     }
 
-    this.testSession = await this.createSession(
-      this.testClient,
-      OPCUA_TEST_SERVER_URI
-    );
+    this.testSession = await this.createSession(this.testClient, OPCUA_TEST_SERVER_URI);
     return { session: this.testSession, client: this.testClient };
   }
 
@@ -305,9 +287,7 @@ export class E2ETestControllerImpl implements E2ETestController {
     ]);
 
     if (response.result[0].statusCode !== StatusCodes.Good) {
-      throw new Error(
-        'Error adding compliance test namespace ' + response.result[0].toJSON()
-      );
+      throw new Error('Error adding compliance test namespace ' + response.result[0].toJSON());
     }
 
     return response.result[0].outputArguments[0].value;

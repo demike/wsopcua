@@ -81,7 +81,7 @@ import {
 import { StatusCodes } from '../constants/raw_status_codes';
 
 import { enocdeQualifiedName, coerceQualifiedName } from '../data-model/qualified_name_util';
-import { decodeQualifiedName } from '../generated/QualifiedName';
+import { decodeQualifiedName, QualifiedName } from '../generated/QualifiedName';
 import { decodeLocalizedText } from '../generated/LocalizedText';
 import { enocdeLocalizedText, coerceLocalizedText } from '../data-model/localized_text_util';
 import { ITypeSchema, TypeSchema } from './type_schema';
@@ -314,7 +314,7 @@ export function findSimpleType(name: string) {
 }
 
 // populate the default type map
-export let _defaultTypeMap = {};
+export let _defaultTypeMap: { [key: string]: TypeSchema } = {};
 for (const t of _defaultType) {
   registerType(t);
 }
@@ -326,17 +326,17 @@ for (const t of _defaultType) {
  * @param datatypeName
  * @return {*}
  */
-export function findBuiltInType(datatypeName) {
+export function findBuiltInType(datatypeName: string | QualifiedName): TypeSchema {
   // coerce string or Qualified Name to string
-  if (datatypeName.name) {
+  if ((datatypeName as QualifiedName).name) {
     datatypeName = datatypeName.toString();
   }
   assert(typeof datatypeName === 'string', 'findBuiltInType : expecting a string ' + datatypeName);
-  const t = _defaultTypeMap[datatypeName];
+  const t = _defaultTypeMap[datatypeName as string];
   if (!t) {
     throw new Error('datatype ' + datatypeName + ' must be registered');
   }
-  if (t.subType) {
+  if (t.subType && t.subType !== t.name /* avoid infinite recursion */) {
     return findBuiltInType(t.subType);
   }
   return t;

@@ -3,15 +3,10 @@
  * @module opcua.miscellaneous
  */
 
- import {assert} from '../assert';
+import { assert } from '../assert';
 import { TypeSchema } from './type_schema';
 
-function _encode_enumeration(member, stream) {
-    stream.writeInteger(member.value);
-}
-
-const _enumerations = {};
-
+const _enumerations: { [key: string]: any } = {};
 
 /**
  * @method registerEnumeration
@@ -24,34 +19,40 @@ const _enumerations = {};
  * @param schema.defaultValue
  * @return {Enum}
  */
-export function registerEnumeration(name: string, enumeration: any, encode: Function, decode: Function, coerce?: Function) {
-
-    // create a new Enum
-    if (_enumerations.hasOwnProperty(name)) {
-        throw new Error('factories.registerEnumeration : Enumeration ' + name + ' has been already inserted');
-    }
-
-    assert('function' === typeof encode);
-    assert('function' === typeof decode);
-
-    const typeSchema = new TypeSchema(    {
-        name: name,
-        encode: encode,
-        decode: decode,
-        defaultValue: enumeration[0],
-        coerce: coerce,
-    }
+export function registerEnumeration(
+  name: string,
+  enumeration: any,
+  encode: Function,
+  decode: Function,
+  coerce?: Function
+) {
+  // create a new Enum
+  if (_enumerations.hasOwnProperty(name)) {
+    throw new Error(
+      'factories.registerEnumeration : Enumeration ' + name + ' has been already inserted'
     );
-    _enumerations[name] = typeSchema;
+  }
 
-    return enumeration;
+  assert('function' === typeof encode);
+  assert('function' === typeof decode);
+
+  const typeSchema = new TypeSchema({
+    name: name,
+    encode: encode,
+    decode: decode,
+    defaultValue: enumeration[0],
+    coerce: coerce,
+  });
+  _enumerations[name] = typeSchema;
+
+  return enumeration;
 }
 
 export function hasEnumeration(enumerationName: string) {
-    return !!_enumerations[enumerationName];
+  return !!_enumerations[enumerationName];
 }
 
 export function getEnumeration(enumerationName: string) {
-    assert(hasEnumeration(enumerationName));
-    return _enumerations[enumerationName];
+  assert(hasEnumeration(enumerationName));
+  return _enumerations[enumerationName];
 }

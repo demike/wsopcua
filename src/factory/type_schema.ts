@@ -5,6 +5,7 @@ export interface ITypeSchema {
   encode: Function;
   decode: Function;
   coerce?: Function;
+  subType?: string;
   //    defaultValue? : Function
 }
 
@@ -19,6 +20,7 @@ export class TypeSchema implements ITypeSchema {
   encode: Function;
   decode: Function;
   coerce?: Function;
+  subType?: string;
   protected defaultValue: any;
   constructor(options: ITypeSchema | any) {
     for (const prop in options) {
