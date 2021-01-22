@@ -13,7 +13,7 @@ import { chooseSecurityHeader } from './secure_message_chunk_manager';
 
 const decodeString = ec.decodeString;
 
-import { packet_analyzer } from '../packet-analyzer';
+import { analyseExtensionObject, packet_analyzer } from '../packet-analyzer';
 
 import { doDebug, debugLog, hexDump } from '../common/debug';
 import { DataStream } from '../basic-types/DataStream';
@@ -424,7 +424,7 @@ protected _decrypt(binaryStream : DataStream) {
       console.log(err);
       console.log(err.stack);
       console.log(hexDump(full_message_body));
-      packet_analyzer(new DataView(full_message_body));
+      analyseExtensionObject(full_message_body, 0, 0);
 
       let i = 0;
       console.log(' ---------------- block');

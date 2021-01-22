@@ -6,7 +6,7 @@
 import { assert } from '../assert';
 
 const crypto: Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
-import async_series from 'async-es/series';
+import { series as async_series } from 'async';
 // **nomsgcrypt** var exploreCertificate = require("node-opcua-crypto").crypto_explore_certificate.exploreCertificate;
 
 import { StatusCodes } from '../constants';
@@ -89,7 +89,12 @@ export type UserIdentityInfo = Partial<
   | UserIdentityInfoIssued
 >;
 
-function validateServerNonce(serverNonce: { length: number }) {
+export interface SessionActivationOptions {
+  userIdentityInfo?: UserIdentityInfo;
+  localeIds?: string[];
+}
+
+function validateServerNonce(serverNonce: Uint8Array | null): serverNonce is Uint8Array {
   return serverNonce && serverNonce.length < 32 ? false : true;
 }
 
@@ -167,7 +172,7 @@ export class OPCUAClient extends OPCUAClientBase {
     this.securityPolicy = this.securityPolicy || SecurityPolicy.None;
 
     let endpoint = this.findEndpoint(
-      this._secureChannel.endpointUrl,
+      this._secureChannel!.endpointUrl,
       this.securityMode,
       this.securityPolicy
     );
@@ -182,7 +187,7 @@ export class OPCUAClient extends OPCUAClientBase {
       if (this.endpoint_must_exist) {
         debugLog(
           'OPCUAClient#endpoint_must_exist = true and endpoint with url ',
-          this._secureChannel.endpointUrl,
+          this._secureChannel!.endpointUrl,
           ' cannot be found'
         );
         return false;
@@ -217,10 +222,10 @@ export class OPCUAClient extends OPCUAClientBase {
           );
         })
       );
-      return callback(new Error(' End point must exist ' + this._secureChannel.endpointUrl));
+      return callback(new Error(' End point must exist ' + this._secureChannel!.endpointUrl));
     }
     this._serverUri = this.endpoint.server.applicationUri;
-    this._endpointUrl = this._secureChannel.endpointUrl;
+    this._endpointUrl = this._secureChannel!.endpointUrl;
 
     const session = new ClientSession(this);
     this.__createSession_step2(session, callback);
@@ -316,7 +321,7 @@ export class OPCUAClient extends OPCUAClientBase {
             session.authenticationToken = response.authenticationToken;
             session.timeout = response.revisedSessionTimeout;
             session.serverNonce = response.serverNonce;
-            session.serverCertificate = response.serverCertificate;
+            session.serverCertificate = response.serverCertificate ?? undefined;
             session.serverSignature = response.serverSignature;
 
             debugLog('revised session timeout = ' + session.timeout);
@@ -333,9 +338,9 @@ export class OPCUAClient extends OPCUAClientBase {
           } else {
             err = new Error(
               'Error ' +
-                response.responseHeader.serviceResult.name +
+                response.responseHeader.serviceResult?.name +
                 ' ' +
-                response.responseHeader.serviceResult.description
+                response.responseHeader.serviceResult?.description
             );
           }
         }
@@ -378,14 +383,11 @@ export class OPCUAClient extends OPCUAClientBase {
 
   protected createUserIdentityToken(
     session: ClientSession,
-    userIdentityInfo: UserIdentityInfo,
+    userIdentityInfo: UserIdentityInfo | null,
     callback: ResponseCallback<UserIdentityToken>
   ): void {
     assert('function' === typeof callback);
-
-    if (null === userIdentityInfo) {
-      return callback(null, null);
-    }
+    userIdentityInfo = userIdentityInfo ?? {};
     if (isAnonymous(userIdentityInfo)) {
       try {
         const token = createAnonymousIdentityToken(session);
@@ -420,8 +422,13 @@ export class OPCUAClient extends OPCUAClientBase {
   }
 
   // see OPCUA Part 4 - $7.35
-  protected _activateSession(session: ClientSession, callback: ResponseCallback<ClientSession>) {
+  protected _activateSession(
+    session: ClientSession,
+    options: SessionActivationOptions | null,
+    callback: ResponseCallback<ClientSession>
+  ) {
     assert(typeof callback === 'function');
+    options = options ?? {};
 
     // istanbul ignore next
     if (!this._secureChannel) {
@@ -442,7 +449,7 @@ export class OPCUAClient extends OPCUAClientBase {
 
     this.createUserIdentityToken(
       session,
-      this._userIdentityInfo,
+      options.userIdentityInfo ?? null,
       async (err, userIdentityToken) => {
         if (err) {
           session.client = _old_client;
@@ -454,7 +461,7 @@ export class OPCUAClient extends OPCUAClientBase {
         const request = new ActivateSessionRequest({
           // This is a signature generated with the private key associated with the
           // clientCertificate. The SignatureAlgorithm shall be the AsymmetricSignatureAlgorithm
-          // specified in the SecurityPolicy for the Endpoint. The SignatureData type is defined in 7.30.
+          // specified in the SecurityPolicy for the Endpoint. The SignatureData type is defined in 7.32.
 
           clientSignature: await this.computeClientSignature(
             this._secureChannel,
@@ -480,7 +487,7 @@ export class OPCUAClient extends OPCUAClientBase {
           // shall use any that it has.
           // This parameter only needs to be specified during the first call to ActivateSession during a single
           // application Session. If it is not specified the Server shall keep using the current localeIds for the Session.
-          localeIds: [],
+          localeIds: options.localeIds ?? [],
 
           // The credentials of the user associated with the Client application. The Server uses these credentials to
           // determine whether the Client should be allowed to activate a Session and what resources the Client has access
@@ -526,7 +533,11 @@ export class OPCUAClient extends OPCUAClientBase {
    * @param callback
    * @return {*}
    */
-  public reactivateSession(session: ClientSession, callback: ErrorCallback) {
+  public reactivateSession(
+    session: ClientSession,
+    options: SessionActivationOptions,
+    callback: ErrorCallback
+  ) {
     assert(typeof callback === 'function');
     assert(this._secureChannel, ' client must be connected first');
 
@@ -543,7 +554,7 @@ export class OPCUAClient extends OPCUAClientBase {
 
     debugLog('OPCUAClient#reactivateSession');
 
-    this._activateSession(session, (err) => {
+    this._activateSession(session, options, (err) => {
       if (!err) {
         if (old_client !== this) {
           // remove session from old client:
@@ -575,9 +586,12 @@ export class OPCUAClient extends OPCUAClientBase {
    * @param callback
    * @return {*}
    */
-  public reactivateSessionP(session: ClientSession): Promise<void> {
+  public reactivateSessionP(
+    session: ClientSession,
+    options: SessionActivationOptions
+  ): Promise<void> {
     return new Promise((res, rej) => {
-      this.reactivateSession(session, (err) => {
+      this.reactivateSession(session, options, (err) => {
         if (err) {
           rej(err);
         } else {
@@ -616,16 +630,9 @@ export class OPCUAClient extends OPCUAClientBase {
    */
 
   public createSession(
-    userIdentityInfo: UserIdentityInfo | null,
+    options: SessionActivationOptions | null,
     callback: ResponseCallback<ClientSession>
   ): void {
-    if ('function' === typeof userIdentityInfo) {
-      (<any>callback) = userIdentityInfo;
-      userIdentityInfo = { type: UserTokenType.Anonymous };
-    }
-
-    this._userIdentityInfo = userIdentityInfo;
-
     assert('function' === typeof callback);
 
     this._createSession((err, session) => {
@@ -634,7 +641,7 @@ export class OPCUAClient extends OPCUAClientBase {
       } else {
         this._addSession(session);
 
-        this._activateSession(session, function (err) {
+        this._activateSession(session, options, function (err) {
           callback(err, session);
         });
       }
@@ -659,9 +666,9 @@ export class OPCUAClient extends OPCUAClientBase {
    *     const session = client.createSession(userIdentityInfo);
    *
    */
-  public createSessionP(userIdentityInfo: UserIdentityInfo | null): Promise<ClientSession> {
+  public createSessionP(options: SessionActivationOptions | null): Promise<ClientSession> {
     return new Promise((res, rej) => {
-      this.createSession(userIdentityInfo, (err, clientSession) => {
+      this.createSession(options, (err, clientSession) => {
         if (err) {
           rej(err);
         } else {
@@ -680,23 +687,21 @@ export class OPCUAClient extends OPCUAClientBase {
    */
   public changeSessionIdentity(
     session: ClientSession | null,
-    userIdentityInfo: UserIdentityInfo | null,
+    options: SessionActivationOptions | null,
     callback: ErrorCallback
   ) {
     assert('function' === typeof callback);
 
-    this._userIdentityInfo = userIdentityInfo;
-
-    this._activateSession(session, function (err) {
+    this._activateSession(session, options, function (err) {
       callback(err);
     });
   }
   public changeSessionIdentityP(
     session: ClientSession | null,
-    userIdentityInfo: UserIdentityInfo | null
+    options: SessionActivationOptions | null
   ): Promise<void> {
     return new Promise((res, rej) => {
-      this.changeSessionIdentity(session, userIdentityInfo, (err) => {
+      this.changeSessionIdentity(session, options, (err) => {
         if (err) {
           rej(err);
         } else {
@@ -832,60 +837,60 @@ export class OPCUAClient extends OPCUAClientBase {
     assert('function' === typeof callback, 'expecting callback function');
 
     let the_session: ClientSession;
-    let the_error: Error;
+    let the_error: Error | undefined | null;
     let need_disconnect = false;
     async_series(
       [
         // step 1 : connect to
-        (callback: ErrorCallback) => {
+        (innerCallback: ErrorCallback) => {
           this.connect(endpointUrl, function (err) {
             need_disconnect = true;
             if (err) {
               console.log(' cannot connect to endpoint :', endpointUrl);
             }
-            callback(err);
+            innerCallback(err);
           });
         },
 
         // step 2 : createSession
-        (callback: ErrorCallback) => {
+        (innerCallback: ErrorCallback) => {
           this.createSession(null, (err, session) => {
             if (!err) {
-              the_session = session;
+              the_session = session!;
             }
-            callback(err);
+            innerCallback(err);
           });
         },
 
-        (callback: () => void) => {
+        (innerCallback: () => void) => {
           try {
             inner_func(the_session, function (err) {
               the_error = err;
-              callback();
+              innerCallback();
             });
           } catch (err) {
             console.log('OPCUAClient#withClientSession', err.message);
             the_error = err;
-            callback();
+            innerCallback();
           }
         },
 
         // close session
-        (callback: () => void) => {
+        (innerCallback: () => void) => {
           the_session.close(/*deleteSubscriptions=*/ true, function (err) {
             if (err) {
               console.log('OPCUAClient#withClientSession: session closed failed ?');
             }
-            callback();
+            innerCallback();
           });
         },
-        (callback: () => void) => {
+        (innerCallback: () => void) => {
           this.disconnect(function (err) {
             need_disconnect = false;
             if (err) {
               console.log('OPCUAClient#withClientSession: client disconnect failed ?');
             }
-            callback();
+            innerCallback();
           });
         },
       ],
@@ -963,7 +968,7 @@ function isIssued(userIdentityInfo: UserIdentityInfo): userIdentityInfo is UserI
 function findUserTokenPolicy(
   endpoint_description: endpoints_service.EndpointDescription,
   userTokenType: UserTokenType
-): endpoints_service.UserTokenPolicy {
+): endpoints_service.UserTokenPolicy | null {
   assert(endpoint_description instanceof EndpointDescription);
   const r = endpoint_description.userIdentityTokens.filter(function (
     userIdentity: endpoints_service.UserTokenPolicy
@@ -981,11 +986,8 @@ function createAnonymousIdentityToken(
   const endpoint_desc = session.endpoint;
   assert(endpoint_desc instanceof EndpointDescription);
 
-  const userTokenPolicy: endpoints_service.UserTokenPolicy = findUserTokenPolicy(
-    endpoint_desc,
-    UserTokenType.Anonymous
-  );
-  if (!userTokenPolicy) {
+  const userTokenPolicy = findUserTokenPolicy(endpoint_desc, UserTokenType.Anonymous);
+  if (!userTokenPolicy || !userTokenPolicy.policyId) {
     throw new Error('Cannot find ANONYMOUS user token policy in end point description');
   }
   return new AnonymousIdentityToken({ policyId: userTokenPolicy.policyId });
