@@ -3,7 +3,7 @@
 /**
  * @module opcua.datamodel
  */
-import {NodeId, coerceNodeId} from './nodeid';
+import { NodeId, coerceNodeId } from './nodeid';
 import { NodeIdType } from '../generated/NodeIdType';
 
 /**
@@ -42,81 +42,87 @@ import { NodeIdType } from '../generated/NodeIdType';
  * @constructor
  */
 export class ExpandedNodeId extends NodeId {
-    public static readonly NullExpandedNodeId: Readonly<ExpandedNodeId> = new ExpandedNodeId(NodeIdType.Numeric, 0, 0);
-    public static readonly UNDEFINED_NAMESPACE = 0;
-    public namespaceUri: null | string;
-    public serverIndex: number;
-    constructor(identifierType: NodeIdType, value, namespace: number =
-        ExpandedNodeId.UNDEFINED_NAMESPACE, namespaceUri?: string|null, serverIndex?: number) {
-        super(identifierType, value, namespace);
-        this.namespaceUri = namespaceUri || null;
-        this.serverIndex = serverIndex || 0;
-    }
+  public static readonly NullExpandedNodeId: Readonly<ExpandedNodeId> = new ExpandedNodeId(
+    NodeIdType.Numeric,
+    0,
+    0
+  );
+  public static readonly UNDEFINED_NAMESPACE = 0;
+  public namespaceUri: null | string;
+  public serverIndex: number;
+  constructor(
+    identifierType: NodeIdType,
+    value: number | string | Uint8Array,
+    namespace: number = ExpandedNodeId.UNDEFINED_NAMESPACE,
+    namespaceUri?: string | null,
+    serverIndex?: number
+  ) {
+    super(identifierType, value, namespace);
+    this.namespaceUri = namespaceUri || null;
+    this.serverIndex = serverIndex || 0;
+  }
 
-    /**
- * @method toString
- * @return {string}
- */
-    toString(): string {
+  /**
+   * @method toString
+   * @return {string}
+   */
+  toString(): string {
     let str = super.toString();
     if (this.namespaceUri) {
-        str = 'nsu=' + this.namespaceUri + ';' + str;
+      str = 'nsu=' + this.namespaceUri + ';' + str;
     }
     if (this.serverIndex) {
-        str = 'svr=' + this.serverIndex + ';' + str;
+      str = 'svr=' + this.serverIndex + ';' + str;
     }
     return str;
-    }
+  }
 
-
-    /**
-     * convert nodeId to a JSON string. same as {@link NodeId#toString }
-     * @method  toJSON
-     * @return {string}
-     */
-    toJSON(): string {
-        return this.toString();
-    }
-
+  /**
+   * convert nodeId to a JSON string. same as {@link NodeId#toString }
+   * @method  toJSON
+   * @return {string}
+   */
+  toJSON(): string {
+    return this.toString();
+  }
 }
 
-export function coerceExpandedNodeId(value): ExpandedNodeId {
+export function coerceExpandedNodeId(value: any): ExpandedNodeId {
+  if (value == null) {
+    return ExpandedNodeId.NullExpandedNodeId;
+  }
 
-    if (value == null) {
-        return ExpandedNodeId.NullExpandedNodeId;
+  if (value instanceof ExpandedNodeId) {
+    return value;
+  }
+  let namespaceUri = null;
+  let serverIndex = 0;
+
+  if (typeof value === 'string') {
+    if (value.substr(0, 4) === 'svr=') {
+      const idStart = value.indexOf(';');
+      serverIndex = Number.parseInt(value.substring(4, idStart), 10);
+      if (isNaN(serverIndex)) {
+        throw new Error('String cannot be coerced to an ExpandedNodeId (invalid svr) : ' + value);
+      }
+      value = value.substring(idStart + 1);
     }
 
-    if (value instanceof ExpandedNodeId) {
-        return value;
+    if (value.substr(0, 4) === 'nsu=') {
+      const idStart = value.indexOf(';');
+      namespaceUri = value.substring(4, idStart);
+      value = value.substring(idStart + 1);
     }
-    let namespaceUri = null;
-    let serverIndex = 0;
+  } else if (value instanceof Object) {
+    namespaceUri = value.namespaceUri;
+    serverIndex = value.serverIndex;
+  }
 
-    if (typeof value === 'string') {
-        if (value.substr(0, 4) === 'svr=') {
-            const idStart = value.indexOf(';');
-            serverIndex =  Number.parseInt(value.substring(4, idStart ), 10);
-            if ( isNaN(serverIndex)) {
-                throw new Error('String cannot be coerced to an ExpandedNodeId (invalid svr) : ' + value);
-            }
-            value = value.substring(idStart + 1);
-        }
-
-        if (value.substr(0, 4) === 'nsu=') {
-            const idStart = value.indexOf(';');
-            namespaceUri = value.substring(4, idStart );
-            value = value.substring(idStart + 1);
-        }
-    } else if (value instanceof Object) {
-        namespaceUri = value.namespaceUri;
-        serverIndex = value.serverIndex;
-    }
-
-    const n = coerceNodeId(value);
-    if (namespaceUri) {
-        n.namespace = 0;
-    }
-    return new ExpandedNodeId(n.identifierType, n.value, n.namespace, namespaceUri, serverIndex);
+  const n = coerceNodeId(value);
+  if (namespaceUri) {
+    n.namespace = 0;
+  }
+  return new ExpandedNodeId(n.identifierType, n.value, n.namespace, namespaceUri, serverIndex);
 }
 
 /**
@@ -125,29 +131,38 @@ export function coerceExpandedNodeId(value): ExpandedNodeId {
  * @param [namespace=0] {Integer} the namespace
  * @return {ExpandedNodeId}
  */
-export function makeExpandedNodeId(value: any, namespace?: number, namespaceUri: string| null = null) {
+export function makeExpandedNodeId(
+  value: any,
+  namespace?: number,
+  namespaceUri: string | null = null
+) {
+  if (value === undefined && namespace === undefined) {
+    return new ExpandedNodeId(NodeIdType.Numeric, 0, 0, null, 0);
+  }
+  const serverIndex = 0;
+  let n;
 
-    if (value === undefined && namespace === undefined) {
-        return new ExpandedNodeId(NodeIdType.Numeric, 0, 0, null, 0);
-    }
-    const serverIndex = 0;
-    let n;
+  if (value instanceof ExpandedNodeId) {
+    // construct from a ExpandedNodeId => copy
+    n = value;
+    return new ExpandedNodeId(
+      n.identifierType,
+      n.value,
+      n.namespace,
+      n.namespaceUri,
+      n.serverIndex
+    );
+  }
+  if (value instanceof NodeId) {
+    // construct from a nodeId
+    n = value;
+    return new ExpandedNodeId(n.identifierType, n.value, n.namespace, namespaceUri, serverIndex);
+  }
 
-    if (value instanceof ExpandedNodeId) {
-        // construct from a ExpandedNodeId => copy
-        n = value;
-        return new ExpandedNodeId(n.identifierType, n.value, n.namespace, n.namespaceUri, n.serverIndex);
-    }
-    if (value instanceof NodeId) {
-        // construct from a nodeId
-        n = value;
-        return new ExpandedNodeId(n.identifierType, n.value, n.namespace, namespaceUri, serverIndex);
-    }
-
-    const valueInt = parseInt(value, 10);
-    if (!Number.isFinite(valueInt)) {
-        throw new Error(' cannot makeExpandedNodeId out of ' + value);
-    }
-    namespace = namespace || 0;
-    return new ExpandedNodeId(NodeIdType.Numeric, valueInt, namespace, namespaceUri, serverIndex);
+  const valueInt = parseInt(value, 10);
+  if (!Number.isFinite(valueInt)) {
+    throw new Error(' cannot makeExpandedNodeId out of ' + value);
+  }
+  namespace = namespace || 0;
+  return new ExpandedNodeId(NodeIdType.Numeric, valueInt, namespace, namespaceUri, serverIndex);
 }
