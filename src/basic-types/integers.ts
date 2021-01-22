@@ -40,7 +40,7 @@ export function decodeUInt16(stream: DataStream): number {
   return stream.getUint16();
 }
 
-export function isValidInt16(value: unknown): boolean {
+export function isValidInt16(value: any): boolean {
   if (!Number.isFinite(value)) {
     return false;
   }
@@ -58,7 +58,7 @@ export function decodeInt16(stream: DataStream): number {
   return stream.getInt16();
 }
 
-export function isValidInt32(value: unknown): boolean {
+export function isValidInt32(value: any): boolean {
   if (!Number.isFinite(value)) {
     return false;
   }
@@ -75,7 +75,7 @@ export function decodeInt32(stream: DataStream): number {
   return stream.getInt32();
 }
 
-export function isValidUInt32(value: unknown): boolean {
+export function isValidUInt32(value: any): boolean {
   if (!Number.isFinite(value)) {
     return false;
   }
@@ -92,7 +92,7 @@ export function decodeUInt32(stream: DataStream): number {
   return stream.getUint32();
 }
 
-export function isValidInt8(value: unknown): boolean {
+export function isValidInt8(value: any): boolean {
   if (!Number.isFinite(value)) {
     return false;
   }
@@ -115,7 +115,7 @@ export const randomSByte = randomInt8;
 export const encodeSByte = encodeInt8;
 export const decodeSByte = decodeInt8;
 
-export function isValidUInt8(value: unknown): boolean {
+export function isValidUInt8(value: any): boolean {
   if (!Number.isFinite(value)) {
     return false;
   }
@@ -136,7 +136,7 @@ export const randomByte = randomUInt8;
 export const encodeByte = encodeUInt8;
 export const decodeByte = decodeUInt8;
 
-export function isValidUInt64(value: unknown): boolean {
+export function isValidUInt64(value: any): boolean {
   return value instanceof Array && value.length === 2;
 }
 export function randomUInt64(): Array<number> {
