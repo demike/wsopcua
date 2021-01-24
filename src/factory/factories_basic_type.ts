@@ -2,13 +2,11 @@
 /**
  * @module opcua.miscellaneous
  */
-import {assert} from '../assert';
+import { assert } from '../assert';
 
 import * as ec from '../basic-types';
-import {registerType, _defaultTypeMap} from './factories_builtin_types';
-
-
-
+import { registerType, _defaultTypeMap } from './factories_builtin_types';
+import { ITypeSchema } from './type_schema';
 
 /**
  * register a Basic Type ,
@@ -37,72 +35,73 @@ import {registerType, _defaultTypeMap} from './factories_builtin_types';
  *
  * @param [schema.toJSONFunc]{Function} optional, a method to convert a value into the request type.
  */
-export function registerBasicType(schema) {
-    const name = schema.name;
+export function registerBasicType(schema: ITypeSchema) {
+  const name = schema.name;
 
-    const t = _defaultTypeMap[schema.subtype];
+  const t = _defaultTypeMap[schema.subtype];
 
-    /* istanbul ignore next */
-    if (!t) {
-        console.log(JSON.stringify(schema));
-        throw new Error(' cannot find subtype ' + schema.subtype);
-    }
-    assert('function' === typeof t.decode);
+  /* istanbul ignore next */
+  if (!t) {
+    console.log(JSON.stringify(schema));
+    throw new Error(' cannot find subtype ' + schema.subtype);
+  }
+  assert('function' === typeof t.decode);
 
-    const encodeFunc = schema.encode || t.encode;
-    assert('function' === typeof encodeFunc);
+  const encodeFunc = schema.encode || t.encode;
+  assert('function' === typeof encodeFunc);
 
-    const decodeFunc = schema.decode || t.decode;
-    assert('function' === typeof decodeFunc);
+  const decodeFunc = schema.decode || t.decode;
+  assert('function' === typeof decodeFunc);
 
-    const defaultValue = (schema.defaultValue === undefined ) ? t.defaultValue : schema.defaultValue;
-    // assert('function' === typeof defaultValue);
+  const defaultValue = schema.defaultValue === undefined ? t.defaultValue : schema.defaultValue;
+  // assert('function' === typeof defaultValue);
 
-    const coerceFunc = schema.coerce || t.coerce;
+  const coerceFunc = schema.coerce || t.coerce;
 
-    const toJSONFunc = schema.toJSON || t.toJSON;
+  const toJSONFunc = schema.toJSON || t.toJSON;
 
-    const random = schema.random || defaultValue;
+  const random = schema.random || defaultValue;
 
-    const new_schema = {
-        name: name,
-        encode: encodeFunc,
-        decode: decodeFunc,
-        defaultValue: defaultValue,
-        coerce: coerceFunc,
-        toJSON: toJSONFunc,
-        subType: schema.subtype,
-        random: random
-    };
-    registerType(new_schema);
+  const new_schema = {
+    name: name,
+    encode: encodeFunc,
+    decode: decodeFunc,
+    defaultValue: defaultValue,
+    coerce: coerceFunc,
+    toJSON: toJSONFunc,
+    subType: schema.subtype,
+    random: random,
+  };
+  registerType(new_schema);
 }
 
 // =============================================================================================
 // Registering the Basic Type already defined int the OPC-UA Specification
 // =============================================================================================
 
-registerBasicType({name: 'Counter', subtype: 'UInt32'});
+registerBasicType({ name: 'Counter', subtype: 'UInt32' });
 // OPC Unified Architecture, part 3.0 $8.13 page 65
-registerBasicType({name: 'Duration', subtype: 'Double'});
-registerBasicType({name: 'UAString', subtype: 'String'});
-registerBasicType({name: 'UtcTime',  subtype: 'DateTime'});
-registerBasicType({name: 'Int8',     subtype: 'SByte'});
-registerBasicType({name: 'UInt8',    subtype: 'Byte'});
+registerBasicType({ name: 'Duration', subtype: 'Double' });
+registerBasicType({ name: 'UAString', subtype: 'String' });
+registerBasicType({ name: 'UtcTime', subtype: 'DateTime' });
+registerBasicType({ name: 'Int8', subtype: 'SByte' });
+registerBasicType({ name: 'UInt8', subtype: 'Byte' });
 // xx registerBasicType({name:"XmlElement" ,subtype:"String"  });
-registerBasicType({name: 'Time',     subtype: 'String'});
+registerBasicType({ name: 'Time', subtype: 'String' });
 // string in the form "en-US" or "de-DE" or "fr" etc...
 
-registerBasicType({name: 'LocaleId',
-    subtype: 'String',
-    encode: ec.encodeLocaleId,
-    decode: ec.decodeLocaleId,
-    validate: ec.validateLocaleId,
-    defaultValue: null
+registerBasicType({
+  name: 'LocaleId',
+  subtype: 'String',
+  encode: ec.encodeLocaleId,
+  decode: ec.decodeLocaleId,
+  validate: ec.validateLocaleId,
+  defaultValue: null,
 });
 
-registerBasicType({name: 'ContinuationPoint', subtype: 'ByteString'});
-registerBasicType({name: 'Image',    subtype: 'ByteString'});
-registerBasicType({name: 'ImageBMP', subtype: 'ByteString'});
-registerBasicType({name: 'ImageJPG', subtype: 'ByteString'});
-registerBasicType({name: 'ImagePNG', subtype: 'ByteString'});
-registerBasicType({name: 'ImageGIF', subtype: 'ByteString'});
+registerBasicType({ name: 'ContinuationPoint', subtype: 'ByteString' });
+registerBasicType({ name: 'Image', subtype: 'ByteString' });
+registerBasicType({ name: 'ImageBMP', subtype: 'ByteString' });
+registerBasicType({ name: 'ImageJPG', subtype: 'ByteString' });
+registerBasicType({ name: 'ImagePNG', subtype: 'ByteString' });
+registerBasicType({ name: 'ImageGIF', subtype: 'ByteString' });

@@ -336,8 +336,8 @@ export function findBuiltInType(datatypeName: string | QualifiedName): TypeSchem
   if (!t) {
     throw new Error('datatype ' + datatypeName + ' must be registered');
   }
-  if (t.subType && t.subType !== t.name /* avoid infinite recursion */) {
-    return findBuiltInType(t.subType);
+  if (t.subtype && t.subtype !== t.name /* avoid infinite recursion */) {
+    return findBuiltInType(t.subtype);
   }
   return t;
 }

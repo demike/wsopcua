@@ -1,12 +1,16 @@
 import { assert } from '../assert';
+import { DataStream } from '../basic-types/DataStream';
 
 export interface ITypeSchema {
   name: string;
-  encode: Function;
-  decode: Function;
-  coerce?: Function;
-  subType?: string;
-  //    defaultValue? : Function
+  subtype?: string;
+  encode?: (value: any, stream: DataStream) => void;
+  decode?: (stream: DataStream) => void;
+  validate?: (value: any) => boolean;
+  coerce?: (value: any) => any;
+  toJSON?: (value: any) => any;
+  random?: () => any;
+  defaultValue?: any;
 }
 
 /**
@@ -15,13 +19,16 @@ export interface ITypeSchema {
  * @constructor
  * create a new type Schema
  */
+
 export class TypeSchema implements ITypeSchema {
   name: string;
-  encode: Function;
-  decode: Function;
-  coerce?: Function;
-  subType?: string;
-  protected defaultValue: any;
+  encode?: (value: any, stream: DataStream) => void;
+  decode?: (stream: DataStream) => void;
+  validate?: (value: any) => boolean;
+  coerce?: (value: any) => any;
+  toJSON?: (value: any) => any;
+  subtype?: string;
+  public defaultValue: any;
   constructor(options: ITypeSchema | any) {
     for (const prop in options) {
       if (options.hasOwnProperty(prop)) {

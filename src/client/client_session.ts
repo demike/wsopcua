@@ -167,7 +167,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   protected static emptyUint32Array = new Uint32Array(0);
 
   protected static readonly allAttributeIds = Object.values(read_service.AttributeIds).filter(
-    (v) => Number.isInteger(v) && v !== read_service.AttributeIds.INVALID
+    (v) => Number.isInteger(v) && (v as number) !== read_service.AttributeIds.INVALID
   ) as read_service.AttributeIds[];
 
   serverCertificate?: Uint8Array;
