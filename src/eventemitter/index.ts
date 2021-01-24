@@ -1,5 +1,6 @@
 'use strict';
 
+// tslint:disable-next-line: no-unbound-method
 const has = Object.prototype.hasOwnProperty;
 let prefix = '~';
 
@@ -10,7 +11,7 @@ let prefix = '~';
  * @constructor
  * @private
  */
-function Events() {}
+function Events(): any {}
 
 //
 // We try to not inherit from `Object.prototype`. In some engines creating an
@@ -26,8 +27,8 @@ if (Object.create) {
   // This hack is needed because the `__proto__` property is still inherited in
   // some old browsers like Android 4, iPhone 5.1, Opera 11 and Safari 5.
   //
-  if (!new Events().__proto__) {
-      prefix = <any>false;
+  if (!new (Events as any)().__proto__) {
+    prefix = <any>false;
   }
 }
 
@@ -39,46 +40,9 @@ if (Object.create) {
  * @constructor
  * @private
  */
-function EE(fn, once) {
+function EE(fn: Function, once: boolean) {
   this.fn = fn;
   this.once = once || false;
-}
-
-/**
- * Add a listener for a given event.
- *
- * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
- * @param {(String|Symbol)} event The event name.
- * @param {Function} fn The listener function.
- * @param {*} context The context to invoke the listener with.
- * @param {Boolean} once Specify if the listener is a one-time listener.
- * @returns {EventEmitter}
- * @private
- */
-function addListener(emitter, event, fn, once) {
-  if (typeof fn !== 'function') {
-    throw new TypeError('The listener must be a function');
-  }
-
-  const listener = new EE(fn, once)
-    , evt = prefix ? prefix + event : event;
-
-  if (!emitter._events[evt]) { emitter._events[evt] = listener, emitter._eventsCount++; } 
-  else if (!emitter._events[evt].fn) { emitter._events[evt].push(listener); } 
-  else { emitter._events[evt] = [emitter._events[evt], listener]; }
-
-  return emitter;
-}
-
-/**
- * Clear event by name.
- *
- * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
- * @param {(String|Symbol)} evt The Event name.
- * @private
- */
-function clearEvent(emitter, evt) {
-  if (--emitter._eventsCount === 0) { emitter._events = new Events(); } else { delete emitter._events[evt]; }
 }
 
 /**
@@ -88,234 +52,307 @@ function clearEvent(emitter, evt) {
  * @constructor
  * @public
  */
-export class EventEmitter<EventTypesMap extends {[evtName: string]: any}> {
+export class EventEmitter<EventTypesMap extends { [evtName: string]: any }> {
+  /**
+   * Return an array listing the events for which the emitter has registered
+   * listeners.
+   *
+   * @returns {Array}
+   * @public
+   */
+  public eventNames<MessageType extends keyof EventTypesMap>(): Array<MessageType> {
+    const names: MessageType[] = [];
 
-/**
- * Return an array listing the events for which the emitter has registered
- * listeners.
- *
- * @returns {Array}
- * @public
- */
-public eventNames<MessageType extends keyof EventTypesMap>(): Array<MessageType> {
-  let names = []
-    , events
-    , name;
+    if (this._eventsCount === 0) {
+      return names;
+    }
 
-  if (this._eventsCount === 0) { return names; }
+    const events = this._events;
+    for (const name in events) {
+      if (has.call(events, name)) {
+        names.push((prefix ? name.slice(1) : name) as MessageType);
+      }
+    }
 
-  for (name in (events = this._events)) {
-    if (has.call(events, name)) { names.push(prefix ? name.slice(1) : name); }
+    if (Object.getOwnPropertySymbols) {
+      return names.concat(Object.getOwnPropertySymbols(events) as MessageType[]);
+    }
+
+    return names;
   }
 
-  if (Object.getOwnPropertySymbols) {
-    return names.concat(Object.getOwnPropertySymbols(events));
+  /**
+   * Return the listeners registered for a given event.
+   *
+   * @param {(String|Symbol)} event The event name.
+   * @returns {Array} The registered listeners.
+   * @public
+   */
+  public listeners<MessageType extends keyof EventTypesMap>(
+    event: MessageType
+  ): Array<EventTypesMap[MessageType]> {
+    const evt = prefix ? prefix + event : (event as string);
+    const handlers = this._events[evt];
+
+    if (!handlers) {
+      return [];
+    }
+    if (handlers.fn) {
+      return [handlers.fn];
+    }
+
+    const l = handlers.length;
+    const ee = new Array(l);
+
+    for (let i = 0; i < l; i++) {
+      ee[i] = handlers[i].fn;
+    }
+    return ee;
   }
 
-  return names;
-}
+  /**
+   * Return the number of listeners listening to a given event.
+   *
+   * @param {(String|Symbol)} event The event name.
+   * @returns {Number} The number of listeners.
+   * @public
+   */
+  public listenerCount<MessageType extends keyof EventTypesMap>(event: MessageType): number {
+    const evt = (prefix ? prefix + event : event) as string;
+    const listeners = this._events[evt];
 
-/**
- * Return the listeners registered for a given event.
- *
- * @param {(String|Symbol)} event The event name.
- * @returns {Array} The registered listeners.
- * @public
- */
-public listeners<MessageType extends keyof EventTypesMap>(event: MessageType): Array<EventTypesMap[MessageType]> {
-
-  const evt = prefix ? prefix + event : event
-    , handlers = this._events[evt];
-
-  if (!handlers) { return []; }
-  if (handlers.fn) { return [handlers.fn]; }
-
-  const l = handlers.length;
-  const ee = new Array(l);
-
-  for (let i = 0; i < l; i++) {
-    ee[i] = handlers[i].fn;
+    if (!listeners) {
+      return 0;
+    }
+    if (listeners.fn) {
+      return 1;
+    }
+    return listeners.length;
   }
-  return ee;
-}
 
-/**
- * Return the number of listeners listening to a given event.
- *
- * @param {(String|Symbol)} event The event name.
- * @returns {Number} The number of listeners.
- * @public
- */
-public listenerCount<MessageType extends keyof EventTypesMap>(event: MessageType): number {
-  const evt = prefix ? prefix + event : event
-    , listeners = this._events[evt];
-
-  if (!listeners) { return 0; }
-  if (listeners.fn) { return 1; }
-  return listeners.length;
-}
-
-/**
- * Calls each of the listeners registered for a given event.
- *
- * @param {(String|Symbol)} event The event name.
- * @returns {Boolean} `true` if the event had listeners, else `false`.
- * @public
- */
-public emit<MessageType extends keyof EventTypesMap>(
+  /**
+   * Calls each of the listeners registered for a given event.
+   *
+   * @param {(String|Symbol)} event The event name.
+   * @returns {Boolean} `true` if the event had listeners, else `false`.
+   * @public
+   */
+  public emit<MessageType extends keyof EventTypesMap>(
     event: MessageType,
     ...message: Parameters<EventTypesMap[MessageType]>
-): boolean {
-  let evt = prefix ? prefix + event : event;
+  ): boolean {
+    const evt = (prefix ? prefix + event : event) as string;
 
-  if (!this._events[evt]) { return false; }
-
-  const listeners = this._events[evt];
-
-  if (listeners.fn) {
-    if (listeners.once) { this.removeListener(event, listeners.fn, true); }
-
-    listeners.fn(...message);
-    return  true;
-  } else {
-    const length = listeners.length;
-
-    for (let i = 0; i < length; i++) {
-      if (listeners[i].once) {
-        this.removeListener(event, listeners[i].fn, true);
-      }
-      listeners[i].fn(...message);
+    if (!this._events[evt]) {
+      return false;
     }
+
+    const listeners = this._events[evt];
+
+    if (listeners.fn) {
+      if (listeners.once) {
+        this.removeListener(event, listeners.fn, true);
+      }
+
+      listeners.fn(...message);
+      return true;
+    } else {
+      const length = listeners.length;
+
+      for (let i = 0; i < length; i++) {
+        if (listeners[i].once) {
+          this.removeListener(event, listeners[i].fn, true);
+        }
+        listeners[i].fn(...message);
+      }
+    }
+
+    return true;
   }
 
-  return true;
-}
+  /**
+   * Add a listener for a given event.
+   *
+   * @param {(String|Symbol)} event The event name.
+   * @param {Function} fn The listener function.
+   * @param {*} [context=this] The context to invoke the listener with.
+   * @returns {EventEmitter} `this`.
+   * @public
+   */
 
-/**
- * Add a listener for a given event.
- *
- * @param {(String|Symbol)} event The event name.
- * @param {Function} fn The listener function.
- * @param {*} [context=this] The context to invoke the listener with.
- * @returns {EventEmitter} `this`.
- * @public
- */
-
-public on<MessageType extends keyof EventTypesMap>(
+  public on<MessageType extends keyof EventTypesMap>(
     event: MessageType,
     handler: EventTypesMap[MessageType]
-): this {
-  return addListener(this, event, handler, false);
-}
-public addListener<MessageType extends keyof EventTypesMap>(
+  ): this {
+    return this._addListener(event, handler, false);
+  }
+  public addListener<MessageType extends keyof EventTypesMap>(
     event: MessageType,
     handler: EventTypesMap[MessageType]
-): this {
-  return addListener(this, event, handler, false);
-}
+  ): this {
+    return this._addListener(event, handler, false);
+  }
 
-/**
- * Add a one-time listener for a given event.
- *
- * @param {(String|Symbol)} event The event name.
- * @param {Function} fn The listener function.
- * @param {*} [context=this] The context to invoke the listener with.
- * @returns {EventEmitter} `this`.
- * @public
- */
+  /**
+   * Add a one-time listener for a given event.
+   *
+   * @param {(String|Symbol)} event The event name.
+   * @param {Function} fn The listener function.
+   * @param {*} [context=this] The context to invoke the listener with.
+   * @returns {EventEmitter} `this`.
+   * @public
+   */
 
-public once<MessageType extends keyof EventTypesMap>(
+  public once<MessageType extends keyof EventTypesMap>(
     event: MessageType,
     handler: EventTypesMap[MessageType]
-): this {
-  return addListener(this, event, handler, true);
-}
+  ): this {
+    return this._addListener(event, handler, true);
+  }
 
-/**
- * Remove the listeners of a given event.
- *
- * @param {(String|Symbol)} event The event name.
- * @param {Function} fn Only remove the listeners that match this function.
- * @param {*} context Only remove the listeners that have this context.
- * @param {Boolean} once Only remove one-time listeners.
- * @returns {EventEmitter} `this`.
- * @public
- */
-public removeListener<MessageType extends keyof EventTypesMap>(event: MessageType, fn?: EventTypesMap[MessageType], once?: boolean): this {
-  let evt = prefix ? prefix + event : event;
+  /**
+   * Add a listener for a given event.
+   *
+   * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
+   * @param {(String|Symbol)} event The event name.
+   * @param {Function} fn The listener function.
+   * @param {*} context The context to invoke the listener with.
+   * @param {Boolean} once Specify if the listener is a one-time listener.
+   * @returns {EventEmitter}
+   * @private
+   */
+  private _addListener<MessageType extends keyof EventTypesMap>(
+    event: MessageType,
+    handler: EventTypesMap[MessageType],
+    once = false
+  ) {
+    if (typeof handler !== 'function') {
+      throw new TypeError('The listener must be a function');
+    }
 
-  if (!this._events[evt]) { return this; }
-  if (!fn) {
-    clearEvent(this, evt);
+    const listener = new (EE as any)(handler, once);
+    const evt = (prefix ? prefix + event : event) as string;
+
+    if (!this._events[evt]) {
+      this._events[evt] = listener;
+      this._eventsCount++;
+    } else if (!this._events[evt].fn) {
+      this._events[evt].push(listener);
+    } else {
+      this._events[evt] = [this._events[evt], listener];
+    }
+
     return this;
   }
 
-  let listeners = this._events[evt];
+  /**
+   * Remove the listeners of a given event.
+   *
+   * @param {(String|Symbol)} event The event name.
+   * @param {Function} fn Only remove the listeners that match this function.
+   * @param {*} context Only remove the listeners that have this context.
+   * @param {Boolean} once Only remove one-time listeners.
+   * @returns {EventEmitter} `this`.
+   * @public
+   */
+  public removeListener<MessageType extends keyof EventTypesMap>(
+    event: MessageType,
+    fn?: EventTypesMap[MessageType],
+    once?: boolean
+  ): this {
+    const evt = (prefix ? prefix + event : event) as string;
 
-  if (listeners.fn) {
-    if (
-      listeners.fn === fn &&
-      (!once || listeners.once)
-    ) {
-      clearEvent(this, evt);
+    if (!this._events[evt]) {
+      return this;
     }
-  } else {
-    let events = [];
-    let length = listeners.length;
-    for (let i = 0; i < length; i++) {
-      if (
-        listeners[i].fn !== fn ||
-        (once && !listeners[i].once)
-      ) {
-        events.push(listeners[i]);
+    if (!fn) {
+      this.clearEvent(evt);
+      return this;
+    }
+
+    const listeners = this._events[evt];
+
+    if (listeners.fn) {
+      if (listeners.fn === fn && (!once || listeners.once)) {
+        this.clearEvent(evt);
+      }
+    } else {
+      const events = [];
+      const length = listeners.length;
+      for (let i = 0; i < length; i++) {
+        if (listeners[i].fn !== fn || (once && !listeners[i].once)) {
+          events.push(listeners[i]);
+        }
+      }
+
+      //
+      // Reset the array, or remove it completely if we have no more listeners.
+      //
+      if (events.length) {
+        this._events[evt] = events.length === 1 ? events[0] : events;
+      } else {
+        this.clearEvent(evt);
       }
     }
 
-    //
-    // Reset the array, or remove it completely if we have no more listeners.
-    //
-    if (events.length) { this._events[evt] = events.length === 1 ? events[0] : events; }
-    else { clearEvent(this, evt); }
+    return this;
   }
 
-  return this;
-}
+  /**
+   * Remove all listeners, or those of the specified event.
+   *
+   * @param {(String|Symbol)} [event] The event name.
+   * @returns {EventEmitter} `this`.
+   * @public
+   */
+  public removeAllListeners<MessageType extends keyof EventTypesMap>(event?: MessageType): this {
+    let evt: string;
 
-/**
- * Remove all listeners, or those of the specified event.
- *
- * @param {(String|Symbol)} [event] The event name.
- * @returns {EventEmitter} `this`.
- * @public
- */
-public removeAllListeners<MessageType extends keyof EventTypesMap>(event?: MessageType): this {
-  let evt;
+    if (event) {
+      evt = (prefix ? prefix + event : event) as string;
+      if (this._events[evt]) {
+        this.clearEvent(evt);
+      }
+    } else {
+      this._events = new (Events as any)();
+      this._eventsCount = 0;
+    }
 
-  if (event) {
-    evt = prefix ? prefix + event : event;
-    if (this._events[evt]) { clearEvent(this, evt); }
-  } else {
-    this._events = new Events();
-    this._eventsCount = 0;
+    return this;
   }
 
-  return this;
-}
+  /**
+   * Clear event by name.
+   *
+   * @param {EventEmitter} emitter Reference to the `EventEmitter` instance.
+   * @param {(String|Symbol)} evt The Event name.
+   * @private
+   */
+  private clearEvent(evt: string) {
+    if (--this._eventsCount === 0) {
+      this._events = new (Events as any)();
+    } else {
+      delete this._events[evt];
+    }
+  }
+
   //
   // Expose the prefix.
   //
   static prefixed: string | boolean = prefix;
 
-  protected _events = new Events();
+  protected _events: { [key: string]: any | any[] } = new (Events as any)();
   protected _eventsCount = 0;
 }
 //
 // Alias methods name off.
 //
 
-
-export interface EventEmitter<EventTypesMap extends {[evtName: string]: any}> {
-    off<MessageType extends keyof EventTypesMap>(event: MessageType, fn?: EventTypesMap[MessageType], once?: boolean): this;
+export interface EventEmitter<EventTypesMap extends { [evtName: string]: any }> {
+  off<MessageType extends keyof EventTypesMap>(
+    event: MessageType,
+    fn?: EventTypesMap[MessageType],
+    once?: boolean
+  ): this;
 }
 EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
-
