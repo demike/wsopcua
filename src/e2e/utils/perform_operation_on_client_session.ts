@@ -78,13 +78,13 @@ export function perform_operation_on_subscription(
         priority: 6,
       });
 
-      await new Promise((resolve) =>
+      await new Promise<void>((resolve) =>
         subscription.on('started', function () {
           resolve();
         })
       );
 
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         try {
           do_func(session, subscription, function (err: Error) {
             do_func_err = err;
@@ -99,7 +99,7 @@ export function perform_operation_on_subscription(
       subscription.on('terminated', function () {
         //
       });
-      await new Promise((resolve) =>
+      await new Promise<void>((resolve) =>
         subscription.terminate(function (err) {
           // ignore errors : subscription may have been terminated due to timeout or transfer
           if (err) {
@@ -193,7 +193,7 @@ export async function perform_operation_on_monitoredItemP(
         queueSize: 1,
       });
 
-      await new Promise((resolve) =>
+      await new Promise<void>((resolve) =>
         monitoredItem.on('initialized', function () {
           resolve();
         })
