@@ -43,12 +43,11 @@ describe('Testing ChannelSecurityToken lifetime', function () {
   it('A client should periodically renew the expiring security token', async () => {
     await client.connectP(endpointUrl);
 
-    const waitingTime =
-      ((client as any).defaultSecureTokenLifetime + 1000) * 10;
+    const waitingTime = ((client as any).defaultSecureTokenLifetime + 1000) * 10;
     console.log('waiting time = ', waitingTime);
 
     let security_token_renewed_counter = 0;
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       const id = window.setTimeout(
         () => reject(new Error('security token not renewed')),
         waitingTime

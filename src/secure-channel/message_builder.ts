@@ -13,7 +13,7 @@ import { chooseSecurityHeader } from './secure_message_chunk_manager';
 
 const decodeString = ec.decodeString;
 
-import { analyseExtensionObject, packet_analyzer } from '../packet-analyzer';
+import { analyseExtensionObject } from '../packet-analyzer';
 
 import { doDebug, debugLog, hexDump } from '../common/debug';
 import { DataStream } from '../basic-types/DataStream';

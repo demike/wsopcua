@@ -401,7 +401,6 @@ export class OPCUAClient extends OPCUAClientBase {
 
       try {
         createUserNameIdentityToken(session, userName, password).then((token) => {
-          token;
           callback(null, token);
         });
         return;
@@ -412,7 +411,6 @@ export class OPCUAClient extends OPCUAClientBase {
     } else if (isIssued(userIdentityInfo)) {
       const tokenData = (userIdentityInfo as UserIdentityInfoIssued).tokenData;
       createIssuedIdentityToken(session, tokenData).then((token) => {
-        token;
         callback(null, token);
       });
     } else {
@@ -1161,7 +1159,7 @@ async function createIssuedIdentityToken(
     policyId: userTokenPolicy.policyId,
   });
 
-  // now encrypt password as requested
+  // now encrypt isseud token as requested
 
   assert(session.serverCertificate instanceof Uint8Array);
 

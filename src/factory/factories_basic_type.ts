@@ -58,7 +58,8 @@ export function registerBasicType(schema: ITypeSchema) {
 
   const coerceFunc = schema.coerce || t.coerce;
 
-  const toJSONFunc = schema.toJSON || t.toJSON;
+  const jsonEncode = schema.jsonEncode || t.jsonEncode;
+  const jsonDecode = schema.jsonDecode || t.jsonDecode;
 
   const random = schema.random || defaultValue;
 
@@ -68,9 +69,10 @@ export function registerBasicType(schema: ITypeSchema) {
     decode: decodeFunc,
     defaultValue: defaultValue,
     coerce: coerceFunc,
-    toJSON: toJSONFunc,
     subType: schema.subtype,
     random: random,
+    jsonEncode,
+    jsonDecode,
   };
   registerType(new_schema);
 }

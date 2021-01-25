@@ -8,9 +8,10 @@ export interface ITypeSchema {
   decode?: (stream: DataStream) => void;
   validate?: (value: any) => boolean;
   coerce?: (value: any) => any;
-  toJSON?: (value: any) => any;
   random?: () => any;
   defaultValue?: any;
+  jsonEncode?: (arg: any) => any;
+  jsonDecode?: (arg: any) => any;
 }
 
 /**
@@ -24,9 +25,11 @@ export class TypeSchema implements ITypeSchema {
   name: string;
   encode?: (value: any, stream: DataStream) => void;
   decode?: (stream: DataStream) => void;
+  jsonEncode?: (arg: any) => any;
+  jsonDecode?: (arg: any) => any;
   validate?: (value: any) => boolean;
   coerce?: (value: any) => any;
-  toJSON?: (value: any) => any;
+  //  toJSON?: (value: any) => any;
   subtype?: string;
   public defaultValue: any;
   constructor(options: ITypeSchema | any) {

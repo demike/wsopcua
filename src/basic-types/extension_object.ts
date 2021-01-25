@@ -45,7 +45,10 @@ export function constructEmptyExtensionObject(nodeId: NodeId) {
 //                    |  string without any null terminator.
 //
 
-export function encodeExtensionObject(object: IEncodable | null | undefined, stream: DataStream) {
+export function encodeExtensionObject(
+  object: IEncodable | null | undefined | ExtensionObject,
+  stream: DataStream
+) {
   if (!object) {
     encodeNodeId(makeNodeId(0), stream);
     stream.setUint8(0x00); // no body is encoded
@@ -54,29 +57,32 @@ export function encodeExtensionObject(object: IEncodable | null | undefined, str
     // ensure we have a valid encoding Default Binary ID !!!
 
     /* istanbul ignore next */
-    if (!object.encodingDefaultBinary) {
+    if (!(object as IEncodable).encodingDefaultBinary) {
       console.log('xxxxxxxxx encoding ExtObj ', object);
       throw new Error('Cannot find encodingDefaultBinary for this object');
     }
     /* istanbul ignore next */
-    if (object.encodingDefaultBinary.isEmpty()) {
-      console.log('xxxxxxxxx encoding ExtObj ', object.encodingDefaultBinary.toString());
+    if ((object as IEncodable).encodingDefaultBinary.isEmpty()) {
+      console.log(
+        'xxxxxxxxx encoding ExtObj ',
+        (object as IEncodable).encodingDefaultBinary.toString()
+      );
       throw new Error('Cannot find encodingDefaultBinary for this object');
     }
     /* istanbul ignore next */
-    if (is_internal_id(object.encodingDefaultBinary.value as number)) {
+    if (is_internal_id((object as IEncodable).encodingDefaultBinary.value as number)) {
       console.log(
         'xxxxxxxxx encoding ExtObj ',
-        object.encodingDefaultBinary.toString(),
+        (object as IEncodable).encodingDefaultBinary.toString(),
         object.constructor.name
       );
       throw new Error('Cannot find valid OPCUA encodingDefaultBinary for this object');
     }
 
-    encodeNodeId(object.encodingDefaultBinary, stream);
+    encodeNodeId((object as IEncodable).encodingDefaultBinary, stream);
     stream.setUint8(0x01); // 0x01 The body is encoded as a ByteString.
-    stream.setUint32(DataStream.binaryStoreSize(object));
-    object.encode(stream);
+    stream.setUint32(DataStream.binaryStoreSize(object as IEncodable));
+    (object as IEncodable).encode(stream);
   }
 }
 
@@ -133,7 +139,7 @@ export function jsonEncodeExtensionObject(object: any) {
   const out: any = {};
 
   if (!object) {
-    //out.TypeId = jsonEncodeNodeId(NodeId.NullNodeId);
+    // out.TypeId = jsonEncodeNodeId(NodeId.NullNodeId);
     return undefined;
     // no body is encoded, end of the job!
   } else {

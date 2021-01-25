@@ -27,9 +27,7 @@ describe('testing Client-Server - Event', function () {
     await client.connectP(OPCUA_TEST_SERVER_URI);
 
     setup.client.on('close', function (err) {
-      expect(err).toBeNull(
-        'No error shall be transmitted when client initiates the disconnection'
-      );
+      expect(err).toBeNull('No error shall be transmitted when client initiates the disconnection');
       close_counter++;
     });
 
@@ -99,18 +97,13 @@ describe('testing Client-Server - Event', function () {
     expect(_client_received_close_event.calls.count()).toBe(0);
 
     client.on('close', function (err) {
-      debugLog(
-        ' 8 --> client has sent "close" event',
-        err ? err.message : null
-      );
+      debugLog(' 8 --> client has sent "close" event', err ? err.message : null);
       // xx should.exist(err);
     });
 
-    await new Promise((resolve) => {
+    await new Promise<void>((resolve) => {
       client.once('connection_lost', function () {
-        debugLog(
-          ' 4 or 5--> client has detected that server has shutdown abruptly'
-        );
+        debugLog(' 4 or 5--> client has detected that server has shutdown abruptly');
         debugLog('           and will try to reconnect');
 
         setTimeout(() => {
