@@ -194,13 +194,13 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
     }
   }
   _encrypt(chunk: ArrayBuffer) {
-    if (this.plainBlockSize > 0) {
+    if (this.plainBlockSize > 0 && this.encryptBufferFunc) {
       const startEncryptionPos = this.headerSize;
       const endEncryptionPos = this.dataEnd + this.signatureLength;
       const area_to_encrypt = chunk.slice(startEncryptionPos, endEncryptionPos);
       assert(area_to_encrypt.byteLength % this.plainBlockSize === 0); // padding should have been applied
       const nbBlock = area_to_encrypt.byteLength / this.plainBlockSize;
-      const encrypted_buf = this.encryptBufferFunc!(area_to_encrypt);
+      const encrypted_buf = this.encryptBufferFunc(area_to_encrypt);
       assert(encrypted_buf.byteLength % this.cipherBlockSize === 0);
       assert(encrypted_buf.byteLength === nbBlock * this.cipherBlockSize);
       new Uint8Array(chunk).set(new Uint8Array(encrypted_buf), this.headerSize); // encrypted_buf.copy(chunk, this.headerSize, 0);
@@ -209,18 +209,18 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
   _push_pending_chunk(isLast: boolean) {
     if (this.pending_chunk) {
       const expected_length = this.pending_chunk.byteLength;
-      if (this.headerSize > 0) {
+      if (this.headerSize > 0 && this.writeHeaderFunc) {
         // Release 1.02  39  OPC Unified Architecture, Part 6:
         // The sequence header ensures that the first  encrypted block of every  Message  sent over
         // a channel will start with different data.
-        this.writeHeaderFunc!(
+        this.writeHeaderFunc(
           new DataView(this.pending_chunk, 0, this.headerSize),
           isLast,
           expected_length
         );
       }
-      if (this.sequenceHeaderSize > 0) {
-        this.writeSequenceHeaderFunc!(
+      if (this.sequenceHeaderSize > 0 && this.writeSequenceHeaderFunc) {
+        this.writeSequenceHeaderFunc(
           new DataView(
             this.pending_chunk,
             this.headerSize,
@@ -244,7 +244,7 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
    * @param buffer {Buffer}
    * @param length {Number}
    */
-  write(buffer: ArrayBuffer, length: number) {
+  write(buffer: ArrayBuffer, length?: number) {
     length = length || buffer.byteLength;
     assert(buffer instanceof ArrayBuffer || buffer === null);
     assert(length > 0);
@@ -283,16 +283,19 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
       extraNbPaddingByte === 0 || this.plainBlockSize > 256,
       'extraNbPaddingByte only requested when key size > 2048'
     );
+    if (!this.chunkArray) {
+      throw new Error('missing chunk array');
+    }
     // write the padding byte
-    this.chunk![this.cursor + this.dataOffset] = nbPaddingByte;
+    this.chunkArray[this.cursor + this.dataOffset] = nbPaddingByte;
     // this.chunk.writeUInt8(nbPaddingByte, this.cursor + this.dataOffset);
     this.cursor += 1;
     for (let i = 0; i < nbPaddingByteTotal; i++) {
-      this.chunk![this.cursor + this.dataOffset + i] = nbPaddingByte;
+      this.chunkArray[this.cursor + this.dataOffset + i] = nbPaddingByte;
     }
     this.cursor += nbPaddingByteTotal;
     if (this.plainBlockSize > 256) {
-      this.chunk![this.cursor + this.dataOffset] = extraNbPaddingByte;
+      this.chunkArray[this.cursor + this.dataOffset] = extraNbPaddingByte;
       this.cursor += 1;
     }
   }
