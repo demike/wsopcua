@@ -11,18 +11,13 @@ import { WriteValue } from '../generated/WriteValue';
 import { coerceNodeId } from '../nodeid/nodeid';
 import { Variant } from '../variant';
 import { DataType } from '../variant/DataTypeEnum';
-import {
-  E2ETestController,
-  getE2ETestController,
-} from './utils/test_server_controller';
+import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 
 describe('JHJ1 end-to-end testing of read and write operation on a Variable', function () {
   let session: ClientSession;
   let controller: E2ETestController;
   let client: OPCUAClient;
-  const CurrentTimeVariableId = coerceNodeId(
-    'ns=2;s=Scalar_Simulation_Interval'
-  );
+  const CurrentTimeVariableId = coerceNodeId('ns=2;s=Scalar_Simulation_Interval');
 
   beforeAll(async () => {
     controller = getE2ETestController();
@@ -163,7 +158,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       timestampsToReturn: TimestampsToReturn.Both,
     });
 
-    await new Promise((resolve, reject) =>
+    await new Promise<void>((resolve, reject) =>
       session.performMessageTransaction(request, function (err /*, response*/) {
         // xx console.log(response.results[0].toString());
         expect(err).toBeFalsy();
@@ -181,7 +176,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       timestampsToReturn: TimestampsToReturn.Both,
     });
 
-    await new Promise((resolve, reject) =>
+    await new Promise<void>((resolve, reject) =>
       session.performMessageTransaction(request, function (err /*, response*/) {
         // xx console.log(response.results[0].toString());
         expect(err).toBeFalsy();
@@ -199,7 +194,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       timestampsToReturn: TimestampsToReturn.Server,
     });
 
-    await new Promise((resolve, reject) =>
+    await new Promise<void>((resolve, reject) =>
       session.performMessageTransaction(request, function (err /*, response*/) {
         // xx console.log(response.results[0].toString());
         expect(err).toBeFalsy();
@@ -260,9 +255,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       let writeResponse = await session.writeP(nodesToWrite);
       // xx console.log(nodesToWrite[0].value.value.value.constructor.name);
 
-      expect(
-        nodesToWrite[0].value.value.value instanceof Float32Array
-      ).toBeTruthy();
+      expect(nodesToWrite[0].value.value.value instanceof Float32Array).toBeTruthy();
       nodesToWrite[0].value.value.value = new Float32Array(1024 * 1024);
       writeResponse = await session.writeP(nodesToWrite);
 
