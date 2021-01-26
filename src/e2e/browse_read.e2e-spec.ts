@@ -1,7 +1,6 @@
 import { ClientSession } from '../client/client_session';
 import { OPCUAClient } from '../client/opcua_client';
 import { StatusCodes } from '../constants/raw_status_codes';
-import { VariableIds } from '../constants/VariableIds';
 import {
   DataValue,
   IBrowseDescription,
@@ -288,7 +287,7 @@ describe('Browse-Read-Write Services', function () {
   });
 
   it("T9-2 - Server should expose 'Server_NamespaceArray' variable ", function (done) {
-    const server_NamespaceArray_Id = makeNodeId(VariableIds.Server_NamespaceArray); // ns=0;i=2255
+    const server_NamespaceArray_Id = makeNodeId(/* VariableIds.Server_NamespaceArray */ 2255); // ns=0;i=2255
     session.readVariableValue(server_NamespaceArray_Id, function (
       err,
       dataValue /*, diagnosticsInfo*/
@@ -311,7 +310,7 @@ describe('Browse-Read-Write Services', function () {
   });
 
   it('T9-3 - ServerStatus object shall be accessible as a ExtensionObject', function (done) {
-    const server_NamespaceArray_Id = makeNodeId(VariableIds.Server_ServerStatus); // ns=0;i=2255
+    const server_NamespaceArray_Id = makeNodeId(/* VariableIds.Server_ServerStatus */ 2255); // ns=0;i=2255
     session.readVariableValue(server_NamespaceArray_Id, function (
       err,
       dataValue /*, diagnosticsInfo*/

@@ -582,16 +582,24 @@ describe('check coerce various types', function () {
   }
 
   types.forEach(function (type) {
-    it('coerce' + w(type, 8) + ' should preserves null or undefined values ', function () {
+    it('coerce' + w(type, 8) + ' should coerce null or undefined values to 0', function () {
       const coerceFunc = (ec as any)['coerce' + type];
 
       expect((ec as any)['coerce' + type]).toBeDefined();
 
       const value1 = coerceFunc(null);
-      expect(value1).toBeNull();
+      if (value1 instanceof Array) {
+        expect(value1).toEqual([0, 0]);
+      } else {
+        expect(value1).toEqual(0);
+      }
 
       const value2 = coerceFunc();
-      expect(value2).toEqual(undefined);
+      if (value2 instanceof Array) {
+        expect(value2).toEqual([0, 0]);
+      } else {
+        expect(value2).toEqual(0);
+      }
     });
   });
 });

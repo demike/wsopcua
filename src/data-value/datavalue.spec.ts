@@ -425,13 +425,13 @@ describe('DataValue', function () {
 });
 
 describe('TimestampsToReturn', function () {
-  it('should create an invalid timestampsToReturn', function () {
+  it('should decode timestampsToReturn', function () {
     const buffer = new ArrayBuffer(10);
     const stream = new DataStream(buffer);
-    stream.setUint32(0x3333);
+    stream.setUint32(TimestampsToReturn.Both);
     stream.rewind();
     const timestampToReturn = decodeTimestampsToReturn(stream);
-    expect(timestampToReturn).toBe(TimestampsToReturn.Invalid);
+    expect(timestampToReturn).toBe(TimestampsToReturn.Both);
   });
 });
 

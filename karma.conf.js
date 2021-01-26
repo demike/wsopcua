@@ -6,90 +6,66 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['jasmine', 'karma-typescript', 'source-map-support'],
 
-
     files: [
-      { pattern: "src/**/*.ts", esModule: true },
-      { pattern: "src/**/*.fixture", included: false, watched: false, served: true},
-//      { pattern: "src/**/schema_parser/bin/**", included: false, watched: false},
-//      { pattern: "src/**/*.d.ts", included: false, watched: false},
-//      { pattern: "src/schema_parser/**", included: false, watched: false},
-//      { pattern: "src/**/node_modules/*", included: false, watched: false}
+      { pattern: 'src/**/*.ts', esModule: true },
+      { pattern: 'src/**/*.fixture', included: false, watched: false, served: true },
+      //      { pattern: "src/**/schema_parser/bin/**", included: false, watched: false},
+      //      { pattern: "src/**/*.d.ts", included: false, watched: false},
+      //      { pattern: "src/schema_parser/**", included: false, watched: false},
+      //      { pattern: "src/**/node_modules/*", included: false, watched: false}
     ],
-    exclude: [
-      "src/**/*.d.ts",
-      "src/**/schema_parser/**",
-      "src/**/node_modules/**",
-    ],
+    exclude: ['src/**/*.d.ts', 'src/**/schema_parser/**', 'src/**/node_modules/**'],
     preprocessors: {
-      "src/**/*.ts": ["karma-typescript"],
+      'src/**/*.ts': ['karma-typescript'],
     },
     karmaTypescriptConfig: {
       tsconfig: './tsconfig.json',
-      
+
       compilerOptions: {
-        //noEmitOnError: true
-        module: "commonjs",
-        target: "ES6",
-        "sourceMap": true,
+        //noEmitOnError: true,
+        module: 'commonjs',
+        target: 'ES2015',
       },
 
       coverageOptions: {
-        exclude: [/\.(d|spec|e2e-spec)\.ts$/i,/(generated)/,/(tcp_transport)/]
+        exclude: [/\.(d|spec|e2e-spec)\.ts$/i, /(generated)/, /(tcp_transport)/, /(constants)/],
+        instrumentation: false,
       },
-      
 
-      
       bundlerOptions: {
-          entrypoints: /\.spec\.ts$/,
-          transforms: [
-            require("karma-typescript-es6-transform")()
-          ]
+        entrypoints: /\.spec\.ts$/,
+        // transforms: [require('karma-typescript-es6-transform')()],
       },
-      
-      exclude: [
-        "src/**/node_modules",
-        "src/schema_parser/**/*",
-      ],
-  },
-/*
+
+      exclude: ['src/**/node_modules', 'src/schema_parser/**/*'],
+    },
+    /*
     plugins: [
-      require('karma-jasmine'),
-      require('karma-chrome-launcher'),
-      require('karma-jasmine-html-reporter'),
-      //require('karma-coverage-istanbul-reporter'),
-      require('karma-typescript')
+      'karma-jasmine',
+      'karma-chrome-launcher',
+      'karma-jasmine-html-reporter',
+      'karma-coverage-istanbul-reporter',
+      'karma-typescript',
+      'karma-source-map-support',
     ],
 */
     client: {
-      clearContext: false // leave Jasmine Spec Runner output visible in browser
+      clearContext: false, // leave Jasmine Spec Runner output visible in browser
     },
-    
+
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage'),
       reports: ['html', 'lcovonly'],
       fixWebpackSourcePaths: true,
     },
-    
-    reporters: ['progress','kjhtml', 'karma-typescript'],
+
+    reporters: ['progress', 'kjhtml', 'karma-typescript'],
     port: 9876,
     colors: true,
-    //logLevel: config.LOG_INFO,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-
     browsers: ['Chrome'],
-/*
-  browsers: [
-    'ChromeDebugging'
-  ],
-  customLaunchers: {
-    ChromeDebugging: {
-      base: 'Chrome',
-      flags: [ '--remote-debugging-port=9333' ]
-    }
-  },
-*/
-
-    singleRun: false
+    restartOnFileChange: true,
+    singleRun: false,
   });
 };

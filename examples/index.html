@@ -1,33 +1,19 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>wsopcua test</title>
-        <meta charset="utf-8">
-        <base href=".">
-    </head>
-    <body>
+  <head>
+    <title>wsopcua test</title>
+    <meta charset="utf-8" />
+    <base href="." />
+  </head>
+  <body>
+    <script src="./dist/wsopcua.example.js"></script>
 
-    <!--    <script src="require.js" ></script> 
-        <script src="require-config.js"></script> -->
-        <script src="./dist/vendors~examples.entry.js"></script>
-        <script src="./dist/examples.entry.js"></script>
-<!--
-//            requirejs(["dist/wsopcua_example"], function(test) {
-    //This function is called when scripts/helper/util.js is loaded.
-    //If util.js calls define(), then this function is not fired until
-    //util's dependencies have loaded, and the util argument will hold
-    //the module value for "helper/util".
-//                console.log("hohohoho");
-//                test.exectest();
-//});
---> 
-        <div id="tranlateBrowsePaths"><div>Translate Browse Paths Results:</div></div>   
-        <button id="writeValue">Write Value</button>
-        <button id="callMethod">Call Method</button>
+    <div id="tranlateBrowsePaths"><div>Translate Browse Paths Results:</div></div>
+    <button id="writeValue">Write Value</button>
+    <button id="callMethod">Call Method</button>
 
-        <div id="readValues"><div>Read Values: </div></div>
-        <div id="browseResults"><div>Browse Results:</div></div>
-
-       
-    </body>
+    <div id="readValues"><div>Read Values:</div></div>
+    <div id="error"></div>
+    <div id="browseResults"><div>Browse Results:</div></div>
+  </body>
 </html>

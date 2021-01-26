@@ -6,9 +6,10 @@
     "sourceMap": true,
     "outDir": "./dist",
     "moduleResolution": "node",
-    "strictNullChecks": false
+    "strictNullChecks": false,
     // "outFile": "./dist/ws-opcua.js"
-    // "noImplicitAny": true
+    "noImplicitAny": true,
+    "lib": ["es2017", "es2017.object", "dom"]
   },
   "exclude": ["node_modules/"],
   "include": ["src/**/*.ts"]

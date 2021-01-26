@@ -1430,14 +1430,14 @@ describe('Variant with enumeration', function () {
     expect(SomeEnum.DiagnosticInfo).toBeDefined();
   });
 
-  it('should fail to create a variant from a enumeration item if dataType is not Int32', function () {
+  it('should not fail to create a variant from a enumeration item if dataType is not Int32', function () {
     expect(function () {
       const v = new Variant({
         dataType: DataType.UInt32,
         value: SomeEnum.DiagnosticInfo,
       });
       expect(v.value).toEqual(SomeEnum.DiagnosticInfo);
-    }).toThrow();
+    }).not.toThrow();
   });
 
   it('should create a variant from a enumeration item', function () {

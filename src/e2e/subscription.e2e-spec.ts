@@ -1,7 +1,6 @@
 import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 import * as opcua from '../wsopcua';
 import { makeNodeId, MonitoredItemCreateRequest } from '../wsopcua';
-import { VariableIds } from '../constants/VariableIds';
 
 describe('testing basic Client Server dealing with subscription at low level', function () {
   let session: opcua.ClientSession;
@@ -74,7 +73,7 @@ describe('testing basic Client Server dealing with subscription at low level', f
         itemsToCreate: [
           new MonitoredItemCreateRequest({
             itemToMonitor: new opcua.ReadValueId({
-              nodeId: makeNodeId(VariableIds.Server_ServerStatus_CurrentTime),
+              nodeId: makeNodeId(/* VariableIds.Server_ServerStatus_CurrentTime */ 2258),
             }),
             monitoringMode: opcua.MonitoringMode.Sampling,
             requestedParameters: new opcua.MonitoringParameters({

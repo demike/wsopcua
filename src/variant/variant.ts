@@ -252,7 +252,6 @@ export class Variant extends BaseUAObject {
 
 import { register_class_definition } from '../factory/factories_factories';
 import { registerSpecialVariantEncoder } from '../factory/factories_builtin_types_special';
-import { isArray } from 'util';
 
 register_class_definition('Variant', Variant, makeExpandedNodeId(generate_new_id()));
 registerSpecialVariantEncoder(Variant, 'Variant');
@@ -507,7 +506,7 @@ function variantToString(self: Variant, options?: any) {
       data += ', null';
     } else {
       const a = [];
-      assert(isArray(self.value) || self.value.buffer instanceof ArrayBuffer);
+      assert(Array.isArray(self.value) || self.value.buffer instanceof ArrayBuffer);
       for (let i = 0; i < Math.min(10, self.value.length); i++) {
         a[i] = self.value[i];
       }

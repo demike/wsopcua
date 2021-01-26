@@ -226,8 +226,16 @@ function RSAOAEP_Encrypt(buffer: Uint8Array, publicKey: CryptoKey): Promise<Uint
   );
 }
 
-//TODO: this should return a promise (async)
-export function compute_derived_keys(serverNonce: Uint8Array, clientNonce: Uint8Array) {
+export interface DerivedKeys1 {
+  derivedClientKeys: DerivedKeys | null;
+  derivedServerKeys: DerivedKeys | null;
+  algorithm: string | null;
+}
+// TODO: this should return a promise (async)
+export function compute_derived_keys(
+  serverNonce: Uint8Array,
+  clientNonce: Uint8Array
+): DerivedKeys1 {
   const self = this;
 
   // calculate derived keys
@@ -243,8 +251,8 @@ export function compute_derived_keys(serverNonce: Uint8Array, clientNonce: Uint8
     };
     return {
       algorithm: null,
-      derivedClientKeys: crypto_utils.computeDerivedKeys(serverNonce, clientNonce, options),
-      derivedServerKeys: crypto_utils.computeDerivedKeys(clientNonce, serverNonce, options),
+      derivedClientKeys: crypto_utils.computeDerivedKeys(serverNonce, clientNonce, options) as any, // TODO: !!!! remove this any
+      derivedServerKeys: crypto_utils.computeDerivedKeys(clientNonce, serverNonce, options) as any, // TODO: !!!! remove this any
     };
   }
   return {
@@ -407,7 +415,7 @@ export function computeSignature(
   }
   // This parameter is calculated by appending the clientNonce to the clientCertificate
   const buffer = new Uint8Array(senderCertificate.byteLength + senderNonce.byteLength);
-  //= Buffer.concat([senderCertificate, senderNonce]);
+  // = Buffer.concat([senderCertificate, senderNonce]);
   buffer.set(senderCertificate);
   buffer.set(senderNonce, senderCertificate.byteLength);
 

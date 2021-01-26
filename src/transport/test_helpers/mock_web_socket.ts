@@ -5,8 +5,8 @@ const origWS = window.WebSocket;
 export interface WebSocketMock {
   _open(): void;
   _message(msg: string | ArrayBufferLike | Blob | ArrayBufferView): void;
-  _error(): void;
-  _close(): void;
+  _error(code?: number): void;
+  _close(code?: number): void;
   addEventListener(type: string, listener: () => void): void;
   send: jasmine.Spy;
   close: jasmine.Spy;
@@ -31,7 +31,10 @@ export function installMockWebSocket() {
       // methods to mock the internal behaviour of the real WebSocket
       _open: function () {
         socketMock.readyState = WebSocket.OPEN;
-        assert(socketMock.onopen && socketMock.onopen());
+        if (socketMock.onopen) {
+          socketMock.onopen();
+        }
+
         if (socketMock.listeners['open']) {
           socketMock.listeners['open'].forEach((listener) => {
             listener({});
@@ -46,7 +49,7 @@ export function installMockWebSocket() {
           });
         }
       },
-      _error: function (code?: string) {
+      _error: function (code?: number) {
         socketMock.readyState = WebSocket.CLOSED;
         socketMock.onerror && socketMock.onerror();
         if (socketMock.listeners['error']) {

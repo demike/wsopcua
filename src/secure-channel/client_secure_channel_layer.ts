@@ -11,7 +11,12 @@ import {
   /* **nomsgcrypt** getOptionsForSymmetricSignAndEncrypt,*/ ICryptoFactory,
 } from './security_policy';
 import { MessageBuilder } from './message_builder';
-import { OPCUAClientBase, ErrorCallback, ResponseCallback } from '../client/client_base';
+import {
+  OPCUAClientBase,
+  ErrorCallback,
+  ResponseCallback,
+  OpcUaResponse,
+} from '../client/client_base';
 
 import * as log from 'loglevel';
 import { doDebug, debugLog, hexDump } from '../common/debug';
@@ -35,7 +40,6 @@ import { MessageChunker } from './message_chunker';
 import * as secure_channel_service from '../service-secure-channel';
 import { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
 import { ClientWSTransport } from '../transport/client_ws_transport';
-import { ConnectionStrategy } from '../common/client_options';
 import { IEncodable } from '../factory/factories_baseobject';
 import { IRequestHeader } from '../generated/RequestHeader';
 import { SecureMessageChunkManagerOptions } from './secure_message_chunk_manager';
@@ -56,7 +60,7 @@ const do_trace_statistics = false;
 let g_channelId = 0;
 const defaultTransactionTimeout = 60 * 1000; // 1 minute
 
-export interface ITransactionStats {
+interface ITransactionStats {
   request: any;
   response: any;
   bytesWritten: number;
@@ -70,9 +74,9 @@ export interface ITransactionStats {
 
 interface RequestData {
   request?: IEncodable & { requestHeader: IRequestHeader };
-  response?: IEncodable;
+  response?: OpcUaResponse;
   msgType?: string;
-  callback?;
+  callback?(err: Error | null, response?: OpcUaResponse): void;
 
   bytesWritten_before?: number;
   bytesWritten_after?: number;
@@ -91,7 +95,7 @@ interface RequestData {
   bytesRead?: number;
 }
 
-export function dump_transaction_statistics(stats: ITransactionStats) {
+function dump_transaction_statistics(stats: ITransactionStats) {
   function w(str: any) {
     return ('                  ' + str).substr(-12);
   }
@@ -136,6 +140,39 @@ export function dump_transaction_statistics(stats: ITransactionStats) {
   console.log('---------------------------------------------------------------------<< Stats');
 }
 
+export interface ConnectionStrategyOptions {
+  maxRetry?: number;
+  initialDelay?: number;
+  maxDelay?: number;
+  randomisationFactor?: number;
+}
+
+export interface ConnectionStrategy {
+  maxRetry: number;
+  initialDelay: number;
+  maxDelay: number;
+  randomisationFactor: number;
+}
+
+export function coerceConnectionStrategy(
+  options: ConnectionStrategyOptions | null
+): ConnectionStrategy {
+  options = options || {};
+
+  const maxRetry: number = options.maxRetry === undefined ? 10 : options.maxRetry;
+  const initialDelay = options.initialDelay || 10;
+  const maxDelay = options.maxDelay || 10000;
+  const randomisationFactor =
+    options.randomisationFactor === undefined ? 0 : options.randomisationFactor;
+
+  return {
+    initialDelay,
+    maxDelay,
+    maxRetry,
+    randomisationFactor,
+  };
+}
+
 export interface ClientSecureChannelLayerEvents {
   end_transaction: (transaction_stats: ITransactionStats) => void;
   close: ErrorCallback;
@@ -144,7 +181,7 @@ export interface ClientSecureChannelLayerEvents {
   lifetime_75: (securityToken: ChannelSecurityToken) => void;
   backoff: (number: number, delay: number) => void;
   security_token_renewed: () => void;
-  receive_response: (response: any) => void;
+  receive_response: (response: OpcUaResponse) => void;
   timed_out_request: (requestMessage: IEncodable & { requestHeader: IRequestHeader }) => void;
   send_chunk: (messageChunk: ArrayBuffer) => void;
   send_request: (requestMessage: IEncodable & { requestHeader: IRequestHeader }) => void;
@@ -160,7 +197,7 @@ export interface ClientSecureChannelLayerOptions {
   parent?: OPCUAClientBase;
   factory?: any;
   transportTimeout?: number;
-  connectionStrategy?: ConnectionStrategy;
+  connectionStrategy?: ConnectionStrategyOptions;
 }
 
 /**
@@ -227,16 +264,12 @@ export class ClientSecureChannelLayer
   }
 
   get endpointUrl() {
-    return this._transport.endpointUrl;
+    return this._transport ? this._transport.endpointUrl : '';
   }
-
-  public readonly encoding: 'opcua+uacp' | 'opcua+uajson';
 
   constructor(options: ClientSecureChannelLayerOptions) {
     super();
-    options = options || {};
 
-    this._transport = null;
     this._lastRequestId = 0;
     this.parent = options.parent;
     this._clientNonce = null; // will be created when needed
@@ -244,9 +277,7 @@ export class ClientSecureChannelLayer
 
     this.encoding = options.encoding || 'opcua+uacp';
 
-    this.messageChunker = new MessageChunker({
-      derivedKeys: null,
-    });
+    this.messageChunker = new MessageChunker({});
 
     this.defaultSecureTokenLifetime = options.defaultSecureTokenLifeTime || 30000;
     this.tokenRenewalInterval = options.tokenRenewalInterval || 0;
@@ -279,7 +310,7 @@ export class ClientSecureChannelLayer
     }
 
     (this.messageBuilder as EventEmitter<MessageBuilderEvents>)
-      .on('message', (response, msgType: string, requestId: number) =>
+      .on('message', (response: OpcUaResponse, msgType: string, requestId: number) =>
         this._on_message_received(response, msgType, requestId)
       )
       .on('error', (err, requestId) => {
@@ -335,7 +366,11 @@ export class ClientSecureChannelLayer
     return this.parent ? this.parent.getCertificateChain() : null;
   }
 
-  protected process_request_callback(request_data: RequestData, err: Error, response) {
+  protected process_request_callback(
+    request_data: RequestData,
+    err: Error,
+    response: OpcUaResponse
+  ) {
     assert('function' === typeof request_data.callback);
 
     if (!response && !err && request_data.msgType !== 'CLO') {
@@ -350,13 +385,14 @@ export class ClientSecureChannelLayer
       response.responseHeader.stringTable = [response.responseHeader.stringTable.join('\n')];
       err = new Error(
         ' serviceResult = ' +
-          response.responseHeader.serviceResult.toString() +
+          response.responseHeader.serviceResult?.toString() +
           '  returned by server \n response:' +
           response.toString() +
           '\n  request: ' +
-          request_data.toString()
+          request_data.request.toString()
       );
       (err as any).response = response;
+      (err as any).request = request_data.request;
       response = null;
     }
 
@@ -452,7 +488,7 @@ export class ClientSecureChannelLayer
     this._transport = null;
   }
 
-  protected _on_message_received(response, msgType: string, requestId: number) {
+  protected _on_message_received(response: OpcUaResponse, msgType: string, requestId: number) {
     /* jshint validthis: true */
 
     assert(msgType !== 'ERR');
@@ -572,7 +608,7 @@ export class ClientSecureChannelLayer
     // "This parameter shall have a length equal to key size used for the symmetric
     //  encryption algorithm that is identified by the securityPolicyUri"
 
-    const cryptoFactory: ICryptoFactory = getCryptoFactory(this.securityPolicy);
+    const cryptoFactory = getCryptoFactory(this.securityPolicy);
     if (!cryptoFactory) {
       // this securityPolicy may not be support yet ... let's return null
       return null;
@@ -1015,8 +1051,8 @@ export class ClientSecureChannelLayer
     }
     return this._transport.isValid();
   }
-  public isOpened() {
-    return this.isValid() && this._isOpened;
+  public isOpened(): boolean {
+    return !!this.isValid() && this._isOpened;
   }
 
   /**
@@ -1051,16 +1087,16 @@ export class ClientSecureChannelLayer
       return callback(new Error('ClientSecureChannelLayer => Socket is closed !'));
     }
 
-    let local_callback = callback;
+    let local_callback: ResponseCallback<any> | null = callback;
 
     let timeout = requestMessage.requestHeader.timeoutHint || defaultTransactionTimeout;
     timeout = Math.max(ClientSecureChannelLayer.minTransactionTimeout, timeout);
 
-    let timerId: number = null;
+    let timerId: number | null = null;
 
     let hasTimedOut = false;
 
-    const modified_callback = (err: Error, response) => {
+    const modified_callback = (err?: Error | null, response?: OpcUaResponse) => {
       /* istanbul ignore next */
       if (doDebug) {
         debugLog('------------------- client receiving response');
@@ -1186,13 +1222,13 @@ export class ClientSecureChannelLayer
       // record tick0 : before request is being sent to server
       _tick0: get_clock_tick(),
       // record tick1:  after request has been sent to server
-      _tick1: null,
+      _tick1: 0,
       // record tick2 : after response message has been received, before message processing
-      _tick2: null,
+      _tick2: 0,
       // record tick3 : after response message has been received, before message processing
-      _tick3: null,
+      _tick3: 0,
       // record tick4 after callback
-      _tick4: null,
+      _tick4: 0,
       chunk_count: 0,
     });
 
@@ -1352,9 +1388,15 @@ protected _get_security_options_for_MSG() {
     requestId: number
   ) {
     const options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader = {
-      requestId: requestId,
+      requestId,
       secureChannelId: this._securityToken ? this._securityToken.channelId /*.secureChannelId*/ : 0,
       tokenId: this._securityToken ? this._securityToken.tokenId : 0,
+      chunkSize: 0,
+
+      cipherBlockSize: 0,
+      plainBlockSize: 0,
+      sequenceHeaderSize: 0,
+      signatureLength: 0,
     };
 
     // use chunk size that has been negotiated by the transport layer
@@ -1488,16 +1530,18 @@ protected _get_security_options_for_MSG() {
   public static minTransactionTimeout = 30 * 1000; // 30 sec
   public static defaultTransactionTimeout = 60 * 1000; // 1 minute
 
+  public readonly encoding: 'opcua+uacp' | 'opcua+uajson';
+
   _securityHeader: any;
   _derivedKeys: any;
   _receiverCertificate: string;
   _serverNonce: any;
-  _transport: ClientWSTransport;
+  _transport?: ClientWSTransport;
   _isOpened: boolean;
   _securityToken: ChannelSecurityToken;
   protected _lastRequestId: number;
-  protected parent: OPCUAClientBase;
-  protected _clientNonce: Uint8Array;
+  protected parent?: OPCUAClientBase;
+  protected _clientNonce: Uint8Array | null;
   public protocolVersion: number;
   protected messageChunker: MessageChunker;
   protected _securityMode: MessageSecurityMode;
@@ -1511,7 +1555,7 @@ protected _get_security_options_for_MSG() {
   protected __in_normal_close_operation = false;
   protected _renew_security_token_requested = 0;
   protected _timedout_request_count = 0;
-  protected _securityTokenTimeoutId: number = null;
+  protected _securityTokenTimeoutId: number | null = null;
 
   // protected _transport :
   protected transportTimeout: number;

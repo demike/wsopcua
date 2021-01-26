@@ -2,38 +2,30 @@ const path = require('path');
 
 module.exports = {
   watch: true,
-  mode:"development",
+  mode: 'development',
   entry: {
-/*    main : [
+    /*    main : [
             './src/client/opcua_client'],
 */
-    examples : ['./examples/test']
+    examples: ['./examples/test'],
   },
   // Enable sourcemaps for debugging webpack's output.
-  devtool: "source-map",
+  devtool: 'source-map',
   module: {
     rules: [
       {
         test: /\.ts?$/,
         loader: 'ts-loader',
         exclude: /node_modules\/examples/,
-      }
-    ]
+      },
+    ],
   },
   resolve: {
-    modules : [path.resolve(__dirname,"node_modules")],
-    extensions: [ '.tsx', '.ts', '.js' ]
+    modules: [path.resolve(__dirname, 'node_modules')],
+    extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    //filename: 'wsopcua.js',
-		filename: "[name].entry.js",
+    filename: 'wsopcua.example.js',
     path: path.resolve(__dirname, 'examples/dist'),
-  //  library: "mylib"
   },
-  optimization: {
-      splitChunks: {
-        chunks: 'initial',
-        
-      }
-  }
 };

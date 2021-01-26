@@ -111,6 +111,7 @@ export function coerceExpandedNodeId(value: any): ExpandedNodeId {
     if (value.substr(0, 4) === 'nsu=') {
       const idStart = value.indexOf(';');
       namespaceUri = value.substring(4, idStart);
+      // TODO: check for valid namespace uri (a number would be wrong here)
       value = value.substring(idStart + 1);
     }
   } else if (value instanceof Object) {

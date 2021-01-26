@@ -27,7 +27,9 @@ describe('testing Client-Server - Event', function () {
     await client.connectP(OPCUA_TEST_SERVER_URI);
 
     setup.client.on('close', function (err) {
-      expect(err).toBeNull('No error shall be transmitted when client initiates the disconnection');
+      expect(err).toBeUndefined(
+        'No error shall be transmitted when client initiates the disconnection'
+      );
       close_counter++;
     });
 
@@ -121,6 +123,6 @@ describe('testing Client-Server - Event', function () {
 
     expect(_client_backoff_event.calls.count()).toBeGreaterThan(0);
     expect(_client_received_close_event.calls.count()).toEqual(1);
-    expect(_client_received_close_event.calls.first().args[0]).toBeNull();
+    expect(_client_received_close_event.calls.first().args[0]).toBeUndefined();
   }, 10000);
 });

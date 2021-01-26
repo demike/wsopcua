@@ -116,7 +116,7 @@ export class SecureMessageChunkManager extends EventEmitter<SecureMessageChunkMa
         this.write_header(finalC, block, totalLength);
       },
 
-      sequenceHeaderSize: options.sequenceHeaderSize,
+      sequenceHeaderSize,
       writeSequenceHeaderFunc: function (block: DataStream | DataView) {
         assert(block.byteLength === this.sequenceHeaderSize);
         self.writeSequenceHeader(block);

@@ -5,13 +5,13 @@
 
 import { assert } from '../assert';
 import * as log from 'loglevel';
-import async_series from 'async-es/series';
-import async_map from 'async-es/map';
+import { map as async_map, series as async_series } from 'async';
+// import async_series from 'async-es/series';
+// import async_map from 'async-es/map';
 import { EventEmitter } from '../eventemitter';
-import { SecurityPolicy, toUri } from '../secure-channel/security_policy';
+import { coerceSecurityPolicy, SecurityPolicy } from '../secure-channel/security_policy';
 import { MessageSecurityMode } from '../secure-channel';
 import { once } from '../utils/once';
-import * as delayed from 'delayed';
 import { ObjectRegistry } from '../object-registry/objectRegistry';
 // import {OPCUASecureObject} from '../common/secure_object'
 import { doDebug } from '../common/debug';
@@ -38,7 +38,12 @@ function debugLog(s: String) {
   }
 }
 
-import { ClientSecureChannelLayer } from '../secure-channel/client_secure_channel_layer';
+import {
+  ClientSecureChannelLayer,
+  coerceConnectionStrategy,
+  ConnectionStrategy,
+  ConnectionStrategyOptions,
+} from '../secure-channel/client_secure_channel_layer';
 import { OPCUASecureObject } from '../common/secure_object';
 import { RequestHeader, ResponseHeader } from '../service-secure-channel';
 import { ClientSession } from './client_session';
@@ -54,21 +59,21 @@ import {
 } from '../generated';
 import { IEncodable } from '../factory/factories_baseobject';
 
-const defaultConnectionStrategy = {
+const defaultConnectionStrategy: ConnectionStrategyOptions = {
   maxRetry: 10000000, // almost infinite
   initialDelay: 1000,
   maxDelay: 20 * 1000, // 20 seconds
   randomisationFactor: 0.1,
 };
 
-export type ErrorCallback = (err?: Error) => void;
+export type ErrorCallback = (err?: Error | null) => void;
 
-export interface OpcUaResponse {
+export interface OpcUaResponse extends IEncodable {
   responseHeader: ResponseHeader;
 }
 
 export type ResponseCallback<R1, R2 = undefined> = (
-  err?: Error | null,
+  err: Error | null,
   response?: R1,
   arg2?: R2
 ) => void;
@@ -79,19 +84,12 @@ export interface ResponseCallback<R1, R2 = undefined> {
 }
 */
 
-export interface ConnectionStrategy {
-  maxRetry?: number;
-  initialDelay?: number;
-  maxDelay?: number;
-  randomisationFactor?: number;
-}
-
 export interface OPCUAClientOptions {
   encoding?: 'opcua+uacp' | 'opcua+uajson'; // default: 'opcua+uacp'
 
   defaultSecureTokenLifetime?: number; // default secure token lifetime in ms
   serverCertificate?: any; // =null] {Certificate} the server certificate.
-  connectionStrategy?: ConnectionStrategy;
+  connectionStrategy?: ConnectionStrategyOptions;
   // {MessageSecurityMode} the default security mode.
   securityMode?: MessageSecurityMode; //  MessageSecurityMode, // [ =  MessageSecurityMode.None]
   securityPolicy?: SecurityPolicy; // : SecurityPolicy,//  =SecurityPolicy.NONE] {SecurityPolicy} the security mode.
@@ -122,7 +120,7 @@ export interface OPCUAClientEvents {
   after_reconnection: ErrorCallback;
   send_request: (requestMessage: IEncodable & { requestHeader: IRequestHeader }) => void;
   receive_chunk: (message_chunk: DataView) => void;
-  receive_response;
+  receive_response: (response: OpcUaResponse) => void;
   lifetime_75: (token: ChannelSecurityToken) => void;
   security_token_renewed: () => void;
   connection_lost: () => void;
@@ -193,7 +191,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
   protected _transactionsPerformed: number;
   protected _timedOutRequestCount: number;
 
-  protected _secureChannel: ClientSecureChannelLayer;
+  protected _secureChannel: ClientSecureChannelLayer | null;
   protected _server_endpoints: EndpointDescription[];
 
   protected _clientName: string;
@@ -323,8 +321,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
      * @property securityPolicy
      * @type {SecurityPolicy}
      */
-    this.securityPolicy = options.securityPolicy || toUri('None');
-    this.securityPolicy = SecurityPolicy[this.securityPolicy]; // TODO CHECK IF THIS IS RIGHT!!!
+    this.securityPolicy = coerceSecurityPolicy(options.securityPolicy);
 
     /**
      * @property serverCertificate
@@ -345,7 +342,9 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
      * @type {options.connectionStrategy|{maxRetry, initialDelay, maxDelay, randomisationFactor}|*
      *              |{maxRetry: number, initialDelay: number, maxDelay: number, randomisationFactor: number}}
      */
-    this.connectionStrategy = options.connectionStrategy || defaultConnectionStrategy;
+    this.connectionStrategy = coerceConnectionStrategy(
+      options.connectionStrategy ?? defaultConnectionStrategy
+    );
     this.keepPendingSessionsOnDisconnect = options.keepPendingSessionsOnDisconnect || false;
   }
 
@@ -420,8 +419,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     // [...]
 
     // make sure callback will only be call once regardless of outcome, and will be also deferred.
-    const callback_od = once(delayed.deferred(callback));
-    callback = null;
+    const callback_od = once(() => window.setImmediate(callback));
 
     this.registry.register(this);
 
@@ -494,11 +492,11 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         /**
          * @event close
          */
-        this.emit('close', null);
+        this.emit('close');
         window.setImmediate(callback);
       });
     } else {
-      this.emit('close', null);
+      this.emit('close');
       window.setImmediate(callback);
     }
   }
@@ -577,7 +575,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
   ): Promise<endpoints_service.ApplicationDescription[]> {
     return new Promise((res, rej) => {
       this.findServers(options, (err, applDescription) => {
-        if (err) {
+        if (err || !applDescription) {
           rej(err);
         } else {
           res(applDescription);
@@ -607,13 +605,13 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         return new Error('Internal Error');
       }
       response.servers = response.servers || [];
-      callback(null, (<FindServersOnNetworkResponse>response).servers);
+      callback(null, response.servers);
     });
   }
   public findServersOnNetworkP(options: IFindServersOnNetworkRequest): Promise<ServerOnNetwork[]> {
     return new Promise((res, rej) => {
       this.findServersOnNetwork(options, (err, servers) => {
-        if (err) {
+        if (err || !servers) {
           rej(err);
         } else {
           res(servers);
@@ -673,7 +671,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
    */
   public getEndpoints(
     options: IGetEndpointsRequest | null,
-    callback: (err: Error, endpoints?: EndpointDescription[]) => void
+    callback: ResponseCallback<EndpointDescription[]>
   ): void {
     if (!options) {
       options = {};
@@ -689,13 +687,11 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
       endpointUrl: options.endpointUrl || this.endpointUrl,
       localeIds: options.localeIds,
       profileUris: options.profileUris,
-      requestHeader: new RequestHeader({
-        auditEntryId: null,
-      }),
+      requestHeader: new RequestHeader(),
     });
 
     this.performMessageTransaction(request, (err, response) => {
-      this._server_endpoints = null;
+      this._server_endpoints = [];
       if (!err) {
         assert(response instanceof GetEndpointsResponse);
         this._server_endpoints = response.endpoints;
@@ -709,7 +705,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         if (err) {
           rej(err);
         } else {
-          res(eps);
+          res(eps!);
         }
       });
     });
@@ -830,8 +826,8 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
     const client = new OPCUAClientBase(options);
 
-    let selected_endpoint: endpoints_service.EndpointDescription = null;
-    let all_endpoints: endpoints_service.EndpointDescription[] = null;
+    let selected_endpoint: endpoints_service.EndpointDescription | undefined;
+    let all_endpoints: endpoints_service.EndpointDescription[] = [];
     const tasks = [
       function (cb: ErrorCallback) {
         client.on('backoff', function () {
@@ -850,9 +846,9 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
       },
       function (cb: ErrorCallback) {
         client.getEndpoints(null, (err, endpoints) => {
-          all_endpoints = endpoints;
           if (!err) {
-            endpoints.forEach(function (endpoint) {
+            all_endpoints = endpoints!;
+            endpoints!.forEach(function (endpoint) {
               if (
                 endpoint.securityMode === securityMode &&
                 endpoint.securityPolicyUri === securityPolicy
@@ -874,13 +870,13 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         return callback(err);
       }
       if (!selected_endpoint) {
-        callback(
+        return callback(
           new Error(
             ' Cannot find an Endpoint matching ' +
               ' security mode: ' +
-              securityMode.toString() +
+              securityMode?.toString() +
               ' policy: ' +
-              securityPolicy.toString()
+              securityPolicy?.toString()
           )
         );
       }
@@ -1154,7 +1150,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
   }
 
   public getClientNonce() {
-    return this._secureChannel.clientNonce;
+    return this._secureChannel ? this._secureChannel.clientNonce : null;
   }
 
   public getPrivateKey() {

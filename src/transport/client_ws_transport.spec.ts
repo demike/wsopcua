@@ -132,10 +132,13 @@ describe('testing ClientWS_transport', function () {
       }
     });
 
-    (transport as any)._socket._open();
+    let mockSocket: WebSocketMock = (transport as any)._socket;
+    mockSocket._open();
     // received Fake HEL Message
     // Pretend the message is malformed or that the server crashed for some reason : abort now !
-    (transport as any)._socket._error(1000);
+    mockSocket._error(1000);
+    // the close event immediately follows the error event
+    mockSocket._close(1000);
   });
 
   it('should report an error if the server close the socket unexpectedly', function (done) {
@@ -158,7 +161,10 @@ describe('testing ClientWS_transport', function () {
 
     // received Fake HEL Message
     // Pretend the message is malformed or that the server crashed for some reason : abort now !
-    (transport as any)._socket._error(1000);
+    const mockSocket: WebSocketMock = (transport as any)._socket;
+    mockSocket._error(1006);
+    // the close event fires immediately after the error event
+    mockSocket._close(1006);
   });
 
   function makeError(statusCode: StatusCode) {
@@ -370,6 +376,8 @@ describe('testing ClientWS_transport', function () {
 
     // server closing
     sock._error();
+    // websocket: close event is always emitted directly after error
+    sock._close();
   });
   /*
 
