@@ -333,8 +333,8 @@ export class OPCUAClient extends OPCUAClientBase {
               console.log(response.serverEndpoints);
               return callback(new Error('Invalid endpoint descriptions Found'));
             }
-            this._server_endpoints = response.serverEndpoints;
-            // TODO: xx session.serverEndpoints = response.serverEndpoints;
+
+            // TODO: session.serverEndpoints = response.serverEndpoints;
           } else {
             err = new Error(
               'Error ' +
@@ -504,13 +504,17 @@ export class OPCUAClient extends OPCUAClientBase {
 
         session.performMessageTransaction(request, function (err, response) {
           if (!err && response.responseHeader.serviceResult === StatusCodes.Good) {
-            assert(response instanceof ActivateSessionResponse);
-
-            session.serverNonce = response.serverNonce;
+            if (!(response instanceof ActivateSessionResponse)) {
+              return callback(new Error('Internal Error'));
+            }
 
             if (!validateServerNonce(session.serverNonce)) {
               return callback(new Error('Invalid server Nonce'));
             }
+
+            session.serverNonce = response.serverNonce;
+            // TODO: session.lastResponseReceivedTime = Date.now();
+
             // 05.11.2019: Derfler added new session_activated
             session.emit('session_activated');
             return callback(null, session);

@@ -692,11 +692,17 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
     this.performMessageTransaction(request, (err, response) => {
       this._server_endpoints = [];
-      if (!err) {
-        assert(response instanceof GetEndpointsResponse);
+      if (err) {
+        return callback(err);
+      }
+
+      if (!response || !(response instanceof GetEndpointsResponse)) {
+        return callback(new Error('Internal Error'));
+      }
+      if (response && response.endpoints) {
         this._server_endpoints = response.endpoints;
       }
-      callback(err, this._server_endpoints);
+      callback(null, this._server_endpoints);
     });
   }
   public getEndpointsP(options: IGetEndpointsRequest | null): Promise<EndpointDescription[]> {

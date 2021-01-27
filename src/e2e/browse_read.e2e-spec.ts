@@ -310,7 +310,7 @@ describe('Browse-Read-Write Services', function () {
   });
 
   it('T9-3 - ServerStatus object shall be accessible as a ExtensionObject', function (done) {
-    const server_NamespaceArray_Id = makeNodeId(/* VariableIds.Server_ServerStatus */ 2255); // ns=0;i=2255
+    const server_NamespaceArray_Id = makeNodeId(/* VariableIds.Server_ServerStatus */ 2256);
     session.readVariableValue(server_NamespaceArray_Id, function (
       err,
       dataValue /*, diagnosticsInfo*/
