@@ -429,10 +429,11 @@ export class NumericRange {
   }
 }
 
-function slice<U, T extends ArrayLike<U>>(arr: T, start: number, end: number): T {
+function slice<U, T extends ArrayLike<U> | ArrayBuffer>(arr: T, start: number, end: number): T {
   assert(arr, 'expecting value to slice');
-
-  if (start === 0 && end === arr.length) {
+  const arrayLength =
+    (arr as any).byteLength === undefined ? (arr as any).length : (arr as any).byteLength;
+  if (start === 0 && end === arrayLength) {
     return arr;
   }
 
@@ -491,7 +492,7 @@ function extract_single_value<U, T extends ArrayLike<U>>(
   };
 }
 
-function extract_array_range<U, T extends ArrayLike<U>>(
+function extract_array_range<U, T extends ArrayLike<U> | ArrayBuffer>(
   array: T,
   low_index: number,
   high_index: number
@@ -499,14 +500,17 @@ function extract_array_range<U, T extends ArrayLike<U>>(
   assert(Number.isFinite(low_index) && Number.isFinite(high_index));
   assert(low_index >= 0);
   assert(low_index <= high_index);
-  if (low_index >= array.length) {
+
+  const arrayLength = (array as any).byteLength ?? (array as any).length;
+
+  if (low_index >= arrayLength) {
     if (typeof array === 'string') {
       return { array: ('' as any) as T, statusCode: StatusCodes.BadIndexRangeNoData as StatusCode };
     }
     return { array: ([] as any) as T, statusCode: StatusCodes.BadIndexRangeNoData as StatusCode };
   }
   // clamp high index
-  high_index = Math.min(high_index, array.length - 1);
+  high_index = Math.min(high_index, arrayLength - 1);
 
   return {
     array: slice(array, low_index, high_index + 1),
