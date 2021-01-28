@@ -67,6 +67,18 @@ export class Variant extends BaseUAObject {
      */
     if (options.arrayType !== undefined) {
       this.setArrayType(options.arrayType);
+    } else if (
+      options.value &&
+      (Array.isArray(options.value) ||
+        (options.value.buffer !== undefined && this.dataType !== DataType.ByteString))
+    ) {
+      if (options.dataType === DataType.UInt64 || options.dataType === DataType.Int64) {
+        throw new Error(
+          'Variant#constructor : when using UInt64 or Int64 arrayType must be specified , as automatic detection is impossible'
+        );
+      } else {
+        this.arrayType = VariantArrayType.Array;
+      }
     }
 
     /**
