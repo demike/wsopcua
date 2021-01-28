@@ -5,13 +5,14 @@ import {
   ICreateSubscriptionRequest,
   CallMethodRequest,
   CallMethodResult,
+  LocalizedText,
 } from '../../generated';
 import { OPCUAClientOptions } from '../../client/client_base';
 import { ConnectionStrategy, SecurityPolicy } from '../../secure-channel';
 import { OPCUAClient } from '../../client/opcua_client';
 import { ClientSession } from '../../client/client_session';
 import { DataType, Variant, VariantArrayType } from '../../variant';
-import { ClientSubscription, StatusCodes } from '../../wsopcua';
+import { ClientSubscription, LocaleId, StatusCodes } from '../../wsopcua';
 
 export const OPCUA_CONTROL_SERVER_URI = 'ws://localhost:4444';
 export const OPCUA_TEST_SERVER_URI = 'ws://localhost:4445';
@@ -68,6 +69,7 @@ export interface E2ETestController {
     browseName: string;
     parent: string | NodeId | number;
     value: Variant;
+    displayName?: LocalizedText | LocalizedText[];
   }): Promise<NodeId>;
   addComplianceTestNamespace(): Promise<number>;
 
@@ -232,6 +234,7 @@ export class E2ETestControllerImpl implements E2ETestController {
     browseName: string;
     parent: string | NodeId | number;
     value: Variant;
+    displayName?: LocalizedText | LocalizedText[];
   }) {
     const session = await this.controlSession$;
     const nodeId = coerceNodeId(options.nodeId);
@@ -258,6 +261,26 @@ export class E2ETestControllerImpl implements E2ETestController {
       }),
     ];
 
+    if (options.displayName) {
+      inputArguments.push(
+        new Variant({
+          arrayType: Array.isArray(options.displayName)
+            ? VariantArrayType.Array
+            : VariantArrayType.Scalar,
+          dataType: DataType.LocalizedText,
+          value: options.displayName,
+        })
+      );
+    } else {
+      inputArguments.push(
+        new Variant({
+          arrayType: VariantArrayType.Array,
+          dataType: DataType.LocalizedText,
+          value: [],
+        })
+      );
+    }
+
     const response = await session.callP([
       new CallMethodRequest({
         objectId: E2ETestControllerImpl.nodeManagerNodeId,
@@ -267,7 +290,7 @@ export class E2ETestControllerImpl implements E2ETestController {
     ]);
 
     if (response.result[0].statusCode !== StatusCodes.Good) {
-      throw new Error('Error adding an object ' + response.result[0].toJSON());
+      throw new Error('Error adding a variable ' + JSON.stringify(response.result[0].toJSON()));
     }
 
     return nodeId;
