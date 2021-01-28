@@ -1386,7 +1386,7 @@ describe('Variant with Advanced Array', function () {
       dataType: DataType.Double,
       arrayType: VariantArrayType.Matrix,
       dimensions: [5, 4],
-      value: [
+      value: new Float64Array([
         0x000,
         0x001,
         0x002,
@@ -1407,7 +1407,7 @@ describe('Variant with Advanced Array', function () {
         0x401,
         0x402,
         0x403,
-      ],
+      ]),
     });
 
     const nr = new NumericRange('3:4,1:3');

@@ -376,16 +376,24 @@ export class NumericRange {
     }
   }
 
-  public set_values(arrayToAlter: ArrayLike<any>, newValues: ArrayLike<any>) {
+  public set_values(
+    arrayToAlter: ArrayLike<any> | ArrayBuffer,
+    newValues: ArrayLike<any> | ArrayBuffer
+  ) {
     assert_array_or_buffer(arrayToAlter);
     assert_array_or_buffer(newValues);
 
     let low_index, high_index;
 
+    const arrayToAlterLength =
+      arrayToAlter instanceof ArrayBuffer ? arrayToAlter.byteLength : arrayToAlter.length;
+    const newValuesLength =
+      newValues instanceof ArrayBuffer ? newValues.byteLength : newValues.length;
+
     switch (this.type) {
       case NumericRangeType.Empty:
         low_index = 0;
-        high_index = arrayToAlter.length - 1;
+        high_index = arrayToAlterLength - 1;
         break;
       case NumericRangeType.SingleValue:
         low_index = this.value;
@@ -402,15 +410,17 @@ export class NumericRange {
         return { array: [], statusCode: StatusCodes.BadIndexRangeInvalid };
     }
 
-    if (high_index >= arrayToAlter.length || low_index >= arrayToAlter.length) {
+    if (high_index >= arrayToAlterLength || low_index >= arrayToAlterLength) {
       return { array: [], statusCode: StatusCodes.BadIndexRangeNoData };
     }
-    if (this.type !== NumericRangeType.Empty && newValues.length !== high_index - low_index + 1) {
+    if (this.type !== NumericRangeType.Empty && newValuesLength !== high_index - low_index + 1) {
       return { array: [], statusCode: StatusCodes.BadIndexRangeInvalid };
     }
 
     const insertInPlace = Array.isArray(arrayToAlter)
       ? insertInPlaceStandardArray
+      : arrayToAlter instanceof ArrayBuffer
+      ? insertInPlaceArrayBuffer
       : insertInPlaceTypedArray;
     return {
       array: insertInPlace(arrayToAlter, low_index, high_index, newValues),
@@ -580,7 +590,9 @@ function extract_matrix_range<U, T extends ArrayLike<U>>(
 
 function assert_array_or_buffer(array: any) {
   assert(
-    Array.isArray(array) || array.buffer instanceof ArrayBuffer /*|| array instanceof Buffer*/
+    Array.isArray(array) ||
+      array instanceof ArrayBuffer ||
+      array.buffer instanceof ArrayBuffer /*|| array instanceof Buffer*/
   );
 }
 
@@ -602,6 +614,11 @@ function insertInPlaceTypedArray(arrayToAlter: any, low: number, high: number, n
   assert(newValues.length === high - low + 1);
   arrayToAlter.subarray(low, high + 1).set(newValues);
   return arrayToAlter;
+}
+
+function insertInPlaceArrayBuffer(arrayToAlter: any, low: number, high: number, newValues: any) {
+  return insertInPlaceTypedArray(new Uint8Array(arrayToAlter), low, high, new Uint8Array(newValues))
+    .buffer;
 }
 
 /*
