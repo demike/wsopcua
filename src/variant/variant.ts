@@ -12,7 +12,7 @@ import * as ec from '../basic-types';
 
 import { BaseUAObject } from '../factory/factories_baseobject';
 import { DataStream } from '../basic-types/DataStream';
-import { cloneComplexArray, UInt32 } from '../basic-types';
+import { cloneComplexArray, UInt32, unFlattenArray } from '../basic-types';
 
 import { findBuiltInType } from '../factory/factories_builtin_types';
 import { generate_new_id } from '../factory';
@@ -98,6 +98,7 @@ export class Variant extends BaseUAObject {
      * @default  null
      */
     if (options.dimensions !== undefined) {
+      // TODO: this could also be done lazily in the encode methods
       this.dimensions = options.dimensions;
       this.arrayType = VariantArrayType.Matrix;
       if (this.dimensions.reduce((prev, current) => prev * current, 1) !== this.value.length) {
@@ -251,7 +252,7 @@ export class Variant extends BaseUAObject {
     if (inp.Dimensions) {
       this.arrayType = VariantArrayType.Matrix;
       this.dimensions = inp.Dimensions;
-      this.value = jsonDecodeMatrix(this.dataType, body);
+      this.value = jsonDecodeMatrix(this.dataType, body, this.dimensions);
     } else if (Array.isArray(body)) {
       this.arrayType = VariantArrayType.Array;
       this.value = jsonDecodeVariantArray(this.dataType, body);
@@ -275,7 +276,7 @@ export class Variant extends BaseUAObject {
     if (this.arrayType === VariantArrayType.Array) {
       out.Body = jsonEncodeVariantArray(this.dataType, this.value);
     } else if (this.arrayType === VariantArrayType.Matrix) {
-      out.Body = jsonEncodeMatrix(this.dataType, this.value);
+      out.Body = jsonEncodeMatrix(this.dataType, this.value, this.dimensions);
     } else {
       const encode = get_json_encoder(this.dataType);
       if (encode) {
@@ -624,13 +625,14 @@ function jsonEncodeGeneralArray(dataType: DataType, array: any[]) {
   return array.map(encode);
 }
 
-function jsonEncodeMatrix(dataType: DataType, matrix: any[]) {
+function jsonEncodeMatrix(dataType: DataType, matrix: any[], dimesions: number[]) {
   // 2*3*2 matrix:
-  // let matrix = [[[0,1],[2,3],[4,5]] , [[6,7],[8,9],[10,11]]];
-
-  throw new Error('not implemented');
+  // [0,1,2,3,4,5,6,7,8,9,10,11] ==>
+  // [[[0,1],[2,3],[4,5]] , [[6,7], [8,9], [10,11]]];
+  return unFlattenArray(jsonEncodeVariantArray(dataType, matrix), dimesions);
 }
 
-function jsonDecodeMatrix(dataType: DataType, matrix: any[]) {
-  throw new Error('not implemented');
+function jsonDecodeMatrix(dataType: DataType, matrix: any[], dimensions: number[]) {
+  // TODO fix the compiler warning about flat
+  return jsonDecodeVariantArray(dataType, (matrix as any).flat(dimensions.length - 1));
 }

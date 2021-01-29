@@ -7,6 +7,7 @@ import { makeNodeId, NodeId } from '../nodeid/nodeid';
 import { makeExpandedNodeId, ExpandedNodeId } from '../nodeid/expanded_nodeid';
 import { NodeIdType } from '../generated/NodeIdType';
 import { StatusCodes } from '../constants/raw_status_codes';
+import { unFlattenArray } from './array';
 
 const crypto: Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
 
@@ -285,5 +286,26 @@ describe('encoding and decoding arrays', function () {
     data[1] = null;
 
     test_encode_decode(data, json_encode_array_bytestring, json_decode_array_bytestring);
+  });
+});
+
+describe('unFlattenArray', () => {
+  it('should create a multi dimensional array from a flat array', () => {
+    const dimensions = [2, 3, 2];
+    const flatArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    const expectedMatrix = [
+      [
+        [0, 1],
+        [2, 3],
+        [4, 5],
+      ],
+      [
+        [6, 7],
+        [8, 9],
+        [10, 11],
+      ],
+    ];
+
+    expect(unFlattenArray(flatArray, dimensions)).toEqual(expectedMatrix);
   });
 });
