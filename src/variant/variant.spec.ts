@@ -1318,7 +1318,7 @@ describe('Variant with Advanced Array', function () {
     const v = new Variant({
       dataType: DataType.Float,
       //  EXPLICITLY MISSING arrayType : VariantArrayType.Array
-      value: [1, 2],
+      value: new Float32Array([1, 2]),
     });
 
     expect(v.arrayType).toEqual(VariantArrayType.Array);
@@ -1459,7 +1459,7 @@ describe('Variant with enumeration', function () {
     expect(v.dataType).toEqual(DataType.Int32);
   });
 
-  it("should create a variant with builtin type 'Duration'", function () {
+  it("should create a variant with builtin type 'Double'", function () {
     const v = new Variant({
       dataType: DataType.Double,
       value: 0.1,
@@ -1475,7 +1475,7 @@ describe('Variant with enumeration', function () {
     expect(v.dataType).toEqual(DataType.ByteString);
     expect(uint8ArrayToStr(v.value)).toEqual('abcd');
   });
-  it("should create a variant copy (with it's own array) ", function () {
+  it('should create a variant copy (sharing the same array) ', function () {
     const options = {
       dataType: DataType.Float,
       arrayType: VariantArrayType.Array,
@@ -1492,7 +1492,7 @@ describe('Variant with enumeration', function () {
     });
 
     v1.value[1] += 1;
-    expect(v1.value[1] === v2.value[1]).toBeFalsy();
+    expect(v1.value[1] === v2.value[1]).toBeTrue();
     v1.value[1] -= 1;
 
     v3 = new Variant({
@@ -1510,11 +1510,9 @@ describe('Variant with enumeration', function () {
     v1.value[1] = 32;
     expect(v1.value[1]).toEqual(32);
 
-    // xx options.value[1]).toEqual(1); // v2 should have its own copy of the array
+    expect(v3.value[1]).toEqual(32); // v2 should share the same array
 
-    expect(v3.value[1]).toEqual(1); // v2 should have its own copy of the array
-
-    expect(v2.value[1]).toEqual(1); // v2 should have its own copy of the array
+    expect(v2.value[1]).toEqual(32); // v2 share the array
   });
 
   it('should create a Extension object variant as a copy of ', function () {
