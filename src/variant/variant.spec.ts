@@ -1730,10 +1730,14 @@ describe('testing sameVariant Performance', function () {
 });
 
 class SomeExtensionObject extends ExtensionObject {
-  a: any;
-  constructor(options: { a: any }) {
+  a: number;
+  constructor(options: any) {
     super();
     this.a = options.a;
+  }
+
+  clone() {
+    return new SomeExtensionObject(this);
   }
 }
 

@@ -270,10 +270,14 @@ describe('DataValue', function () {
 
   describe('Cloning a DataValue', function () {
     class SomeExtensionObject extends ExtensionObject {
-      a: any;
+      a: number;
       constructor(options: any) {
         super();
         this.a = options.a;
+      }
+
+      clone() {
+        return new SomeExtensionObject(this);
       }
     }
 
@@ -348,7 +352,7 @@ describe('DataValue', function () {
           const cloned = copy_construct_or_clone_func(dv);
 
           expect(cloned.value.dataType).toBe(dv.value.dataType);
-          expect(cloned.value.value).toBe(dv.value.value);
+          expect(cloned.value.value).toEqual(dv.value.value);
           expect(cloned.value.value[0].toString()).toBe(dv.value.value[0].toString());
           expect(cloned.value.value[1].toString()).toBe(dv.value.value[1].toString());
           expect(cloned.value.value[2].toString()).toBe(dv.value.value[2].toString());

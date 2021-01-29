@@ -12,7 +12,7 @@ import * as ec from '../basic-types';
 
 import { BaseUAObject } from '../factory/factories_baseobject';
 import { DataStream } from '../basic-types/DataStream';
-import { UInt32 } from '../basic-types';
+import { cloneComplexArray, UInt32 } from '../basic-types';
 
 import { findBuiltInType } from '../factory/factories_builtin_types';
 import { generate_new_id } from '../factory';
@@ -208,7 +208,29 @@ export class Variant extends BaseUAObject {
    * @return {Variant}
    */
   public clone(): Variant {
-    return new Variant(this);
+    const newvar = new Variant(this);
+    if (newvar.dimensions) {
+      newvar.dimensions = newvar.dimensions.slice(0);
+    }
+
+    if (newvar.value === undefined || newvar.value === null) {
+      return;
+    }
+
+    if (this.arrayType === VariantArrayType.Scalar) {
+      if (newvar.value.clone !== undefined) {
+        newvar.value = newvar.value.clone();
+      }
+    } else {
+      if (newvar.value.length > 0 && newvar.value[0].clone !== undefined) {
+        // it is an array with complex types
+        newvar.value = cloneComplexArray(newvar.value);
+      } else {
+        newvar.value = newvar.value.slice(0);
+      }
+    }
+
+    return newvar;
   }
 
   public fromJSON(inp: any) {
