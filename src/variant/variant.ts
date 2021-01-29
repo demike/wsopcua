@@ -99,6 +99,11 @@ export class Variant extends BaseUAObject {
      */
     if (options.dimensions !== undefined) {
       this.dimensions = options.dimensions;
+      this.arrayType = VariantArrayType.Matrix;
+      if (this.dimensions.reduce((prev, current) => prev * current, 1) !== this.value.length) {
+        // it' a multidimensional array --> flatten it
+        this.value = this.value.flat(this.dimensions.length - 1);
+      }
     }
 
     // Object.preventExtensions(self);
@@ -620,6 +625,9 @@ function jsonEncodeGeneralArray(dataType: DataType, array: any[]) {
 }
 
 function jsonEncodeMatrix(dataType: DataType, matrix: any[]) {
+  // 2*3*2 matrix:
+  // let matrix = [[[0,1],[2,3],[4,5]] , [[6,7],[8,9],[10,11]]];
+
   throw new Error('not implemented');
 }
 
