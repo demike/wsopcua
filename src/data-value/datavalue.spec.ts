@@ -312,15 +312,20 @@ describe('DataValue', function () {
         const cloned = copy_construct_or_clone_func(dv);
 
         expect(cloned.value.dataType).toBe(dv.value.dataType);
-        expect(cloned.value.value).toBe(dv.value.value);
+        expect(cloned.value.value).toEqual(dv.value.value);
         expect(cloned.value.value[0]).toBe(36);
         expect(cloned.value.value[1]).toBe(37);
 
         dv.value.value[0] = 136;
         dv.value.value[1] = 137;
 
-        expect(cloned.value.value[0]).toBe(36);
-        expect(cloned.value.value[1]).toBe(37);
+        if (copy_construct_or_clone === 'clone') {
+          expect(cloned.value.value[0]).toBe(36);
+          expect(cloned.value.value[1]).toBe(37);
+        } else {
+          expect(cloned.value.value[0]).toBe(136);
+          expect(cloned.value.value[1]).toBe(137);
+        }
       });
       it(
         'should ' + copy_construct_or_clone + ' a DataValue with a variant array of ByteString',
@@ -353,9 +358,15 @@ describe('DataValue', function () {
           dv.value.value[1] = enc.encode('YYY');
 
           const dec = new TextDecoder();
-          // clone object should not have been affected !
-          expect(dec.decode(cloned.value.value[0])).toBe('ABC');
-          expect(dec.decode(cloned.value.value[1])).toBe('DEF');
+
+          if (copy_construct_or_clone === 'clone') {
+            // clone object should not have been affected !
+            expect(dec.decode(cloned.value.value[0])).toBe('ABC');
+            expect(dec.decode(cloned.value.value[1])).toBe('DEF');
+          } else {
+            expect(dec.decode(cloned.value.value[0])).toBe('ZZZ');
+            expect(dec.decode(cloned.value.value[1])).toBe('YYY');
+          }
         }
       );
 
@@ -379,8 +390,13 @@ describe('DataValue', function () {
 
           extObj.a = 1000;
 
-          expect(cloned.value.value).not.toEqual(dv.value.value);
-          expect(cloned.value.value).toEqual(36);
+          if (copy_construct_or_clone === 'clone') {
+            expect(cloned.value.value).not.toEqual(dv.value.value);
+            expect(cloned.value.value.a).toEqual(36);
+          } else {
+            expect(cloned.value.value).toEqual(dv.value.value);
+            expect(cloned.value.value.a).toEqual(1000);
+          }
 
           expect(dv.value.value.a).toBe(1000);
         }
@@ -410,8 +426,13 @@ describe('DataValue', function () {
           extObj1.a = 1000;
           extObj2.a = 1001;
 
-          expect(cloned.value.value[0].a).toBe(36);
-          expect(cloned.value.value[1].a).toBe(37);
+          if (copy_construct_or_clone === 'clone') {
+            expect(cloned.value.value[0].a).toBe(36);
+            expect(cloned.value.value[1].a).toBe(37);
+          } else {
+            expect(cloned.value.value[0].a).toBe(1000);
+            expect(cloned.value.value[1].a).toBe(1001);
+          }
 
           expect(dv.value.value[0].a).toBe(1000);
           expect(dv.value.value[1].a).toBe(1001);

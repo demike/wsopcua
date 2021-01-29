@@ -1777,8 +1777,13 @@ describe('testing variant Clone & Copy Construct', function () {
       v.value[0] = 136;
       v.value[1] = 137;
 
-      expect(cloned.value[0]).toEqual(36);
-      expect(cloned.value[1]).toEqual(37);
+      if (copy_construct_or_clone === 'clone') {
+        expect(cloned.value[0]).toEqual(36);
+        expect(cloned.value[1]).toEqual(37);
+      } else {
+        expect(cloned.value[0]).toEqual(136);
+        expect(cloned.value[1]).toEqual(137);
+      }
     });
     it(
       'should ' + copy_construct_or_clone + ' a variant containing a extension object',
@@ -1796,8 +1801,13 @@ describe('testing variant Clone & Copy Construct', function () {
 
         extObj.a = 1000;
 
-        expect(cloned.value.should).not.toEqual(v.value);
-        expect(cloned.value.a).toEqual(36);
+        if (copy_construct_or_clone === 'clone') {
+          expect(cloned.value).not.toEqual(v.value);
+          expect(cloned.value.a).toEqual(36);
+        } else {
+          expect(cloned.value).toEqual(v.value);
+          expect(cloned.value.a).toEqual(1000);
+        }
 
         expect(v.value.a).toEqual(1000);
       }
@@ -1823,8 +1833,13 @@ describe('testing variant Clone & Copy Construct', function () {
         extObj1.a = 1000;
         extObj2.a = 1001;
 
-        expect(cloned.value[0].a).toEqual(36);
-        expect(cloned.value[1].a).toEqual(37);
+        if (copy_construct_or_clone === 'clone') {
+          expect(cloned.value[0].a).toEqual(36);
+          expect(cloned.value[1].a).toEqual(37);
+        } else {
+          expect(cloned.value[0].a).toEqual(1000);
+          expect(cloned.value[1].a).toEqual(1001);
+        }
 
         expect(v.value[0].a).toEqual(1000);
         expect(v.value[1].a).toEqual(1001);
