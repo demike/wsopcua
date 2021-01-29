@@ -5,6 +5,7 @@
  */
 import { NodeId, coerceNodeId } from './nodeid';
 import { NodeIdType } from '../generated/NodeIdType';
+import { assert } from '../assert';
 
 /**
  * An ExpandedNodeId extends the NodeId structure.
@@ -111,7 +112,9 @@ export function coerceExpandedNodeId(value: any): ExpandedNodeId {
     if (value.substr(0, 4) === 'nsu=') {
       const idStart = value.indexOf(';');
       namespaceUri = value.substring(4, idStart);
-      // TODO: check for valid namespace uri (a number would be wrong here)
+      // check for valid namespace uri (a number would be wrong here)
+      assert(isNaN(namespaceUri), 'nsu should not be a number did you mean ns=...');
+
       value = value.substring(idStart + 1);
     }
   } else if (value instanceof Object) {

@@ -101,9 +101,16 @@ export class Variant extends BaseUAObject {
       // TODO: this could also be done lazily in the encode methods
       this.dimensions = options.dimensions;
       this.arrayType = VariantArrayType.Matrix;
-      if (this.dimensions.reduce((prev, current) => prev * current, 1) !== this.value.length) {
+      const elementCnt = this.dimensions.reduce((prev, current) => prev * current, 1);
+      if (elementCnt !== this.value.length) {
         // it' a multidimensional array --> flatten it
         this.value = this.value.flat(this.dimensions.length - 1);
+      }
+
+      if (elementCnt !== this.value.length) {
+        throw new Error(
+          `Dimensions ${this.dimensions} and actual array length ${this.value.length} do not match!`
+        );
       }
     }
 
