@@ -45,9 +45,8 @@ export class Variant extends BaseUAObject {
   public value?: any = null; // default value null
   public dimensions?: UInt32[];
 
-  constructor(options?: IVariant) {
+  constructor(options: IVariant = {}) {
     super();
-    options = <any>options || {};
 
     /**
      * the variant type.
@@ -259,7 +258,7 @@ export class Variant extends BaseUAObject {
     if (inp.Dimensions) {
       this.arrayType = VariantArrayType.Matrix;
       this.dimensions = inp.Dimensions;
-      this.value = jsonDecodeMatrix(this.dataType, body, this.dimensions);
+      this.value = jsonDecodeMatrix(this.dataType, body, inp.Dimensions);
     } else if (Array.isArray(body)) {
       this.arrayType = VariantArrayType.Array;
       this.value = jsonDecodeVariantArray(this.dataType, body);
@@ -283,7 +282,7 @@ export class Variant extends BaseUAObject {
     if (this.arrayType === VariantArrayType.Array) {
       out.Body = jsonEncodeVariantArray(this.dataType, this.value);
     } else if (this.arrayType === VariantArrayType.Matrix) {
-      out.Body = jsonEncodeMatrix(this.dataType, this.value, this.dimensions);
+      out.Body = jsonEncodeMatrix(this.dataType, this.value, this.dimensions!);
     } else {
       const encode = get_json_encoder(this.dataType);
       if (encode) {
@@ -506,7 +505,7 @@ function calculate_product(array: number[]) {
 }
 
 export function decodeVariant(inp: DataStream): Variant {
-  const obj = new Variant(null);
+  const obj = new Variant();
   obj.decode(inp);
   return obj;
 }
