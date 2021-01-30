@@ -18,243 +18,233 @@ import { Variant, DataType, VariantArrayType } from '../src/variant';
 import { CallMethodRequest, CallMethodResult } from '../src/service-call';
 import { NodeIdType } from '../src/generated/NodeIdType';
 
-
 function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-
-const cli = new OPCUAClient(
-    {
-        applicationName: 'testapp',
-        clientName: 'theClient',
-        endpoint_must_exist: false, // <-- necessary for the websocket proxying to work
-        encoding: 'opcua+uajson'
-        // TODO: add some more
-    });
+const cli = new OPCUAClient({
+  applicationName: 'testapp',
+  clientName: 'theClient',
+  endpoint_must_exist: false, // <-- necessary for the websocket proxying to work
+  encoding: 'opcua+uacp',
+  // TODO: add some more
+});
 let cliSession: ClientSession = null;
 
 export function exectest() {
-
-    // cli.findServers({endpointUrl : "192.168.110.10:4840"},onFindServers);
-    // connect("ws://192.168.110.10:4444");
-    //connect('ws://10.36.64.1:4444');
-    connect('wss://prototyping.opcfoundation.org:65200');
+  // cli.findServers({endpointUrl : "192.168.110.10:4840"},onFindServers);
+  connect('ws://192.168.110.10:4444');
+  // connect('ws://10.36.64.1:4444');loca
+  // connect('wss://prototyping.opcfoundation.org:62542');
 }
 
 function connect(uri: string) {
-    console.log('connecting to server: ' + uri);
+  console.log('connecting to server: ' + uri);
 
-    cli.connect(uri, (err) => {
-        if (err) {
-            console.log(err.name + ': ' + err.message);
-            return;
-        } else {
-           cli.getEndpoints({ endpointUrl: 'wss://prototyping.opcfoundation.org:65200' }, onGetEndpoints);
-        }
+  cli.connect(uri, (err) => {
+    if (err) {
+      console.log(err.name + ': ' + err.message);
+      return;
+    } else {
+      cli.getEndpoints(
+        { endpointUrl: 'wss://prototyping.opcfoundation.org:65200' },
+        onGetEndpoints
+      );
+    }
 
-        // next step
-    });
-
+    // next step
+  });
 }
 
 function onFindServers(err: Error | null, serverUris: string[]) {
-    if (err) {
-        console.log(err.name + ': ' + err.message);
-        return;
-    }
+  if (err) {
+    console.log(err.name + ': ' + err.message);
+    return;
+  }
 
-    console.log('found following servers:');
-    for (const uri in serverUris) {
-        console.log('\t' + uri);
-    }
+  console.log('found following servers:');
+  for (const uri in serverUris) {
+    console.log('\t' + uri);
+  }
 
-    connect(serverUris[0]);
+  connect(serverUris[0]);
 }
 
-
 function onGetEndpoints(err: Error | null, serverUris: EndpointDescription[]) {
-    if (err) {
-        console.log(err.name + ': ' + err.message);
-        return;
-    }
+  if (err) {
+    console.log(err.name + ': ' + err.message);
+    return;
+  }
 
-    console.log('found following servers:');
-    for (const uri of serverUris) {
-        console.log('\t' + uri.endpointUrl);
-    }
+  console.log('found following servers:');
+  for (const uri of serverUris) {
+    console.log('\t' + uri.endpointUrl);
+  }
 
-    createSession();
-    // connect(serverUris[0]);
+  createSession();
+  // connect(serverUris[0]);
 }
 
 function createSession() {
-    cli.createSession(/*{userName : "anonymous", password : "anonymous"}*/null, (err, session) => {
-        if (err) {
-            console.log(err.name + ': ' + err.message);
-            return;
-        }
+  cli.createSession(/*{userName : "anonymous", password : "anonymous"}*/ null, (err, session) => {
+    if (err) {
+      console.log(err.name + ': ' + err.message);
+      return;
+    }
 
-        cliSession = session;
-        console.log('session name: ' + session.name);
+    cliSession = session;
+    console.log('session name: ' + session.name);
 
-        translateBrowsePaths();
-    });
+    translateBrowsePaths();
+  });
 }
 
 const browseDepth = 0;
 let nodeCnt = 0;
 const maxNodeCnt = 300;
 function browse(nodeId: NodeId | NodeId[], elemId: string | string[]) {
-    //   if (nodeCnt >maxNodeCnt) {
-    //        return;
-    //    }
-    if (!Array.isArray(nodeId)) {
-        nodeId = <any>[nodeId];
-    }
+  //   if (nodeCnt >maxNodeCnt) {
+  //        return;
+  //    }
+  if (!Array.isArray(nodeId)) {
+    nodeId = <any>[nodeId];
+  }
 
-    if (!Array.isArray(elemId)) {
-        elemId = <any>[elemId];
-    }
+  if (!Array.isArray(elemId)) {
+    elemId = <any>[elemId];
+  }
 
-    const arBd = [];
-    for (const id of <NodeId[]>nodeId) {
-        arBd.push(
-            new BrowseDescription({
-                'nodeId': id, 'browseDirection': BrowseDirection.Forward, 'includeSubtypes': true,
-                nodeClassMask: 0 , resultMask: BrowseResultMask.All, referenceTypeId: new NodeId(NodeIdType.Numeric, ReferenceTypeIds.HierarchicalReferences)
-            })
-        );
+  const arBd = [];
+  for (const id of <NodeId[]>nodeId) {
+    arBd.push(
+      new BrowseDescription({
+        nodeId: id,
+        browseDirection: BrowseDirection.Forward,
+        includeSubtypes: true,
+        nodeClassMask: 0,
+        resultMask: BrowseResultMask.All,
+        referenceTypeId: new NodeId(NodeIdType.Numeric, ReferenceTypeIds.HierarchicalReferences),
+      })
+    );
+  }
+  const bd = cliSession.browse(
+    arBd /*nodeId*/,
+    (err: Error, results: BrowseResult[], diagInfos: DiagnosticInfo[]) => {
+      if (results && results.length > 0) {
+        for (let ii = 0; ii < results.length; ii++) {
+          const ulId = elemId[ii] + '_' + nodeId[ii].value;
+          createUL('#' + elemId[ii], ulId);
+          onBrowse(err, results[ii], ulId);
+        }
+      }
     }
-    const bd =
-        cliSession.browse(arBd/*nodeId*/, (err: Error, results: BrowseResult[], diagInfos: DiagnosticInfo[]) => {
-            if (results && results.length > 0) {
-                for (let ii = 0; ii < results.length; ii++) {
-                    const ulId = elemId[ii] + '_' + nodeId[ii].value;
-                    createUL('#' + elemId[ii], ulId);
-                    onBrowse(err, results[ii], ulId);
-                }
-            }
-
-        });
+  );
 }
 
 async function onBrowse(err: Error, result: BrowseResult, ulId: string) {
-    readValues();
-    if (err) {
-        console.log(err.name + ': ' + err.message);
-        return;
+  readValues();
+  if (err) {
+    console.log(err.name + ': ' + err.message);
+    return;
+  }
+
+  const arNodesToBrowse = [];
+  const arIds = [];
+  console.log('BrowseResults:');
+  for (const ref of result.references) {
+    const liId = ulId + '_' + ref.nodeId.value;
+    const text = ref.browseName.name; // + ": " + ref.displayName.text
+    logToElem('#' + ulId, liId, text);
+    if (nodeCnt > maxNodeCnt) {
+      // quit recursive browsing and start the next test
+      return;
     }
+    arNodesToBrowse.push(ref.nodeId);
+    arIds.push(liId);
+    //     ref.nodeId.namespace = ref.browseName.namespaceIndex;
+  }
 
-    const arNodesToBrowse = [];
-    const arIds = [];
-    console.log('BrowseResults:');
-    for (const ref of result.references) {
-        const liId = ulId + '_' + ref.nodeId.value;
-        const text = ref.browseName.name; // + ": " + ref.displayName.text
-        logToElem('#' + ulId, liId, text);
-        if ( nodeCnt > maxNodeCnt) {
-            // quit recursive browsing and start the next test
-          return;
-        }
-        arNodesToBrowse.push(ref.nodeId);
-        arIds.push(liId);
-        //     ref.nodeId.namespace = ref.browseName.namespaceIndex;
+  await sleep(100);
+  browse(arNodesToBrowse, arIds);
 
-    }
-
-        await sleep(100);
-        browse(arNodesToBrowse, arIds);
-
-
-    // logToElem("#browseResults","","-------------------------------------------");
-
+  // logToElem("#browseResults","","-------------------------------------------");
 }
-
 
 const arPathsBNF = [
-    '/5:_global/5:EqRobot1/5:X/5:posMin/5:r',
-    '/5:_global/5:EqRobot1/5:X/5:rPosMax',
-    '/5:_global/5:EqRobot1/5:X/5:actPos',
-    '/5:_global/5:EqRobot1/5:X/5:rPosMin',
-    '/5:_global/5:EqRobot1/5:Y/5:actPos',
-    '/5:_global/5:EqRobot1/5:Y/5:rPosMax',
-    '/5:_global/5:EqRobot1/5:Y/5:rPosMin',
-    '/5:_global/5:EqRobot1/5:Z/5:actPos',
-    '/5:_global/5:EqRobot1/5:Z/5:rPosMax',
-    '/5:_global/5:EqRobot1/5:Z/5:rPosMin',
-    '/5:_global/5:EqRobot1/5:A/5:actPos',
-    '/5:_global/5:EqRobot1/5:B/5:actPos',
-    '/5:_global/5:EqRobot1/5:B/5:rPosMax',
-    '/5:_global/5:EqRobot1/5:B/5:rPosMin',
-    '/5:_global/5:EqRobot1/5:C12/5:ubActive',
-    '/5:_global/5:EqRobot1/5:C22/5:actPos',
-    '/5:_global/5:EqRobot1/5:X/5:Unknown',
+  '/5:_global/5:EqRobot1/5:X/5:posMin/5:r',
+  '/5:_global/5:EqRobot1/5:X/5:rPosMax',
+  '/5:_global/5:EqRobot1/5:X/5:actPos',
+  '/5:_global/5:EqRobot1/5:X/5:rPosMin',
+  '/5:_global/5:EqRobot1/5:Y/5:actPos',
+  '/5:_global/5:EqRobot1/5:Y/5:rPosMax',
+  '/5:_global/5:EqRobot1/5:Y/5:rPosMin',
+  '/5:_global/5:EqRobot1/5:Z/5:actPos',
+  '/5:_global/5:EqRobot1/5:Z/5:rPosMax',
+  '/5:_global/5:EqRobot1/5:Z/5:rPosMin',
+  '/5:_global/5:EqRobot1/5:A/5:actPos',
+  '/5:_global/5:EqRobot1/5:B/5:actPos',
+  '/5:_global/5:EqRobot1/5:B/5:rPosMax',
+  '/5:_global/5:EqRobot1/5:B/5:rPosMin',
+  '/5:_global/5:EqRobot1/5:C12/5:ubActive',
+  '/5:_global/5:EqRobot1/5:C22/5:actPos',
+  '/5:_global/5:EqRobot1/5:X/5:Unknown',
 ];
 
-const translatedIds: NodeId[]  = [];
+const translatedIds: NodeId[] = [];
 
 function translateBrowsePaths() {
-
-    const rootNode = makeNodeId(85);
-    const arBrowsePaths: BrowsePath[] = [];
-    for (const name of arPathsBNF) {
-        arBrowsePaths.push(makeBrowsePath(rootNode, name));
-    }
-    cliSession.translateBrowsePath(arBrowsePaths, onTranslateBrowsePaths);
+  const rootNode = makeNodeId(85);
+  const arBrowsePaths: BrowsePath[] = [];
+  for (const name of arPathsBNF) {
+    arBrowsePaths.push(makeBrowsePath(rootNode, name));
+  }
+  cliSession.translateBrowsePath(arBrowsePaths, onTranslateBrowsePaths);
 }
 
-function onTranslateBrowsePaths(err: Error|null, results: BrowsePathResult[]) {
-    if (err) {
-        console.log(err);
-        console.log(results);
+function onTranslateBrowsePaths(err: Error | null, results: BrowsePathResult[]) {
+  if (err) {
+    console.log(err);
+    console.log(results);
+  }
+
+  createUL('#tranlateBrowsePaths', 'translateBrowsePath_UL');
+  for (let ii = 0; ii < results.length; ii++) {
+    let targetId;
+    let strResult;
+    if (results[ii].statusCode.value == StatusCodes.Good.value) {
+      targetId = results[ii].targets[0].targetId;
+      strResult = targetId.value;
+      translatedIds.push(targetId);
+      logToElem('#translateBrowsePath_UL', strResult, arPathsBNF[ii] + ': id=' + strResult);
+      createInput('#' + strResult, +'in_' + strResult);
+    } else {
+      logToElem('#translateBrowsePath_UL', 'unknown', arPathsBNF[ii] + ': id=' + 'not found');
     }
+  }
 
-    createUL('#tranlateBrowsePaths','translateBrowsePath_UL');
-    for (let ii = 0; ii < results.length; ii++) {
-        let targetId;
-        let strResult;
-        if (results[ii].statusCode.value == StatusCodes.Good.value) {
-            targetId = results[ii].targets[0].targetId;
-            strResult = targetId.value;
-            translatedIds.push(targetId);
-            logToElem('#translateBrowsePath_UL', strResult, arPathsBNF[ii] + ': id=' + strResult);
-            createInput('#' + strResult, + 'in_' + strResult );
-        } else {
-            logToElem('#translateBrowsePath_UL','unknown', arPathsBNF[ii] + ': id=' + 'not found');
-        }
-
-
-    }
-
-    createSubscription();
-    // browse(new NodeId(NodeIdType.NUMERIC, 50510), "browseResults");
-
-
-
-
+  createSubscription();
+  // browse(new NodeId(NodeIdType.NUMERIC, 50510), "browseResults");
 }
-
 
 let cliSubscription: ClientSubscription = null;
 let monItemGroup: MonitoredItemGroup;
 function createSubscription() {
-    cliSubscription = new ClientSubscription(cliSession, {
-        requestedPublishingInterval: 100,
-        requestedLifetimeCount: 10000,
-        requestedMaxKeepAliveCount: 100,
-        maxNotificationsPerPublish: 10000,
-        publishingEnabled: true,
-        priority: 10
-    });
-    cliSubscription.on('started', registerMonitoredItems);
+  cliSubscription = new ClientSubscription(cliSession, {
+    requestedPublishingInterval: 100,
+    requestedLifetimeCount: 10000,
+    requestedMaxKeepAliveCount: 100,
+    maxNotificationsPerPublish: 10000,
+    publishingEnabled: true,
+    priority: 10,
+  });
+  cliSubscription.on('started', registerMonitoredItems);
 }
 
 function registerMonitoredItems() {
-    console.log('subscription created');
+  console.log('subscription created');
 
-    const arIds: IReadValueId[] = [];
-    /*
+  const arIds: IReadValueId[] = [];
+  /*
     for (const id of translatedIds) {
         arIds.push({
             nodeId : id,
@@ -262,163 +252,204 @@ function registerMonitoredItems() {
         });
     }
     */
-    arIds.push({nodeId: new NodeId(NodeIdType.Numeric, 2258, 0), attributeId: AttributeIds.Value});
-    logToElem('#translateBrowsePath_UL', '_2258', 'i=2258:');
-    createInput('#_2258', 'in_2258');
 
-    arIds.push({nodeId: new NodeId(NodeIdType.Numeric, 2256, 0), attributeId: AttributeIds.Value});
-    logToElem('#translateBrowsePath_UL', '_2256', 'i=2256:');
-    createTextArea('#_2256', 'in_2256');
+  arIds.push({
+    nodeId: new NodeId(NodeIdType.String, 'Scalar_Simulation_UInt32', 2),
+    attributeId: AttributeIds.Value,
+  });
+  logToElem('#translateBrowsePath_UL', '_Scalar_Simulation_Double', 's=Scalar_Simulation_Double:');
+  createInput('#_Scalar_Simulation_Double', 'in_Scalar_Simulation_Double');
 
+  arIds.push({ nodeId: new NodeId(NodeIdType.Numeric, 2258, 0), attributeId: AttributeIds.Value });
+  logToElem('#translateBrowsePath_UL', '_2258', 'i=2258:');
+  createInput('#_2258', 'in_2258');
 
-    arIds.forEach(rids => translatedIds.push(rids.nodeId));
+  arIds.push({ nodeId: new NodeId(NodeIdType.Numeric, 2256, 0), attributeId: AttributeIds.Value });
+  logToElem('#translateBrowsePath_UL', '_2256', 'i=2256:');
+  createTextArea('#_2256', 'in_2256');
 
-    monItemGroup = cliSubscription.monitorItems(arIds, {samplingInterval : 1000, discardOldest : true, queueSize : 1}, TimestampsToReturn.Both, onRegisterMonitoredItems);
-    monItemGroup.onChanged(onItemChanged);
+  arIds.forEach((rids) => translatedIds.push(rids.nodeId));
+
+  monItemGroup = cliSubscription.monitorItems(
+    arIds,
+    { samplingInterval: 1000, discardOldest: true, queueSize: 1 },
+    TimestampsToReturn.Both,
+    onRegisterMonitoredItems
+  );
+  monItemGroup.onChanged(onItemChanged);
 }
 function onRegisterMonitoredItems(err: Error, mg: MonitoredItemGroup) {
-
-   console.log('Monitored items registered!');
-   browse(new NodeId(NodeIdType.Numeric, 84), 'browseResults');
+  console.log('Monitored items registered!');
+  browse(new NodeId(NodeIdType.Numeric, 84), 'browseResults');
 }
 
 function onItemChanged(item: MonitoredItemBase, dataValue: DataValue, index: number) {
-    if(!dataValue || !dataValue.value ) {
-        return;
-    }
+  if (!dataValue || !dataValue.value) {
+    return;
+  }
 
-    if(dataValue.value.dataType === DataType.ExtensionObject ) {
-        setContent('#in_' + item.nodeId.value, JSON.stringify(dataValue.value.value, null, ' '));
-    } else {
-        setInputValue('#in_' + item.nodeId.value, dataValue.value.value);
-    }
-
+  if (dataValue.value.dataType === DataType.ExtensionObject) {
+    setContent('#in_' + item.nodeId.value, JSON.stringify(dataValue.value.value, null, ' '));
+  } else {
+    setInputValue('#in_' + item.nodeId.value, dataValue.value.value);
+  }
 }
 
 // function createBrowsePath(str : string) : BrowsePath {
- //   let rp = new RelativePath({elements : str.split(".")});
- //   let bp = new BrowsePath({relativePath })
+//   let rp = new RelativePath({elements : str.split(".")});
+//   let bp = new BrowsePath({relativePath })
 // }
 
 function readValues() {
-    cliSession.readVariableValue(translatedIds, onReadValues); // monitorItems(arIds,{samplingInterval : 100, discardOldest : true,queueSize : 1},TimestampsToReturn.Both,onRegisterMonitoredItems);
+  cliSession.readVariableValue(translatedIds, onReadValues);
+  // monitorItems(arIds,{samplingInterval : 100, discardOldest : true,queueSize : 1},TimestampsToReturn.Both,onRegisterMonitoredItems);
 }
 
 function onReadValues(err: Error, results?: DataValue[], diagInf?: DiagnosticInfo[]) {
-    let str: string = '';
+  let str = '';
 
-    if (err) {
-        console.log(err);
-        return;
-    }
+  if (err) {
+    console.log(err);
+    return;
+  }
 
-    for (let ii = 0; ii < translatedIds.length; ++ii) {
-        
-        str += translatedIds[ii].value + ': ' + JSON.stringify(results[ii].value.value, undefined, ' ') + ', ';
-    }
-   console.log(str);
-   createUL('#readValues','readValuesUL');
-   logToElem('#readValuesUL','readValuesLI', str);
+  createUL('#readValues', 'readValuesUL');
+  for (let ii = 0; ii < translatedIds.length; ++ii) {
+    str = translatedIds[ii].value + ': ' + JSON.stringify(results[ii].value.value, undefined, ' ');
+    logToElem('#readValuesUL', 'readValuesLI', str);
+    console.log(str);
+  }
 }
 
 function logToElem(querySelector: string, id: string, text: string) {
-    nodeCnt++;
-    querySelector = querySelector.replace(/[.\[\]]/g, '_');
-    const div = window.document.createElement('LI');
-    div.id = id.replace(/[.\[\]]/g, '_');
-    div.appendChild(document.createTextNode(text));
-    window.document.querySelector(querySelector).appendChild(div);
+  nodeCnt++;
+  querySelector = querySelector.replace(/[.\[\]]/g, '_');
+  const div = window.document.createElement('LI');
+  div.id = id.replace(/[.\[\]]/g, '_');
+  div.appendChild(document.createTextNode(text));
+  window.document.querySelector(querySelector).appendChild(div);
 }
 
 function createUL(parentSelector: string, id: string) {
-
-    const ul = window.document.createElement('UL');
-    parentSelector = parentSelector.replace(/[.\[\]]/g, '_');
-    ul.id = id.replace(/[.\[\]]/g, '_');
-    window.document.querySelector(parentSelector).appendChild(ul);
-
+  const ul = window.document.createElement('UL');
+  parentSelector = parentSelector.replace(/[.\[\]]/g, '_');
+  ul.id = id.replace(/[.\[\]]/g, '_');
+  window.document.querySelector(parentSelector).appendChild(ul);
 }
 
-function createInput(parentSelector: string, id: string ) {
-    const inp = window.document.createElement('input');
-    parentSelector = parentSelector.replace(/[.\[\]]/g, '_');
-    inp.id = id.replace(/[.\[\]]/g, '_');
-    const parent = window.document.querySelector(parentSelector);
-    parent.appendChild(inp);
+function createInput(parentSelector: string, id: string) {
+  const inp = window.document.createElement('input');
+  parentSelector = parentSelector.replace(/[.\[\]]/g, '_');
+  inp.id = id.replace(/[.\[\]]/g, '_');
+  const parent = window.document.querySelector(parentSelector);
+  parent.appendChild(inp);
 }
 
-function createTextArea(parentSelector: string, id: string ) {
-    const inp = window.document.createElement('pre');
-    parentSelector = parentSelector.replace(/[.\[\]]/g, '_');
-    inp.id = id.replace(/[.\[\]]/g, '_');
-    const parent = window.document.querySelector(parentSelector);
-    parent.appendChild(inp);
+function createTextArea(parentSelector: string, id: string) {
+  const inp = window.document.createElement('pre');
+  parentSelector = parentSelector.replace(/[.\[\]]/g, '_');
+  inp.id = id.replace(/[.\[\]]/g, '_');
+  const parent = window.document.querySelector(parentSelector);
+  parent.appendChild(inp);
 }
 
 function setInputValue(inputSelector: string, value: any) {
-    inputSelector = inputSelector.replace(/[.\[\]]/g, '_');
-    const inp: HTMLInputElement = window.document.querySelector(inputSelector);
-    inp.value = value;
+  inputSelector = inputSelector.replace(/[.\[\]]/g, '_');
+  const inp: HTMLInputElement = window.document.querySelector(inputSelector);
+  inp.value = value;
 }
 
 function setContent(inputSelector: string, value: any) {
-    inputSelector = inputSelector.replace(/[.\[\]]/g, '_');
-    const inp: HTMLInputElement = window.document.querySelector(inputSelector);
-    inp.innerHTML = value;
+  inputSelector = inputSelector.replace(/[.\[\]]/g, '_');
+  const inp: HTMLInputElement = window.document.querySelector(inputSelector);
+  inp.innerHTML = value;
 }
 
 let newValue = 100;
 export function onWriteValue() {
-    cliSession.writeSingleNode(translatedIds[0], new Variant({value: newValue++, dataType: DataType.Float, arrayType: VariantArrayType.Scalar}), onValueWritten);
+  cliSession.writeSingleNode(
+    translatedIds[0],
+    new Variant({
+      value: newValue++,
+      dataType: DataType.Double,
+      arrayType: VariantArrayType.Scalar,
+    }),
+    onValueWritten
+  );
 }
 
 function onValueWritten(err) {
   if (err) {
-      console.log(err);
-      return;
+    console.log(err);
+    return;
   }
 }
 
 function setupButtons() {
-    window.onload = () => {
-     window.document.querySelector<HTMLButtonElement>('#writeValue').onclick = onWriteValue;
-     window.document.querySelector<HTMLButtonElement>('#callMethod').onclick = callMethodTest;
-    };
+  window.onload = () => {
+    window.document.querySelector<HTMLButtonElement>('#writeValue').onclick = onWriteValue;
+    window.document.querySelector<HTMLButtonElement>('#callMethod').onclick = callMethodTest;
+  };
 }
 
-
 function callMethodTest() {
+  const arNames: string[] = [
+    'APPL.TT._global.EqRobot1.SuctionGripper1',
+    'APPL.TT._global.EqRobot1.SuctionGripper2',
+  ];
+  const phraseNames: Variant = new Variant({
+    value: arNames,
+    dataType: DataType.String,
+    arrayType: VariantArrayType.Array,
+  });
+  const languageKey: Variant = new Variant({
+    value: 'de',
+    dataType: DataType.String,
+    arrayType: VariantArrayType.Scalar,
+  });
 
+  const request = new CallMethodRequest({
+    inputArguments: [phraseNames, languageKey],
+    objectId: new NodeId(NodeIdType.String, 'ResourceService', 2),
+    methodId: new NodeId(NodeIdType.String, 'getPhrases', 2),
+  });
 
-    const arNames: string[] = ['APPL.TT._global.EqRobot1.SuctionGripper1', 'APPL.TT._global.EqRobot1.SuctionGripper2'];
-    const phraseNames: Variant = new Variant({ value: arNames, dataType: DataType.String, arrayType: VariantArrayType.Array });
-    const languageKey: Variant = new Variant({ value: 'de', dataType: DataType.String, arrayType: VariantArrayType.Scalar});
-
-    const request = new CallMethodRequest({
-              inputArguments: [phraseNames, languageKey],
-              objectId: new NodeId(NodeIdType.String, 'ResourceService', 2),
-              methodId: new NodeId(NodeIdType.String, 'getPhrases', 2) });
-
-
-    cliSession.call([request], (err, response) => {
-      if (err) {
-
-        console.log(err + ' ');
-      } else {
-        onMethodCall(response);
-      }
-    });
-
+  cliSession.call([request], (err, response) => {
+    if (err) {
+      console.log(err + ' ');
+    } else {
+      onMethodCall(response);
+    }
+  });
 }
 
 function onMethodCall(response: CallMethodResult[]) {
-   console.log('onMethodCall');
+  console.log('onMethodCall');
 }
-
 
 // execute the test
 console.log('starting the tests');
 exectest();
 setupButtons();
 
+let cli2: OPCUAClient;
+async function execAsyncTest() {
+  cli2 = new OPCUAClient({
+    applicationName: 'theapp',
+    clientName: 'theclient',
+    encoding: 'opcua+uajson',
+  });
 
+  await cli2.connectP('wss://prototyping.opcfoundation.org:65200');
+  const session = await cli2.createSessionP(null);
+  session.createSubscriptionP({
+    requestedPublishingInterval: 100,
+    requestedLifetimeCount: 10000,
+    requestedMaxKeepAliveCount: 100,
+    maxNotificationsPerPublish: 10000,
+    publishingEnabled: true,
+    priority: 10,
+  });
+}
+
+execAsyncTest();
