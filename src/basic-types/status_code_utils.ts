@@ -85,7 +85,7 @@ export function jsonDecodeStatusCode(statusCode?: number | { Code: number }) {
   return getStatusCodeFromCode(code);
 }
 
-export function jsonEncodeStatusCode(statusCode: StatusCode) {
+export function jsonEncodeStatusCode(statusCode?: StatusCode | null) {
   if (!statusCode || statusCode === StatusCodes.Good) {
     return;
   }
