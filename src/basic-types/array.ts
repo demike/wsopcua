@@ -15,7 +15,7 @@ export function encodeArray(
   stream: DataStream,
   encode_element_func?: (obj: any, stream: DataStream) => void
 ): void {
-  if (arr === null) {
+  if (arr == null) {
     stream.setUint32(0xffffffff);
     return;
   }
