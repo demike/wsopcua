@@ -1,52 +1,50 @@
-
 // ---------------------------------------------------------------------------------------------------------------------
 // Common
 // ---------------------------------------------------------------------------------------------------------------------
-export {NodeId, resolveNodeId, makeNodeId, coerceNodeId/*sameNodeId*/} from '../nodeid/nodeid';
-export {NodeIdType} from '../generated';
+export { NodeId, resolveNodeId, makeNodeId, coerceNodeId /*sameNodeId*/ } from '../nodeid/nodeid';
+export { NodeIdType } from '../generated';
 
-export {ExpandedNodeId, makeExpandedNodeId/*,coerceExpandedNodeId*/} from '../nodeid/expanded_nodeid';
+export {
+  ExpandedNodeId,
+  makeExpandedNodeId /*,coerceExpandedNodeId*/,
+} from '../nodeid/expanded_nodeid';
 
-export {StatusCodes} from '../constants/raw_status_codes';
+export { StatusCodes } from '../constants/raw_status_codes';
 
 import '../generated';
 
-export {DataType} from '../variant/DataTypeEnum';
-export {Variant, IVariant} from '../variant/variant';
-export {VariantArrayType} from '../variant/VariantArrayTypeEnum';
-export {buildVariantArray} from '../variant';
+export { DataType } from '../variant/DataTypeEnum';
+export { Variant, IVariant } from '../variant/variant';
+export { VariantArrayType } from '../variant/VariantArrayTypeEnum';
+export { buildVariantArray } from '../variant';
 
-export {DataValue, sameDataValue} from '../data-value';
+export { DataValue, sameDataValue } from '../data-value';
 
-export {NumericRange} from '../numeric-range/numeric_range';
+export { NumericRange } from '../numeric-range/numeric_range';
 // export {AccessLevelFlag} from '../data-model'; //is generated as AccessLevelType <-- TODO fix the generation
 
 // generated module.exports.LocalizedText       = require("node-opcua-data-model").LocalizedText;
 
 // generated module.exports.QualifiedName       = require("node-opcua-data-model").QualifiedName;
-export {coerceQualifiedName, stringToQualifiedName, coerceLocalizedText} from '../data-model';
+export { coerceQualifiedName, stringToQualifiedName, coerceLocalizedText } from '../data-model';
 // generated module.exports.NodeClass           = require("node-opcua-data-model").NodeClass;
 // not used? module.exports.NodeClassMask       = require("node-opcua-data-model").NodeClassMask;
 
-export {AttributeIds} from '../constants/AttributeIds';
+export { AttributeIds } from '../constants/AttributeIds';
 // not used? module.exports.AttributeNameById   = require("node-opcua-data-model").AttributeNameById;
 // generated module.exports.BrowseDirection     = require("node-opcua-data-model").BrowseDirection;
 
-
-export { /*VariableTypeIds, ObjectTypeIds,*/ DataTypeIds, ReferenceTypeIds} from '../constants';
+export { /*VariableTypeIds, ObjectTypeIds,*/ DataTypeIds, ReferenceTypeIds } from '../constants';
 // is it really necessary to export all these ids?
 // export {VariableIds, MethodIds, ObjectIds} from '../constants/opcua_node_ids';
 
-
 // DA
-export {makeEUInformation, standardUnits, commonCodeToUInt} from '../data-access';
+export { makeEUInformation, standardUnits, commonCodeToUInt } from '../data-access';
 // generated module.exports.Range = require("node-opcua-data-access").Range;
 
 // not used? module.exports.get_fully_qualified_domain_name = require("node-opcua-hostname").get_fully_qualified_domain_name;
 
-export {makeApplicationUrn} from '../common';
-
-
+export { makeApplicationUrn } from '../common';
 
 // services
 export * from '../service-browse'; // TODO:export as
@@ -76,49 +74,47 @@ export * from '../service-translate-browse-path'; // TODO:export as translate_br
 
 // generated module.exports.BrowsePath                                 = require("node-opcua-service-translate-browse-path").BrowsePath;
 
-export {makeRelativePath, makeBrowsePath, constructBrowsePathFromQualifiedName} from '../service-translate-browse-path';
+export * from '../service-translate-browse-path'; // TODO: export as service-translate-browse-path
 
 // TODO: implement me module.exports.query_service                              = require("node-opcua-service-query");
 // TODO: implement me module.exports.node_managment_service                     = require("node-opcua-service-node-management");
 
-
 // generated module.exports.ServerState = require("node-opcua-common").ServerState;
 // generated as ServiceCounterDataType  module.exports.ServiceCounter = require("node-opcua-common").ServiceCounter;
 
-export {SecurityPolicy} from '../secure-channel';
+export { SecurityPolicy, ConnectionStrategy } from '../secure-channel';
 
 // generated module.exports.MessageSecurityMode = require("node-opcua-service-secure-channel").MessageSecurityMode;
 
 export * from '../utils'; // TODO: export as utils
 // not used? module.exports.crypto_utils = require("node-opcua-crypto").crypto_utils;
-export {hexDump} from '../common/debug';
+export { hexDump } from '../common/debug';
 
 // ----------------------------------------------------------------------------------------------------------------------
 // client services
 // ----------------------------------------------------------------------------------------------------------------------
-export {OPCUAClientBase, ConnectionStrategy, OPCUAClientOptions} from '../client/client_base';
-export {OPCUAClient} from '../client/opcua_client';
-export {MonitoredItem} from '../client/MonitoredItem';
+export { OPCUAClientBase, OPCUAClientOptions } from '../client/client_base';
+export { OPCUAClient } from '../client/opcua_client';
+export { MonitoredItem } from '../client/MonitoredItem';
 
 // not implemented yet module.exports.NodeCrawler        = require("node-opcua-client-crawler").NodeCrawler;
 
-export {ClientSession} from '../client/client_session';
-export {ClientSubscription} from '../client/ClientSubscription';
+export { ClientSession } from '../client/client_session';
+export { ClientSubscription } from '../client/ClientSubscription';
 
-export {readUAAnalogItem, perform_findServers} from '../client/client_utils'; // module.exports.client_utils = require("node-opcua-client/src/client_utils");
+export { readUAAnalogItem, perform_findServers } from '../client/client_utils'; // module.exports.client_utils = require("node-opcua-client/src/client_utils");
 
 // TODO: implement me  module.exports.callConditionRefresh = require("node-opcua-client/src/alarms_and_conditions/client_tools").callConditionRefresh;
 
-export {parseEndpointUrl, is_valid_endpointUrl} from '../transport/tools';
+export { parseEndpointUrl, is_valid_endpointUrl } from '../transport/tools';
 
 // ----------------------------------------------------------------------------------------------------------------------
 // Server services
 // ----------------------------------------------------------------------------------------------------------------------
-export * from '../basic-types';
+export * from '../basic-types'; // TODO: export as basic-types
 
 // version
-export let version = 0.1;          //     = require("./package.json").version;
-
+export const version: Readonly<string> = '0.1'; //     = require("./package.json").version;
 
 // filtering tools
 // TODO: implement me module.exports.checkSelectClause = require("node-opcua-address-space").checkSelectClause;

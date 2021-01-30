@@ -368,8 +368,8 @@ export class ClientSecureChannelLayer
 
   protected process_request_callback(
     request_data: RequestData,
-    err: Error,
-    response: OpcUaResponse
+    err: Error | null,
+    response: OpcUaResponse | null
   ) {
     assert('function' === typeof request_data.callback);
 
@@ -641,9 +641,9 @@ export class ClientSecureChannelLayer
       requestType: requestType,
       securityMode: this._securityMode,
       requestHeader: new secure_channel_service.RequestHeader({
-        auditEntryId: null,
+        /* auditEntryId: undefined, */
       }),
-      clientNonce: this._clientNonce, //
+      clientNonce: this._clientNonce || undefined, //
       requestedLifetime: this.defaultSecureTokenLifetime,
     });
 
@@ -1562,7 +1562,7 @@ protected _get_security_options_for_MSG() {
   protected channelId: number;
   protected connectionStrategy: any;
 
-  protected __call: backoff.FunctionCall;
+  protected __call: backoff.FunctionCall | null;
 
   // transaction stats
   request: any;
