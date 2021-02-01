@@ -46,8 +46,10 @@
     "build-examples": "webpack --config webpack.example.js",
     "test": "karma start",
     "test-server": "wsopcua-test-server",
-    "e2e:run": "karma start ./karma.e2e.conf.js",
-    "test-e2e": "start-server-and-test test-server tcp:4444 e2e:run"
+    "e2e:run": "karma start ./karma.e2e.conf.js --single-run",
+    "e2e:start": "karma start ./karma.e2e.conf.js",
+    "test-e2e": "start-server-and-test test-server tcp:4444 e2e:run",
+    "start-e2e": "start-server-and-test test-server tcp:4444 e2e:start"
   },
   "files": [
     "documentation/**/*",
