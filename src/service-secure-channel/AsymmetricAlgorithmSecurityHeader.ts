@@ -7,11 +7,11 @@ import { DataStream } from '../basic-types/DataStream';
 
 export interface IAsymmetricAlgorithmSecurityHeader {
   securityPolicyUri?: string;
-  senderCertificate?: Uint8Array; //ByteString;
-  receiverCertificateThumbprint?: Uint8Array; //ByteString;
+  senderCertificate?: Uint8Array; // ByteString;
+  receiverCertificateThumbprint?: Uint8Array; // ByteString;
 }
 
-//Asymmetric algorithms are used to secure the OpenSecureChannel messages.
+// Asymmetric algorithms are used to secure the OpenSecureChannel messages.
 export class AsymmetricAlgorithmSecurityHeader {
   constructor(options?: IAsymmetricAlgorithmSecurityHeader) {
     options = options || {};
@@ -41,13 +41,13 @@ export class AsymmetricAlgorithmSecurityHeader {
   // Receivers can extract the Certificates from the byte array by using the Certificate size contained
   // in DER header (see X509).
   // Receivers that do not handle Certificate chains shall ignore the extra bytes.
-  senderCertificate: Uint8Array; //ByteString;
+  senderCertificate: Uint8Array; // ByteString;
 
   // The thumbprint of the X509v3 certificate assigned to the receiving application
   // The thumbprint is the SHA1 digest of the DER encoded form of the certificate.
   // This indicates what public key was used to encrypt the MessageChunk
   // This field shall be null if the message is not encrypted.
-  receiverCertificateThumbprint: Uint8Array; //ByteString;
+  receiverCertificateThumbprint: Uint8Array; // ByteString;
 
   encode(out: DataStream) {
     ec.encodeString(this.securityPolicyUri, out);
@@ -84,7 +84,7 @@ export class AsymmetricAlgorithmSecurityHeader {
     }
 
     target.securityPolicyUri = this.securityPolicyUri;
-    target.senderCertificate = this.senderCertificate; //TODO: deep copy?
+    target.senderCertificate = this.senderCertificate; // TODO: deep copy?
     target.receiverCertificateThumbprint = this.receiverCertificateThumbprint;
     return target;
   }

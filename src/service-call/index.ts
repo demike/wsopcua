@@ -10,7 +10,6 @@
  * @module services.call
  */
 
-
 /*
  *
  *
@@ -34,23 +33,21 @@
  *
  */
 
+export { Argument } from '../generated/Argument';
 
-    export {Argument} from '../generated/Argument';
-
-    /**
-     * @class CallMethodRequest
-     */
-    export {CallMethodRequest} from "../generated/CallMethodRequest"
-    /**
-     * @class CallRequest
-     */
-    export {CallRequest} from "../generated/CallRequest";
-    /**
-     * @class CallMethodResult
-     */
-    export {CallMethodResult}  from "../generated/CallMethodResult";
-    /**
-     * @class CallResponse
-     */
-    export {CallResponse} from "../generated/CallResponse";
-
+/**
+ * @class CallMethodRequest
+ */
+export { CallMethodRequest } from '../generated/CallMethodRequest';
+/**
+ * @class CallRequest
+ */
+export { CallRequest } from '../generated/CallRequest';
+/**
+ * @class CallMethodResult
+ */
+export { CallMethodResult } from '../generated/CallMethodResult';
+/**
+ * @class CallResponse
+ */
+export { CallResponse } from '../generated/CallResponse';

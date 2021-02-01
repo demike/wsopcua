@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 /**
  * @module services.write
  */
 
 /**
-  * @class WriteValue
-  */
+ * @class WriteValue
+ */
 export { WriteValue } from '../generated/WriteValue';
 
 /**
@@ -16,4 +16,3 @@ export { WriteRequest } from '../generated/WriteRequest';
  * @class WriteResponse
  */
 export { WriteResponse } from '../generated/WriteResponse';
-

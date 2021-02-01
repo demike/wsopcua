@@ -433,9 +433,8 @@ function encodeGeneralArray(dataType: DataType, stream: DataStream, value: any) 
   assert(Number.isFinite(arr.length));
   ec.encodeUInt32(arr.length, stream);
   const encode = get_encoder(dataType);
-  let i,
-    n = arr.length;
-  for (i = 0; i < n; i++) {
+  const n = arr.length;
+  for (let i = 0; i < n; i++) {
     encode(arr[i], stream);
   }
 }

@@ -1,6 +1,5 @@
 import * as ec from '../basic-types';
 import { DataStream } from '../basic-types/DataStream';
-('use strict');
 
 export interface ISymmetricAlgortihmSecurityHeader {
   tokenId?: ec.UInt32;

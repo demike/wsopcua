@@ -102,9 +102,11 @@ export { MonitoredItem } from '../client/MonitoredItem';
 export { ClientSession } from '../client/client_session';
 export { ClientSubscription } from '../client/ClientSubscription';
 
-export { readUAAnalogItem, perform_findServers } from '../client/client_utils'; // module.exports.client_utils = require("node-opcua-client/src/client_utils");
+export { readUAAnalogItem, perform_findServers } from '../client/client_utils';
+// module.exports.client_utils = require("node-opcua-client/src/client_utils");
 
-// TODO: implement me  module.exports.callConditionRefresh = require("node-opcua-client/src/alarms_and_conditions/client_tools").callConditionRefresh;
+// TODO: implement me
+// module.exports.callConditionRefresh = require("node-opcua-client/src/alarms_and_conditions/client_tools").callConditionRefresh;
 
 export { parseEndpointUrl, is_valid_endpointUrl } from '../transport/tools';
 

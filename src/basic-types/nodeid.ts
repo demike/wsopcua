@@ -21,7 +21,6 @@ export { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 
 import { set_flag, check_flag } from '../utils';
 import { NodeIdType } from '../generated/NodeIdType';
-import { Node } from '../generated';
 
 enum EnumNodeIdEncoding {
   TwoBytes = 0x00, // A numeric value that fits into the two byte representation.

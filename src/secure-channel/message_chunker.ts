@@ -18,7 +18,7 @@ import {
   SecureMessageChunkManagerOptions,
 } from './secure_message_chunk_manager';
 import { ISymmetricAlgortihmSecurityHeader } from '../service-secure-channel/SymmetricAlgorithmSecurityHeader';
-import { DerivedKeys, computeDerivedKeys } from '../crypto';
+import { DerivedKeys } from '../crypto';
 import { IEncodable } from '../factory/factories_baseobject';
 
 export interface IMessageChunkerOptions {

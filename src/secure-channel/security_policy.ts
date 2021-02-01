@@ -10,7 +10,7 @@ import { SignatureData } from '../generated/SignatureData';
 import * as crypto_utils from '../crypto';
 import { generatePublicKeyFromDER, DerivedKeys } from '../crypto';
 import { debugLog } from '../common/debug';
-import { EncryptBufferFunc, SignBufferFunc } from '../chunkmanager/chunk_manager';
+
 /**
  * @class SecurityPolicy
  * @static
