@@ -181,7 +181,7 @@ public modify(parameters: IMonitoringParameters,
 
 public modifyP(parameters: IMonitoringParameters,
     timestampsToReturn?: TimestampsToReturn): Promise<subscription_service.MonitoredItemModifyResult[]> {
-    return new Promise((res, rej) => {this.modify(parameters,timestampsToReturn, (err, result) => {
+    return new Promise((res, rej) => {this.modify(parameters, timestampsToReturn, (err, result) => {
         if (err) { rej(err); } else { res(result); }
     }); });
 }

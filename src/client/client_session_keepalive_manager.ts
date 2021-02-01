@@ -75,7 +75,7 @@ public ping_server(callback: () => void) {
 
         } else {
             if (!dataValue.statusCode || dataValue.statusCode === StatusCodes.Good) {
-                const newState = dataValue.value.value;//ServerState[dataValue.value.value];
+                const newState = dataValue.value.value; // ServerState[dataValue.value.value];
                 // istanbul ignore next
                 if (newState !== this.lastKnownState) {
                     console.log(' Server State = ', newState.toString());

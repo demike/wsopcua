@@ -1290,7 +1290,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
     /* istanbul ignore next */
     if (doDebug) {
-      (request as any).trace = new Error().stack;
+      request.trace = new Error().stack;
     }
 
     if (this._closeEventHasBeenEmmitted) {
@@ -1301,7 +1301,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       return;
     }
 
-    this.performMessageTransaction(request as any, (err, response) => {
+    this.performMessageTransaction(request, (err, response) => {
       if (this._closeEventHasBeenEmmitted) {
         debugLog(
           'ClientSession#_defaultRequest ... err =',
@@ -2415,7 +2415,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
           new Error('cannot read DataType Attribute ' + dataValue.statusCode.toString())
         );
       }
-      let dataTypeId: NodeId = dataValue.value!.value;
+      const dataTypeId: NodeId = dataValue.value!.value;
       assert(dataTypeId instanceof NodeId);
       this.__findBasicDataType(session, dataTypeId, callback);
     });

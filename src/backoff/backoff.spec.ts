@@ -142,7 +142,7 @@ describe('Backoff', function() {
         });
 
         const expectedNumbers = [0, 1, 2, 3, 4];
-        
+
 
         for (let i = 0; i < expectedNumbers.length; i++) {
             backoff.backoff();
@@ -283,10 +283,10 @@ describe('call', () => {
         let callCnt = 0;
 
         const fn = (onerror: (err?: Error) => void) => {
-            
+
             if (onerror instanceof Error) {
-                //it failed after 5 retries
-                //expect(onerror.message).toContain('test error');
+                // it failed after 5 retries
+                // expect(onerror.message).toContain('test error');
 
                 c.abort();
                 return;
