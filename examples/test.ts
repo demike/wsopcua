@@ -27,7 +27,7 @@ const cli = new OPCUAClient({
   clientName: 'theClient',
   endpoint_must_exist: false, // <-- necessary for the websocket proxying to work
   encoding: 'opcua+uacp',
-  // TODO: add some more
+  // TODO:  add some more
 });
 let cliSession: ClientSession = null;
 
