@@ -69,7 +69,7 @@ if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
   this.serverNonce = ec.jsonDecodeByteString(inp.ServerNonce);
   this.results = ec.jsonDecodeArray( inp.Results, ec.jsonDecodeStatusCode);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
 
  }
 

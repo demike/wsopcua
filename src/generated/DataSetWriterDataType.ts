@@ -103,7 +103,7 @@ if (!inp) { return; }
   this.dataSetFieldContentMask = inp.DataSetFieldContentMask;
   this.keyFrameCount = inp.KeyFrameCount;
   this.dataSetName = inp.DataSetName;
-  this.dataSetWriterProperties = ec.jsonDecodeStructArray( inp.DataSetWriterProperties,KeyValuePair);
+  this.dataSetWriterProperties = ec.jsonDecodeStructArray( inp.DataSetWriterProperties, KeyValuePair);
   this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
   this.messageSettings = jsonDecodeExtensionObject(inp.MessageSettings);
 

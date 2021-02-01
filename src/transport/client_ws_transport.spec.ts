@@ -132,7 +132,7 @@ describe('testing ClientWS_transport', function () {
       }
     });
 
-    let mockSocket: WebSocketMock = (transport as any)._socket;
+    const mockSocket: WebSocketMock = (transport as any)._socket;
     mockSocket._open();
     // received Fake HEL Message
     // Pretend the message is malformed or that the server crashed for some reason : abort now !

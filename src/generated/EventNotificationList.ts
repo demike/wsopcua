@@ -49,7 +49,7 @@ export class EventNotificationList extends NotificationData {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.events = ec.jsonDecodeStructArray( inp.Events,EventFieldList);
+  this.events = ec.jsonDecodeStructArray( inp.Events, EventFieldList);
 
  }
 

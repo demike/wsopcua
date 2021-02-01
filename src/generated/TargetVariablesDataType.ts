@@ -49,7 +49,7 @@ export class TargetVariablesDataType extends SubscribedDataSetDataType {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.targetVariables = ec.jsonDecodeStructArray( inp.TargetVariables,FieldTargetDataType);
+  this.targetVariables = ec.jsonDecodeStructArray( inp.TargetVariables, FieldTargetDataType);
 
  }
 

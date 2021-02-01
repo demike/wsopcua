@@ -69,7 +69,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       dataValue.sourcePicoseconds = dataValues[0].sourcePicoseconds;
     }
 
-    //xx console.log(results[0].toString());
+    // xx console.log(results[0].toString());
 
     // verify that server provides a valid serverTimestamp and sourceTimestamp, regardless
     // of what we wrote into the variable

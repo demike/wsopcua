@@ -62,7 +62,7 @@ export class FindServersOnNetworkResponse {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
   this.lastCounterResetTime = ec.jsonDecodeDateTime(inp.LastCounterResetTime);
-  this.servers = ec.jsonDecodeStructArray( inp.Servers,ServerOnNetwork);
+  this.servers = ec.jsonDecodeStructArray( inp.Servers, ServerOnNetwork);
 
  }
 

@@ -1,6 +1,6 @@
 'use strict';
 
-let _FIRST_INTERNAL_ID = 0xFFFE0000;
+const _FIRST_INTERNAL_ID = 0xFFFE0000;
 
 let _next_available_id = _FIRST_INTERNAL_ID;
 export function generate_new_id () {

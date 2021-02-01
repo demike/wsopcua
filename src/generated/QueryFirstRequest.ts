@@ -82,7 +82,7 @@ export class QueryFirstRequest {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
   this.view.fromJSON(inp.View);
-  this.nodeTypes = ec.jsonDecodeStructArray( inp.NodeTypes,NodeTypeDescription);
+  this.nodeTypes = ec.jsonDecodeStructArray( inp.NodeTypes, NodeTypeDescription);
   this.filter.fromJSON(inp.Filter);
   this.maxDataSetsToReturn = inp.MaxDataSetsToReturn;
   this.maxReferencesToReturn = inp.MaxReferencesToReturn;

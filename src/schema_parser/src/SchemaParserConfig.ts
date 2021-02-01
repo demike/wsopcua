@@ -39,7 +39,7 @@ export interface ProjectImportConfig {
     /**
      * the schema files to import
      */
-    schemaImports: SchemaImportConfig[]
+    schemaImports: SchemaImportConfig[];
 }
 
 export interface SchemaParserConfig {
@@ -60,10 +60,10 @@ export class ProjectModulePath {
     modulePath: string;
 
     /**
-     * true: this module is a directory and has a index.ts file 
+     * true: this module is a directory and has a index.ts file
      * false: this module is a file
      */
-    isDirectory: boolean = true;
+    isDirectory = true;
 
     constructor(projectName: string, modulePath: string, isDirectory: boolean = true) {
         this.projectName = projectName;
@@ -82,28 +82,28 @@ export class ProjectModulePath {
 
 /**
  * replaces all relative paths to absolute paths
- * 
+ *
  * @param conf the configuration
  * @param configFilePath the file the configuration was parsed from
  */
 export function sanitizeProjectImportConfig(conf: ProjectImportConfig, configFilePath: string) {
     const confFilePath = path.dirname(configFilePath);
     if (conf.projectSrcPath.startsWith('.')) {
-        //it's a relative path
+        // it's a relative path
 
         conf.projectSrcPath = path.join(confFilePath , conf.projectSrcPath);
     }
 
     for (const schemaConf of conf.schemaImports) {
         if (schemaConf.pathToSchema.startsWith('.')) {
-            //it's a relative path
+            // it's a relative path
             schemaConf.pathToSchema = path.join(confFilePath, schemaConf.pathToSchema);
         }
     }
 }
 
 /**
- * 
+ *
  * @param modDest      the module path of the class we want to import the other module
  * @param modToImport  the module path of the class we want to import
  * @param className    if modToImport is a directory, the class concatenated, if not, then the class name is ignored
@@ -111,12 +111,12 @@ export function sanitizeProjectImportConfig(conf: ProjectImportConfig, configFil
 export function getModuleImportPath(modDest: ProjectModulePath, modToImport: ProjectModulePath, className?: string): string {
     let str: string;
     if (modDest.projectName !== modToImport.projectName) {
-        //ok it's an import from an other project
-        str = path.normalize(modToImport.projectName + '/' + modToImport.modulePath).replace(/\\/g, "/");
+        // ok it's an import from an other project
+        str = path.normalize(modToImport.projectName + '/' + modToImport.modulePath).replace(/\\/g, '/');
     } else {
-        str = path.normalize(path.relative(modDest.modulePath, modToImport.modulePath)).replace(/\\/g, "/");
+        str = path.normalize(path.relative(modDest.modulePath, modToImport.modulePath)).replace(/\\/g, '/');
         if (!str.length) {
-            str = ".";
+            str = '.';
         }
     }
 

@@ -78,7 +78,7 @@ if (!inp) { return; }
   this.historyReadDetails = jsonDecodeExtensionObject(inp.HistoryReadDetails);
   this.timestampsToReturn = inp.TimestampsToReturn;
   this.releaseContinuationPoints = inp.ReleaseContinuationPoints;
-  this.nodesToRead = ec.jsonDecodeStructArray( inp.NodesToRead,HistoryReadValueId);
+  this.nodesToRead = ec.jsonDecodeStructArray( inp.NodesToRead, HistoryReadValueId);
 
  }
 

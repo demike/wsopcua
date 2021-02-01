@@ -55,8 +55,8 @@ export class ContentFilterResult {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.elementResults = ec.jsonDecodeStructArray( inp.ElementResults,ContentFilterElementResult);
-  this.elementDiagnosticInfos = ec.jsonDecodeStructArray( inp.ElementDiagnosticInfos,DiagnosticInfo);
+  this.elementResults = ec.jsonDecodeStructArray( inp.ElementResults, ContentFilterElementResult);
+  this.elementDiagnosticInfos = ec.jsonDecodeStructArray( inp.ElementDiagnosticInfos, DiagnosticInfo);
 
  }
 

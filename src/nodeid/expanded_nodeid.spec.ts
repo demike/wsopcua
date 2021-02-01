@@ -119,7 +119,7 @@ describe('testing ExpandedNodeId', function () {
             namespaceUri: 'testuri',
             serverIndex: 2,
             value: 10
-        }
+        };
 
         const exNodeId = coerceExpandedNodeId(obj);
         expect(exNodeId.toString()).toBe('svr=2;nsu=testuri;ns=0;i=10');

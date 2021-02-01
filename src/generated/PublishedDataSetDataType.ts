@@ -76,7 +76,7 @@ if (!inp) { return; }
   this.name = inp.Name;
   this.dataSetFolder = inp.DataSetFolder;
   this.dataSetMetaData.fromJSON(inp.DataSetMetaData);
-  this.extensionFields = ec.jsonDecodeStructArray( inp.ExtensionFields,KeyValuePair);
+  this.extensionFields = ec.jsonDecodeStructArray( inp.ExtensionFields, KeyValuePair);
   this.dataSetSource = jsonDecodeExtensionObject(inp.DataSetSource);
 
  }

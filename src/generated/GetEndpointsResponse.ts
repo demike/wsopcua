@@ -55,7 +55,7 @@ export class GetEndpointsResponse {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
-  this.endpoints = ec.jsonDecodeStructArray( inp.Endpoints,EndpointDescription);
+  this.endpoints = ec.jsonDecodeStructArray( inp.Endpoints, EndpointDescription);
 
  }
 

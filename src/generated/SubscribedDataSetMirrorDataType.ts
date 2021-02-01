@@ -56,7 +56,7 @@ export class SubscribedDataSetMirrorDataType extends SubscribedDataSetDataType {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.parentNodeName = inp.ParentNodeName;
-  this.rolePermissions = ec.jsonDecodeStructArray( inp.RolePermissions,RolePermissionType);
+  this.rolePermissions = ec.jsonDecodeStructArray( inp.RolePermissions, RolePermissionType);
 
  }
 

@@ -69,7 +69,7 @@ if (!inp) { return; }
   this.defaultEncodingId = ec.jsonDecodeNodeId(inp.DefaultEncodingId);
   this.baseDataType = ec.jsonDecodeNodeId(inp.BaseDataType);
   this.structureType = inp.StructureType;
-  this.fields = ec.jsonDecodeStructArray( inp.Fields,StructureField);
+  this.fields = ec.jsonDecodeStructArray( inp.Fields, StructureField);
 
  }
 

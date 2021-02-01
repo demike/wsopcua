@@ -1,10 +1,9 @@
-"use strict";
+'use strict';
 /**
  * @module opcua.utils
  */
 
-import {assert} from '../assert';
-
+import { assert } from '../assert';
 
 /**
  * set a flag
@@ -13,9 +12,9 @@ import {assert} from '../assert';
  * @param mask
  * @return {number}
  */
-export function set_flag(value : number, mask : number): number {
-    assert(mask !== undefined);
-    return (value | mask);
+export function set_flag(value: number, mask: number): number {
+  assert(mask !== undefined);
+  return value | mask;
 }
 
 /**
@@ -27,21 +26,20 @@ export function set_flag(value : number, mask : number): number {
  * @return {boolean}
  */
 export function check_flag(value: number, mask: number): boolean {
-    assert(mask !== undefined);
-    return ((value & mask) === mask);
+  assert(mask !== undefined);
+  return (value & mask) === mask;
 }
 
-export {buffer_ellipsis} from './buffer_ellipsis';
+export { buffer_ellipsis } from './buffer_ellipsis';
 export * from './string_utils';
 export * from './get_clock_tick';
 
-//exports.compare_buffers = require("./src/compare_buffers").compare_buffers;
+// exports.compare_buffers = require("./src/compare_buffers").compare_buffers;
 
-export function isNullOrUndefined(value: any)  {
-    return ( value === undefined ) || (value === null);
+export function isNullOrUndefined(value: any) {
+  return value === undefined || value === null;
 }
 
 export * from './get_function_parameters_name';
 export * from './once';
 export * from './isEqual';
-

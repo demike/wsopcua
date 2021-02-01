@@ -119,10 +119,10 @@ if (!inp) { return; }
   this.description.fromJSON(inp.Description);
   this.writeMask = inp.WriteMask;
   this.userWriteMask = inp.UserWriteMask;
-  this.rolePermissions = ec.jsonDecodeStructArray( inp.RolePermissions,RolePermissionType);
-  this.userRolePermissions = ec.jsonDecodeStructArray( inp.UserRolePermissions,RolePermissionType);
+  this.rolePermissions = ec.jsonDecodeStructArray( inp.RolePermissions, RolePermissionType);
+  this.userRolePermissions = ec.jsonDecodeStructArray( inp.UserRolePermissions, RolePermissionType);
   this.accessRestrictions = inp.AccessRestrictions;
-  this.references = ec.jsonDecodeStructArray( inp.References,ReferenceNode);
+  this.references = ec.jsonDecodeStructArray( inp.References, ReferenceNode);
 
  }
 

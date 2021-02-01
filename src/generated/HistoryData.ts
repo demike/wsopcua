@@ -47,7 +47,7 @@ export class HistoryData {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.dataValues = ec.jsonDecodeStructArray( inp.DataValues,DataValue);
+  this.dataValues = ec.jsonDecodeStructArray( inp.DataValues, DataValue);
 
  }
 

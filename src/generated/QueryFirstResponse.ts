@@ -84,10 +84,10 @@ export class QueryFirstResponse {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
-  this.queryDataSets = ec.jsonDecodeStructArray( inp.QueryDataSets,QueryDataSet);
+  this.queryDataSets = ec.jsonDecodeStructArray( inp.QueryDataSets, QueryDataSet);
   this.continuationPoint = ec.jsonDecodeByteString(inp.ContinuationPoint);
-  this.parsingResults = ec.jsonDecodeStructArray( inp.ParsingResults,ParsingResult);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
+  this.parsingResults = ec.jsonDecodeStructArray( inp.ParsingResults, ParsingResult);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
   this.filterResult.fromJSON(inp.FilterResult);
 
  }

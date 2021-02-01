@@ -112,7 +112,7 @@ if (!inp) { return; }
   this.arrayDimensions = inp.ArrayDimensions;
   this.maxStringLength = inp.MaxStringLength;
   this.dataSetFieldId = inp.DataSetFieldId;
-  this.properties = ec.jsonDecodeStructArray( inp.Properties,KeyValuePair);
+  this.properties = ec.jsonDecodeStructArray( inp.Properties, KeyValuePair);
 
  }
 

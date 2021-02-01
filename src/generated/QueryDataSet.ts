@@ -61,7 +61,7 @@ export class QueryDataSet {
 if (!inp) { return; }
   this.nodeId = ec.jsonDecodeExpandedNodeId(inp.NodeId);
   this.typeDefinitionNode = ec.jsonDecodeExpandedNodeId(inp.TypeDefinitionNode);
-  this.values = ec.jsonDecodeStructArray( inp.Values,Variant);
+  this.values = ec.jsonDecodeStructArray( inp.Values, Variant);
 
  }
 

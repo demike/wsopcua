@@ -92,7 +92,7 @@ export class RegisteredServer {
 if (!inp) { return; }
   this.serverUri = inp.ServerUri;
   this.productUri = inp.ProductUri;
-  this.serverNames = ec.jsonDecodeStructArray( inp.ServerNames,LocalizedText);
+  this.serverNames = ec.jsonDecodeStructArray( inp.ServerNames, LocalizedText);
   this.serverType = inp.ServerType;
   this.gatewayServerUri = inp.GatewayServerUri;
   this.discoveryUrls = inp.DiscoveryUrls;

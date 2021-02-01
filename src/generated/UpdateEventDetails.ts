@@ -69,7 +69,7 @@ if (!inp) { return; }
   super.fromJSON(inp);
   this.performInsertReplace = inp.PerformInsertReplace;
   this.filter.fromJSON(inp.Filter);
-  this.eventData = ec.jsonDecodeStructArray( inp.EventData,HistoryEventFieldList);
+  this.eventData = ec.jsonDecodeStructArray( inp.EventData, HistoryEventFieldList);
 
  }
 

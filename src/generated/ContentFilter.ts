@@ -47,7 +47,7 @@ export class ContentFilter {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.elements = ec.jsonDecodeStructArray( inp.Elements,ContentFilterElement);
+  this.elements = ec.jsonDecodeStructArray( inp.Elements, ContentFilterElement);
 
  }
 

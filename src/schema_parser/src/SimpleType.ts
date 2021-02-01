@@ -58,7 +58,7 @@ export class SimpleType extends ClassFile {
 
     // protected createDecodeMethod() : void {
     //     let enc = new ClassMethod(null,new ClassFile(this.name),"decode" + this.name,
-    //     [   new ClassMember("in",ClassFile.IO_TYPE)], 
+    //     [   new ClassMember("in",ClassFile.IO_TYPE)],
     //     null,
     //     "return in.get" + this.name + "(data);"
     //         );
@@ -67,17 +67,17 @@ export class SimpleType extends ClassFile {
 
     // protected createEncodeMethod() : void {
     //     let enc = new ClassMethod(null,null,"encode" + this.name,
-    //     [   
+    //     [
     //         new ClassMember("data", this.name),
-    //         new ClassMember("out",ClassFile.IO_TYPE)], 
+    //         new ClassMember("out",ClassFile.IO_TYPE)],
     //     null,
     //     "out.set" + this.name + "(data);"
     //         );
     //     this.utilityFunctions.push(enc);
     // }
 
-    public getDecodeMethod() : ClassMethod|null { return this.getMethodByName('decode' + this.name)}
-    public getEncodeMethod() : ClassMethod|null { return this.getMethodByName('encode' + this.name)}
+    public getDecodeMethod(): ClassMethod|null { return this.getMethodByName('decode' + this.name);}
+    public getEncodeMethod(): ClassMethod|null { return this.getMethodByName('encode' + this.name);}
 
         /**
      * return the code to import this class
@@ -85,24 +85,24 @@ export class SimpleType extends ClassFile {
      */
     public getImportSrc(targetClassFile: ClassFile): string {
         if (this.importAs) {
-            return "import * as " + this.importAs + " from '" +
+            return 'import * as ' + this.importAs + " from '" +
                  getModuleImportPath(targetClassFile.ModulePath, this.ModulePath) + "';";
         }
         if (this._hasEnDeCodeFunctions) {
-            let ret = "import {" + this.Name + ", encode" + this.Name + ", decode" + this.Name ;
+            let ret = 'import {' + this.Name + ', encode' + this.Name + ', decode' + this.Name ;
             if (this._hasJsonEnDeCodeFunctions) {
-               ret +=  ", jsonEncode" + this.Name + ", jsonDecode" + this.Name ;
+               ret +=  ', jsonEncode' + this.Name + ', jsonDecode' + this.Name ;
             }
             ret += "} from '" + getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + "';";
             return ret;
         }
-        return "import {" + this.Name + "} from '" +
+        return 'import {' + this.Name + "} from '" +
         getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) + "';";
     }
 
     public getDecodeFnImportSrc(targetClassFile: ClassFile): string|null {
-        //nothing to do, the encode/decode functions are already imported
+        // nothing to do, the encode/decode functions are already imported
       return null;
     }
 
-} 
+}

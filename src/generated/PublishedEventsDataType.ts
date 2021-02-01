@@ -63,7 +63,7 @@ export class PublishedEventsDataType extends PublishedDataSetSourceDataType {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.eventNotifier = ec.jsonDecodeNodeId(inp.EventNotifier);
-  this.selectedFields = ec.jsonDecodeStructArray( inp.SelectedFields,SimpleAttributeOperand);
+  this.selectedFields = ec.jsonDecodeStructArray( inp.SelectedFields, SimpleAttributeOperand);
   this.filter.fromJSON(inp.Filter);
 
  }

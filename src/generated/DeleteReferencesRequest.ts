@@ -55,7 +55,7 @@ export class DeleteReferencesRequest {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
-  this.referencesToDelete = ec.jsonDecodeStructArray( inp.ReferencesToDelete,DeleteReferencesItem);
+  this.referencesToDelete = ec.jsonDecodeStructArray( inp.ReferencesToDelete, DeleteReferencesItem);
 
  }
 

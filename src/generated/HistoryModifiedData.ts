@@ -53,7 +53,7 @@ export class HistoryModifiedData extends HistoryData {
  fromJSON( inp: any) {
 if (!inp) { return; }
   super.fromJSON(inp);
-  this.modificationInfos = ec.jsonDecodeStructArray( inp.ModificationInfos,ModificationInfo);
+  this.modificationInfos = ec.jsonDecodeStructArray( inp.ModificationInfos, ModificationInfo);
 
  }
 

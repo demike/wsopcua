@@ -82,7 +82,7 @@ export class ActivateSessionRequest {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
   this.clientSignature.fromJSON(inp.ClientSignature);
-  this.clientSoftwareCertificates = ec.jsonDecodeStructArray( inp.ClientSoftwareCertificates,SignedSoftwareCertificate);
+  this.clientSoftwareCertificates = ec.jsonDecodeStructArray( inp.ClientSoftwareCertificates, SignedSoftwareCertificate);
   this.localeIds = inp.LocaleIds;
   this.userIdentityToken = jsonDecodeExtensionObject(inp.UserIdentityToken);
   this.userTokenSignature.fromJSON(inp.UserTokenSignature);

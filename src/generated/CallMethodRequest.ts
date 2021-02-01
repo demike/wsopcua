@@ -61,7 +61,7 @@ export class CallMethodRequest {
 if (!inp) { return; }
   this.objectId = ec.jsonDecodeNodeId(inp.ObjectId);
   this.methodId = ec.jsonDecodeNodeId(inp.MethodId);
-  this.inputArguments = ec.jsonDecodeStructArray( inp.InputArguments,Variant);
+  this.inputArguments = ec.jsonDecodeStructArray( inp.InputArguments, Variant);
 
  }
 

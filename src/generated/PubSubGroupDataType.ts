@@ -90,9 +90,9 @@ if (!inp) { return; }
   this.enabled = inp.Enabled;
   this.securityMode = inp.SecurityMode;
   this.securityGroupId = inp.SecurityGroupId;
-  this.securityKeyServices = ec.jsonDecodeStructArray( inp.SecurityKeyServices,EndpointDescription);
+  this.securityKeyServices = ec.jsonDecodeStructArray( inp.SecurityKeyServices, EndpointDescription);
   this.maxNetworkMessageSize = inp.MaxNetworkMessageSize;
-  this.groupProperties = ec.jsonDecodeStructArray( inp.GroupProperties,KeyValuePair);
+  this.groupProperties = ec.jsonDecodeStructArray( inp.GroupProperties, KeyValuePair);
 
  }
 

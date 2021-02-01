@@ -55,7 +55,7 @@ export class TranslateBrowsePathsToNodeIdsRequest {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
-  this.browsePaths = ec.jsonDecodeStructArray( inp.BrowsePaths,BrowsePath);
+  this.browsePaths = ec.jsonDecodeStructArray( inp.BrowsePaths, BrowsePath);
 
  }
 

@@ -162,8 +162,8 @@ if (!inp) { return; }
   this.headerLayoutUri = inp.HeaderLayoutUri;
   this.securityMode = inp.SecurityMode;
   this.securityGroupId = inp.SecurityGroupId;
-  this.securityKeyServices = ec.jsonDecodeStructArray( inp.SecurityKeyServices,EndpointDescription);
-  this.dataSetReaderProperties = ec.jsonDecodeStructArray( inp.DataSetReaderProperties,KeyValuePair);
+  this.securityKeyServices = ec.jsonDecodeStructArray( inp.SecurityKeyServices, EndpointDescription);
+  this.dataSetReaderProperties = ec.jsonDecodeStructArray( inp.DataSetReaderProperties, KeyValuePair);
   this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
   this.messageSettings = jsonDecodeExtensionObject(inp.MessageSettings);
   this.subscribedDataSet = jsonDecodeExtensionObject(inp.SubscribedDataSet);

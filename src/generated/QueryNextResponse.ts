@@ -61,7 +61,7 @@ export class QueryNextResponse {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
-  this.queryDataSets = ec.jsonDecodeStructArray( inp.QueryDataSets,QueryDataSet);
+  this.queryDataSets = ec.jsonDecodeStructArray( inp.QueryDataSets, QueryDataSet);
   this.revisedContinuationPoint = ec.jsonDecodeByteString(inp.RevisedContinuationPoint);
 
  }

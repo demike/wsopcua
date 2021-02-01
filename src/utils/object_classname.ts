@@ -1,4 +1,4 @@
-"use strict"
+'use strict';
 /**
  * @method getObjectClassName
  * @param obj

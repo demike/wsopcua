@@ -55,7 +55,7 @@ export class FindServersResponse {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
-  this.servers = ec.jsonDecodeStructArray( inp.Servers,ApplicationDescription);
+  this.servers = ec.jsonDecodeStructArray( inp.Servers, ApplicationDescription);
 
  }
 

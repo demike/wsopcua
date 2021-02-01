@@ -63,7 +63,7 @@ export class EventFilterResult extends MonitoringFilterResult {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.selectClauseResults = ec.jsonDecodeArray( inp.SelectClauseResults, ec.jsonDecodeStatusCode);
-  this.selectClauseDiagnosticInfos = ec.jsonDecodeStructArray( inp.SelectClauseDiagnosticInfos,DiagnosticInfo);
+  this.selectClauseDiagnosticInfos = ec.jsonDecodeStructArray( inp.SelectClauseDiagnosticInfos, DiagnosticInfo);
   this.whereClauseResult.fromJSON(inp.WhereClauseResult);
 
  }

@@ -46,7 +46,7 @@ function createClientSocket(
       const fakeSocket = getFakeTransport();
       assert(ep.protocol === 'fake', ' Unsupported transport protocol');
       setTimeout(function () {
-        (<any>fakeSocket).emit('connect');
+        (fakeSocket).emit('connect');
       }, 0);
       return <WebSocket>fakeSocket;
     case 'http':
@@ -238,7 +238,7 @@ export class ClientWSTransport extends WSTransport {
     if (messageHeader.msgType === 'ERR') {
       responseClass = TCPErrorMessage;
       _stream.rewind();
-      response = <TCPErrorMessage>decodeMessage(_stream, responseClass);
+      response = decodeMessage(_stream, responseClass);
 
       const err = new Error(
         'ACK: ERR received ' + response.statusCode.toString() + ' : ' + response.reason
@@ -318,11 +318,11 @@ export class ClientWSTransport extends WSTransport {
        */
       this.emit('connection_break');
     }
-  };
+  }
 
   protected dispose() {
     super.dispose();
     this.off('socket_error', this._on_socket_error_after_connection);
-    //this._socket.removeEventListener('socket_error', this._on_socket_error_after_connection);
+    // this._socket.removeEventListener('socket_error', this._on_socket_error_after_connection);
   }
 }

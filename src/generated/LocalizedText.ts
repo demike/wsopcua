@@ -29,24 +29,24 @@ export class LocalizedText {
 
  encode( out: DataStream) {
   let encodingByte = 0;
-  if (this.locale != null) { encodingByte |= 1 << 0;}
-  if (this.text != null) { encodingByte |= 1 << 1;}
+  if (this.locale != null) { encodingByte |= 1 << 0; }
+  if (this.text != null) { encodingByte |= 1 << 1; }
   out.setUint8(encodingByte);
-  if(this.locale != null) { ec.encodeString(this.locale, out); }
-  if(this.text != null) { ec.encodeString(this.text, out); }
+  if (this.locale != null) { ec.encodeString(this.locale, out); }
+  if (this.text != null) { ec.encodeString(this.text, out); }
 
  }
 
 
  decode( inp: DataStream) {
-  let encodingByte = inp.getUint8();
-  let localeSpecified = (encodingByte & 1) != 0;
-  let textSpecified = (encodingByte & 2) != 0;
-  let reserved1 = (encodingByte & 4) != 0;
-  if(localeSpecified) {
+  const encodingByte = inp.getUint8();
+  const localeSpecified = (encodingByte & 1) != 0;
+  const textSpecified = (encodingByte & 2) != 0;
+  const reserved1 = (encodingByte & 4) != 0;
+  if (localeSpecified) {
    this.locale = ec.decodeString(inp);
   }
-  if(textSpecified) {
+  if (textSpecified) {
    this.text = ec.decodeString(inp);
   }
 
@@ -55,18 +55,18 @@ export class LocalizedText {
 
  toJSON() {
   const out: any = {};
-  if(this.locale != null) { out.Locale = this.locale; }
-  if(this.text != null) { out.Text = this.text; }
+  if (this.locale != null) { out.Locale = this.locale; }
+  if (this.text != null) { out.Text = this.text; }
  return out;
  }
 
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  if(inp.Locale) {
+  if (inp.Locale) {
    this.locale = inp.Locale;
   }
-  if(inp.Text) {
+  if (inp.Text) {
    this.text = inp.Text;
   }
 

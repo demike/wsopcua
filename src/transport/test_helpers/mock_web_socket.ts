@@ -24,7 +24,7 @@ export function installMockWebSocket() {
       listeners: {},
       send: jasmine.createSpy(),
       close: jasmine.createSpy().and.callFake(function () {
-        socketMock.readyState = 2; //WebSocket.CLOSING;
+        socketMock.readyState = 2; // WebSocket.CLOSING;
         socketMock._close();
       }),
 
@@ -77,7 +77,7 @@ export function installMockWebSocket() {
       },
 
       removeEventListener: function (type: string, listener: (...args: any[]) => void) {
-        let arr: any[] = socketMock.listeners[type];
+        const arr: any[] = socketMock.listeners[type];
         if (!arr) {
           return;
         }

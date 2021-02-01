@@ -111,8 +111,8 @@ if (!inp) { return; }
   this.revisedSessionTimeout = inp.RevisedSessionTimeout;
   this.serverNonce = ec.jsonDecodeByteString(inp.ServerNonce);
   this.serverCertificate = ec.jsonDecodeByteString(inp.ServerCertificate);
-  this.serverEndpoints = ec.jsonDecodeStructArray( inp.ServerEndpoints,EndpointDescription);
-  this.serverSoftwareCertificates = ec.jsonDecodeStructArray( inp.ServerSoftwareCertificates,SignedSoftwareCertificate);
+  this.serverEndpoints = ec.jsonDecodeStructArray( inp.ServerEndpoints, EndpointDescription);
+  this.serverSoftwareCertificates = ec.jsonDecodeStructArray( inp.ServerSoftwareCertificates, SignedSoftwareCertificate);
   this.serverSignature.fromJSON(inp.ServerSignature);
   this.maxRequestMessageSize = inp.MaxRequestMessageSize;
 

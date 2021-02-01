@@ -55,7 +55,7 @@ export class AddNodesRequest {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
-  this.nodesToAdd = ec.jsonDecodeStructArray( inp.NodesToAdd,AddNodesItem);
+  this.nodesToAdd = ec.jsonDecodeStructArray( inp.NodesToAdd, AddNodesItem);
 
  }
 

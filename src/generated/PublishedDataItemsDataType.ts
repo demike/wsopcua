@@ -49,7 +49,7 @@ export class PublishedDataItemsDataType extends PublishedDataSetSourceDataType {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.publishedData = ec.jsonDecodeStructArray( inp.PublishedData,PublishedVariableDataType);
+  this.publishedData = ec.jsonDecodeStructArray( inp.PublishedData, PublishedVariableDataType);
 
  }
 

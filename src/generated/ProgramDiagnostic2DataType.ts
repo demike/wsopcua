@@ -122,10 +122,10 @@ if (!inp) { return; }
   this.lastTransitionTime = ec.jsonDecodeDateTime(inp.LastTransitionTime);
   this.lastMethodCall = inp.LastMethodCall;
   this.lastMethodSessionId = ec.jsonDecodeNodeId(inp.LastMethodSessionId);
-  this.lastMethodInputArguments = ec.jsonDecodeStructArray( inp.LastMethodInputArguments,Argument);
-  this.lastMethodOutputArguments = ec.jsonDecodeStructArray( inp.LastMethodOutputArguments,Argument);
-  this.lastMethodInputValues = ec.jsonDecodeStructArray( inp.LastMethodInputValues,Variant);
-  this.lastMethodOutputValues = ec.jsonDecodeStructArray( inp.LastMethodOutputValues,Variant);
+  this.lastMethodInputArguments = ec.jsonDecodeStructArray( inp.LastMethodInputArguments, Argument);
+  this.lastMethodOutputArguments = ec.jsonDecodeStructArray( inp.LastMethodOutputArguments, Argument);
+  this.lastMethodInputValues = ec.jsonDecodeStructArray( inp.LastMethodInputValues, Variant);
+  this.lastMethodOutputValues = ec.jsonDecodeStructArray( inp.LastMethodOutputValues, Variant);
   this.lastMethodCallTime = ec.jsonDecodeDateTime(inp.LastMethodCallTime);
   this.lastMethodReturnStatus.fromJSON(inp.LastMethodReturnStatus);
 

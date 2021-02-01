@@ -61,7 +61,7 @@ export class HistoryUpdateResult {
 if (!inp) { return; }
   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.operationResults = ec.jsonDecodeArray( inp.OperationResults, ec.jsonDecodeStatusCode);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
 
  }
 

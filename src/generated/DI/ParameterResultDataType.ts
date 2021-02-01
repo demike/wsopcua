@@ -60,7 +60,7 @@ export class ParameterResultDataType {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.nodePath = ec.jsonDecodeStructArray( inp.NodePath,QualifiedName);
+  this.nodePath = ec.jsonDecodeStructArray( inp.NodePath, QualifiedName);
   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.diagnostics.fromJSON(inp.Diagnostics);
 
@@ -90,4 +90,4 @@ export function decodeParameterResultDataType( inp: DataStream): ParameterResult
 
 import {register_class_definition} from '../../factory/factories_factories';
 import { ExpandedNodeId } from '../../nodeid/expanded_nodeid';
-register_class_definition('ParameterResultDataType', ParameterResultDataType, new ExpandedNodeId(3 /*string id*/,'1;i=6525', 2));
+register_class_definition('ParameterResultDataType', ParameterResultDataType, new ExpandedNodeId(3 /*string id*/, '1;i=6525', 2));

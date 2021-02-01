@@ -1,6 +1,6 @@
-import { BaseUAObject } from "../../factory/factories_baseobject";
-import { DataStream } from "../../basic-types/DataStream";
-import { buf2hex } from "../../crypto";
+import { BaseUAObject } from '../../factory/factories_baseobject';
+import { DataStream } from '../../basic-types/DataStream';
+import { buf2hex } from '../../crypto';
 
 export function compare_obj_by_encoding(obj1: BaseUAObject, obj2: BaseUAObject): boolean {
 

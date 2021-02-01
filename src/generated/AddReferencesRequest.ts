@@ -55,7 +55,7 @@ export class AddReferencesRequest {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
-  this.referencesToAdd = ec.jsonDecodeStructArray( inp.ReferencesToAdd,AddReferencesItem);
+  this.referencesToAdd = ec.jsonDecodeStructArray( inp.ReferencesToAdd, AddReferencesItem);
 
  }
 

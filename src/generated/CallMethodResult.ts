@@ -69,8 +69,8 @@ export class CallMethodResult {
 if (!inp) { return; }
   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.inputArgumentResults = ec.jsonDecodeArray( inp.InputArgumentResults, ec.jsonDecodeStatusCode);
-  this.inputArgumentDiagnosticInfos = ec.jsonDecodeStructArray( inp.InputArgumentDiagnosticInfos,DiagnosticInfo);
-  this.outputArguments = ec.jsonDecodeStructArray( inp.OutputArguments,Variant);
+  this.inputArgumentDiagnosticInfos = ec.jsonDecodeStructArray( inp.InputArgumentDiagnosticInfos, DiagnosticInfo);
+  this.outputArguments = ec.jsonDecodeStructArray( inp.OutputArguments, Variant);
 
  }
 

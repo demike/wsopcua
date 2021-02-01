@@ -96,7 +96,7 @@ if (!inp) { return; }
   this.serverCertificate = ec.jsonDecodeByteString(inp.ServerCertificate);
   this.securityMode = inp.SecurityMode;
   this.securityPolicyUri = inp.SecurityPolicyUri;
-  this.userIdentityTokens = ec.jsonDecodeStructArray( inp.UserIdentityTokens,UserTokenPolicy);
+  this.userIdentityTokens = ec.jsonDecodeStructArray( inp.UserIdentityTokens, UserTokenPolicy);
   this.transportProfileUri = inp.TransportProfileUri;
   this.securityLevel = inp.SecurityLevel;
 

@@ -68,7 +68,7 @@ if (!inp) { return; }
   super.fromJSON(inp);
   this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
   this.messageSettings = jsonDecodeExtensionObject(inp.MessageSettings);
-  this.dataSetReaders = ec.jsonDecodeStructArray( inp.DataSetReaders,DataSetReaderDataType);
+  this.dataSetReaders = ec.jsonDecodeStructArray( inp.DataSetReaders, DataSetReaderDataType);
 
  }
 

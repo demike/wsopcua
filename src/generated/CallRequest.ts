@@ -55,7 +55,7 @@ export class CallRequest {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
-  this.methodsToCall = ec.jsonDecodeStructArray( inp.MethodsToCall,CallMethodRequest);
+  this.methodsToCall = ec.jsonDecodeStructArray( inp.MethodsToCall, CallMethodRequest);
 
  }
 

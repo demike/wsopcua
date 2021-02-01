@@ -140,7 +140,7 @@ export class TypeRegistry {
         type.JsType = 'Date';
         // UtcTime: 8.38
         this.addType('UtcTime', type);
-        
+
 
         // Double: 8.12
         type = new SimpleType(this.BASIC_TYPES_PATH, 'Double');

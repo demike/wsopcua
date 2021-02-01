@@ -70,7 +70,7 @@ if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
   this.subscriptionId = inp.SubscriptionId;
   this.timestampsToReturn = inp.TimestampsToReturn;
-  this.itemsToCreate = ec.jsonDecodeStructArray( inp.ItemsToCreate,MonitoredItemCreateRequest);
+  this.itemsToCreate = ec.jsonDecodeStructArray( inp.ItemsToCreate, MonitoredItemCreateRequest);
 
  }
 

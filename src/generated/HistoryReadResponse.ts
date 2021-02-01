@@ -63,8 +63,8 @@ export class HistoryReadResponse {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
-  this.results = ec.jsonDecodeStructArray( inp.Results,HistoryReadResult);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
+  this.results = ec.jsonDecodeStructArray( inp.Results, HistoryReadResult);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
 
  }
 

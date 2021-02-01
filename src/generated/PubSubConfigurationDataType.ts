@@ -61,8 +61,8 @@ export class PubSubConfigurationDataType {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.publishedDataSets = ec.jsonDecodeStructArray( inp.PublishedDataSets,PublishedDataSetDataType);
-  this.connections = ec.jsonDecodeStructArray( inp.Connections,PubSubConnectionDataType);
+  this.publishedDataSets = ec.jsonDecodeStructArray( inp.PublishedDataSets, PublishedDataSetDataType);
+  this.connections = ec.jsonDecodeStructArray( inp.Connections, PubSubConnectionDataType);
   this.enabled = inp.Enabled;
 
  }

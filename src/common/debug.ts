@@ -34,11 +34,11 @@ export function hexDump(view: DataView | ArrayBuffer, offset?: number, length?: 
   let row = '';
   for (let i = 0; i < length; i += 16) {
     row += _fillUp(offset.toString(16).toUpperCase(), 8, '0') + '  ';
-    let n = Math.min(16, length - offset);
+    const n = Math.min(16, length - offset);
     let string = '';
     for (let j = 0; j < 16; ++j) {
       if (j < n) {
-        let value = view.getUint8(offset);
+        const value = view.getUint8(offset);
         string += value >= 32 ? String.fromCharCode(value) : '.';
         row += _fillUp(value.toString(16).toUpperCase(), 2, '0') + ' ';
         offset++;

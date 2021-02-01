@@ -62,7 +62,7 @@ export class AddReferencesResponse {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
   this.results = ec.jsonDecodeArray( inp.Results, ec.jsonDecodeStatusCode);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
 
  }
 

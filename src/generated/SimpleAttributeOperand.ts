@@ -68,7 +68,7 @@ export class SimpleAttributeOperand extends FilterOperand {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.typeDefinitionId = ec.jsonDecodeNodeId(inp.TypeDefinitionId);
-  this.browsePath = ec.jsonDecodeStructArray( inp.BrowsePath,QualifiedName);
+  this.browsePath = ec.jsonDecodeStructArray( inp.BrowsePath, QualifiedName);
   this.attributeId = inp.AttributeId;
   this.indexRange = inp.IndexRange;
 

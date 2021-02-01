@@ -61,7 +61,7 @@ export class UpdateStructureDataDetails extends HistoryUpdateDetails {
 if (!inp) { return; }
   super.fromJSON(inp);
   this.performInsertReplace = inp.PerformInsertReplace;
-  this.updateValues = ec.jsonDecodeStructArray( inp.UpdateValues,DataValue);
+  this.updateValues = ec.jsonDecodeStructArray( inp.UpdateValues, DataValue);
 
  }
 

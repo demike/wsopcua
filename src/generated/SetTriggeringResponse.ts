@@ -74,9 +74,9 @@ export class SetTriggeringResponse {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
   this.addResults = ec.jsonDecodeArray( inp.AddResults, ec.jsonDecodeStatusCode);
-  this.addDiagnosticInfos = ec.jsonDecodeStructArray( inp.AddDiagnosticInfos,DiagnosticInfo);
+  this.addDiagnosticInfos = ec.jsonDecodeStructArray( inp.AddDiagnosticInfos, DiagnosticInfo);
   this.removeResults = ec.jsonDecodeArray( inp.RemoveResults, ec.jsonDecodeStatusCode);
-  this.removeDiagnosticInfos = ec.jsonDecodeStructArray( inp.RemoveDiagnosticInfos,DiagnosticInfo);
+  this.removeDiagnosticInfos = ec.jsonDecodeStructArray( inp.RemoveDiagnosticInfos, DiagnosticInfo);
 
  }
 

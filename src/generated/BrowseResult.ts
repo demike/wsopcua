@@ -61,7 +61,7 @@ export class BrowseResult {
 if (!inp) { return; }
   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.continuationPoint = ec.jsonDecodeByteString(inp.ContinuationPoint);
-  this.references = ec.jsonDecodeStructArray( inp.References,ReferenceDescription);
+  this.references = ec.jsonDecodeStructArray( inp.References, ReferenceDescription);
 
  }
 

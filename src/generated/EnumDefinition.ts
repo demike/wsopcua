@@ -47,7 +47,7 @@ export class EnumDefinition {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.fields = ec.jsonDecodeStructArray( inp.Fields,EnumField);
+  this.fields = ec.jsonDecodeStructArray( inp.Fields, EnumField);
 
  }
 

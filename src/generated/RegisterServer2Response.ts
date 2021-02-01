@@ -62,7 +62,7 @@ export class RegisterServer2Response {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
   this.configurationResults = ec.jsonDecodeArray( inp.ConfigurationResults, ec.jsonDecodeStatusCode);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
 
  }
 

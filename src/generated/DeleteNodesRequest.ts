@@ -55,7 +55,7 @@ export class DeleteNodesRequest {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
-  this.nodesToDelete = ec.jsonDecodeStructArray( inp.NodesToDelete,DeleteNodesItem);
+  this.nodesToDelete = ec.jsonDecodeStructArray( inp.NodesToDelete, DeleteNodesItem);
 
  }
 

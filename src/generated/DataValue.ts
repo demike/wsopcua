@@ -42,49 +42,49 @@ export class DataValue {
 
  encode( out: DataStream) {
   let encodingByte = 0;
-  if (this.value != null) { encodingByte |= 1 << 0;}
-  if (this.statusCode != null) { encodingByte |= 1 << 1;}
-  if (this.sourceTimestamp != null) { encodingByte |= 1 << 2;}
-  if (this.serverTimestamp != null) { encodingByte |= 1 << 3;}
-  if (this.sourcePicoseconds != null) { encodingByte |= 1 << 4;}
-  if (this.serverPicoseconds != null) { encodingByte |= 1 << 5;}
+  if (this.value != null) { encodingByte |= 1 << 0; }
+  if (this.statusCode != null) { encodingByte |= 1 << 1; }
+  if (this.sourceTimestamp != null) { encodingByte |= 1 << 2; }
+  if (this.serverTimestamp != null) { encodingByte |= 1 << 3; }
+  if (this.sourcePicoseconds != null) { encodingByte |= 1 << 4; }
+  if (this.serverPicoseconds != null) { encodingByte |= 1 << 5; }
   out.setUint8(encodingByte);
-  if(this.value != null) { this.value.encode(out); }
-  if(this.statusCode != null) { ec.encodeStatusCode(this.statusCode, out); }
-  if(this.sourceTimestamp != null) { ec.encodeDateTime(this.sourceTimestamp, out); }
-  if(this.sourcePicoseconds != null) { ec.encodeUInt16(this.sourcePicoseconds, out); }
-  if(this.serverTimestamp != null) { ec.encodeDateTime(this.serverTimestamp, out); }
-  if(this.serverPicoseconds != null) { ec.encodeUInt16(this.serverPicoseconds, out); }
+  if (this.value != null) { this.value.encode(out); }
+  if (this.statusCode != null) { ec.encodeStatusCode(this.statusCode, out); }
+  if (this.sourceTimestamp != null) { ec.encodeDateTime(this.sourceTimestamp, out); }
+  if (this.sourcePicoseconds != null) { ec.encodeUInt16(this.sourcePicoseconds, out); }
+  if (this.serverTimestamp != null) { ec.encodeDateTime(this.serverTimestamp, out); }
+  if (this.serverPicoseconds != null) { ec.encodeUInt16(this.serverPicoseconds, out); }
 
  }
 
 
  decode( inp: DataStream) {
-  let encodingByte = inp.getUint8();
-  let valueSpecified = (encodingByte & 1) != 0;
-  let statusCodeSpecified = (encodingByte & 2) != 0;
-  let sourceTimestampSpecified = (encodingByte & 4) != 0;
-  let serverTimestampSpecified = (encodingByte & 8) != 0;
-  let sourcePicosecondsSpecified = (encodingByte & 16) != 0;
-  let serverPicosecondsSpecified = (encodingByte & 32) != 0;
-  let reserved1 = (encodingByte & 64) != 0;
-  if(valueSpecified) {
-   this.value= new Variant();
+  const encodingByte = inp.getUint8();
+  const valueSpecified = (encodingByte & 1) != 0;
+  const statusCodeSpecified = (encodingByte & 2) != 0;
+  const sourceTimestampSpecified = (encodingByte & 4) != 0;
+  const serverTimestampSpecified = (encodingByte & 8) != 0;
+  const sourcePicosecondsSpecified = (encodingByte & 16) != 0;
+  const serverPicosecondsSpecified = (encodingByte & 32) != 0;
+  const reserved1 = (encodingByte & 64) != 0;
+  if (valueSpecified) {
+   this.value = new Variant();
    this.value.decode(inp);
   }
-  if(statusCodeSpecified) {
+  if (statusCodeSpecified) {
    this.statusCode = ec.decodeStatusCode(inp);
   }
-  if(sourceTimestampSpecified) {
+  if (sourceTimestampSpecified) {
    this.sourceTimestamp = ec.decodeDateTime(inp);
   }
-  if(sourcePicosecondsSpecified) {
+  if (sourcePicosecondsSpecified) {
    this.sourcePicoseconds = ec.decodeUInt16(inp);
   }
-  if(serverTimestampSpecified) {
+  if (serverTimestampSpecified) {
    this.serverTimestamp = ec.decodeDateTime(inp);
   }
-  if(serverPicosecondsSpecified) {
+  if (serverPicosecondsSpecified) {
    this.serverPicoseconds = ec.decodeUInt16(inp);
   }
 
@@ -93,34 +93,34 @@ export class DataValue {
 
  toJSON() {
   const out: any = {};
-  if(this.value != null) { out.Value = this.value; }
-  if(this.statusCode != null) { out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode); }
-  if(this.sourceTimestamp != null) { out.SourceTimestamp = ec.jsonEncodeDateTime(this.sourceTimestamp); }
-  if(this.sourcePicoseconds != null) { out.SourcePicoseconds = this.sourcePicoseconds; }
-  if(this.serverTimestamp != null) { out.ServerTimestamp = ec.jsonEncodeDateTime(this.serverTimestamp); }
-  if(this.serverPicoseconds != null) { out.ServerPicoseconds = this.serverPicoseconds; }
+  if (this.value != null) { out.Value = this.value; }
+  if (this.statusCode != null) { out.StatusCode = ec.jsonEncodeStatusCode(this.statusCode); }
+  if (this.sourceTimestamp != null) { out.SourceTimestamp = ec.jsonEncodeDateTime(this.sourceTimestamp); }
+  if (this.sourcePicoseconds != null) { out.SourcePicoseconds = this.sourcePicoseconds; }
+  if (this.serverTimestamp != null) { out.ServerTimestamp = ec.jsonEncodeDateTime(this.serverTimestamp); }
+  if (this.serverPicoseconds != null) { out.ServerPicoseconds = this.serverPicoseconds; }
  return out;
  }
 
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  if(inp.Value) {
+  if (inp.Value) {
    this.value.fromJSON(inp.Value);
   }
-  if(inp.StatusCode) {
+  if (inp.StatusCode) {
    this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   }
-  if(inp.SourceTimestamp) {
+  if (inp.SourceTimestamp) {
    this.sourceTimestamp = ec.jsonDecodeDateTime(inp.SourceTimestamp);
   }
-  if(inp.SourcePicoseconds) {
+  if (inp.SourcePicoseconds) {
    this.sourcePicoseconds = inp.SourcePicoseconds;
   }
-  if(inp.ServerTimestamp) {
+  if (inp.ServerTimestamp) {
    this.serverTimestamp = ec.jsonDecodeDateTime(inp.ServerTimestamp);
   }
-  if(inp.ServerPicoseconds) {
+  if (inp.ServerPicoseconds) {
    this.serverPicoseconds = inp.ServerPicoseconds;
   }
 

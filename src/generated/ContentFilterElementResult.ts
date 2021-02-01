@@ -61,7 +61,7 @@ export class ContentFilterElementResult {
 if (!inp) { return; }
   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.operandStatusCodes = ec.jsonDecodeArray( inp.OperandStatusCodes, ec.jsonDecodeStatusCode);
-  this.operandDiagnosticInfos = ec.jsonDecodeStructArray( inp.OperandDiagnosticInfos,DiagnosticInfo);
+  this.operandDiagnosticInfos = ec.jsonDecodeStructArray( inp.OperandDiagnosticInfos, DiagnosticInfo);
 
  }
 

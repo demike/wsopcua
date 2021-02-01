@@ -70,7 +70,7 @@ if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
   this.maxAge = inp.MaxAge;
   this.timestampsToReturn = inp.TimestampsToReturn;
-  this.nodesToRead = ec.jsonDecodeStructArray( inp.NodesToRead,ReadValueId);
+  this.nodesToRead = ec.jsonDecodeStructArray( inp.NodesToRead, ReadValueId);
 
  }
 

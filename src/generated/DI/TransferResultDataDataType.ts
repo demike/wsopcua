@@ -63,7 +63,7 @@ export class TransferResultDataDataType extends FetchResultDataType {
 if (!inp) { return; }
   this.sequenceNumber = inp.SequenceNumber;
   this.endOfResults = inp.EndOfResults;
-  this.parameterDefs = ec.jsonDecodeStructArray( inp.ParameterDefs,ParameterResultDataType);
+  this.parameterDefs = ec.jsonDecodeStructArray( inp.ParameterDefs, ParameterResultDataType);
 
  }
 
@@ -91,4 +91,4 @@ export function decodeTransferResultDataDataType( inp: DataStream): TransferResu
 
 import {register_class_definition} from '../../factory/factories_factories';
 import { ExpandedNodeId } from '../../nodeid/expanded_nodeid';
-register_class_definition('TransferResultDataDataType', TransferResultDataDataType, new ExpandedNodeId(3 /*string id*/,'1;i=15894', 2));
+register_class_definition('TransferResultDataDataType', TransferResultDataDataType, new ExpandedNodeId(3 /*string id*/, '1;i=15894', 2));

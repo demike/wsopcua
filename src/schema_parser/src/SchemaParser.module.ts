@@ -15,4 +15,4 @@ export {EnumItem} from './EnumItem';
 export {SimpleType} from './SimpleType';
 export {TypeRegistry} from './TypeRegistry';
 export {XSDClassFile} from './XSDClassFile';
-export {XSDComplexTypeFile} from './XSDComplexTypeFile'; 
+export {XSDComplexTypeFile} from './XSDComplexTypeFile';

@@ -70,9 +70,9 @@ export class DataTypeSchemaHeader {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.namespaces = inp.Namespaces;
-  this.structureDataTypes = ec.jsonDecodeStructArray( inp.StructureDataTypes,StructureDescription);
-  this.enumDataTypes = ec.jsonDecodeStructArray( inp.EnumDataTypes,EnumDescription);
-  this.simpleDataTypes = ec.jsonDecodeStructArray( inp.SimpleDataTypes,SimpleTypeDescription);
+  this.structureDataTypes = ec.jsonDecodeStructArray( inp.StructureDataTypes, StructureDescription);
+  this.enumDataTypes = ec.jsonDecodeStructArray( inp.EnumDataTypes, EnumDescription);
+  this.simpleDataTypes = ec.jsonDecodeStructArray( inp.SimpleDataTypes, SimpleTypeDescription);
 
  }
 

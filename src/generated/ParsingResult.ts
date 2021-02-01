@@ -61,7 +61,7 @@ export class ParsingResult {
 if (!inp) { return; }
   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.dataStatusCodes = ec.jsonDecodeArray( inp.DataStatusCodes, ec.jsonDecodeStatusCode);
-  this.dataDiagnosticInfos = ec.jsonDecodeStructArray( inp.DataDiagnosticInfos,DiagnosticInfo);
+  this.dataDiagnosticInfos = ec.jsonDecodeStructArray( inp.DataDiagnosticInfos, DiagnosticInfo);
 
  }
 

@@ -54,7 +54,7 @@ export class EventFieldList {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.clientHandle = inp.ClientHandle;
-  this.eventFields = ec.jsonDecodeStructArray( inp.EventFields,Variant);
+  this.eventFields = ec.jsonDecodeStructArray( inp.EventFields, Variant);
 
  }
 

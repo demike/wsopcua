@@ -97,7 +97,7 @@ if (!inp) { return; }
   this.deadbandValue = inp.DeadbandValue;
   this.indexRange = inp.IndexRange;
   this.substituteValue.fromJSON(inp.SubstituteValue);
-  this.metaDataProperties = ec.jsonDecodeStructArray( inp.MetaDataProperties,QualifiedName);
+  this.metaDataProperties = ec.jsonDecodeStructArray( inp.MetaDataProperties, QualifiedName);
 
  }
 

@@ -110,7 +110,7 @@ if (!inp) { return; }
   this.headerLayoutUri = inp.HeaderLayoutUri;
   this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
   this.messageSettings = jsonDecodeExtensionObject(inp.MessageSettings);
-  this.dataSetWriters = ec.jsonDecodeStructArray( inp.DataSetWriters,DataSetWriterDataType);
+  this.dataSetWriters = ec.jsonDecodeStructArray( inp.DataSetWriters, DataSetWriterDataType);
 
  }
 

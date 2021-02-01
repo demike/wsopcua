@@ -70,7 +70,7 @@ if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
   this.view.fromJSON(inp.View);
   this.requestedMaxReferencesPerNode = inp.RequestedMaxReferencesPerNode;
-  this.nodesToBrowse = ec.jsonDecodeStructArray( inp.NodesToBrowse,BrowseDescription);
+  this.nodesToBrowse = ec.jsonDecodeStructArray( inp.NodesToBrowse, BrowseDescription);
 
  }
 

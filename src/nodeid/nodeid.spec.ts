@@ -8,7 +8,7 @@ import { stringToUint8Array } from '../basic-types/DataStream';
 beforeAll( () => {
     build_nodid_indexes_for_class_map(ObjectIds);
     build_nodid_indexes_for_class_map(VariableIds);
-})
+});
 
 describe('testing NodeIds', function() {
     it('should create a NUMERIC nodeID', function() {

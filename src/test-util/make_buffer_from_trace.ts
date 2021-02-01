@@ -36,7 +36,7 @@ export function makebuffer_from_trace(strFilePath: string): Promise<Uint8Array> 
     .then( (strContent) => {
         return makeBuffer(hexString(inlineText(strContent)));
     });
-    
+
 }
 
 export function makeBuffer(listOfBytes: string): Uint8Array {

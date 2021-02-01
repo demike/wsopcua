@@ -44,55 +44,55 @@ export class DiagnosticInfo {
 
  encode( out: DataStream) {
   let encodingByte = 0;
-  if (this.symbolicId != null) { encodingByte |= 1 << 0;}
-  if (this.namespaceURI != null) { encodingByte |= 1 << 1;}
-  if (this.localizedText != null) { encodingByte |= 1 << 2;}
-  if (this.locale != null) { encodingByte |= 1 << 3;}
-  if (this.additionalInfo != null) { encodingByte |= 1 << 4;}
-  if (this.innerStatusCode != null) { encodingByte |= 1 << 5;}
-  if (this.innerDiagnosticInfo != null) { encodingByte |= 1 << 6;}
+  if (this.symbolicId != null) { encodingByte |= 1 << 0; }
+  if (this.namespaceURI != null) { encodingByte |= 1 << 1; }
+  if (this.localizedText != null) { encodingByte |= 1 << 2; }
+  if (this.locale != null) { encodingByte |= 1 << 3; }
+  if (this.additionalInfo != null) { encodingByte |= 1 << 4; }
+  if (this.innerStatusCode != null) { encodingByte |= 1 << 5; }
+  if (this.innerDiagnosticInfo != null) { encodingByte |= 1 << 6; }
   out.setUint8(encodingByte);
-  if(this.symbolicId != null) { ec.encodeInt32(this.symbolicId, out); }
-  if(this.namespaceURI != null) { ec.encodeInt32(this.namespaceURI, out); }
-  if(this.locale != null) { ec.encodeInt32(this.locale, out); }
-  if(this.localizedText != null) { ec.encodeInt32(this.localizedText, out); }
-  if(this.additionalInfo != null) { ec.encodeString(this.additionalInfo, out); }
-  if(this.innerStatusCode != null) { ec.encodeStatusCode(this.innerStatusCode, out); }
-  if(this.innerDiagnosticInfo != null) { this.innerDiagnosticInfo.encode(out); }
+  if (this.symbolicId != null) { ec.encodeInt32(this.symbolicId, out); }
+  if (this.namespaceURI != null) { ec.encodeInt32(this.namespaceURI, out); }
+  if (this.locale != null) { ec.encodeInt32(this.locale, out); }
+  if (this.localizedText != null) { ec.encodeInt32(this.localizedText, out); }
+  if (this.additionalInfo != null) { ec.encodeString(this.additionalInfo, out); }
+  if (this.innerStatusCode != null) { ec.encodeStatusCode(this.innerStatusCode, out); }
+  if (this.innerDiagnosticInfo != null) { this.innerDiagnosticInfo.encode(out); }
 
  }
 
 
  decode( inp: DataStream) {
-  let encodingByte = inp.getUint8();
-  let symbolicIdSpecified = (encodingByte & 1) != 0;
-  let namespaceURISpecified = (encodingByte & 2) != 0;
-  let localizedTextSpecified = (encodingByte & 4) != 0;
-  let localeSpecified = (encodingByte & 8) != 0;
-  let additionalInfoSpecified = (encodingByte & 16) != 0;
-  let innerStatusCodeSpecified = (encodingByte & 32) != 0;
-  let innerDiagnosticInfoSpecified = (encodingByte & 64) != 0;
-  let reserved1 = (encodingByte & 128) != 0;
-  if(symbolicIdSpecified) {
+  const encodingByte = inp.getUint8();
+  const symbolicIdSpecified = (encodingByte & 1) != 0;
+  const namespaceURISpecified = (encodingByte & 2) != 0;
+  const localizedTextSpecified = (encodingByte & 4) != 0;
+  const localeSpecified = (encodingByte & 8) != 0;
+  const additionalInfoSpecified = (encodingByte & 16) != 0;
+  const innerStatusCodeSpecified = (encodingByte & 32) != 0;
+  const innerDiagnosticInfoSpecified = (encodingByte & 64) != 0;
+  const reserved1 = (encodingByte & 128) != 0;
+  if (symbolicIdSpecified) {
    this.symbolicId = ec.decodeInt32(inp);
   }
-  if(namespaceURISpecified) {
+  if (namespaceURISpecified) {
    this.namespaceURI = ec.decodeInt32(inp);
   }
-  if(localeSpecified) {
+  if (localeSpecified) {
    this.locale = ec.decodeInt32(inp);
   }
-  if(localizedTextSpecified) {
+  if (localizedTextSpecified) {
    this.localizedText = ec.decodeInt32(inp);
   }
-  if(additionalInfoSpecified) {
+  if (additionalInfoSpecified) {
    this.additionalInfo = ec.decodeString(inp);
   }
-  if(innerStatusCodeSpecified) {
+  if (innerStatusCodeSpecified) {
    this.innerStatusCode = ec.decodeStatusCode(inp);
   }
-  if(innerDiagnosticInfoSpecified) {
-   this.innerDiagnosticInfo= new DiagnosticInfo();
+  if (innerDiagnosticInfoSpecified) {
+   this.innerDiagnosticInfo = new DiagnosticInfo();
    this.innerDiagnosticInfo.decode(inp);
   }
 
@@ -101,38 +101,38 @@ export class DiagnosticInfo {
 
  toJSON() {
   const out: any = {};
-  if(this.symbolicId != null) { out.SymbolicId = this.symbolicId; }
-  if(this.namespaceURI != null) { out.NamespaceURI = this.namespaceURI; }
-  if(this.locale != null) { out.Locale = this.locale; }
-  if(this.localizedText != null) { out.LocalizedText = this.localizedText; }
-  if(this.additionalInfo != null) { out.AdditionalInfo = this.additionalInfo; }
-  if(this.innerStatusCode != null) { out.InnerStatusCode = ec.jsonEncodeStatusCode(this.innerStatusCode); }
-  if(this.innerDiagnosticInfo != null) { out.InnerDiagnosticInfo = this.innerDiagnosticInfo; }
+  if (this.symbolicId != null) { out.SymbolicId = this.symbolicId; }
+  if (this.namespaceURI != null) { out.NamespaceURI = this.namespaceURI; }
+  if (this.locale != null) { out.Locale = this.locale; }
+  if (this.localizedText != null) { out.LocalizedText = this.localizedText; }
+  if (this.additionalInfo != null) { out.AdditionalInfo = this.additionalInfo; }
+  if (this.innerStatusCode != null) { out.InnerStatusCode = ec.jsonEncodeStatusCode(this.innerStatusCode); }
+  if (this.innerDiagnosticInfo != null) { out.InnerDiagnosticInfo = this.innerDiagnosticInfo; }
  return out;
  }
 
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  if(inp.SymbolicId) {
+  if (inp.SymbolicId) {
    this.symbolicId = inp.SymbolicId;
   }
-  if(inp.NamespaceURI) {
+  if (inp.NamespaceURI) {
    this.namespaceURI = inp.NamespaceURI;
   }
-  if(inp.Locale) {
+  if (inp.Locale) {
    this.locale = inp.Locale;
   }
-  if(inp.LocalizedText) {
+  if (inp.LocalizedText) {
    this.localizedText = inp.LocalizedText;
   }
-  if(inp.AdditionalInfo) {
+  if (inp.AdditionalInfo) {
    this.additionalInfo = inp.AdditionalInfo;
   }
-  if(inp.InnerStatusCode) {
+  if (inp.InnerStatusCode) {
    this.innerStatusCode = ec.jsonDecodeStatusCode(inp.InnerStatusCode);
   }
-  if(inp.InnerDiagnosticInfo) {
+  if (inp.InnerDiagnosticInfo) {
    this.innerDiagnosticInfo.fromJSON(inp.InnerDiagnosticInfo);
   }
 

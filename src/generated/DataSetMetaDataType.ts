@@ -81,7 +81,7 @@ if (!inp) { return; }
   super.fromJSON(inp);
   this.name = inp.Name;
   this.description.fromJSON(inp.Description);
-  this.fields = ec.jsonDecodeStructArray( inp.Fields,FieldMetaData);
+  this.fields = ec.jsonDecodeStructArray( inp.Fields, FieldMetaData);
   this.dataSetClassId = inp.DataSetClassId;
   this.configurationVersion.fromJSON(inp.ConfigurationVersion);
 

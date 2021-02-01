@@ -47,7 +47,7 @@ for (const projectImport of importConfig.projects) {
 // parse the configuration file provided through command line
 if (program.config) {
 
-    //we  use a custom config file --> set the default one to readonly (do not overwrite our own types)
+    // we  use a custom config file --> set the default one to readonly (do not overwrite our own types)
     importConfig.projects[0].readonly = true;
     try {
         const customConfig: SchemaParserConfig = JSON.parse( fs.readFileSync(program.config).toString());

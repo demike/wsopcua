@@ -106,10 +106,10 @@ if (!inp) { return; }
   this.publisherId.fromJSON(inp.PublisherId);
   this.transportProfileUri = inp.TransportProfileUri;
   this.address = jsonDecodeExtensionObject(inp.Address);
-  this.connectionProperties = ec.jsonDecodeStructArray( inp.ConnectionProperties,KeyValuePair);
+  this.connectionProperties = ec.jsonDecodeStructArray( inp.ConnectionProperties, KeyValuePair);
   this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
-  this.writerGroups = ec.jsonDecodeStructArray( inp.WriterGroups,WriterGroupDataType);
-  this.readerGroups = ec.jsonDecodeStructArray( inp.ReaderGroups,ReaderGroupDataType);
+  this.writerGroups = ec.jsonDecodeStructArray( inp.WriterGroups, WriterGroupDataType);
+  this.readerGroups = ec.jsonDecodeStructArray( inp.ReaderGroups, ReaderGroupDataType);
 
  }
 

@@ -1,14 +1,14 @@
-import { ObjectRegistry } from "./objectRegistry";
+import { ObjectRegistry } from './objectRegistry';
 
 
-describe("testing ObjectRegistry",function() {
+describe('testing ObjectRegistry', function() {
 
     const registry = new ObjectRegistry();
 
-    it("should register and unregister an object",function(){
+    it('should register and unregister an object', function() {
 
         const myObj = {
-            name: "HelloWorld"
+            name: 'HelloWorld'
         };
 
         registry.register(myObj);
