@@ -28,7 +28,7 @@ function has_expired(watchDogData: IWatchdogData2, currentTime: number) {
 }
 
 function keepAliveFunc(this: ISubscriber) {
-  const self: ISubscriber = this as ISubscriber;
+  const self: ISubscriber = this;
   assert(self._watchDog instanceof WatchDog);
   if (!self._watchDogData) {
     throw new Error('Internal error');
