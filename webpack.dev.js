@@ -5,13 +5,11 @@ var TARGET = process.env.npm_lifecycle_event;
 process.env.BABEL_ENV = TARGET;
 
 var LIB_PATH = path.resolve(__dirname, 'src/wsopcua/index.ts');
-var APP_PATH = path.resolve(__dirname, 'examples/test.ts');
 var BUILD_PATH = path.resolve(__dirname, 'dist');
 
 module.exports = {
   entry: {
-    pts: LIB_PATH,
-    // testapp: APP_PATH
+    wsopcua: LIB_PATH,
   },
 
   output: {
@@ -35,7 +33,7 @@ module.exports = {
         test: /\.tsx?$/,
         loader: 'tslint-loader',
         enforce: 'pre',
-        options: { emitErrors: true, failOnHint: true },
+        options: { emitErrors: false, failOnHint: false },
       },
       {
         test: /\.tsx?$/,

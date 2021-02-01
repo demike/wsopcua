@@ -2,7 +2,6 @@ var webpack = require('webpack');
 var path = require('path');
 
 var LIB_PATH = path.resolve(__dirname, 'src/wsopcua/index.ts');
-var APP_PATH = path.resolve(__dirname, 'examples/test.ts');
 var BUILD_PATH = path.resolve(__dirname, 'dist');
 
 module.exports = {
@@ -31,7 +30,7 @@ module.exports = {
         test: /\.tsx?$/,
         loader: 'tslint-loader',
         enforce: 'pre',
-        options: { emitErrors: true, failOnHint: true },
+        options: { emitErrors: false, failOnHint: false },
       },
       {
         test: /\.tsx?$/,
@@ -42,7 +41,7 @@ module.exports = {
 
   plugins: [
     new webpack.BannerPlugin(
-      `wsopcua.js ${require('./package.json').version} - Copyright © 2017-2018 Michael`
+      `wsopcua.js ${require('./package.json').version} - Copyright © 2017-2021 Michael Derfler`
     ),
   ],
 };
