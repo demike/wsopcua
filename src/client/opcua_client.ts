@@ -45,12 +45,7 @@ import { ClientSession } from './client_session';
 
 import { doDebug, debugLog } from '../common/debug';
 
-import {
-  OPCUAClientBase,
-  OPCUAClientOptions,
-  ErrorCallback,
-  ResponseCallback,
-} from './client_base';
+import { OPCUAClientBase, ErrorCallback, ResponseCallback } from './client_base';
 import { isNullOrUndefined } from '../utils';
 
 import { makeApplicationUrn } from '../common/applicationurn';
@@ -67,6 +62,7 @@ import {
 import { ClientSecureChannelLayer } from '../secure-channel/client_secure_channel_layer';
 import { exploreCertificate, generatePublicKeyFromDER, PrivateKeyPEM } from '../crypto';
 import { concatArrayBuffers } from '../basic-types/array';
+import { OPCUAClientOptions } from '../common/client_options';
 
 export interface UserIdentityInfoUserName {
   userName: string;

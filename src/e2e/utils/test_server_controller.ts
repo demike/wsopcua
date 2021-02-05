@@ -7,12 +7,13 @@ import {
   CallMethodResult,
   LocalizedText,
 } from '../../generated';
-import { OPCUAClientOptions } from '../../client/client_base';
+
 import { ConnectionStrategy, SecurityPolicy } from '../../secure-channel';
 import { OPCUAClient } from '../../client/opcua_client';
 import { ClientSession } from '../../client/client_session';
 import { DataType, Variant, VariantArrayType } from '../../variant';
 import { ClientSubscription, LocaleId, StatusCodes } from '../../wsopcua';
+import { OPCUAClientOptions } from '../../common/client_options';
 
 export const OPCUA_CONTROL_SERVER_URI = 'ws://localhost:4444';
 export const OPCUA_TEST_SERVER_URI = 'ws://localhost:4445';

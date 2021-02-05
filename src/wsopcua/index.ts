@@ -93,7 +93,8 @@ export { hexDump } from '../common/debug';
 // ----------------------------------------------------------------------------------------------------------------------
 // client services
 // ----------------------------------------------------------------------------------------------------------------------
-export { OPCUAClientBase, OPCUAClientOptions } from '../client/client_base';
+export { OPCUAClientBase } from '../client/client_base';
+export * from '../common/client_options';
 export { OPCUAClient } from '../client/opcua_client';
 export { MonitoredItem } from '../client/MonitoredItem';
 

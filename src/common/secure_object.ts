@@ -1,9 +1,10 @@
 'use strict';
+
+import { OPCUAClientOptions } from './client_options';
+
 /**
  * @module opcua.miscellaneous
  */
-
-import { OPCUAClientOptions } from '../client/client_base';
 
 export class OPCUASecureObject {
   protected _certificateChain: any;
