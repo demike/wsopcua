@@ -30,6 +30,7 @@ module.exports = {
         test: /\.tsx?$/,
         loader: 'tslint-loader',
         enforce: 'pre',
+        exclude: /node_modules\/examples/,
         options: { emitErrors: false, failOnHint: false },
       },
       {
