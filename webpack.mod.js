@@ -30,20 +30,10 @@ module.exports = {
         test: /\.tsx?$/,
         loader: 'tslint-loader',
         enforce: 'pre',
-        exclude: [
-          path.join(__dirname, 'node_modules'),
-          path.join(__dirname, 'examples'),
-          path.join(__dirname, '/src/schema_parser/'),
-        ],
         options: { emitErrors: false, failOnHint: false },
       },
       {
         test: /\.tsx?$/,
-        exclude: [
-          path.join(__dirname, 'node_modules'),
-          path.join(__dirname, 'examples'),
-          path.join(__dirname, '/src/schema_parser/'),
-        ],
         loader: 'ts-loader',
       },
     ],
