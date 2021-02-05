@@ -35,6 +35,7 @@ module.exports = {
       },
       {
         test: /\.tsx?$/,
+        exclude: /node_modules\/examples\/schema_parser/,
         loader: 'ts-loader',
       },
     ],
