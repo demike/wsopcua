@@ -42,7 +42,7 @@
   "scripts": {
     "start": "webpack --watch --config webpack.dev.js",
     "startES2015": "tsc -p ./tsconfig.json --module es2015 --outDir ./dist/es2015 --watch",
-    "build": "webpack --config webpack.dev.js && webpack --config webpack.mod.js && npm run build-es2015",
+    "build": "webpack --config webpack.mod.js && npm run build-es2015",
     "build-es2015": "tsc -p ./tsconfig.json --module es2015 --outDir ./dist/es2015",
     "build-examples": "webpack --config webpack.example.js",
     "test": "karma start",
