@@ -59,7 +59,7 @@ module.exports = function (config) {
       fixWebpackSourcePaths: true,
     },
 
-    reporters: ['progress', 'kjhtml', 'karma-typescript'],
+    reporters: ['verbose', 'kjhtml', 'karma-typescript'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
