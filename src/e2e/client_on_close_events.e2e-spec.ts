@@ -18,7 +18,7 @@ describe('testing Client-Server - Event', function () {
     setup.client.disconnectP();
   });
 
-  afterAll(async () => controller.stopTestServer());
+  afterEach(async () => controller.stopTestServer());
 
   it('TSC-1 should raise a close event once on normal disconnection', async () => {
     let close_counter = 0;
