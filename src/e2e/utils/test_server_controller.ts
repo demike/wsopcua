@@ -173,6 +173,7 @@ export class E2ETestControllerImpl implements E2ETestController {
 
   public async stopTestServer() {
     const controlSession = await this.controlSession$;
+    await this.testSession?.closeP();
     await this.testClient.disconnectP();
     this.testClient = this.createClient();
     this.testSession = undefined;
