@@ -1,5 +1,5 @@
 {
-  "name": "wsopcua",
+  "name": "@engel/wsopcua",
   "version": "0.0.28",
   "license": "MYLicense",
   "author": "Michael Derfler",
@@ -59,6 +59,7 @@
     "!dist/es2015/**/*.spec.*",
     "!dist/es2015/**/*.e2e-spec.*",
     "src/schema_parser/dist/wsopcua-schema-gen.js",
-    "src/schema_parser/schemas/**/*"
+    "src/schema_parser/schemas/**/*",
+    "!src/examples/**/*"
   ]
 }
