@@ -937,7 +937,7 @@ export class OPCUAClient extends OPCUAClientBase {
   }
 }
 
-function isAnonymous(
+export function isAnonymous(
   userIdentityInfo: UserIdentityInfo
 ): userIdentityInfo is UserIdentityInfoAnonymous {
   return (
@@ -948,7 +948,7 @@ function isAnonymous(
   );
 }
 
-function isUserNamePassword(
+export function isUserNamePassword(
   userIdentityInfo: UserIdentityInfo
 ): userIdentityInfo is UserIdentityInfoUserName {
   const res =
@@ -957,7 +957,9 @@ function isUserNamePassword(
   return res;
 }
 
-function isIssued(userIdentityInfo: UserIdentityInfo): userIdentityInfo is UserIdentityInfoIssued {
+export function isIssued(
+  userIdentityInfo: UserIdentityInfo
+): userIdentityInfo is UserIdentityInfoIssued {
   const res = (userIdentityInfo as Partial<UserIdentityInfoIssued>).tokenData !== undefined;
 
   return res;

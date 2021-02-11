@@ -108,7 +108,7 @@ describe('testing Client-Server - Event', function () {
         debugLog(' 4 or 5--> client has detected that server has shutdown abruptly');
         debugLog('           and will try to reconnect');
 
-        setTimeout(() => {
+        window.setTimeout(() => {
           debugLog(' 6--> disconnecting client');
           client.disconnect(() => {
             debugLog(' 8 --> client has been disconnected');
