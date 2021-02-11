@@ -163,11 +163,13 @@ export class E2ETestControllerImpl implements E2ETestController {
       }),
     ]);
 
+    console.log(response.result[0]);
     if (response.result[0].statusCode !== StatusCodes.Good) {
       throw new Error('Error starting the test server' + response.result[0].toJSON());
     }
 
     this.testSession = await this.createSession(this.testClient, OPCUA_TEST_SERVER_URI);
+    console.log(OPCUA_TEST_SERVER_URI + ': test session created');
     return { session: this.testSession, client: this.testClient };
   }
 
