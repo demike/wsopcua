@@ -20,6 +20,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
   const CurrentTimeVariableId = coerceNodeId('ns=2;s=Scalar_Simulation_Interval');
 
   beforeAll(async () => {
+    console.log('jasmine timeout',  jasmine.DEFAULT_TIMEOUT_INTERVAL):
     controller = getE2ETestController();
     const setup = await controller.startTestServer();
     CurrentTimeVariableId.namespace = await controller.addComplianceTestNamespace();
