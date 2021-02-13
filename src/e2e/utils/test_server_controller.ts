@@ -133,12 +133,17 @@ export class E2ETestControllerImpl implements E2ETestController {
 
   private async createSession(client: OPCUAClient, url: string) {
     await client.connectP(url);
+    // tslint:disable-next-line: no-console
+    console.info('connected to ', url);
 
     window.onbeforeunload = () => {
       return client.disconnectP();
     };
 
-    return client.createSessionP(null);
+    const session = await client.createSessionP(null);
+    // tslint:disable-next-line: no-console
+    console.info(url, ': created session ', session.sessionId);
+    return session;
   }
 
   /**
@@ -163,13 +168,13 @@ export class E2ETestControllerImpl implements E2ETestController {
       }),
     ]);
 
-    console.log(response.result[0]);
     if (response.result[0].statusCode !== StatusCodes.Good) {
       throw new Error('Error starting the test server' + response.result[0].toJSON());
+    } else {
+      console.log('test server started succesfully');
     }
 
     this.testSession = await this.createSession(this.testClient, OPCUA_TEST_SERVER_URI);
-    console.log(OPCUA_TEST_SERVER_URI + ': test session created');
     return { session: this.testSession, client: this.testClient };
   }
 
