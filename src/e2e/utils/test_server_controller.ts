@@ -140,7 +140,12 @@ export class E2ETestControllerImpl implements E2ETestController {
       return client.disconnectP();
     };
 
-    const session = await client.createSessionP(null);
+    try {
+      const session = await client.createSessionP(null);
+    } catch (err) {
+      console.error('failed loading session', err);
+      throw err;
+    }
     // tslint:disable-next-line: no-console
     console.info(url, ': created session ', session.sessionId);
     return session;
