@@ -140,8 +140,9 @@ export class E2ETestControllerImpl implements E2ETestController {
       return client.disconnectP();
     };
 
+    let session: ClientSession;
     try {
-      const session = await client.createSessionP(null);
+      session = await client.createSessionP(null);
     } catch (err) {
       console.error('failed loading session', err);
       throw err;
