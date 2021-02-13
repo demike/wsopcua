@@ -51,6 +51,9 @@ module.exports = function (config) {
 */
     client: {
       clearContext: false, // leave Jasmine Spec Runner output visible in browser
+      jasmine: {
+        timeoutInterval: 10000, // increase the default timeout to 10s
+      },
     },
 
     coverageIstanbulReporter: {
