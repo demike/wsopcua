@@ -14,7 +14,6 @@ import { ClientSession } from '../../client/client_session';
 import { DataType, Variant, VariantArrayType } from '../../variant';
 import { ClientSubscription, LocaleId, StatusCodes } from '../../wsopcua';
 import { OPCUAClientOptions } from '../../common/client_options';
-import { setDebug } from '../../common/debug';
 
 export const OPCUA_CONTROL_SERVER_URI = 'ws://127.0.0.1:4444';
 export const OPCUA_TEST_SERVER_URI = 'ws://127.0.0.1:4445';
@@ -133,9 +132,7 @@ export class E2ETestControllerImpl implements E2ETestController {
   }
 
   private async createSession(client: OPCUAClient, url: string) {
-    setDebug(true);
     await client.connectP(url);
-    setDebug(false);
     // tslint:disable-next-line: no-console
     console.info('connected to ', url);
 
