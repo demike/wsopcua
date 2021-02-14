@@ -933,7 +933,7 @@ export class ClientSecureChannelLayer
       this.__call.start();
     };
 
-    _establish_connection(transp, endpoint_url, () => this._on_connection(transp, callback));
+    _establish_connection(transp, endpoint_url, (connerr) => this._on_connection(transp, callback, connerr));
   }
 
   public dispose() {
