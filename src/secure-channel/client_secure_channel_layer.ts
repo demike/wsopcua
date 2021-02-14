@@ -853,6 +853,7 @@ export class ClientSecureChannelLayer
           //   - server too busy -
           //   - server shielding itself from a DOS attack
           if (err) {
+            console.log('connection error',err);
             let should_abort = false;
 
             if (err.message.match(/ECONNRESET/)) {
