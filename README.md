@@ -1,6 +1,6 @@
 # wsopcua - The Browser OPC UA Client
 
-![Build](https://github.com/demike/wsopcua/workflows/.github/workflows/ci-cd.yml/badge.svg)
+![Build](https://github.com/demike/wsopcua/actions/workflows/.github/workflows/ci-cd.yml/badge.svg)
 
 wsopcua is an OPC UA client running in the browser. It leverages WebSockets to communicate to communicate directly with the OPC UA server.
 
