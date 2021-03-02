@@ -997,6 +997,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         },
       ],
       (err: Error) => {
+        console.log('error creating secure channel', err);
         if (err) {
           // xx this.disconnect(function () {
           // xx });

@@ -853,6 +853,7 @@ export class ClientSecureChannelLayer
           //   - server too busy -
           //   - server shielding itself from a DOS attack
           if (err) {
+            console.log('connection error',err);
             let should_abort = false;
 
             if (err.message.match(/ECONNRESET/)) {
@@ -932,7 +933,7 @@ export class ClientSecureChannelLayer
       this.__call.start();
     };
 
-    _establish_connection(transp, endpoint_url, () => this._on_connection(transp, callback));
+    _establish_connection(transp, endpoint_url, (connerr) => this._on_connection(transp, callback, connerr));
   }
 
   public dispose() {
