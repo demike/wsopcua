@@ -1,44 +1,44 @@
 {
- "name": "opcua-schema-parser",
- "version": "0.1.0-00",
- "description": "opcua schema parser",
- "main": "index.ts",
- "dependencies": {
-  "@types/jsdom": "~12.2.4",
-  "@types/node": "^12.12.9",
-  "commander": "^4.0.1",
-  "csv": "^2.0.0",
-  "jsdom": "~15.1.1",
-  "parse5": "^5.1.0"
- },
- "devDependencies": {
-  "webpack": "^4.41.2",
-  "webpack-cli": "^3.3.10"
- },
- "eslintConfig": {
-  "env": {
-   "node": true
+  "name": "opcua-schema-parser",
+  "version": "0.1.0-00",
+  "description": "opcua schema parser",
+  "main": "index.ts",
+  "dependencies": {
+    "@types/jsdom": "16.2.6",
+    "@types/node": "^14.14.31",
+    "commander": "^4.0.1",
+    "csv": "^2.0.0",
+    "jsdom": "~16.4.0",
+    "parse5": "^5.1.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.17.0",
+    "webpack-cli": "^4.4.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true
+    }
+  },
+  "author": "Michael Derfler",
+  "license": "my licence",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/node-opcua/node-opcua.git"
+  },
+  "keywords": [
+    "OPCUA",
+    "opcua",
+    "m2m",
+    "iot",
+    "opc ua",
+    "internet of things"
+  ],
+  "homepage": "",
+  "scripts": {
+    "start": "tsc -p ./tsconfig.json --watch",
+    "build": "tsc -p ./tsconfig.json",
+    "build-min": "webpack --config webpack.config.js ",
+    "schema-gen": "node ./dist/wsopcua-schema-gen.js --genids --gencodes"
   }
- },
- "author": "Michael Derfler",
- "license": "my licence",
- "repository": {
-  "type": "git",
-  "url": "git://github.com/node-opcua/node-opcua.git"
- },
- "keywords": [
-  "OPCUA",
-  "opcua",
-  "m2m",
-  "iot",
-  "opc ua",
-  "internet of things"
- ],
- "homepage": "",
- "scripts": {
-  "start": "tsc -p ./tsconfig.json --watch",
-  "build": "tsc -p ./tsconfig.json",
-  "build-min": "webpack --config webpack.config.js ",
-  "schema-gen": "node ./dist/wsopcua-schema-gen.js --genids --gencodes"
- }
 }
