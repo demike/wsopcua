@@ -226,7 +226,7 @@ export class Variant extends BaseUAObject {
     }
 
     if (newvar.value === undefined || newvar.value === null) {
-      return;
+      return newvar;
     }
 
     if (this.arrayType === VariantArrayType.Scalar) {

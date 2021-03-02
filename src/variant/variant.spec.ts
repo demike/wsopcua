@@ -1764,6 +1764,16 @@ describe('testing variant Clone & Copy Construct', function () {
       expect(cloned.dataType).toEqual(v.dataType);
       expect(cloned.value).toEqual(v.value);
     });
+    fit('should ' + copy_construct_or_clone + ' a simple variant without value', function () {
+      const v = new Variant({
+        dataType: DataType.UInt32,
+      });
+
+      const cloned = copy_construct_or_clone_func(v);
+
+      expect(cloned.dataType).toEqual(v.dataType);
+      expect(cloned.value).toEqual(v.value);
+    });
     it('should ' + copy_construct_or_clone + ' a variant array', function () {
       const v = new Variant({
         dataType: DataType.UInt32,
