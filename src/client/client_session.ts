@@ -2491,10 +2491,10 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   /**
    * returns the namespace index or undefined if not present
    * throws an error if
-   * @param index
+   * @param index  default: 0
    */
-  public getNamespaceUri() {
+  public getNamespaceUri(index: number = 0) {
     assert(this._namespaceArray, 'please make sure that readNamespaceArray has been called');
-    return this._namespaceArray?.[0];
+    return this._namespaceArray?.[index];
   }
 }
