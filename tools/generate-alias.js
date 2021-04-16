@@ -5,6 +5,7 @@
  */
 const fs = require('fs-extra');
 const path = require('path');
+const packageJson = require('../package.json');
 
 const DIST_PATH = path.resolve(__dirname, `../dist`);
 
@@ -33,7 +34,7 @@ function createPackageManifest(barrelPath) {
   let alias = relPath;
 
   const pkgManifest = {
-    name: `@engel/wsopcua/${relPath}`,
+    name: `${packageJson.name}/${relPath}`,
     types: `${relPathReverse}/${relPath}/index.d.ts`,
     main: `${relPathReverse}/_cjs/${relPath}/index.js`,
     module: `${relPathReverse}/_esm/${relPath}/index.js`,

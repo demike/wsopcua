@@ -4,7 +4,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-packageJson = require('../package.json');
+const packageJson = require('../package.json');
 
 const pkgManifest = {
   name: packageJson.name,
