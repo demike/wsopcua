@@ -1,13 +1,14 @@
 {
   "name": "wsopcua",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "license": "MYLicense",
   "author": "Michael Derfler",
   "private": true,
-  "main": "dist/index.js",
-  "jsnext:main": "dist/es2015/wsopcua/index.js",
-  "es2015": "dist/es2015/wsopcua/index.js",
-  "module": "dist/es2015/wsopcua/index.js",
+  "main": "dist/_cjs/index.js",
+  "jsnext:main": "dist/_esm/index.js",
+  "es2015": "dist/_esm/index.js",
+  "module": "dist/_esm/index.js",
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "async": "^3.2.0",
     "loglevel": "^1.7.1",
@@ -43,6 +44,8 @@
   "scripts": {
     "start": "webpack --watch --config webpack.dev.js",
     "startES2015": "tsc -p ./tsconfig.json --module es2015 --outDir ./dist/es2015 --watch",
+    "compile": "tsc -b ./src/tsconfig.cjs.json ./src/tsconfig.esm.json  ./src/tsconfig.types.json",
+    "package:prepare": "npm run compile && node ./tools/prepare-package.js && node ./tools/generate-alias",
     "build": "webpack --config webpack.mod.js && npm run build-es2015",
     "build-es2015": "tsc -p ./tsconfig.json --module es2015 --outDir ./dist/es2015",
     "build-examples": "webpack --config webpack.example.js",
@@ -55,9 +58,9 @@
   },
   "files": [
     "documentation/**/*",
-    "dist/es2015/**/*",
-    "!dist/es2015/**/*.spec.*",
-    "!dist/es2015/**/*.e2e-spec.*",
+    "dist/**/*",
+    "!dist/**/*.spec.*",
+    "!dist/**/*.e2e-spec.*",
     "src/schema_parser/dist/wsopcua-schema-gen.js",
     "src/schema_parser/schemas/**/*",
     "!src/examples/**/*"

@@ -19,7 +19,7 @@ module.exports = function (config) {
       'src/**/*.ts': ['karma-typescript'],
     },
     karmaTypescriptConfig: {
-      tsconfig: './tsconfig.json',
+      tsconfig: './src/tsconfig.esm.json',
 
       compilerOptions: {
         //noEmitOnError: true,
@@ -37,7 +37,7 @@ module.exports = function (config) {
         // transforms: [require('karma-typescript-es6-transform')()],
       },
 
-      exclude: ['src/**/node_modules', 'src/schema_parser/**/*'],
+      exclude: ['./**/node_modules', './schema_parser/**/*'],
     },
     /*
     plugins: [

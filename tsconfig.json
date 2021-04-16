@@ -1,16 +1,25 @@
 {
   "compilerOptions": {
-    "module": "es2015",
-    "target": "es6",
-    "declaration": true,
+    "incremental": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
     "sourceMap": true,
-    "outDir": "./dist",
+    // "declaration": true,
+    // "strict": true,
+    // "noImplicitReturns": true,
     "moduleResolution": "node",
     "strictNullChecks": false,
-    // "outFile": "./dist/ws-opcua.js"
     "noImplicitAny": true,
-    "lib": ["es2017", "es2017.object", "dom"]
+    "lib": ["esnext", "es2017.object", "dom"],
+    "target": "esnext",
+    "baseUrl": "."
   },
-  "exclude": ["node_modules/", "src/schema_parser/**/*", "src/examples/**/*"],
+  "exclude": [
+    "node_modules/",
+    "**/*.spec.ts",
+    "**/*.e2e-spec.ts",
+    "src/schema_parser/**/*",
+    "src/examples/**/*"
+  ],
   "include": ["src/**/*.ts"]
 }
