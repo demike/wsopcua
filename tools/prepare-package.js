@@ -18,6 +18,9 @@ const pkgManifest = {
   es2015: `./_esm/index.js`,
   dependencies: packageJson.dependencies,
   files: ['/**/!(*.tsbuildinfo)'],
+  bin: {
+    'wsopcua-schema-gen': './bin/wsopcua-schema-gen.js',
+  },
 };
 
 fs.writeJSONSync(path.resolve(__dirname, `../dist/package.json`), pkgManifest, { spaces: 2 });
@@ -53,10 +56,10 @@ fs.copySync(
 /**
  * copy the schema generator
  */
-/* TODO enable it again
+
 fs.copySync(
   path.resolve(__dirname, '../src/schema_parser/dist/wsopcua-schema-gen.js'),
-  path.resolve(__dirname, '../dist/wsopcua-schema-gen.js'),
+  path.resolve(__dirname, '../dist/bin/wsopcua-schema-gen.js'),
   { overwrite: true },
   function (err) {
     if (err) {
@@ -65,4 +68,15 @@ fs.copySync(
     }
   }
 );
-*/
+
+fs.copySync(
+  path.resolve(__dirname, '../src/schema_parser/schemas'),
+  path.resolve(__dirname, '../dist/schemas'),
+  { overwrite: true },
+  function (err) {
+    if (err) {
+      console.error(err);
+      process.exit(-1);
+    }
+  }
+);

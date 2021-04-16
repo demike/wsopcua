@@ -1,20 +1,20 @@
 {
-    "projects" : [
+  "projects": [
+    {
+      "projectName": "wsopcua",
+      "projectSrcPath": "../../",
+      "schemaImports": [
         {
-            "projectName": "wsopcua/dist/es2015",
-            "projectSrcPath": "../../",
-            "schemaImports": [
-                {
-                    "pathToSchema" : "../schemas/Opc.Ua.Types.bsd",
-                    "modulePath": "/generated/",
-                    "namespace": 0
-                },
-                {
-                    "pathToSchema" : "../schemas/Opc.Ua.Di.NodeSet2.xml",
-                    "modulePath": "/generated/DI/",
-                    "namespace": 2
-                }
-            ]
+          "pathToSchema": "../schemas/Opc.Ua.Types.bsd",
+          "modulePath": "/generated/",
+          "namespace": 0
+        },
+        {
+          "pathToSchema": "../schemas/Opc.Ua.Di.NodeSet2.xml",
+          "modulePath": "/generated/DI/",
+          "namespace": 2
         }
-    ]   
+      ]
+    }
+  ]
 }
