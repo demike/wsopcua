@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
-import {AddReferencesItem} from './AddReferencesItem';
-import {decodeAddReferencesItem} from './AddReferencesItem';
+import {RequestHeader} from '.';
+import {AddReferencesItem} from '.';
+import {decodeAddReferencesItem} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IAddReferencesRequest {
   requestHeader?: RequestHeader;
@@ -55,7 +55,7 @@ export class AddReferencesRequest {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
-  this.referencesToAdd = ec.jsonDecodeStructArray( inp.ReferencesToAdd, AddReferencesItem);
+  this.referencesToAdd = ec.jsonDecodeStructArray( inp.ReferencesToAdd,AddReferencesItem);
 
  }
 
@@ -80,6 +80,6 @@ export function decodeAddReferencesRequest( inp: DataStream): AddReferencesReque
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('AddReferencesRequest', AddReferencesRequest, new ExpandedNodeId(2 /*numeric id*/, 494, 0));

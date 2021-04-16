@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum DataSetOrderingType {
   Undefined = 0,
@@ -22,5 +22,5 @@ export function decodeDataSetOrderingType( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('DataSetOrderingType', DataSetOrderingType, encodeDataSetOrderingType , decodeDataSetOrderingType , undefined);

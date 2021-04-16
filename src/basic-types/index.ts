@@ -1,5 +1,3 @@
-
-
 // "use strict";
 export * from './boolean';
 export * from './integers';
@@ -13,11 +11,15 @@ export * from './status_code_utils';
 export * from './guid';
 export * from './localeid';
 export * from './array';
+export * from './DataStream';
 // export * from './extension_object';
 
-
-export {coerceUInt64 as coerceInt64, encodeUInt64 as encodeInt64,
-    decodeUInt64 as decodeInt64, isValidUInt64 as isValidInt64} from './integers';
+export {
+  coerceUInt64 as coerceInt64,
+  encodeUInt64 as encodeInt64,
+  decodeUInt64 as decodeInt64,
+  isValidUInt64 as isValidInt64,
+} from './integers';
 
 // export  {
 
@@ -46,7 +48,6 @@ export {coerceUInt64 as coerceInt64, encodeUInt64 as encodeInt64,
 //     encodeUInt8:integers.encodeUInt8,
 //     decodeUInt8:integers.decodeUInt8,
 //     coerceUInt8:integers.coerceUInt8,
-
 
 //     encodeByte:integers.encodeByte,
 //     decodeByte:integers.decodeByte,
@@ -106,7 +107,6 @@ export {coerceUInt64 as coerceInt64, encodeUInt64 as encodeInt64,
 //     decodeGuid: guid.decodeGuid,
 //     emptyGuid: guid.emptyGuid,
 //     //xx coerceGuid: guid.coerceGuid,
-
 
 //     randomByte: integers.randomByte,
 //     randomSByte: integers.randomSByte,

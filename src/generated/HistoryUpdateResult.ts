@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
-import {DataStream} from '../basic-types/DataStream';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IHistoryUpdateResult {
   statusCode?: ec.StatusCode;
@@ -61,7 +61,7 @@ export class HistoryUpdateResult {
 if (!inp) { return; }
   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.operationResults = ec.jsonDecodeArray( inp.OperationResults, ec.jsonDecodeStatusCode);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
 
  }
 
@@ -87,6 +87,6 @@ export function decodeHistoryUpdateResult( inp: DataStream): HistoryUpdateResult
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('HistoryUpdateResult', HistoryUpdateResult, new ExpandedNodeId(2 /*numeric id*/, 697, 0));

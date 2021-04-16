@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {StructureDefinition} from './StructureDefinition';
-import {DataStream} from '../basic-types/DataStream';
-import {DataTypeDescription} from './DataTypeDescription';
-import {IDataTypeDescription} from './DataTypeDescription';
+import {StructureDefinition} from '.';
+import {DataStream} from '../basic-types';
+import {DataTypeDescription} from '.';
+import {IDataTypeDescription} from '.';
 
 export interface IStructureDescription extends IDataTypeDescription {
   structureDefinition?: StructureDefinition;
@@ -76,6 +76,6 @@ export function decodeStructureDescription( inp: DataStream): StructureDescripti
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('StructureDescription', StructureDescription, new ExpandedNodeId(2 /*numeric id*/, 126, 0));

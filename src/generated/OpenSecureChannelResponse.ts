@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
+import {ResponseHeader} from '.';
 import * as ec from '../basic-types';
-import {ChannelSecurityToken} from './ChannelSecurityToken';
-import {DataStream} from '../basic-types/DataStream';
+import {ChannelSecurityToken} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IOpenSecureChannelResponse {
   responseHeader?: ResponseHeader;
@@ -95,6 +95,6 @@ export function decodeOpenSecureChannelResponse( inp: DataStream): OpenSecureCha
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('OpenSecureChannelResponse', OpenSecureChannelResponse, new ExpandedNodeId(2 /*numeric id*/, 449, 0));

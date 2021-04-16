@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum PubSubDiagnosticsCounterClassification {
   Information = 0,
@@ -21,5 +21,5 @@ export function decodePubSubDiagnosticsCounterClassification( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('PubSubDiagnosticsCounterClassification', PubSubDiagnosticsCounterClassification, encodePubSubDiagnosticsCounterClassification , decodePubSubDiagnosticsCounterClassification , undefined);

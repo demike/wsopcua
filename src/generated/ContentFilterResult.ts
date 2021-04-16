@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {ContentFilterElementResult} from './ContentFilterElementResult';
-import {decodeContentFilterElementResult} from './ContentFilterElementResult';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
+import {ContentFilterElementResult} from '.';
+import {decodeContentFilterElementResult} from '.';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IContentFilterResult {
   elementResults?: ContentFilterElementResult[];
@@ -55,8 +55,8 @@ export class ContentFilterResult {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.elementResults = ec.jsonDecodeStructArray( inp.ElementResults, ContentFilterElementResult);
-  this.elementDiagnosticInfos = ec.jsonDecodeStructArray( inp.ElementDiagnosticInfos, DiagnosticInfo);
+  this.elementResults = ec.jsonDecodeStructArray( inp.ElementResults,ContentFilterElementResult);
+  this.elementDiagnosticInfos = ec.jsonDecodeStructArray( inp.ElementDiagnosticInfos,DiagnosticInfo);
 
  }
 
@@ -81,6 +81,6 @@ export function decodeContentFilterResult( inp: DataStream): ContentFilterResult
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ContentFilterResult', ContentFilterResult, new ExpandedNodeId(2 /*numeric id*/, 609, 0));

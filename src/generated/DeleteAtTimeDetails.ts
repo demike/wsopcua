@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {HistoryUpdateDetails} from './HistoryUpdateDetails';
-import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
+import {DataStream} from '../basic-types';
+import {HistoryUpdateDetails} from '.';
+import {IHistoryUpdateDetails} from '.';
 
 export interface IDeleteAtTimeDetails extends IHistoryUpdateDetails {
   reqTimes?: Date[];
@@ -76,6 +76,6 @@ export function decodeDeleteAtTimeDetails( inp: DataStream): DeleteAtTimeDetails
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('DeleteAtTimeDetails', DeleteAtTimeDetails, new ExpandedNodeId(2 /*numeric id*/, 691, 0));

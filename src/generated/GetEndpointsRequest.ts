@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
+import {RequestHeader} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IGetEndpointsRequest {
   requestHeader?: RequestHeader;
@@ -94,6 +94,6 @@ export function decodeGetEndpointsRequest( inp: DataStream): GetEndpointsRequest
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('GetEndpointsRequest', GetEndpointsRequest, new ExpandedNodeId(2 /*numeric id*/, 428, 0));

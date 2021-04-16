@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum BrokerTransportQualityOfService {
   NotSpecified = 0,
@@ -24,5 +24,5 @@ export function decodeBrokerTransportQualityOfService( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('BrokerTransportQualityOfService', BrokerTransportQualityOfService, encodeBrokerTransportQualityOfService , decodeBrokerTransportQualityOfService , undefined);

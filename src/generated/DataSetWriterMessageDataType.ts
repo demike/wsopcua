@@ -20,6 +20,6 @@ export class DataSetWriterMessageDataType {
 
 
 }
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('DataSetWriterMessageDataType', DataSetWriterMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15688, 0));

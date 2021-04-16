@@ -5,9 +5,9 @@
 
 import * as ec from '../basic-types';
 import {Variant} from '../variant';
-import {QualifiedName} from './QualifiedName';
-import {decodeQualifiedName} from './QualifiedName';
-import {DataStream} from '../basic-types/DataStream';
+import {QualifiedName} from '.';
+import {decodeQualifiedName} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IPublishedVariableDataType {
   publishedVariable?: ec.NodeId;
@@ -97,7 +97,7 @@ if (!inp) { return; }
   this.deadbandValue = inp.DeadbandValue;
   this.indexRange = inp.IndexRange;
   this.substituteValue.fromJSON(inp.SubstituteValue);
-  this.metaDataProperties = ec.jsonDecodeStructArray( inp.MetaDataProperties, QualifiedName);
+  this.metaDataProperties = ec.jsonDecodeStructArray( inp.MetaDataProperties,QualifiedName);
 
  }
 
@@ -128,6 +128,6 @@ export function decodePublishedVariableDataType( inp: DataStream): PublishedVari
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('PublishedVariableDataType', PublishedVariableDataType, new ExpandedNodeId(2 /*numeric id*/, 14323, 0));

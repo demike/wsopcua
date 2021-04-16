@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
-import {DataStream} from '../basic-types/DataStream';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IContentFilterElementResult {
   statusCode?: ec.StatusCode;
@@ -61,7 +61,7 @@ export class ContentFilterElementResult {
 if (!inp) { return; }
   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.operandStatusCodes = ec.jsonDecodeArray( inp.OperandStatusCodes, ec.jsonDecodeStatusCode);
-  this.operandDiagnosticInfos = ec.jsonDecodeStructArray( inp.OperandDiagnosticInfos, DiagnosticInfo);
+  this.operandDiagnosticInfos = ec.jsonDecodeStructArray( inp.OperandDiagnosticInfos,DiagnosticInfo);
 
  }
 
@@ -87,6 +87,6 @@ export function decodeContentFilterElementResult( inp: DataStream): ContentFilte
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ContentFilterElementResult', ContentFilterElementResult, new ExpandedNodeId(2 /*numeric id*/, 606, 0));

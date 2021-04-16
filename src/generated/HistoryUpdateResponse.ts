@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
-import {HistoryUpdateResult} from './HistoryUpdateResult';
-import {decodeHistoryUpdateResult} from './HistoryUpdateResult';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
+import {ResponseHeader} from '.';
+import {HistoryUpdateResult} from '.';
+import {decodeHistoryUpdateResult} from '.';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IHistoryUpdateResponse {
   responseHeader?: ResponseHeader;
@@ -63,8 +63,8 @@ export class HistoryUpdateResponse {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
-  this.results = ec.jsonDecodeStructArray( inp.Results, HistoryUpdateResult);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
+  this.results = ec.jsonDecodeStructArray( inp.Results,HistoryUpdateResult);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
 
  }
 
@@ -90,6 +90,6 @@ export function decodeHistoryUpdateResponse( inp: DataStream): HistoryUpdateResp
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('HistoryUpdateResponse', HistoryUpdateResponse, new ExpandedNodeId(2 /*numeric id*/, 703, 0));

@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum BrowseDirection {
   Forward = 0,
@@ -23,5 +23,5 @@ export function decodeBrowseDirection( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('BrowseDirection', BrowseDirection, encodeBrowseDirection , decodeBrowseDirection , undefined);

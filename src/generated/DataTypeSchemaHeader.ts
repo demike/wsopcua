@@ -4,13 +4,13 @@
 */
 
 import * as ec from '../basic-types';
-import {StructureDescription} from './StructureDescription';
-import {decodeStructureDescription} from './StructureDescription';
-import {EnumDescription} from './EnumDescription';
-import {decodeEnumDescription} from './EnumDescription';
-import {SimpleTypeDescription} from './SimpleTypeDescription';
-import {decodeSimpleTypeDescription} from './SimpleTypeDescription';
-import {DataStream} from '../basic-types/DataStream';
+import {StructureDescription} from '.';
+import {decodeStructureDescription} from '.';
+import {EnumDescription} from '.';
+import {decodeEnumDescription} from '.';
+import {SimpleTypeDescription} from '.';
+import {decodeSimpleTypeDescription} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IDataTypeSchemaHeader {
   namespaces?: string[];
@@ -70,9 +70,9 @@ export class DataTypeSchemaHeader {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.namespaces = inp.Namespaces;
-  this.structureDataTypes = ec.jsonDecodeStructArray( inp.StructureDataTypes, StructureDescription);
-  this.enumDataTypes = ec.jsonDecodeStructArray( inp.EnumDataTypes, EnumDescription);
-  this.simpleDataTypes = ec.jsonDecodeStructArray( inp.SimpleDataTypes, SimpleTypeDescription);
+  this.structureDataTypes = ec.jsonDecodeStructArray( inp.StructureDataTypes,StructureDescription);
+  this.enumDataTypes = ec.jsonDecodeStructArray( inp.EnumDataTypes,EnumDescription);
+  this.simpleDataTypes = ec.jsonDecodeStructArray( inp.SimpleDataTypes,SimpleTypeDescription);
 
  }
 
@@ -99,6 +99,6 @@ export function decodeDataTypeSchemaHeader( inp: DataStream): DataTypeSchemaHead
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('DataTypeSchemaHeader', DataTypeSchemaHeader, new ExpandedNodeId(2 /*numeric id*/, 15676, 0));

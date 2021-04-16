@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {ReadValueId} from './ReadValueId';
-import {MonitoringMode, encodeMonitoringMode, decodeMonitoringMode} from './MonitoringMode';
-import {MonitoringParameters} from './MonitoringParameters';
-import {DataStream} from '../basic-types/DataStream';
+import {ReadValueId} from '.';
+import {MonitoringMode, encodeMonitoringMode, decodeMonitoringMode} from '.';
+import {MonitoringParameters} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IMonitoredItemCreateRequest {
   itemToMonitor?: ReadValueId;
@@ -87,6 +87,6 @@ export function decodeMonitoredItemCreateRequest( inp: DataStream): MonitoredIte
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('MonitoredItemCreateRequest', MonitoredItemCreateRequest, new ExpandedNodeId(2 /*numeric id*/, 745, 0));

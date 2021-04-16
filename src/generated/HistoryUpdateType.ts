@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum HistoryUpdateType {
   Insert = 1,
@@ -23,5 +23,5 @@ export function decodeHistoryUpdateType( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('HistoryUpdateType', HistoryUpdateType, encodeHistoryUpdateType , decodeHistoryUpdateType , undefined);

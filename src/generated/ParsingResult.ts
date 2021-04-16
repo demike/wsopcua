@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
-import {DataStream} from '../basic-types/DataStream';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IParsingResult {
   statusCode?: ec.StatusCode;
@@ -61,7 +61,7 @@ export class ParsingResult {
 if (!inp) { return; }
   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.dataStatusCodes = ec.jsonDecodeArray( inp.DataStatusCodes, ec.jsonDecodeStatusCode);
-  this.dataDiagnosticInfos = ec.jsonDecodeStructArray( inp.DataDiagnosticInfos, DiagnosticInfo);
+  this.dataDiagnosticInfos = ec.jsonDecodeStructArray( inp.DataDiagnosticInfos,DiagnosticInfo);
 
  }
 
@@ -87,6 +87,6 @@ export function decodeParsingResult( inp: DataStream): ParsingResult {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ParsingResult', ParsingResult, new ExpandedNodeId(2 /*numeric id*/, 612, 0));

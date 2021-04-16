@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum AttributeWriteMask {
   None = 0,
@@ -46,5 +46,5 @@ export function decodeAttributeWriteMask( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('AttributeWriteMask', AttributeWriteMask, encodeAttributeWriteMask , decodeAttributeWriteMask , undefined);

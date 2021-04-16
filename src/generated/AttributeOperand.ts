@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {RelativePath} from './RelativePath';
-import {DataStream} from '../basic-types/DataStream';
-import {FilterOperand} from './FilterOperand';
+import {RelativePath} from '.';
+import {DataStream} from '../basic-types';
+import {FilterOperand} from '.';
 
 export interface IAttributeOperand {
   nodeId?: ec.NodeId;
@@ -104,6 +104,6 @@ export function decodeAttributeOperand( inp: DataStream): AttributeOperand {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('AttributeOperand', AttributeOperand, new ExpandedNodeId(2 /*numeric id*/, 600, 0));

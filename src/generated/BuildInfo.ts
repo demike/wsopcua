@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IBuildInfo {
   productUri?: string;
@@ -109,6 +109,6 @@ export function decodeBuildInfo( inp: DataStream): BuildInfo {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('BuildInfo', BuildInfo, new ExpandedNodeId(2 /*numeric id*/, 340, 0));

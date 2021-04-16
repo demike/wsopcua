@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {ReferenceDescription} from './ReferenceDescription';
-import {decodeReferenceDescription} from './ReferenceDescription';
-import {DataStream} from '../basic-types/DataStream';
+import {ReferenceDescription} from '.';
+import {decodeReferenceDescription} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IBrowseResult {
   statusCode?: ec.StatusCode;
@@ -61,7 +61,7 @@ export class BrowseResult {
 if (!inp) { return; }
   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.continuationPoint = ec.jsonDecodeByteString(inp.ContinuationPoint);
-  this.references = ec.jsonDecodeStructArray( inp.References, ReferenceDescription);
+  this.references = ec.jsonDecodeStructArray( inp.References,ReferenceDescription);
 
  }
 
@@ -87,6 +87,6 @@ export function decodeBrowseResult( inp: DataStream): BrowseResult {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('BrowseResult', BrowseResult, new ExpandedNodeId(2 /*numeric id*/, 524, 0));

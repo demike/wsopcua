@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum IdType {
   Numeric = 0,
@@ -23,5 +23,5 @@ export function decodeIdType( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('IdType', IdType, encodeIdType , decodeIdType , undefined);

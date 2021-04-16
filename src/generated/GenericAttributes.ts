@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {GenericAttributeValue} from './GenericAttributeValue';
-import {decodeGenericAttributeValue} from './GenericAttributeValue';
+import {GenericAttributeValue} from '.';
+import {decodeGenericAttributeValue} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {NodeAttributes} from './NodeAttributes';
-import {INodeAttributes} from './NodeAttributes';
+import {DataStream} from '../basic-types';
+import {NodeAttributes} from '.';
+import {INodeAttributes} from '.';
 
 export interface IGenericAttributes extends INodeAttributes {
   attributeValues?: GenericAttributeValue[];
@@ -53,7 +53,7 @@ export class GenericAttributes extends NodeAttributes {
  fromJSON( inp: any) {
 if (!inp) { return; }
   super.fromJSON(inp);
-  this.attributeValues = ec.jsonDecodeStructArray( inp.AttributeValues, GenericAttributeValue);
+  this.attributeValues = ec.jsonDecodeStructArray( inp.AttributeValues,GenericAttributeValue);
 
  }
 
@@ -78,6 +78,6 @@ export function decodeGenericAttributes( inp: DataStream): GenericAttributes {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('GenericAttributes', GenericAttributes, new ExpandedNodeId(2 /*numeric id*/, 17611, 0));

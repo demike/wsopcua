@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {EnumField} from './EnumField';
-import {decodeEnumField} from './EnumField';
+import {EnumField} from '.';
+import {decodeEnumField} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IEnumDefinition {
   fields?: EnumField[];
@@ -47,7 +47,7 @@ export class EnumDefinition {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.fields = ec.jsonDecodeStructArray( inp.Fields, EnumField);
+  this.fields = ec.jsonDecodeStructArray( inp.Fields,EnumField);
 
  }
 
@@ -71,6 +71,6 @@ export function decodeEnumDefinition( inp: DataStream): EnumDefinition {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('EnumDefinition', EnumDefinition, new ExpandedNodeId(2 /*numeric id*/, 123, 0));

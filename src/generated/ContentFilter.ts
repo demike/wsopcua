@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {ContentFilterElement} from './ContentFilterElement';
-import {decodeContentFilterElement} from './ContentFilterElement';
+import {ContentFilterElement} from '.';
+import {decodeContentFilterElement} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IContentFilter {
   elements?: ContentFilterElement[];
@@ -47,7 +47,7 @@ export class ContentFilter {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.elements = ec.jsonDecodeStructArray( inp.Elements, ContentFilterElement);
+  this.elements = ec.jsonDecodeStructArray( inp.Elements,ContentFilterElement);
 
  }
 
@@ -71,6 +71,6 @@ export function decodeContentFilter( inp: DataStream): ContentFilter {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ContentFilter', ContentFilter, new ExpandedNodeId(2 /*numeric id*/, 588, 0));

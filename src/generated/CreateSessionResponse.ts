@@ -3,14 +3,14 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
+import {ResponseHeader} from '.';
 import * as ec from '../basic-types';
-import {EndpointDescription} from './EndpointDescription';
-import {decodeEndpointDescription} from './EndpointDescription';
-import {SignedSoftwareCertificate} from './SignedSoftwareCertificate';
-import {decodeSignedSoftwareCertificate} from './SignedSoftwareCertificate';
-import {SignatureData} from './SignatureData';
-import {DataStream} from '../basic-types/DataStream';
+import {EndpointDescription} from '.';
+import {decodeEndpointDescription} from '.';
+import {SignedSoftwareCertificate} from '.';
+import {decodeSignedSoftwareCertificate} from '.';
+import {SignatureData} from '.';
+import {DataStream} from '../basic-types';
 
 export interface ICreateSessionResponse {
   responseHeader?: ResponseHeader;
@@ -111,8 +111,8 @@ if (!inp) { return; }
   this.revisedSessionTimeout = inp.RevisedSessionTimeout;
   this.serverNonce = ec.jsonDecodeByteString(inp.ServerNonce);
   this.serverCertificate = ec.jsonDecodeByteString(inp.ServerCertificate);
-  this.serverEndpoints = ec.jsonDecodeStructArray( inp.ServerEndpoints, EndpointDescription);
-  this.serverSoftwareCertificates = ec.jsonDecodeStructArray( inp.ServerSoftwareCertificates, SignedSoftwareCertificate);
+  this.serverEndpoints = ec.jsonDecodeStructArray( inp.ServerEndpoints,EndpointDescription);
+  this.serverSoftwareCertificates = ec.jsonDecodeStructArray( inp.ServerSoftwareCertificates,SignedSoftwareCertificate);
   this.serverSignature.fromJSON(inp.ServerSignature);
   this.maxRequestMessageSize = inp.MaxRequestMessageSize;
 
@@ -147,6 +147,6 @@ export function decodeCreateSessionResponse( inp: DataStream): CreateSessionResp
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('CreateSessionResponse', CreateSessionResponse, new ExpandedNodeId(2 /*numeric id*/, 464, 0));

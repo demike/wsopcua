@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMode} from './MessageSecurityMode';
-import {DataStream} from '../basic-types/DataStream';
+import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMode} from '.';
+import {DataStream} from '../basic-types';
 
 export interface ISessionSecurityDiagnosticsDataType {
   sessionId?: ec.NodeId;
@@ -134,6 +134,6 @@ export function decodeSessionSecurityDiagnosticsDataType( inp: DataStream): Sess
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('SessionSecurityDiagnosticsDataType', SessionSecurityDiagnosticsDataType, new ExpandedNodeId(2 /*numeric id*/, 870, 0));

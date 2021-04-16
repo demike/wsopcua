@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {RelativePath} from './RelativePath';
-import {DataStream} from '../basic-types/DataStream';
+import {RelativePath} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IBrowsePath {
   startingNode?: ec.NodeId;
@@ -78,6 +78,6 @@ export function decodeBrowsePath( inp: DataStream): BrowsePath {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('BrowsePath', BrowsePath, new ExpandedNodeId(2 /*numeric id*/, 545, 0));

@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum DataSetFieldFlags {
   None = 0,
@@ -21,5 +21,5 @@ export function decodeDataSetFieldFlags( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('DataSetFieldFlags', DataSetFieldFlags, encodeDataSetFieldFlags , decodeDataSetFieldFlags , undefined);

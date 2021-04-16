@@ -5,11 +5,11 @@
 
 import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataSetWriterDataType} from './DataSetWriterDataType';
-import {decodeDataSetWriterDataType} from './DataSetWriterDataType';
-import {DataStream} from '../basic-types/DataStream';
-import {PubSubGroupDataType} from './PubSubGroupDataType';
-import {IPubSubGroupDataType} from './PubSubGroupDataType';
+import {DataSetWriterDataType} from '.';
+import {decodeDataSetWriterDataType} from '.';
+import {DataStream} from '../basic-types';
+import {PubSubGroupDataType} from '.';
+import {IPubSubGroupDataType} from '.';
 
 export interface IWriterGroupDataType extends IPubSubGroupDataType {
   writerGroupId?: ec.UInt16;
@@ -110,7 +110,7 @@ if (!inp) { return; }
   this.headerLayoutUri = inp.HeaderLayoutUri;
   this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
   this.messageSettings = jsonDecodeExtensionObject(inp.MessageSettings);
-  this.dataSetWriters = ec.jsonDecodeStructArray( inp.DataSetWriters, DataSetWriterDataType);
+  this.dataSetWriters = ec.jsonDecodeStructArray( inp.DataSetWriters,DataSetWriterDataType);
 
  }
 
@@ -143,6 +143,6 @@ export function decodeWriterGroupDataType( inp: DataStream): WriterGroupDataType
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('WriterGroupDataType', WriterGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 21150, 0));

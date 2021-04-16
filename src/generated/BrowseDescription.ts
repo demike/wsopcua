@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {BrowseDirection, encodeBrowseDirection, decodeBrowseDirection} from './BrowseDirection';
-import {DataStream} from '../basic-types/DataStream';
+import {BrowseDirection, encodeBrowseDirection, decodeBrowseDirection} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IBrowseDescription {
   nodeId?: ec.NodeId;
@@ -110,6 +110,6 @@ export function decodeBrowseDescription( inp: DataStream): BrowseDescription {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('BrowseDescription', BrowseDescription, new ExpandedNodeId(2 /*numeric id*/, 516, 0));

@@ -4,11 +4,11 @@
 */
 
 import * as ec from '../basic-types';
-import {DataSetFieldContentMask, encodeDataSetFieldContentMask, decodeDataSetFieldContentMask} from './DataSetFieldContentMask';
-import {KeyValuePair} from './KeyValuePair';
-import {decodeKeyValuePair} from './KeyValuePair';
+import {DataSetFieldContentMask, encodeDataSetFieldContentMask, decodeDataSetFieldContentMask} from '.';
+import {KeyValuePair} from '.';
+import {decodeKeyValuePair} from '.';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IDataSetWriterDataType {
   name?: string;
@@ -103,7 +103,7 @@ if (!inp) { return; }
   this.dataSetFieldContentMask = inp.DataSetFieldContentMask;
   this.keyFrameCount = inp.KeyFrameCount;
   this.dataSetName = inp.DataSetName;
-  this.dataSetWriterProperties = ec.jsonDecodeStructArray( inp.DataSetWriterProperties, KeyValuePair);
+  this.dataSetWriterProperties = ec.jsonDecodeStructArray( inp.DataSetWriterProperties,KeyValuePair);
   this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
   this.messageSettings = jsonDecodeExtensionObject(inp.MessageSettings);
 
@@ -137,6 +137,6 @@ export function decodeDataSetWriterDataType( inp: DataStream): DataSetWriterData
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('DataSetWriterDataType', DataSetWriterDataType, new ExpandedNodeId(2 /*numeric id*/, 15682, 0));

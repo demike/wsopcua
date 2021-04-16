@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
-import {ApplicationDescription} from './ApplicationDescription';
-import {decodeApplicationDescription} from './ApplicationDescription';
+import {ResponseHeader} from '.';
+import {ApplicationDescription} from '.';
+import {decodeApplicationDescription} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IFindServersResponse {
   responseHeader?: ResponseHeader;
@@ -55,7 +55,7 @@ export class FindServersResponse {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
-  this.servers = ec.jsonDecodeStructArray( inp.Servers, ApplicationDescription);
+  this.servers = ec.jsonDecodeStructArray( inp.Servers,ApplicationDescription);
 
  }
 
@@ -80,6 +80,6 @@ export function decodeFindServersResponse( inp: DataStream): FindServersResponse
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('FindServersResponse', FindServersResponse, new ExpandedNodeId(2 /*numeric id*/, 425, 0));

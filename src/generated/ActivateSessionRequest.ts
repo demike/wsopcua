@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
-import {SignatureData} from './SignatureData';
-import {SignedSoftwareCertificate} from './SignedSoftwareCertificate';
-import {decodeSignedSoftwareCertificate} from './SignedSoftwareCertificate';
+import {RequestHeader} from '.';
+import {SignatureData} from '.';
+import {SignedSoftwareCertificate} from '.';
+import {decodeSignedSoftwareCertificate} from '.';
 import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IActivateSessionRequest {
   requestHeader?: RequestHeader;
@@ -82,7 +82,7 @@ export class ActivateSessionRequest {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
   this.clientSignature.fromJSON(inp.ClientSignature);
-  this.clientSoftwareCertificates = ec.jsonDecodeStructArray( inp.ClientSoftwareCertificates, SignedSoftwareCertificate);
+  this.clientSoftwareCertificates = ec.jsonDecodeStructArray( inp.ClientSoftwareCertificates,SignedSoftwareCertificate);
   this.localeIds = inp.LocaleIds;
   this.userIdentityToken = jsonDecodeExtensionObject(inp.UserIdentityToken);
   this.userTokenSignature.fromJSON(inp.UserTokenSignature);
@@ -114,6 +114,6 @@ export function decodeActivateSessionRequest( inp: DataStream): ActivateSessionR
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ActivateSessionRequest', ActivateSessionRequest, new ExpandedNodeId(2 /*numeric id*/, 467, 0));

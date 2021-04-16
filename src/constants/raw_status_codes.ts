@@ -8,7 +8,7 @@
 
     // tslint:disable: max-line-length
     // tslint:disable: quotemark
- export class StatusCodes  {
+ export class StatusCodes  { 
  /** Good: No Error */
  static Good: ConstantStatusCode =  new ConstantStatusCode({ name: 'Good', value: 0, description: 'No Error' });
 /** The value is bad but no specific reason is known. */
@@ -504,4 +504,4 @@
   static BadSyntaxError: ConstantStatusCode = new ConstantStatusCode({ name: 'BadSyntaxError' , value: 0x80b60000  , description: "A value had an invalid syntax."});
  /** The operation could not be finished because all available connections are in use. */
   static BadMaxConnectionsReached: ConstantStatusCode = new ConstantStatusCode({ name: 'BadMaxConnectionsReached' , value: 0x80b70000  , description: "The operation could not be finished because all available connections are in use."});
-}
+};

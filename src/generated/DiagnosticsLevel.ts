@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum DiagnosticsLevel {
   Basic = 0,
@@ -24,5 +24,5 @@ export function decodeDiagnosticsLevel( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('DiagnosticsLevel', DiagnosticsLevel, encodeDiagnosticsLevel , decodeDiagnosticsLevel , undefined);

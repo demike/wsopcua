@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {ModificationInfo} from './ModificationInfo';
-import {decodeModificationInfo} from './ModificationInfo';
+import {ModificationInfo} from '.';
+import {decodeModificationInfo} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {HistoryData} from './HistoryData';
-import {IHistoryData} from './HistoryData';
+import {DataStream} from '../basic-types';
+import {HistoryData} from '.';
+import {IHistoryData} from '.';
 
 export interface IHistoryModifiedData extends IHistoryData {
   modificationInfos?: ModificationInfo[];
@@ -53,7 +53,7 @@ export class HistoryModifiedData extends HistoryData {
  fromJSON( inp: any) {
 if (!inp) { return; }
   super.fromJSON(inp);
-  this.modificationInfos = ec.jsonDecodeStructArray( inp.ModificationInfos, ModificationInfo);
+  this.modificationInfos = ec.jsonDecodeStructArray( inp.ModificationInfos,ModificationInfo);
 
  }
 
@@ -78,6 +78,6 @@ export function decodeHistoryModifiedData( inp: DataStream): HistoryModifiedData
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('HistoryModifiedData', HistoryModifiedData, new ExpandedNodeId(2 /*numeric id*/, 11227, 0));

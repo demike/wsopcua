@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
-import {ViewDescription} from './ViewDescription';
+import {RequestHeader} from '.';
+import {ViewDescription} from '.';
 import * as ec from '../basic-types';
-import {BrowseDescription} from './BrowseDescription';
-import {decodeBrowseDescription} from './BrowseDescription';
-import {DataStream} from '../basic-types/DataStream';
+import {BrowseDescription} from '.';
+import {decodeBrowseDescription} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IBrowseRequest {
   requestHeader?: RequestHeader;
@@ -70,7 +70,7 @@ if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
   this.view.fromJSON(inp.View);
   this.requestedMaxReferencesPerNode = inp.RequestedMaxReferencesPerNode;
-  this.nodesToBrowse = ec.jsonDecodeStructArray( inp.NodesToBrowse, BrowseDescription);
+  this.nodesToBrowse = ec.jsonDecodeStructArray( inp.NodesToBrowse,BrowseDescription);
 
  }
 
@@ -97,6 +97,6 @@ export function decodeBrowseRequest( inp: DataStream): BrowseRequest {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('BrowseRequest', BrowseRequest, new ExpandedNodeId(2 /*numeric id*/, 527, 0));

@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {MonitoredItemNotification} from './MonitoredItemNotification';
-import {decodeMonitoredItemNotification} from './MonitoredItemNotification';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
+import {MonitoredItemNotification} from '.';
+import {decodeMonitoredItemNotification} from '.';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {NotificationData} from './NotificationData';
+import {DataStream} from '../basic-types';
+import {NotificationData} from '.';
 
 export interface IDataChangeNotification {
   monitoredItems?: MonitoredItemNotification[];
@@ -57,8 +57,8 @@ export class DataChangeNotification extends NotificationData {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.monitoredItems = ec.jsonDecodeStructArray( inp.MonitoredItems, MonitoredItemNotification);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
+  this.monitoredItems = ec.jsonDecodeStructArray( inp.MonitoredItems,MonitoredItemNotification);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
 
  }
 
@@ -83,6 +83,6 @@ export function decodeDataChangeNotification( inp: DataStream): DataChangeNotifi
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('DataChangeNotification', DataChangeNotification, new ExpandedNodeId(2 /*numeric id*/, 811, 0));

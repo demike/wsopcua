@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IDeleteReferencesItem {
   sourceNodeId?: ec.NodeId;
@@ -101,6 +101,6 @@ export function decodeDeleteReferencesItem( inp: DataStream): DeleteReferencesIt
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('DeleteReferencesItem', DeleteReferencesItem, new ExpandedNodeId(2 /*numeric id*/, 387, 0));

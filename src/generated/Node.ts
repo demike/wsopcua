@@ -4,14 +4,14 @@
 */
 
 import * as ec from '../basic-types';
-import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
-import {QualifiedName} from './QualifiedName';
-import {LocalizedText} from './LocalizedText';
-import {RolePermissionType} from './RolePermissionType';
-import {decodeRolePermissionType} from './RolePermissionType';
-import {ReferenceNode} from './ReferenceNode';
-import {decodeReferenceNode} from './ReferenceNode';
-import {DataStream} from '../basic-types/DataStream';
+import {NodeClass, encodeNodeClass, decodeNodeClass} from '.';
+import {QualifiedName} from '.';
+import {LocalizedText} from '.';
+import {RolePermissionType} from '.';
+import {decodeRolePermissionType} from '.';
+import {ReferenceNode} from '.';
+import {decodeReferenceNode} from '.';
+import {DataStream} from '../basic-types';
 
 export interface INode {
   nodeId?: ec.NodeId;
@@ -119,10 +119,10 @@ if (!inp) { return; }
   this.description.fromJSON(inp.Description);
   this.writeMask = inp.WriteMask;
   this.userWriteMask = inp.UserWriteMask;
-  this.rolePermissions = ec.jsonDecodeStructArray( inp.RolePermissions, RolePermissionType);
-  this.userRolePermissions = ec.jsonDecodeStructArray( inp.UserRolePermissions, RolePermissionType);
+  this.rolePermissions = ec.jsonDecodeStructArray( inp.RolePermissions,RolePermissionType);
+  this.userRolePermissions = ec.jsonDecodeStructArray( inp.UserRolePermissions,RolePermissionType);
   this.accessRestrictions = inp.AccessRestrictions;
-  this.references = ec.jsonDecodeStructArray( inp.References, ReferenceNode);
+  this.references = ec.jsonDecodeStructArray( inp.References,ReferenceNode);
 
  }
 
@@ -156,6 +156,6 @@ export function decodeNode( inp: DataStream): Node {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('Node', Node, new ExpandedNodeId(2 /*numeric id*/, 260, 0));

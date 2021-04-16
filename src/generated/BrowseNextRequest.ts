@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
+import {RequestHeader} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IBrowseNextRequest {
   requestHeader?: RequestHeader;
@@ -86,6 +86,6 @@ export function decodeBrowseNextRequest( inp: DataStream): BrowseNextRequest {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('BrowseNextRequest', BrowseNextRequest, new ExpandedNodeId(2 /*numeric id*/, 533, 0));

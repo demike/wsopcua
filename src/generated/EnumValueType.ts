@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {LocalizedText} from './LocalizedText';
-import {DataStream} from '../basic-types/DataStream';
+import {LocalizedText} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IEnumValueType {
   value?: ec.Int64;
@@ -86,6 +86,6 @@ export function decodeEnumValueType( inp: DataStream): EnumValueType {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('EnumValueType', EnumValueType, new ExpandedNodeId(2 /*numeric id*/, 8251, 0));

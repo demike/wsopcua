@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {PermissionType, encodePermissionType, decodePermissionType} from './PermissionType';
-import {DataStream} from '../basic-types/DataStream';
+import {PermissionType, encodePermissionType, decodePermissionType} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IRolePermissionType {
   roleId?: ec.NodeId;
@@ -78,6 +78,6 @@ export function decodeRolePermissionType( inp: DataStream): RolePermissionType {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('RolePermissionType', RolePermissionType, new ExpandedNodeId(2 /*numeric id*/, 128, 0));

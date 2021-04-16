@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {NetworkAddressDataType} from './NetworkAddressDataType';
-import {INetworkAddressDataType} from './NetworkAddressDataType';
+import {DataStream} from '../basic-types';
+import {NetworkAddressDataType} from '.';
+import {INetworkAddressDataType} from '.';
 
 export interface INetworkAddressUrlDataType extends INetworkAddressDataType {
   url?: string;
@@ -76,6 +76,6 @@ export function decodeNetworkAddressUrlDataType( inp: DataStream): NetworkAddres
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('NetworkAddressUrlDataType', NetworkAddressUrlDataType, new ExpandedNodeId(2 /*numeric id*/, 21152, 0));

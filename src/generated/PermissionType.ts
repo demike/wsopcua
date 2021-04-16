@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum PermissionType {
   None = 0,
@@ -37,5 +37,5 @@ export function decodePermissionType( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('PermissionType', PermissionType, encodePermissionType , decodePermissionType , undefined);

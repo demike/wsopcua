@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../basic-types';
-import {RolePermissionType} from './RolePermissionType';
-import {decodeRolePermissionType} from './RolePermissionType';
-import {DataStream} from '../basic-types/DataStream';
-import {SubscribedDataSetDataType} from './SubscribedDataSetDataType';
+import {RolePermissionType} from '.';
+import {decodeRolePermissionType} from '.';
+import {DataStream} from '../basic-types';
+import {SubscribedDataSetDataType} from '.';
 
 export interface ISubscribedDataSetMirrorDataType {
   parentNodeName?: string;
@@ -56,7 +56,7 @@ export class SubscribedDataSetMirrorDataType extends SubscribedDataSetDataType {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.parentNodeName = inp.ParentNodeName;
-  this.rolePermissions = ec.jsonDecodeStructArray( inp.RolePermissions, RolePermissionType);
+  this.rolePermissions = ec.jsonDecodeStructArray( inp.RolePermissions,RolePermissionType);
 
  }
 
@@ -81,6 +81,6 @@ export function decodeSubscribedDataSetMirrorDataType( inp: DataStream): Subscri
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('SubscribedDataSetMirrorDataType', SubscribedDataSetMirrorDataType, new ExpandedNodeId(2 /*numeric id*/, 15713, 0));

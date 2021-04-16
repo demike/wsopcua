@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {EndpointUrlListDataType} from './EndpointUrlListDataType';
-import {decodeEndpointUrlListDataType} from './EndpointUrlListDataType';
-import {DataStream} from '../basic-types/DataStream';
+import {EndpointUrlListDataType} from '.';
+import {decodeEndpointUrlListDataType} from '.';
+import {DataStream} from '../basic-types';
 
 export interface INetworkGroupDataType {
   serverUri?: string;
@@ -54,7 +54,7 @@ export class NetworkGroupDataType {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.serverUri = inp.ServerUri;
-  this.networkPaths = ec.jsonDecodeStructArray( inp.NetworkPaths, EndpointUrlListDataType);
+  this.networkPaths = ec.jsonDecodeStructArray( inp.NetworkPaths,EndpointUrlListDataType);
 
  }
 
@@ -79,6 +79,6 @@ export function decodeNetworkGroupDataType( inp: DataStream): NetworkGroupDataTy
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('NetworkGroupDataType', NetworkGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 11958, 0));

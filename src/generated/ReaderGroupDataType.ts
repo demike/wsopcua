@@ -4,12 +4,12 @@
 */
 
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataSetReaderDataType} from './DataSetReaderDataType';
-import {decodeDataSetReaderDataType} from './DataSetReaderDataType';
+import {DataSetReaderDataType} from '.';
+import {decodeDataSetReaderDataType} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {PubSubGroupDataType} from './PubSubGroupDataType';
-import {IPubSubGroupDataType} from './PubSubGroupDataType';
+import {DataStream} from '../basic-types';
+import {PubSubGroupDataType} from '.';
+import {IPubSubGroupDataType} from '.';
 
 export interface IReaderGroupDataType extends IPubSubGroupDataType {
   transportSettings?: ExtensionObject;
@@ -68,7 +68,7 @@ if (!inp) { return; }
   super.fromJSON(inp);
   this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
   this.messageSettings = jsonDecodeExtensionObject(inp.MessageSettings);
-  this.dataSetReaders = ec.jsonDecodeStructArray( inp.DataSetReaders, DataSetReaderDataType);
+  this.dataSetReaders = ec.jsonDecodeStructArray( inp.DataSetReaders,DataSetReaderDataType);
 
  }
 
@@ -95,6 +95,6 @@ export function decodeReaderGroupDataType( inp: DataStream): ReaderGroupDataType
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ReaderGroupDataType', ReaderGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 21153, 0));

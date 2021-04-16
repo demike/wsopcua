@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IAddNodesResult {
   statusCode?: ec.StatusCode;
@@ -77,6 +77,6 @@ export function decodeAddNodesResult( inp: DataStream): AddNodesResult {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('AddNodesResult', AddNodesResult, new ExpandedNodeId(2 /*numeric id*/, 485, 0));

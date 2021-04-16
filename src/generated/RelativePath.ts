@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {RelativePathElement} from './RelativePathElement';
-import {decodeRelativePathElement} from './RelativePathElement';
+import {RelativePathElement} from '.';
+import {decodeRelativePathElement} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IRelativePath {
   elements?: RelativePathElement[];
@@ -47,7 +47,7 @@ export class RelativePath {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.elements = ec.jsonDecodeStructArray( inp.Elements, RelativePathElement);
+  this.elements = ec.jsonDecodeStructArray( inp.Elements,RelativePathElement);
 
  }
 
@@ -71,6 +71,6 @@ export function decodeRelativePath( inp: DataStream): RelativePath {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('RelativePath', RelativePath, new ExpandedNodeId(2 /*numeric id*/, 542, 0));

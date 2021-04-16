@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {DataValue} from './DataValue';
-import {decodeDataValue} from './DataValue';
+import {DataValue} from '.';
+import {decodeDataValue} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IHistoryData {
   dataValues?: DataValue[];
@@ -47,7 +47,7 @@ export class HistoryData {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.dataValues = ec.jsonDecodeStructArray( inp.DataValues, DataValue);
+  this.dataValues = ec.jsonDecodeStructArray( inp.DataValues,DataValue);
 
  }
 
@@ -71,6 +71,6 @@ export function decodeHistoryData( inp: DataStream): HistoryData {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('HistoryData', HistoryData, new ExpandedNodeId(2 /*numeric id*/, 658, 0));

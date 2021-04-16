@@ -4,12 +4,12 @@
 */
 
 import * as ec from '../basic-types';
-import {Argument} from './Argument';
-import {decodeArgument} from './Argument';
+import {Argument} from '.';
+import {decodeArgument} from '.';
 import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
-import {StatusResult} from './StatusResult';
-import {DataStream} from '../basic-types/DataStream';
+import {StatusResult} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IProgramDiagnostic2DataType {
   createSessionId?: ec.NodeId;
@@ -122,10 +122,10 @@ if (!inp) { return; }
   this.lastTransitionTime = ec.jsonDecodeDateTime(inp.LastTransitionTime);
   this.lastMethodCall = inp.LastMethodCall;
   this.lastMethodSessionId = ec.jsonDecodeNodeId(inp.LastMethodSessionId);
-  this.lastMethodInputArguments = ec.jsonDecodeStructArray( inp.LastMethodInputArguments, Argument);
-  this.lastMethodOutputArguments = ec.jsonDecodeStructArray( inp.LastMethodOutputArguments, Argument);
-  this.lastMethodInputValues = ec.jsonDecodeStructArray( inp.LastMethodInputValues, Variant);
-  this.lastMethodOutputValues = ec.jsonDecodeStructArray( inp.LastMethodOutputValues, Variant);
+  this.lastMethodInputArguments = ec.jsonDecodeStructArray( inp.LastMethodInputArguments,Argument);
+  this.lastMethodOutputArguments = ec.jsonDecodeStructArray( inp.LastMethodOutputArguments,Argument);
+  this.lastMethodInputValues = ec.jsonDecodeStructArray( inp.LastMethodInputValues,Variant);
+  this.lastMethodOutputValues = ec.jsonDecodeStructArray( inp.LastMethodOutputValues,Variant);
   this.lastMethodCallTime = ec.jsonDecodeDateTime(inp.LastMethodCallTime);
   this.lastMethodReturnStatus.fromJSON(inp.LastMethodReturnStatus);
 
@@ -162,6 +162,6 @@ export function decodeProgramDiagnostic2DataType( inp: DataStream): ProgramDiagn
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ProgramDiagnostic2DataType', ProgramDiagnostic2DataType, new ExpandedNodeId(2 /*numeric id*/, 15397, 0));

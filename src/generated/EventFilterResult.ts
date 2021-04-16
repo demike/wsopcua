@@ -4,11 +4,11 @@
 */
 
 import * as ec from '../basic-types';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
-import {ContentFilterResult} from './ContentFilterResult';
-import {DataStream} from '../basic-types/DataStream';
-import {MonitoringFilterResult} from './MonitoringFilterResult';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
+import {ContentFilterResult} from '.';
+import {DataStream} from '../basic-types';
+import {MonitoringFilterResult} from '.';
 
 export interface IEventFilterResult {
   selectClauseResults?: ec.StatusCode[];
@@ -63,7 +63,7 @@ export class EventFilterResult extends MonitoringFilterResult {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.selectClauseResults = ec.jsonDecodeArray( inp.SelectClauseResults, ec.jsonDecodeStatusCode);
-  this.selectClauseDiagnosticInfos = ec.jsonDecodeStructArray( inp.SelectClauseDiagnosticInfos, DiagnosticInfo);
+  this.selectClauseDiagnosticInfos = ec.jsonDecodeStructArray( inp.SelectClauseDiagnosticInfos,DiagnosticInfo);
   this.whereClauseResult.fromJSON(inp.WhereClauseResult);
 
  }
@@ -90,6 +90,6 @@ export function decodeEventFilterResult( inp: DataStream): EventFilterResult {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('EventFilterResult', EventFilterResult, new ExpandedNodeId(2 /*numeric id*/, 736, 0));

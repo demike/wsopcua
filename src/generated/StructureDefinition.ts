@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../basic-types';
-import {StructureType, encodeStructureType, decodeStructureType} from './StructureType';
-import {StructureField} from './StructureField';
-import {decodeStructureField} from './StructureField';
-import {DataStream} from '../basic-types/DataStream';
+import {StructureType, encodeStructureType, decodeStructureType} from '.';
+import {StructureField} from '.';
+import {decodeStructureField} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IStructureDefinition {
   defaultEncodingId?: ec.NodeId;
@@ -69,7 +69,7 @@ if (!inp) { return; }
   this.defaultEncodingId = ec.jsonDecodeNodeId(inp.DefaultEncodingId);
   this.baseDataType = ec.jsonDecodeNodeId(inp.BaseDataType);
   this.structureType = inp.StructureType;
-  this.fields = ec.jsonDecodeStructArray( inp.Fields, StructureField);
+  this.fields = ec.jsonDecodeStructArray( inp.Fields,StructureField);
 
  }
 
@@ -96,6 +96,6 @@ export function decodeStructureDefinition( inp: DataStream): StructureDefinition
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('StructureDefinition', StructureDefinition, new ExpandedNodeId(2 /*numeric id*/, 122, 0));

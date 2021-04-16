@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum NodeClass {
   Unspecified = 0,
@@ -28,5 +28,5 @@ export function decodeNodeClass( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('NodeClass', NodeClass, encodeNodeClass , decodeNodeClass , undefined);

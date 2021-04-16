@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {IdentityCriteriaType, encodeIdentityCriteriaType, decodeIdentityCriteriaType} from './IdentityCriteriaType';
+import {IdentityCriteriaType, encodeIdentityCriteriaType, decodeIdentityCriteriaType} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IIdentityMappingRuleType {
   criteriaType?: IdentityCriteriaType;
@@ -78,6 +78,6 @@ export function decodeIdentityMappingRuleType( inp: DataStream): IdentityMapping
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('IdentityMappingRuleType', IdentityMappingRuleType, new ExpandedNodeId(2 /*numeric id*/, 15736, 0));

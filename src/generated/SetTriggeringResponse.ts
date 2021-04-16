@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
+import {ResponseHeader} from '.';
 import * as ec from '../basic-types';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
-import {DataStream} from '../basic-types/DataStream';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
+import {DataStream} from '../basic-types';
 
 export interface ISetTriggeringResponse {
   responseHeader?: ResponseHeader;
@@ -74,9 +74,9 @@ export class SetTriggeringResponse {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
   this.addResults = ec.jsonDecodeArray( inp.AddResults, ec.jsonDecodeStatusCode);
-  this.addDiagnosticInfos = ec.jsonDecodeStructArray( inp.AddDiagnosticInfos, DiagnosticInfo);
+  this.addDiagnosticInfos = ec.jsonDecodeStructArray( inp.AddDiagnosticInfos,DiagnosticInfo);
   this.removeResults = ec.jsonDecodeArray( inp.RemoveResults, ec.jsonDecodeStatusCode);
-  this.removeDiagnosticInfos = ec.jsonDecodeStructArray( inp.RemoveDiagnosticInfos, DiagnosticInfo);
+  this.removeDiagnosticInfos = ec.jsonDecodeStructArray( inp.RemoveDiagnosticInfos,DiagnosticInfo);
 
  }
 
@@ -104,6 +104,6 @@ export function decodeSetTriggeringResponse( inp: DataStream): SetTriggeringResp
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('SetTriggeringResponse', SetTriggeringResponse, new ExpandedNodeId(2 /*numeric id*/, 778, 0));

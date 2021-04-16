@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum DataSetFieldContentMask {
   None = 0,
@@ -26,5 +26,5 @@ export function decodeDataSetFieldContentMask( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('DataSetFieldContentMask', DataSetFieldContentMask, encodeDataSetFieldContentMask , decodeDataSetFieldContentMask , undefined);

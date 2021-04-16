@@ -20,6 +20,6 @@ export class ReaderGroupTransportDataType {
 
 
 }
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ReaderGroupTransportDataType', ReaderGroupTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15701, 0));

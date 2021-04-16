@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {PublishedVariableDataType} from './PublishedVariableDataType';
-import {decodePublishedVariableDataType} from './PublishedVariableDataType';
+import {PublishedVariableDataType} from '.';
+import {decodePublishedVariableDataType} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {PublishedDataSetSourceDataType} from './PublishedDataSetSourceDataType';
+import {DataStream} from '../basic-types';
+import {PublishedDataSetSourceDataType} from '.';
 
 export interface IPublishedDataItemsDataType {
   publishedData?: PublishedVariableDataType[];
@@ -49,7 +49,7 @@ export class PublishedDataItemsDataType extends PublishedDataSetSourceDataType {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.publishedData = ec.jsonDecodeStructArray( inp.PublishedData, PublishedVariableDataType);
+  this.publishedData = ec.jsonDecodeStructArray( inp.PublishedData,PublishedVariableDataType);
 
  }
 
@@ -73,6 +73,6 @@ export function decodePublishedDataItemsDataType( inp: DataStream): PublishedDat
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('PublishedDataItemsDataType', PublishedDataItemsDataType, new ExpandedNodeId(2 /*numeric id*/, 15679, 0));

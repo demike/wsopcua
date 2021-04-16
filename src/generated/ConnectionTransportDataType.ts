@@ -20,6 +20,6 @@ export class ConnectionTransportDataType {
 
 
 }
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ConnectionTransportDataType', ConnectionTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15695, 0));

@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {InstanceNode} from './InstanceNode';
-import {IInstanceNode} from './InstanceNode';
+import {DataStream} from '../basic-types';
+import {InstanceNode} from '.';
+import {IInstanceNode} from '.';
 
 export interface IMethodNode extends IInstanceNode {
   executable?: boolean;
@@ -84,6 +84,6 @@ export function decodeMethodNode( inp: DataStream): MethodNode {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('MethodNode', MethodNode, new ExpandedNodeId(2 /*numeric id*/, 278, 0));

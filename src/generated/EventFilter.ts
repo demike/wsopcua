@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {SimpleAttributeOperand} from './SimpleAttributeOperand';
-import {decodeSimpleAttributeOperand} from './SimpleAttributeOperand';
-import {ContentFilter} from './ContentFilter';
+import {SimpleAttributeOperand} from '.';
+import {decodeSimpleAttributeOperand} from '.';
+import {ContentFilter} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {MonitoringFilter} from './MonitoringFilter';
+import {DataStream} from '../basic-types';
+import {MonitoringFilter} from '.';
 
 export interface IEventFilter {
   selectClauses?: SimpleAttributeOperand[];
@@ -56,7 +56,7 @@ export class EventFilter extends MonitoringFilter {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.selectClauses = ec.jsonDecodeStructArray( inp.SelectClauses, SimpleAttributeOperand);
+  this.selectClauses = ec.jsonDecodeStructArray( inp.SelectClauses,SimpleAttributeOperand);
   this.whereClause.fromJSON(inp.WhereClause);
 
  }
@@ -82,6 +82,6 @@ export function decodeEventFilter( inp: DataStream): EventFilter {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('EventFilter', EventFilter, new ExpandedNodeId(2 /*numeric id*/, 727, 0));

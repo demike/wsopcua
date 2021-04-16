@@ -4,11 +4,11 @@
 */
 
 import * as ec from '../basic-types';
-import {LocalizedText} from './LocalizedText';
-import {DataSetFieldFlags, encodeDataSetFieldFlags, decodeDataSetFieldFlags} from './DataSetFieldFlags';
-import {KeyValuePair} from './KeyValuePair';
-import {decodeKeyValuePair} from './KeyValuePair';
-import {DataStream} from '../basic-types/DataStream';
+import {LocalizedText} from '.';
+import {DataSetFieldFlags, encodeDataSetFieldFlags, decodeDataSetFieldFlags} from '.';
+import {KeyValuePair} from '.';
+import {decodeKeyValuePair} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IFieldMetaData {
   name?: string;
@@ -112,7 +112,7 @@ if (!inp) { return; }
   this.arrayDimensions = inp.ArrayDimensions;
   this.maxStringLength = inp.MaxStringLength;
   this.dataSetFieldId = inp.DataSetFieldId;
-  this.properties = ec.jsonDecodeStructArray( inp.Properties, KeyValuePair);
+  this.properties = ec.jsonDecodeStructArray( inp.Properties,KeyValuePair);
 
  }
 
@@ -145,6 +145,6 @@ export function decodeFieldMetaData( inp: DataStream): FieldMetaData {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('FieldMetaData', FieldMetaData, new ExpandedNodeId(2 /*numeric id*/, 14839, 0));

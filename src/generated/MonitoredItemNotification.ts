@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {DataValue} from './DataValue';
-import {DataStream} from '../basic-types/DataStream';
+import {DataValue} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IMonitoredItemNotification {
   clientHandle?: ec.UInt32;
@@ -78,6 +78,6 @@ export function decodeMonitoredItemNotification( inp: DataStream): MonitoredItem
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('MonitoredItemNotification', MonitoredItemNotification, new ExpandedNodeId(2 /*numeric id*/, 808, 0));

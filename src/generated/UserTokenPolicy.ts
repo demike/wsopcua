@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {UserTokenType, encodeUserTokenType, decodeUserTokenType} from './UserTokenType';
-import {DataStream} from '../basic-types/DataStream';
+import {UserTokenType, encodeUserTokenType, decodeUserTokenType} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IUserTokenPolicy {
   policyId?: string;
@@ -102,6 +102,6 @@ export function decodeUserTokenPolicy( inp: DataStream): UserTokenPolicy {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('UserTokenPolicy', UserTokenPolicy, new ExpandedNodeId(2 /*numeric id*/, 306, 0));

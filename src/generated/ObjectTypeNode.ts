@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {TypeNode} from './TypeNode';
-import {ITypeNode} from './TypeNode';
+import {DataStream} from '../basic-types';
+import {TypeNode} from '.';
+import {ITypeNode} from '.';
 
 export interface IObjectTypeNode extends ITypeNode {
   isAbstract?: boolean;
@@ -76,6 +76,6 @@ export function decodeObjectTypeNode( inp: DataStream): ObjectTypeNode {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ObjectTypeNode', ObjectTypeNode, new ExpandedNodeId(2 /*numeric id*/, 266, 0));

@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
-import {BrowsePath} from './BrowsePath';
-import {decodeBrowsePath} from './BrowsePath';
+import {RequestHeader} from '.';
+import {BrowsePath} from '.';
+import {decodeBrowsePath} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface ITranslateBrowsePathsToNodeIdsRequest {
   requestHeader?: RequestHeader;
@@ -55,7 +55,7 @@ export class TranslateBrowsePathsToNodeIdsRequest {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
-  this.browsePaths = ec.jsonDecodeStructArray( inp.BrowsePaths, BrowsePath);
+  this.browsePaths = ec.jsonDecodeStructArray( inp.BrowsePaths,BrowsePath);
 
  }
 
@@ -80,6 +80,6 @@ export function decodeTranslateBrowsePathsToNodeIdsRequest( inp: DataStream): Tr
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('TranslateBrowsePathsToNodeIdsRequest', TranslateBrowsePathsToNodeIdsRequest, new ExpandedNodeId(2 /*numeric id*/, 554, 0));

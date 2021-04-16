@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {BrokerTransportQualityOfService, encodeBrokerTransportQualityOfService, decodeBrokerTransportQualityOfService} from './BrokerTransportQualityOfService';
-import {DataStream} from '../basic-types/DataStream';
-import {WriterGroupTransportDataType} from './WriterGroupTransportDataType';
+import {BrokerTransportQualityOfService, encodeBrokerTransportQualityOfService, decodeBrokerTransportQualityOfService} from '.';
+import {DataStream} from '../basic-types';
+import {WriterGroupTransportDataType} from '.';
 
 export interface IBrokerWriterGroupTransportDataType {
   queueName?: string;
@@ -96,6 +96,6 @@ export function decodeBrokerWriterGroupTransportDataType( inp: DataStream): Brok
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('BrokerWriterGroupTransportDataType', BrokerWriterGroupTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15727, 0));

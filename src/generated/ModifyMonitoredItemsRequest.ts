@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
+import {RequestHeader} from '.';
 import * as ec from '../basic-types';
-import {TimestampsToReturn, encodeTimestampsToReturn, decodeTimestampsToReturn} from './TimestampsToReturn';
-import {MonitoredItemModifyRequest} from './MonitoredItemModifyRequest';
-import {decodeMonitoredItemModifyRequest} from './MonitoredItemModifyRequest';
-import {DataStream} from '../basic-types/DataStream';
+import {TimestampsToReturn, encodeTimestampsToReturn, decodeTimestampsToReturn} from '.';
+import {MonitoredItemModifyRequest} from '.';
+import {decodeMonitoredItemModifyRequest} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IModifyMonitoredItemsRequest {
   requestHeader?: RequestHeader;
@@ -70,7 +70,7 @@ if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
   this.subscriptionId = inp.SubscriptionId;
   this.timestampsToReturn = inp.TimestampsToReturn;
-  this.itemsToModify = ec.jsonDecodeStructArray( inp.ItemsToModify, MonitoredItemModifyRequest);
+  this.itemsToModify = ec.jsonDecodeStructArray( inp.ItemsToModify,MonitoredItemModifyRequest);
 
  }
 
@@ -97,6 +97,6 @@ export function decodeModifyMonitoredItemsRequest( inp: DataStream): ModifyMonit
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ModifyMonitoredItemsRequest', ModifyMonitoredItemsRequest, new ExpandedNodeId(2 /*numeric id*/, 763, 0));

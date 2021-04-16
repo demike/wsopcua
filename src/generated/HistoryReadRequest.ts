@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
+import {RequestHeader} from '.';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {TimestampsToReturn, encodeTimestampsToReturn, decodeTimestampsToReturn} from './TimestampsToReturn';
+import {TimestampsToReturn, encodeTimestampsToReturn, decodeTimestampsToReturn} from '.';
 import * as ec from '../basic-types';
-import {HistoryReadValueId} from './HistoryReadValueId';
-import {decodeHistoryReadValueId} from './HistoryReadValueId';
-import {DataStream} from '../basic-types/DataStream';
+import {HistoryReadValueId} from '.';
+import {decodeHistoryReadValueId} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IHistoryReadRequest {
   requestHeader?: RequestHeader;
@@ -78,7 +78,7 @@ if (!inp) { return; }
   this.historyReadDetails = jsonDecodeExtensionObject(inp.HistoryReadDetails);
   this.timestampsToReturn = inp.TimestampsToReturn;
   this.releaseContinuationPoints = inp.ReleaseContinuationPoints;
-  this.nodesToRead = ec.jsonDecodeStructArray( inp.NodesToRead, HistoryReadValueId);
+  this.nodesToRead = ec.jsonDecodeStructArray( inp.NodesToRead,HistoryReadValueId);
 
  }
 
@@ -106,6 +106,6 @@ export function decodeHistoryReadRequest( inp: DataStream): HistoryReadRequest {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('HistoryReadRequest', HistoryReadRequest, new ExpandedNodeId(2 /*numeric id*/, 664, 0));

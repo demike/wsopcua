@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
+import {ResponseHeader} from '.';
 import * as ec from '../basic-types';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
-import {DataStream} from '../basic-types/DataStream';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
+import {DataStream} from '../basic-types';
 
 export interface ISetMonitoringModeResponse {
   responseHeader?: ResponseHeader;
@@ -62,7 +62,7 @@ export class SetMonitoringModeResponse {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
   this.results = ec.jsonDecodeArray( inp.Results, ec.jsonDecodeStatusCode);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
 
  }
 
@@ -88,6 +88,6 @@ export function decodeSetMonitoringModeResponse( inp: DataStream): SetMonitoring
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('SetMonitoringModeResponse', SetMonitoringModeResponse, new ExpandedNodeId(2 /*numeric id*/, 772, 0));

@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IRationalNumber {
   numerator?: ec.Int32;
@@ -77,6 +77,6 @@ export function decodeRationalNumber( inp: DataStream): RationalNumber {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('RationalNumber', RationalNumber, new ExpandedNodeId(2 /*numeric id*/, 18815, 0));

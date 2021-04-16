@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../basic-types';
-import {LocalizedText} from './LocalizedText';
-import {decodeLocalizedText} from './LocalizedText';
-import {ApplicationType, encodeApplicationType, decodeApplicationType} from './ApplicationType';
-import {DataStream} from '../basic-types/DataStream';
+import {LocalizedText} from '.';
+import {decodeLocalizedText} from '.';
+import {ApplicationType, encodeApplicationType, decodeApplicationType} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IRegisteredServer {
   serverUri?: string;
@@ -92,7 +92,7 @@ export class RegisteredServer {
 if (!inp) { return; }
   this.serverUri = inp.ServerUri;
   this.productUri = inp.ProductUri;
-  this.serverNames = ec.jsonDecodeStructArray( inp.ServerNames, LocalizedText);
+  this.serverNames = ec.jsonDecodeStructArray( inp.ServerNames,LocalizedText);
   this.serverType = inp.ServerType;
   this.gatewayServerUri = inp.GatewayServerUri;
   this.discoveryUrls = inp.DiscoveryUrls;
@@ -128,6 +128,6 @@ export function decodeRegisteredServer( inp: DataStream): RegisteredServer {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('RegisteredServer', RegisteredServer, new ExpandedNodeId(2 /*numeric id*/, 434, 0));

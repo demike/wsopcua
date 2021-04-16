@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
-import {SubscriptionAcknowledgement} from './SubscriptionAcknowledgement';
-import {decodeSubscriptionAcknowledgement} from './SubscriptionAcknowledgement';
+import {RequestHeader} from '.';
+import {SubscriptionAcknowledgement} from '.';
+import {decodeSubscriptionAcknowledgement} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IPublishRequest {
   requestHeader?: RequestHeader;
@@ -55,7 +55,7 @@ export class PublishRequest {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
-  this.subscriptionAcknowledgements = ec.jsonDecodeStructArray( inp.SubscriptionAcknowledgements, SubscriptionAcknowledgement);
+  this.subscriptionAcknowledgements = ec.jsonDecodeStructArray( inp.SubscriptionAcknowledgements,SubscriptionAcknowledgement);
 
  }
 
@@ -80,6 +80,6 @@ export function decodePublishRequest( inp: DataStream): PublishRequest {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('PublishRequest', PublishRequest, new ExpandedNodeId(2 /*numeric id*/, 826, 0));

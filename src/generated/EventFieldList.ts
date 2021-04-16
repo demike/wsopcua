@@ -6,7 +6,7 @@
 import * as ec from '../basic-types';
 import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IEventFieldList {
   clientHandle?: ec.UInt32;
@@ -54,7 +54,7 @@ export class EventFieldList {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.clientHandle = inp.ClientHandle;
-  this.eventFields = ec.jsonDecodeStructArray( inp.EventFields, Variant);
+  this.eventFields = ec.jsonDecodeStructArray( inp.EventFields,Variant);
 
  }
 
@@ -79,6 +79,6 @@ export function decodeEventFieldList( inp: DataStream): EventFieldList {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('EventFieldList', EventFieldList, new ExpandedNodeId(2 /*numeric id*/, 919, 0));

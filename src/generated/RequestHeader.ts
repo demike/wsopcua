@@ -5,7 +5,7 @@
 
 import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IRequestHeader {
   authenticationToken?: ec.NodeId;
@@ -118,6 +118,6 @@ export function decodeRequestHeader( inp: DataStream): RequestHeader {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('RequestHeader', RequestHeader, new ExpandedNodeId(2 /*numeric id*/, 391, 0));

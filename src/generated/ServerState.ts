@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum ServerState {
   Running = 0,
@@ -27,5 +27,5 @@ export function decodeServerState( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('ServerState', ServerState, encodeServerState , decodeServerState , undefined);

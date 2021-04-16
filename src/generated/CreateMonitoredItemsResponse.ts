@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
-import {MonitoredItemCreateResult} from './MonitoredItemCreateResult';
-import {decodeMonitoredItemCreateResult} from './MonitoredItemCreateResult';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
+import {ResponseHeader} from '.';
+import {MonitoredItemCreateResult} from '.';
+import {decodeMonitoredItemCreateResult} from '.';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface ICreateMonitoredItemsResponse {
   responseHeader?: ResponseHeader;
@@ -63,8 +63,8 @@ export class CreateMonitoredItemsResponse {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
-  this.results = ec.jsonDecodeStructArray( inp.Results, MonitoredItemCreateResult);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
+  this.results = ec.jsonDecodeStructArray( inp.Results,MonitoredItemCreateResult);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
 
  }
 
@@ -90,6 +90,6 @@ export function decodeCreateMonitoredItemsResponse( inp: DataStream): CreateMoni
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('CreateMonitoredItemsResponse', CreateMonitoredItemsResponse, new ExpandedNodeId(2 /*numeric id*/, 754, 0));

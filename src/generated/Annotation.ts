@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IAnnotation {
   message?: string;
@@ -85,6 +85,6 @@ export function decodeAnnotation( inp: DataStream): Annotation {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('Annotation', Annotation, new ExpandedNodeId(2 /*numeric id*/, 893, 0));

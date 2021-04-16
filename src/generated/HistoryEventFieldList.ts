@@ -6,7 +6,7 @@
 import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IHistoryEventFieldList {
   eventFields?: Variant[];
@@ -47,7 +47,7 @@ export class HistoryEventFieldList {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.eventFields = ec.jsonDecodeStructArray( inp.EventFields, Variant);
+  this.eventFields = ec.jsonDecodeStructArray( inp.EventFields,Variant);
 
  }
 
@@ -71,6 +71,6 @@ export function decodeHistoryEventFieldList( inp: DataStream): HistoryEventField
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('HistoryEventFieldList', HistoryEventFieldList, new ExpandedNodeId(2 /*numeric id*/, 922, 0));

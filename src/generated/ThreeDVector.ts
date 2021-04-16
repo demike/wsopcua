@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {Vector} from './Vector';
+import {DataStream} from '../basic-types';
+import {Vector} from '.';
 
 export interface IThreeDVector {
   x?: ec.Double;
@@ -87,6 +87,6 @@ export function decodeThreeDVector( inp: DataStream): ThreeDVector {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ThreeDVector', ThreeDVector, new ExpandedNodeId(2 /*numeric id*/, 18817, 0));

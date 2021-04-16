@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {QualifiedName} from './QualifiedName';
+import {QualifiedName} from '.';
 import {Variant} from '../variant';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IKeyValuePair {
   key?: QualifiedName;
@@ -78,6 +78,6 @@ export function decodeKeyValuePair( inp: DataStream): KeyValuePair {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('KeyValuePair', KeyValuePair, new ExpandedNodeId(2 /*numeric id*/, 14846, 0));

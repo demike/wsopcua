@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../basic-types';
-import {QualifiedName} from './QualifiedName';
-import {decodeQualifiedName} from './QualifiedName';
-import {DataStream} from '../basic-types/DataStream';
-import {FilterOperand} from './FilterOperand';
+import {QualifiedName} from '.';
+import {decodeQualifiedName} from '.';
+import {DataStream} from '../basic-types';
+import {FilterOperand} from '.';
 
 export interface ISimpleAttributeOperand {
   typeDefinitionId?: ec.NodeId;
@@ -68,7 +68,7 @@ export class SimpleAttributeOperand extends FilterOperand {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.typeDefinitionId = ec.jsonDecodeNodeId(inp.TypeDefinitionId);
-  this.browsePath = ec.jsonDecodeStructArray( inp.BrowsePath, QualifiedName);
+  this.browsePath = ec.jsonDecodeStructArray( inp.BrowsePath,QualifiedName);
   this.attributeId = inp.AttributeId;
   this.indexRange = inp.IndexRange;
 
@@ -97,6 +97,6 @@ export function decodeSimpleAttributeOperand( inp: DataStream): SimpleAttributeO
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('SimpleAttributeOperand', SimpleAttributeOperand, new ExpandedNodeId(2 /*numeric id*/, 603, 0));

@@ -4,13 +4,13 @@
 */
 
 import * as ec from '../basic-types';
-import {LocalizedText} from './LocalizedText';
-import {FieldMetaData} from './FieldMetaData';
-import {decodeFieldMetaData} from './FieldMetaData';
-import {ConfigurationVersionDataType} from './ConfigurationVersionDataType';
-import {DataStream} from '../basic-types/DataStream';
-import {DataTypeSchemaHeader} from './DataTypeSchemaHeader';
-import {IDataTypeSchemaHeader} from './DataTypeSchemaHeader';
+import {LocalizedText} from '.';
+import {FieldMetaData} from '.';
+import {decodeFieldMetaData} from '.';
+import {ConfigurationVersionDataType} from '.';
+import {DataStream} from '../basic-types';
+import {DataTypeSchemaHeader} from '.';
+import {IDataTypeSchemaHeader} from '.';
 
 export interface IDataSetMetaDataType extends IDataTypeSchemaHeader {
   name?: string;
@@ -81,7 +81,7 @@ if (!inp) { return; }
   super.fromJSON(inp);
   this.name = inp.Name;
   this.description.fromJSON(inp.Description);
-  this.fields = ec.jsonDecodeStructArray( inp.Fields, FieldMetaData);
+  this.fields = ec.jsonDecodeStructArray( inp.Fields,FieldMetaData);
   this.dataSetClassId = inp.DataSetClassId;
   this.configurationVersion.fromJSON(inp.ConfigurationVersion);
 
@@ -112,6 +112,6 @@ export function decodeDataSetMetaDataType( inp: DataStream): DataSetMetaDataType
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('DataSetMetaDataType', DataSetMetaDataType, new ExpandedNodeId(2 /*numeric id*/, 124, 0));

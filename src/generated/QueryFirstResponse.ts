@@ -3,16 +3,16 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
-import {QueryDataSet} from './QueryDataSet';
-import {decodeQueryDataSet} from './QueryDataSet';
+import {ResponseHeader} from '.';
+import {QueryDataSet} from '.';
+import {decodeQueryDataSet} from '.';
 import * as ec from '../basic-types';
-import {ParsingResult} from './ParsingResult';
-import {decodeParsingResult} from './ParsingResult';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
-import {ContentFilterResult} from './ContentFilterResult';
-import {DataStream} from '../basic-types/DataStream';
+import {ParsingResult} from '.';
+import {decodeParsingResult} from '.';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
+import {ContentFilterResult} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IQueryFirstResponse {
   responseHeader?: ResponseHeader;
@@ -84,10 +84,10 @@ export class QueryFirstResponse {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
-  this.queryDataSets = ec.jsonDecodeStructArray( inp.QueryDataSets, QueryDataSet);
+  this.queryDataSets = ec.jsonDecodeStructArray( inp.QueryDataSets,QueryDataSet);
   this.continuationPoint = ec.jsonDecodeByteString(inp.ContinuationPoint);
-  this.parsingResults = ec.jsonDecodeStructArray( inp.ParsingResults, ParsingResult);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
+  this.parsingResults = ec.jsonDecodeStructArray( inp.ParsingResults,ParsingResult);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
   this.filterResult.fromJSON(inp.FilterResult);
 
  }
@@ -117,6 +117,6 @@ export function decodeQueryFirstResponse( inp: DataStream): QueryFirstResponse {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('QueryFirstResponse', QueryFirstResponse, new ExpandedNodeId(2 /*numeric id*/, 618, 0));

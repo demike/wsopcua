@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
-import {ViewDescription} from './ViewDescription';
-import {NodeTypeDescription} from './NodeTypeDescription';
-import {decodeNodeTypeDescription} from './NodeTypeDescription';
-import {ContentFilter} from './ContentFilter';
+import {RequestHeader} from '.';
+import {ViewDescription} from '.';
+import {NodeTypeDescription} from '.';
+import {decodeNodeTypeDescription} from '.';
+import {ContentFilter} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IQueryFirstRequest {
   requestHeader?: RequestHeader;
@@ -82,7 +82,7 @@ export class QueryFirstRequest {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
   this.view.fromJSON(inp.View);
-  this.nodeTypes = ec.jsonDecodeStructArray( inp.NodeTypes, NodeTypeDescription);
+  this.nodeTypes = ec.jsonDecodeStructArray( inp.NodeTypes,NodeTypeDescription);
   this.filter.fromJSON(inp.Filter);
   this.maxDataSetsToReturn = inp.MaxDataSetsToReturn;
   this.maxReferencesToReturn = inp.MaxReferencesToReturn;
@@ -114,6 +114,6 @@ export function decodeQueryFirstRequest( inp: DataStream): QueryFirstRequest {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('QueryFirstRequest', QueryFirstRequest, new ExpandedNodeId(2 /*numeric id*/, 615, 0));

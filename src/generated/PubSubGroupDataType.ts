@@ -4,12 +4,12 @@
 */
 
 import * as ec from '../basic-types';
-import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMode} from './MessageSecurityMode';
-import {EndpointDescription} from './EndpointDescription';
-import {decodeEndpointDescription} from './EndpointDescription';
-import {KeyValuePair} from './KeyValuePair';
-import {decodeKeyValuePair} from './KeyValuePair';
-import {DataStream} from '../basic-types/DataStream';
+import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMode} from '.';
+import {EndpointDescription} from '.';
+import {decodeEndpointDescription} from '.';
+import {KeyValuePair} from '.';
+import {decodeKeyValuePair} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IPubSubGroupDataType {
   name?: string;
@@ -90,9 +90,9 @@ if (!inp) { return; }
   this.enabled = inp.Enabled;
   this.securityMode = inp.SecurityMode;
   this.securityGroupId = inp.SecurityGroupId;
-  this.securityKeyServices = ec.jsonDecodeStructArray( inp.SecurityKeyServices, EndpointDescription);
+  this.securityKeyServices = ec.jsonDecodeStructArray( inp.SecurityKeyServices,EndpointDescription);
   this.maxNetworkMessageSize = inp.MaxNetworkMessageSize;
-  this.groupProperties = ec.jsonDecodeStructArray( inp.GroupProperties, KeyValuePair);
+  this.groupProperties = ec.jsonDecodeStructArray( inp.GroupProperties,KeyValuePair);
 
  }
 
@@ -122,6 +122,6 @@ export function decodePubSubGroupDataType( inp: DataStream): PubSubGroupDataType
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('PubSubGroupDataType', PubSubGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 15689, 0));

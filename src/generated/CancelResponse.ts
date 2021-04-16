@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
+import {ResponseHeader} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface ICancelResponse {
   responseHeader?: ResponseHeader;
@@ -78,6 +78,6 @@ export function decodeCancelResponse( inp: DataStream): CancelResponse {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('CancelResponse', CancelResponse, new ExpandedNodeId(2 /*numeric id*/, 482, 0));

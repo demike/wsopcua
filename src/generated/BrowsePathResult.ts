@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {BrowsePathTarget} from './BrowsePathTarget';
-import {decodeBrowsePathTarget} from './BrowsePathTarget';
-import {DataStream} from '../basic-types/DataStream';
+import {BrowsePathTarget} from '.';
+import {decodeBrowsePathTarget} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IBrowsePathResult {
   statusCode?: ec.StatusCode;
@@ -54,7 +54,7 @@ export class BrowsePathResult {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
-  this.targets = ec.jsonDecodeStructArray( inp.Targets, BrowsePathTarget);
+  this.targets = ec.jsonDecodeStructArray( inp.Targets,BrowsePathTarget);
 
  }
 
@@ -79,6 +79,6 @@ export function decodeBrowsePathResult( inp: DataStream): BrowsePathResult {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('BrowsePathResult', BrowsePathResult, new ExpandedNodeId(2 /*numeric id*/, 551, 0));

@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
-import {BrowseResult} from './BrowseResult';
-import {decodeBrowseResult} from './BrowseResult';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
+import {ResponseHeader} from '.';
+import {BrowseResult} from '.';
+import {decodeBrowseResult} from '.';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IBrowseNextResponse {
   responseHeader?: ResponseHeader;
@@ -63,8 +63,8 @@ export class BrowseNextResponse {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
-  this.results = ec.jsonDecodeStructArray( inp.Results, BrowseResult);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
+  this.results = ec.jsonDecodeStructArray( inp.Results,BrowseResult);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
 
  }
 
@@ -90,6 +90,6 @@ export function decodeBrowseNextResponse( inp: DataStream): BrowseNextResponse {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('BrowseNextResponse', BrowseNextResponse, new ExpandedNodeId(2 /*numeric id*/, 536, 0));

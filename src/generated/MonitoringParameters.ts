@@ -5,7 +5,7 @@
 
 import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IMonitoringParameters {
   clientHandle?: ec.UInt32;
@@ -102,6 +102,6 @@ export function decodeMonitoringParameters( inp: DataStream): MonitoringParamete
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('MonitoringParameters', MonitoringParameters, new ExpandedNodeId(2 /*numeric id*/, 742, 0));

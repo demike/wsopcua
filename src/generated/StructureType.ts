@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export enum StructureType {
   Structure = 0,
@@ -22,5 +22,5 @@ export function decodeStructureType( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory/factories_enumerations';
+import {registerEnumeration} from '../factory';
 registerEnumeration('StructureType', StructureType, encodeStructureType , decodeStructureType , undefined);

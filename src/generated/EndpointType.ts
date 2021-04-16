@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMode} from './MessageSecurityMode';
-import {DataStream} from '../basic-types/DataStream';
+import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMode} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IEndpointType {
   endpointUrl?: string;
@@ -94,6 +94,6 @@ export function decodeEndpointType( inp: DataStream): EndpointType {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('EndpointType', EndpointType, new ExpandedNodeId(2 /*numeric id*/, 15671, 0));

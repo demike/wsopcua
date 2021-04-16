@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IServerDiagnosticsSummaryDataType {
   serverViewCount?: ec.UInt32;
@@ -157,6 +157,6 @@ export function decodeServerDiagnosticsSummaryDataType( inp: DataStream): Server
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ServerDiagnosticsSummaryDataType', ServerDiagnosticsSummaryDataType, new ExpandedNodeId(2 /*numeric id*/, 861, 0));

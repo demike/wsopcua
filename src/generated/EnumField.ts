@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {EnumValueType} from './EnumValueType';
-import {IEnumValueType} from './EnumValueType';
+import {DataStream} from '../basic-types';
+import {EnumValueType} from '.';
+import {IEnumValueType} from '.';
 
 export interface IEnumField extends IEnumValueType {
   name?: string;
@@ -76,6 +76,6 @@ export function decodeEnumField( inp: DataStream): EnumField {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('EnumField', EnumField, new ExpandedNodeId(2 /*numeric id*/, 14845, 0));

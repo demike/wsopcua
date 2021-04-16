@@ -4,14 +4,14 @@
   "description": "opcua schema parser",
   "main": "index.ts",
   "dependencies": {
-    "@types/jsdom": "16.2.6",
-    "@types/node": "^14.14.31",
     "commander": "^4.0.1",
     "csv": "^2.0.0",
     "jsdom": "~16.4.0",
     "parse5": "^5.1.0"
   },
   "devDependencies": {
+    "@types/jsdom": "16.2.6",
+    "@types/node": "^14.14.31",
     "webpack": "^5.17.0",
     "webpack-cli": "^4.4.0"
   },

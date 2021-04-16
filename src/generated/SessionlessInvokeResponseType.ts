@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface ISessionlessInvokeResponseType {
   namespaceUris?: string[];
@@ -85,6 +85,6 @@ export function decodeSessionlessInvokeResponseType( inp: DataStream): Sessionle
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('SessionlessInvokeResponseType', SessionlessInvokeResponseType, new ExpandedNodeId(2 /*numeric id*/, 21001, 0));

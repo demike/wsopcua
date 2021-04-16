@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
-import {TransferResult} from './TransferResult';
-import {decodeTransferResult} from './TransferResult';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
+import {ResponseHeader} from '.';
+import {TransferResult} from '.';
+import {decodeTransferResult} from '.';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface ITransferSubscriptionsResponse {
   responseHeader?: ResponseHeader;
@@ -63,8 +63,8 @@ export class TransferSubscriptionsResponse {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
-  this.results = ec.jsonDecodeStructArray( inp.Results, TransferResult);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
+  this.results = ec.jsonDecodeStructArray( inp.Results,TransferResult);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
 
  }
 
@@ -90,6 +90,6 @@ export function decodeTransferSubscriptionsResponse( inp: DataStream): TransferS
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('TransferSubscriptionsResponse', TransferSubscriptionsResponse, new ExpandedNodeId(2 /*numeric id*/, 844, 0));

@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
+import {ResponseHeader} from '.';
 import * as ec from '../basic-types';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
-import {DataStream} from '../basic-types/DataStream';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IRegisterServer2Response {
   responseHeader?: ResponseHeader;
@@ -62,7 +62,7 @@ export class RegisterServer2Response {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
   this.configurationResults = ec.jsonDecodeArray( inp.ConfigurationResults, ec.jsonDecodeStatusCode);
-  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos, DiagnosticInfo);
+  this.diagnosticInfos = ec.jsonDecodeStructArray( inp.DiagnosticInfos,DiagnosticInfo);
 
  }
 
@@ -88,6 +88,6 @@ export function decodeRegisterServer2Response( inp: DataStream): RegisterServer2
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('RegisterServer2Response', RegisterServer2Response, new ExpandedNodeId(2 /*numeric id*/, 12212, 0));

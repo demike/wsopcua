@@ -5,7 +5,7 @@
 
 import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IMonitoredItemModifyResult {
   statusCode?: ec.StatusCode;
@@ -94,6 +94,6 @@ export function decodeMonitoredItemModifyResult( inp: DataStream): MonitoredItem
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('MonitoredItemModifyResult', MonitoredItemModifyResult, new ExpandedNodeId(2 /*numeric id*/, 760, 0));

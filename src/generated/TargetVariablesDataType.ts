@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {FieldTargetDataType} from './FieldTargetDataType';
-import {decodeFieldTargetDataType} from './FieldTargetDataType';
+import {FieldTargetDataType} from '.';
+import {decodeFieldTargetDataType} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {SubscribedDataSetDataType} from './SubscribedDataSetDataType';
+import {DataStream} from '../basic-types';
+import {SubscribedDataSetDataType} from '.';
 
 export interface ITargetVariablesDataType {
   targetVariables?: FieldTargetDataType[];
@@ -49,7 +49,7 @@ export class TargetVariablesDataType extends SubscribedDataSetDataType {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.targetVariables = ec.jsonDecodeStructArray( inp.TargetVariables, FieldTargetDataType);
+  this.targetVariables = ec.jsonDecodeStructArray( inp.TargetVariables,FieldTargetDataType);
 
  }
 
@@ -73,6 +73,6 @@ export function decodeTargetVariablesDataType( inp: DataStream): TargetVariables
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('TargetVariablesDataType', TargetVariablesDataType, new ExpandedNodeId(2 /*numeric id*/, 15712, 0));

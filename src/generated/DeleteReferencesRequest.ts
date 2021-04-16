@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
-import {DeleteReferencesItem} from './DeleteReferencesItem';
-import {decodeDeleteReferencesItem} from './DeleteReferencesItem';
+import {RequestHeader} from '.';
+import {DeleteReferencesItem} from '.';
+import {decodeDeleteReferencesItem} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IDeleteReferencesRequest {
   requestHeader?: RequestHeader;
@@ -55,7 +55,7 @@ export class DeleteReferencesRequest {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
-  this.referencesToDelete = ec.jsonDecodeStructArray( inp.ReferencesToDelete, DeleteReferencesItem);
+  this.referencesToDelete = ec.jsonDecodeStructArray( inp.ReferencesToDelete,DeleteReferencesItem);
 
  }
 
@@ -80,6 +80,6 @@ export function decodeDeleteReferencesRequest( inp: DataStream): DeleteReference
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('DeleteReferencesRequest', DeleteReferencesRequest, new ExpandedNodeId(2 /*numeric id*/, 506, 0));

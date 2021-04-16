@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface ISubscriptionAcknowledgement {
   subscriptionId?: ec.UInt32;
@@ -77,6 +77,6 @@ export function decodeSubscriptionAcknowledgement( inp: DataStream): Subscriptio
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('SubscriptionAcknowledgement', SubscriptionAcknowledgement, new ExpandedNodeId(2 /*numeric id*/, 823, 0));

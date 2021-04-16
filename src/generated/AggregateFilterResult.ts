@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {AggregateConfiguration} from './AggregateConfiguration';
-import {DataStream} from '../basic-types/DataStream';
-import {MonitoringFilterResult} from './MonitoringFilterResult';
+import {AggregateConfiguration} from '.';
+import {DataStream} from '../basic-types';
+import {MonitoringFilterResult} from '.';
 
 export interface IAggregateFilterResult {
   revisedStartTime?: Date;
@@ -88,6 +88,6 @@ export function decodeAggregateFilterResult( inp: DataStream): AggregateFilterRe
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('AggregateFilterResult', AggregateFilterResult, new ExpandedNodeId(2 /*numeric id*/, 739, 0));

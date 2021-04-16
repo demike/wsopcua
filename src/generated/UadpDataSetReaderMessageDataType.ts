@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../basic-types';
-import {UadpNetworkMessageContentMask, encodeUadpNetworkMessageContentMask, decodeUadpNetworkMessageContentMask} from './UadpNetworkMessageContentMask';
-import {UadpDataSetMessageContentMask, encodeUadpDataSetMessageContentMask, decodeUadpDataSetMessageContentMask} from './UadpDataSetMessageContentMask';
-import {DataStream} from '../basic-types/DataStream';
-import {DataSetReaderMessageDataType} from './DataSetReaderMessageDataType';
+import {UadpNetworkMessageContentMask, encodeUadpNetworkMessageContentMask, decodeUadpNetworkMessageContentMask} from '.';
+import {UadpDataSetMessageContentMask, encodeUadpDataSetMessageContentMask, decodeUadpDataSetMessageContentMask} from '.';
+import {DataStream} from '../basic-types';
+import {DataSetReaderMessageDataType} from '.';
 
 export interface IUadpDataSetReaderMessageDataType {
   groupVersion?: ec.UInt32;
@@ -137,6 +137,6 @@ export function decodeUadpDataSetReaderMessageDataType( inp: DataStream): UadpDa
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('UadpDataSetReaderMessageDataType', UadpDataSetReaderMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15718, 0));

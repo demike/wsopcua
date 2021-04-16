@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {EnumDefinition} from './EnumDefinition';
+import {EnumDefinition} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {DataTypeDescription} from './DataTypeDescription';
-import {IDataTypeDescription} from './DataTypeDescription';
+import {DataStream} from '../basic-types';
+import {DataTypeDescription} from '.';
+import {IDataTypeDescription} from '.';
 
 export interface IEnumDescription extends IDataTypeDescription {
   enumDefinition?: EnumDefinition;
@@ -85,6 +85,6 @@ export function decodeEnumDescription( inp: DataStream): EnumDescription {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('EnumDescription', EnumDescription, new ExpandedNodeId(2 /*numeric id*/, 127, 0));

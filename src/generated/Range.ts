@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IRange {
   low?: ec.Double;
@@ -77,6 +77,6 @@ export function decodeRange( inp: DataStream): Range {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('Range', Range, new ExpandedNodeId(2 /*numeric id*/, 886, 0));

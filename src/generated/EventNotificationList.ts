@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {EventFieldList} from './EventFieldList';
-import {decodeEventFieldList} from './EventFieldList';
+import {EventFieldList} from '.';
+import {decodeEventFieldList} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {NotificationData} from './NotificationData';
+import {DataStream} from '../basic-types';
+import {NotificationData} from '.';
 
 export interface IEventNotificationList {
   events?: EventFieldList[];
@@ -49,7 +49,7 @@ export class EventNotificationList extends NotificationData {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.events = ec.jsonDecodeStructArray( inp.Events, EventFieldList);
+  this.events = ec.jsonDecodeStructArray( inp.Events,EventFieldList);
 
  }
 
@@ -73,6 +73,6 @@ export function decodeEventNotificationList( inp: DataStream): EventNotification
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('EventNotificationList', EventNotificationList, new ExpandedNodeId(2 /*numeric id*/, 916, 0));

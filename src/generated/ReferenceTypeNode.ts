@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../basic-types';
-import {LocalizedText} from './LocalizedText';
-import {DataStream} from '../basic-types/DataStream';
-import {TypeNode} from './TypeNode';
-import {ITypeNode} from './TypeNode';
+import {LocalizedText} from '.';
+import {DataStream} from '../basic-types';
+import {TypeNode} from '.';
+import {ITypeNode} from '.';
 
 export interface IReferenceTypeNode extends ITypeNode {
   isAbstract?: boolean;
@@ -93,6 +93,6 @@ export function decodeReferenceTypeNode( inp: DataStream): ReferenceTypeNode {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ReferenceTypeNode', ReferenceTypeNode, new ExpandedNodeId(2 /*numeric id*/, 275, 0));

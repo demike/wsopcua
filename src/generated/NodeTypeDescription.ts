@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {QueryDataDescription} from './QueryDataDescription';
-import {decodeQueryDataDescription} from './QueryDataDescription';
-import {DataStream} from '../basic-types/DataStream';
+import {QueryDataDescription} from '.';
+import {decodeQueryDataDescription} from '.';
+import {DataStream} from '../basic-types';
 
 export interface INodeTypeDescription {
   typeDefinitionNode?: ec.ExpandedNodeId;
@@ -61,7 +61,7 @@ export class NodeTypeDescription {
 if (!inp) { return; }
   this.typeDefinitionNode = ec.jsonDecodeExpandedNodeId(inp.TypeDefinitionNode);
   this.includeSubTypes = inp.IncludeSubTypes;
-  this.dataToReturn = ec.jsonDecodeStructArray( inp.DataToReturn, QueryDataDescription);
+  this.dataToReturn = ec.jsonDecodeStructArray( inp.DataToReturn,QueryDataDescription);
 
  }
 
@@ -87,6 +87,6 @@ export function decodeNodeTypeDescription( inp: DataStream): NodeTypeDescription
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('NodeTypeDescription', NodeTypeDescription, new ExpandedNodeId(2 /*numeric id*/, 575, 0));

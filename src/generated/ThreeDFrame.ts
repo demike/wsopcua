@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {ThreeDCartesianCoordinates} from './ThreeDCartesianCoordinates';
-import {ThreeDOrientation} from './ThreeDOrientation';
-import {DataStream} from '../basic-types/DataStream';
-import {Frame} from './Frame';
+import {ThreeDCartesianCoordinates} from '.';
+import {ThreeDOrientation} from '.';
+import {DataStream} from '../basic-types';
+import {Frame} from '.';
 
 export interface IThreeDFrame {
   cartesianCoordinates?: ThreeDCartesianCoordinates;
@@ -80,6 +80,6 @@ export function decodeThreeDFrame( inp: DataStream): ThreeDFrame {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ThreeDFrame', ThreeDFrame, new ExpandedNodeId(2 /*numeric id*/, 18823, 0));

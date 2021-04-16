@@ -3,14 +3,14 @@
  do not modify, changes will be overwritten
 */
 
-import {PerformUpdateType, encodePerformUpdateType, decodePerformUpdateType} from './PerformUpdateType';
-import {EventFilter} from './EventFilter';
-import {HistoryEventFieldList} from './HistoryEventFieldList';
-import {decodeHistoryEventFieldList} from './HistoryEventFieldList';
+import {PerformUpdateType, encodePerformUpdateType, decodePerformUpdateType} from '.';
+import {EventFilter} from '.';
+import {HistoryEventFieldList} from '.';
+import {decodeHistoryEventFieldList} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {HistoryUpdateDetails} from './HistoryUpdateDetails';
-import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
+import {DataStream} from '../basic-types';
+import {HistoryUpdateDetails} from '.';
+import {IHistoryUpdateDetails} from '.';
 
 export interface IUpdateEventDetails extends IHistoryUpdateDetails {
   performInsertReplace?: PerformUpdateType;
@@ -69,7 +69,7 @@ if (!inp) { return; }
   super.fromJSON(inp);
   this.performInsertReplace = inp.PerformInsertReplace;
   this.filter.fromJSON(inp.Filter);
-  this.eventData = ec.jsonDecodeStructArray( inp.EventData, HistoryEventFieldList);
+  this.eventData = ec.jsonDecodeStructArray( inp.EventData,HistoryEventFieldList);
 
  }
 
@@ -96,6 +96,6 @@ export function decodeUpdateEventDetails( inp: DataStream): UpdateEventDetails {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('UpdateEventDetails', UpdateEventDetails, new ExpandedNodeId(2 /*numeric id*/, 685, 0));

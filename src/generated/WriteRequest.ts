@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
-import {WriteValue} from './WriteValue';
-import {decodeWriteValue} from './WriteValue';
+import {RequestHeader} from '.';
+import {WriteValue} from '.';
+import {decodeWriteValue} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IWriteRequest {
   requestHeader?: RequestHeader;
@@ -55,7 +55,7 @@ export class WriteRequest {
  fromJSON( inp: any) {
 if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
-  this.nodesToWrite = ec.jsonDecodeStructArray( inp.NodesToWrite, WriteValue);
+  this.nodesToWrite = ec.jsonDecodeStructArray( inp.NodesToWrite,WriteValue);
 
  }
 
@@ -80,6 +80,6 @@ export function decodeWriteRequest( inp: DataStream): WriteRequest {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('WriteRequest', WriteRequest, new ExpandedNodeId(2 /*numeric id*/, 673, 0));

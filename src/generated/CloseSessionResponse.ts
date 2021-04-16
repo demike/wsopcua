@@ -3,8 +3,8 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
-import {DataStream} from '../basic-types/DataStream';
+import {ResponseHeader} from '.';
+import {DataStream} from '../basic-types';
 
 export interface ICloseSessionResponse {
   responseHeader?: ResponseHeader;
@@ -69,6 +69,6 @@ export function decodeCloseSessionResponse( inp: DataStream): CloseSessionRespon
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('CloseSessionResponse', CloseSessionResponse, new ExpandedNodeId(2 /*numeric id*/, 476, 0));

@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {FilterOperator, encodeFilterOperator, decodeFilterOperator} from './FilterOperator';
+import {FilterOperator, encodeFilterOperator, decodeFilterOperator} from '.';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IContentFilterElement {
   filterOperator?: FilterOperator;
@@ -79,6 +79,6 @@ export function decodeContentFilterElement( inp: DataStream): ContentFilterEleme
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ContentFilterElement', ContentFilterElement, new ExpandedNodeId(2 /*numeric id*/, 585, 0));

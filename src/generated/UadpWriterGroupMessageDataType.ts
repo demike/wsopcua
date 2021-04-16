@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../basic-types';
-import {DataSetOrderingType, encodeDataSetOrderingType, decodeDataSetOrderingType} from './DataSetOrderingType';
-import {UadpNetworkMessageContentMask, encodeUadpNetworkMessageContentMask, decodeUadpNetworkMessageContentMask} from './UadpNetworkMessageContentMask';
-import {DataStream} from '../basic-types/DataStream';
-import {WriterGroupMessageDataType} from './WriterGroupMessageDataType';
+import {DataSetOrderingType, encodeDataSetOrderingType, decodeDataSetOrderingType} from '.';
+import {UadpNetworkMessageContentMask, encodeUadpNetworkMessageContentMask, decodeUadpNetworkMessageContentMask} from '.';
+import {DataStream} from '../basic-types';
+import {WriterGroupMessageDataType} from '.';
 
 export interface IUadpWriterGroupMessageDataType {
   groupVersion?: ec.UInt32;
@@ -105,6 +105,6 @@ export function decodeUadpWriterGroupMessageDataType( inp: DataStream): UadpWrit
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('UadpWriterGroupMessageDataType', UadpWriterGroupMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15715, 0));

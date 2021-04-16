@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {EventFilter} from './EventFilter';
-import {DataStream} from '../basic-types/DataStream';
-import {HistoryReadDetails} from './HistoryReadDetails';
+import {EventFilter} from '.';
+import {DataStream} from '../basic-types';
+import {HistoryReadDetails} from '.';
 
 export interface IReadEventDetails {
   numValuesPerNode?: ec.UInt32;
@@ -96,6 +96,6 @@ export function decodeReadEventDetails( inp: DataStream): ReadEventDetails {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ReadEventDetails', ReadEventDetails, new ExpandedNodeId(2 /*numeric id*/, 646, 0));

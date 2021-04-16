@@ -4,11 +4,11 @@
 */
 
 import * as ec from '../basic-types';
-import {DiagnosticInfo} from './DiagnosticInfo';
-import {decodeDiagnosticInfo} from './DiagnosticInfo';
+import {DiagnosticInfo} from '.';
+import {decodeDiagnosticInfo} from '.';
 import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface ICallMethodResult {
   statusCode?: ec.StatusCode;
@@ -69,8 +69,8 @@ export class CallMethodResult {
 if (!inp) { return; }
   this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);
   this.inputArgumentResults = ec.jsonDecodeArray( inp.InputArgumentResults, ec.jsonDecodeStatusCode);
-  this.inputArgumentDiagnosticInfos = ec.jsonDecodeStructArray( inp.InputArgumentDiagnosticInfos, DiagnosticInfo);
-  this.outputArguments = ec.jsonDecodeStructArray( inp.OutputArguments, Variant);
+  this.inputArgumentDiagnosticInfos = ec.jsonDecodeStructArray( inp.InputArgumentDiagnosticInfos,DiagnosticInfo);
+  this.outputArguments = ec.jsonDecodeStructArray( inp.OutputArguments,Variant);
 
  }
 
@@ -97,6 +97,6 @@ export function decodeCallMethodResult( inp: DataStream): CallMethodResult {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('CallMethodResult', CallMethodResult, new ExpandedNodeId(2 /*numeric id*/, 709, 0));

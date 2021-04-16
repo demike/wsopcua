@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from './ResponseHeader';
+import {ResponseHeader} from '.';
 import * as ec from '../basic-types';
-import {ServerOnNetwork} from './ServerOnNetwork';
-import {decodeServerOnNetwork} from './ServerOnNetwork';
-import {DataStream} from '../basic-types/DataStream';
+import {ServerOnNetwork} from '.';
+import {decodeServerOnNetwork} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IFindServersOnNetworkResponse {
   responseHeader?: ResponseHeader;
@@ -62,7 +62,7 @@ export class FindServersOnNetworkResponse {
 if (!inp) { return; }
   this.responseHeader.fromJSON(inp.ResponseHeader);
   this.lastCounterResetTime = ec.jsonDecodeDateTime(inp.LastCounterResetTime);
-  this.servers = ec.jsonDecodeStructArray( inp.Servers, ServerOnNetwork);
+  this.servers = ec.jsonDecodeStructArray( inp.Servers,ServerOnNetwork);
 
  }
 
@@ -88,6 +88,6 @@ export function decodeFindServersOnNetworkResponse( inp: DataStream): FindServer
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('FindServersOnNetworkResponse', FindServersOnNetworkResponse, new ExpandedNodeId(2 /*numeric id*/, 12209, 0));

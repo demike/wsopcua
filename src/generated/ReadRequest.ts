@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from './RequestHeader';
+import {RequestHeader} from '.';
 import * as ec from '../basic-types';
-import {TimestampsToReturn, encodeTimestampsToReturn, decodeTimestampsToReturn} from './TimestampsToReturn';
-import {ReadValueId} from './ReadValueId';
-import {decodeReadValueId} from './ReadValueId';
-import {DataStream} from '../basic-types/DataStream';
+import {TimestampsToReturn, encodeTimestampsToReturn, decodeTimestampsToReturn} from '.';
+import {ReadValueId} from '.';
+import {decodeReadValueId} from '.';
+import {DataStream} from '../basic-types';
 
 export interface IReadRequest {
   requestHeader?: RequestHeader;
@@ -70,7 +70,7 @@ if (!inp) { return; }
   this.requestHeader.fromJSON(inp.RequestHeader);
   this.maxAge = inp.MaxAge;
   this.timestampsToReturn = inp.TimestampsToReturn;
-  this.nodesToRead = ec.jsonDecodeStructArray( inp.NodesToRead, ReadValueId);
+  this.nodesToRead = ec.jsonDecodeStructArray( inp.NodesToRead,ReadValueId);
 
  }
 
@@ -97,6 +97,6 @@ export function decodeReadRequest( inp: DataStream): ReadRequest {
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ReadRequest', ReadRequest, new ExpandedNodeId(2 /*numeric id*/, 631, 0));

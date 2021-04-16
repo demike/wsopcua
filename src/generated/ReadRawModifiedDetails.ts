@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {HistoryReadDetails} from './HistoryReadDetails';
+import {DataStream} from '../basic-types';
+import {HistoryReadDetails} from '.';
 
 export interface IReadRawModifiedDetails {
   isReadModified?: boolean;
@@ -103,6 +103,6 @@ export function decodeReadRawModifiedDetails( inp: DataStream): ReadRawModifiedD
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('ReadRawModifiedDetails', ReadRawModifiedDetails, new ExpandedNodeId(2 /*numeric id*/, 649, 0));

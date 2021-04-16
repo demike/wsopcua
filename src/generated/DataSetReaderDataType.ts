@@ -5,15 +5,15 @@
 
 import * as ec from '../basic-types';
 import {Variant} from '../variant';
-import {DataSetMetaDataType} from './DataSetMetaDataType';
-import {DataSetFieldContentMask, encodeDataSetFieldContentMask, decodeDataSetFieldContentMask} from './DataSetFieldContentMask';
-import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMode} from './MessageSecurityMode';
-import {EndpointDescription} from './EndpointDescription';
-import {decodeEndpointDescription} from './EndpointDescription';
-import {KeyValuePair} from './KeyValuePair';
-import {decodeKeyValuePair} from './KeyValuePair';
+import {DataSetMetaDataType} from '.';
+import {DataSetFieldContentMask, encodeDataSetFieldContentMask, decodeDataSetFieldContentMask} from '.';
+import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMode} from '.';
+import {EndpointDescription} from '.';
+import {decodeEndpointDescription} from '.';
+import {KeyValuePair} from '.';
+import {decodeKeyValuePair} from '.';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IDataSetReaderDataType {
   name?: string;
@@ -162,8 +162,8 @@ if (!inp) { return; }
   this.headerLayoutUri = inp.HeaderLayoutUri;
   this.securityMode = inp.SecurityMode;
   this.securityGroupId = inp.SecurityGroupId;
-  this.securityKeyServices = ec.jsonDecodeStructArray( inp.SecurityKeyServices, EndpointDescription);
-  this.dataSetReaderProperties = ec.jsonDecodeStructArray( inp.DataSetReaderProperties, KeyValuePair);
+  this.securityKeyServices = ec.jsonDecodeStructArray( inp.SecurityKeyServices,EndpointDescription);
+  this.dataSetReaderProperties = ec.jsonDecodeStructArray( inp.DataSetReaderProperties,KeyValuePair);
   this.transportSettings = jsonDecodeExtensionObject(inp.TransportSettings);
   this.messageSettings = jsonDecodeExtensionObject(inp.MessageSettings);
   this.subscribedDataSet = jsonDecodeExtensionObject(inp.SubscribedDataSet);
@@ -206,6 +206,6 @@ export function decodeDataSetReaderDataType( inp: DataStream): DataSetReaderData
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('DataSetReaderDataType', DataSetReaderDataType, new ExpandedNodeId(2 /*numeric id*/, 15703, 0));

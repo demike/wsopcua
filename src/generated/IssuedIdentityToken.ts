@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {UserIdentityToken} from './UserIdentityToken';
-import {IUserIdentityToken} from './UserIdentityToken';
+import {DataStream} from '../basic-types';
+import {UserIdentityToken} from '.';
+import {IUserIdentityToken} from '.';
 
 export interface IIssuedIdentityToken extends IUserIdentityToken {
   tokenData?: Uint8Array;
@@ -84,6 +84,6 @@ export function decodeIssuedIdentityToken( inp: DataStream): IssuedIdentityToken
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('IssuedIdentityToken', IssuedIdentityToken, new ExpandedNodeId(2 /*numeric id*/, 940, 0));

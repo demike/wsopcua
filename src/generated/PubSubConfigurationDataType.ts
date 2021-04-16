@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {PublishedDataSetDataType} from './PublishedDataSetDataType';
-import {decodePublishedDataSetDataType} from './PublishedDataSetDataType';
-import {PubSubConnectionDataType} from './PubSubConnectionDataType';
-import {decodePubSubConnectionDataType} from './PubSubConnectionDataType';
+import {PublishedDataSetDataType} from '.';
+import {decodePublishedDataSetDataType} from '.';
+import {PubSubConnectionDataType} from '.';
+import {decodePubSubConnectionDataType} from '.';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import {DataStream} from '../basic-types';
 
 export interface IPubSubConfigurationDataType {
   publishedDataSets?: PublishedDataSetDataType[];
@@ -61,8 +61,8 @@ export class PubSubConfigurationDataType {
 
  fromJSON( inp: any) {
 if (!inp) { return; }
-  this.publishedDataSets = ec.jsonDecodeStructArray( inp.PublishedDataSets, PublishedDataSetDataType);
-  this.connections = ec.jsonDecodeStructArray( inp.Connections, PubSubConnectionDataType);
+  this.publishedDataSets = ec.jsonDecodeStructArray( inp.PublishedDataSets,PublishedDataSetDataType);
+  this.connections = ec.jsonDecodeStructArray( inp.Connections,PubSubConnectionDataType);
   this.enabled = inp.Enabled;
 
  }
@@ -89,6 +89,6 @@ export function decodePubSubConfigurationDataType( inp: DataStream): PubSubConfi
 
 
 
-import {register_class_definition} from '../factory/factories_factories';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {register_class_definition} from '../factory';
+import { ExpandedNodeId } from '../nodeid';
 register_class_definition('PubSubConfigurationDataType', PubSubConfigurationDataType, new ExpandedNodeId(2 /*numeric id*/, 21154, 0));
