@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from '.';
-import {QueryDataSet} from '.';
-import {decodeQueryDataSet} from '.';
+import {ResponseHeader} from './ResponseHeader';
+import {QueryDataSet} from './QueryDataSet';
+import {decodeQueryDataSet} from './QueryDataSet';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IQueryNextResponse {
   responseHeader?: ResponseHeader;
@@ -88,6 +88,6 @@ export function decodeQueryNextResponse( inp: DataStream): QueryNextResponse {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('QueryNextResponse', QueryNextResponse, new ExpandedNodeId(2 /*numeric id*/, 624, 0));

@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum ExceptionDeviationFormat {
   AbsoluteValue = 0,
@@ -24,5 +24,5 @@ export function decodeExceptionDeviationFormat( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('ExceptionDeviationFormat', ExceptionDeviationFormat, encodeExceptionDeviationFormat , decodeExceptionDeviationFormat , undefined);

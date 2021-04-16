@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {HistoryUpdateType, encodeHistoryUpdateType, decodeHistoryUpdateType} from '.';
-import {DataStream} from '../basic-types';
+import {HistoryUpdateType, encodeHistoryUpdateType, decodeHistoryUpdateType} from './HistoryUpdateType';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IModificationInfo {
   modificationTime?: Date;
@@ -86,6 +86,6 @@ export function decodeModificationInfo( inp: DataStream): ModificationInfo {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ModificationInfo', ModificationInfo, new ExpandedNodeId(2 /*numeric id*/, 11226, 0));

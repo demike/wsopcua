@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {JsonNetworkMessageContentMask, encodeJsonNetworkMessageContentMask, decodeJsonNetworkMessageContentMask} from '.';
-import {JsonDataSetMessageContentMask, encodeJsonDataSetMessageContentMask, decodeJsonDataSetMessageContentMask} from '.';
-import {DataStream} from '../basic-types';
-import {DataSetReaderMessageDataType} from '.';
+import {JsonNetworkMessageContentMask, encodeJsonNetworkMessageContentMask, decodeJsonNetworkMessageContentMask} from './JsonNetworkMessageContentMask';
+import {JsonDataSetMessageContentMask, encodeJsonDataSetMessageContentMask, decodeJsonDataSetMessageContentMask} from './JsonDataSetMessageContentMask';
+import {DataStream} from '../basic-types/DataStream';
+import {DataSetReaderMessageDataType} from './DataSetReaderMessageDataType';
 
 export interface IJsonDataSetReaderMessageDataType {
   networkMessageContentMask?: JsonNetworkMessageContentMask;
@@ -80,6 +80,6 @@ export function decodeJsonDataSetReaderMessageDataType( inp: DataStream): JsonDa
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('JsonDataSetReaderMessageDataType', JsonDataSetReaderMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15725, 0));

@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {DataTypeDescription} from '.';
-import {IDataTypeDescription} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {DataTypeDescription} from './DataTypeDescription';
+import {IDataTypeDescription} from './DataTypeDescription';
 
 export interface ISimpleTypeDescription extends IDataTypeDescription {
   baseDataType?: ec.NodeId;
@@ -84,6 +84,6 @@ export function decodeSimpleTypeDescription( inp: DataStream): SimpleTypeDescrip
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('SimpleTypeDescription', SimpleTypeDescription, new ExpandedNodeId(2 /*numeric id*/, 15421, 0));

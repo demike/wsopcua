@@ -4,12 +4,12 @@
 */
 
 import * as ec from '../basic-types';
-import {KeyValuePair} from '.';
-import {decodeKeyValuePair} from '.';
+import {KeyValuePair} from './KeyValuePair';
+import {decodeKeyValuePair} from './KeyValuePair';
 import {Variant} from '../variant';
-import {DataStream} from '../basic-types';
-import {DataTypeSchemaHeader} from '.';
-import {IDataTypeSchemaHeader} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {DataTypeSchemaHeader} from './DataTypeSchemaHeader';
+import {IDataTypeSchemaHeader} from './DataTypeSchemaHeader';
 
 export interface IUABinaryFileDataType extends IDataTypeSchemaHeader {
   schemaLocation?: string;
@@ -95,6 +95,6 @@ export function decodeUABinaryFileDataType( inp: DataStream): UABinaryFileDataTy
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('UABinaryFileDataType', UABinaryFileDataType, new ExpandedNodeId(2 /*numeric id*/, 15422, 0));

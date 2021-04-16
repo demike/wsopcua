@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum TimestampsToReturn {
   Source = 0,
@@ -24,5 +24,5 @@ export function decodeTimestampsToReturn( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('TimestampsToReturn', TimestampsToReturn, encodeTimestampsToReturn , decodeTimestampsToReturn , undefined);

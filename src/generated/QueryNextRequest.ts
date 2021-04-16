@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
+import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IQueryNextRequest {
   requestHeader?: RequestHeader;
@@ -86,6 +86,6 @@ export function decodeQueryNextRequest( inp: DataStream): QueryNextRequest {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('QueryNextRequest', QueryNextRequest, new ExpandedNodeId(2 /*numeric id*/, 621, 0));

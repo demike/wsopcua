@@ -5,7 +5,7 @@
 
 import {Variant} from '../variant';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IDataValue {
   value?: Variant;
@@ -151,6 +151,6 @@ export function decodeDataValue( inp: DataStream): DataValue {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('DataValue', DataValue, new ExpandedNodeId(2 /*numeric id*/, 23, 0));

@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {HistoryUpdateDetails} from '.';
-import {IHistoryUpdateDetails} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {HistoryUpdateDetails} from './HistoryUpdateDetails';
+import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
 export interface IDeleteEventDetails extends IHistoryUpdateDetails {
   eventIds?: Uint8Array[];
@@ -76,6 +76,6 @@ export function decodeDeleteEventDetails( inp: DataStream): DeleteEventDetails {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('DeleteEventDetails', DeleteEventDetails, new ExpandedNodeId(2 /*numeric id*/, 694, 0));

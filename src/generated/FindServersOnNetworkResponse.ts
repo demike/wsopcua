@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from '.';
+import {ResponseHeader} from './ResponseHeader';
 import * as ec from '../basic-types';
-import {ServerOnNetwork} from '.';
-import {decodeServerOnNetwork} from '.';
-import {DataStream} from '../basic-types';
+import {ServerOnNetwork} from './ServerOnNetwork';
+import {decodeServerOnNetwork} from './ServerOnNetwork';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IFindServersOnNetworkResponse {
   responseHeader?: ResponseHeader;
@@ -88,6 +88,6 @@ export function decodeFindServersOnNetworkResponse( inp: DataStream): FindServer
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('FindServersOnNetworkResponse', FindServersOnNetworkResponse, new ExpandedNodeId(2 /*numeric id*/, 12209, 0));

@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {ServerState, encodeServerState, decodeServerState} from '.';
-import {DataStream} from '../basic-types';
+import {ServerState, encodeServerState, decodeServerState} from './ServerState';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IRedundantServerDataType {
   serverId?: string;
@@ -86,6 +86,6 @@ export function decodeRedundantServerDataType( inp: DataStream): RedundantServer
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('RedundantServerDataType', RedundantServerDataType, new ExpandedNodeId(2 /*numeric id*/, 855, 0));

@@ -5,9 +5,9 @@
 
 import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataStream} from '../basic-types';
-import {TypeNode} from '.';
-import {ITypeNode} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {TypeNode} from './TypeNode';
+import {ITypeNode} from './TypeNode';
 
 export interface IDataTypeNode extends ITypeNode {
   isAbstract?: boolean;
@@ -85,6 +85,6 @@ export function decodeDataTypeNode( inp: DataStream): DataTypeNode {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('DataTypeNode', DataTypeNode, new ExpandedNodeId(2 /*numeric id*/, 284, 0));

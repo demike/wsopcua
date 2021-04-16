@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
-import {WriteValue} from '.';
-import {decodeWriteValue} from '.';
+import {RequestHeader} from './RequestHeader';
+import {WriteValue} from './WriteValue';
+import {decodeWriteValue} from './WriteValue';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IWriteRequest {
   requestHeader?: RequestHeader;
@@ -80,6 +80,6 @@ export function decodeWriteRequest( inp: DataStream): WriteRequest {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('WriteRequest', WriteRequest, new ExpandedNodeId(2 /*numeric id*/, 673, 0));

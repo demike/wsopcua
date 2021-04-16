@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {RelativePath} from '.';
+import {RelativePath} from './RelativePath';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IQueryDataDescription {
   relativePath?: RelativePath;
@@ -86,6 +86,6 @@ export function decodeQueryDataDescription( inp: DataStream): QueryDataDescripti
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('QueryDataDescription', QueryDataDescription, new ExpandedNodeId(2 /*numeric id*/, 572, 0));

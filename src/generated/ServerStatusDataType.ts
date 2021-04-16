@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../basic-types';
-import {ServerState, encodeServerState, decodeServerState} from '.';
-import {BuildInfo} from '.';
-import {LocalizedText} from '.';
-import {DataStream} from '../basic-types';
+import {ServerState, encodeServerState, decodeServerState} from './ServerState';
+import {BuildInfo} from './BuildInfo';
+import {LocalizedText} from './LocalizedText';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IServerStatusDataType {
   startTime?: Date;
@@ -112,6 +112,6 @@ export function decodeServerStatusDataType( inp: DataStream): ServerStatusDataTy
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ServerStatusDataType', ServerStatusDataType, new ExpandedNodeId(2 /*numeric id*/, 864, 0));

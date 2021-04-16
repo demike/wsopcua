@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IDoubleComplexNumberType {
   real?: ec.Double;
@@ -77,6 +77,6 @@ export function decodeDoubleComplexNumberType( inp: DataStream): DoubleComplexNu
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('DoubleComplexNumberType', DoubleComplexNumberType, new ExpandedNodeId(2 /*numeric id*/, 12182, 0));

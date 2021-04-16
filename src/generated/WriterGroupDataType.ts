@@ -5,11 +5,11 @@
 
 import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataSetWriterDataType} from '.';
-import {decodeDataSetWriterDataType} from '.';
-import {DataStream} from '../basic-types';
-import {PubSubGroupDataType} from '.';
-import {IPubSubGroupDataType} from '.';
+import {DataSetWriterDataType} from './DataSetWriterDataType';
+import {decodeDataSetWriterDataType} from './DataSetWriterDataType';
+import {DataStream} from '../basic-types/DataStream';
+import {PubSubGroupDataType} from './PubSubGroupDataType';
+import {IPubSubGroupDataType} from './PubSubGroupDataType';
 
 export interface IWriterGroupDataType extends IPubSubGroupDataType {
   writerGroupId?: ec.UInt16;
@@ -143,6 +143,6 @@ export function decodeWriterGroupDataType( inp: DataStream): WriterGroupDataType
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('WriterGroupDataType', WriterGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 21150, 0));

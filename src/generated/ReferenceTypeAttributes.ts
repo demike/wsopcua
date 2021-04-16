@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../basic-types';
-import {LocalizedText} from '.';
-import {DataStream} from '../basic-types';
-import {NodeAttributes} from '.';
-import {INodeAttributes} from '.';
+import {LocalizedText} from './LocalizedText';
+import {DataStream} from '../basic-types/DataStream';
+import {NodeAttributes} from './NodeAttributes';
+import {INodeAttributes} from './NodeAttributes';
 
 export interface IReferenceTypeAttributes extends INodeAttributes {
   isAbstract?: boolean;
@@ -93,6 +93,6 @@ export function decodeReferenceTypeAttributes( inp: DataStream): ReferenceTypeAt
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ReferenceTypeAttributes', ReferenceTypeAttributes, new ExpandedNodeId(2 /*numeric id*/, 369, 0));

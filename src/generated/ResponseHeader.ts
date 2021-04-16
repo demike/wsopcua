@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DiagnosticInfo} from '.';
+import {DiagnosticInfo} from './DiagnosticInfo';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IResponseHeader {
   timestamp?: Date;
@@ -111,6 +111,6 @@ export function decodeResponseHeader( inp: DataStream): ResponseHeader {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ResponseHeader', ResponseHeader, new ExpandedNodeId(2 /*numeric id*/, 394, 0));

@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
+import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
-import {TimestampsToReturn, encodeTimestampsToReturn, decodeTimestampsToReturn} from '.';
-import {MonitoredItemCreateRequest} from '.';
-import {decodeMonitoredItemCreateRequest} from '.';
-import {DataStream} from '../basic-types';
+import {TimestampsToReturn, encodeTimestampsToReturn, decodeTimestampsToReturn} from './TimestampsToReturn';
+import {MonitoredItemCreateRequest} from './MonitoredItemCreateRequest';
+import {decodeMonitoredItemCreateRequest} from './MonitoredItemCreateRequest';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface ICreateMonitoredItemsRequest {
   requestHeader?: RequestHeader;
@@ -97,6 +97,6 @@ export function decodeCreateMonitoredItemsRequest( inp: DataStream): CreateMonit
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('CreateMonitoredItemsRequest', CreateMonitoredItemsRequest, new ExpandedNodeId(2 /*numeric id*/, 751, 0));

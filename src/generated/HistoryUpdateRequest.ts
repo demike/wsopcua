@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
+import {RequestHeader} from './RequestHeader';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryUpdateRequest {
   requestHeader?: RequestHeader;
@@ -79,6 +79,6 @@ export function decodeHistoryUpdateRequest( inp: DataStream): HistoryUpdateReque
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('HistoryUpdateRequest', HistoryUpdateRequest, new ExpandedNodeId(2 /*numeric id*/, 700, 0));

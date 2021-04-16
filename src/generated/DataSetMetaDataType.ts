@@ -4,13 +4,13 @@
 */
 
 import * as ec from '../basic-types';
-import {LocalizedText} from '.';
-import {FieldMetaData} from '.';
-import {decodeFieldMetaData} from '.';
-import {ConfigurationVersionDataType} from '.';
-import {DataStream} from '../basic-types';
-import {DataTypeSchemaHeader} from '.';
-import {IDataTypeSchemaHeader} from '.';
+import {LocalizedText} from './LocalizedText';
+import {FieldMetaData} from './FieldMetaData';
+import {decodeFieldMetaData} from './FieldMetaData';
+import {ConfigurationVersionDataType} from './ConfigurationVersionDataType';
+import {DataStream} from '../basic-types/DataStream';
+import {DataTypeSchemaHeader} from './DataTypeSchemaHeader';
+import {IDataTypeSchemaHeader} from './DataTypeSchemaHeader';
 
 export interface IDataSetMetaDataType extends IDataTypeSchemaHeader {
   name?: string;
@@ -112,6 +112,6 @@ export function decodeDataSetMetaDataType( inp: DataStream): DataSetMetaDataType
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('DataSetMetaDataType', DataSetMetaDataType, new ExpandedNodeId(2 /*numeric id*/, 124, 0));

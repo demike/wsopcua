@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {HistoryReadDetails} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {HistoryReadDetails} from './HistoryReadDetails';
 
 export interface IReadAtTimeDetails {
   reqTimes?: Date[];
@@ -79,6 +79,6 @@ export function decodeReadAtTimeDetails( inp: DataStream): ReadAtTimeDetails {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ReadAtTimeDetails', ReadAtTimeDetails, new ExpandedNodeId(2 /*numeric id*/, 655, 0));

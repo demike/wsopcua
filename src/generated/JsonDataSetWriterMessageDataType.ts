@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {JsonDataSetMessageContentMask, encodeJsonDataSetMessageContentMask, decodeJsonDataSetMessageContentMask} from '.';
-import {DataStream} from '../basic-types';
-import {DataSetWriterMessageDataType} from '.';
+import {JsonDataSetMessageContentMask, encodeJsonDataSetMessageContentMask, decodeJsonDataSetMessageContentMask} from './JsonDataSetMessageContentMask';
+import {DataStream} from '../basic-types/DataStream';
+import {DataSetWriterMessageDataType} from './DataSetWriterMessageDataType';
 
 export interface IJsonDataSetWriterMessageDataType {
   dataSetMessageContentMask?: JsonDataSetMessageContentMask;
@@ -71,6 +71,6 @@ export function decodeJsonDataSetWriterMessageDataType( inp: DataStream): JsonDa
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('JsonDataSetWriterMessageDataType', JsonDataSetWriterMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15724, 0));

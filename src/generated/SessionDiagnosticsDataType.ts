@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {ApplicationDescription} from '.';
-import {ServiceCounterDataType} from '.';
-import {DataStream} from '../basic-types';
+import {ApplicationDescription} from './ApplicationDescription';
+import {ServiceCounterDataType} from './ServiceCounterDataType';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface ISessionDiagnosticsDataType {
   sessionId?: ec.NodeId;
@@ -407,6 +407,6 @@ export function decodeSessionDiagnosticsDataType( inp: DataStream): SessionDiagn
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('SessionDiagnosticsDataType', SessionDiagnosticsDataType, new ExpandedNodeId(2 /*numeric id*/, 867, 0));

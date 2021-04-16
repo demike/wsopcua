@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum OpenFileMode {
   Read = 1,
@@ -23,5 +23,5 @@ export function decodeOpenFileMode( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('OpenFileMode', OpenFileMode, encodeOpenFileMode , decodeOpenFileMode , undefined);

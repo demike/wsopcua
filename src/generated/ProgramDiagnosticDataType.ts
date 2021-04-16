@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../basic-types';
-import {Argument} from '.';
-import {decodeArgument} from '.';
-import {StatusResult} from '.';
-import {DataStream} from '../basic-types';
+import {Argument} from './Argument';
+import {decodeArgument} from './Argument';
+import {StatusResult} from './StatusResult';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IProgramDiagnosticDataType {
   createSessionId?: ec.NodeId;
@@ -144,6 +144,6 @@ export function decodeProgramDiagnosticDataType( inp: DataStream): ProgramDiagno
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ProgramDiagnosticDataType', ProgramDiagnosticDataType, new ExpandedNodeId(2 /*numeric id*/, 896, 0));

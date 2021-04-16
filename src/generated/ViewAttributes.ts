@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {NodeAttributes} from '.';
-import {INodeAttributes} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {NodeAttributes} from './NodeAttributes';
+import {INodeAttributes} from './NodeAttributes';
 
 export interface IViewAttributes extends INodeAttributes {
   containsNoLoops?: boolean;
@@ -84,6 +84,6 @@ export function decodeViewAttributes( inp: DataStream): ViewAttributes {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ViewAttributes', ViewAttributes, new ExpandedNodeId(2 /*numeric id*/, 375, 0));

@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum SecurityTokenRequestType {
   Issue = 0,
@@ -21,5 +21,5 @@ export function decodeSecurityTokenRequestType( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('SecurityTokenRequestType', SecurityTokenRequestType, encodeSecurityTokenRequestType , decodeSecurityTokenRequestType , undefined);

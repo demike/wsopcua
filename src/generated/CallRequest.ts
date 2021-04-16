@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
-import {CallMethodRequest} from '.';
-import {decodeCallMethodRequest} from '.';
+import {RequestHeader} from './RequestHeader';
+import {CallMethodRequest} from './CallMethodRequest';
+import {decodeCallMethodRequest} from './CallMethodRequest';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface ICallRequest {
   requestHeader?: RequestHeader;
@@ -80,6 +80,6 @@ export function decodeCallRequest( inp: DataStream): CallRequest {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('CallRequest', CallRequest, new ExpandedNodeId(2 /*numeric id*/, 712, 0));

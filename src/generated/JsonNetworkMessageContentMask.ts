@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum JsonNetworkMessageContentMask {
   None = 0,
@@ -26,5 +26,5 @@ export function decodeJsonNetworkMessageContentMask( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('JsonNetworkMessageContentMask', JsonNetworkMessageContentMask, encodeJsonNetworkMessageContentMask , decodeJsonNetworkMessageContentMask , undefined);

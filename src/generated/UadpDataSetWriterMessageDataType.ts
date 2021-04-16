@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {UadpDataSetMessageContentMask, encodeUadpDataSetMessageContentMask, decodeUadpDataSetMessageContentMask} from '.';
+import {UadpDataSetMessageContentMask, encodeUadpDataSetMessageContentMask, decodeUadpDataSetMessageContentMask} from './UadpDataSetMessageContentMask';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {DataSetWriterMessageDataType} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {DataSetWriterMessageDataType} from './DataSetWriterMessageDataType';
 
 export interface IUadpDataSetWriterMessageDataType {
   dataSetMessageContentMask?: UadpDataSetMessageContentMask;
@@ -96,6 +96,6 @@ export function decodeUadpDataSetWriterMessageDataType( inp: DataStream): UadpDa
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('UadpDataSetWriterMessageDataType', UadpDataSetWriterMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15717, 0));

@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {FilterOperand} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {FilterOperand} from './FilterOperand';
 
 export interface IElementOperand {
   index?: ec.UInt32;
@@ -71,6 +71,6 @@ export function decodeElementOperand( inp: DataStream): ElementOperand {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ElementOperand', ElementOperand, new ExpandedNodeId(2 /*numeric id*/, 594, 0));

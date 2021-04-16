@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum AccessLevelType {
   None = 0,
@@ -27,5 +27,5 @@ export function decodeAccessLevelType( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('AccessLevelType', AccessLevelType, encodeAccessLevelType , decodeAccessLevelType , undefined);

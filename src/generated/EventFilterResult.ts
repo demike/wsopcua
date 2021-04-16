@@ -4,11 +4,11 @@
 */
 
 import * as ec from '../basic-types';
-import {DiagnosticInfo} from '.';
-import {decodeDiagnosticInfo} from '.';
-import {ContentFilterResult} from '.';
-import {DataStream} from '../basic-types';
-import {MonitoringFilterResult} from '.';
+import {DiagnosticInfo} from './DiagnosticInfo';
+import {decodeDiagnosticInfo} from './DiagnosticInfo';
+import {ContentFilterResult} from './ContentFilterResult';
+import {DataStream} from '../basic-types/DataStream';
+import {MonitoringFilterResult} from './MonitoringFilterResult';
 
 export interface IEventFilterResult {
   selectClauseResults?: ec.StatusCode[];
@@ -90,6 +90,6 @@ export function decodeEventFilterResult( inp: DataStream): EventFilterResult {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('EventFilterResult', EventFilterResult, new ExpandedNodeId(2 /*numeric id*/, 736, 0));

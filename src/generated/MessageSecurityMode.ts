@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum MessageSecurityMode {
   Invalid = 0,
@@ -23,5 +23,5 @@ export function decodeMessageSecurityMode( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('MessageSecurityMode', MessageSecurityMode, encodeMessageSecurityMode , decodeMessageSecurityMode , undefined);

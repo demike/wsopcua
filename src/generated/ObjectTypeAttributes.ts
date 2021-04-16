@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {NodeAttributes} from '.';
-import {INodeAttributes} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {NodeAttributes} from './NodeAttributes';
+import {INodeAttributes} from './NodeAttributes';
 
 export interface IObjectTypeAttributes extends INodeAttributes {
   isAbstract?: boolean;
@@ -76,6 +76,6 @@ export function decodeObjectTypeAttributes( inp: DataStream): ObjectTypeAttribut
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ObjectTypeAttributes', ObjectTypeAttributes, new ExpandedNodeId(2 /*numeric id*/, 363, 0));

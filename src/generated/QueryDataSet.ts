@@ -6,7 +6,7 @@
 import * as ec from '../basic-types';
 import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IQueryDataSet {
   nodeId?: ec.ExpandedNodeId;
@@ -87,6 +87,6 @@ export function decodeQueryDataSet( inp: DataStream): QueryDataSet {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('QueryDataSet', QueryDataSet, new ExpandedNodeId(2 /*numeric id*/, 579, 0));

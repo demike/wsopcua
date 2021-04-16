@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../../basic-types';
-import {ParameterResultDataType} from '.';
-import {decodeParameterResultDataType} from '.';
-import {DataStream} from '../../basic-types';
-import {FetchResultDataType} from '.';
+import {ParameterResultDataType} from './ParameterResultDataType';
+import {decodeParameterResultDataType} from './ParameterResultDataType';
+import {DataStream} from '../../basic-types/DataStream';
+import {FetchResultDataType} from './FetchResultDataType';
 
 export interface ITransferResultDataDataType {
   sequenceNumber?: ec.Int32;
@@ -89,6 +89,6 @@ export function decodeTransferResultDataDataType( inp: DataStream): TransferResu
 
 
 
-import {register_class_definition} from '../../factory';
-import { ExpandedNodeId } from '../../nodeid';
+import {register_class_definition} from '../../factory/factories_factories';
+import { ExpandedNodeId } from '../../nodeid/expanded_nodeid';
 register_class_definition('TransferResultDataDataType', TransferResultDataDataType, new ExpandedNodeId(3 /*string id*/,'1;i=15894', 2));

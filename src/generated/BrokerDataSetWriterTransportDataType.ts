@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {BrokerTransportQualityOfService, encodeBrokerTransportQualityOfService, decodeBrokerTransportQualityOfService} from '.';
-import {DataStream} from '../basic-types';
-import {DataSetWriterTransportDataType} from '.';
+import {BrokerTransportQualityOfService, encodeBrokerTransportQualityOfService, decodeBrokerTransportQualityOfService} from './BrokerTransportQualityOfService';
+import {DataStream} from '../basic-types/DataStream';
+import {DataSetWriterTransportDataType} from './DataSetWriterTransportDataType';
 
 export interface IBrokerDataSetWriterTransportDataType {
   queueName?: string;
@@ -112,6 +112,6 @@ export function decodeBrokerDataSetWriterTransportDataType( inp: DataStream): Br
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('BrokerDataSetWriterTransportDataType', BrokerDataSetWriterTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15729, 0));

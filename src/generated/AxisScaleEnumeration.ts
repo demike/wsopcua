@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum AxisScaleEnumeration {
   Linear = 0,
@@ -22,5 +22,5 @@ export function decodeAxisScaleEnumeration( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('AxisScaleEnumeration', AxisScaleEnumeration, encodeAxisScaleEnumeration , decodeAxisScaleEnumeration , undefined);

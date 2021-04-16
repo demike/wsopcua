@@ -4,11 +4,11 @@
 */
 
 import * as ec from '../basic-types';
-import {ApplicationDescription} from '.';
-import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMode} from '.';
-import {UserTokenPolicy} from '.';
-import {decodeUserTokenPolicy} from '.';
-import {DataStream} from '../basic-types';
+import {ApplicationDescription} from './ApplicationDescription';
+import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMode} from './MessageSecurityMode';
+import {UserTokenPolicy} from './UserTokenPolicy';
+import {decodeUserTokenPolicy} from './UserTokenPolicy';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IEndpointDescription {
   endpointUrl?: string;
@@ -129,6 +129,6 @@ export function decodeEndpointDescription( inp: DataStream): EndpointDescription
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('EndpointDescription', EndpointDescription, new ExpandedNodeId(2 /*numeric id*/, 314, 0));

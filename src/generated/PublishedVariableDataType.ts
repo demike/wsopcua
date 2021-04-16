@@ -5,9 +5,9 @@
 
 import * as ec from '../basic-types';
 import {Variant} from '../variant';
-import {QualifiedName} from '.';
-import {decodeQualifiedName} from '.';
-import {DataStream} from '../basic-types';
+import {QualifiedName} from './QualifiedName';
+import {decodeQualifiedName} from './QualifiedName';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IPublishedVariableDataType {
   publishedVariable?: ec.NodeId;
@@ -128,6 +128,6 @@ export function decodePublishedVariableDataType( inp: DataStream): PublishedVari
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('PublishedVariableDataType', PublishedVariableDataType, new ExpandedNodeId(2 /*numeric id*/, 14323, 0));

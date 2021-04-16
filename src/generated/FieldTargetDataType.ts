@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {OverrideValueHandling, encodeOverrideValueHandling, decodeOverrideValueHandling} from '.';
+import {OverrideValueHandling, encodeOverrideValueHandling, decodeOverrideValueHandling} from './OverrideValueHandling';
 import {Variant} from '../variant';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IFieldTargetDataType {
   dataSetFieldId?: ec.Guid;
@@ -119,6 +119,6 @@ export function decodeFieldTargetDataType( inp: DataStream): FieldTargetDataType
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('FieldTargetDataType', FieldTargetDataType, new ExpandedNodeId(2 /*numeric id*/, 14848, 0));

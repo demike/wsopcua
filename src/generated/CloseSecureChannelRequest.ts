@@ -3,8 +3,8 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
-import {DataStream} from '../basic-types';
+import {RequestHeader} from './RequestHeader';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface ICloseSecureChannelRequest {
   requestHeader?: RequestHeader;
@@ -69,6 +69,6 @@ export function decodeCloseSecureChannelRequest( inp: DataStream): CloseSecureCh
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('CloseSecureChannelRequest', CloseSecureChannelRequest, new ExpandedNodeId(2 /*numeric id*/, 452, 0));

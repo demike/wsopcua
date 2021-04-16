@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {CartesianCoordinates} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {CartesianCoordinates} from './CartesianCoordinates';
 
 export interface IThreeDCartesianCoordinates {
   x?: ec.Double;
@@ -87,6 +87,6 @@ export function decodeThreeDCartesianCoordinates( inp: DataStream): ThreeDCartes
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ThreeDCartesianCoordinates', ThreeDCartesianCoordinates, new ExpandedNodeId(2 /*numeric id*/, 18819, 0));

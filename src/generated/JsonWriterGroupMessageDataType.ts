@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {JsonNetworkMessageContentMask, encodeJsonNetworkMessageContentMask, decodeJsonNetworkMessageContentMask} from '.';
-import {DataStream} from '../basic-types';
-import {WriterGroupMessageDataType} from '.';
+import {JsonNetworkMessageContentMask, encodeJsonNetworkMessageContentMask, decodeJsonNetworkMessageContentMask} from './JsonNetworkMessageContentMask';
+import {DataStream} from '../basic-types/DataStream';
+import {WriterGroupMessageDataType} from './WriterGroupMessageDataType';
 
 export interface IJsonWriterGroupMessageDataType {
   networkMessageContentMask?: JsonNetworkMessageContentMask;
@@ -71,6 +71,6 @@ export function decodeJsonWriterGroupMessageDataType( inp: DataStream): JsonWrit
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('JsonWriterGroupMessageDataType', JsonWriterGroupMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15719, 0));

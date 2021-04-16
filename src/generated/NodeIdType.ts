@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 /**
 The possible encodings for a NodeId value.*/
@@ -27,5 +27,5 @@ export function decodeNodeIdType( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('NodeIdType', NodeIdType, encodeNodeIdType , decodeNodeIdType , undefined);

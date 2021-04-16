@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
-import {AddNodesItem} from '.';
-import {decodeAddNodesItem} from '.';
+import {RequestHeader} from './RequestHeader';
+import {AddNodesItem} from './AddNodesItem';
+import {decodeAddNodesItem} from './AddNodesItem';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IAddNodesRequest {
   requestHeader?: RequestHeader;
@@ -80,6 +80,6 @@ export function decodeAddNodesRequest( inp: DataStream): AddNodesRequest {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('AddNodesRequest', AddNodesRequest, new ExpandedNodeId(2 /*numeric id*/, 488, 0));

@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
-import {Node} from '.';
-import {INode} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {Node} from './Node';
+import {INode} from './Node';
 
 export interface ITypeNode extends INode {
 }
@@ -67,6 +67,6 @@ export function decodeTypeNode( inp: DataStream): TypeNode {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('TypeNode', TypeNode, new ExpandedNodeId(2 /*numeric id*/, 11890, 0));

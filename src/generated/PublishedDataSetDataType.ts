@@ -4,11 +4,11 @@
 */
 
 import * as ec from '../basic-types';
-import {DataSetMetaDataType} from '.';
-import {KeyValuePair} from '.';
-import {decodeKeyValuePair} from '.';
+import {DataSetMetaDataType} from './DataSetMetaDataType';
+import {KeyValuePair} from './KeyValuePair';
+import {decodeKeyValuePair} from './KeyValuePair';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IPublishedDataSetDataType {
   name?: string;
@@ -105,6 +105,6 @@ export function decodePublishedDataSetDataType( inp: DataStream): PublishedDataS
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('PublishedDataSetDataType', PublishedDataSetDataType, new ExpandedNodeId(2 /*numeric id*/, 15677, 0));

@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IEndpointUrlListDataType {
   endpointUrlList?: string[];
@@ -69,6 +69,6 @@ export function decodeEndpointUrlListDataType( inp: DataStream): EndpointUrlList
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('EndpointUrlListDataType', EndpointUrlListDataType, new ExpandedNodeId(2 /*numeric id*/, 11957, 0));

@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {ContentFilterElementResult} from '.';
-import {decodeContentFilterElementResult} from '.';
-import {DiagnosticInfo} from '.';
-import {decodeDiagnosticInfo} from '.';
+import {ContentFilterElementResult} from './ContentFilterElementResult';
+import {decodeContentFilterElementResult} from './ContentFilterElementResult';
+import {DiagnosticInfo} from './DiagnosticInfo';
+import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IContentFilterResult {
   elementResults?: ContentFilterElementResult[];
@@ -81,6 +81,6 @@ export function decodeContentFilterResult( inp: DataStream): ContentFilterResult
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ContentFilterResult', ContentFilterResult, new ExpandedNodeId(2 /*numeric id*/, 609, 0));

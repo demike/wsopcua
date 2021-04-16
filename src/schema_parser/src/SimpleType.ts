@@ -108,10 +108,7 @@ export class SimpleType extends ClassFile {
       }
       ret +=
         "} from '" +
-        getModuleImportPath(
-          targetClassFile.ModulePath,
-          this.ModulePath /*, this.name  */ /* no more deep imports use the barrel file */
-        ) +
+        getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) +
         "';";
       return ret;
     }
@@ -119,10 +116,7 @@ export class SimpleType extends ClassFile {
       'import {' +
       this.Name +
       "} from '" +
-      getModuleImportPath(
-        targetClassFile.ModulePath,
-        this.ModulePath /*, this.name  */ /* no more deep imports use the barrel file */
-      ) +
+      getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) +
       "';"
     );
   }

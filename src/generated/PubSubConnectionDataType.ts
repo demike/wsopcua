@@ -6,13 +6,13 @@
 import * as ec from '../basic-types';
 import {Variant} from '../variant';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {KeyValuePair} from '.';
-import {decodeKeyValuePair} from '.';
-import {WriterGroupDataType} from '.';
-import {decodeWriterGroupDataType} from '.';
-import {ReaderGroupDataType} from '.';
-import {decodeReaderGroupDataType} from '.';
-import {DataStream} from '../basic-types';
+import {KeyValuePair} from './KeyValuePair';
+import {decodeKeyValuePair} from './KeyValuePair';
+import {WriterGroupDataType} from './WriterGroupDataType';
+import {decodeWriterGroupDataType} from './WriterGroupDataType';
+import {ReaderGroupDataType} from './ReaderGroupDataType';
+import {decodeReaderGroupDataType} from './ReaderGroupDataType';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IPubSubConnectionDataType {
   name?: string;
@@ -141,6 +141,6 @@ export function decodePubSubConnectionDataType( inp: DataStream): PubSubConnecti
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('PubSubConnectionDataType', PubSubConnectionDataType, new ExpandedNodeId(2 /*numeric id*/, 15694, 0));

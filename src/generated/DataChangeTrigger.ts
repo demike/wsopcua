@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum DataChangeTrigger {
   Status = 0,
@@ -22,5 +22,5 @@ export function decodeDataChangeTrigger( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('DataChangeTrigger', DataChangeTrigger, encodeDataChangeTrigger , decodeDataChangeTrigger , undefined);

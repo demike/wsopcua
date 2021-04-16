@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {PerformUpdateType, encodePerformUpdateType, decodePerformUpdateType} from '.';
-import {DataValue} from '.';
-import {decodeDataValue} from '.';
+import {PerformUpdateType, encodePerformUpdateType, decodePerformUpdateType} from './PerformUpdateType';
+import {DataValue} from './DataValue';
+import {decodeDataValue} from './DataValue';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {HistoryUpdateDetails} from '.';
-import {IHistoryUpdateDetails} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {HistoryUpdateDetails} from './HistoryUpdateDetails';
+import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
 export interface IUpdateStructureDataDetails extends IHistoryUpdateDetails {
   performInsertReplace?: PerformUpdateType;
@@ -87,6 +87,6 @@ export function decodeUpdateStructureDataDetails( inp: DataStream): UpdateStruct
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('UpdateStructureDataDetails', UpdateStructureDataDetails, new ExpandedNodeId(2 /*numeric id*/, 11300, 0));

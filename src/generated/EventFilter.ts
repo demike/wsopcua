@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {SimpleAttributeOperand} from '.';
-import {decodeSimpleAttributeOperand} from '.';
-import {ContentFilter} from '.';
+import {SimpleAttributeOperand} from './SimpleAttributeOperand';
+import {decodeSimpleAttributeOperand} from './SimpleAttributeOperand';
+import {ContentFilter} from './ContentFilter';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {MonitoringFilter} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {MonitoringFilter} from './MonitoringFilter';
 
 export interface IEventFilter {
   selectClauses?: SimpleAttributeOperand[];
@@ -82,6 +82,6 @@ export function decodeEventFilter( inp: DataStream): EventFilter {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('EventFilter', EventFilter, new ExpandedNodeId(2 /*numeric id*/, 727, 0));

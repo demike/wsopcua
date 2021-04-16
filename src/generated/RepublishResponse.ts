@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from '.';
-import {NotificationMessage} from '.';
-import {DataStream} from '../basic-types';
+import {ResponseHeader} from './ResponseHeader';
+import {NotificationMessage} from './NotificationMessage';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IRepublishResponse {
   responseHeader?: ResponseHeader;
@@ -78,6 +78,6 @@ export function decodeRepublishResponse( inp: DataStream): RepublishResponse {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('RepublishResponse', RepublishResponse, new ExpandedNodeId(2 /*numeric id*/, 835, 0));

@@ -3,8 +3,8 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from '.';
-import {DataStream} from '../basic-types';
+import {ResponseHeader} from './ResponseHeader';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface ICloseSecureChannelResponse {
   responseHeader?: ResponseHeader;
@@ -69,6 +69,6 @@ export function decodeCloseSecureChannelResponse( inp: DataStream): CloseSecureC
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('CloseSecureChannelResponse', CloseSecureChannelResponse, new ExpandedNodeId(2 /*numeric id*/, 455, 0));

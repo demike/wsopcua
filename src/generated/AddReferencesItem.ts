@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {NodeClass, encodeNodeClass, decodeNodeClass} from '.';
-import {DataStream} from '../basic-types';
+import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IAddReferencesItem {
   sourceNodeId?: ec.NodeId;
@@ -110,6 +110,6 @@ export function decodeAddReferencesItem( inp: DataStream): AddReferencesItem {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('AddReferencesItem', AddReferencesItem, new ExpandedNodeId(2 /*numeric id*/, 381, 0));

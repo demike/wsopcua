@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {UserIdentityToken} from '.';
-import {IUserIdentityToken} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {UserIdentityToken} from './UserIdentityToken';
+import {IUserIdentityToken} from './UserIdentityToken';
 
 export interface IUserNameIdentityToken extends IUserIdentityToken {
   userName?: string;
@@ -92,6 +92,6 @@ export function decodeUserNameIdentityToken( inp: DataStream): UserNameIdentityT
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('UserNameIdentityToken', UserNameIdentityToken, new ExpandedNodeId(2 /*numeric id*/, 324, 0));

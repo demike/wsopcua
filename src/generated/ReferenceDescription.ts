@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../basic-types';
-import {QualifiedName} from '.';
-import {LocalizedText} from '.';
-import {NodeClass, encodeNodeClass, decodeNodeClass} from '.';
-import {DataStream} from '../basic-types';
+import {QualifiedName} from './QualifiedName';
+import {LocalizedText} from './LocalizedText';
+import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IReferenceDescription {
   referenceTypeId?: ec.NodeId;
@@ -120,6 +120,6 @@ export function decodeReferenceDescription( inp: DataStream): ReferenceDescripti
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ReferenceDescription', ReferenceDescription, new ExpandedNodeId(2 /*numeric id*/, 520, 0));

@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {QualifiedName} from '.';
-import {DataStream} from '../basic-types';
+import {QualifiedName} from './QualifiedName';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IReadValueId {
   nodeId?: ec.NodeId;
@@ -94,6 +94,6 @@ export function decodeReadValueId( inp: DataStream): ReadValueId {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ReadValueId', ReadValueId, new ExpandedNodeId(2 /*numeric id*/, 628, 0));

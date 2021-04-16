@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {PublishedVariableDataType} from '.';
-import {decodePublishedVariableDataType} from '.';
+import {PublishedVariableDataType} from './PublishedVariableDataType';
+import {decodePublishedVariableDataType} from './PublishedVariableDataType';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {PublishedDataSetSourceDataType} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {PublishedDataSetSourceDataType} from './PublishedDataSetSourceDataType';
 
 export interface IPublishedDataItemsDataType {
   publishedData?: PublishedVariableDataType[];
@@ -73,6 +73,6 @@ export function decodePublishedDataItemsDataType( inp: DataStream): PublishedDat
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('PublishedDataItemsDataType', PublishedDataItemsDataType, new ExpandedNodeId(2 /*numeric id*/, 15679, 0));

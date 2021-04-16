@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {HistoryUpdateDetails} from '.';
-import {IHistoryUpdateDetails} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {HistoryUpdateDetails} from './HistoryUpdateDetails';
+import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
 export interface IDeleteRawModifiedDetails extends IHistoryUpdateDetails {
   isDeleteModified?: boolean;
@@ -92,6 +92,6 @@ export function decodeDeleteRawModifiedDetails( inp: DataStream): DeleteRawModif
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('DeleteRawModifiedDetails', DeleteRawModifiedDetails, new ExpandedNodeId(2 /*numeric id*/, 688, 0));

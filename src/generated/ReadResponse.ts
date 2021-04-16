@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from '.';
-import {DataValue} from '.';
-import {decodeDataValue} from '.';
-import {DiagnosticInfo} from '.';
-import {decodeDiagnosticInfo} from '.';
+import {ResponseHeader} from './ResponseHeader';
+import {DataValue} from './DataValue';
+import {decodeDataValue} from './DataValue';
+import {DiagnosticInfo} from './DiagnosticInfo';
+import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IReadResponse {
   responseHeader?: ResponseHeader;
@@ -90,6 +90,6 @@ export function decodeReadResponse( inp: DataStream): ReadResponse {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ReadResponse', ReadResponse, new ExpandedNodeId(2 /*numeric id*/, 634, 0));

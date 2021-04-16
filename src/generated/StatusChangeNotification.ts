@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DiagnosticInfo} from '.';
-import {DataStream} from '../basic-types';
-import {NotificationData} from '.';
+import {DiagnosticInfo} from './DiagnosticInfo';
+import {DataStream} from '../basic-types/DataStream';
+import {NotificationData} from './NotificationData';
 
 export interface IStatusChangeNotification {
   status?: ec.StatusCode;
@@ -80,6 +80,6 @@ export function decodeStatusChangeNotification( inp: DataStream): StatusChangeNo
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('StatusChangeNotification', StatusChangeNotification, new ExpandedNodeId(2 /*numeric id*/, 820, 0));

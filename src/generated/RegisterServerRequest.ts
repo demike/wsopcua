@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
-import {RegisteredServer} from '.';
-import {DataStream} from '../basic-types';
+import {RequestHeader} from './RequestHeader';
+import {RegisteredServer} from './RegisteredServer';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IRegisterServerRequest {
   requestHeader?: RequestHeader;
@@ -78,6 +78,6 @@ export function decodeRegisterServerRequest( inp: DataStream): RegisterServerReq
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('RegisterServerRequest', RegisterServerRequest, new ExpandedNodeId(2 /*numeric id*/, 437, 0));

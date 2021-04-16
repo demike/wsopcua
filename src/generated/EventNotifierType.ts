@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum EventNotifierType {
   None = 0,
@@ -23,5 +23,5 @@ export function decodeEventNotifierType( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('EventNotifierType', EventNotifierType, encodeEventNotifierType , decodeEventNotifierType , undefined);

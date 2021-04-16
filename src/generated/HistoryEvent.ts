@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {HistoryEventFieldList} from '.';
-import {decodeHistoryEventFieldList} from '.';
+import {HistoryEventFieldList} from './HistoryEventFieldList';
+import {decodeHistoryEventFieldList} from './HistoryEventFieldList';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryEvent {
   events?: HistoryEventFieldList[];
@@ -71,6 +71,6 @@ export function decodeHistoryEvent( inp: DataStream): HistoryEvent {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('HistoryEvent', HistoryEvent, new ExpandedNodeId(2 /*numeric id*/, 661, 0));

@@ -4,12 +4,12 @@
 */
 
 import * as ec from '../basic-types';
-import {Argument} from '.';
-import {decodeArgument} from '.';
+import {Argument} from './Argument';
+import {decodeArgument} from './Argument';
 import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
-import {StatusResult} from '.';
-import {DataStream} from '../basic-types';
+import {StatusResult} from './StatusResult';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IProgramDiagnostic2DataType {
   createSessionId?: ec.NodeId;
@@ -162,6 +162,6 @@ export function decodeProgramDiagnostic2DataType( inp: DataStream): ProgramDiagn
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ProgramDiagnostic2DataType', ProgramDiagnostic2DataType, new ExpandedNodeId(2 /*numeric id*/, 15397, 0));

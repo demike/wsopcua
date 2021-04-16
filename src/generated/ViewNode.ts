@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {InstanceNode} from '.';
-import {IInstanceNode} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {InstanceNode} from './InstanceNode';
+import {IInstanceNode} from './InstanceNode';
 
 export interface IViewNode extends IInstanceNode {
   containsNoLoops?: boolean;
@@ -84,6 +84,6 @@ export function decodeViewNode( inp: DataStream): ViewNode {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ViewNode', ViewNode, new ExpandedNodeId(2 /*numeric id*/, 281, 0));

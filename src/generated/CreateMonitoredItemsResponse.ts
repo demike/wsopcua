@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from '.';
-import {MonitoredItemCreateResult} from '.';
-import {decodeMonitoredItemCreateResult} from '.';
-import {DiagnosticInfo} from '.';
-import {decodeDiagnosticInfo} from '.';
+import {ResponseHeader} from './ResponseHeader';
+import {MonitoredItemCreateResult} from './MonitoredItemCreateResult';
+import {decodeMonitoredItemCreateResult} from './MonitoredItemCreateResult';
+import {DiagnosticInfo} from './DiagnosticInfo';
+import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface ICreateMonitoredItemsResponse {
   responseHeader?: ResponseHeader;
@@ -90,6 +90,6 @@ export function decodeCreateMonitoredItemsResponse( inp: DataStream): CreateMoni
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('CreateMonitoredItemsResponse', CreateMonitoredItemsResponse, new ExpandedNodeId(2 /*numeric id*/, 754, 0));

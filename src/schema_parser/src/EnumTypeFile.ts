@@ -62,10 +62,7 @@ export class EnumTypeFile extends ClassFile {
         'import * as ' +
         this.importAs +
         " from '" +
-        getModuleImportPath(
-          targetClassFile.ModulePath,
-          this.ModulePath /*, this.name  */ /* no more deep imports use the barrel file */
-        ) +
+        getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) +
         "';"
       );
     }
@@ -77,10 +74,7 @@ export class EnumTypeFile extends ClassFile {
       ', decode' +
       this.Name +
       "} from '" +
-      getModuleImportPath(
-        targetClassFile.ModulePath,
-        this.ModulePath /*, this.name  */ /* no more deep imports use the barrel file */
-      ) +
+      getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) +
       "';"
     );
   }
@@ -92,7 +86,11 @@ export class EnumTypeFile extends ClassFile {
   protected getFactoryCode(): string {
     let str =
       "import {registerEnumeration} from '" +
-      getModuleImportPath(this.modulePath, PathGenUtil.FactoryModulePath) +
+      getModuleImportPath(
+        this.modulePath,
+        PathGenUtil.FactoryModulePath,
+        'factories_enumerations'
+      ) +
       "';\n";
     str +=
       "registerEnumeration('" +

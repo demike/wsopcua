@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {LocalizedText} from '.';
-import {ApplicationType, encodeApplicationType, decodeApplicationType} from '.';
-import {DataStream} from '../basic-types';
+import {LocalizedText} from './LocalizedText';
+import {ApplicationType, encodeApplicationType, decodeApplicationType} from './ApplicationType';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IApplicationDescription {
   applicationUri?: string;
@@ -119,6 +119,6 @@ export function decodeApplicationDescription( inp: DataStream): ApplicationDescr
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ApplicationDescription', ApplicationDescription, new ExpandedNodeId(2 /*numeric id*/, 310, 0));

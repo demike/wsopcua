@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {LocalizedText} from '.';
-import {DataStream} from '../basic-types';
+import {LocalizedText} from './LocalizedText';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IArgument {
   name?: string;
@@ -102,6 +102,6 @@ export function decodeArgument( inp: DataStream): Argument {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('Argument', Argument, new ExpandedNodeId(2 /*numeric id*/, 298, 0));

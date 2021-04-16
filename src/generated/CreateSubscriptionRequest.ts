@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
+import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface ICreateSubscriptionRequest {
   requestHeader?: RequestHeader;
@@ -118,6 +118,6 @@ export function decodeCreateSubscriptionRequest( inp: DataStream): CreateSubscri
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('CreateSubscriptionRequest', CreateSubscriptionRequest, new ExpandedNodeId(2 /*numeric id*/, 787, 0));

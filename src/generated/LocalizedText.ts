@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface ILocalizedText {
   locale?: string;
@@ -93,6 +93,6 @@ export function decodeLocalizedText( inp: DataStream): LocalizedText {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('LocalizedText', LocalizedText, new ExpandedNodeId(2 /*numeric id*/, 21, 0));

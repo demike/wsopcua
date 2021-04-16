@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
-import {ApplicationDescription} from '.';
+import {RequestHeader} from './RequestHeader';
+import {ApplicationDescription} from './ApplicationDescription';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface ICreateSessionRequest {
   requestHeader?: RequestHeader;
@@ -135,6 +135,6 @@ export function decodeCreateSessionRequest( inp: DataStream): CreateSessionReque
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('CreateSessionRequest', CreateSessionRequest, new ExpandedNodeId(2 /*numeric id*/, 461, 0));

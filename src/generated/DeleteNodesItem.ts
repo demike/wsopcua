@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IDeleteNodesItem {
   nodeId?: ec.NodeId;
@@ -77,6 +77,6 @@ export function decodeDeleteNodesItem( inp: DataStream): DeleteNodesItem {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('DeleteNodesItem', DeleteNodesItem, new ExpandedNodeId(2 /*numeric id*/, 384, 0));

@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {DiscoveryConfiguration} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {DiscoveryConfiguration} from './DiscoveryConfiguration';
 
 export interface IMdnsDiscoveryConfiguration {
   mdnsServerName?: string;
@@ -79,6 +79,6 @@ export function decodeMdnsDiscoveryConfiguration( inp: DataStream): MdnsDiscover
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('MdnsDiscoveryConfiguration', MdnsDiscoveryConfiguration, new ExpandedNodeId(2 /*numeric id*/, 12901, 0));

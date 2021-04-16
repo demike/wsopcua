@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryUpdateDetails {
   nodeId?: ec.NodeId;
@@ -69,6 +69,6 @@ export function decodeHistoryUpdateDetails( inp: DataStream): HistoryUpdateDetai
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('HistoryUpdateDetails', HistoryUpdateDetails, new ExpandedNodeId(2 /*numeric id*/, 679, 0));

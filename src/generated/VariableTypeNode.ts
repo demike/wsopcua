@@ -5,9 +5,9 @@
 
 import {Variant} from '../variant';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {TypeNode} from '.';
-import {ITypeNode} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {TypeNode} from './TypeNode';
+import {ITypeNode} from './TypeNode';
 
 export interface IVariableTypeNode extends ITypeNode {
   value?: Variant;
@@ -109,6 +109,6 @@ export function decodeVariableTypeNode( inp: DataStream): VariableTypeNode {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('VariableTypeNode', VariableTypeNode, new ExpandedNodeId(2 /*numeric id*/, 272, 0));

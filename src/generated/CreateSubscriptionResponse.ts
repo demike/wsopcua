@@ -3,9 +3,9 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from '.';
+import {ResponseHeader} from './ResponseHeader';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface ICreateSubscriptionResponse {
   responseHeader?: ResponseHeader;
@@ -102,6 +102,6 @@ export function decodeCreateSubscriptionResponse( inp: DataStream): CreateSubscr
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('CreateSubscriptionResponse', CreateSubscriptionResponse, new ExpandedNodeId(2 /*numeric id*/, 790, 0));

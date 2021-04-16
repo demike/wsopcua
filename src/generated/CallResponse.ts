@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {ResponseHeader} from '.';
-import {CallMethodResult} from '.';
-import {decodeCallMethodResult} from '.';
-import {DiagnosticInfo} from '.';
-import {decodeDiagnosticInfo} from '.';
+import {ResponseHeader} from './ResponseHeader';
+import {CallMethodResult} from './CallMethodResult';
+import {decodeCallMethodResult} from './CallMethodResult';
+import {DiagnosticInfo} from './DiagnosticInfo';
+import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface ICallResponse {
   responseHeader?: ResponseHeader;
@@ -90,6 +90,6 @@ export function decodeCallResponse( inp: DataStream): CallResponse {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('CallResponse', CallResponse, new ExpandedNodeId(2 /*numeric id*/, 715, 0));

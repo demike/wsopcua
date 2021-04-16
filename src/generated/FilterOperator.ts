@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum FilterOperator {
   Equals = 0,
@@ -37,5 +37,5 @@ export function decodeFilterOperator( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('FilterOperator', FilterOperator, encodeFilterOperator , decodeFilterOperator , undefined);

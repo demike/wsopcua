@@ -4,9 +4,9 @@
 */
 
 import * as ec from '../basic-types';
-import {AggregateConfiguration} from '.';
-import {DataStream} from '../basic-types';
-import {HistoryReadDetails} from '.';
+import {AggregateConfiguration} from './AggregateConfiguration';
+import {DataStream} from '../basic-types/DataStream';
+import {HistoryReadDetails} from './HistoryReadDetails';
 
 export interface IReadProcessedDetails {
   startTime?: Date;
@@ -104,6 +104,6 @@ export function decodeReadProcessedDetails( inp: DataStream): ReadProcessedDetai
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ReadProcessedDetails', ReadProcessedDetails, new ExpandedNodeId(2 /*numeric id*/, 652, 0));

@@ -284,11 +284,11 @@ export class ClassFile {
 
     let str =
       "import {register_class_definition} from '" +
-      getModuleImportPath(this.modulePath, PathGenUtil.FactoryModulePath) +
+      getModuleImportPath(this.modulePath, PathGenUtil.FactoryModulePath, 'factories_factories') +
       "';\n";
     str +=
       "import { ExpandedNodeId } from '" +
-      getModuleImportPath(this.modulePath, PathGenUtil.NodeIdModulePath) +
+      getModuleImportPath(this.modulePath, PathGenUtil.NodeIdModulePath, 'expanded_nodeid') +
       "';\n";
     const ns =
       typeof this.namespace === 'number' ? this.namespace : " undefined, '" + this.namespace + "'";
@@ -341,10 +341,7 @@ export class ClassFile {
       'import {' +
       this.Name +
       "} from '" +
-      getModuleImportPath(
-        targetClassFile.ModulePath,
-        this.ModulePath /*, this.name  */ /* no more deep imports use the barrel file */
-      ) +
+      getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) +
       "';"
     );
   }
@@ -361,10 +358,7 @@ export class ClassFile {
       'import {I' +
       this.Name +
       "} from '" +
-      getModuleImportPath(
-        targetClassFile.ModulePath,
-        this.ModulePath /*, this.name  */ /* no more deep imports use the barrel file */
-      ) +
+      getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) +
       "';"
     );
   }
@@ -378,10 +372,7 @@ export class ClassFile {
       'import {decode' +
       this.Name +
       "} from '" +
-      getModuleImportPath(
-        targetClassFile.ModulePath,
-        this.ModulePath /*, this.name  */ /* no more deep imports use the barrel file */
-      ) +
+      getModuleImportPath(targetClassFile.ModulePath, this.ModulePath, this.name) +
       "';"
     );
   }

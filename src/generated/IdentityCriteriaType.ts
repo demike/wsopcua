@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum IdentityCriteriaType {
   UserName = 1,
@@ -25,5 +25,5 @@ export function decodeIdentityCriteriaType( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('IdentityCriteriaType', IdentityCriteriaType, encodeIdentityCriteriaType , decodeIdentityCriteriaType , undefined);

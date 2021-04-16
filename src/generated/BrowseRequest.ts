@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
-import {ViewDescription} from '.';
+import {RequestHeader} from './RequestHeader';
+import {ViewDescription} from './ViewDescription';
 import * as ec from '../basic-types';
-import {BrowseDescription} from '.';
-import {decodeBrowseDescription} from '.';
-import {DataStream} from '../basic-types';
+import {BrowseDescription} from './BrowseDescription';
+import {decodeBrowseDescription} from './BrowseDescription';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IBrowseRequest {
   requestHeader?: RequestHeader;
@@ -97,6 +97,6 @@ export function decodeBrowseRequest( inp: DataStream): BrowseRequest {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('BrowseRequest', BrowseRequest, new ExpandedNodeId(2 /*numeric id*/, 527, 0));

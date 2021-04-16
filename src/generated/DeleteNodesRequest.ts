@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
-import {DeleteNodesItem} from '.';
-import {decodeDeleteNodesItem} from '.';
+import {RequestHeader} from './RequestHeader';
+import {DeleteNodesItem} from './DeleteNodesItem';
+import {decodeDeleteNodesItem} from './DeleteNodesItem';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IDeleteNodesRequest {
   requestHeader?: RequestHeader;
@@ -80,6 +80,6 @@ export function decodeDeleteNodesRequest( inp: DataStream): DeleteNodesRequest {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('DeleteNodesRequest', DeleteNodesRequest, new ExpandedNodeId(2 /*numeric id*/, 500, 0));

@@ -4,8 +4,8 @@
 */
 
 import {Variant} from '../variant';
-import {DataStream} from '../basic-types';
-import {FilterOperand} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {FilterOperand} from './FilterOperand';
 
 export interface ILiteralOperand {
   value?: Variant;
@@ -71,6 +71,6 @@ export function decodeLiteralOperand( inp: DataStream): LiteralOperand {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('LiteralOperand', LiteralOperand, new ExpandedNodeId(2 /*numeric id*/, 597, 0));

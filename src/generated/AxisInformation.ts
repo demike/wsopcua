@@ -3,12 +3,12 @@
  do not modify, changes will be overwritten
 */
 
-import {EUInformation} from '.';
-import {Range} from '.';
-import {LocalizedText} from '.';
-import {AxisScaleEnumeration, encodeAxisScaleEnumeration, decodeAxisScaleEnumeration} from '.';
+import {EUInformation} from './EUInformation';
+import {Range} from './Range';
+import {LocalizedText} from './LocalizedText';
+import {AxisScaleEnumeration, encodeAxisScaleEnumeration, decodeAxisScaleEnumeration} from './AxisScaleEnumeration';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IAxisInformation {
   engineeringUnits?: EUInformation;
@@ -105,6 +105,6 @@ export function decodeAxisInformation( inp: DataStream): AxisInformation {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('AxisInformation', AxisInformation, new ExpandedNodeId(2 /*numeric id*/, 12089, 0));

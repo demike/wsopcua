@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {DataValue} from '.';
-import {decodeDataValue} from '.';
+import {DataValue} from './DataValue';
+import {decodeDataValue} from './DataValue';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryData {
   dataValues?: DataValue[];
@@ -71,6 +71,6 @@ export function decodeHistoryData( inp: DataStream): HistoryData {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('HistoryData', HistoryData, new ExpandedNodeId(2 /*numeric id*/, 658, 0));

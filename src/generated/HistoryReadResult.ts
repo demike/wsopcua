@@ -5,7 +5,7 @@
 
 import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IHistoryReadResult {
   statusCode?: ec.StatusCode;
@@ -86,6 +86,6 @@ export function decodeHistoryReadResult( inp: DataStream): HistoryReadResult {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('HistoryReadResult', HistoryReadResult, new ExpandedNodeId(2 /*numeric id*/, 640, 0));

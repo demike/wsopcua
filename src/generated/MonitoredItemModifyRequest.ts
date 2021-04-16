@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {MonitoringParameters} from '.';
-import {DataStream} from '../basic-types';
+import {MonitoringParameters} from './MonitoringParameters';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IMonitoredItemModifyRequest {
   monitoredItemId?: ec.UInt32;
@@ -78,6 +78,6 @@ export function decodeMonitoredItemModifyRequest( inp: DataStream): MonitoredIte
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('MonitoredItemModifyRequest', MonitoredItemModifyRequest, new ExpandedNodeId(2 /*numeric id*/, 757, 0));

@@ -3,13 +3,13 @@
  do not modify, changes will be overwritten
 */
 
-import {RequestHeader} from '.';
-import {SignatureData} from '.';
-import {SignedSoftwareCertificate} from '.';
-import {decodeSignedSoftwareCertificate} from '.';
+import {RequestHeader} from './RequestHeader';
+import {SignatureData} from './SignatureData';
+import {SignedSoftwareCertificate} from './SignedSoftwareCertificate';
+import {decodeSignedSoftwareCertificate} from './SignedSoftwareCertificate';
 import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IActivateSessionRequest {
   requestHeader?: RequestHeader;
@@ -114,6 +114,6 @@ export function decodeActivateSessionRequest( inp: DataStream): ActivateSessionR
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('ActivateSessionRequest', ActivateSessionRequest, new ExpandedNodeId(2 /*numeric id*/, 467, 0));

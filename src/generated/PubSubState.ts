@@ -3,7 +3,7 @@
  do not modify, changes will be overwritten
 */
 
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export enum PubSubState {
   Disabled = 0,
@@ -23,5 +23,5 @@ export function decodePubSubState( inp: DataStream) {
 
 
 
-import {registerEnumeration} from '../factory';
+import {registerEnumeration} from '../factory/factories_enumerations';
 registerEnumeration('PubSubState', PubSubState, encodePubSubState , decodePubSubState , undefined);

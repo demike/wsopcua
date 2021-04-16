@@ -6,7 +6,7 @@
 import * as ec from '../basic-types';
 import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface ICallMethodRequest {
   objectId?: ec.NodeId;
@@ -87,6 +87,6 @@ export function decodeCallMethodRequest( inp: DataStream): CallMethodRequest {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('CallMethodRequest', CallMethodRequest, new ExpandedNodeId(2 /*numeric id*/, 706, 0));

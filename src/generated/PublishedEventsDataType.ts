@@ -4,11 +4,11 @@
 */
 
 import * as ec from '../basic-types';
-import {SimpleAttributeOperand} from '.';
-import {decodeSimpleAttributeOperand} from '.';
-import {ContentFilter} from '.';
-import {DataStream} from '../basic-types';
-import {PublishedDataSetSourceDataType} from '.';
+import {SimpleAttributeOperand} from './SimpleAttributeOperand';
+import {decodeSimpleAttributeOperand} from './SimpleAttributeOperand';
+import {ContentFilter} from './ContentFilter';
+import {DataStream} from '../basic-types/DataStream';
+import {PublishedDataSetSourceDataType} from './PublishedDataSetSourceDataType';
 
 export interface IPublishedEventsDataType {
   eventNotifier?: ec.NodeId;
@@ -90,6 +90,6 @@ export function decodePublishedEventsDataType( inp: DataStream): PublishedEvents
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('PublishedEventsDataType', PublishedEventsDataType, new ExpandedNodeId(2 /*numeric id*/, 15681, 0));

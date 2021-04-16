@@ -85,7 +85,8 @@ export class BSDEnumTypeFileParser extends BSDClassFileParser {
           "} from '" +
           getModuleImportPath(
             this.cls.ModulePath,
-            PathGenUtil.SimpleTypesModulePath /*, ClassFile.IO_TYPE */ /*no more direct import use the barrel file*/
+            PathGenUtil.SimpleTypesModulePath,
+            ClassFile.IO_TYPE
           ) +
           "';"
       );

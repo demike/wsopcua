@@ -4,10 +4,10 @@
 */
 
 import * as ec from '../basic-types';
-import {QualifiedName} from '.';
-import {NodeClass, encodeNodeClass, decodeNodeClass} from '.';
+import {QualifiedName} from './QualifiedName';
+import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
-import {DataStream} from '../basic-types';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IAddNodesItem {
   parentNodeId?: ec.ExpandedNodeId;
@@ -120,6 +120,6 @@ export function decodeAddNodesItem( inp: DataStream): AddNodesItem {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('AddNodesItem', AddNodesItem, new ExpandedNodeId(2 /*numeric id*/, 378, 0));

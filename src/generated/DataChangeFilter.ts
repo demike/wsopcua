@@ -3,10 +3,10 @@
  do not modify, changes will be overwritten
 */
 
-import {DataChangeTrigger, encodeDataChangeTrigger, decodeDataChangeTrigger} from '.';
+import {DataChangeTrigger, encodeDataChangeTrigger, decodeDataChangeTrigger} from './DataChangeTrigger';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types';
-import {MonitoringFilter} from '.';
+import {DataStream} from '../basic-types/DataStream';
+import {MonitoringFilter} from './MonitoringFilter';
 
 export interface IDataChangeFilter {
   trigger?: DataChangeTrigger;
@@ -88,6 +88,6 @@ export function decodeDataChangeFilter( inp: DataStream): DataChangeFilter {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('DataChangeFilter', DataChangeFilter, new ExpandedNodeId(2 /*numeric id*/, 724, 0));

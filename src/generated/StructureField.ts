@@ -4,8 +4,8 @@
 */
 
 import * as ec from '../basic-types';
-import {LocalizedText} from '.';
-import {DataStream} from '../basic-types';
+import {LocalizedText} from './LocalizedText';
+import {DataStream} from '../basic-types/DataStream';
 
 export interface IStructureField {
   name?: string;
@@ -118,6 +118,6 @@ export function decodeStructureField( inp: DataStream): StructureField {
 
 
 
-import {register_class_definition} from '../factory';
-import { ExpandedNodeId } from '../nodeid';
+import {register_class_definition} from '../factory/factories_factories';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('StructureField', StructureField, new ExpandedNodeId(2 /*numeric id*/, 14844, 0));
