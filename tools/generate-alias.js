@@ -1,7 +1,5 @@
 /**
- * Alias subpath import (`dist/cjs/*`) to top-level path mapping (`rxjs/*`)
- * Previously this was done by placing cjs to top-level package when it's published -
- * Now build uses `dist` as explicit output subpath so we generate top-level alias here instead.
+ * Alias subpath import (`dist/_cjs/*`, `dist/_esm/*`) to top-level path mapping (`wsopcua/*`)
  */
 const fs = require('fs-extra');
 const path = require('path');
