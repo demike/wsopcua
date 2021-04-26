@@ -1,9 +1,12 @@
-import { MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../wsopcua';
+import { MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
 
 export async function connectToServerExample() {
   const client = new OPCUAClient({
     securityMode: MessageSecurityMode.None,
     securityPolicy: SecurityPolicy.None,
+    connectionStrategy: {
+      maxRetry: 1,
+    },
     endpoint_must_exist: false,
   });
 

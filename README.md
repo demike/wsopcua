@@ -18,8 +18,8 @@ No Need for a proprietary itermediate protocol!
 Get started with wsopcua, learn the fundamentals and explore advanced examples.
 
 - [Getting Started](quickstart)
-- [Client Setup](client-setup)
-- [Server Setup](server-setup)
+- [Client Setup](#client-setup)
+- [Server Setup](#server-setup)
 
 ### Advanced
 
@@ -31,7 +31,7 @@ TODO
 
 ### Prerequisites
 
-- Install [Node.js] which includes [Node Package Manager][npm]
+- Install [Node.js](www.nodejs.org) which includes [Node Package Manager](https://www.npmjs.com/)
 
 install the wsopcua library
 
@@ -39,11 +39,34 @@ install the wsopcua library
 npm i wsopcua
 ```
 
+### client workflow
+
+The following example is structured in multiple async steps
+
+1.  connect to a server [example 1](#connecting-to-a-server)
+2.  create a session [example 1](#connecting-to-a-server)
+3.  read from a variable [example 2](#reading-values)
+    - read a value with read
+    - read a value with `readVariableValueP`
+    - read an attribute
+    - read all attributes
+4.  browse a folder [example 3](#browsing)
+5.  install a subscription and a monitored item [example 4](#monitoring)
+6.  find a node id by Browse Name [example 5](#browse-path-translation)
+7.  close session [example 1](#connecting-to-a-server)
+8.  disconnecting [example 1](#connecting-to-a-server)
+
 ### Connecting to a Server
+
+The example below uses minimalistic configuration to connect to a server.
+The connection is is insecure ( securityMode and Policy are set to None).
+
+The default connection strategy is to retry indefinitly. In this case
+we reduced the retry count to 1.
 
 <!-- add-file: ./src/examples/simple.connect.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../wsopcua';
 
 export async function connectToServerExample() {
@@ -74,42 +97,34 @@ export async function connectToServerExample() {
   await client.disconnectP();
   console.log('disconnected');
 }
-
 ```
 
-``` ts markdown-add-files
-import { MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../wsopcua';
+### Reading Values
 
-export async function connectToServerExample() {
-  const client = new OPCUAClient({
-    securityMode: MessageSecurityMode.None,
-    securityPolicy: SecurityPolicy.None,
-    endpoint_must_exist: false,
-  });
+To `read` a specific variable node we construct a ReadValueId object with two parameters:
 
-  // connection
-  await client.connectP('ws://localhost:4444');
-  console.log('connected');
+- nodeId: `NodeId` target node
+- attributeId: `AttributeIds` target attribute enumeration (i.e.: value, displayName ...)
 
-  // create session
-  const session = await client.createSessionP({});
-  console.log('session created');
+A simplified way to read a variable value is
+`session.readVariableValueP`
 
-  /*
-   get some data from the server with one of the services provided by 'session':
-   session.*
-  */
+It's also possible to read all attributes of a variable.
+`readAllAttributesP` returns an object holding the Attribute key/values
 
-  // close session
-  await session.closeP();
-  console.log('session closed');
+<!-- add-file: ./src/examples/read.example.ts -->
 
-  // disconnnecting
-  await client.disconnectP();
-  console.log('disconnected');
-}
+### Browsing
 
-```
+TODO
+
+### Monitoring
+
+TODO
+
+### Browse Path Translation
+
+TODO
 
 ## Server Setup
 
