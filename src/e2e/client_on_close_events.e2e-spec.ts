@@ -1,7 +1,7 @@
 import { OPCUAClientOptions } from '../common/client_options';
 import { debugLog } from '../common/debug';
 
-import { OPCUAClient } from '../wsopcua';
+import { OPCUAClient } from '../';
 import {
   E2ESetup,
   E2ETestController,

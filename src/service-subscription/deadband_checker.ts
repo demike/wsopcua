@@ -3,7 +3,7 @@ import { assert } from '../assert';
 
 import { DeadbandType } from '../generated/DeadbandType';
 import { DataType, VariantArrayType, Variant } from '../variant';
-import { UInt64 } from '../wsopcua';
+import { UInt64 } from '../';
 
 function _differenceScalar(
   value1: number | UInt64,

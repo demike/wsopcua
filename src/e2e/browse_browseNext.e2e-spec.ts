@@ -1,10 +1,7 @@
 // tslint:disable:no-var-requires
 // tslint:disable:no-empty
 
-import {
-  E2ETestController,
-  getE2ETestController,
-} from './utils/test_server_controller';
+import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 import { NodeId } from '../basic-types';
 import {
   browseAll,
@@ -15,7 +12,7 @@ import {
   ClientSession,
   coerceNodeId,
   NodeIdType,
-} from '../wsopcua';
+} from '../';
 import { NodeClass } from '../generated/NodeClass';
 
 const ObjectsFolderId = new NodeId(NodeIdType.Numeric, 85, 0);
@@ -65,20 +62,14 @@ describe('testing browse & browseNext', () => {
 
     expect(result.continuationPoint).toBeDefined();
 
-    const responseNext1 = await session.browseNextP(
-      result.continuationPoint,
-      false
-    );
+    const responseNext1 = await session.browseNextP(result.continuationPoint, false);
     const resultNext1 = responseNext1.results[0];
 
     expect(resultNext1.references.length).toBe(10);
 
     expect(resultNext1.continuationPoint).toBeDefined();
 
-    const responseNext2 = await session.browseNextP(
-      resultNext1.continuationPoint,
-      false
-    );
+    const responseNext2 = await session.browseNextP(resultNext1.continuationPoint, false);
     const resultNext2 = responseNext2.results[0];
     expect(resultNext2.references.length).toBe(7);
     expect(resultNext2.continuationPoint).toBeNull();

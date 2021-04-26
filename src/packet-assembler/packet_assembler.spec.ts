@@ -1,5 +1,5 @@
 import { PacketAssembler, PacketInfo } from './packet_assembler';
-import { concatArrayBuffers } from '../wsopcua';
+import { concatArrayBuffers } from '../';
 
 function makeMessage(msgType: string, length: number) {
   const total_length = length + 4 + 1;

@@ -17,7 +17,7 @@ import {
   ReferenceTypeIds,
   Variant,
   VariantArrayType,
-} from '../wsopcua';
+} from '../';
 import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 
 const fail_fast_connectivity_strategy = {

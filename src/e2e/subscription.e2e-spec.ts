@@ -1,6 +1,6 @@
 import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
-import * as opcua from '../wsopcua';
-import { makeNodeId, MonitoredItemCreateRequest } from '../wsopcua';
+import * as opcua from '../';
+import { makeNodeId, MonitoredItemCreateRequest } from '../';
 
 describe('testing basic Client Server dealing with subscription at low level', function () {
   let session: opcua.ClientSession;

@@ -15,7 +15,7 @@ registerSpecialVariantEncoder(DataValue, 'DataValue');
 import { getCurrentClock } from '../date-time/date_time';
 
 import { Variant, sameVariant, VariantArrayType } from '../variant';
-import { NumericRange } from '../wsopcua';
+import { NumericRange } from '../';
 
 // DataValue.prototype.toString = function () {
 //     var str = "DataValue:";

@@ -1,6 +1,6 @@
 import { DataValue, LocalizedText, ReadValueId } from '../generated';
 import { coerceNodeId, NodeId } from '../nodeid/nodeid';
-import { AttributeIds, DataType, NodeIdType, Variant } from '../wsopcua';
+import { AttributeIds, DataType, NodeIdType, Variant } from '../';
 import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 
 describe('e2e test session localeId handling', function () {

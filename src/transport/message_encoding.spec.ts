@@ -5,7 +5,7 @@ import { DataStream } from '../basic-types/DataStream';
 import { decodeMessage, packTcpMessage } from './tools';
 import { AcknowledgeMessage } from './AcknowledgeMessage';
 import { TCPErrorMessage } from './TCPErrorMessage';
-import { StatusCode, StatusCodes } from '../wsopcua';
+import { StatusCode, StatusCodes } from '../';
 
 describe('testing message encoding and decoding', function () {
   it('should encode and decode HelloMessage ', function () {

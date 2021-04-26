@@ -2,11 +2,8 @@ import { ClientSubscription } from '../client/ClientSubscription';
 import { ClientSession } from '../client/client_session';
 import { OPCUAClient } from '../client/opcua_client';
 import { AttributeIds } from '../constants/AttributeIds';
-import { coerceBoolean, coerceNodeId, ReadValueId } from '../wsopcua';
-import {
-  E2ETestController,
-  getE2ETestController,
-} from './utils/test_server_controller';
+import { coerceBoolean, coerceNodeId, ReadValueId } from '../';
+import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 
 describe('ClientSession#readVariableValue', function () {
   let session: ClientSession;
@@ -40,10 +37,7 @@ describe('ClientSession#readVariableValue', function () {
   });
 
   it('ClientSession#readVariableValue - case 2 - an array of nodeIds', async () => {
-    const response = await session.readVariableValueP([
-      'ns=0;i=2258',
-      'ns=0;i=2257',
-    ]);
+    const response = await session.readVariableValueP(['ns=0;i=2258', 'ns=0;i=2257']);
     const results = response.value;
 
     expect(results instanceof Array).toBeTruthy();
@@ -60,10 +54,7 @@ describe('ClientSession#readVariableValue', function () {
       attributeId: AttributeIds.NodeClass,
     });
 
-    const response = await session.readVariableValueP([
-      readValueId1,
-      readValueId2,
-    ]);
+    const response = await session.readVariableValueP([readValueId1, readValueId2]);
     const results = response.value;
     expect(Array.isArray(results)).toBeTruthy();
     expect(results.length).toEqual(2);
