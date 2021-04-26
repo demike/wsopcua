@@ -3,7 +3,7 @@ import { readExample } from '../examples/read.example';
 import { connectToServerExample } from '../examples/simple.connect.example';
 import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 
-fdescribe('Examples', () => {
+describe('Examples', () => {
   let session: ClientSession;
   let controller: E2ETestController;
   let client: OPCUAClient;
