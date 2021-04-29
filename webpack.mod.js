@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var path = require('path');
 
-var LIB_PATH = path.resolve(__dirname, 'src/wsopcua/index.ts');
+var LIB_PATH = path.resolve(__dirname, 'src/index.ts');
 var BUILD_PATH = path.resolve(__dirname, 'dist');
 
 module.exports = {

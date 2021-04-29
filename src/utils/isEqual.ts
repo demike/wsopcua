@@ -16,7 +16,7 @@ export function isEqual(a: any, b: any, aStack?: any[], bStack?: any[]) {
   }
   // Exhaust primitive checks
   const type = typeof a;
-  if (type !== 'function' && type !== 'object' && typeof b != 'object') {
+  if (type !== 'function' && type !== 'object' && typeof b !== 'object') {
     return false;
   }
   return deepEq(a, b, aStack, bStack);
@@ -58,7 +58,7 @@ function deepEq(a: any, b: any, aStack?: any[], bStack?: any[]) {
 
   const areArrays = className === '[object Array]';
   if (!areArrays) {
-    if (typeof a != 'object' || typeof b != 'object') {
+    if (typeof a !== 'object' || typeof b !== 'object') {
       return false;
     }
 
