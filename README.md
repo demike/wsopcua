@@ -116,7 +116,7 @@ It's also possible to read all attributes of a variable.
 
 ### Browsing
 
-TODO
+<!-- add-file: ./src/examples/browse.example.ts -->
 
 ### Monitoring
 

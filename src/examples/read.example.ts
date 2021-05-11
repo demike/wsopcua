@@ -4,12 +4,6 @@ import { ReadValueId } from '../generated';
 import { coerceNodeId } from '../nodeid/nodeid';
 
 export async function readExample(session: ClientSession) {
-  const client = new OPCUAClient({
-    securityMode: MessageSecurityMode.None,
-    securityPolicy: SecurityPolicy.None,
-    endpoint_must_exist: false,
-  });
-
   // read a value
   const nodeToRead = new ReadValueId({
     nodeId: coerceNodeId('ns=2;s=Scalar_Simulation_String'),
@@ -18,7 +12,7 @@ export async function readExample(session: ClientSession) {
   const response = await session.readP(nodeToRead);
   //                           DataValue
   //                                |   Variant
-  //                                |          value = "OPCUA"
+  //                                |      |   value = "OPCUA"
   //                                |      |     |
   console.log(' value ', response.value.value.value);
 
