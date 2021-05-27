@@ -1,20 +1,14 @@
+import { MonitoredItemBase } from '../client';
 import { ClientSubscription } from '../client/ClientSubscription';
 import { ClientSession } from '../client/client_session';
 import { MonitoredItem } from '../client/MonitoredItem';
 import { MonitoredItemGroup } from '../client/MonitoredItemGroup';
 import { OPCUAClient } from '../client/opcua_client';
 import { AttributeIds } from '../constants/AttributeIds';
-import {
-  DataValue,
-  IMonitoringParameters,
-  TimestampsToReturn,
-} from '../generated';
+import { DataValue, IMonitoringParameters, TimestampsToReturn } from '../generated';
 import { resolveNodeId } from '../nodeid/nodeid';
 import { Variant } from '../variant';
-import {
-  E2ETestController,
-  getE2ETestController,
-} from './utils/test_server_controller';
+import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 
 const doDebug = false;
 
@@ -55,11 +49,7 @@ describe('Testing ClientMonitoredItemGroup', function () {
       queueSize: 1,
     };
 
-    const monitoredItem = new MonitoredItem(
-      subscription,
-      itemToMonitor,
-      options
-    );
+    const monitoredItem = new MonitoredItem(subscription, itemToMonitor, options);
     monitoredItem._monitor(() => {
       console.log(monitoredItem.result);
     });
@@ -161,7 +151,7 @@ describe('Testing ClientMonitoredItemGroup', function () {
     let count = 0;
     monitoredItemGroup.on(
       'changed',
-      function (item, dataValue: DataValue, index) {
+      function (item: MonitoredItemBase, dataValue: DataValue, index: number) {
         count++;
         if (doDebug) {
           console.log(
