@@ -116,15 +116,40 @@ It's also possible to read all attributes of a variable.
 
 ### Browsing
 
+We can browse the RootFolder to receive a list of all of it's child nodes. With the references objects of the browseResult we are able to access all attributes. Let's print the browseName and the nodeId of all the nodes.
+
 <!-- add-file: ./src/examples/browse.example.ts -->
 
 ### Monitoring
 
-TODO
+OPC-UA allows for subscriptions to [attributes](./src/constants/AttributeIds.ts) (value, ...) of it's variables, objects and properties instead of polling for changes.
+
+#### Install a subscription
+
+First Create a subscription from session with several parameters.
+Define a Timeout for the subscription to end and hook into several subscription events like "started".
+
+<!-- add-file: ./src/examples/create.subscription.example.ts -->
+
+#### register a monitored item
+
+When defining an actual monitor object you again use the nodeId as well as the attributeId you want to monitor.
+The [monitored item](./src/client/MonitoredItemBase.ts) again allows for hooks into it's [event system](./src/client/MonitoredItemBase.ts#L30).
+
+<!-- add-file: ./src/examples/monitoring.single.item.example.ts -->
+
+#### register multiple monitored items
+
+To keep the request count low, the preffered way to monitor items is to do a batch request by creating
+multiple monitored items at once.
+
+<!-- add-file: ./src/examples/monitoring.multiple.items.example.ts -->
 
 ### Browse Path Translation
 
-TODO
+If a `nodeId` is unknown it may be obtained through browsing for it.
+
+<!-- add-file: ./src/examples/translate.browse.path.example.ts -->
 
 ## Server Setup
 
