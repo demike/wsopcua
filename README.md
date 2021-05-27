@@ -66,7 +66,7 @@ we reduced the retry count to 1.
 
 <!-- add-file: ./src/examples/simple.connect.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
 
 export async function connectToServerExample() {
@@ -100,7 +100,6 @@ export async function connectToServerExample() {
   await client.disconnectP();
   console.log('disconnected');
 }
-
 ```
 
 ```ts markdown-add-files
@@ -151,7 +150,7 @@ It's also possible to read all attributes of a variable.
 
 <!-- add-file: ./src/examples/read.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { AttributeIds, MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
 import { ClientSession } from '../client';
 import { ReadValueId } from '../generated';
@@ -205,7 +204,6 @@ export async function readExample(session: ClientSession) {
     "minimumSamplingInterval":0,"historizing":false,"statusCode":{"value":0}} 
    */
 }
-
 ```
 
 ### Browsing
@@ -214,7 +212,7 @@ We can browse the RootFolder to receive a list of all of it's child nodes. With 
 
 <!-- add-file: ./src/examples/browse.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { ClientSession } from '../client';
 
 export async function browseExample(session: ClientSession) {
@@ -231,7 +229,6 @@ export async function browseExample(session: ClientSession) {
    * '   -> Views: ns=0;i=87'
    */
 }
-
 ```
 
 ### Monitoring
@@ -245,7 +242,7 @@ Define a Timeout for the subscription to end and hook into several subscription 
 
 <!-- add-file: ./src/examples/create.subscription.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { ClientSubscription } from '../';
 import { ClientSession } from '../client';
 
@@ -276,7 +273,6 @@ export function createSubscriptionExample(session: ClientSession): ClientSubscri
 
   return subscription;
 }
-
 ```
 
 #### register a monitored item
@@ -286,7 +282,7 @@ The [monitored item](./src/client/MonitoredItemBase.ts) again allows for hooks i
 
 <!-- add-file: ./src/examples/monitoring.single.item.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { AttributeIds, ClientSubscription, coerceNodeId } from '../';
 import { DataValue, IMonitoringParameters, ReadValueId, TimestampsToReturn } from '../generated';
 import { timeout } from './example.utils';
@@ -331,7 +327,6 @@ export async function monitorSingleItemExample(subscription: ClientSubscription)
   console.log('now terminating subscription');
   await subscription.terminateP();
 }
-
 ```
 
 #### register multiple monitored items
@@ -341,7 +336,7 @@ multiple monitored items at once.
 
 <!-- add-file: ./src/examples/monitoring.multiple.items.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { AttributeIds, ClientSubscription, coerceNodeId } from '../';
 import { MonitoredItemBase } from '../client';
 import { DataValue, IMonitoringParameters, IReadValueId, TimestampsToReturn } from '../generated';
@@ -396,7 +391,6 @@ export async function monitorMultipleItemsExample(subscription: ClientSubscripti
   console.log('now terminating subscription');
   await subscription.terminateP();
 }
-
 ```
 
 ### Browse Path Translation
@@ -405,7 +399,7 @@ If a `nodeId` is unknown it may be obtained through browsing for it.
 
 <!-- add-file: ./src/examples/translate.browse.path.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { ClientSession } from '../client';
 import { makeBrowsePath } from '../service-translate-browse-path';
 
@@ -420,7 +414,6 @@ export async function translateBrowsePathExample(session: ClientSession) {
   const productNameNodeId = result.targets[0].targetId;
   console.log(' Product Name nodeId = ', productNameNodeId.toString());
 }
-
 ```
 
 ## Server Setup
