@@ -26,7 +26,7 @@ describe('testing Client-Server - Event', function () {
     debugLog('--> connection client');
     await client.connectP(OPCUA_TEST_SERVER_URI);
 
-    setup.client.on('close', function (err) {
+    client.on('close', function (err) {
       expect(err).toBeUndefined(
         'No error shall be transmitted when client initiates the disconnection'
       );
@@ -35,7 +35,7 @@ describe('testing Client-Server - Event', function () {
 
     expect(close_counter).toBe(0);
     debugLog(' --> Disconnecting Client');
-    await setup.client.disconnectP();
+    await client.disconnectP();
 
     expect(close_counter).toBe(1);
   });
