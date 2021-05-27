@@ -452,9 +452,10 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
     if (this._sessions.length) {
       // transfer active session to  orphan and detach them from channel
-      this._sessions.forEach((session) => {
+      const tmp = [...this._sessions];
+      for (const session of tmp) {
         this._removeSession(session);
-      });
+      }
       this._sessions = [];
     }
 
