@@ -13,17 +13,21 @@ import { Variant } from '../variant';
 import { DataType } from '../variant/DataTypeEnum';
 import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 
-describe('JHJ1 end-to-end testing of read and write operation on a Variable', function () {
+fdescribe('JHJ1 end-to-end testing of read and write operation on a Variable', function () {
   let session: ClientSession;
   let controller: E2ETestController;
   let client: OPCUAClient;
   const CurrentTimeVariableId = coerceNodeId('ns=2;s=Scalar_Simulation_Interval');
+  let namespace: number;
 
   beforeAll(async () => {
     console.log('jasmine timeout', jasmine.DEFAULT_TIMEOUT_INTERVAL);
     controller = getE2ETestController();
     const setup = await controller.startTestServer();
-    CurrentTimeVariableId.namespace = await controller.addComplianceTestNamespace();
+
+    namespace = await controller.addComplianceTestNamespace();
+    CurrentTimeVariableId.namespace = namespace;
+    console.log(namespace);
 
     session = setup.session;
     client = setup.client;
@@ -34,7 +38,8 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
   const namespaceIndex = 2;
 
   async function test_write_read_cycle(dataValue: DataValue) {
-    const nodeId = coerceNodeId('ns=2;s=Scalar_Static_Float');
+    const nodeId = coerceNodeId('ns=2;s=Static_Scalar_Float');
+    nodeId.namespace = namespace;
 
     const nodesToWrite = [
       new WriteValue({
@@ -228,7 +233,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
     });
 
     it('PERF - WRITE testing performance of large array', async () => {
-      const nodeId = coerceNodeId('ns=2;s=Scalar_Static_Large_Array_Float');
+      const nodeId = coerceNodeId('ns=2;s=Static_Scalar_Large_Array_Float');
       const nodeToRead = new ReadValueId({
         nodeId: nodeId,
         attributeId: AttributeIds.Value,
