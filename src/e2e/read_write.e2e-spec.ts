@@ -13,7 +13,7 @@ import { Variant } from '../variant';
 import { DataType } from '../variant/DataTypeEnum';
 import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 
-fdescribe('JHJ1 end-to-end testing of read and write operation on a Variable', function () {
+describe('JHJ1 end-to-end testing of read and write operation on a Variable', function () {
   let session: ClientSession;
   let controller: E2ETestController;
   let client: OPCUAClient;
