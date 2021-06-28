@@ -7,6 +7,7 @@ import { monitorSingleItemExample } from '../examples/monitoring.single.item.exa
 import { readExample } from '../examples/read.example';
 import { connectToServerExample } from '../examples/simple.connect.example';
 import { translateBrowsePathExample } from '../examples/translate.browse.path.example';
+import { writeExample } from '../examples/write.example';
 import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 
 describe('Examples', () => {
@@ -53,5 +54,9 @@ describe('Examples', () => {
 
   it('should call a method', async () => {
     await methodExample(session);
+  });
+
+  it('should write a value', async () => {
+    await writeExample(session);
   });
 });
