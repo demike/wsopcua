@@ -24,6 +24,7 @@ Get started with wsopcua, learn the fundamentals and explore advanced examples.
 ### Advanced
 
 - [Data Type Generation](./documentation/code_gen.md)
+- [Debugging with Wireshark](./documentation/wireshark.md)
 
 ## Client Setup
 
@@ -53,8 +54,9 @@ The following example is structured in multiple async steps
 4.  browse a folder [example 3](#browsing)
 5.  install a subscription and a monitored item [example 4](#monitoring)
 6.  find a node id by Browse Name [example 5](#browse-path-translation)
-7.  close session [example 1](#connecting-to-a-server)
-8.  disconnecting [example 1](#connecting-to-a-server)
+7.  call a method [example 6](#calling-methods)
+8.  close session [example 1](#connecting-to-a-server)
+9.  disconnecting [example 1](#connecting-to-a-server)
 
 ### Connecting to a Server
 
@@ -415,6 +417,17 @@ export async function translateBrowsePathExample(session: ClientSession) {
   console.log(' Product Name nodeId = ', productNameNodeId.toString());
 }
 ```
+
+### Calling Methods
+
+As one might expect Opcua Objects can have methods.
+
+<!-- add-file: ./src/examples/method.example.ts -->
+
+In addition to this simple example it is also possible
+to use the method nodeId of the `object type` in combination with the nodeId of the target object.
+This makes it easier if you want to call the same method on different instances ( potentially in different namespaces ) of the same object type.
+Because the nodeId of the method has to be translated only once.
 
 ## Server Setup
 

@@ -1,6 +1,7 @@
 import { ClientSession, OPCUAClient } from '../client';
 import { browseExample } from '../examples/browse.example';
 import { createSubscriptionExample } from '../examples/create.subscription.example';
+import { methodExample } from '../examples/method.example';
 import { monitorMultipleItemsExample } from '../examples/monitoring.multiple.items.example';
 import { monitorSingleItemExample } from '../examples/monitoring.single.item.example';
 import { readExample } from '../examples/read.example';
@@ -48,5 +49,9 @@ describe('Examples', () => {
   it('should monitor an item', async () => {
     const subscription = await createSubscriptionExample(session);
     await monitorSingleItemExample(subscription);
+  });
+
+  it('should call a method', async () => {
+    await methodExample(session);
   });
 });
