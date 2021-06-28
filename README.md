@@ -69,7 +69,7 @@ we reduced the retry count to 1.
 
 <!-- add-file: ./src/examples/simple.connect.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
 
 export async function connectToServerExample() {
@@ -103,6 +103,7 @@ export async function connectToServerExample() {
   await client.disconnectP();
   console.log('disconnected');
 }
+
 ```
 
 ### Reading Values
@@ -120,7 +121,7 @@ It's also possible to read all attributes of a variable.
 
 <!-- add-file: ./src/examples/read.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { AttributeIds, MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
 import { ClientSession } from '../client';
 import { ReadValueId } from '../generated';
@@ -174,6 +175,7 @@ export async function readExample(session: ClientSession) {
     "minimumSamplingInterval":0,"historizing":false,"statusCode":{"value":0}} 
    */
 }
+
 ```
 
 ### Browsing
@@ -182,7 +184,7 @@ We can browse the RootFolder to receive a list of all of it's child nodes. With 
 
 <!-- add-file: ./src/examples/browse.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { ClientSession } from '../client';
 
 export async function browseExample(session: ClientSession) {
@@ -199,6 +201,7 @@ export async function browseExample(session: ClientSession) {
    * '   -> Views: ns=0;i=87'
    */
 }
+
 ```
 
 ### Monitoring
@@ -212,7 +215,7 @@ Define a Timeout for the subscription to end and hook into several subscription 
 
 <!-- add-file: ./src/examples/create.subscription.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { ClientSubscription } from '../';
 import { ClientSession } from '../client';
 
@@ -243,6 +246,7 @@ export function createSubscriptionExample(session: ClientSession): ClientSubscri
 
   return subscription;
 }
+
 ```
 
 #### register a monitored item
@@ -252,7 +256,7 @@ The [monitored item](./src/client/MonitoredItemBase.ts) again allows for hooks i
 
 <!-- add-file: ./src/examples/monitoring.single.item.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { AttributeIds, ClientSubscription, coerceNodeId } from '../';
 import { DataValue, IMonitoringParameters, ReadValueId, TimestampsToReturn } from '../generated';
 import { timeout } from './example.utils';
@@ -297,6 +301,7 @@ export async function monitorSingleItemExample(subscription: ClientSubscription)
   console.log('now terminating subscription');
   await subscription.terminateP();
 }
+
 ```
 
 #### register multiple monitored items
@@ -306,7 +311,7 @@ multiple monitored items at once.
 
 <!-- add-file: ./src/examples/monitoring.multiple.items.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { AttributeIds, ClientSubscription, coerceNodeId } from '../';
 import { MonitoredItemBase } from '../client';
 import { DataValue, IMonitoringParameters, IReadValueId, TimestampsToReturn } from '../generated';
@@ -361,6 +366,7 @@ export async function monitorMultipleItemsExample(subscription: ClientSubscripti
   console.log('now terminating subscription');
   await subscription.terminateP();
 }
+
 ```
 
 ### Browse Path Translation
@@ -369,7 +375,7 @@ If a `nodeId` is unknown it may be obtained through browsing for it.
 
 <!-- add-file: ./src/examples/translate.browse.path.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { ClientSession } from '../client';
 import { makeBrowsePath } from '../service-translate-browse-path';
 
@@ -384,6 +390,7 @@ export async function translateBrowsePathExample(session: ClientSession) {
   const productNameNodeId = result.targets[0].targetId;
   console.log(' Product Name nodeId = ', productNameNodeId.toString());
 }
+
 ```
 
 ### Calling Methods
@@ -392,7 +399,7 @@ As one might expect Opcua Objects can have methods.
 
 <!-- add-file: ./src/examples/method.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { coerceNodeId, DataType } from '..';
 import { ClientSession } from '../client';
 import { CallMethodRequest } from '../generated';
@@ -424,40 +431,7 @@ export async function methodExample(session: ClientSession) {
   // "Result Value: 42"
   console.log(`Result Value: ${response.result[0].outputArguments[0].value}`);
 }
-```
 
-```ts markdown-add-files
-import { coerceNodeId, DataType } from '..';
-import { ClientSession } from '../client';
-import { CallMethodRequest } from '../generated';
-import { coerceVariant } from '../variant/variant';
-
-export async function methodExample(session: ClientSession) {
-  /*
-    calls the method of a specific object with one argument
-    ObjectWithMethods.MethoIO(1);
-
-    For detailed information take a look at the "method service set" documentation
-    https://reference.opcfoundation.org/v104/Core/docs/Part4/5.11.2/ 
-  */
-
-  const response = await session.callP([
-    new CallMethodRequest({
-      objectId: coerceNodeId('ns=2;s=ObjectWithMethods'), // target object
-      methodId: coerceNodeId('ns=2;s=MethodIO'), // the method to call
-      inputArguments: [
-        // an array of input arguments
-        coerceVariant({
-          dataType: DataType.UInt32,
-          value: 1,
-        }),
-      ],
-    }),
-  ]);
-
-  // "Result Value: 42"
-  console.log(`Result Value: ${response.result[0].outputArguments[0].value}`);
-}
 ```
 
 In addition to this simple example it is also possible
@@ -469,7 +443,7 @@ Because the nodeId of the method has to be translated only once.
 
 <!-- add-file: ./src/examples/write.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { AttributeIds, MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
 import { ClientSession } from '../client';
 import { DataValue, ReadValueId, WriteValue } from '../generated';
@@ -493,6 +467,7 @@ export async function writeExample(session: ClientSession) {
 
   console.log(statusCode); // GOOD
 }
+
 ```
 
 `session.writeValueP` supports writing a single node or an array of nodes.
