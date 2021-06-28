@@ -69,7 +69,7 @@ we reduced the retry count to 1.
 
 <!-- add-file: ./src/examples/simple.connect.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
 
 export async function connectToServerExample() {
@@ -103,7 +103,6 @@ export async function connectToServerExample() {
   await client.disconnectP();
   console.log('disconnected');
 }
-
 ```
 
 ### Reading Values
@@ -121,7 +120,7 @@ It's also possible to read all attributes of a variable.
 
 <!-- add-file: ./src/examples/read.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { AttributeIds, MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
 import { ClientSession } from '../client';
 import { ReadValueId } from '../generated';
@@ -175,7 +174,6 @@ export async function readExample(session: ClientSession) {
     "minimumSamplingInterval":0,"historizing":false,"statusCode":{"value":0}} 
    */
 }
-
 ```
 
 ### Browsing
@@ -184,7 +182,7 @@ We can browse the RootFolder to receive a list of all of it's child nodes. With 
 
 <!-- add-file: ./src/examples/browse.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { ClientSession } from '../client';
 
 export async function browseExample(session: ClientSession) {
@@ -201,7 +199,6 @@ export async function browseExample(session: ClientSession) {
    * '   -> Views: ns=0;i=87'
    */
 }
-
 ```
 
 ### Monitoring
@@ -215,7 +212,7 @@ Define a Timeout for the subscription to end and hook into several subscription 
 
 <!-- add-file: ./src/examples/create.subscription.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { ClientSubscription } from '../';
 import { ClientSession } from '../client';
 
@@ -246,7 +243,6 @@ export function createSubscriptionExample(session: ClientSession): ClientSubscri
 
   return subscription;
 }
-
 ```
 
 #### register a monitored item
@@ -256,7 +252,7 @@ The [monitored item](./src/client/MonitoredItemBase.ts) again allows for hooks i
 
 <!-- add-file: ./src/examples/monitoring.single.item.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { AttributeIds, ClientSubscription, coerceNodeId } from '../';
 import { DataValue, IMonitoringParameters, ReadValueId, TimestampsToReturn } from '../generated';
 import { timeout } from './example.utils';
@@ -301,7 +297,6 @@ export async function monitorSingleItemExample(subscription: ClientSubscription)
   console.log('now terminating subscription');
   await subscription.terminateP();
 }
-
 ```
 
 #### register multiple monitored items
@@ -311,7 +306,7 @@ multiple monitored items at once.
 
 <!-- add-file: ./src/examples/monitoring.multiple.items.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { AttributeIds, ClientSubscription, coerceNodeId } from '../';
 import { MonitoredItemBase } from '../client';
 import { DataValue, IMonitoringParameters, IReadValueId, TimestampsToReturn } from '../generated';
@@ -366,7 +361,6 @@ export async function monitorMultipleItemsExample(subscription: ClientSubscripti
   console.log('now terminating subscription');
   await subscription.terminateP();
 }
-
 ```
 
 ### Browse Path Translation
@@ -375,7 +369,7 @@ If a `nodeId` is unknown it may be obtained through browsing for it.
 
 <!-- add-file: ./src/examples/translate.browse.path.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { ClientSession } from '../client';
 import { makeBrowsePath } from '../service-translate-browse-path';
 
@@ -390,7 +384,6 @@ export async function translateBrowsePathExample(session: ClientSession) {
   const productNameNodeId = result.targets[0].targetId;
   console.log(' Product Name nodeId = ', productNameNodeId.toString());
 }
-
 ```
 
 ### Calling Methods
@@ -399,7 +392,7 @@ As one might expect Opcua Objects can have methods.
 
 <!-- add-file: ./src/examples/method.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { coerceNodeId, DataType } from '..';
 import { ClientSession } from '../client';
 import { CallMethodRequest } from '../generated';
@@ -431,10 +424,9 @@ export async function methodExample(session: ClientSession) {
   // "Result Value: 42"
   console.log(`Result Value: ${response.result[0].outputArguments[0].value}`);
 }
-
 ```
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { coerceNodeId, DataType } from '..';
 import { ClientSession } from '../client';
 import { CallMethodRequest } from '../generated';
@@ -466,7 +458,6 @@ export async function methodExample(session: ClientSession) {
   // "Result Value: 42"
   console.log(`Result Value: ${response.result[0].outputArguments[0].value}`);
 }
-
 ```
 
 In addition to this simple example it is also possible
@@ -478,7 +469,7 @@ Because the nodeId of the method has to be translated only once.
 
 <!-- add-file: ./src/examples/write.example.ts -->
 
-``` ts markdown-add-files
+```ts markdown-add-files
 import { AttributeIds, MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
 import { ClientSession } from '../client';
 import { DataValue, ReadValueId, WriteValue } from '../generated';
@@ -502,7 +493,6 @@ export async function writeExample(session: ClientSession) {
 
   console.log(statusCode); // GOOD
 }
-
 ```
 
 `session.writeValueP` supports writing a single node or an array of nodes.
@@ -548,50 +538,3 @@ TODO
 ## Ecosystem
 
 TODO
-
-### Calling Methods
-
-As one might expect Opcua Objects can have methods.
-
-<!-- add-file: ./src/examples/method.example.ts -->
-
-In addition to this simple example it is also possible
-to use the method nodeId of the `object type` in combination with the nodeId of the target object.
-This makes it easier if you want to call the same method on different instances ( potentially in different namespaces ) of the same object type.
-Because the nodeId of the method has to be translated only once.
-
-## Server Setup
-
-To be able to directly connect to an OPC UA server, it has to support
-the WebSocket transport.
-
-OPC UA servers that do not provide the WSS transport can be easily connected
-by a web socket proxy ( tested with Unified Automation C++ SDK servers):
-
-### Servers with WSS Support
-
-[Open62541]() supports the WSS transport.
-
-Take a look at this [Open62541 WS example](https://github.com/open62541/open62541/blob/master/examples/tutorial_server_variable.c)
-or [Open62541 WSS example](https://github.com/open62541/open62541/blob/master/examples/encryption/server_encryption.c) to enable the WebSocket transport.
-
-Hint:
-
-> `UA_ENABLE_WEBSOCKET_SERVER` options has to be enabled in CMakeList.txt
-> It uses `libwebsockets`
-
-### Using a WebSocket Proxy
-
-TODO
-
-## Quickstart
-
-TODO
-
-## Ecosystem
-
-TODO
-
-```
-
-```
