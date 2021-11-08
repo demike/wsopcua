@@ -17,4 +17,16 @@ ws_dissector_table:add(4444,opcua_dissector)
 Change the Port `4444` to your used websocket port (in case you are not using the `opcua+uacp` sub-protocol).
 
 You can evaluate the above lua script in Wireshark by pasting it in
-`Tools/Lua/Evaluate`.
+`Tools > Lua > Evaluate`.
+
+Alternatively you can put these view lines into a file with the `.lua` ending and paste
+it into one of Wireshark's plugin folders
+
+> You can find the Plugin-Folders in Wireshark in
+> <b>Help > About Wireshark > Folders</b>
+
+<b>Hint</b>
+
+> Restart your Application in order to make Wireshark detect the WebSocket connection
+
+![image](./wireshark-example.png)
