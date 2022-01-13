@@ -942,9 +942,11 @@ export function isAnonymous(
 ): userIdentityInfo is UserIdentityInfoAnonymous {
   return (
     !userIdentityInfo ||
-    (!(userIdentityInfo as Partial<UserIdentityInfoUserName>).userName &&
-      !(userIdentityInfo as Partial<UserIdentityInfoUserName>).password) ||
-    !(userIdentityInfo as Partial<UserIdentityInfoIssued>).tokenData
+    (!(
+      (userIdentityInfo as Partial<UserIdentityInfoUserName>).userName &&
+      (userIdentityInfo as Partial<UserIdentityInfoUserName>).password
+    ) &&
+      !(userIdentityInfo as Partial<UserIdentityInfoIssued>).tokenData)
   );
 }
 

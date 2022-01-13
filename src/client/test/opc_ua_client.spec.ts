@@ -1,5 +1,5 @@
 'use strict';
-import { OPCUAClient } from '../opcua_client';
+import { isAnonymous, isIssued, isUserNamePassword, OPCUAClient } from '../opcua_client';
 import { ClientSecureChannelLayer } from '../../secure-channel/client_secure_channel_layer';
 import { timeout } from 'async';
 
@@ -50,5 +50,73 @@ describe('OPCUA Client', function () {
 
       expect(setIntervalCalls).toEqual(clearIntervalCalls);
     });
+  });
+});
+
+describe('isAnonymous', () => {
+  it('should return false if username and/or password are set', () => {
+    expect(isAnonymous({ userName: 'name', password: 'pw' })).toBeFalse();
+  });
+
+  it("should return false if 'tokenData' is set", () => {
+    expect(isAnonymous({ userName: 'name', password: 'pw' })).toBeFalse();
+  });
+
+  it("should return false if 'tokenData' is set", () => {
+    expect(isAnonymous({ tokenData: new Uint8Array() })).toBeFalse();
+  });
+
+  it('should return true if username, password and tokenData are not set', () => {
+    expect(isAnonymous({ some: 'thing' })).toBeTrue();
+  });
+
+  it('should return false if username is set', () => {
+    expect(isAnonymous({ userName: 'name' })).toBeFalse();
+  });
+});
+
+describe('isAnonymous', () => {
+  it('should return false if username and/or password are set', () => {
+    expect(isAnonymous({ userName: 'name', password: 'pw' })).toBeFalse();
+  });
+
+  it("should return false if 'tokenData' is set", () => {
+    expect(isAnonymous({ userName: 'name', password: 'pw' })).toBeFalse();
+  });
+
+  it("should return false if 'tokenData' is set", () => {
+    expect(isAnonymous({ tokenData: new Uint8Array() })).toBeFalse();
+  });
+
+  it('should return true if username and tokenData are not set', () => {
+    expect(isAnonymous({ some: 'thing' })).toBeTrue();
+  });
+});
+
+describe('isUsernamePassword', () => {
+  it('should return true if username and password are set', () => {
+    expect(isUserNamePassword({ userName: 'name', password: 'pw' })).toBeTrue();
+  });
+
+  it('should return false if just password is set', () => {
+    expect(isUserNamePassword({ password: 'pw' })).toBeFalse();
+  });
+
+  it("should return false if just 'username' is set", () => {
+    expect(isUserNamePassword({ userName: 'name' })).toBeFalse();
+  });
+
+  it('should return false if username and password are not set', () => {
+    expect(isUserNamePassword({ some: 'thing' })).toBeFalse();
+  });
+});
+
+describe('isIssued', () => {
+  it('should return true if tokenData is set', () => {
+    expect(isIssued({ tokenData: new Uint8Array() })).toBeTrue();
+  });
+
+  it('should return true username and password are not set', () => {
+    expect(isIssued({ some: 'thing' })).toBeFalse();
   });
 });
