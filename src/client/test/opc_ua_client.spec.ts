@@ -75,24 +75,6 @@ describe('isAnonymous', () => {
   });
 });
 
-describe('isAnonymous', () => {
-  it('should return false if username and/or password are set', () => {
-    expect(isAnonymous({ userName: 'name', password: 'pw' })).toBeFalse();
-  });
-
-  it("should return false if 'tokenData' is set", () => {
-    expect(isAnonymous({ userName: 'name', password: 'pw' })).toBeFalse();
-  });
-
-  it("should return false if 'tokenData' is set", () => {
-    expect(isAnonymous({ tokenData: new Uint8Array() })).toBeFalse();
-  });
-
-  it('should return true if username and tokenData are not set', () => {
-    expect(isAnonymous({ some: 'thing' })).toBeTrue();
-  });
-});
-
 describe('isUsernamePassword', () => {
   it('should return true if username and password are set', () => {
     expect(isUserNamePassword({ userName: 'name', password: 'pw' })).toBeTrue();
