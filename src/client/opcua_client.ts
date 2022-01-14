@@ -1097,6 +1097,34 @@ async function createUserNameIdentityToken(
   return identityToken;
 }
 
+/**
+ * create an IssuedIdentityToken
+ *
+ * 7.36.6 IssuedIdentityToken
+ * The IssuedIdentityToken is used to pass SecurityTokens issued by an external Authorization Service to the Server.
+ * These tokens may be text or binary.
+ *
+ * OAuth2 defines a standard for Authorization Services that produce JSON Web Tokens (JWT). These JWTs are passed as an Issued Token to an OPC UA Server which uses the signature contained in the JWT to validate the token.
+ * OPC 10000-6 describes OAuth2 and JWTs in more detail.
+ * If the token is encrypted, it shall use the EncryptedSecret format defined in 7.36.2.3.
+ *
+ * This token shall be encrypted by the Client if required by the SecurityPolicy of the UserTokenPolicy.
+ * The Server should specify a **SecurityPolicy for the UserTokenPolicy** if the **SecureChannel has a SecurityPolicy of None** and no transport layer encryption is available.
+ *
+ * The SecurityPolicy of the SecureChannel is used If no SecurityPolicy is specified in the UserTokenPolicy.
+ *
+ * If the SecurityPolicy is not None, the tokenData shall be encoded in UTF-8 (if it is not already binary),
+ * signed and encrypted according the rules specified for the tokenType of the associated UserTokenPolicy (see 7.37).
+ *
+ * If the SecurityPolicy is None then the tokenData only contains the UTF-8 encoded tokenData.
+ * This configuration should not be used unless the network is encrypted in some other manner such as a VPN.
+ * The use of this configuration without network encryption would result in a serious security fault, in that it would cause the appearance of a secure user access, but it would make the token visible in clear text.
+ *
+ *
+ * @param session
+ * @param tokenData
+ * @returns
+ */
 async function createIssuedIdentityToken(
   session: ClientSession,
   tokenData: Uint8Array
@@ -1124,7 +1152,7 @@ async function createIssuedIdentityToken(
 
   let securityPolicy = fromURI(userTokenPolicy.securityPolicyUri);
 
-  // if the security policy is not specified we use the session security policy
+  // if the security policy is not specified we use the session security policy (of the secure channel)
   if (securityPolicy === SecurityPolicy.Invalid) {
     securityPolicy = (<any>session)._client._secureChannel.securityPolicy;
     assert(securityPolicy);

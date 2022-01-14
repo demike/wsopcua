@@ -1160,7 +1160,7 @@ export function generatePublicKeyFromDER(der_certificate: Uint8Array): PromiseLi
   const spki = getSPKIFromCertificate(der_certificate);
 
   return crypto.subtle
-    .importKey('spki', spki, { name: 'RSA-OAEP', hash: 'SHA-1' }, true, ['encrypt'])
+    .importKey('spki', spki, { name: 'RSA-OAEP', hash: 'SHA-1' /*'SHA-256'*/ }, true, ['encrypt'])
     .then((key) => {
       (der_certificate as any)._publicKey = key;
       return key;
