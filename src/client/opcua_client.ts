@@ -1088,7 +1088,10 @@ async function createUserNameIdentityToken(
 
   // let ci = exploreCertificate(session.serverCertificate);
   try {
-    const publicKey = await generatePublicKeyFromDER(session.serverCertificate);
+    const publicKey = await generatePublicKeyFromDER(
+      session.serverCertificate,
+      cryptoFactory.sha1or256
+    );
     const buffer = await cryptoFactory.asymmetricEncrypt(block, publicKey);
     identityToken.password = new Uint8Array(buffer);
   } catch (err) {
@@ -1202,7 +1205,10 @@ async function createIssuedIdentityToken(
   ]);
 
   try {
-    const publicKey = await generatePublicKeyFromDER(session.serverCertificate);
+    const publicKey = await generatePublicKeyFromDER(
+      session.serverCertificate,
+      cryptoFactory.sha1or256
+    );
     const buffer = await cryptoFactory.asymmetricEncrypt(block, publicKey);
     identityToken.tokenData = new Uint8Array(buffer);
   } catch (err) {

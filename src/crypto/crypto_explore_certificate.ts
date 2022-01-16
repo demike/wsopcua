@@ -1152,7 +1152,10 @@ export function convertPEMtoDER(raw_key: PEM): DER {
   return combine_der(parts);
 }
 
-export function generatePublicKeyFromDER(der_certificate: Uint8Array): PromiseLike<CryptoKey> {
+export function generatePublicKeyFromDER(
+  der_certificate: Uint8Array,
+  hash: 'SHA-1' | 'SHA-256'
+): PromiseLike<CryptoKey> {
   if ((der_certificate as any)._publicKey) {
     return Promise.resolve((der_certificate as any)._publicKey);
   }
@@ -1160,7 +1163,7 @@ export function generatePublicKeyFromDER(der_certificate: Uint8Array): PromiseLi
   const spki = getSPKIFromCertificate(der_certificate);
 
   return crypto.subtle
-    .importKey('spki', spki, { name: 'RSA-OAEP', hash: 'SHA-1' /*'SHA-256'*/ }, true, ['encrypt'])
+    .importKey('spki', spki, { name: 'RSA-OAEP', hash }, true, ['encrypt'])
     .then((key) => {
       (der_certificate as any)._publicKey = key;
       return key;

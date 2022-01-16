@@ -166,7 +166,7 @@ function RSAPKCS1V15SHA1_Verify(
   signature: Uint8Array,
   certificate: Uint8Array
 ): PromiseLike<boolean> {
-  return generatePublicKeyFromDER(certificate)
+  return generatePublicKeyFromDER(certificate, 'SHA-1')
     .then((pubKey) => {
       return {
         algorithm: 'RSA-SHA1',
@@ -182,7 +182,7 @@ function RSAPKCS1OAEPSHA256_Verify(
   signature: Uint8Array,
   certificate: Uint8Array
 ): PromiseLike<boolean> {
-  return generatePublicKeyFromDER(certificate)
+  return generatePublicKeyFromDER(certificate, 'SHA-256')
     .then((pubKey) => {
       return {
         algorithm: 'RSA-SHA256',
@@ -221,7 +221,7 @@ function RSAOAEP_Encrypt(buffer: Uint8Array, publicKey: CryptoKey): Promise<Uint
   return crypto_utils.publicEncrypt_long(
     buffer,
     publicKey,
-    42,
+    getRSAOAEPPadding((publicKey.algorithm as RsaHashedKeyAlgorithm).hash.name),
     crypto_utils.RSA_PKCS1_OAEP_PADDING
   );
 }
@@ -290,7 +290,7 @@ export interface ICryptoFactory {
   asymmetricEncryptionAlgorithm: string;
   blockPaddingSize: number;
   symmetricEncryptionAlgorithm: string;
-  sha1or256: string;
+  sha1or256: 'SHA-1' | 'SHA-256'; //string;
   compute_derived_keys: Function;
 }
 
@@ -346,7 +346,7 @@ const _Basic256: ICryptoFactory = {
   asymmetricDecrypt: RSAOAEP_Decrypt,
   asymmetricEncryptionAlgorithm: 'http://www.w3.org/2001/04/xmlenc#rsa-oaep',
 
-  blockPaddingSize: 42,
+  blockPaddingSize: getRSAOAEPPadding('SHA-1'),
 
   // "aes-256-cbc"
   symmetricEncryptionAlgorithm: 'AES-256-CBC',
@@ -376,7 +376,7 @@ const _Basic256Sha256: ICryptoFactory = {
   asymmetricDecrypt: RSAOAEP_Decrypt,
   asymmetricEncryptionAlgorithm: 'http://www.w3.org/2001/04/xmlenc#rsa-oaep',
 
-  blockPaddingSize: 42,
+  blockPaddingSize: getRSAOAEPPadding('SHA-256'),
 
   // "aes-256-cbc"
   symmetricEncryptionAlgorithm: 'AES-256-CBC',
@@ -490,4 +490,17 @@ export function getOptionsForSymmetricSignAndEncrypt(
     };
   }
   return options;
+}
+
+export function getRSAOAEPPadding(hash: string /* 'SHA-1' | 'SHA-256' | 'SHA-512' */): number {
+  switch (hash) {
+    case 'SHA-1':
+      return 42; // 20*2 +2
+    case 'SHA-256':
+      return 66; // 256/8 * 2 + 2 = 32 * 2 + 2
+    case 'SHA-512':
+      return 130; // 512/8 * 2 + 2 = 64 * 2 + 2
+    default:
+      throw new Error('hash function not implemented');
+  }
 }
