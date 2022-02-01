@@ -1,5 +1,6 @@
 import { Signature } from './common';
 import { assert } from '../assert';
+import { concatArrayBuffers } from 'src/basic-types/array';
 
 export function buf2base64(buffer: ArrayBuffer): string {
   return btoa(String.fromCharCode(...new Uint8Array(buffer)));
@@ -30,7 +31,7 @@ export function buf2hex(buffer: ArrayBuffer) {
     .join('');
 }
 
-export function buf2string(buffer: ArrayBuffer) {
+export function buf2string(buffer: BufferSource) {
   const dec = new TextDecoder('utf-8');
   return dec.decode(buffer);
 }
@@ -67,11 +68,10 @@ interface MakeMessageChunkSignatureOptions {
  * @return - the signature
  */
 export async function makeMessageChunkSignature(
-  chunk: ArrayBuffer,
+  chunk: BufferSource,
   options: MakeMessageChunkSignatureOptions
 ): Promise<ArrayBuffer> {
-  assert(chunk instanceof ArrayBuffer);
-  return crypto.subtle.sign(options.algorithm, options.privateKey, chunk);
+  return crypto.subtle.sign(options.algorithm, options.privateKey, chunk as any);
 }
 
 export interface VerifyMessageChunkSignatureOptions {
@@ -96,18 +96,20 @@ export interface VerifyMessageChunkSignatureOptions {
  * @return {Boolean} - true if the signature is valid
  */
 export function verifyMessageChunkSignature(
-  blockToVerify: ArrayBuffer,
-  signature: Signature,
+  blockToVerify: BufferSource,
+  signature: BufferSource,
   options: VerifyMessageChunkSignatureOptions
 ): PromiseLike<boolean> {
-  assert(blockToVerify instanceof ArrayBuffer);
-  assert(signature instanceof ArrayBuffer);
-
-  return crypto.subtle.verify(options.algorithm, options.publicKey, signature, blockToVerify);
+  return crypto.subtle.verify(
+    options.algorithm,
+    options.publicKey,
+    signature as any,
+    blockToVerify as any
+  );
 }
 
-export function makeSHA1Thumbprint(buffer: ArrayBuffer): PromiseLike<Signature> {
-  return crypto.subtle.digest('SHA-1', buffer);
+export function makeSHA1Thumbprint(buffer: BufferSource): PromiseLike<Signature> {
+  return crypto.subtle.digest('SHA-1', buffer as any);
 }
 
 // Basically when you =encrypt something using an RSA key (whether public or private), the encrypted value must
@@ -138,7 +140,7 @@ export async function publicEncrypt_long(
   }
   assert(algorithm === RSA_PKCS1_PADDING || algorithm === RSA_PKCS1_OAEP_PADDING);
 
-  const blockSize = (publicKey.algorithm as RsaKeyAlgorithm).modulusLength / 8;
+  const blockSize = rsaKeyLength(publicKey);
   const chunk_size = blockSize - padding;
   const nbBlocks = Math.ceil(buffer.byteLength / chunk_size);
 
@@ -173,7 +175,7 @@ export async function privateDecrypt_long(
   algorithm = algorithm || RSA_PKCS1_PADDING;
   assert(algorithm === RSA_PKCS1_PADDING || algorithm === RSA_PKCS1_OAEP_PADDING);
 
-  const blockSize = (privateKey.algorithm as RsaKeyAlgorithm).modulusLength / 8;
+  const blockSize = rsaKeyLength(privateKey);
   const nbBlocks = Math.ceil(buffer.byteLength / blockSize);
 
   if (nbBlocks <= 1) {
@@ -183,18 +185,24 @@ export async function privateDecrypt_long(
       .then((decrypted) => new Uint8Array(decrypted));
   }
 
-  const outputBuffer = new Uint8Array(nbBlocks * blockSize);
+  const inputArray = new Uint8Array(buffer);
+  const outputBuffers: ArrayBuffer[] = [];
   for (let i = 0; i < nbBlocks; i++) {
-    const currentBlock = buffer.slice(blockSize * i, blockSize * (i + 1));
+    const inputBuffer = inputArray.subarray(blockSize * i, blockSize * (i + 1));
+
+    // const currentBlock = buffer.slice(blockSize * i, blockSize * (i + 1));
 
     const decrypted_chunk: ArrayBuffer = await crypto.subtle.decrypt(
       { name: 'RSA-OAEP' },
       privateKey,
-      currentBlock
+      inputBuffer
     );
 
-    outputBuffer.set(new Uint8Array(decrypted_chunk), i * blockSize);
+    outputBuffers.push(decrypted_chunk);
   }
+  return new Uint8Array(concatArrayBuffers(outputBuffers));
+}
 
-  return outputBuffer;
+export function rsaKeyLength(key: CryptoKey) {
+  return (key.algorithm as RsaKeyAlgorithm).modulusLength / 8;
 }

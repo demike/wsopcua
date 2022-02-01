@@ -3,6 +3,7 @@
 import { ChunkManager } from './chunk_manager';
 import { assert } from '../assert';
 import { hexDump } from '../common/debug';
+import { DataStream } from '../basic-types/DataStream';
 
 function make_packet(packet_length: number) {
   const buf = new Uint8Array(packet_length);
@@ -14,15 +15,15 @@ function make_packet(packet_length: number) {
 
 const do_debug = false;
 
-function compute_fake_signature(section_to_sign: ArrayBuffer): ArrayBuffer {
+function compute_fake_signature(section_to_sign: ArrayBuffer): Promise<ArrayBuffer> {
   const signature = new Uint8Array(4);
   for (let i = 0; i < signature.length; i++) {
     signature[i] = 0xcc;
   }
-  return signature.buffer;
+  return Promise.resolve(signature.buffer);
 }
 
-function write_fake_header(block: DataView, isLast: boolean, total_length: number) {
+function write_fake_header(block: DataView | DataStream, isLast: boolean, total_length: number) {
   for (let i = 0; i < this.headerSize; i++) {
     block.setUint8(i, 0xaa);
   }
@@ -61,12 +62,12 @@ function fake_encrypt_buffer(buffer: ArrayBuffer) {
 
     outputBuffer.set(new Uint8Array(encrypted_chunk), i * this.cipherBlockSize);
   }
-  return outputBuffer;
+  return Promise.resolve(outputBuffer);
 }
 
 function no_encrypt_block(block: ArrayBuffer) {
   assert(this.plainBlockSize === this.cipherBlockSize);
-  return block;
+  return Promise.resolve(block);
 }
 
 function make_hex_block(hex: string): ArrayBuffer {
@@ -90,7 +91,7 @@ function make_hex_block(hex: string): ArrayBuffer {
 }
 
 describe('Chunk manager - no header - no signature - no encryption', function () {
-  it('should decompose a large single write in small chunks', function () {
+  it('should decompose a large single write in small chunks', async function () {
     const chunkManager = new ChunkManager({
       chunkSize: 48,
       sequenceHeaderSize: 0,
@@ -117,13 +118,13 @@ describe('Chunk manager - no header - no signature - no encryption', function ()
     const buf = make_packet(n);
 
     // write this single buffer
-    chunkManager.write(buf.buffer, buf.length);
-    chunkManager.end();
+    await chunkManager.write(buf.buffer, buf.length);
+    await chunkManager.end();
 
     expect(chunk_counter).toEqual(3);
   });
 
-  it('should decompose many small writes in small chunks', function () {
+  it('should decompose many small writes in small "sequential" chunks', async () => {
     const chunkManager = new ChunkManager({
       chunkSize: 48,
       sequenceHeaderSize: 0,
@@ -132,7 +133,7 @@ describe('Chunk manager - no header - no signature - no encryption', function ()
     expect(chunkManager.maxBodySize).toEqual(48);
 
     let chunk_counter = 0;
-    chunkManager.on('chunk', function (chunk: ArrayBuffer) {
+    chunkManager.on('chunk', (chunk: ArrayBuffer) => {
       // console.log(" chunk "+ chunk_counter + " " + chunk.toString("hex"));
       if (chunk_counter < 2) {
         // all packets shall be 48 byte long, except last
@@ -144,15 +145,54 @@ describe('Chunk manager - no header - no signature - no encryption', function ()
       chunk_counter += 1;
     });
 
-    // feed chunk-manager on byte at a time
+    // feed chunk-manager one byte at a time
+    const n = 48 * 2 + 12;
+    const buf = new Uint8Array(1);
+    //let promises = [];
+    for (let i = 0; i < n; i += 1) {
+      buf[i] = 0;
+      // promises.push(chunkManager.write(buf.buffer, 1));
+      await chunkManager.write(buf.buffer, 1);
+    }
+
+    //await Promise.all(promises);
+
+    // write this single buffer
+    chunkManager.end();
+    expect(chunk_counter).toEqual(3);
+  });
+
+  it('should decompose many small writes in small "parallel" chunks', async () => {
+    const chunkManager = new ChunkManager({
+      chunkSize: 48,
+      sequenceHeaderSize: 0,
+    });
+    expect(chunkManager.chunkSize).toEqual(48);
+    expect(chunkManager.maxBodySize).toEqual(48);
+
+    let chunk_counter = 0;
+    chunkManager.on('chunk', (chunk: ArrayBuffer) => {
+      // console.log(" chunk "+ chunk_counter + " " + chunk.toString("hex"));
+      if (chunk_counter < 2) {
+        // all packets shall be 48 byte long, except last
+        expect(chunk.byteLength).toEqual(48);
+      } else {
+        // last packet is smaller
+        expect(chunk.byteLength).toEqual(12);
+      }
+      chunk_counter += 1;
+    });
+
+    // feed chunk-manager one byte at a time
     const n = 48 * 2 + 12;
     const buf = new Uint8Array(1);
     for (let i = 0; i < n; i += 1) {
       buf[i] = 0;
       chunkManager.write(buf.buffer, 1);
     }
+
     // write this single buffer
-    chunkManager.end();
+    await chunkManager.end();
     expect(chunk_counter).toEqual(3);
   });
 });
@@ -204,8 +244,7 @@ function perform_test(
 
   const buf = make_packet(packet_length);
 
-  chunkManager.write(buf.buffer);
-  chunkManager.end();
+  chunkManager.write(buf.buffer).then(() => chunkManager.end());
 }
 
 describe('Chunk Manager (chunk size 32 bytes, sequenceHeaderSize: 8 bytes)\n', function () {

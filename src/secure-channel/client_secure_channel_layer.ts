@@ -8,7 +8,8 @@ import {
   SecurityPolicy,
   getCryptoFactory,
   toUri,
-  /* **nomsgcrypt** getOptionsForSymmetricSignAndEncrypt,*/ ICryptoFactory,
+  getOptionsForSymmetricSignAndEncrypt,
+  computeDerivedKeys,
 } from './security_policy';
 import { MessageBuilder } from './message_builder';
 import {
@@ -46,6 +47,7 @@ import { SecureMessageChunkManagerOptions } from './secure_message_chunk_manager
 import { ISymmetricAlgortihmSecurityHeader } from '../service-secure-channel/SymmetricAlgorithmSecurityHeader';
 import { JSONMessageBuilder } from '../transport/json_message_builder';
 import { MessageBuilderEvents } from '../transport/message_builder_base';
+import { DER, generatePublicKeyFromDER, makeSHA1Thumbprint, rsaKeyLength } from '../crypto';
 
 const OpenSecureChannelRequest = secure_channel_service.OpenSecureChannelRequest;
 const CloseSecureChannelRequest = secure_channel_service.CloseSecureChannelRequest;
@@ -54,8 +56,8 @@ const AsymmetricAlgorithmSecurityHeader = secure_channel_service.AsymmetricAlgor
 const ServiceFault = secure_channel_service.ServiceFault;
 const SecurityTokenRequestType = secure_channel_service.SecurityTokenRequestType;
 
-const do_trace_message = false;
-const do_trace_statistics = false;
+const doTraceMessage = false;
+const doTraceStatistics = false;
 
 let g_channelId = 0;
 const defaultTransactionTimeout = 60 * 1000; // 1 minute
@@ -224,9 +226,7 @@ export interface ClientSecureChannelLayerOptions {
 export class ClientSecureChannelLayer
   extends EventEmitter<ClientSecureChannelLayerEvents>
   implements ITransactionStats {
-  _receiverPublicKey(): any {
-    throw new Error('Method not implemented.');
-  }
+  _receiverPublicKey?: CryptoKey;
   /**
    * true if the secure channel is trying to establish the connection with the server. In this case, the client
    * may be in the middle of the b ackoff connection process.
@@ -245,10 +245,6 @@ export class ClientSecureChannelLayer
 
   get bytesWritten() {
     return this._transport ? this._transport.bytesWritten : 0;
-  }
-
-  get securityMode(): MessageSecurityMode {
-    return this._securityMode;
   }
 
   get transactionsPerformed() {
@@ -282,14 +278,14 @@ export class ClientSecureChannelLayer
     this.defaultSecureTokenLifetime = options.defaultSecureTokenLifeTime || 30000;
     this.tokenRenewalInterval = options.tokenRenewalInterval || 0;
 
-    this._securityMode = options.securityMode || MessageSecurityMode.None;
+    this.securityMode = options.securityMode || MessageSecurityMode.None;
 
     this.securityPolicy = options.securityPolicy || SecurityPolicy.None;
 
     this.serverCertificate = options.serverCertificate;
 
     // assert(this._securityMode !== MessageSecurityMode.Invalid, "invalid security Mode");
-    if (this._securityMode !== MessageSecurityMode.None) {
+    if (this.securityMode !== MessageSecurityMode.None) {
       assert(
         this.serverCertificate,
         'Expecting a valid certificate when security mode is not None'
@@ -303,7 +299,7 @@ export class ClientSecureChannelLayer
     this._request_data = new Map();
     if (this.encoding === 'opcua+uacp') {
       this.messageBuilder = new MessageBuilder();
-      this.messageBuilder.securityMode = this._securityMode;
+      this.messageBuilder.securityMode = this.securityMode;
       this.messageBuilder.privateKey = this.getPrivateKey();
     } else {
       this.messageBuilder = new JSONMessageBuilder();
@@ -432,7 +428,7 @@ export class ClientSecureChannelLayer
       lap_transaction: request_data._tick4 - request_data._tick0,
     };
 
-    if (do_trace_statistics) {
+    if (doTraceStatistics) {
       dump_transaction_statistics(this.last_transaction_stats);
     }
   }
@@ -494,7 +490,7 @@ export class ClientSecureChannelLayer
     assert(msgType !== 'ERR');
 
     /* istanbul ignore next */
-    if (do_trace_message) {
+    if (doTraceMessage) {
       console.log('xxxxx  <<<<<< _on_message_received ', requestId, response.constructor.name);
     }
 
@@ -599,7 +595,7 @@ export class ClientSecureChannelLayer
   }
 
   protected _build_client_nonce() {
-    if (this._securityMode === MessageSecurityMode.None) {
+    if (this.securityMode === MessageSecurityMode.None) {
       return null;
     }
     // create a client Nonce if secure mode is requested
@@ -620,7 +616,7 @@ export class ClientSecureChannelLayer
   }
 
   protected _open_secure_channel_request(is_initial: boolean, callback: ErrorCallback) {
-    assert(this._securityMode !== MessageSecurityMode.Invalid, 'invalid security mode');
+    assert(this.securityMode !== MessageSecurityMode.Invalid, 'invalid security mode');
     // from the specs:
     // The OpenSecureChannel Messages are not signed or encrypted if the SecurityMode is None. The
     // Nonces are ignored and should be set to null. The SecureChannelId and the TokenId are still
@@ -639,7 +635,7 @@ export class ClientSecureChannelLayer
     const msg = new OpenSecureChannelRequest({
       clientProtocolVersion: this.protocolVersion,
       requestType: requestType,
-      securityMode: this._securityMode,
+      securityMode: this.securityMode,
       requestHeader: new secure_channel_service.RequestHeader({
         /* auditEntryId: undefined, */
       }),
@@ -650,7 +646,7 @@ export class ClientSecureChannelLayer
     this._performMessageTransaction(
       msgType,
       msg,
-      (error, response: secure_channel_service.OpenSecureChannelResponse) => {
+      async (error, response: secure_channel_service.OpenSecureChannelResponse) => {
         if (response && response.responseHeader.serviceResult !== StatusCodes.Good) {
           error = new Error(response.responseHeader.serviceResult.toString());
         }
@@ -675,7 +671,7 @@ export class ClientSecureChannelLayer
 
           this._serverNonce = response.serverNonce;
 
-          if (this._securityMode !== MessageSecurityMode.None) {
+          if (this.securityMode !== MessageSecurityMode.None) {
             // verify that server nonce if provided is at least 32 bytes long
 
             /* istanbul ignore next */
@@ -694,7 +690,8 @@ export class ClientSecureChannelLayer
           const cryptoFactory = (this.messageBuilder as MessageBuilder).cryptoFactory;
           if (cryptoFactory) {
             assert(this._serverNonce instanceof Uint8Array);
-            this._derivedKeys = cryptoFactory.compute_derived_keys(
+            this._derivedKeys = await computeDerivedKeys(
+              cryptoFactory,
               this._serverNonce,
               this._clientNonce
             );
@@ -796,7 +793,7 @@ export class ClientSecureChannelLayer
   public create(endpoint_url: string, callback: ErrorCallback) {
     assert('function' === typeof callback);
 
-    if (this._securityMode !== MessageSecurityMode.None) {
+    if (this.securityMode !== MessageSecurityMode.None) {
       if (!this.serverCertificate) {
         return callback(
           new Error(
@@ -806,22 +803,22 @@ export class ClientSecureChannelLayer
       }
 
       // take the opportunity of this async method to perform some async pre-processing
-      // **nomsgcrypt**
-      /*
-        if (_.isUndefined(this._receiverPublicKey)) {
 
-            crypto_utils.extractPublicKeyFromCertificate(this.serverCertificate, (err, publicKey) => {
-                if (err) {
-                    return callback(err);
-                }
-                this._receiverPublicKey = publicKey;
-                assert(!_.isUndefined(this._receiverPublicKey)); // make sure we wont go into infinite recursion calling create again.
-                this.create(endpoint_url, callback);
-            });
-            return;
-        }
-        assert(typeof this._receiverPublicKey === "string");
-        */
+      if (!this._receiverPublicKey) {
+        const cryptoFactory = getCryptoFactory(this.securityPolicy);
+        generatePublicKeyFromDER(this.serverCertificate, cryptoFactory.sha1or256).then(
+          (publicKey) => {
+            this._receiverPublicKey = publicKey;
+            assert(this._receiverPublicKey); // make sure we wont go into infinite recursion calling create again.
+            this.create(endpoint_url, callback);
+          },
+          (err: Error) => {
+            return callback(err);
+          }
+        );
+        return;
+      }
+      assert(this._receiverPublicKey instanceof CryptoKey);
     }
 
     const transp = new ClientWSTransport(this.encoding);
@@ -853,7 +850,7 @@ export class ClientSecureChannelLayer
           //   - server too busy -
           //   - server shielding itself from a DOS attack
           if (err) {
-            console.log('connection error',err);
+            console.log('connection error', err);
             let should_abort = false;
 
             if (err.message.match(/ECONNRESET/)) {
@@ -933,7 +930,9 @@ export class ClientSecureChannelLayer
       this.__call.start();
     };
 
-    _establish_connection(transp, endpoint_url, (connerr) => this._on_connection(transp, callback, connerr));
+    _establish_connection(transp, endpoint_url, (connerr) =>
+      this._on_connection(transp, callback, connerr)
+    );
   }
 
   public dispose() {
@@ -1207,7 +1206,7 @@ export class ClientSecureChannelLayer
     const requestId = this.makeRequestId();
 
     /* istanbul ignore next */
-    if (do_trace_message) {
+    if (doTraceMessage) {
       console.log(
         'xxxxx   >>>>>>                     ' + requestId + requestMessage.constructor.name
       );
@@ -1291,24 +1290,24 @@ export class ClientSecureChannelLayer
     }
   }
 
-  protected _construct_security_header() {
+  protected async _construct_security_header() {
     assert(this.hasOwnProperty('securityMode'));
     assert(this.hasOwnProperty('securityPolicy'));
 
     this._receiverCertificate = this.serverCertificate;
 
     let securityHeader = null;
-    switch (this._securityMode) {
+    switch (this.securityMode) {
       case MessageSecurityMode.Sign:
       case MessageSecurityMode.SignAndEncrypt:
         assert(this.securityPolicy !== SecurityPolicy.None);
         // get the thumbprint of the client certificate
-        const thumbprint: Uint8Array =
-          /* **nomsgcrypt** this._receiverCertificate ? crypto_utils.makeSHA1Thumbprint(this._receiverCertificate) :*/
-          null;
+        const thumbprint: Uint8Array | null = this._receiverCertificate
+          ? new Uint8Array(await makeSHA1Thumbprint(this._receiverCertificate))
+          : null;
         securityHeader = new AsymmetricAlgorithmSecurityHeader({
           securityPolicyUri: toUri(this.securityPolicy),
-          senderCertificate: this.getCertificateChain(), // certificate of the private key used to sign the message
+          senderCertificate: this.getCertificateChain(), // (client)certificate of the (client)private key used to sign the message
           receiverCertificateThumbprint: thumbprint, // thumbprint of the public key used to encrypt the message
         });
         break;
@@ -1321,69 +1320,66 @@ export class ClientSecureChannelLayer
     this._securityHeader = securityHeader;
   }
 
-  /* //**nomsgcrypt**
-protected _get_security_options_for_OPN() {
-
-
-    if (this._securityMode === MessageSecurityMode.None) {
-        return null;
+  protected async _get_security_options_for_OPN() {
+    if (this.securityMode === MessageSecurityMode.None) {
+      return null;
     }
 
-    this._construct_security_header();
+    await this._construct_security_header();
     this.messageChunker.securityHeader = this._securityHeader;
 
     var senderPrivateKey = this.getPrivateKey();
 
-
-    assert(this._receiverPublicKey);
-    assert(typeof this._receiverPublicKey === "string", "expecting a valid public key");
-
-    var cryptoFactory = getCryptoFactory(this.securityPolicy);
-
-    if (!cryptoFactory) {
-        return null; // may be a not yet supported security Policy
+    if (!senderPrivateKey) {
+      throw new Error('invalid senderPrivateKey');
     }
 
-    assert(cryptoFactory, "expecting a cryptoFactory");
+    const cryptoFactory = getCryptoFactory(this.securityPolicy);
+
+    if (!cryptoFactory) {
+      return null; // may be a not yet supported security Policy
+    }
+
+    assert(cryptoFactory, 'expecting a cryptoFactory');
     assert('function' === typeof cryptoFactory.asymmetricSign);
 
-    var options : any = {};
+    const options: Partial<SecureMessageChunkManagerOptions> = {};
+    options.signatureLength = rsaKeyLength(
+      await senderPrivateKey.getSignKey(cryptoFactory.sha1or256)
+    );
+    options.signBufferFunc = (chunk) => cryptoFactory.asymmetricSign(chunk, senderPrivateKey);
 
-    options.signatureLength = crypto_utils.rsa_length(senderPrivateKey);
-    options.signingFunc = function (chunk) {
-        var s = cryptoFactory.asymmetricSign(chunk, senderPrivateKey);
-        assert(s.length === options.signatureLength);
-        return s;
-    };
-
-    assert(this._receiverPublicKey);
-    var keyLength = crypto_utils.rsa_length(this._receiverPublicKey);
+    if (!this._receiverPublicKey) {
+      throw new Error(' invalid receiverPublicKey');
+    }
+    var keyLength = rsaKeyLength(this._receiverPublicKey);
     options.plainBlockSize = keyLength - cryptoFactory.blockPaddingSize;
     options.cipherBlockSize = keyLength;
 
-    options.encrypt_buffer = function (chunk) {
-        return cryptoFactory.asymmetricEncrypt(chunk, this._receiverPublicKey);
+    //  if (this.securityMode === MessageSecurityMode.SignAndEncrypt) {
+    const receiverPublicKey = this._receiverPublicKey;
+    options.encryptBufferFunc = function (chunk) {
+      return cryptoFactory.asymmetricEncrypt(chunk, receiverPublicKey);
     };
+    //  }
 
     return options;
-};
-*/
+  }
 
-  /* //**nomsgcrypt**
-protected _get_security_options_for_MSG() {
-
-    if (this._securityMode === MessageSecurityMode.None) {
-        return null;
+  protected _get_security_options_for_MSG() {
+    if (this.securityMode === MessageSecurityMode.None) {
+      return null;
     }
 
+    if (!this._derivedKeys || !this._derivedKeys.derivedClientKeys) {
+      throw new Error('internal error expecting valid derivedKeys');
+    }
     var derivedClientKeys = this._derivedKeys.derivedClientKeys;
-    assert(derivedClientKeys, "expecting valid derivedClientKeys");
-    return getOptionsForSymmetricSignAndEncrypt(this._securityMode, derivedClientKeys);
+    assert(derivedClientKeys, 'expecting valid derivedClientKeys');
+    return getOptionsForSymmetricSignAndEncrypt(this.securityMode, derivedClientKeys);
+  }
 
-};
-*/
-
-  protected _sendSecureOpcUARequest(
+  protected async _sendSecureOpcUARequest(
     msgType: string,
     requestMessage: IEncodable & { requestHeader: IRequestHeader },
     requestId: number
@@ -1416,10 +1412,12 @@ protected _get_security_options_for_MSG() {
       debugLog(requestMessage);
     }
 
-    /* //**nomsgcrypt**
-    var security_options = (msgType === "OPN") ? this._get_security_options_for_OPN() : this._get_security_options_for_MSG();
-    _.extend(options, security_options);
-*/
+    var security_options =
+      msgType === 'OPN'
+        ? await this._get_security_options_for_OPN()
+        : await this._get_security_options_for_MSG();
+    Object.assign(options, security_options);
+
     /**
      * notify the observer that a client request is being sent the server
      * @event send_request
@@ -1518,8 +1516,9 @@ protected _get_security_options_for_MSG() {
         return callback(new Error('Transport disconnected'));
       }
 
+      assert((this._transport as any)._disconnecting !== undefined);
+      (this._transport as any)._disconnecting = true; // avoid throwing a potential websocket 1006 error
       this._performMessageTransaction('CLO', request, () => {
-        /// xx this._transport.disconnect(function() {
         this.dispose();
         callback();
         // xxx });
@@ -1535,7 +1534,7 @@ protected _get_security_options_for_MSG() {
 
   _securityHeader: any;
   _derivedKeys: any;
-  _receiverCertificate: string;
+  _receiverCertificate: DER;
   _serverNonce: any;
   _transport?: ClientWSTransport;
   _isOpened: boolean;
@@ -1545,11 +1544,11 @@ protected _get_security_options_for_MSG() {
   protected _clientNonce: Uint8Array | null;
   public protocolVersion: number;
   protected messageChunker: MessageChunker;
-  protected _securityMode: MessageSecurityMode;
+  public readonly securityMode: MessageSecurityMode;
   protected securityPolicy: SecurityPolicy;
   protected defaultSecureTokenLifetime: number;
   protected tokenRenewalInterval: number;
-  protected serverCertificate: string;
+  protected serverCertificate: DER;
   protected messageBuilder: MessageBuilder | JSONMessageBuilder;
 
   protected _request_data: Map<number, RequestData>;

@@ -2,6 +2,8 @@
 
 export { OPCUASecureObject } from './secure_object';
 
+export * from './certificate_store';
+
 export { ModelChangeStructureDataType as ModelChangeStructure } from '../generated/ModelChangeStructureDataType';
 export { SubscriptionDiagnosticsDataType as SubscriptionDiagnostics } from '../generated/SubscriptionDiagnosticsDataType';
 

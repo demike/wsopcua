@@ -25,7 +25,7 @@ const DEFAULT_CLIENT_CONNECTION_STRATEGY: ConnectionStrategy = {
   randomisationFactor: 0.1,
 };
 
-const DEFAULT_CLIENT_OPTIONS: OPCUAClientOptions = {
+export const DEFAULT_CLIENT_OPTIONS: OPCUAClientOptions = {
   securityMode: MessageSecurityMode.None,
   securityPolicy: SecurityPolicy.None,
   applicationName: 'testapp',

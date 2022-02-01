@@ -13,7 +13,6 @@ import { coerceSecurityPolicy, SecurityPolicy } from '../secure-channel/security
 import { MessageSecurityMode } from '../secure-channel';
 import { once } from '../utils/once';
 import { ObjectRegistry } from '../object-registry/objectRegistry';
-// import {OPCUASecureObject} from '../common/secure_object'
 import { doDebug } from '../common/debug';
 import * as endpoints_service from '../service-endpoints';
 
@@ -59,6 +58,7 @@ import {
 } from '../generated';
 import { IEncodable } from '../factory/factories_baseobject';
 import { OPCUAClientOptions } from '../common/client_options';
+import { CertificateStore, NullCertificateStore } from 'src/common/certificate_store';
 
 const defaultConnectionStrategy: ConnectionStrategyOptions = {
   maxRetry: 10000000, // almost infinite
@@ -126,7 +126,7 @@ export interface OPCUAClientEvents {
  */
 export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
   endpoint: any;
-  secureObject: OPCUASecureObject;
+  protected clientCertificateStore: CertificateStore;
   /**
    * @property securityMode
    * @type MessageSecurityMode
@@ -281,7 +281,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     // }
 
     //       OPCUASecureObject.call(this, options);
-    this.secureObject = new OPCUASecureObject(options);
+    this.clientCertificateStore = options.clientCertificateStore || new NullCertificateStore();
 
     this.registry = new ObjectRegistry();
     // must be ZERO with Spec 1.0.2
@@ -369,10 +369,6 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
       // verify that the certificates in the chain are valid and not revoked.
       //
 
-      /** NOCRYPT
-            const cert = this.certificateFile || 'certificates/client_selfsigned_cert_1024.pem';
-            const key = self.privateKeyFile || 'certificates/client_key_1024.pem';
-        */
       const appName = this._applicationName || 'NodeOPCUA-Client';
       const params = {
         securityMode: this.securityMode,
@@ -380,18 +376,33 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         connectionStrategy: this.connectionStrategy,
         endpoint_must_exist: false,
         applicationName: appName,
+        clientCertificateStore: this.clientCertificateStore,
       };
-      return OPCUAClientBase.__findEndpoint(endpointUrl, params, (err: Error, endpoint: any) => {
+      return OPCUAClientBase.__findEndpoint(endpointUrl, params, (err: Error, result) => {
         if (err) {
           return callback(err);
         }
+
+        if (!result) {
+          const err1 = new Error('internal error');
+          return callback(err1);
+        }
+
+        const endpoint = result.selectedEndpoint;
         if (!endpoint) {
           // no matching end point can be found ...
-          return callback(new Error('cannot find end point'));
+          const err1 = new Error(
+            'cannot find endpoint for securityMode=' +
+              MessageSecurityMode[this.securityMode] +
+              ' policy = ' +
+              this.securityPolicy
+          );
+          return callback(err1);
         }
         // xx console.log(" Found End point ");
+        this.serverCertificate = endpoint.serverCertificate;
 
-        return this.connect(endpointUrl, callback);
+        return this.connect(/*endpoint.endpointUrl*/ endpointUrl, callback);
       });
     }
 
@@ -399,7 +410,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     // [...]
 
     // make sure callback will only be call once regardless of outcome, and will be also deferred.
-    const callback_od = once(() => window.setImmediate(callback));
+    const callback_od = once((...args: any[]) => window.setImmediate(callback, ...args));
 
     this.registry.register(this);
 
@@ -736,7 +747,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     securityMode: MessageSecurityMode,
     securityPolicy: string
   ) {
-    assert(this.knowsServerEndpoint, 'Server end point are not known yet');
+    assert(this.knowsServerEndpoint, 'Server endpoints are not known yet');
     return this._server_endpoints.find(function (endpoint) {
       return (
         endpoint.endpointUrl === endpointUrl &&
@@ -806,8 +817,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     const options = {
       connectionStrategy: params.connectionStrategy,
       endpoint_must_exist: false,
-      certificateFile: params.certificateFile,
-      privateKeyFile: params.privateKeyFile,
+      clientCertificateStore: params.clientCertificateStore,
       applicationName: params.applicationName,
     };
 
@@ -1142,15 +1152,15 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
   }
 
   public getPrivateKey() {
-    return this.secureObject.getPrivateKey();
+    return this.clientCertificateStore.getPrivateKey();
   }
 
   public getCertificate() {
-    return this.secureObject.getCertificate();
+    return this.clientCertificateStore.getCertificate();
   }
 
   public getCertificateChain() {
-    return this.secureObject.getCertificateChain();
+    return this.clientCertificateStore.getCertificateChain();
   }
 
   /**

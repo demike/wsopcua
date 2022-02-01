@@ -2,35 +2,35 @@
  * @module node_opcua_crypto
  */
 
-import {Nonce} from './common';
-import {verifyMessageChunkSignature, VerifyMessageChunkSignatureOptions} from './crypto_utils';
-import {exploreCertificateInfo} from './explore_certificate';
+import { Nonce } from './common';
+import { verifyMessageChunkSignature, VerifyMessageChunkSignatureOptions } from './crypto_utils';
 import { assert } from '../assert';
-
 
 const crypto: SubtleCrypto = window.crypto.subtle;
 
-async function HMAC_HASH(sha1or256: 'SHA-1' | 'SHA-256', secret: ArrayBuffer, message: ArrayBuffer) {
-    // return crypto.sign('HMAC', CryptoKey. sha1or256, secret);
-    const key = await crypto.importKey(
-        'raw', // raw format of the key - should be Uint8Array
-        secret,
-        { // algorithm details
-            name: 'HMAC',
-            hash: {name: sha1or256}
-        },
-        false, // export = false
-        ['sign', 'verify'] // what this key can do
-    );
+async function HMAC_KEY(sha1or256: 'SHA-1' | 'SHA-256', secret: BufferSource) {
+  return await crypto.importKey(
+    'raw', // raw format of the key - should be Uint8Array
+    secret as any,
+    {
+      // algorithm details
+      name: 'HMAC',
+      hash: { name: sha1or256 },
+    },
+    false, // export = false
+    ['sign', 'verify'] // what this key can do
+  );
+}
 
-    return crypto.sign('HMAC', key, message);
+function HMAC_HASH(hmacKey: CryptoKey, message: ArrayBuffer) {
+  return crypto.sign('HMAC', hmacKey, message);
 }
 
 function plus(buf1: ArrayBuffer, buf2: ArrayBuffer): ArrayBuffer {
-    const tmp = new Uint8Array(buf1.byteLength + buf2.byteLength);
-    tmp.set(new Uint8Array(buf1), 0);
-    tmp.set(new Uint8Array(buf2), buf1.byteLength);
-    return tmp;
+  const tmp = new Uint8Array(buf1.byteLength + buf2.byteLength);
+  tmp.set(new Uint8Array(buf1), 0);
+  tmp.set(new Uint8Array(buf2), buf1.byteLength);
+  return tmp;
 }
 
 // OPC-UA Spec 1.02 part 6 - 6.7.5  Deriving Keys page 42
@@ -80,79 +80,86 @@ function plus(buf1: ArrayBuffer, buf2: ArrayBuffer): ArrayBuffer {
 //
 // see also http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512/ws-secureconversation-1.3-os.html
 //          http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf
-export async function makePseudoRandomBuffer(secret: Nonce, seed: Nonce, minLength: number, sha1or256: 'SHA-1' | 'SHA-256') {
+export async function makePseudoRandomBuffer(
+  secret: Nonce,
+  seed: Nonce,
+  minLength: number,
+  sha1or256: 'SHA-1' | 'SHA-256'
+) {
+  assert(seed instanceof Uint8Array);
+  assert(sha1or256 === 'SHA-1' || sha1or256 === 'SHA-256');
 
-    assert(seed instanceof ArrayBuffer);
-    assert(sha1or256 === 'SHA-1' || sha1or256 === 'SHA-256');
+  const a = [];
+  a[0] = seed;
+  let index = 1;
+  let p_hash = new ArrayBuffer(0);
+  const hmacKey = await HMAC_KEY(sha1or256, secret);
+  while (p_hash.byteLength <= minLength) {
+    /* eslint  new-cap:0 */
+    a[index] = await HMAC_HASH(hmacKey, a[index - 1]);
+    const hash2 = await HMAC_HASH(hmacKey, plus(a[index], seed));
+    p_hash = plus(p_hash, hash2);
+    index += 1;
+  }
 
-    const a = [];
-    a[0] = seed;
-    let index = 1;
-    let p_hash = new ArrayBuffer(0);
-    while (p_hash.byteLength <= minLength) {
-        /* eslint  new-cap:0 */
-        a[index] = await HMAC_HASH(sha1or256, secret, a[index - 1]);
-        const hash2 = await HMAC_HASH(sha1or256, secret, plus(a[index], seed));
-        p_hash = plus(p_hash, hash2);
-        index += 1;
-    }
-    return p_hash.slice(0, minLength);
+  return p_hash.slice(0, minLength);
 }
 
 export interface ComputeDerivedKeysOptions {
-    signatureLength: number;
-    signingKeyLength: number;
-    encryptingKeyLength: number;
+  signatureLength: number;
+  signingKeyLength: number;
+  encryptingKeyLength: number;
 
-    encryptingBlockSize: number;
-    algorithm: string;
-    sha1or256?: 'SHA-1' | 'SHA-256';
+  encryptingBlockSize: number;
+  algorithm: string;
+  sha1or256?: 'SHA-1' | 'SHA-256';
 }
 
 export interface DerivedKeys extends ComputeDerivedKeysOptions {
-    signatureLength: number;
-    signingKeyLength: number;
-    encryptingKeyLength: number;
+  signatureLength: number;
+  signingKeyLength: number;
+  encryptingKeyLength: number;
 
-    encryptingBlockSize: number;
-    algorithm: string;
-    sha1or256: 'SHA-1' | 'SHA-256';
+  encryptingBlockSize: number;
+  algorithm: string;
+  sha1or256: 'SHA-1' | 'SHA-256';
 
-    signingKey: ArrayBuffer;
-    encryptingKey: ArrayBuffer;
-    initializationVector: ArrayBuffer;
+  signingKey: BufferSource;
+  encryptingKey: BufferSource;
+  initializationVector: ArrayBuffer;
 }
 
 export async function computeDerivedKeys(
-    secret: Nonce, seed: Nonce, options: ComputeDerivedKeysOptions
+  secret: Nonce,
+  seed: Nonce,
+  options: ComputeDerivedKeysOptions
 ): Promise<DerivedKeys> {
-    assert(Number.isFinite(options.signatureLength));
-    assert(Number.isFinite(options.encryptingKeyLength));
-    assert(Number.isFinite(options.encryptingBlockSize));
-    assert(typeof options.algorithm === 'string');
-    options.sha1or256 = options.sha1or256 || 'SHA-1';
-    assert(typeof options.sha1or256 === 'string');
+  assert(Number.isFinite(options.signatureLength));
+  assert(Number.isFinite(options.encryptingKeyLength));
+  assert(Number.isFinite(options.encryptingBlockSize));
+  assert(typeof options.algorithm === 'string');
+  options.sha1or256 = options.sha1or256 || 'SHA-1';
+  assert(typeof options.sha1or256 === 'string');
 
-    const offset1 = options.signingKeyLength;
-    const offset2 = offset1 + options.encryptingKeyLength;
-    const minLength = offset2 + options.encryptingBlockSize;
+  const offset1 = options.signingKeyLength;
+  const offset2 = offset1 + options.encryptingKeyLength;
+  const minLength = offset2 + options.encryptingBlockSize;
 
-    const buf = await makePseudoRandomBuffer(secret, seed, minLength, options.sha1or256);
+  const buf = await makePseudoRandomBuffer(secret, seed, minLength, options.sha1or256);
 
-    return {
+  return {
+    signatureLength: options.signatureLength,
+    signingKeyLength: options.signingKeyLength,
+    encryptingKeyLength: options.encryptingKeyLength,
 
-        signatureLength: options.signatureLength,
-        signingKeyLength: options.signingKeyLength,
-        encryptingKeyLength: options.encryptingKeyLength,
+    encryptingBlockSize: options.encryptingBlockSize,
+    algorithm: options.algorithm,
+    sha1or256: options.sha1or256,
 
-        encryptingBlockSize: options.encryptingBlockSize,
-        algorithm: options.algorithm,
-        sha1or256: options.sha1or256,
-
-        signingKey: buf.slice(0, offset1),
-        encryptingKey: buf.slice(offset1, offset2),
-        initializationVector: buf.slice(offset2, minLength),
-    };
+    signingKey: buf.slice(0, offset1),
+    encryptingKey: buf.slice(offset1, offset2),
+    initializationVector: buf.slice(offset2, minLength),
+  };
 }
 
 /**
@@ -162,7 +169,7 @@ export async function computeDerivedKeys(
  * @return buffer
  */
 export function reduceLength(buffer: ArrayBuffer, byteToRemove: number): ArrayBuffer {
-    return buffer.slice(0, buffer.byteLength - byteToRemove);
+  return buffer.slice(0, buffer.byteLength - byteToRemove);
 }
 
 /**
@@ -171,13 +178,13 @@ export function reduceLength(buffer: ArrayBuffer, byteToRemove: number): ArrayBu
  * @return buffer with padding removed
  */
 export function removePadding(buffer: ArrayBuffer): ArrayBuffer {
-    const buf8 = new Uint8Array(buffer);
-    const nbPaddingBytes = buf8[buffer.byteLength - 1] + 1;
-    return reduceLength(buffer, nbPaddingBytes);
+  const buf8 = new Uint8Array(buffer);
+  const nbPaddingBytes = buf8[buffer.byteLength - 1] + 1;
+  return reduceLength(buffer, nbPaddingBytes);
 }
 
 export interface VerifyChunkSignatureOptions extends VerifyMessageChunkSignatureOptions {
-    signatureLength: number;
+  signatureLength: number;
 }
 
 /**
@@ -196,18 +203,20 @@ export interface VerifyChunkSignatureOptions extends VerifyMessageChunkSignature
  * @param options.publicKey
  * @return {*}
  */
-export function verifyChunkSignature(chunk: ArrayBuffer, options: VerifyChunkSignatureOptions): PromiseLike<boolean> {
-
-    assert(chunk instanceof ArrayBuffer);
-    let signatureLength = options.signatureLength || 0;
-    if (signatureLength === 0) {
-        // let's get the signatureLength by checking the size
-        // of the certificate's public key
-        signatureLength = (options.publicKey.algorithm as RsaHashedKeyGenParams).modulusLength / 8; // 1024 bits = 128Bytes or 2048=256Bytes
-    }
-    const block_to_verify = chunk.slice(0, chunk.byteLength - signatureLength);
-    const signature = chunk.slice(chunk.byteLength - signatureLength);
-    return verifyMessageChunkSignature(block_to_verify, signature, options);
+export function verifyChunkSignature(
+  chunk: ArrayBuffer,
+  options: VerifyChunkSignatureOptions
+): PromiseLike<boolean> {
+  assert(chunk instanceof ArrayBuffer);
+  let signatureLength = options.signatureLength || 0;
+  if (signatureLength === 0) {
+    // let's get the signatureLength by checking the size
+    // of the certificate's public key
+    signatureLength = (options.publicKey.algorithm as RsaHashedKeyGenParams).modulusLength / 8; // 1024 bits = 128Bytes or 2048=256Bytes
+  }
+  const block_to_verify = chunk.slice(0, chunk.byteLength - signatureLength);
+  const signature = chunk.slice(chunk.byteLength - signatureLength);
+  return verifyMessageChunkSignature(block_to_verify, signature, options);
 }
 
 // /**
@@ -247,32 +256,35 @@ export function computePaddingFooter(buffer: ArrayBuffer, derivedKeys: DerivedKe
 */
 
 function derivedKeys_algorithm(derivedKeys: DerivedKeys) {
-    assert(derivedKeys.hasOwnProperty('algorithm'));
-    const algorithm = derivedKeys.algorithm || 'AES-128-CBC';
-    assert(algorithm === 'AES-128-CBC' || algorithm === 'AES-256-CBC');
-    return algorithm;
+  assert(derivedKeys.hasOwnProperty('algorithm'));
+  const algorithm = derivedKeys.algorithm || 'AES-128-CBC';
+  assert(algorithm === 'AES-128-CBC' || algorithm === 'AES-256-CBC');
+  return algorithm;
 }
 
-export function encryptBufferWithDerivedKeys(buffer: ArrayBuffer, derivedKeys: DerivedKeys): PromiseLike<ArrayBuffer> {
+export async function encryptBufferWithDerivedKeys(
+  buffer: ArrayBuffer,
+  derivedKeys: DerivedKeys
+): Promise<ArrayBuffer> {
+  let key: CryptoKey | undefined = (derivedKeys.encryptingKey as any)._AES_CBC_KEY;
+  if (!key) {
+    key = (derivedKeys.encryptingKey as any)._AES_CBC_KEY = await crypto.importKey(
+      'raw',
+      derivedKeys.encryptingKey as any,
+      'AES-CBC',
+      true,
+      ['encrypt', 'decrypt']
+    );
+  }
 
-    const algorithm = derivedKeys_algorithm(derivedKeys);
-    const key = derivedKeys.encryptingKey;
-    const initVector = derivedKeys.initializationVector;
+  const opts = {
+    name: 'AES-CBC',
+    iv: derivedKeys.initializationVector,
+  };
 
-    const opts = {
-        name: 'AES-GCM',
-        iv: initVector
-      };
+  return crypto.encrypt(opts, key, buffer);
 
-      return crypto.importKey('raw', key, 'AES-GCM',
-      true, ['encrypt']).then(function (key) {
-        return crypto.encrypt(opts, key, buffer);
-      }).then(function (resp) {
-        return resp;
-      });
-
-
-    /*
+  /*
     const cypher = crypto.createCipheriv(algorithm, key, initVector);
     cypher.setAutoPadding(false);
     const encrypted_chunks = [];
@@ -282,25 +294,29 @@ export function encryptBufferWithDerivedKeys(buffer: ArrayBuffer, derivedKeys: D
     */
 }
 
-export function decryptBufferWithDerivedKeys(buffer: ArrayBuffer, derivedKeys: DerivedKeys): PromiseLike<ArrayBuffer> {
+export async function decryptBufferWithDerivedKeys(
+  buffer: ArrayBuffer,
+  derivedKeys: DerivedKeys
+): Promise<ArrayBuffer> {
+  let key: CryptoKey | undefined = (derivedKeys.encryptingKey as any)._AES_CBC_KEY;
+  if (!key) {
+    key = (derivedKeys.encryptingKey as any)._AES_CBC_KEY = await crypto.importKey(
+      'raw',
+      derivedKeys.encryptingKey as any,
+      'AES-CBC',
+      true,
+      ['encrypt', 'decrypt']
+    );
+  }
 
-    const algorithm = derivedKeys_algorithm(derivedKeys);
-    const key = derivedKeys.encryptingKey;
-    const initVector = derivedKeys.initializationVector;
+  const opts = {
+    name: 'AES-CBC',
+    iv: derivedKeys.initializationVector,
+  };
 
-    const opts = {
-        name: 'AES-GCM',
-        iv: initVector
-      };
-      return crypto.importKey('raw', key, 'AES-GCM',
-      true, ['decrypt']).then(function (the_key) {
-        return crypto.decrypt(opts, the_key, buffer);
-      }).then(function (resp) {
-        return resp;
-      });
+  return crypto.decrypt(opts, key, buffer);
 
-
-    /*
+  /*
     const cypher = crypto.createDecipheriv(algorithm, key, initVector);
     cypher.setAutoPadding(false);
     const decrypted_chunks = [];
@@ -316,12 +332,23 @@ export function decryptBufferWithDerivedKeys(buffer: ArrayBuffer, derivedKeys: D
  * @param derivedKeys
  * @return
  */
-export async function makeMessageChunkSignatureWithDerivedKeys(message: ArrayBuffer, derivedKeys: DerivedKeys): Promise<ArrayBuffer> {
-    assert(message instanceof ArrayBuffer);
-    assert(derivedKeys.signingKey instanceof ArrayBuffer);
-    assert(typeof derivedKeys.sha1or256 === 'string');
-    assert(derivedKeys.sha1or256 === 'SHA-1' || derivedKeys.sha1or256 === 'SHA-256');
-    return HMAC_HASH(derivedKeys.sha1or256, derivedKeys.signingKey, message);
+export async function makeMessageChunkSignatureWithDerivedKeys(
+  message: ArrayBuffer,
+  derivedKeys: DerivedKeys
+): Promise<ArrayBuffer> {
+  assert(message instanceof ArrayBuffer);
+  // assert(derivedKeys.signingKey instanceof BufferSource);
+  assert(typeof derivedKeys.sha1or256 === 'string');
+  assert(derivedKeys.sha1or256 === 'SHA-1' || derivedKeys.sha1or256 === 'SHA-256');
+  let hmacKey: CryptoKey | undefined = (derivedKeys.signingKey as any)._hmacCryptoKey;
+  if (!hmacKey) {
+    // cache hmac crypto key in signingKey
+    hmacKey = (derivedKeys.signingKey as any)._hmacCryptoKey = await HMAC_KEY(
+      derivedKeys.sha1or256,
+      derivedKeys.signingKey
+    );
+  }
+  return HMAC_HASH(hmacKey, message);
 }
 
 /**
@@ -330,11 +357,18 @@ export async function makeMessageChunkSignatureWithDerivedKeys(message: ArrayBuf
  * @param derivedKeys
  * @return
  */
-export async function verifyChunkSignatureWithDerivedKeys(chunk: ArrayBuffer, derivedKeys: DerivedKeys): Promise<boolean> {
-    const message = chunk.slice(0, chunk.byteLength - derivedKeys.signatureLength);
-    const signature = new Uint8Array( chunk.slice(chunk.byteLength - derivedKeys.signatureLength) );
-    const verif = new Uint8Array( await makeMessageChunkSignatureWithDerivedKeys(message, derivedKeys));
+export async function verifyChunkSignatureWithDerivedKeys(
+  chunk: ArrayBuffer,
+  derivedKeys: DerivedKeys
+): Promise<boolean> {
+  const message = chunk.slice(0, chunk.byteLength - derivedKeys.signatureLength);
+  const signature = new Uint8Array(chunk.slice(chunk.byteLength - derivedKeys.signatureLength));
+  const verif = new Uint8Array(
+    await makeMessageChunkSignatureWithDerivedKeys(message, derivedKeys)
+  );
 
-    if (verif.byteLength !== signature.byteLength) { return false; }
-    return verif.every((val, i) => val === signature[i]);
+  if (verif.byteLength !== signature.byteLength) {
+    return false;
+  }
+  return verif.every((val, i) => val === signature[i]);
 }

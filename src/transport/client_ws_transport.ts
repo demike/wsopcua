@@ -46,7 +46,7 @@ function createClientSocket(
       const fakeSocket = getFakeTransport();
       assert(ep.protocol === 'fake', ' Unsupported transport protocol');
       setTimeout(function () {
-        (fakeSocket).emit('connect');
+        fakeSocket.emit('connect');
       }, 0);
       return <WebSocket>fakeSocket;
     case 'http':
@@ -106,7 +106,6 @@ export class ClientWSTransport extends WSTransport {
   _connected: boolean;
   serverUri: string;
   endpointUrl: string;
-  _protocolVersion: number;
   _parameters: any;
 
   get protocolVersion() {
@@ -318,7 +317,7 @@ export class ClientWSTransport extends WSTransport {
        */
       this.emit('connection_break');
     }
-  }
+  };
 
   protected dispose() {
     super.dispose();

@@ -2,6 +2,7 @@ import { MessageSecurityMode } from '../generated/MessageSecurityMode';
 import { SecurityPolicy } from '../secure-channel/security_policy';
 
 import { ConnectionStrategyOptions } from '../secure-channel/client_secure_channel_layer';
+import { CertificateStore } from './certificate_store';
 
 export interface OPCUAClientOptions {
   encoding?: 'opcua+uacp' | 'opcua+uajson'; // default: 'opcua+uacp'
@@ -18,6 +19,7 @@ export interface OPCUAClientOptions {
   keepSessionAlive?: boolean; // =false]{Boolean}
   certificateFile?: string; // "certificates/client_selfsigned_cert_1024.pem"] {String} client certificate pem file.
   privateKeyFile?: string; // "certificates/client_key_1024.pem"] {String} client private key pem file.
+  clientCertificateStore?: CertificateStore; // default: NullCertificateToken
   clientName?: string; // ] {String} a client name string that will be used to generate session names.
   tokenRenewalInterval?: number; // if not specify or set to 0 , token  renewal will happen around 75% of the defaultSecureTokenLiveTime
   keepPendingSessionsOnDisconnect?: boolean; // =false, if set to true,

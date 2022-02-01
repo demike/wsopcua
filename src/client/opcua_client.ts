@@ -7,7 +7,6 @@ import { assert } from '../assert';
 
 const crypto: Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
 import { series as async_series } from 'async';
-// **nomsgcrypt** var exploreCertificate = require("node-opcua-crypto").crypto_explore_certificate.exploreCertificate;
 
 import { StatusCodes } from '../constants';
 import * as session_service from '../service-session';
@@ -36,7 +35,6 @@ import { MessageSecurityMode, SignatureData } from '../service-secure-channel';
 import { SecurityPolicy, fromURI, getCryptoFactory } from '../secure-channel/security_policy';
 import { LocalizedText } from '../generated/LocalizedText';
 
-// **nomsgcrypt** var crypto_utils = require("node-opcua-crypto").crypto_utils;
 const UserNameIdentityToken = session_service.UserNameIdentityToken;
 
 import { computeSignature } from '../secure-channel';
@@ -56,11 +54,10 @@ import {
   UserTokenType,
   ICreateSubscriptionRequest,
   IX509IdentityToken,
-  ISignatureData,
   IssuedIdentityToken,
 } from '../generated';
 import { ClientSecureChannelLayer } from '../secure-channel/client_secure_channel_layer';
-import { exploreCertificate, generatePublicKeyFromDER, PrivateKeyPEM } from '../crypto';
+import { exploreCertificate, generatePublicKeyFromDER } from '../crypto';
 import { concatArrayBuffers } from '../basic-types/array';
 import { OPCUAClientOptions } from '../common/client_options';
 
@@ -73,9 +70,7 @@ export interface UserIdentityInfoIssued {
   tokenData: Uint8Array;
 }
 
-export interface UserIdentityInfoX509 extends IX509IdentityToken {
-  privateKey: PrivateKeyPEM;
-}
+export interface UserIdentityInfoX509 extends IX509IdentityToken {}
 export interface UserIdentityInfoAnonymous {}
 
 export type UserIdentityInfo = Partial<
@@ -104,8 +99,6 @@ function validateServerNonce(serverNonce: Uint8Array | null): serverNonce is Uin
  * @param [options.applicationName="NodeOPCUA-Client"]        {string} the client application name
  * @param [options.endpoint_must_exist=true] {Boolean} set to false if the client should accept server endpoint mismatch
  * @param [options.keepSessionAlive=false]{Boolean}
- * @param [options.certificateFile="certificates/client_selfsigned_cert_1024.pem"] {String} client certificate pem file.
- * @param [options.privateKeyFile="certificates/client_key_1024.pem"] {String} client private key pem file.
  * @param [options.clientName=""] {String} a client name string that will be used to generate session names.
  * @constructor
  */
@@ -143,14 +136,14 @@ export class OPCUAClient extends OPCUAClientBase {
     return this._clientName + this.___sessionName_counter;
   }
 
-  protected _getApplicationUri(): Promise<string> {
+  protected async _getApplicationUri(): Promise<string> {
     // get applicationURI from certificate
 
     /**msgcrypt**/
     const certificate = this.getCertificate();
     let applicationUri;
     if (certificate) {
-      const e = exploreCertificate(certificate);
+      const e = await exploreCertificate(certificate);
       if (!e.tbsCertificate.extensions || !e.tbsCertificate.extensions.subjectAltName) {
         console.log(' Warning: client certificate is invalid : subjectAltName is missing');
         applicationUri = makeApplicationUrn(window.location.hostname, this.applicationName);
@@ -1049,7 +1042,7 @@ async function createUserNameIdentityToken(
   // note: this means that password is sent in clear text to the server
   // note: OPCUA specification discourages use of unencrypted password
   //       but some old OPCUA server may only provide this policy and we
-  //       still have to support in the client?
+  //       still have to support it in the client?
   if (securityPolicy === SecurityPolicy.None) {
     identityToken = new UserNameIdentityToken({
       encryptionAlgorithm: null,

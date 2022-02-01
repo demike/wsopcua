@@ -402,7 +402,10 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
   }
 
   private _on_socket_close(evt: CloseEvent) {
-    // istanbul ignore next
+    if (this._disconnecting) {
+      return; // actively disconnecting --> do nothing
+    }
+
     if (doDebug) {
       debugLog(
         ' SOCKET CLOSE : reason =' + evt.reason + ' code=' + evt.code + ' name=' + this.name

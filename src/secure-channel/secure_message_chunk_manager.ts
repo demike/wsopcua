@@ -15,6 +15,11 @@ import {
   SymmetricAlgorithmSecurityHeader,
 } from '../service-secure-channel';
 import { SequenceNumberGenerator } from './sequence_number_generator';
+import {
+  EncryptBufferFunc,
+  IChunkManagerOptions,
+  SignBufferFunc,
+} from 'src/chunkmanager/chunk_manager';
 
 export interface SecureMessageChunkManagerEvents {
   chunk: (chunk: ArrayBuffer, is_last: boolean) => void;
@@ -35,10 +40,10 @@ export interface SecureMessageChunkManagerOptions {
   chunkSize?: number;
   requestId: number;
   signatureLength: number;
-  signingFunc?: Function;
+  signBufferFunc?: SignBufferFunc;
   plainBlockSize: number;
   cipherBlockSize: number;
-  encrypt_buffer?: ArrayBuffer;
+  encryptBufferFunc?: EncryptBufferFunc;
 }
 
 /**
@@ -106,7 +111,7 @@ export class SecureMessageChunkManager extends EventEmitter<SecureMessageChunkMa
 
     this._headerSize = 12 + securityHeaderSize;
     const self = this;
-    const params = {
+    const params: IChunkManagerOptions = {
       chunkSize: this._chunkSize,
 
       headerSize: this._headerSize,
@@ -117,19 +122,19 @@ export class SecureMessageChunkManager extends EventEmitter<SecureMessageChunkMa
       },
 
       sequenceHeaderSize,
-      writeSequenceHeaderFunc: function (block: DataStream | DataView) {
-        assert(block.byteLength === this.sequenceHeaderSize);
-        self.writeSequenceHeader(block);
+      writeSequenceHeaderFunc: (block: DataStream | DataView) => {
+        // assert(block.byteLength === sequenceHeaderSize);
+        this.writeSequenceHeader(block);
       },
 
       // ---------------------------------------- Signing stuff
       signatureLength: options.signatureLength,
-      compute_signature: options.signingFunc,
+      signBufferFunc: options.signBufferFunc,
 
       // ---------------------------------------- Encrypting stuff
       plainBlockSize: options.plainBlockSize,
       cipherBlockSize: options.cipherBlockSize,
-      encrypt_buffer: options.encrypt_buffer,
+      encryptBufferFunc: options.encryptBufferFunc,
     };
 
     this._chunkManager = new ChunkManager(params);
@@ -191,9 +196,9 @@ export class SecureMessageChunkManager extends EventEmitter<SecureMessageChunkMa
    * @param buffer {Buffer}
    * @param length {Integer} - optional if not provided  buffer.length is used instead.
    */
-  public write(buffer: ArrayBuffer, length: number) {
+  public write(buffer: ArrayBuffer, length: number): Promise<void> {
     length = length || buffer.byteLength;
-    this._chunkManager.write(buffer, length);
+    return this._chunkManager.write(buffer, length);
   }
 
   /**
@@ -208,8 +213,8 @@ export class SecureMessageChunkManager extends EventEmitter<SecureMessageChunkMa
   /**
    * @method end
    */
-  public end() {
-    this._chunkManager.end();
+  public async end() {
+    await this._chunkManager.end();
     this.emit('finished');
   }
 }

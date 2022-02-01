@@ -7,7 +7,7 @@ import { DataStream } from '../basic-types/DataStream';
 import { assert } from '../assert';
 import { get_clock_tick } from '../utils';
 
-import { PacketAssembler, PacketInfo } from '../packet-assembler/packet_assembler';
+import { MessageHeader, PacketAssembler, PacketInfo } from '../packet-assembler/packet_assembler';
 import { readMessageHeader } from '../chunkmanager';
 import { concatArrayBuffers } from '../basic-types/array';
 import { SequenceHeader } from '../service-secure-channel';
@@ -49,7 +49,7 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
   status_error: boolean;
   blocks: any[];
   message_chunks: DataView[];
-  messageHeader: any;
+  messageHeader: MessageHeader;
   secureChannelId: number;
   expected_secureChannelId: number;
 
@@ -102,7 +102,7 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
     this.blocks = [];
     this.message_chunks = [];
   }
-  protected _read_headers(binaryStream: DataStream) {
+  protected async _read_headers(binaryStream: DataStream) {
     this.messageHeader = readMessageHeader(binaryStream);
     assert(binaryStream.length === 8);
     this.secureChannelId = binaryStream.getUint32();
@@ -119,7 +119,7 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
    * @param message_chunk
    * @private
    */
-  protected _append(message_chunk: DataView | ArrayBuffer) {
+  protected async _append(message_chunk: DataView | ArrayBuffer) {
     if (this.status_error) {
       // the message builder is in error mode and further message chunks should be discarded.
       return false;
@@ -132,7 +132,7 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
     this.message_chunks.push(message_chunk);
     this.total_message_size += message_chunk.byteLength;
     const binaryStream = new DataStream(message_chunk);
-    if (!this._read_headers(binaryStream)) {
+    if (!(await this._read_headers(binaryStream))) {
       return false;
     }
     assert(binaryStream.length >= 12);
@@ -169,7 +169,7 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
       this.packetAssembler.feed(data);
     }
   }
-  protected _feed_messageChunk(messageChunk: ArrayBuffer | DataView) {
+  protected async _feed_messageChunk(messageChunk: ArrayBuffer | DataView) {
     assert(messageChunk);
     const messageHeader = readMessageHeader(new DataStream(messageChunk));
     /**
@@ -180,7 +180,7 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
     this.emit('chunk', messageChunk);
     if (messageHeader.isFinal === 'F') {
       // last message
-      this._append(messageChunk);
+      await this._append(messageChunk);
       if (this.status_error) {
         return false;
       }

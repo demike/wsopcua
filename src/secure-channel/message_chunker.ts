@@ -128,10 +128,12 @@ export class MessageChunker {
       })
       .on('finished', function () {
         messageChunkCallback(null);
+        secure_chunker.removeAllListeners();
       });
 
     assert(stream.view.byteOffset === 0);
-    secure_chunker.write(stream.view.buffer, stream.view.buffer.byteLength);
-    secure_chunker.end();
+    secure_chunker
+      .write(stream.view.buffer, stream.view.buffer.byteLength)
+      .then(() => secure_chunker.end());
   }
 }
