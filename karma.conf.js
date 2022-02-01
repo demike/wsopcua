@@ -9,6 +9,7 @@ module.exports = function (config) {
     files: [
       { pattern: 'src/**/*.ts', esModule: true },
       { pattern: 'src/**/*.fixture', included: false, watched: false, served: true },
+      { pattern: 'src/**/*.pem', included: false, watched: false, served: true },
       //      { pattern: "src/**/schema_parser/bin/**", included: false, watched: false},
       //      { pattern: "src/**/*.d.ts", included: false, watched: false},
       //      { pattern: "src/schema_parser/**", included: false, watched: false},
