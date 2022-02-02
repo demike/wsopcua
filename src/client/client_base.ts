@@ -43,7 +43,6 @@ import {
   ConnectionStrategy,
   ConnectionStrategyOptions,
 } from '../secure-channel/client_secure_channel_layer';
-import { OPCUASecureObject } from '../common/secure_object';
 import { RequestHeader, ResponseHeader } from '../service-secure-channel';
 import { ClientSession } from './client_session';
 import { EndpointDescription } from '../service-endpoints';
@@ -58,7 +57,7 @@ import {
 } from '../generated';
 import { IEncodable } from '../factory/factories_baseobject';
 import { OPCUAClientOptions } from '../common/client_options';
-import { CertificateStore, NullCertificateStore } from 'src/common/certificate_store';
+import { CertificateStore, NullCertificateStore } from '../common/certificate_store';
 
 const defaultConnectionStrategy: ConnectionStrategyOptions = {
   maxRetry: 10000000, // almost infinite

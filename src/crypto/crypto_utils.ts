@@ -1,6 +1,6 @@
 import { Signature } from './common';
 import { assert } from '../assert';
-import { concatArrayBuffers } from 'src/basic-types/array';
+import { concatArrayBuffers } from '../basic-types/array';
 
 export function buf2base64(buffer: ArrayBuffer): string {
   return btoa(String.fromCharCode(...new Uint8Array(buffer)));
