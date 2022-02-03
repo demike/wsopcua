@@ -481,18 +481,16 @@ export class ClientSidePublishEngine {
         });
       }
 
-      window.setImmediate(function () {
+      window.setImmediate(() => {
         assert('function' === typeof _i_callback);
         whilst(
-          function () {
-            return !is_done;
-          },
+          (cb: (err: null, truth: boolean) => void) => cb(null, !is_done),
           _send_republish,
-          function (err: Error) {
-            debugLog('nbPendingPublishRequest = ' + self.nbPendingPublishRequests);
-            debugLog(' _republish ends with ' + (err ? err.message : 'null'));
+          ((err?: Error | null): void => {
+            debugLog('nbPendingPublishRequest = ', this.nbPendingPublishRequests);
+            debugLog(' _republish ends with ', err ? err.message : 'null');
             _i_callback(err);
-          }
+          }) as any // Wait for @type/async bug to be fixed !
         );
       });
     }
