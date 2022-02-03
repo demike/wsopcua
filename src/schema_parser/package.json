@@ -24,7 +24,7 @@
   "license": "my licence",
   "repository": {
     "type": "git",
-    "url": "git://github.com/node-opcua/node-opcua.git"
+    "url": "git://github.com/demike/wsopcua.git"
   },
   "keywords": [
     "OPCUA",

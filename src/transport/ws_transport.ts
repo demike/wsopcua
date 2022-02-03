@@ -449,7 +449,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     debugLog(' bytesRead    = ' + this.bytesRead);
     debugLog(' bytesWritten = ' + this.bytesWritten);
     this._fulfill_pending_promises(
-      new Error('Connection aborted - ended by client : ' + (err ? err.message : ''))
+      new Error('Connection aborted - ended by server : ' + (err ? err.message : ''))
     );
   }
 }

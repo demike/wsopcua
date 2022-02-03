@@ -63,10 +63,13 @@ describe('testing Client-Server - Event', function () {
     await controller.stopTestServer();
 
     // wait a little bit , to relax client
+    await new Promise((resolve) => {
+      setTimeout(resolve, 100);
+    });
 
     expect(_client_received_close_event.calls.count()).toBe(1);
     expect(_client_received_close_event.calls.first().args[0].message).toMatch(
-      /Connection Break/ // /disconnected by third party/
+      /Connection aborted/
     );
 
     await client.disconnectP();

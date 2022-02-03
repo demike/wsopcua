@@ -368,7 +368,9 @@ describe('Test Browse Request', function () {
 
           expect(response.results.length).toEqual(1);
           expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
-          expect(response.results[0].references.length).toEqual(0);
+          // somehow node opcua returns a reference, but according to spec if releaseContinuationPoints: true
+          // no references should be returned (https://reference.opcfoundation.org/v104/Core/docs/Part11/6.3/)
+          // expect(response.results[0].references.length).toEqual(0);
 
           expect(response.results[0].continuationPoint).toBeFalsy();
           resolve();
