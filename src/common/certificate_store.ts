@@ -10,8 +10,6 @@ import { getCryptoFactory, SecurityPolicy } from '../secure-channel/security_pol
 /**
  * The certificate store holds the certificate and the private key
  * for a simple implementation take a look at @type {PEMCertificateStore}
- * create certificates with:
- * openssl req -x509 -days 365 -nodes -newkey rsa:2048 -keyout test_privatekey.pem -out test_cert.pem
  */
 
 export interface CertificateStore {
@@ -58,10 +56,14 @@ class PrivateKeyImpl implements PrivateKey {
 
 /**
  * A basic implementation of the certificateStore, that takes a certificate and a private key in PEM format
- * for example create by: https://certificatetools.com/
+ * for example created by: https://certificatetools.com/
  *
- * key usage: DataEncipherment needs to be enabled,
- * you have to private a subjectAltName
+ *  key usage:
+ *  spec says that certificate shall include digitalSignature, nonRepudiation, keyEncipherment and dataEncipherment.
+ * Other key uses are allowed.
+ *
+ * you also have to add a subjectAltName URI
+ * be shure that the subejctAltName matches your applicationUri
  *
  */
 export class PEMCertificateStore implements CertificateStore {

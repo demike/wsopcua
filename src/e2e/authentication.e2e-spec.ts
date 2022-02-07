@@ -3,7 +3,7 @@ import { OPCUAClient } from '../client/opcua_client';
 import { PEMCertificateStore } from '../common/certificate_store';
 import { MessageSecurityMode } from '../generated';
 import { getCryptoFactory, SecurityPolicy } from '../secure-channel';
-import { convertPEMtoDER, generatePublicKeyFromDER } from '../crypto/';
+import { generatePublicKeyFromDER } from '../crypto/';
 
 import {
   DEFAULT_CLIENT_OPTIONS,
@@ -47,7 +47,7 @@ describe('OPCUA-Session Activation', function () {
     });
   });
   describe('security: sign', () => {
-    it('should do username password authentication', async () => {
+    fit('should do username password authentication', async () => {
       const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
       const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
         r.text()
@@ -125,7 +125,7 @@ describe('asymmetric encrypt decrypt', () => {
     expect(block).toEqual(new Uint8Array(decrypted));
   });
 
-  it('should sign and verify with a PEM certificate and private key', async () => {
+  fit('SHA-256: should sign and verify with a PEM certificate and private key', async () => {
     const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
     const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
       r.text()
@@ -134,6 +134,31 @@ describe('asymmetric encrypt decrypt', () => {
     const store = new PEMCertificateStore(clientCertPEM, privateKeyPEM);
 
     const factory = getCryptoFactory(SecurityPolicy.Basic256Sha256);
+
+    const block = new Uint8Array(512);
+    for (let i = 0; i < 512; i++) {
+      block[i] = i;
+    }
+
+    const signature = await factory.asymmetricSign(block, store.getPrivateKey());
+    const isVerified = await factory.asymmetricVerify(
+      block,
+      new Uint8Array(signature),
+      store.getCertificate()
+    );
+
+    expect(isVerified).toBeTrue();
+  });
+
+  fit('SHA-1: should sign and verify with a PEM certificate and private key', async () => {
+    const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
+    const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
+      r.text()
+    );
+
+    const store = new PEMCertificateStore(clientCertPEM, privateKeyPEM);
+
+    const factory = getCryptoFactory(SecurityPolicy.Basic256);
 
     const block = new Uint8Array(512);
     for (let i = 0; i < 512; i++) {
