@@ -22,8 +22,8 @@ async function HMAC_KEY(sha1or256: 'SHA-1' | 'SHA-256', secret: BufferSource) {
   );
 }
 
-function HMAC_HASH(hmacKey: CryptoKey, message: ArrayBuffer) {
-  return crypto.sign('HMAC', hmacKey, message);
+function HMAC_HASH(hmacKey: CryptoKey, message: BufferSource) {
+  return crypto.sign('HMAC', hmacKey, message as any);
 }
 
 function plus(buf1: ArrayBuffer, buf2: ArrayBuffer): ArrayBuffer {
@@ -263,9 +263,9 @@ function derivedKeys_algorithm(derivedKeys: DerivedKeys) {
 }
 
 export async function encryptBufferWithDerivedKeys(
-  buffer: ArrayBuffer,
+  buffer: Uint8Array,
   derivedKeys: DerivedKeys
-): Promise<ArrayBuffer> {
+): Promise<Uint8Array> {
   let key: CryptoKey | undefined = (derivedKeys.encryptingKey as any)._AES_CBC_KEY;
   if (!key) {
     key = (derivedKeys.encryptingKey as any)._AES_CBC_KEY = await crypto.importKey(
@@ -282,7 +282,9 @@ export async function encryptBufferWithDerivedKeys(
     iv: derivedKeys.initializationVector,
   };
 
-  return crypto.encrypt(opts, key, buffer);
+  const resultBuffer = await crypto.encrypt(opts, key, buffer);
+  // virtually cut away the automatically added padding, by limiting the uint8array length to data length
+  return new Uint8Array(resultBuffer, 0, buffer.byteLength);
 
   /*
     const cypher = crypto.createCipheriv(algorithm, key, initVector);
@@ -295,9 +297,9 @@ export async function encryptBufferWithDerivedKeys(
 }
 
 export async function decryptBufferWithDerivedKeys(
-  buffer: ArrayBuffer,
+  buffer: Uint8Array,
   derivedKeys: DerivedKeys
-): Promise<ArrayBuffer> {
+): Promise<Uint8Array> {
   let key: CryptoKey | undefined = (derivedKeys.encryptingKey as any)._AES_CBC_KEY;
   if (!key) {
     key = (derivedKeys.encryptingKey as any)._AES_CBC_KEY = await crypto.importKey(
@@ -314,7 +316,8 @@ export async function decryptBufferWithDerivedKeys(
     iv: derivedKeys.initializationVector,
   };
 
-  return crypto.decrypt(opts, key, buffer);
+  // TODO fix the auto padding of aes cbc
+  return new Uint8Array(await crypto.decrypt(opts, key, buffer));
 
   /*
     const cypher = crypto.createDecipheriv(algorithm, key, initVector);
@@ -333,10 +336,10 @@ export async function decryptBufferWithDerivedKeys(
  * @return
  */
 export async function makeMessageChunkSignatureWithDerivedKeys(
-  message: ArrayBuffer,
+  message: BufferSource,
   derivedKeys: DerivedKeys
 ): Promise<ArrayBuffer> {
-  assert(message instanceof ArrayBuffer);
+  // assert(message instanceof ArrayBuffer);
   // assert(derivedKeys.signingKey instanceof BufferSource);
   assert(typeof derivedKeys.sha1or256 === 'string');
   assert(derivedKeys.sha1or256 === 'SHA-1' || derivedKeys.sha1or256 === 'SHA-256');

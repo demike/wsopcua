@@ -25,6 +25,20 @@ describe('Testing DataStream', function () {
     expect(stream.length).toEqual(12);
   });
 
+  it('should create a binary stream from Uint8Array', () => {
+    const arr = Uint8Array.from([5, 6, 7, 8]);
+
+    const stream1 = new DataStream(arr);
+
+    expect(stream1.getUint8()).toBe(5);
+    expect(stream1.getUint8()).toBe(6);
+
+    const stream2 = new DataStream(new Uint8Array(arr.buffer, 1, 2));
+    expect(stream2.length).toBe(0);
+    expect(stream2.getUint8()).toBe(6);
+    expect(stream2.length).toBe(1);
+  });
+
   it('readArrayBuffer should not returned a shared buffer', function () {
     const stream = new DataStream(50);
 

@@ -65,7 +65,7 @@ function fake_encrypt_buffer(buffer: ArrayBuffer) {
   return Promise.resolve(outputBuffer);
 }
 
-function no_encrypt_block(block: ArrayBuffer) {
+function no_encrypt_block(block: Uint8Array) {
   assert(this.plainBlockSize === this.cipherBlockSize);
   return Promise.resolve(block);
 }
@@ -231,7 +231,7 @@ function perform_test(
         console.log(hexDump(expected_chunks[chunk_counter]));
       }
 
-      expect(chunk).toEqual(expected_chunks[chunk_counter]);
+      expect(chunk.buffer).toEqual(expected_chunks[chunk_counter]);
     }
     chunk_counter += 1;
     if (chunk_counter === expected_chunk_lengths.length) {

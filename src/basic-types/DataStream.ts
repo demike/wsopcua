@@ -12,8 +12,8 @@ export class DataStream {
       this._view = data;
     } else if (data instanceof ArrayBuffer) {
       this._view = new DataView(data);
-    } else if ( ArrayBuffer.isView(data) ) {
-      this._view = new DataView(data.buffer);
+    } else if (ArrayBuffer.isView(data)) {
+      this._view = new DataView(data.buffer, data.byteOffset, data.byteLength);
     } else {
       this._view = new DataView(new ArrayBuffer(data));
     }
@@ -49,16 +49,13 @@ export class DataStream {
     this._pos = newLen;
   }
 
-
   get byteLength(): number {
     return this._pos;
   }
 
-
   // _buffer: any;
   protected _view: DataView;
   protected _pos: number;
-
 
   public static binaryStoreSize(obj: IEncodable): number {
     const stream = new BinaryStreamSizeCalculator();
@@ -67,10 +64,10 @@ export class DataStream {
   }
 
   /**
-    * Gets the Float32 value at the specified byte offset from the start of the view. There is
-    * no alignment constraint; multi-byte values may be fetched from any offset.
-    * @param byteOffset The place in the buffer at which the value should be retrieved.
-    */
+   * Gets the Float32 value at the specified byte offset from the start of the view. There is
+   * no alignment constraint; multi-byte values may be fetched from any offset.
+   * @param byteOffset The place in the buffer at which the value should be retrieved.
+   */
   getFloat32(littleEndian: boolean = true): number {
     const val = this._view.getFloat32(this._pos, littleEndian);
     this._pos += 4;
@@ -78,10 +75,10 @@ export class DataStream {
   }
 
   /**
-    * Gets the Float64 value at the specified byte offset from the start of the view. There is
-    * no alignment constraint; multi-byte values may be fetched from any offset.
-    * @param byteOffset The place in the buffer at which the value should be retrieved.
-    */
+   * Gets the Float64 value at the specified byte offset from the start of the view. There is
+   * no alignment constraint; multi-byte values may be fetched from any offset.
+   * @param byteOffset The place in the buffer at which the value should be retrieved.
+   */
   getFloat64(littleEndian: boolean = true): number {
     const val = this._view.getFloat64(this._pos, littleEndian);
     this._pos += 8;
@@ -89,10 +86,10 @@ export class DataStream {
   }
 
   /**
-    * Gets the Int8 value at the specified byte offset from the start of the view. There is
-    * no alignment constraint; multi-byte values may be fetched from any offset.
-    * @param byteOffset The place in the buffer at which the value should be retrieved.
-    */
+   * Gets the Int8 value at the specified byte offset from the start of the view. There is
+   * no alignment constraint; multi-byte values may be fetched from any offset.
+   * @param byteOffset The place in the buffer at which the value should be retrieved.
+   */
   getInt8(): number {
     const val = this._view.getInt8(this._pos);
     this._pos++;
@@ -100,20 +97,20 @@ export class DataStream {
   }
 
   /**
-    * Gets the Int16 value at the specified byte offset from the start of the view. There is
-    * no alignment constraint; multi-byte values may be fetched from any offset.
-    * @param byteOffset The place in the buffer at which the value should be retrieved.
-    */
+   * Gets the Int16 value at the specified byte offset from the start of the view. There is
+   * no alignment constraint; multi-byte values may be fetched from any offset.
+   * @param byteOffset The place in the buffer at which the value should be retrieved.
+   */
   getInt16(littleEndian: boolean = true): number {
     const val = this._view.getInt16(this._pos, littleEndian);
     this._pos += 2;
     return val;
   }
   /**
-    * Gets the Int32 value at the specified byte offset from the start of the view. There is
-    * no alignment constraint; multi-byte values may be fetched from any offset.
-    * @param byteOffset The place in the buffer at which the value should be retrieved.
-    */
+   * Gets the Int32 value at the specified byte offset from the start of the view. There is
+   * no alignment constraint; multi-byte values may be fetched from any offset.
+   * @param byteOffset The place in the buffer at which the value should be retrieved.
+   */
   getInt32(littleEndian: boolean = true): number {
     const val = this._view.getInt32(this._pos, littleEndian);
     this._pos += 4;
@@ -121,10 +118,10 @@ export class DataStream {
   }
 
   /**
-    * Gets the Uint8 value at the specified byte offset from the start of the view. There is
-    * no alignment constraint; multi-byte values may be fetched from any offset.
-    * @param byteOffset The place in the buffer at which the value should be retrieved.
-    */
+   * Gets the Uint8 value at the specified byte offset from the start of the view. There is
+   * no alignment constraint; multi-byte values may be fetched from any offset.
+   * @param byteOffset The place in the buffer at which the value should be retrieved.
+   */
   getUint8(): number {
     const val = this._view.getUint8(this._pos);
     this._pos++;
@@ -137,12 +134,11 @@ export class DataStream {
     return val;
   }
 
-
   /**
-    * Gets the Uint16 value at the specified byte offset from the start of the view. There is
-    * no alignment constraint; multi-byte values may be fetched from any offset.
-    * @param byteOffset The place in the buffer at which the value should be retrieved.
-    */
+   * Gets the Uint16 value at the specified byte offset from the start of the view. There is
+   * no alignment constraint; multi-byte values may be fetched from any offset.
+   * @param byteOffset The place in the buffer at which the value should be retrieved.
+   */
   getUint16(littleEndian: boolean = true): number {
     const val = this._view.getUint16(this._pos, littleEndian);
     this._pos += 2;
@@ -150,10 +146,10 @@ export class DataStream {
   }
 
   /**
-    * Gets the Uint32 value at the specified byte offset from the start of the view. There is
-    * no alignment constraint; multi-byte values may be fetched from any offset.
-    * @param byteOffset The place in the buffer at which the value should be retrieved.
-    */
+   * Gets the Uint32 value at the specified byte offset from the start of the view. There is
+   * no alignment constraint; multi-byte values may be fetched from any offset.
+   * @param byteOffset The place in the buffer at which the value should be retrieved.
+   */
   getUint32(littleEndian: boolean = true): number {
     const val = this._view.getUint32(this._pos, littleEndian);
     this._pos += 4;
@@ -161,69 +157,68 @@ export class DataStream {
   }
 
   /**
-    * Stores an Float32 value at the specified byte offset from the start of the view.
-    * @param byteOffset The place in the buffer at which the value should be set.
-    * @param value The value to set.
-    * @param littleEndian If false or undefined, a big-endian value should be written,
-    * otherwise a little-endian value should be written.
-    */
+   * Stores an Float32 value at the specified byte offset from the start of the view.
+   * @param byteOffset The place in the buffer at which the value should be set.
+   * @param value The value to set.
+   * @param littleEndian If false or undefined, a big-endian value should be written,
+   * otherwise a little-endian value should be written.
+   */
   setFloat32(value: number, littleEndian: boolean = true): void {
     this._view.setFloat32(this._pos, value, littleEndian);
     this._pos += 4;
   }
 
   /**
-    * Stores an Float64 value at the specified byte offset from the start of the view.
-    * @param byteOffset The place in the buffer at which the value should be set.
-    * @param value The value to set.
-    * @param littleEndian If false or undefined, a big-endian value should be written,
-    * otherwise a little-endian value should be written.
-    */
+   * Stores an Float64 value at the specified byte offset from the start of the view.
+   * @param byteOffset The place in the buffer at which the value should be set.
+   * @param value The value to set.
+   * @param littleEndian If false or undefined, a big-endian value should be written,
+   * otherwise a little-endian value should be written.
+   */
   setFloat64(value: number, littleEndian: boolean = true): void {
     this._view.setFloat64(this._pos, value, littleEndian);
     this._pos += 8;
   }
 
   /**
-    * Stores an Int8 value at the specified byte offset from the start of the view.
-    * @param byteOffset The place in the buffer at which the value should be set.
-    * @param value The value to set.
-    */
+   * Stores an Int8 value at the specified byte offset from the start of the view.
+   * @param byteOffset The place in the buffer at which the value should be set.
+   * @param value The value to set.
+   */
   setInt8(value: number): void {
     this._view.setInt8(this._pos, value);
     this._pos++;
   }
 
-
   /**
-    * Stores an Int16 value at the specified byte offset from the start of the view.
-    * @param byteOffset The place in the buffer at which the value should be set.
-    * @param value The value to set.
-    * @param littleEndian If false or undefined, a big-endian value should be written,
-    * otherwise a little-endian value should be written.
-    */
+   * Stores an Int16 value at the specified byte offset from the start of the view.
+   * @param byteOffset The place in the buffer at which the value should be set.
+   * @param value The value to set.
+   * @param littleEndian If false or undefined, a big-endian value should be written,
+   * otherwise a little-endian value should be written.
+   */
   setInt16(value: number, littleEndian: boolean = true): void {
     this._view.setInt16(this._pos, value, littleEndian);
     this._pos += 2;
   }
 
   /**
-    * Stores an Int32 value at the specified byte offset from the start of the view.
-    * @param byteOffset The place in the buffer at which the value should be set.
-    * @param value The value to set.
-    * @param littleEndian If false or undefined, a big-endian value should be written,
-    * otherwise a little-endian value should be written.
-    */
+   * Stores an Int32 value at the specified byte offset from the start of the view.
+   * @param byteOffset The place in the buffer at which the value should be set.
+   * @param value The value to set.
+   * @param littleEndian If false or undefined, a big-endian value should be written,
+   * otherwise a little-endian value should be written.
+   */
   setInt32(value: number, littleEndian: boolean = true): void {
     this._view.setInt32(this._pos, value, littleEndian);
     this._pos += 4;
   }
 
   /**
-    * Stores an Uint8 value at the specified byte offset from the start of the view.
-    * @param byteOffset The place in the buffer at which the value should be set.
-    * @param value The value to set.
-    */
+   * Stores an Uint8 value at the specified byte offset from the start of the view.
+   * @param byteOffset The place in the buffer at which the value should be set.
+   * @param value The value to set.
+   */
   setUint8(value: number): void {
     this._view.setUint8(this._pos, value);
     this._pos++;
@@ -234,24 +229,24 @@ export class DataStream {
   }
 
   /**
-    * Stores an Uint16 value at the specified byte offset from the start of the view.
-    * @param byteOffset The place in the buffer at which the value should be set.
-    * @param value The value to set.
-    * @param littleEndian If false or undefined, a big-endian value should be written,
-    * otherwise a little-endian value should be written.
-    */
+   * Stores an Uint16 value at the specified byte offset from the start of the view.
+   * @param byteOffset The place in the buffer at which the value should be set.
+   * @param value The value to set.
+   * @param littleEndian If false or undefined, a big-endian value should be written,
+   * otherwise a little-endian value should be written.
+   */
   setUint16(value: number, littleEndian: boolean = true): void {
     this._view.setUint16(this._pos, value, littleEndian);
     this._pos += 2;
   }
 
   /**
-    * Stores an Uint32 value at the specified byte offset from the start of the view.
-    * @param byteOffset The place in the buffer at which the value should be set.
-    * @param value The value to set.
-    * @param littleEndian If false or undefined, a big-endian value should be written,
-    * otherwise a little-endian value should be written.
-    */
+   * Stores an Uint32 value at the specified byte offset from the start of the view.
+   * @param byteOffset The place in the buffer at which the value should be set.
+   * @param value The value to set.
+   * @param littleEndian If false or undefined, a big-endian value should be written,
+   * otherwise a little-endian value should be written.
+   */
   setUint32(value: number, littleEndian: boolean = true): void {
     this._view.setUint32(this._pos, value, littleEndian);
     this._pos += 4;
@@ -270,7 +265,6 @@ export class DataStream {
   }
 
   writeByteStream(buf?: Uint8Array) {
-
     if (!buf) {
       this.setInt32(-1);
       return;
@@ -281,21 +275,26 @@ export class DataStream {
 
     /* istanbul ignore next */
     if (remaining_bytes < buf.length) {
-      throw new Error('DataStream.writeByteStream error : not enough bytes left in buffer :  bufferLength is ' +
-        buf.length + ' but only ' + remaining_bytes + ' left');
+      throw new Error(
+        'DataStream.writeByteStream error : not enough bytes left in buffer :  bufferLength is ' +
+          buf.length +
+          ' but only ' +
+          remaining_bytes +
+          ' left'
+      );
     }
-    const bytebuf = new Uint8Array(this._view.buffer);
+    const bytebuf = new Uint8Array(this._view.buffer, this._view.byteOffset);
     bytebuf.set(buf, this._pos);
     this._pos += buf.length;
   }
 
   /**
-* read a byte stream to the stream.
-* The method reads the length of the byte array from the stream as a 32 bits integer before reading the byte stream.
-*
-* @method readByteStream
-* @return {Uint8Array}
-*/
+   * read a byte stream to the stream.
+   * The method reads the length of the byte array from the stream as a 32 bits integer before reading the byte stream.
+   *
+   * @method readByteStream
+   * @return {Uint8Array}
+   */
   readByteStream(): Uint8Array {
     const bufLen = this.getInt32();
     if (bufLen === -1) {
@@ -306,13 +305,20 @@ export class DataStream {
     }
 
     // check that there is enough space in the buffer
-    const remaining_bytes = this._view.buffer.byteLength - this._pos;
+    const remaining_bytes = this._view.byteLength - this._pos;
     if (remaining_bytes < bufLen) {
-      throw new Error('BinaryStream.readByteStream error : not enough bytes left in buffer :  bufferLength is ' +
-        bufLen + ' but only ' + remaining_bytes + ' left');
+      throw new Error(
+        'BinaryStream.readByteStream error : not enough bytes left in buffer :  bufferLength is ' +
+          bufLen +
+          ' but only ' +
+          remaining_bytes +
+          ' left'
+      );
     }
 
-    const buf = new Uint8Array(this._view.buffer.slice(this._pos, this._pos + bufLen));
+    const buf = new Uint8Array(
+      this._view.buffer.slice(this._view.byteOffset + this._pos, this._pos + bufLen)
+    ); // TODO use subarray
     this._pos += bufLen;
     return buf;
   }
@@ -326,7 +332,6 @@ export class DataStream {
       return null;
     }
     return txtDecoder.decode(buff);
-
   }
 
   writeString(str?: string): void {
@@ -338,11 +343,11 @@ export class DataStream {
   }
 
   /**
-* @method writeArrayBuffer
-* @param arrayBuf {ArrayBuffer}
-* @param offset   {Number}
-* @param length   {Number}
-*/
+   * @method writeArrayBuffer
+   * @param arrayBuf {ArrayBuffer}
+   * @param offset   {Number}
+   * @param length   {Number}
+   */
   public writeArrayBuffer(arrayBuf: ArrayBuffer, offset: number, length?: number) {
     offset = offset || 0;
 
@@ -355,37 +360,61 @@ export class DataStream {
       this._view[this._pos++] = byteArr[i];
     }
     */
-   const byteArr = new Uint8Array(arrayBuf, offset, length);
-   const viewBuffer = new Uint8Array(this._view.buffer);
-   viewBuffer.set(byteArr, this._pos);
-   this._pos += length;
+    const byteArr = new Uint8Array(arrayBuf, offset, length);
+    const viewBuffer = new Uint8Array(this._view.buffer, this._view.byteOffset);
+    viewBuffer.set(byteArr, this._pos);
+    this._pos += length;
   }
 
   /**
-  * @method readByteArray
-  * @param length
-  * @returns {Uint8Array}
-  */
+   * returns an Uint8Array reprentation of the underlying arraybuffer at the current position
+   * It does NOT COPY the data, it' just referencing it
+   * @method readByteArray
+   * @param length
+   * @returns {Uint8Array}
+   */
   public readByteArray(length: number): Uint8Array {
-    const arr = new Uint8Array(this._view.buffer, this._pos, length);
+    const arr = new Uint8Array(this._view.buffer, this._pos + this._view.byteOffset, length);
     this._pos += length;
     return arr;
   }
 
   /**
-   *
+   * returns an array buffer holding a COPY of the original data
    * @param length
    * @param constructorFn
    */
   public readArrayBuffer(lengthInBytes: number): ArrayBuffer {
-    const arr = this._view.buffer.slice(this._pos, this._pos + lengthInBytes);
+    const arr = this._view.buffer.slice(
+      this._pos + this._view.byteOffset,
+      this._pos + this._view.byteOffset + lengthInBytes
+    );
     this._pos += lengthInBytes;
     return arr;
   }
 
+  /**
+   * !!! important !!!
+   * this method returns an Uint8Array from the position in the stream WITHOUT
+   * advancing the position variable
+   * @param pos defaults to the current position of the stream
+   */
+  public getUint8ArrayWithoutAdvancingPositionPointer(pos: number = this._pos, length?: number) {
+    return new Uint8Array(this._view.buffer, pos + this._view.byteOffset, length);
+  }
+
+  /**
+   * !!! important !!!
+   * this method sets an Uint8Array at the position in the stream WITHOUT
+   * advancing the position variable
+   * @param arr the uint8array to set at the defined position
+   * @param pos defaults to the current position of the stream
+   */
+  public setUint8ArrayWithoutAdvancingPositionPointer(arr: Uint8Array, pos: number = this._pos) {
+    const viewBuffer = new Uint8Array(this._view.buffer, this._view.byteOffset);
+    viewBuffer.set(arr, pos);
+  }
 }
-
-
 
 /**
  * a BinaryStreamSizeCalculator can be used to quickly evaluate the required size
@@ -437,23 +466,22 @@ export class BinaryStreamSizeCalculator {
     this.length += 2;
   }
 
-
   setFloat32(value: number): void {
     this.length += 4;
   }
 
-  setFloat64(value: number|[number, number]): void {
+  setFloat64(value: number | [number, number]): void {
     this.length += 8;
   }
 
-  setDouble(value: number|[number, number]): void {
+  setDouble(value: number | [number, number]): void {
     this.length += 8;
   }
 
   writeArrayBuffer(arrayBuf: ArrayBuffer, offset: number, byteLength: number): void {
     offset = offset || 0;
     // assert(arrayBuf instanceof ArrayBuffer);
-    this.length += (byteLength || arrayBuf.byteLength/*new Uint8Array(arrayBuf).length*/);
+    this.length += byteLength || arrayBuf.byteLength /*new Uint8Array(arrayBuf).length*/;
   }
 
   writeByteStream(buf: Uint8Array): void {
@@ -462,19 +490,16 @@ export class BinaryStreamSizeCalculator {
     } else {
       this.setInt32(buf.length);
       this.length += buf.length;
-
     }
   }
 
   writeString(str: string): void {
-
     if (str === undefined || str === null) {
       this.setInt32(-1);
       return;
     }
     return this.writeByteStream(txtEncoder.encode(str));
   }
-
 }
 
 // utility functions

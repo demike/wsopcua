@@ -1085,8 +1085,8 @@ async function createUserNameIdentityToken(
       session.serverCertificate,
       cryptoFactory.sha1or256
     );
-    const buffer = await cryptoFactory.asymmetricEncrypt(block, publicKey);
-    identityToken.password = new Uint8Array(buffer);
+    const buffer = await cryptoFactory.asymmetricEncrypt(new Uint8Array(block), publicKey);
+    identityToken.password = buffer;
   } catch (err) {
     console.log(err.message);
   }
@@ -1202,8 +1202,8 @@ async function createIssuedIdentityToken(
       session.serverCertificate,
       cryptoFactory.sha1or256
     );
-    const buffer = await cryptoFactory.asymmetricEncrypt(block, publicKey);
-    identityToken.tokenData = new Uint8Array(buffer);
+    const buffer = await cryptoFactory.asymmetricEncrypt(new Uint8Array(block), publicKey);
+    identityToken.tokenData = buffer;
   } catch (err) {
     console.log(err.message);
   }

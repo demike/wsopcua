@@ -8,12 +8,7 @@ import { MessageSecurityMode } from '../generated/MessageSecurityMode';
 import { SignatureData } from '../generated/SignatureData';
 
 import * as crypto_utils from '../crypto';
-import {
-  generatePublicKeyFromDER,
-  DerivedKeys,
-  generateVerifyKeyFromDER,
-  PrivateKey,
-} from '../crypto';
+import { DerivedKeys, generateVerifyKeyFromDER, PrivateKey } from '../crypto';
 import { debugLog } from '../common/debug';
 
 /**
@@ -144,21 +139,21 @@ export function coerceSecurityPolicy(value?: any): SecurityPolicy {
 }
 
 // --------------------
-function RSAPKCS1V15_Decrypt(buffer: ArrayBuffer, privateKey: PrivateKey) {
+function RSAPKCS1V15_Decrypt(buffer: Uint8Array, privateKey: PrivateKey) {
   return privateKey
     .getDecryptKey('SHA-1')
     .then((key) =>
       crypto_utils.privateDecrypt_long(buffer, key, crypto_utils.RSA_PKCS1_OAEP_PADDING)
     );
 }
-function RSAOAEP_SHA1_Decrypt(buffer: ArrayBuffer, privateKey: PrivateKey) {
+function RSAOAEP_SHA1_Decrypt(buffer: Uint8Array, privateKey: PrivateKey) {
   return privateKey
     .getDecryptKey('SHA-1')
     .then((key) =>
       crypto_utils.privateDecrypt_long(buffer, key, crypto_utils.RSA_PKCS1_OAEP_PADDING)
     );
 }
-function RSAOAEP_SHA256_Decrypt(buffer: ArrayBuffer, privateKey: PrivateKey) {
+function RSAOAEP_SHA256_Decrypt(buffer: Uint8Array, privateKey: PrivateKey) {
   return privateKey
     .getDecryptKey('SHA-256')
     .then((key) =>
@@ -212,7 +207,7 @@ function RSAPKCS1OAEPSHA256_Verify(
     .then((opts) => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
 }
 
-function RSAPKCS1V15SHA1_Sign(buffer: ArrayBuffer, privateKey: PrivateKey): Promise<ArrayBuffer> {
+function RSAPKCS1V15SHA1_Sign(buffer: Uint8Array, privateKey: PrivateKey): Promise<ArrayBuffer> {
   return privateKey.getSignKey('SHA-1').then((signKey) =>
     crypto_utils.makeMessageChunkSignature(buffer, {
       algorithm: 'RSASSA-PKCS1-v1_5', // 'RSA-SHA256',
@@ -253,7 +248,7 @@ export interface DerivedKeys1 {
   derivedServerKeys: DerivedKeys | null;
   algorithm: string | null;
 }
-// TODO: this should return a promise (async)
+
 export async function computeDerivedKeys(
   cryptoFactory: ICryptoFactory,
   serverNonce: Uint8Array,
@@ -308,8 +303,8 @@ export interface ICryptoFactory {
   asymmetricSignatureAlgorithm: string;
 
   /* asymmetric encryption algorithm */
-  asymmetricEncrypt: (block: ArrayBuffer, publicKey: CryptoKey) => PromiseLike<ArrayBuffer>;
-  asymmetricDecrypt: (block: ArrayBuffer, privateKey: PrivateKey) => Promise<ArrayBuffer>;
+  asymmetricEncrypt: (block: Uint8Array, publicKey: CryptoKey) => PromiseLike<Uint8Array>;
+  asymmetricDecrypt: (block: Uint8Array, privateKey: PrivateKey) => Promise<Uint8Array>;
   asymmetricEncryptionAlgorithm: string;
   blockPaddingSize: number;
   symmetricEncryptionAlgorithm: string;
@@ -494,7 +489,7 @@ export function getOptionsForSymmetricSignAndEncrypt(
 
   let options = {
     signatureLength: derivedKeys.signatureLength,
-    signBufferFunc: function (chunk: ArrayBuffer) {
+    signBufferFunc: (chunk: Uint8Array) => {
       return crypto_utils.makeMessageChunkSignatureWithDerivedKeys(chunk, derivedKeys);
     },
   };
@@ -503,7 +498,7 @@ export function getOptionsForSymmetricSignAndEncrypt(
       ...options,
       plainBlockSize: derivedKeys.encryptingBlockSize,
       cipherBlockSize: derivedKeys.encryptingBlockSize,
-      encryptBufferFunc: function (chunk: ArrayBuffer) {
+      encryptBufferFunc: (chunk: Uint8Array) => {
         return crypto_utils.encryptBufferWithDerivedKeys(chunk, derivedKeys);
       },
     };

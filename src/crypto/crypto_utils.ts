@@ -130,7 +130,7 @@ export enum PaddingAlgorithm {
 }
 
 export async function publicEncrypt_long(
-  buffer: ArrayBuffer,
+  buffer: Uint8Array,
   publicKey: CryptoKey,
   padding: number,
   algorithm?: PaddingAlgorithm
@@ -153,7 +153,7 @@ export async function publicEncrypt_long(
 
   const outputBuffer = new Uint8Array(nbBlocks * blockSize);
   for (let i = 0; i < nbBlocks; i++) {
-    const currentBlock = buffer.slice(chunk_size * i, chunk_size * (i + 1));
+    const currentBlock = buffer.subarray(chunk_size * i, chunk_size * (i + 1));
 
     const encrypted_chunk: ArrayBuffer = await crypto.subtle.encrypt(
       { name: 'RSA-OAEP' },
@@ -168,7 +168,7 @@ export async function publicEncrypt_long(
 }
 
 export async function privateDecrypt_long(
-  buffer: ArrayBuffer,
+  buffer: Uint8Array,
   privateKey: CryptoKey,
   algorithm?: number
 ): Promise<Uint8Array> {
@@ -185,12 +185,9 @@ export async function privateDecrypt_long(
       .then((decrypted) => new Uint8Array(decrypted));
   }
 
-  const inputArray = new Uint8Array(buffer);
   const outputBuffers: ArrayBuffer[] = [];
   for (let i = 0; i < nbBlocks; i++) {
-    const inputBuffer = inputArray.subarray(blockSize * i, blockSize * (i + 1));
-
-    // const currentBlock = buffer.slice(blockSize * i, blockSize * (i + 1));
+    const inputBuffer = buffer.subarray(blockSize * i, blockSize * (i + 1));
 
     const decrypted_chunk: ArrayBuffer = await crypto.subtle.decrypt(
       { name: 'RSA-OAEP' },

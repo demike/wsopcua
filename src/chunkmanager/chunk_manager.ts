@@ -59,7 +59,7 @@ export type WriteHeaderFunc = (
 ) => void;
 export type WriteSequenceHeaderFunc = (chunk: DataView) => void;
 export type SignBufferFunc = (buffer: ArrayBuffer) => PromiseLike<ArrayBuffer>;
-export type EncryptBufferFunc = (buffer: ArrayBuffer) => PromiseLike<ArrayBuffer>;
+export type EncryptBufferFunc = (buffer: Uint8Array) => PromiseLike<Uint8Array>;
 
 export interface IChunkManagerOptions {
   chunkSize: number;
@@ -77,7 +77,7 @@ export interface IChunkManagerOptions {
 }
 
 export interface ChunkManagerEvents {
-  chunk: (pendingChunk: ArrayBuffer, isLast: boolean) => void;
+  chunk: (pendingChunk: Uint8Array, isLast: boolean) => void;
 }
 
 /**
@@ -110,10 +110,9 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
   encryptBufferFunc?: EncryptBufferFunc;
   maxBlock: number;
   dataOffset: number;
-  chunk: ArrayBuffer | null;
-  chunkArray: Uint8Array | null;
+  chunk: Uint8Array | null;
   cursor: number;
-  pending_chunk: ArrayBuffer | null;
+  pending_chunk: Uint8Array | null;
   dataEnd: number;
   private writeLock?: Promise<void>;
   /*    emit(arg0: any, arg1: any, arg2: any,arg3?: any): any {
@@ -170,7 +169,6 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
     // where the data starts in the block
     this.dataOffset = this.headerSize + this.sequenceHeaderSize;
     this.chunk = null;
-    this.chunkArray = null;
     this.cursor = 0;
     this.pending_chunk = null;
   }
@@ -181,27 +179,27 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
    * @method _write_signature
    * @private
    */
-  private async _write_signature(chunk: ArrayBuffer) {
+  private async _write_signature(chunk: Uint8Array) {
     if (this.signBufferFunc) {
       assert('function' === typeof this.signBufferFunc);
       assert(this.signatureLength !== 0);
       const signature_start = this.dataEnd;
-      const section_to_sign = chunk.slice(0, signature_start); //TODO use subarray
+      const section_to_sign = chunk.subarray(0, signature_start);
       const signature = await this.signBufferFunc(section_to_sign);
       assert(
         signature.byteLength === this.signatureLength,
         `wrong signature length: ${signature.byteLength} `
       );
-      new Uint8Array(chunk).set(new Uint8Array(signature), signature_start);
+      chunk.set(new Uint8Array(signature), signature_start);
     } else {
       assert(this.signatureLength === 0, 'expecting NO SIGN');
     }
   }
-  private async _encrypt(chunk: ArrayBuffer) {
+  private async _encrypt(chunk: Uint8Array) {
     if (this.plainBlockSize > 0 && this.encryptBufferFunc) {
       const startEncryptionPos = this.headerSize;
       const endEncryptionPos = this.dataEnd + this.signatureLength;
-      const area_to_encrypt = chunk.slice(startEncryptionPos, endEncryptionPos);
+      const area_to_encrypt = chunk.subarray(startEncryptionPos, endEncryptionPos);
       assert(area_to_encrypt.byteLength % this.plainBlockSize === 0); // padding should have been applied
       const nbBlock = area_to_encrypt.byteLength / this.plainBlockSize;
       const encrypted_buf = await this.encryptBufferFunc(area_to_encrypt);
@@ -209,7 +207,7 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
 
       // TODO: FIX SYMMETRIC ENCRYPTION/DECRYPTION of derived keys ( ACCOUNT FOR THE AUTOMATICALLY ADDED PADDING in AES-CBC)
       assert(encrypted_buf.byteLength === nbBlock * this.cipherBlockSize);
-      new Uint8Array(chunk).set(new Uint8Array(encrypted_buf), this.headerSize); // encrypted_buf.copy(chunk, this.headerSize, 0);
+      chunk.set(new Uint8Array(encrypted_buf), this.headerSize); // encrypted_buf.copy(chunk, this.headerSize, 0);
     }
   }
   private async _push_pending_chunk(isLast: boolean) {
@@ -220,7 +218,7 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
         // The sequence header ensures that the first  encrypted block of every  Message  sent over
         // a channel will start with different data.
         this.writeHeaderFunc(
-          new DataView(this.pending_chunk, 0, this.headerSize),
+          new DataView(this.pending_chunk.buffer, this.pending_chunk.byteOffset, this.headerSize),
           isLast,
           expected_length
         );
@@ -228,8 +226,8 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
       if (this.sequenceHeaderSize > 0 && this.writeSequenceHeaderFunc) {
         this.writeSequenceHeaderFunc(
           new DataView(
-            this.pending_chunk,
-            this.headerSize,
+            this.pending_chunk.buffer,
+            this.pending_chunk.byteOffset + this.headerSize,
             /* this.headerSize + */ this.sequenceHeaderSize
           )
         );
@@ -283,12 +281,11 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
       const space_left = this.maxBodySize - this.cursor;
       const nb_to_write = Math.min(length - input_cursor, space_left);
 
-      this.chunk = this.chunk || new ArrayBuffer(this.chunkSize);
-      this.chunkArray = this.chunkArray || new Uint8Array(this.chunk);
+      this.chunk = this.chunk || new Uint8Array(this.chunkSize);
 
       if (buffer) {
         const arrBuffer = new Uint8Array(buffer, input_cursor, nb_to_write);
-        this.chunkArray.set(arrBuffer, this.cursor + this.dataOffset);
+        this.chunk.set(arrBuffer, this.cursor + this.dataOffset);
         // buffer.copy(this.chunk, this.cursor + this.dataOffset, input_cursor, input_cursor + nb_to_write);
       }
       input_cursor += nb_to_write;
@@ -314,19 +311,19 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
       extraNbPaddingByte === 0 || this.plainBlockSize > 256,
       'extraNbPaddingByte only requested when key size > 2048'
     );
-    if (!this.chunkArray) {
-      throw new Error('missing chunk array');
+    if (!this.chunk) {
+      throw new Error('missing chunk');
     }
     // write the padding byte
-    this.chunkArray[this.cursor + this.dataOffset] = nbPaddingByte;
+    this.chunk[this.cursor + this.dataOffset] = nbPaddingByte;
     // this.chunk.writeUInt8(nbPaddingByte, this.cursor + this.dataOffset);
     this.cursor += 1;
     for (let i = 0; i < nbPaddingByteTotal; i++) {
-      this.chunkArray[this.cursor + this.dataOffset + i] = nbPaddingByte;
+      this.chunk[this.cursor + this.dataOffset + i] = nbPaddingByte;
     }
     this.cursor += nbPaddingByteTotal;
     if (this.plainBlockSize > 256) {
-      this.chunkArray[this.cursor + this.dataOffset] = extraNbPaddingByte;
+      this.chunk[this.cursor + this.dataOffset] = extraNbPaddingByte;
       this.cursor += 1;
     }
   }
@@ -358,13 +355,12 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
     this.dataEnd = this.dataOffset + this.cursor;
     // calculate the expected length of the chunk, once encrypted if encryption apply
     const expected_length = this.dataEnd + this.signatureLength + extra_encryption_bytes;
-    this.pending_chunk = this.chunk!.slice(0, expected_length);
+    this.pending_chunk = this.chunk!.subarray(0, expected_length);
     // note :
     //  - this.pending_chunk has the correct size but is not signed nor encrypted yet
     //    as we don't know what to write in the header yet
     //  - as a result,
     this.chunk = null;
-    this.chunkArray = null;
     this.cursor = 0;
   }
   /**
