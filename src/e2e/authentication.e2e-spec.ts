@@ -1,9 +1,13 @@
 import { ClientSession } from '../client/client_session';
 import { OPCUAClient } from '../client/opcua_client';
-import { PEMCertificateStore } from '../common/certificate_store';
+import { PEMDERCertificateStore } from '../common/certificate_store';
 import { MessageSecurityMode } from '../generated';
 import { getCryptoFactory, SecurityPolicy } from '../secure-channel';
-import { generatePublicKeyFromDER } from '../crypto/';
+import {
+  decryptBufferWithDerivedKeys,
+  encryptBufferWithDerivedKeys,
+  generatePublicKeyFromDER,
+} from '../crypto/';
 
 import {
   DEFAULT_CLIENT_OPTIONS,
@@ -11,6 +15,7 @@ import {
   getE2ETestController,
   OPCUA_TEST_SERVER_URI,
 } from './utils/test_server_controller';
+import { computeDerivedKeys } from '../secure-channel/security_policy';
 
 describe('OPCUA-Session Activation', function () {
   let session: ClientSession;
@@ -47,7 +52,7 @@ describe('OPCUA-Session Activation', function () {
     });
   });
   describe('security: sign', () => {
-    fit('should do username password authentication', async () => {
+    it('should do username password authentication', async () => {
       const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
       const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
         r.text()
@@ -57,7 +62,7 @@ describe('OPCUA-Session Activation', function () {
         ...DEFAULT_CLIENT_OPTIONS,
         securityMode: MessageSecurityMode.Sign,
         securityPolicy: SecurityPolicy.Basic256,
-        clientCertificateStore: new PEMCertificateStore(clientCertPEM, privateKeyPEM),
+        clientCertificateStore: new PEMDERCertificateStore(clientCertPEM, privateKeyPEM),
       });
 
       await client.connectP(OPCUA_TEST_SERVER_URI);
@@ -69,11 +74,13 @@ describe('OPCUA-Session Activation', function () {
         expect(session.isChannelValid()).toBeTrue();
       } catch (err) {
         fail(err);
+      } finally {
+        await client.disconnectP();
       }
     });
   });
   describe('security: sign and encrypt', () => {
-    xit('should do username password authentication', async () => {
+    it('should do username password authentication', async () => {
       const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
       const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
         r.text()
@@ -83,7 +90,7 @@ describe('OPCUA-Session Activation', function () {
         ...DEFAULT_CLIENT_OPTIONS,
         securityMode: MessageSecurityMode.SignAndEncrypt,
         securityPolicy: SecurityPolicy.Basic256,
-        clientCertificateStore: new PEMCertificateStore(clientCertPEM, privateKeyPEM),
+        clientCertificateStore: new PEMDERCertificateStore(clientCertPEM, privateKeyPEM),
       });
 
       await client.connectP(OPCUA_TEST_SERVER_URI /*'ws://sjuticd.engel.int:4444'*/);
@@ -95,83 +102,87 @@ describe('OPCUA-Session Activation', function () {
         expect(session.isChannelValid()).toBeTrue();
       } catch (err) {
         fail(err);
+      } finally {
+        await client.disconnectP();
       }
     });
   });
 });
 
-describe('asymmetric encrypt decrypt', () => {
-  it('should encrypt decrypt with a PEM certificate and private key', async () => {
-    const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
-    const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
-      r.text()
-    );
+[SecurityPolicy.Basic256Sha256, SecurityPolicy.Basic256].forEach((policy) =>
+  describe('asymmetric encrypt decrypt', () => {
+    it('should encrypt decrypt with a PEM certificate and private key', async () => {
+      const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
+      const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
+        r.text()
+      );
 
-    const store = new PEMCertificateStore(clientCertPEM, privateKeyPEM);
+      const store = new PEMDERCertificateStore(clientCertPEM, privateKeyPEM);
 
-    const publicKey = await generatePublicKeyFromDER(store.getCertificate(), 'SHA-256');
-    const privateKey = store.getPrivateKey();
+      const factory = getCryptoFactory(policy);
+      const publicKey = await generatePublicKeyFromDER(store.getCertificate(), factory.sha1or256);
+      const privateKey = store.getPrivateKey();
 
-    const factory = getCryptoFactory(SecurityPolicy.Basic256Sha256);
+      const block = new Uint8Array(512);
+      for (let i = 0; i < 512; i++) {
+        block[i] = i;
+      }
 
-    const block = new Uint8Array(512);
-    for (let i = 0; i < 512; i++) {
-      block[i] = i;
-    }
+      const encrypted = await factory.asymmetricEncrypt(block, publicKey);
+      const decrypted = await factory.asymmetricDecrypt(encrypted, privateKey);
 
-    const encrypted = await factory.asymmetricEncrypt(block, publicKey);
-    const decrypted = await factory.asymmetricDecrypt(encrypted, privateKey);
+      expect(block).toEqual(new Uint8Array(decrypted));
+    });
 
-    expect(block).toEqual(new Uint8Array(decrypted));
-  });
+    it('should sign and verify with a PEM certificate and private key', async () => {
+      const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
+      const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
+        r.text()
+      );
 
-  fit('SHA-256: should sign and verify with a PEM certificate and private key', async () => {
-    const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
-    const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
-      r.text()
-    );
+      const store = new PEMDERCertificateStore(clientCertPEM, privateKeyPEM);
 
-    const store = new PEMCertificateStore(clientCertPEM, privateKeyPEM);
+      const factory = getCryptoFactory(policy);
 
-    const factory = getCryptoFactory(SecurityPolicy.Basic256Sha256);
+      const block = new Uint8Array(512);
+      for (let i = 0; i < 512; i++) {
+        block[i] = i;
+      }
 
-    const block = new Uint8Array(512);
-    for (let i = 0; i < 512; i++) {
-      block[i] = i;
-    }
+      const signature = await factory.asymmetricSign(block, store.getPrivateKey());
+      const isVerified = await factory.asymmetricVerify(
+        block,
+        new Uint8Array(signature),
+        store.getCertificate()
+      );
 
-    const signature = await factory.asymmetricSign(block, store.getPrivateKey());
-    const isVerified = await factory.asymmetricVerify(
-      block,
-      new Uint8Array(signature),
-      store.getCertificate()
-    );
+      expect(isVerified).toBeTrue();
+    });
+  })
+);
 
-    expect(isVerified).toBeTrue();
-  });
+describe('symmetric encrypt decrypt', () => {
+  [SecurityPolicy.Basic256Sha256, SecurityPolicy.Basic256].forEach((policy) =>
+    it('should encrypt decrypt with a PEM certificate and private key', async () => {
+      const factory = getCryptoFactory(policy);
 
-  fit('SHA-1: should sign and verify with a PEM certificate and private key', async () => {
-    const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
-    const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
-      r.text()
-    );
+      const serverNonce = crypto.getRandomValues(new Uint8Array(32));
+      const clientNonce = crypto.getRandomValues(new Uint8Array(32));
 
-    const store = new PEMCertificateStore(clientCertPEM, privateKeyPEM);
+      const derivedKeys = await computeDerivedKeys(factory, serverNonce, clientNonce);
 
-    const factory = getCryptoFactory(SecurityPolicy.Basic256);
+      const block = new Uint8Array(512);
+      for (let i = 0; i < 512; i++) {
+        block[i] = i;
+      }
 
-    const block = new Uint8Array(512);
-    for (let i = 0; i < 512; i++) {
-      block[i] = i;
-    }
+      const encrypted = await encryptBufferWithDerivedKeys(block, derivedKeys.derivedServerKeys);
+      const decrypted = await decryptBufferWithDerivedKeys(
+        encrypted,
+        derivedKeys.derivedServerKeys
+      );
 
-    const signature = await factory.asymmetricSign(block, store.getPrivateKey());
-    const isVerified = await factory.asymmetricVerify(
-      block,
-      new Uint8Array(signature),
-      store.getCertificate()
-    );
-
-    expect(isVerified).toBeTrue();
-  });
+      expect(block).toEqual(new Uint8Array(decrypted));
+    })
+  );
 });

@@ -179,23 +179,25 @@ export class MessageBuilder extends MessageBuilderBase {
 
     // The message has been signed  with sender private key and has been encrypted with receiver public key.
     // We shall decrypt it with the receiver private key.
-    const buf = binaryStream.view.buffer.slice(binaryStream.pos);
+    const buf = binaryStream.getUint8ArrayWithoutAdvancingPositionPointer();
 
     if (asymmetricAlgorithmSecurityHeader.receiverCertificateThumbprint) {
       // this mean that the message has been encrypted ....
 
       assert(this._privateKey, 'expecting valid key');
 
-      const decryptedBuffer = new Uint8Array(
-        await this._cryptoFactory.asymmetricDecrypt(buf, this._privateKey)
-      );
+      const decryptedBuffer = await this._cryptoFactory.asymmetricDecrypt(buf, this._privateKey);
 
       // replace decrypted buffer in initial buffer#
-      new Uint8Array(binaryStream.view.buffer).set(decryptedBuffer, binaryStream.pos);
+      buf.set(decryptedBuffer);
 
       // adjust length
       binaryStream.view = new DataView(
-        binaryStream.view.buffer.slice(0, binaryStream.pos + decryptedBuffer.length)
+        binaryStream.view.buffer.slice(
+          // TODO replace slice by referencing a reagion of the buffer
+          binaryStream.view.byteOffset,
+          binaryStream.view.byteOffset + binaryStream.pos + decryptedBuffer.length
+        )
       );
 
       if (doDebug) {
@@ -218,7 +220,7 @@ export class MessageBuilder extends MessageBuilderBase {
         signatureLength === 512
     );
 
-    const chunk = new Uint8Array(binaryStream.view.buffer);
+    const chunk = binaryStream.getUint8ArrayWithoutAdvancingPositionPointer(0); //new Uint8Array(binaryStream.view.buffer, binaryStream.view.byteOffset);
 
     const signatureIsOK = await this._cryptoFactory.asymmetricVerifyChunk(
       chunk,
@@ -310,24 +312,25 @@ export class MessageBuilder extends MessageBuilderBase {
     }
 
     // We shall decrypt it with the receiver private key.
-    const buf = binaryStream.view.buffer.slice(binaryStream.pos);
-
+    const buf = binaryStream.getUint8ArrayWithoutAdvancingPositionPointer();
     const derivedKeys = securityTokenData.derivedKeys;
 
     assert(derivedKeys !== null);
     assert(derivedKeys.signatureLength, ' must provide a signature length');
 
     if (this.securityMode === MessageSecurityMode.SignAndEncrypt) {
-      var decryptedBuffer = new Uint8Array(
-        await crypto_utils.decryptBufferWithDerivedKeys(buf, derivedKeys)
-      );
+      var decryptedBuffer = await crypto_utils.decryptBufferWithDerivedKeys(buf, derivedKeys);
 
       // replace decrypted buffer in initial buffer
-      new Uint8Array(binaryStream.view.buffer).set(decryptedBuffer, binaryStream.pos);
+      buf.set(decryptedBuffer);
 
       // adjust length
       binaryStream.view = new DataView(
-        binaryStream.view.buffer.slice(0, binaryStream.pos + decryptedBuffer.length)
+        binaryStream.view.buffer.slice(
+          // TODO replace slice by referencing a reagion of the buffer
+          binaryStream.view.byteOffset,
+          binaryStream.view.byteOffset + binaryStream.pos + decryptedBuffer.length
+        )
       );
 
       if (doDebug) {
@@ -338,7 +341,7 @@ export class MessageBuilder extends MessageBuilderBase {
     }
 
     // now check signature ....
-    var chunk = binaryStream.view.buffer;
+    const chunk = binaryStream.getUint8ArrayWithoutAdvancingPositionPointer(0);
 
     var signatureIsOK = crypto_utils.verifyChunkSignatureWithDerivedKeys(chunk, derivedKeys);
     if (!signatureIsOK) {

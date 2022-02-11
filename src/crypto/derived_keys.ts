@@ -316,8 +316,14 @@ export async function decryptBufferWithDerivedKeys(
     iv: derivedKeys.initializationVector,
   };
 
+  const encryptedPadding = await recreatePKCS7PaddingBlock(buffer, key);
+
+  const prolongedBuffer = new Uint8Array(buffer.length + encryptedPadding.length);
+  prolongedBuffer.set(buffer);
+  prolongedBuffer.set(encryptedPadding, buffer.length);
+
   // TODO fix the auto padding of aes cbc
-  return new Uint8Array(await crypto.decrypt(opts, key, buffer));
+  return new Uint8Array(await crypto.decrypt(opts, key, prolongedBuffer));
 
   /*
     const cypher = crypto.createDecipheriv(algorithm, key, initVector);
@@ -327,6 +333,35 @@ export async function decryptBufferWithDerivedKeys(
     decrypted_chunks.push(cypher.final());
     return Buffer.concat(decrypted_chunks);
     */
+}
+
+/**
+ * creates a dummy block of length 16 with every value = 16,
+ * XORs it with the last block values
+ * and encrypts it
+ * @param encryptedData
+ * @returns
+ */
+async function recreatePKCS7PaddingBlock(encryptedData: Uint8Array, key: CryptoKey) {
+  const block = new Uint8Array(16);
+  const startPos = encryptedData.length - 16;
+  const endPos = startPos + 16;
+
+  const newInitializer = new Uint8Array(16);
+
+  for (let i = 0; i < 16; i++) {
+    block[i] = 16;
+    newInitializer[i] = encryptedData[startPos + i];
+  }
+
+  const opts = {
+    name: 'AES-CBC',
+    iv: newInitializer.buffer,
+  };
+
+  const resultBuffer = await crypto.encrypt(opts, key, block);
+  // virtually cut away the automatically added padding, by limiting the uint8array length to data length
+  return new Uint8Array(resultBuffer, 0, block.byteLength);
 }
 
 /**
