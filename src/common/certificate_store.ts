@@ -5,11 +5,10 @@ import {
   PrivateKey,
   split_der,
 } from '../crypto';
-import { getCryptoFactory, SecurityPolicy } from '../secure-channel/security_policy';
 
 /**
  * The certificate store holds the certificate and the private key
- * for a simple implementation take a look at @type {PEMCertificateStore}
+ * for a simple implementation take a look at @type {PEMDERCertificateStore}
  */
 
 export interface CertificateStore {
@@ -66,14 +65,17 @@ class PrivateKeyImpl implements PrivateKey {
  * be shure that the subejctAltName matches your applicationUri
  *
  */
-export class PEMCertificateStore implements CertificateStore {
+export class PEMDERCertificateStore implements CertificateStore {
   protected certificateChain: Uint8Array;
   protected certificate: Uint8Array;
   protected privateKey: PrivateKeyImpl;
   public signKey?: CryptoKey;
 
-  constructor(private certificatePEM: string, private privateKeyPEM: string) {
-    this.certificateChain = convertPEMtoDER(this.certificatePEM);
+  constructor(certificatePEMOrDER: string | ArrayBuffer, private privateKeyPEM: string) {
+    this.certificateChain =
+      certificatePEMOrDER instanceof ArrayBuffer
+        ? new Uint8Array(certificatePEMOrDER)
+        : convertPEMtoDER(certificatePEMOrDER);
     this.certificate = split_der(this.certificateChain)[0];
     this.privateKey = new PrivateKeyImpl(privateKeyPEM);
   }

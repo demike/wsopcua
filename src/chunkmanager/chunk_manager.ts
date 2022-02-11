@@ -108,7 +108,6 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
   cipherBlockSize: number;
   maxBodySize: number;
   encryptBufferFunc?: EncryptBufferFunc;
-  maxBlock: number;
   dataOffset: number;
   chunk: Uint8Array | null;
   cursor: number;
@@ -138,6 +137,7 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
     this.signBufferFunc = options.signBufferFunc;
     this.plainBlockSize = options.plainBlockSize || 0; // 256-14;
     this.cipherBlockSize = options.cipherBlockSize || 0; // 256;
+    this.dataEnd = 0;
     if (this.cipherBlockSize === 0) {
       assert(this.plainBlockSize === 0);
       // unencrypted block
@@ -158,9 +158,9 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
           ) -
         this.sequenceHeaderSize;
       // this is the formula proposed  by ERN
-      this.maxBlock = Math.floor((this.chunkSize - this.headerSize) / this.cipherBlockSize);
+      const maxBlock = Math.floor((this.chunkSize - this.headerSize) / this.cipherBlockSize);
       this.maxBodySize =
-        this.plainBlockSize * this.maxBlock - this.sequenceHeaderSize - this.signatureLength - 1;
+        this.plainBlockSize * maxBlock - this.sequenceHeaderSize - this.signatureLength - 1;
       if (this.plainBlockSize > 256) {
         this.maxBodySize -= 1;
       }
