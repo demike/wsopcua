@@ -8,7 +8,12 @@ import { MessageSecurityMode } from '../generated/MessageSecurityMode';
 import { SignatureData } from '../generated/SignatureData';
 
 import * as crypto_utils from '../crypto';
-import { DerivedKeys, generateVerifyKeyFromDER, PrivateKey } from '../crypto';
+import {
+  DerivedKeys,
+  generatePublicKeyFromDER,
+  generateVerifyKeyFromDER,
+  PrivateKey,
+} from '../crypto';
 import { debugLog } from '../common/debug';
 
 /**
@@ -39,7 +44,7 @@ import { debugLog } from '../common/debug';
  *    -> SymmetricEncryptionAlgorithm  -   Aes256 -(http://www.w3.org/2001/04/xmlenc#aes256-cbc).
  *    -> AsymmetricSignatureAlgorithm  -  RsaSha1 -(http://www.w3.org/2000/09/xmldsig#rsa-sha1).
  *    -> AsymmetricKeyWrapAlgorithm    - KwRsaOaep-(http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p).
- *    -> AsymmetricEncryptionAlgorithm -  RsaOaep -(http://www.w3.org/2001/04/xmlenc#rsa-oaep).
+ *    -> AsymmetricEncryptionAlgorithm - RsaOaep SHA1 -(http://www.w3.org/2001/04/xmlenc#rsa-oaep).
  *    -> KeyDerivationAlgorithm        -    PSha1 -(http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512/dk/p_sha1).
  *    -> DerivedSignatureKeyLength     -  192.
  *    -> MinAsymmetricKeyLength        - 1024
@@ -53,7 +58,7 @@ import { debugLog } from '../common/debug';
  *   -> SymmetricEncryptionAlgorithm  -  Aes256_CBC -(http://www.w3.org/2001/04/xmlenc#aes256-cbc).
  *   -> AsymmetricSignatureAlgorithm  -  Rsa_Sha256 -(http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).
  *   -> AsymmetricKeyWrapAlgorithm    -   KwRsaOaep -(http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p).
- *   -> AsymmetricEncryptionAlgorithm -    Rsa_Oaep -(http://www.w3.org/2001/04/xmlenc#rsa-oaep).
+ *   -> AsymmetricEncryptionAlgorithm - Rsa_Oaep SHA1 -(http://www.w3.org/2001/04/xmlenc#rsa-oaep).
  *   -> KeyDerivationAlgorithm        -     PSHA256 -(http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512/dk/p_sha256).
  *   -> DerivedSignatureKeyLength     - 256
  *   -> MinAsymmetricKeyLength        - 2048
@@ -303,11 +308,13 @@ export interface ICryptoFactory {
   asymmetricSignatureAlgorithm: string;
 
   /* asymmetric encryption algorithm */
+  generatePublicKeyFromDER: (der: Uint8Array) => PromiseLike<CryptoKey>;
   asymmetricEncrypt: (block: Uint8Array, publicKey: CryptoKey) => PromiseLike<Uint8Array>;
   asymmetricDecrypt: (block: Uint8Array, privateKey: PrivateKey) => Promise<Uint8Array>;
   asymmetricEncryptionAlgorithm: string;
   blockPaddingSize: number;
   symmetricEncryptionAlgorithm: string;
+
   sha1or256: 'SHA-1' | 'SHA-256'; //string;
 }
 
@@ -333,6 +340,7 @@ const _Basic128Rsa15: ICryptoFactory = {
   asymmetricEncrypt: RSAPKCS1V15_Encrypt,
   asymmetricDecrypt: RSAPKCS1V15_Decrypt,
   asymmetricEncryptionAlgorithm: 'http://www.w3.org/2001/04/xmlenc#rsa-1_5',
+  generatePublicKeyFromDER: (der) => generatePublicKeyFromDER(der, 'SHA-1'),
 
   blockPaddingSize: 11,
 
@@ -361,7 +369,7 @@ const _Basic256: ICryptoFactory = {
   asymmetricEncrypt: RSAOAEP_Encrypt,
   asymmetricDecrypt: RSAOAEP_SHA1_Decrypt,
   asymmetricEncryptionAlgorithm: 'http://www.w3.org/2001/04/xmlenc#rsa-oaep',
-
+  generatePublicKeyFromDER: (der) => generatePublicKeyFromDER(der, 'SHA-1'),
   blockPaddingSize: getRSAOAEPPadding('SHA-1'),
 
   // "aes-256-cbc"
@@ -386,12 +394,12 @@ const _Basic256Sha256: ICryptoFactory = {
   asymmetricVerify: RSAPKCS1OAEPSHA256_Verify,
   asymmetricSignatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
 
-  /* asymmetric encryption algorithm */
+  /* asymmetric encryption algorithm (YES Basic256Sha256 uses SHA-1 for encryption) */
   asymmetricEncrypt: RSAOAEP_Encrypt,
-  asymmetricDecrypt: RSAOAEP_SHA256_Decrypt,
+  asymmetricDecrypt: RSAOAEP_SHA1_Decrypt,
   asymmetricEncryptionAlgorithm: 'http://www.w3.org/2001/04/xmlenc#rsa-oaep',
-
-  blockPaddingSize: getRSAOAEPPadding('SHA-256'),
+  generatePublicKeyFromDER: (der) => generatePublicKeyFromDER(der, 'SHA-1'),
+  blockPaddingSize: getRSAOAEPPadding('SHA-1'),
 
   // "aes-256-cbc"
   symmetricEncryptionAlgorithm: 'AES-256-CBC',

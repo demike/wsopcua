@@ -806,7 +806,7 @@ export class ClientSecureChannelLayer
 
       if (!this._receiverPublicKey) {
         const cryptoFactory = getCryptoFactory(this.securityPolicy);
-        generatePublicKeyFromDER(this.serverCertificate, cryptoFactory.sha1or256).then(
+        cryptoFactory.generatePublicKeyFromDER(this.serverCertificate).then(
           (publicKey) => {
             this._receiverPublicKey = publicKey;
             assert(this._receiverPublicKey); // make sure we wont go into infinite recursion calling create again.

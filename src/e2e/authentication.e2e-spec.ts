@@ -3,11 +3,7 @@ import { OPCUAClient } from '../client/opcua_client';
 import { PEMDERCertificateStore } from '../common/certificate_store';
 import { MessageSecurityMode } from '../generated';
 import { getCryptoFactory, SecurityPolicy } from '../secure-channel';
-import {
-  decryptBufferWithDerivedKeys,
-  encryptBufferWithDerivedKeys,
-  generatePublicKeyFromDER,
-} from '../crypto/';
+import { decryptBufferWithDerivedKeys, encryptBufferWithDerivedKeys } from '../crypto/';
 
 import {
   DEFAULT_CLIENT_OPTIONS,
@@ -18,21 +14,25 @@ import {
 import { computeDerivedKeys } from '../secure-channel/security_policy';
 
 describe('OPCUA-Session Activation', function () {
-  let session: ClientSession;
   let controller: E2ETestController;
 
   beforeAll(async () => {
     controller = getE2ETestController();
-    const setup = await controller.startTestServer();
-    session = setup.session;
+    await controller.startTestServer();
   });
 
-  afterAll(async () => controller.stopTestServer());
+  afterAll(async () => {
+    try {
+      controller.stopTestServer();
+    } catch (e) {
+      console.warn('error stopping test server', e);
+    }
+  });
   describe('securitynone', () => {
     it('should do username password authentication', async () => {
       const client = new OPCUAClient(DEFAULT_CLIENT_OPTIONS);
       await client.connectP(OPCUA_TEST_SERVER_URI /* 'ws://sjuticd.engel.int:4444' */);
-      const sesssion = await client.createSessionP({
+      const session = await client.createSessionP({
         userIdentityInfo: { userName: 'john', password: 'john_pw' },
       });
       expect(session).toBeTruthy();
@@ -120,7 +120,7 @@ describe('OPCUA-Session Activation', function () {
       const store = new PEMDERCertificateStore(clientCertPEM, privateKeyPEM);
 
       const factory = getCryptoFactory(policy);
-      const publicKey = await generatePublicKeyFromDER(store.getCertificate(), factory.sha1or256);
+      const publicKey = await factory.generatePublicKeyFromDER(store.getCertificate());
       const privateKey = store.getPrivateKey();
 
       const block = new Uint8Array(512);

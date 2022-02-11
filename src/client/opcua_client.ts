@@ -57,7 +57,7 @@ import {
   IssuedIdentityToken,
 } from '../generated';
 import { ClientSecureChannelLayer } from '../secure-channel/client_secure_channel_layer';
-import { exploreCertificate, generatePublicKeyFromDER } from '../crypto';
+import { exploreCertificate } from '../crypto';
 import { concatArrayBuffers } from '../basic-types/array';
 import { OPCUAClientOptions } from '../common/client_options';
 
@@ -1081,10 +1081,7 @@ async function createUserNameIdentityToken(
 
   // let ci = exploreCertificate(session.serverCertificate);
   try {
-    const publicKey = await generatePublicKeyFromDER(
-      session.serverCertificate,
-      cryptoFactory.sha1or256
-    );
+    const publicKey = await cryptoFactory.generatePublicKeyFromDER(session.serverCertificate);
     const buffer = await cryptoFactory.asymmetricEncrypt(new Uint8Array(block), publicKey);
     identityToken.password = buffer;
   } catch (err) {
@@ -1198,10 +1195,7 @@ async function createIssuedIdentityToken(
   ]);
 
   try {
-    const publicKey = await generatePublicKeyFromDER(
-      session.serverCertificate,
-      cryptoFactory.sha1or256
-    );
+    const publicKey = await cryptoFactory.generatePublicKeyFromDER(session.serverCertificate);
     const buffer = await cryptoFactory.asymmetricEncrypt(new Uint8Array(block), publicKey);
     identityToken.tokenData = buffer;
   } catch (err) {
