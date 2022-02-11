@@ -798,6 +798,8 @@ export function split_der(certificateChain: Certificate): Certificate[] {
   return certificate_chain;
 }
 
+const PKCS_1_PEM_TYPE = 'RSA PRIVATE KEY';
+
 export function convertPEMtoDER(raw_key: PEM): DER {
   let match: any;
   let pemType;
@@ -811,9 +813,26 @@ export function convertPEMtoDER(raw_key: PEM): DER {
     // pemType shall be "RSA PRIVATE KEY" , "PUBLIC KEY", "CERTIFICATE"
     base64str = match[3];
     base64str = base64str.replace(/\r?\n/g, '');
-    parts.push(base64ToBuf(base64str));
+    let buf = base64ToBuf(base64str);
+    if (pemType === PKCS_1_PEM_TYPE) {
+      buf = convertPKCS1ToPKCS8(buf);
+    }
+    parts.push(buf);
   }
   return combine_der(parts);
+}
+
+function convertPKCS1ToPKCS8(pkcs1: Uint8Array): Uint8Array {
+  const totalLength = pkcs1.length + 22;
+
+  // prettier-ignore
+  const pkcs8Header = new Uint8Array([
+          TagType.SEQUENCE, 0x82,  ((totalLength >> 8) & 0xff), (totalLength & 0xff), // Sequence + total length
+          TagType.INTEGER, 0x1, 0x0, // Integer (0)
+          TagType.SEQUENCE, 0xD, 0x6, 0x9, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0xD, 0x1, 0x1, 0x1, TagType.NULL, 0x0, // Sequence: 1.2.840.113549.1.1.1, NULL
+          TagType.OCTET_STRING, 0x82,  ((pkcs1.length >> 8) & 0xff), (pkcs1.length & 0xff) // Octet string + length
+        ]);
+  return concatTypedArrays([pkcs8Header, pkcs1]);
 }
 
 export function generatePublicKeyFromDER(
