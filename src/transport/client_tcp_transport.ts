@@ -99,7 +99,6 @@ export class ClientTCP_transport extends TCP_transport {
   _connected: boolean;
   serverUri: string;
   endpointUrl: string;
-  _protocolVersion: number;
   _parameters: any;
 
   get protocolVersion() {
