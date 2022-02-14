@@ -54,7 +54,7 @@ export function string2buf(str: string) {
  */
 
 interface MakeMessageChunkSignatureOptions {
-  algorithm: string;
+  algorithm: AlgorithmIdentifier | RsaPssParams;
   privateKey: CryptoKey;
 }
 
@@ -75,7 +75,7 @@ export async function makeMessageChunkSignature(
 }
 
 export interface VerifyMessageChunkSignatureOptions {
-  algorithm: string;
+  algorithm: AlgorithmIdentifier | RsaPssParams;
   publicKey: CryptoKey;
 }
 

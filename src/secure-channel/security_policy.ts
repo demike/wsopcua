@@ -56,7 +56,7 @@ import { debugLog } from '../common/debug';
  * A suite of algorithms that are for 256-Bit encryption, algorithms include.
  *   -> SymmetricSignatureAlgorithm   - Hmac_Sha256 -(http://www.w3.org/2000/09/xmldsig#hmac-sha256).
  *   -> SymmetricEncryptionAlgorithm  -  Aes256_CBC -(http://www.w3.org/2001/04/xmlenc#aes256-cbc).
- *   -> AsymmetricSignatureAlgorithm  -  Rsa_Sha256 -(http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).
+ *   -> AsymmetricSignatureAlgorithm  -  Rsa_Sha256 -(https://www.w3.org/2000/09/xmldsig#rsa-sha256).
  *   -> AsymmetricKeyWrapAlgorithm    -   KwRsaOaep -(http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p).
  *   -> AsymmetricEncryptionAlgorithm - Rsa_Oaep SHA1 -(http://www.w3.org/2001/04/xmlenc#rsa-oaep).
  *   -> KeyDerivationAlgorithm        -     PSHA256 -(http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512/dk/p_sha256).
@@ -75,12 +75,15 @@ export enum SecurityPolicy {
   Invalid = 'invalid',
   None = 'http://opcfoundation.org/UA/SecurityPolicy#None',
   Basic128 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic128',
-  Basic128Rsa15 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15',
+  Basic128Rsa15 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15', //deprecated
   Basic192 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic192',
   Basic192Rsa15 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic192Rsa15',
-  Basic256 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic256',
+  Basic256 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic256', // deprecated
   Basic256Rsa15 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic256Rsa15',
   Basic256Sha256 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256',
+
+  Aes128_Sha256_RsaOaep = 'http://opcfoundation.org/UA/SecurityPolicy#Aes128_Sha256_RsaOaep',
+  Aes256_Sha256_RsaPss = 'http://opcfoundation.org/UA/SecurityPolicy#Aes256_Sha256_RsaPss',
 }
 
 export function fromURI(uri: String): SecurityPolicy {
@@ -124,6 +127,8 @@ export function coerceSecurityPolicy(value?: any): SecurityPolicy {
     value === 'Basic192Rsa15' ||
     value === 'None' ||
     value === 'Basic256Sha256' ||
+    value === 'Aes128_Sha256_RsaOaep' ||
+    value === 'Aes256_Sha256_RsaPss' ||
     value === 'Basic256Rsa15'
   ) {
     return (SecurityPolicy as any)[value as string] as SecurityPolicy;
@@ -135,6 +140,8 @@ export function coerceSecurityPolicy(value?: any): SecurityPolicy {
       value === SecurityPolicy.Basic192Rsa15 ||
       value === SecurityPolicy.Basic256Rsa15 ||
       value === SecurityPolicy.Basic256Sha256 ||
+      value === SecurityPolicy.Aes128_Sha256_RsaOaep ||
+      value === SecurityPolicy.Aes256_Sha256_RsaPss ||
       value === SecurityPolicy.None
     )
   ) {
@@ -205,7 +212,25 @@ function RSAPKCS1OAEPSHA256_Verify(
   return generateVerifyKeyFromDER(certificate, 'SHA-256')
     .then((pubKey) => {
       return {
-        algorithm: 'RSASSA-PKCS1-v1_5', // 'RSA-SHA256',
+        algorithm: 'RSASSA-PKCS1-v1_5',
+        publicKey: pubKey,
+      };
+    })
+    .then((opts) => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
+}
+
+function RSAPSSSHA256_Verify(
+  buffer: Uint8Array,
+  signature: Uint8Array,
+  certificate: Uint8Array
+): PromiseLike<boolean> {
+  return generateVerifyKeyFromDER(certificate, 'SHA-256', 'RSA-PSS')
+    .then((pubKey) => {
+      return {
+        algorithm: {
+          name: 'RSA-PSS',
+          saltLength: 32 /* same length as the digesting algorithm (= SHA-256) */,
+        },
         publicKey: pubKey,
       };
     })
@@ -228,6 +253,20 @@ function RSAPKCS1V15SHA256_Sign(buffer: Uint8Array, privateKey: PrivateKey): Pro
       privateKey: signKey,
     })
   );
+}
+
+function RSAPSSSHA256_Sign(buffer: Uint8Array, privateKey: PrivateKey): Promise<ArrayBuffer> {
+  return privateKey
+    .getSignKey('SHA-256', 'http://www.w3.org/2000/09/xmldsig#rsa-pss')
+    .then((signKey) =>
+      crypto_utils.makeMessageChunkSignature(buffer, {
+        algorithm: {
+          name: 'RSA-PSS',
+          saltLength: 32 /* same length as the digesting algorithm (= SHA-256) */,
+        },
+        privateKey: signKey,
+      })
+    );
 }
 
 const RSAPKCS1OAEPSHA1_Sign = RSAPKCS1V15SHA1_Sign;
@@ -305,7 +344,10 @@ export interface ICryptoFactory {
     signature: Uint8Array,
     certificate: Uint8Array
   ) => PromiseLike<boolean>;
-  asymmetricSignatureAlgorithm: string;
+  asymmetricSignatureAlgorithm:
+    | 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
+    | 'http://www.w3.org/2000/09/xmldsig#rsa-sha256'
+    | 'http://www.w3.org/2000/09/xmldsig#rsa-pss';
 
   /* asymmetric encryption algorithm */
   generatePublicKeyFromDER: (der: Uint8Array) => PromiseLike<CryptoKey>;
@@ -363,7 +405,7 @@ const _Basic256: ICryptoFactory = {
   asymmetricVerifyChunk: asymmetricVerifyChunk,
   asymmetricSign: RSAPKCS1OAEPSHA1_Sign,
   asymmetricVerify: RSAPKCS1OAEPSHA1_Verify,
-  asymmetricSignatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig#rsa-sha1',
+  asymmetricSignatureAlgorithm: 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
 
   /* asymmetric encryption algorithm */
   asymmetricEncrypt: RSAOAEP_Encrypt,
@@ -392,7 +434,7 @@ const _Basic256Sha256: ICryptoFactory = {
   asymmetricVerifyChunk: asymmetricVerifyChunk,
   asymmetricSign: RSAPKCS1V15SHA256_Sign,
   asymmetricVerify: RSAPKCS1OAEPSHA256_Verify,
-  asymmetricSignatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
+  asymmetricSignatureAlgorithm: 'http://www.w3.org/2000/09/xmldsig#rsa-sha256',
 
   /* asymmetric encryption algorithm (YES Basic256Sha256 uses SHA-1 for encryption) */
   asymmetricEncrypt: RSAOAEP_Encrypt,
@@ -406,6 +448,69 @@ const _Basic256Sha256: ICryptoFactory = {
   sha1or256: 'SHA-256',
 };
 
+const _Aes128_Sha256_RsaOaep: ICryptoFactory = {
+  securityPolicy: SecurityPolicy.Aes128_Sha256_RsaOaep,
+
+  derivedEncryptionKeyLength: 16,
+  derivedSignatureKeyLength: 32,
+  encryptingBlockSize: 16,
+
+  signatureLength: 32,
+  symmetricKeyLength: 32,
+
+  maximumAsymmetricKeyLength: 4096,
+  minimumAsymmetricKeyLength: 2048,
+
+  asymmetricVerifyChunk,
+
+  asymmetricSign: RSAPKCS1V15SHA256_Sign,
+
+  asymmetricVerify: RSAPKCS1OAEPSHA256_Verify,
+
+  asymmetricSignatureAlgorithm: 'http://www.w3.org/2000/09/xmldsig#rsa-sha256',
+
+  /* asymmetric encryption algorithm */
+  asymmetricEncrypt: RSAOAEP_Encrypt,
+  asymmetricDecrypt: RSAOAEP_SHA1_Decrypt,
+  asymmetricEncryptionAlgorithm: 'http://www.w3.org/2001/04/xmlenc#rsa-oaep',
+  generatePublicKeyFromDER: (der) => generatePublicKeyFromDER(der, 'SHA-1'),
+  blockPaddingSize: getRSAOAEPPadding('SHA-1'),
+
+  // "aes-128-cbc" : 128 bits : 16 bytes
+  symmetricEncryptionAlgorithm: 'AES-128-CBC',
+
+  sha1or256: 'SHA-256',
+};
+
+const _Aes256_Sha256_RsaPss: ICryptoFactory = {
+  securityPolicy: SecurityPolicy.Aes256_Sha256_RsaPss,
+  derivedEncryptionKeyLength: 32,
+  derivedSignatureKeyLength: 32,
+  encryptingBlockSize: 16,
+  signatureLength: 32,
+  symmetricKeyLength: 32,
+
+  maximumAsymmetricKeyLength: 4096,
+  minimumAsymmetricKeyLength: 2048,
+
+  asymmetricVerifyChunk,
+  asymmetricSign: RSAPSSSHA256_Sign,
+  asymmetricVerify: RSAPSSSHA256_Verify,
+  asymmetricSignatureAlgorithm: 'http://www.w3.org/2000/09/xmldsig#rsa-pss',
+
+  /* asymmetric encryption algorithm */
+  asymmetricEncrypt: RSAOAEP_Encrypt,
+  asymmetricDecrypt: RSAOAEP_SHA256_Decrypt,
+  asymmetricEncryptionAlgorithm: 'http://www.w3.org/2001/04/xmlenc#rsa-oaep',
+  generatePublicKeyFromDER: (der) => generatePublicKeyFromDER(der, 'SHA-256'),
+  blockPaddingSize: getRSAOAEPPadding('SHA-256'),
+
+  // "aes-256-cbc"
+  symmetricEncryptionAlgorithm: 'AES-256-CBC',
+
+  sha1or256: 'SHA-256',
+};
+
 export function getCryptoFactory(securityPolicy: SecurityPolicy): ICryptoFactory | null {
   switch (securityPolicy) {
     case SecurityPolicy.None:
@@ -416,6 +521,10 @@ export function getCryptoFactory(securityPolicy: SecurityPolicy): ICryptoFactory
       return _Basic256;
     case SecurityPolicy.Basic256Sha256:
       return _Basic256Sha256;
+    case SecurityPolicy.Aes128_Sha256_RsaOaep:
+      return _Aes128_Sha256_RsaOaep;
+    case SecurityPolicy.Aes256_Sha256_RsaPss:
+      return _Aes256_Sha256_RsaPss;
     default:
       return null;
   }

@@ -855,7 +855,8 @@ export function generatePublicKeyFromDER(
 
 export function generateVerifyKeyFromDER(
   der_certificate: Uint8Array,
-  hash: 'SHA-1' | 'SHA-256'
+  hash: 'SHA-1' | 'SHA-256',
+  algorithm: 'RSASSA-PKCS1-v1_5' | 'RSA-PSS' = 'RSASSA-PKCS1-v1_5'
 ): PromiseLike<CryptoKey> {
   if ((der_certificate as any)._verifyKey) {
     return Promise.resolve((der_certificate as any)._verifyKey);
@@ -864,7 +865,7 @@ export function generateVerifyKeyFromDER(
   const spki = getSPKIFromCertificate(der_certificate);
 
   return crypto.subtle
-    .importKey('spki', spki, { name: 'RSASSA-PKCS1-v1_5', hash }, true, ['verify'])
+    .importKey('spki', spki, { name: algorithm, hash }, true, ['verify'])
     .then((key) => {
       (der_certificate as any)._verifyKey = key;
       return key;
@@ -904,7 +905,8 @@ export function generatePrivateKeyFromDER(
  */
 export function generateSignKeyFromDER(
   der_certificate: Uint8Array,
-  hash: 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512'
+  hash: 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512',
+  algorithm: 'RSASSA-PKCS1-v1_5' | 'RSA-PSS' = 'RSASSA-PKCS1-v1_5'
 ) {
   if ((der_certificate as any)._signKey) {
     return Promise.resolve((der_certificate as any)._signKey);
@@ -915,7 +917,7 @@ export function generateSignKeyFromDER(
       'pkcs8',
       der_certificate,
       {
-        name: 'RSASSA-PKCS1-v1_5',
+        name: algorithm,
         hash,
       },
       false,

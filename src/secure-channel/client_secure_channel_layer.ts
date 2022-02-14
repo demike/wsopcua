@@ -850,7 +850,7 @@ export class ClientSecureChannelLayer
           //   - server too busy -
           //   - server shielding itself from a DOS attack
           if (err) {
-            console.log('connection error', err);
+            debugLog('connection error', err);
             let should_abort = false;
 
             if (err.message.match(/ECONNRESET/)) {
@@ -1345,7 +1345,10 @@ export class ClientSecureChannelLayer
 
     const options: Partial<SecureMessageChunkManagerOptions> = {};
     options.signatureLength = rsaKeyLength(
-      await senderPrivateKey.getSignKey(cryptoFactory.sha1or256)
+      await senderPrivateKey.getSignKey(
+        cryptoFactory.sha1or256,
+        cryptoFactory.asymmetricSignatureAlgorithm
+      )
     );
     options.signBufferFunc = (chunk) => cryptoFactory.asymmetricSign(chunk, senderPrivateKey);
 

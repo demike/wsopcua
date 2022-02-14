@@ -48,8 +48,16 @@ class PrivateKeyImpl implements PrivateKey {
   getDecryptKey(hashingAlgorithm: 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512'): Promise<CryptoKey> {
     return generatePrivateKeyFromDER(this.privateKeyDER, hashingAlgorithm);
   }
-  getSignKey(hashingAlgorithm: 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512'): Promise<CryptoKey> {
-    return generateSignKeyFromDER(this.privateKeyDER, hashingAlgorithm);
+  getSignKey(
+    hashingAlgorithm: 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512',
+    algorithm:
+      | 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
+      | 'http://www.w3.org/2000/09/xmldsig#rsa-sha256'
+      | 'http://www.w3.org/2000/09/xmldsig#rsa-pss'
+  ): Promise<CryptoKey> {
+    const algorithmName =
+      algorithm === 'http://www.w3.org/2000/09/xmldsig#rsa-pss' ? 'RSA-PSS' : 'RSASSA-PKCS1-v1_5';
+    return generateSignKeyFromDER(this.privateKeyDER, hashingAlgorithm, algorithmName);
   }
 }
 
