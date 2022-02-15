@@ -257,7 +257,7 @@ function expand_map(direct_index: { [name: string]: number }) {
 }
 
 function expand_class<T>(clazz: new () => T) {
-  for (const name of Object.keys(clazz) /*Object.getOwnPropertyNames(clazz)*/) {
+  for (const name of Object.keys(clazz) /* Object.getOwnPropertyNames(clazz)*/) {
     const value = (clazz as any)[name];
     _nodeid_to_name_index[value] = name;
     _name_to_nodeid_index[name] = new NodeId(NodeIdType.Numeric, value, 0);
@@ -316,7 +316,7 @@ export function from_hex(str: string): Uint8Array {
     character += str.charAt(i);
 
     if (i > 0 && i % 2 === 1) {
-      // tslint:disable-next-line:no-bitwise
+      // eslint-disable-next-line no-bitwise
       buf[i >>> 1] = parseInt(character, 16);
       character = '';
     }

@@ -8,7 +8,7 @@ import { NodeId } from '../../nodeid/nodeid';
 
 // @ts-check
 
-// tslint:disable:no-console
+/* eslint-disable no-console */
 
 function dump_block_in_debug_mode(buffer: ArrayBuffer, id: any, options: any) {
   if (doDebug) {
@@ -65,7 +65,7 @@ function redirectToNull(functor: () => void) {
   const old = console.log;
 
   if (!doDebug) {
-    // tslint:disable:no-empty
+    /* eslint-disable no-empty,no-empty-function,@typescript-eslint/no-empty-function */
     console.log = (...args: any[]) => {};
   }
 

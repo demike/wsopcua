@@ -27,7 +27,7 @@ function display_encoding_mask(padding: string, encoding_mask: any, encoding_inf
       const mask = Number(item);
       const bit = Math.log(mask) / Math.log(2);
       bits = ['.', '.', '.', '.', '.', '.', '.', '.', '.'];
-      // tslint:disable-next-line: no-bitwise
+      // eslint-disable-next-line no-bitwise
       bits[bit] = (encoding_mask & mask) === mask ? 'Y' : 'n';
 
       console.log(padding + ' ', bits.join(''), ' <- has ' + encoding_mask[mask]);
@@ -84,7 +84,7 @@ function make_tracer(buffer: DataView, padding: number, offset: number): any {
     display('            length = ' + length);
     analyzePacket(
       new DataView(buffer1.buffer, buffer1.byteOffset + stream.length),
-      /*ext_buf.slice(stream.length)*/ value.encodingDefaultBinary,
+      /* ext_buf.slice(stream.length)*/ value.encodingDefaultBinary,
       padding + 2,
       start + stream.length
     );

@@ -148,14 +148,14 @@ describe('Chunk manager - no header - no signature - no encryption', function ()
     // feed chunk-manager one byte at a time
     const n = 48 * 2 + 12;
     const buf = new Uint8Array(1);
-    //let promises = [];
+    // let promises = [];
     for (let i = 0; i < n; i += 1) {
       buf[i] = 0;
       // promises.push(chunkManager.write(buf.buffer, 1));
       await chunkManager.write(buf.buffer, 1);
     }
 
-    //await Promise.all(promises);
+    // await Promise.all(promises);
 
     // write this single buffer
     chunkManager.end();
@@ -231,7 +231,7 @@ function perform_test(
         console.log(hexDump(expected_chunks[chunk_counter]));
       }
 
-      expect(chunk.buffer).toEqual(expected_chunks[chunk_counter]);
+      expect(chunk).toEqual(new Uint8Array(expected_chunks[chunk_counter]));
     }
     chunk_counter += 1;
     if (chunk_counter === expected_chunk_lengths.length) {

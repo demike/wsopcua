@@ -8,7 +8,7 @@ import {StatusCodes} from '../constants';
 import {ServerState} from '../generated/ServerState';
 import { debugLog } from '../common/debug';
 
-const serverStatus_State_Id = coerceNodeId( /*VariableIds.Server_ServerStatus_State*/ 2259);
+const serverStatus_State_Id = coerceNodeId( /* VariableIds.Server_ServerStatus_State*/ 2259);
 
 export interface ClientSessionKeepAliveManagerEvents {
     'failure': () => void;

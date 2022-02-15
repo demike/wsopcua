@@ -46,7 +46,7 @@ export function commonCodeToUInt (code: string) {
             return unitId;
         }
         unitId *= 256;
-        // tslint:disable-next-line:no-bitwise
+        // eslint-disable-next-line no-bitwise
         unitId |= c;
     }
     return unitId;

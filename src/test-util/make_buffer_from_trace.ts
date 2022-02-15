@@ -33,9 +33,7 @@ function hexString(str: string): string {
 export function makebuffer_from_trace(strFilePath: string): Promise<Uint8Array> {
     return fetch(strFilePath)
     .then( (value) => value.text())
-    .then( (strContent) => {
-        return makeBuffer(hexString(inlineText(strContent)));
-    });
+    .then( (strContent) => makeBuffer(hexString(inlineText(strContent))));
 
 }
 

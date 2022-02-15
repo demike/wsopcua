@@ -1,6 +1,6 @@
 'use strict';
 
-// tslint:disable-next-line: no-unbound-method
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const has = Object.prototype.hasOwnProperty;
 let prefix = '~';
 

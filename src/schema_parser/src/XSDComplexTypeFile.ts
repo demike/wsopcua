@@ -1,4 +1,4 @@
-/*import {XSDClassFile} from './XSDClassFile';
+/* import {XSDClassFile} from './XSDClassFile';
 import { ClassMethod } from './ClassMethod';
 */
 import {XSDClassFile, ClassMethod} from './SchemaParser.module';

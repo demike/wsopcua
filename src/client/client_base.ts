@@ -401,7 +401,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         // xx console.log(" Found End point ");
         this.serverCertificate = endpoint.serverCertificate;
 
-        return this.connect(/*endpoint.endpointUrl*/ endpointUrl, callback);
+        return this.connect(/* endpoint.endpointUrl*/ endpointUrl, callback);
       });
     }
 
@@ -454,7 +454,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
       console.log('warning : disconnection : closing pending sessions');
       // disconnect has been called whereas living session exists
       // we need to close them first ....
-      this._close_pending_sessions((/*err*/) => {
+      this._close_pending_sessions((/* err*/) => {
         this.disconnect(callback);
       });
       return;
@@ -702,7 +702,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         if (err) {
           rej(err);
         } else {
-          res(eps!);
+          res(eps);
         }
       });
     });
@@ -844,7 +844,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         client.getEndpoints(null, (err, endpoints) => {
           if (!err) {
             all_endpoints = endpoints!;
-            endpoints!.forEach(function (endpoint) {
+            endpoints.forEach(function (endpoint) {
               if (
                 endpoint.securityMode === securityMode &&
                 endpoint.securityPolicyUri === securityPolicy
@@ -997,7 +997,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         (_inner_callback: ErrorCallback) => {
           if (!this.knowsServerEndpoint) {
             assert(this._secureChannel !== null);
-            this.getEndpoints(null, (err /*, endpoints*/) => {
+            this.getEndpoints(null, (err /* , endpoints*/) => {
               _inner_callback(err);
             });
           } else {
@@ -1096,12 +1096,12 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         client.emit('connection_lost');
         debugLog('recreating new secure channel ');
         window.setImmediate(() =>
-          client._recreate_secure_channel((err) => {
+          client._recreate_secure_channel((err1) => {
             debugLog(
               'secureChannel#on(close) => _recreate_secure_channel returns ' +
-                (err ? err.message : 'OK')
+                (err1 ? err1.message : 'OK')
             );
-            if (err) {
+            if (err1) {
               // xx assert(!this._secureChannel);
               debugLog('_recreate_secure_channel has failed');
               // xx this.emit("close", err1);
@@ -1116,8 +1116,8 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
               // now delegate to upper class the
               if (client._on_connection_reestablished) {
                 assert('function' === typeof client._on_connection_reestablished);
-                client._on_connection_reestablished((err) => {
-                  if (err) {
+                client._on_connection_reestablished((err2) => {
+                  if (err2) {
                     debugLog('connection_reestablished has failed');
                     client.disconnect(() => {
                       // xx callback(err);
@@ -1173,10 +1173,9 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     securityPolicy: SecurityPolicy
   ) {
     assert(this.knowsServerEndpoint, 'Server end point are not known yet');
-    return this._server_endpoints.find((endpoint) => {
-      return (
+    return this._server_endpoints.find(
+      (endpoint) =>
         endpoint.securityMode === securityMode && endpoint.securityPolicyUri === securityPolicy
-      );
-    });
+    );
   }
 }

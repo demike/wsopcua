@@ -1,7 +1,7 @@
 import { NumericRange, NumericRangeType, numericRange_overlap } from './numeric_range';
 import { StatusCodes } from '../constants';
 
-/*global describe,require,it */
+/* global describe,require,it */
 
 describe('Testing numerical range', function () {
   it('should construct an empty NumericRange', function () {

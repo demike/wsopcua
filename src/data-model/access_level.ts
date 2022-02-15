@@ -42,7 +42,7 @@ export function makeAccessLevel(str: string): AccessLevelFlag {
     const flags = str.split(' | ');
     accessFlag = 0;
     for (const flag of flags) {
-      // tslint:disable-next-line: no-bitwise
+      // eslint-disable-next-line no-bitwise
       accessFlag |= (AccessLevelFlag as any)[flag];
     }
   }
@@ -59,11 +59,11 @@ registerBasicType({
   name: 'AccessLevelFlag',
   subtype: 'Byte',
   defaultValue: function () {
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     return AccessLevelFlag.CurrentRead | AccessLevelFlag.CurrentWrite;
   },
   encode: function (value: Variant, stream: DataStream) {
-    // tslint:disable-next-line:no-bitwise
+    // eslint-disable-next-line no-bitwise
     stream.setUint8(value.value & 0x8f);
   },
   decode: function (stream: DataStream) {

@@ -110,7 +110,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
 
     this._publishEngine = session.getPublishEngine();
 
-    //// options should have
+    /// / options should have
     // var allowedProperties = [
     //    'requestedPublishingInterval',
     //    'requestedLifetimeCount',
@@ -796,7 +796,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
 
           const itemsToCreate: subscription_service.MonitoredItemCreateRequest[] = [];
 
-          // tslint:disable-next-line:forin
+          // eslint-disable-next-line guard-for-in
           for (const key in monitoredItems_old) {
             const monitoredItem = monitoredItems_old[key];
             assert(monitoredItem.monitoringParameters.clientHandle > 0);

@@ -1,8 +1,8 @@
 import { EventEmitter } from '../../eventemitter';
 import { assert } from '../../assert';
 
-// tslint:disable:no-empty
-// tslint:disable:unused-variable
+/* eslint-disable no-empty,no-empty-function,@typescript-eslint/no-empty-function */
+/* eslint-disable  */
 
 export class HalfComChannel extends EventEmitter<any> {
     public _hasEnded: boolean;

@@ -13,7 +13,7 @@ export interface BackoffEvents {
 // A class to hold the state of a backoff operation. Accepts a backoff strategy
 // to generate the backoff delays.
 export class Backoff extends EventEmitter<BackoffEvents> {
-    handlers: { backoff: any; };
+    handlers: { backoff: any };
     timeoutID_: number;
     backoffDelay_: number;
     maxNumberOfRetry_: number;

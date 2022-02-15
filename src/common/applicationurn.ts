@@ -40,7 +40,9 @@ function str2arraybuffer(str: String): ArrayBuffer {
 // equivalent of java's String.hashCode
 function hashCode(str: string) {
   let hash = 0;
-  if (str.length == 0) return hash;
+  if (str.length === 0) {
+    return hash;
+  }
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
     hash = (hash << 5) - hash + char;

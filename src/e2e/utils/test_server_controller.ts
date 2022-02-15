@@ -133,12 +133,10 @@ export class E2ETestControllerImpl implements E2ETestController {
 
   private async createSession(client: OPCUAClient, url: string) {
     await client.connectP(url);
-    // tslint:disable-next-line: no-console
+    // eslint-disable-next-line no-console
     console.info('connected to ', url);
 
-    window.onbeforeunload = () => {
-      return client.disconnectP();
-    };
+    window.onbeforeunload = () => client.disconnectP();
 
     let session: ClientSession;
     try {
@@ -147,7 +145,7 @@ export class E2ETestControllerImpl implements E2ETestController {
       console.error('failed loading session', err);
       throw err;
     }
-    // tslint:disable-next-line: no-console
+    // eslint-disable-next-line no-console
     console.info(url, ': created session ', session.sessionId);
     return session;
   }

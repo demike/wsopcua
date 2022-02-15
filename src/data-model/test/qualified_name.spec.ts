@@ -1,7 +1,7 @@
 import { QualifiedName } from '../../generated/QualifiedName';
 import { coerceQualifiedName, qualifiedNameToString, stringToQualifiedName } from '../qualified_name_util';
 
-/*global require,describe,it*/
+/* global require,describe,it*/
 
 
 describe('QualifiedName', function () {

@@ -9,7 +9,7 @@ import * as util from 'util';
 
     // see OPC-UA Part 6 , A2
     const codeMap: {[key: string]: number} = {};
-    const code_list: {name: string, value: number, description: string}[] = [];
+    const code_list: {name: string; value: number; description: string}[] = [];
 
 export function generateStatusCodes() {
 
@@ -59,10 +59,10 @@ function parseStatusCodeXML() {
     outFile.write(' /** Good: No Error */\n');
     outFile.write(' static Good: ConstantStatusCode =  new ConstantStatusCode({ name: \'Good\', value: 0, description: \'No Error\' });\n');
 
-    outFile.write(`/** The value is bad but no specific reason is known. */\n`);
+    outFile.write('/** The value is bad but no specific reason is known. */\n');
     outFile.write(' static Bad: ConstantStatusCode =  new ConstantStatusCode({ name: \'Bad\', value: 0x80000000, description: \'The value is bad but no specific reason is known.\' });\n');
 
-    outFile.write(`/** The value is uncertain but no specific reason is known. */\n`);
+    outFile.write('/** The value is uncertain but no specific reason is known. */\n');
     outFile.write(' static Uncertain: ConstantStatusCode =  new ConstantStatusCode({ name: \'Uncertain\', value: 0x40000000, description: \'The value is uncertain but no specific reason is known.\' });\n');
 
     outFile.write('  static GoodWithOverflowBit = new ModifiableStatusCode({ base: StatusCodes.Good, extraBits: (ExtraStatusCodeBits.Overflow | ExtraStatusCodeBits.InfoTypeDataValue)});\n');

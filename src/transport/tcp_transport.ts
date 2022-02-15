@@ -104,12 +104,12 @@ export class TCP_transport extends EventEmitter<TcpTransportEvents> {
 
     this._the_callback = null;
 
-    /***
+    /** *
      * @property chunkWrittenCount
      * @type {number}
      */
     this.chunkWrittenCount = 0;
-    /***
+    /** *
      * @property chunkReadCount
      * @type {number}
      */

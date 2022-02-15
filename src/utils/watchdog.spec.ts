@@ -79,7 +79,7 @@ describe('watch dog', function () {
     done();
   });
 
-  it("should install a 'keepAlive' method on  the subscribing object during addSubscriber and remove it during removeSubscriber", function (done) {
+  it("should install a 'keepAlive' method on  the subscribing object during addSubscriber and remove it during removeSubscriber", (done) => {
     const obj = new MyObject();
     expect(typeof (<any>obj).keepAlive).not.toBe('function');
 
@@ -147,7 +147,7 @@ describe('watch dog', function () {
     window.setTimeout(done, 15000);
     jasmine.clock().tick(20000);
   });
-  it('should emit an event when it finds that some subscriber has reached the timeout period without sending a keepAlive signal', function (done) {
+  it('should emit an event when it finds that some subscriber has reached the timeout period without sending a keepAlive signal', (done) => {
     const obj1 = new MyObject();
     watchDog.addSubscriber(obj1, 1000);
 

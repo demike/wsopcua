@@ -165,7 +165,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
     });
 
     await new Promise<void>((resolve, reject) =>
-      session.performMessageTransaction(request, function (err /*, response*/) {
+      session.performMessageTransaction(request, function (err /* , response*/) {
         // xx console.log(response.results[0].toString());
         expect(err).toBeFalsy();
         if (err) {
@@ -183,7 +183,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
     });
 
     await new Promise<void>((resolve, reject) =>
-      session.performMessageTransaction(request, function (err /*, response*/) {
+      session.performMessageTransaction(request, function (err /* , response*/) {
         // xx console.log(response.results[0].toString());
         expect(err).toBeFalsy();
         if (err) {
@@ -201,7 +201,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
     });
 
     await new Promise<void>((resolve, reject) =>
-      session.performMessageTransaction(request, function (err /*, response*/) {
+      session.performMessageTransaction(request, function (err /* , response*/) {
         // xx console.log(response.results[0].toString());
         expect(err).toBeFalsy();
         if (err) {

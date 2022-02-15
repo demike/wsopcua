@@ -772,7 +772,7 @@ export class ClientSecureChannelLayer
    *
    *    ```javascript
    *
-   *    var secureChannel  = new ClientSecureChannelLayer();
+   *    let secureChannel  = new ClientSecureChannelLayer();
    *
    *    secureChannel.on("end", function(err) {
    *         console.log("secure channel has ended",err);
@@ -812,9 +812,7 @@ export class ClientSecureChannelLayer
             assert(this._receiverPublicKey); // make sure we wont go into infinite recursion calling create again.
             this.create(endpoint_url, callback);
           },
-          (err: Error) => {
-            return callback(err);
-          }
+          (err: Error) => callback(err)
         );
         return;
       }
@@ -1026,9 +1024,9 @@ export class ClientSecureChannelLayer
  * example
  *
  *    ```javascript
- *    var secure_channel ; // get a  ClientSecureChannelLayer somehow
+ *    let secure_channel ; // get a  ClientSecureChannelLayer somehow
  *
- *    var message = new BrowseRequest({...});
+ *    let message = new BrowseRequest({...});
  *    secure_channel.performMessageTransaction(message,function(err,response) {
  *       if (err) {
  *         // an error has occurred
@@ -1128,8 +1126,8 @@ export class ClientSecureChannelLayer
       try {
         // local_callback.apply(this, [err,response]);
         local_callback(err, response);
-      } catch (err) {
-        console.log('ERROR !!! , please check here !!!! callback may be called twice !! ', err);
+      } catch (err1) {
+        console.log('ERROR !!! , please check here !!!! callback may be called twice !! ', err1);
         callback(err);
       } finally {
         local_callback = null;
@@ -1328,7 +1326,7 @@ export class ClientSecureChannelLayer
     await this._construct_security_header();
     this.messageChunker.securityHeader = this._securityHeader;
 
-    var senderPrivateKey = this.getPrivateKey();
+    const senderPrivateKey = this.getPrivateKey();
 
     if (!senderPrivateKey) {
       throw new Error('invalid senderPrivateKey');
@@ -1355,7 +1353,7 @@ export class ClientSecureChannelLayer
     if (!this._receiverPublicKey) {
       throw new Error(' invalid receiverPublicKey');
     }
-    var keyLength = rsaKeyLength(this._receiverPublicKey);
+    const keyLength = rsaKeyLength(this._receiverPublicKey);
     options.plainBlockSize = keyLength - cryptoFactory.blockPaddingSize;
     options.cipherBlockSize = keyLength;
 
@@ -1377,7 +1375,7 @@ export class ClientSecureChannelLayer
     if (!this._derivedKeys || !this._derivedKeys.derivedClientKeys) {
       throw new Error('internal error expecting valid derivedKeys');
     }
-    var derivedClientKeys = this._derivedKeys.derivedClientKeys;
+    const derivedClientKeys = this._derivedKeys.derivedClientKeys;
     assert(derivedClientKeys, 'expecting valid derivedClientKeys');
     return getOptionsForSymmetricSignAndEncrypt(this.securityMode, derivedClientKeys);
   }
@@ -1389,7 +1387,9 @@ export class ClientSecureChannelLayer
   ) {
     const options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader = {
       requestId,
-      secureChannelId: this._securityToken ? this._securityToken.channelId /*.secureChannelId*/ : 0,
+      secureChannelId: this._securityToken
+        ? this._securityToken.channelId /* .secureChannelId*/
+        : 0,
       tokenId: this._securityToken ? this._securityToken.tokenId : 0,
       chunkSize: 0,
 
@@ -1415,7 +1415,7 @@ export class ClientSecureChannelLayer
       debugLog(requestMessage);
     }
 
-    var security_options =
+    const security_options =
       msgType === 'OPN'
         ? await this._get_security_options_for_OPN()
         : await this._get_security_options_for_MSG();

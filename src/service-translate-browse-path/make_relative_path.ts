@@ -1,5 +1,5 @@
 'use strict';
-/*=
+/* =
  * Release 1.03 page 152 OPC Unified Architecture, Part 4
  * Annex A (informative) BNF definitions
  * BNF for RelativePath

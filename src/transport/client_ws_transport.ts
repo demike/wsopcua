@@ -181,7 +181,7 @@ export class ClientWSTransport extends WSTransport {
       this.off('socket_error', _on_socket_error_for_connect);
       callback(new Error('failed to connect'));
     };
-    //   this._socket.addEventListener('error', _on_socket_error_for_connect); /* TODO think about listening on the close event, it has mor */
+    // this._socket.addEventListener('error', _on_socket_error_for_connect); /* TODO think about listening on the close event, it has mor */
     this.on('socket_error', _on_socket_error_for_connect);
     // ---------------------------------------------------------------------------
 
@@ -309,7 +309,7 @@ export class ClientWSTransport extends WSTransport {
     // http and net modu
 
     if (
-      evt.code !== 1000 /*all kinds of errors*/ &&
+      evt.code !== 1000 /* all kinds of errors*/ &&
       evt.code !== 1005 /* 1005 = no status received */
     ) {
       /**

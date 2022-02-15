@@ -9,7 +9,7 @@ describe('testing getFunctionParameterNames', function () {
       'c',
       'd',
     ]);
-    expect(getFunctionParameterNames(function (a: any, /*b,c,*/ d: any) {})).toEqual(['a', 'd']);
+    expect(getFunctionParameterNames(function (a: any, /* b,c,*/ d: any) {})).toEqual(['a', 'd']);
     expect(getFunctionParameterNames(function () {})).toEqual([]);
   });
 });

@@ -1,7 +1,7 @@
 import { ClientSession } from '../client';
 
 export async function browseExample(session: ClientSession) {
-  const browseResult = await session.browseP('ns=0;i=84' /*RootFolder*/);
+  const browseResult = await session.browseP('ns=0;i=84' /* RootFolder*/);
 
   console.log('references of RootFolder :');
   for (const result of browseResult.results[0].references) {

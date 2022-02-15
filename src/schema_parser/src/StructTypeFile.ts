@@ -1,4 +1,4 @@
-/*import {BSDClassFile} from './BSDClassFile';
+/* import {BSDClassFile} from './BSDClassFile';
 import { ClassMember } from './ClassMember';
 */
 import {ClassMember, ClassMethod, ClassFile} from './SchemaParser.module';

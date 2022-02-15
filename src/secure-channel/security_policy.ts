@@ -75,7 +75,7 @@ export enum SecurityPolicy {
   Invalid = 'invalid',
   None = 'http://opcfoundation.org/UA/SecurityPolicy#None',
   Basic128 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic128',
-  Basic128Rsa15 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15', //deprecated
+  Basic128Rsa15 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15', // deprecated
   Basic192 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic192',
   Basic192Rsa15 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic192Rsa15',
   Basic256 = 'http://opcfoundation.org/UA/SecurityPolicy#Basic256', // deprecated
@@ -194,12 +194,10 @@ function RSAPKCS1V15SHA1_Verify(
   certificate: Uint8Array
 ): PromiseLike<boolean> {
   return generateVerifyKeyFromDER(certificate, 'SHA-1')
-    .then((pubKey) => {
-      return {
-        algorithm: 'RSASSA-PKCS1-v1_5', //'RSA-SHA1',
+    .then((pubKey) => ({
+        algorithm: 'RSASSA-PKCS1-v1_5', // 'RSA-SHA1',
         publicKey: pubKey,
-      };
-    })
+      }))
     .then((opts) => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
 }
 const RSAPKCS1OAEPSHA1_Verify = RSAPKCS1V15SHA1_Verify;
@@ -210,12 +208,10 @@ function RSAPKCS1OAEPSHA256_Verify(
   certificate: Uint8Array
 ): PromiseLike<boolean> {
   return generateVerifyKeyFromDER(certificate, 'SHA-256')
-    .then((pubKey) => {
-      return {
+    .then((pubKey) => ({
         algorithm: 'RSASSA-PKCS1-v1_5',
         publicKey: pubKey,
-      };
-    })
+      }))
     .then((opts) => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
 }
 
@@ -225,15 +221,13 @@ function RSAPSSSHA256_Verify(
   certificate: Uint8Array
 ): PromiseLike<boolean> {
   return generateVerifyKeyFromDER(certificate, 'SHA-256', 'RSA-PSS')
-    .then((pubKey) => {
-      return {
+    .then((pubKey) => ({
         algorithm: {
           name: 'RSA-PSS',
           saltLength: 32 /* same length as the digesting algorithm (= SHA-256) */,
         },
         publicKey: pubKey,
-      };
-    })
+      }))
     .then((opts) => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
 }
 
@@ -273,7 +267,7 @@ const RSAPKCS1OAEPSHA1_Sign = RSAPKCS1V15SHA1_Sign;
 
 function RSAPKCS1V15_Encrypt(
   buffer: Uint8Array,
-  publicKey: /*Uint8Array |*/ CryptoKey
+  publicKey: /* Uint8Array |*/ CryptoKey
 ): Promise<Uint8Array> {
   return crypto_utils.publicEncrypt_long(buffer, publicKey, 11, crypto_utils.RSA_PKCS1_PADDING);
 }
@@ -357,7 +351,7 @@ export interface ICryptoFactory {
   blockPaddingSize: number;
   symmetricEncryptionAlgorithm: string;
 
-  sha1or256: 'SHA-1' | 'SHA-256'; //string;
+  sha1or256: 'SHA-1' | 'SHA-256'; // string;
 }
 
 const _Basic128Rsa15: ICryptoFactory = {
@@ -551,8 +545,7 @@ export function computeSignature(
   buffer.set(senderNonce, senderCertificate.byteLength);
 
   // ... and signing the resulting sequence of bytes.
-  return crypto_factory.asymmetricSign(buffer, receiverPrivatekey).then((signature) => {
-    return new SignatureData({
+  return crypto_factory.asymmetricSign(buffer, receiverPrivatekey).then((signature) => new SignatureData({
       // This is a signature generated with the private key associated with a Certificate
       signature: new Uint8Array(signature),
       // A string containing the URI of the algorithm.
@@ -560,8 +553,7 @@ export function computeSignature(
       // (The SignatureAlgorithm shall be the AsymmetricSignatureAlgorithm specified in the
       // SecurityPolicy for the Endpoint)
       algorithm: crypto_factory.asymmetricSignatureAlgorithm, // "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
-    });
-  });
+    }));
 }
 
 export function verifySignature(
@@ -604,20 +596,16 @@ export function getOptionsForSymmetricSignAndEncrypt(
   assert(derivedKeys.hasOwnProperty('signatureLength'));
   assert(securityMode !== MessageSecurityMode.None && securityMode !== MessageSecurityMode.Invalid);
 
-  let options = {
+  const options = {
     signatureLength: derivedKeys.signatureLength,
-    signBufferFunc: (chunk: Uint8Array) => {
-      return crypto_utils.makeMessageChunkSignatureWithDerivedKeys(chunk, derivedKeys);
-    },
+    signBufferFunc: (chunk: Uint8Array) => crypto_utils.makeMessageChunkSignatureWithDerivedKeys(chunk, derivedKeys),
   };
   if (securityMode === MessageSecurityMode.SignAndEncrypt) {
     return {
       ...options,
       plainBlockSize: derivedKeys.encryptingBlockSize,
       cipherBlockSize: derivedKeys.encryptingBlockSize,
-      encryptBufferFunc: (chunk: Uint8Array) => {
-        return crypto_utils.encryptBufferWithDerivedKeys(chunk, derivedKeys);
-      },
+      encryptBufferFunc: (chunk: Uint8Array) => crypto_utils.encryptBufferWithDerivedKeys(chunk, derivedKeys),
     };
   }
   return options;

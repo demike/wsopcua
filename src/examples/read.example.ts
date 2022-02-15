@@ -48,6 +48,6 @@ export async function readExample(session: ClientSession) {
     "arrayDimensions":null,
     "accessLevel":3,
     "userAccessLevel":3,
-    "minimumSamplingInterval":0,"historizing":false,"statusCode":{"value":0}} 
+    "minimumSamplingInterval":0,"historizing":false,"statusCode":{"value":0}}
    */
 }

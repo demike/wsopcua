@@ -481,7 +481,7 @@ export class BinaryStreamSizeCalculator {
   writeArrayBuffer(arrayBuf: ArrayBuffer, offset: number, byteLength: number): void {
     offset = offset || 0;
     // assert(arrayBuf instanceof ArrayBuffer);
-    this.length += byteLength || arrayBuf.byteLength /*new Uint8Array(arrayBuf).length*/;
+    this.length += byteLength || arrayBuf.byteLength /* new Uint8Array(arrayBuf).length*/;
   }
 
   writeByteStream(buf: Uint8Array): void {

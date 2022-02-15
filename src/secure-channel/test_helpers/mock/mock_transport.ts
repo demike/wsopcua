@@ -1,4 +1,4 @@
-// tslint:disable:no-console
+/* eslint-disable no-console */
 
 import { analyseExtensionObject } from '../../../packet-analyzer';
 import { DirectTransport } from '../../../transport/test_helpers/direct_transport';

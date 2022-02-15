@@ -9,7 +9,6 @@ import {
   BSDClassFileParser,
   EnumItem,
   ClassFile,
-  EnumTypeFile,
 } from './SchemaParser.module';
 import { getModuleImportPath } from './SchemaParserConfig';
 
@@ -33,7 +32,7 @@ export class BSDEnumTypeFileParser extends BSDClassFileParser {
     if (super.createChildElement(el) || !this.cls) {
       return true;
     }
-    if (el.tagName == BSDEnumTypeFileParser.TAG_ENUM_VALUE) {
+    if (el.tagName === BSDEnumTypeFileParser.TAG_ENUM_VALUE) {
       const name = el.getAttribute(ClassFile.ATTR_NAME);
       const value = el.getAttribute(ClassFile.ATTR_VALUE);
       if (!value || !name) {

@@ -39,7 +39,7 @@ describe('list status codes for input arguments', () => {
     ]);
 
     expect(response.result[0].statusCode).toEqual(StatusCodes.Good);
-    expect(response.result[0].inputArgumentResults![0]).toEqual(StatusCodes.Good);
+    expect(response.result[0].inputArgumentResults[0]).toEqual(StatusCodes.Good);
     expect(response.result[0].outputArguments[0].value).toEqual(42);
   });
 
@@ -57,6 +57,6 @@ describe('list status codes for input arguments', () => {
       }),
     ]);
     expect(response.result[0].statusCode).toEqual(StatusCodes.BadInvalidArgument);
-    expect(response.result[0].inputArgumentResults![0]).toEqual(StatusCodes.BadTypeMismatch);
+    expect(response.result[0].inputArgumentResults[0]).toEqual(StatusCodes.BadTypeMismatch);
   });
 });

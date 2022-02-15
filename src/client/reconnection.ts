@@ -1,4 +1,4 @@
-// tslint:disable:max-line-length
+/* eslint-disable max-len */
 import { ClientSession } from './client_session';
 import { debugLog, doDebug } from '../common/debug';
 import { ErrorCallback } from './client_base';

@@ -1,4 +1,4 @@
-/* tslint:disable:no-bitwise */
+/* eslint-disable no-bitwise */
 'use strict';
 /**
  * @module opcua.datamodel
@@ -18,7 +18,7 @@ export const ExtraStatusCodeBits = Object.freeze({
   //                         This bit has meaning only for StatusCodes returned as part of a data change Notification
   //                         or the HistoryRead. StatusCodes used in other contexts shall always set this bit to zero.
   //
-  // tslint:disable-next-line:no-bitwise
+  // eslint-disable-next-line no-bitwise
   StructureChanged: 0x1 << 15,
 
   // SemanticsChanged 14:14  Semantics of the associated data value have changed. Clients should not process the data
@@ -95,7 +95,7 @@ export abstract class StatusCode {
    */
   public abstract get value(): number;
 
-  /***
+  /** *
    * status code by name, (including  extra bits in textual forms)
    */
   public abstract get name(): string;
@@ -125,17 +125,17 @@ export abstract class StatusCode {
     return (this.value & mask) !== 0;
   }
 
-  /**returns true if the overflow bit is set */
+  /** returns true if the overflow bit is set */
   public get hasOverflowBit(): boolean {
     return this.checkBit(ExtraStatusCodeBits.Overflow);
   }
 
-  /**returns true if the semanticChange bit is set */
+  /** returns true if the semanticChange bit is set */
   public get hasSemanticChangedBit(): boolean {
     return this.checkBit(ExtraStatusCodeBits.SemanticChanged);
   }
 
-  /**returns true if the structureChange bit is set */
+  /** returns true if the structureChange bit is set */
   public get hasStructureChangedBit(): boolean {
     return this.checkBit(ExtraStatusCodeBits.StructureChanged);
   }
@@ -264,7 +264,7 @@ export class ModifiableStatusCode extends StatusCode {
 
   private _getExtraName() {
     const str: string[] = [];
-    // tslint:disable-next-line:forin
+    // eslint-disable-next-line guard-for-in
     for (const [key, value] of Object.entries(ExtraStatusCodeBits)) {
       if ((this._extraBits & value) === value) {
         str.push(key);

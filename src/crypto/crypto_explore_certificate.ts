@@ -33,8 +33,8 @@
 // AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 // PERFORMANCE OF THIS SOFTWARE.
 // ---------------------------------------------------------------------------------------------------------------------
-/*jslint bitwise: true */
-// tslint:disable:no-shadowed-variable
+/* jslint bitwise: true */
+/* eslint-disable no-shadow,@typescript-eslint/no-shadow */
 
 // references:
 //  - http://tools.ietf.org/html/rfc5280
@@ -205,10 +205,10 @@ async function _readAuthorityKeyIdentifier(buffer: Uint8Array): Promise<Authorit
     authorityCertIssuer,
     authorityCertIssuerFingerPrint,
     serial: authorityCertSerialNumber_block
-      ? formatBuffer2DigitHexWithColum(_getBlock(buffer, authorityCertSerialNumber_block!))
+      ? formatBuffer2DigitHexWithColum(_getBlock(buffer, authorityCertSerialNumber_block))
       : null, // can be null for self-signed cert
     keyIdentifier: keyIdentifier_block
-      ? formatBuffer2DigitHexWithColum(_getBlock(buffer, keyIdentifier_block!))
+      ? formatBuffer2DigitHexWithColum(_getBlock(buffer, keyIdentifier_block))
       : null, // can be null for self-signed certf
   };
 }
@@ -349,23 +349,23 @@ function readKeyUsage(oid: string, buffer: Uint8Array): X509KeyUsage {
 
   // set flags
   return {
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     digitalSignature: (b2 & 0x80) === 0x80,
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     nonRepudiation: (b2 & 0x40) === 0x40,
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     keyEncipherment: (b2 & 0x20) === 0x20,
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     dataEncipherment: (b2 & 0x10) === 0x10,
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     keyAgreement: (b2 & 0x08) === 0x08,
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     keyCertSign: (b2 & 0x04) === 0x04,
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     cRLSign: (b2 & 0x02) === 0x02,
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     encipherOnly: (b2 & 0x01) === 0x01,
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     decipherOnly: (b3 & 0x80) === 0x80,
   };
 }
@@ -393,7 +393,7 @@ function readExtKeyUsage(oid: string, buffer: Uint8Array): X509ExtKeyUsage {
     (extKeyUsage as any)[identifier.name] = true;
   }
   /*
-  
+
  id-kp OBJECT IDENTIFIER ::= { id-pkix 3 }
  id-kp-serverAuth             OBJECT IDENTIFIER ::= { id-kp 1 }
  -- TLS WWW server authentication
@@ -684,7 +684,7 @@ async function readTbsCertificate(buffer: Uint8Array, block: BlockInfo): Promise
 
     const extensionBlock = _findBlockAtIndex(blocks, 3);
     if (!extensionBlock) {
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.log(
         'X509 certificate is invalid : cannot find extension block version =' + version_block
       );
@@ -807,7 +807,7 @@ export function convertPEMtoDER(raw_key: PEM): DER {
 
   const parts: DER[] = [];
   PEM_REGEX.lastIndex = 0;
-  // tslint:disable-next-line:no-conditional-assignment
+  // eslint-disable-next-line no-cond-assign
   while ((match = PEM_REGEX.exec(raw_key)) !== null) {
     pemType = match[2];
     // pemType shall be "RSA PRIVATE KEY" , "PUBLIC KEY", "CERTIFICATE"
@@ -928,3 +928,4 @@ export function generateSignKeyFromDER(
       return key;
     });
 }
+

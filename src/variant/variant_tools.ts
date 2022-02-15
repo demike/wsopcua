@@ -162,7 +162,7 @@ function isValidArrayVariant(dataType: DataType, value: any) {
   return true;
 }
 
-/*istanbul ignore next*/
+/* istanbul ignore next*/
 function isValidMatrixVariant(dataType: DataType, value: any, dimensions?: number[]) {
   if (!dimensions) {
     return false;

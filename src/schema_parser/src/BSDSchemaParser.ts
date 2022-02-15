@@ -230,25 +230,25 @@ export class BSDSchemaParser {
     // this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
   }
 
-  public writeToFile(path: string, cls: ClassFile) {
+  public writeToFile(strPath: string, cls: ClassFile) {
     try {
-      fs.writeFileSync(path, cls.toString(), 'utf8');
+      fs.writeFileSync(strPath, cls.toString(), 'utf8');
       console.log('file written: ' + path);
     } catch (err) {
       console.log(err.message);
     }
   }
 
-  public insertIntoFile(path: string, cls: ClassFile) {
-    fs.readFile(path, 'utf8', (err, data) => {
+  public insertIntoFile(strPath: string, cls: ClassFile) {
+    fs.readFile(strPath, 'utf8', (err, data) => {
       if (err) {
         throw err;
       }
       data += data.replace(ClassMethod.DE_SERIALIZER_METHOD_PLACEHOLDER, cls.toString());
       // write the modified class file
-      fs.writeFile(path, data, 'utf8', (err) => {
-        if (err) {
-          console.log(err.message);
+      fs.writeFile(strPath, data, 'utf8', (err1) => {
+        if (err1) {
+          console.log(err1.message);
         } else {
           console.log('file written: ' + path);
         }
@@ -302,7 +302,7 @@ export class BSDSchemaParser {
     for (const file of ar) {
       if (!file.Written) {
         if (!this.importConfig.readonly) {
-          let arParams = this.metaTypeMap[/*"DataType"*/ 'Object'][
+          let arParams = this.metaTypeMap[/* "DataType"*/ 'Object'][
             file.Name + '_Encoding_DefaultBinary'
           ];
           if (!arParams) {

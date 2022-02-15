@@ -141,7 +141,7 @@ export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
     this._monitoringParameters.clientHandle = this._subscription.nextClientHandle();
     assert(
       this._monitoringParameters.clientHandle > 0 &&
-        this._monitoringParameters.clientHandle !== null /*4294967295*/
+        this._monitoringParameters.clientHandle !== null /* 4294967295*/
     );
 
     // If attributeId is EventNotifier then monitoring parameters need a filter.
@@ -235,7 +235,7 @@ export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
       const itemToCreate = (<any>monitoredItem)._prepare_for_monitoring(done);
       if (
         typeof itemToCreate.error === 'string' ||
-        itemToCreate.error instanceof String /*_.isString(itemToCreate.error)*/
+        itemToCreate.error instanceof String /* _.isString(itemToCreate.error)*/
       ) {
         return done(new Error(itemToCreate.error));
       }

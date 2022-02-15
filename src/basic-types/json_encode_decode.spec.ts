@@ -19,7 +19,7 @@ beforeEach(() => {
       return (
         first.namespace === second.namespace &&
         first.identifierType === second.identifierType &&
-        jasmine.matchersUtil.equals(first.value, second.value)
+        first.value === second.value
       );
     }
   });

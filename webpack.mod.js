@@ -1,8 +1,9 @@
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
-var LIB_PATH = path.resolve(__dirname, 'src/index.ts');
-var BUILD_PATH = path.resolve(__dirname, 'dist');
+const LIB_PATH = path.resolve(__dirname, 'src/index.ts');
+const BUILD_PATH = path.resolve(__dirname, 'dist');
 
 module.exports = {
   entry: {
@@ -18,30 +19,26 @@ module.exports = {
 
   // devtool: 'source-map',
 
-  // watchOptions: { poll: true }, // seems to need this for Windows Linux subsystem to watch
-
   resolve: {
-    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
+    extensions: ['.ts', '.tsx', '.js'],
   },
 
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'tslint-loader',
-        enforce: 'pre',
-        options: { emitErrors: false, failOnHint: false },
-      },
-      {
-        test: /\.tsx?$/,
         loader: 'ts-loader',
+        exclude: '/node_modules/',
       },
     ],
   },
 
   plugins: [
+    new ESLintPlugin({
+      extensions: ['ts'],
+    }),
     new webpack.BannerPlugin(
-      `wsopcua.js ${require('./package.json').version} - Copyright © 2017-2021 Michael Derfler`
+      `wsopcua.js ${require('./package.json').version} - Copyright © 2017-2022 Michael Derfler`
     ),
   ],
 };

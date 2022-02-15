@@ -3,7 +3,7 @@ import { makeNodeId } from './nodeid';
 import { NodeIdType} from '../generated/NodeIdType';
 import {coerceExpandedNodeId} from './expanded_nodeid';
 
-/*global describe, it, require*/
+/* global describe, it, require*/
 
 
 describe('testing ExpandedNodeId', function () {

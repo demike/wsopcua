@@ -292,7 +292,7 @@ describe('testing built-in type encoding', function () {
 
   it('should encode and decode any small numeric NodeId', function () {
     for (let i = 0; i <= 255; i++) {
-      const nodeId = makeNodeId(/*value*/ i, /*namespace*/ 2);
+      const nodeId = makeNodeId(/* value*/ i, /* namespace*/ 2);
       test_encode_decode(nodeId, ec.encodeNodeId, ec.decodeNodeId, 4);
     }
   });

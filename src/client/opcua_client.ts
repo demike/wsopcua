@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 'use strict';
 /**
  * @module opcua.client
@@ -70,6 +71,7 @@ export interface UserIdentityInfoIssued {
   tokenData: Uint8Array;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface UserIdentityInfoX509 extends IX509IdentityToken {}
 export interface UserIdentityInfoAnonymous {}
 
@@ -139,7 +141,7 @@ export class OPCUAClient extends OPCUAClientBase {
   protected async _getApplicationUri(): Promise<string> {
     // get applicationURI from certificate
 
-    /**msgcrypt**/
+    /** msgcrypt**/
     const certificate = this.getCertificate();
     let applicationUri;
     if (certificate) {
@@ -161,7 +163,7 @@ export class OPCUAClient extends OPCUAClientBase {
     this.securityPolicy = this.securityPolicy || SecurityPolicy.None;
 
     let endpoint = this.findEndpoint(
-      this._secureChannel!.endpointUrl,
+      this._secureChannel.endpointUrl,
       this.securityMode,
       this.securityPolicy
     );
@@ -176,7 +178,7 @@ export class OPCUAClient extends OPCUAClientBase {
       if (this.endpoint_must_exist) {
         debugLog(
           'OPCUAClient#endpoint_must_exist = true and endpoint with url ',
-          this._secureChannel!.endpointUrl,
+          this._secureChannel.endpointUrl,
           ' cannot be found'
         );
         return false;
@@ -211,10 +213,10 @@ export class OPCUAClient extends OPCUAClientBase {
           );
         })
       );
-      return callback(new Error(' End point must exist ' + this._secureChannel!.endpointUrl));
+      return callback(new Error(' End point must exist ' + this._secureChannel.endpointUrl));
     }
     this._serverUri = this.endpoint.server.applicationUri;
-    this._endpointUrl = this._secureChannel!.endpointUrl;
+    this._endpointUrl = this._secureChannel.endpointUrl;
 
     const session = new ClientSession(this);
     this.__createSession_step2(session, callback);
@@ -491,8 +493,8 @@ export class OPCUAClient extends OPCUAClientBase {
           }),
         });
 
-        session.performMessageTransaction(request, function (err, response) {
-          if (!err && response.responseHeader.serviceResult === StatusCodes.Good) {
+        session.performMessageTransaction(request, (err1, response) => {
+          if (!err1 && response.responseHeader.serviceResult === StatusCodes.Good) {
             if (!(response instanceof ActivateSessionResponse)) {
               return callback(new Error('Internal Error'));
             }
@@ -508,9 +510,9 @@ export class OPCUAClient extends OPCUAClientBase {
             session.emit('session_activated');
             return callback(null, session);
           } else {
-            err = err || new Error(response.responseHeader.serviceResult.toString());
+            err1 = err1 || new Error(response.responseHeader.serviceResult.toString());
             session.client = _old_client;
-            return callback(err, null);
+            return callback(err1, null);
           }
         });
       }
@@ -553,12 +555,12 @@ export class OPCUAClient extends OPCUAClientBase {
             (<any>old_client)._removeSession(session); // cast to any as access of protected member to other instance should be possible
             assert(
               (<any>old_client)._sessions.indexOf(session) <
-                0 /*!_.contains( (<any>old_client)._sessions, session*/
+                0 /* !_.contains( (<any>old_client)._sessions, session*/
             );
           }
           this._addSession(session);
 
-          assert(this._sessions.indexOf(session) >= 0 /*_.contains(this._sessions, session)*/);
+          assert(this._sessions.indexOf(session) >= 0 /* _.contains(this._sessions, session)*/);
         }
       } else {
         // istanbul ignore next
@@ -632,8 +634,8 @@ export class OPCUAClient extends OPCUAClientBase {
       } else {
         this._addSession(session);
 
-        this._activateSession(session, options, function (err) {
-          callback(err, session);
+        this._activateSession(session, options, function (err1) {
+          callback(err1, session);
         });
       }
     });
@@ -868,7 +870,7 @@ export class OPCUAClient extends OPCUAClientBase {
 
         // close session
         (innerCallback: () => void) => {
-          the_session.close(/*deleteSubscriptions=*/ true, function (err) {
+          the_session.close(/* deleteSubscriptions=*/ true, function (err) {
             if (err) {
               console.log('OPCUAClient#withClientSession: session closed failed ?');
             }

@@ -1,4 +1,4 @@
-// tslint:disable: no-bitwise
+/* eslint-disable no-bitwise */
 'use strict';
 
 import { assert } from '../assert';
@@ -282,7 +282,7 @@ export class Variant extends BaseUAObject {
     if (this.arrayType === VariantArrayType.Array) {
       out.Body = jsonEncodeVariantArray(this.dataType, this.value);
     } else if (this.arrayType === VariantArrayType.Matrix) {
-      out.Body = jsonEncodeMatrix(this.dataType, this.value, this.dimensions!);
+      out.Body = jsonEncodeMatrix(this.dataType, this.value, this.dimensions);
     } else {
       const encode = get_json_encoder(this.dataType);
       if (encode) {
@@ -376,7 +376,7 @@ function isValidArrayVariant(dataType: DataType, value: any): boolean {
     return true;
   } else if (
     dataType === DataType.Byte &&
-    value instanceof Uint8Array /*|| value instanceof Buffer*/
+    value instanceof Uint8Array /* || value instanceof Buffer*/
   ) {
     return true;
   } else if (dataType === DataType.Int16 && value instanceof Int16Array) {
@@ -398,7 +398,7 @@ function isValidArrayVariant(dataType: DataType, value: any): boolean {
   return true;
 }
 
-/*istanbul ignore next*/
+/* istanbul ignore next*/
 function isValidMatrixVariant(dataType: DataType, value: any, dimensions?: number[]): boolean {
   if (!dimensions) {
     return false;

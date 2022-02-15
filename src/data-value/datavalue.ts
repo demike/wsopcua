@@ -74,7 +74,7 @@ export function apply_timestamps(
   }
 
   // unset sourceTimestamp unless AttributeId is Value
-  if (attributeId !== 13 /*AttributeIds.Value*/) {
+  if (attributeId !== 13 /* AttributeIds.Value*/) {
     cloneDataValue.sourceTimestamp = null;
   }
   return cloneDataValue;

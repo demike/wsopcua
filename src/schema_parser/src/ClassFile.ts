@@ -1,4 +1,4 @@
-/*import {ClassMethod} from './ClassMethod';
+/* import {ClassMethod} from './ClassMethod';
 import {ClassMember} from './ClassMember';
 import {TypeRegistry} from './TypeRegistry';
 */
@@ -154,7 +154,7 @@ export class ClassFile {
 
   public getMemberByName(name: string): ClassMember | null {
     for (const mem of this.members) {
-      if (mem.Name == name) {
+      if (mem.Name === name) {
         return mem;
       }
     }
@@ -167,7 +167,7 @@ export class ClassFile {
     name = name.charAt(0).toLowerCase() + name.slice(1);
     for (ii = 0; ii < this.members.length; ii++) {
       mem = this.members[ii];
-      if (mem.Name == name) {
+      if (mem.Name === name) {
         this.members.splice(ii, 1);
         break;
       } else {
@@ -226,13 +226,13 @@ export class ClassFile {
 
   public getMethodByName(name: string): ClassMethod | null {
     for (const m of this.methods) {
-      if (m.Name == name) {
+      if (m.Name === name) {
         return m;
       }
     }
 
     for (const m of this.utilityFunctions) {
-      if (m.Name == name) {
+      if (m.Name === name) {
         return m;
       }
     }

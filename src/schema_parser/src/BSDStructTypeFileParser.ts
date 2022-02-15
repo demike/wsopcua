@@ -1,429 +1,496 @@
-/*import {BSDClassFile} from './BSDClassFile';
-import { ClassMember } from './ClassMember';
-*/
-import { ClassMember, ClassMethod, BSDClassFileParser, EnumTypeFile, ClassFile, StructTypeFile, SimpleType } from './SchemaParser.module';
-import { toUnicode } from 'punycode';
+import {
+  ClassMember,
+  ClassMethod,
+  BSDClassFileParser,
+  EnumTypeFile,
+  ClassFile,
+  StructTypeFile,
+  SimpleType,
+} from './SchemaParser.module';
 
 export class BSDStructTypeFileParser extends BSDClassFileParser {
+  //    public static STR_SKIP_EXT_DECODING = "skipExtDecoding";
 
-//    public static STR_SKIP_EXT_DECODING = "skipExtDecoding";
+  protected encodingByteMap?: { [key: string]: ClassMember };
+  /**
+   *
+   * @returns element found
+   */
+  protected createChildElement(el: HTMLElement): boolean {
+    if (super.createChildElement(el) || !this.cls) {
+      return true;
+    }
 
-    protected encodingByteMap?: { [key: string]: ClassMember };
-    /**
-     *
-     * @returns element found
-     */
-    protected createChildElement(el: HTMLElement): boolean {
-        if (super.createChildElement(el) || !this.cls) {
-            return true;
-        }
+    if (el == null || el.tagName !== BSDClassFileParser.TAG_FIELD) {
+      return false;
+    }
 
-        if (el == null || el.tagName != BSDClassFileParser.TAG_FIELD) {
-            return false;
-        }
+    let bitLength = 1;
+    const bitLengthNode = el.attributes.getNamedItem(ClassFile.ATTR_ARRAY_LENGTH);
+    if (bitLengthNode) {
+      bitLength = parseInt(bitLengthNode.value);
+    }
 
-        let bitLength = 1;
-        const bitLengthNode = el.attributes.getNamedItem(ClassFile.ATTR_ARRAY_LENGTH);
-        if (bitLengthNode) {
-            bitLength = parseInt(bitLengthNode.value);
-        }
+    let lengthField: string | null = null;
+    const lengthFieldNode = el.attributes.getNamedItem(BSDClassFileParser.ATTR_LENGTH_FIELD);
+    if (lengthFieldNode) {
+      lengthField = lengthFieldNode.value;
+    }
 
-        let lengthField: string | null = null;
-        const lengthFieldNode = el.attributes.getNamedItem(BSDClassFileParser.ATTR_LENGTH_FIELD);
-        if (lengthFieldNode) {
-            lengthField = lengthFieldNode.value;
-        }
+    const isArr = !!lengthField;
+    const attrName = el.attributes.getNamedItem(ClassFile.ATTR_NAME);
+    const attrTypeName = el.attributes.getNamedItem(BSDClassFileParser.ATTR_TYPE_NAME);
+    const mem = new ClassMember(
+      attrName ? attrName.value : null,
+      attrTypeName ? attrTypeName.value : null,
+      true,
+      null,
+      bitLength,
+      isArr
+    );
 
-        const isArr = !!lengthField;
-        const attrName = el.attributes.getNamedItem(ClassFile.ATTR_NAME);
-        const attrTypeName = el.attributes.getNamedItem(BSDClassFileParser.ATTR_TYPE_NAME);
-        const mem = new ClassMember(
-            (attrName) ? attrName.value : null,
-            (attrTypeName) ? attrTypeName.value : null,
-            true, null, bitLength, isArr
-        );
+    if (lengthField != null) {
+      // we found an array type --> lets remove the array length member entry,
+      // because every array is preceeded by a 32 bit integer and this is handled by arrayDecode/Encode
+      this.cls.removeMember(lengthField);
+    }
 
-        if (lengthField != null) {
-            // we found an array type --> lets remove the array length member entry,
-            // because every array is preceeded by a 32 bit integer and this is handled by arrayDecode/Encode
-            this.cls.removeMember(lengthField);
-        }
-
-        let baseClass = this.cls.BaseClass;
-        while (baseClass) {
-            if (baseClass.getMemberByName(mem.Name) != null) {
-                 // this member is already present in the parent class
-                return true;
-            }
-            baseClass = baseClass.BaseClass;
-        }
-
-        if (mem.Type.Name == 'Bit') {
-            if (!this.encodingByteMap) {
-                this.encodingByteMap = {};
-            }
-            this.encodingByteMap[mem.Name] = mem;
-        } else {
-            if (this.encodingByteMap && this.encodingByteMap[mem.Name + 'Specified']) {
-                // this is an optional field, because we found a specified flag
-                mem.Required = false;
-            }
-            this.cls.addMemberVariable(mem);
-        }
+    let baseClass = this.cls.BaseClass;
+    while (baseClass) {
+      if (baseClass.getMemberByName(mem.Name) != null) {
+        // this member is already present in the parent class
         return true;
+      }
+      baseClass = baseClass.BaseClass;
     }
 
-    protected createConstructor() {
-        if (!this.cls) {
-            return;
-        }
-        const blnHasAnyMembers = this.cls.hasAnyMembers();
-        let body = '';
+    if (mem.Type.Name === 'Bit') {
+      if (!this.encodingByteMap) {
+        this.encodingByteMap = {};
+      }
+      this.encodingByteMap[mem.Name] = mem;
+    } else {
+      if (this.encodingByteMap && this.encodingByteMap[mem.Name + 'Specified']) {
+        // this is an optional field, because we found a specified flag
+        mem.Required = false;
+      }
+      this.cls.addMemberVariable(mem);
+    }
+    return true;
+  }
 
-        if (blnHasAnyMembers) {
-            body += '  options = options || {};\n';
-        }
+  protected createConstructor() {
+    if (!this.cls) {
+      return;
+    }
+    const blnHasAnyMembers = this.cls.hasAnyMembers();
+    let body = '';
 
-        if (this.cls.BaseClass && !(this.cls.BaseClass instanceof SimpleType)) {
-            if (!this.cls.BaseClass.hasAnyMembers()) {
-                body += '  super();\n';
-            } else {
-                body += '  super(options);\n';
-            }
-        }
-
-
-        for (const mem of this.cls.Members) {
-            if (mem.Type.Name != 'Bit') {
-                let alternativeCode = 'null';
-                if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
-                    alternativeCode = 'undefined'; // availability is specified in encoding byte
-                } else if (mem.IsArray) {
-                    alternativeCode = '[]';
-                } else if (mem.Type instanceof StructTypeFile) {
-                    alternativeCode = 'new ' + mem.Type.Name + '()';
-                } else if (mem.Type instanceof SimpleType) {
-                    alternativeCode = mem.Type.defaultValue || 'null';
-                }
-
-                body += '  this.' + mem.Name + ' = (options.' + mem.Name +
-                        ' != null) ? options.' + mem.Name + ' : ' + alternativeCode + ';\n';
-            }
-        }
-        const args = [];
-        if (this.cls.hasAnyMembers()) {
-            args.push(new ClassMember('options', new SimpleType(this.cls.ModulePath, 'I' + this.cls.Name), false));
-        }
-        const met: ClassMethod = new ClassMethod(null, null, 'constructor', args, null, body);
-
-        this.cls.addMethod(met);
+    if (blnHasAnyMembers) {
+      body += '  options = options || {};\n';
     }
 
-    protected createEncodeMethod(): void {
-        let body = '';
-        if (!this.cls || !this.cls.hasAnyMembers()) {
-            return;
+    if (this.cls.BaseClass && !(this.cls.BaseClass instanceof SimpleType)) {
+      if (!this.cls.BaseClass.hasAnyMembers()) {
+        body += '  super();\n';
+      } else {
+        body += '  super(options);\n';
+      }
+    }
+
+    for (const mem of this.cls.Members) {
+      if (mem.Type.Name !== 'Bit') {
+        let alternativeCode = 'null';
+        if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
+          alternativeCode = 'undefined'; // availability is specified in encoding byte
+        } else if (mem.IsArray) {
+          alternativeCode = '[]';
+        } else if (mem.Type instanceof StructTypeFile) {
+          alternativeCode = 'new ' + mem.Type.Name + '()';
+        } else if (mem.Type instanceof SimpleType) {
+          alternativeCode = mem.Type.defaultValue || 'null';
         }
-        if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
-            body += '  super.encode(out);\n';
+
+        body +=
+          '  this.' +
+          mem.Name +
+          ' = (options.' +
+          mem.Name +
+          ' != null) ? options.' +
+          mem.Name +
+          ' : ' +
+          alternativeCode +
+          ';\n';
+      }
+    }
+    const args = [];
+    if (this.cls.hasAnyMembers()) {
+      args.push(
+        new ClassMember('options', new SimpleType(this.cls.ModulePath, 'I' + this.cls.Name), false)
+      );
+    }
+    const met: ClassMethod = new ClassMethod(null, null, 'constructor', args, null, body);
+
+    this.cls.addMethod(met);
+  }
+
+  protected createEncodeMethod(): void {
+    let body = '';
+    if (!this.cls || !this.cls.hasAnyMembers()) {
+      return;
+    }
+    if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
+      body += '  super.encode(out);\n';
+    } else {
+      body += this.createEncodeEncodingByteCode();
+    }
+
+    for (const mem of this.cls.Members) {
+      body += '  ';
+      const checkUndefined =
+        this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified');
+      if (checkUndefined) {
+        body += 'if(this.' + mem.Name + ' != null) { ';
+      }
+
+      if (mem.IsArray) {
+        body += 'ec.encodeArray(this.' + mem.Name + ', out';
+        if (mem.Type instanceof SimpleType || mem.Type instanceof EnumTypeFile) {
+          body += ', ';
+          if (mem.Type.ImportAs) {
+            body += mem.Type.ImportAs + '.';
+          }
+          body += 'encode' + mem.Type.Name;
+        }
+        body += ');';
+      } else {
+        if (mem.Type instanceof SimpleType || mem.Type instanceof EnumTypeFile) {
+          if (mem.Type.ImportAs) {
+            body += mem.Type.ImportAs + '.';
+          }
+          body += 'encode' + mem.Type.Name + '(this.' + mem.Name + ', out);';
         } else {
-            body += this.createEncodeEncodingByteCode();
+          body += 'this.' + mem.Name + '.encode(out);';
         }
+      }
 
-        for (const mem of this.cls.Members) {
-            body += '  ';
-            const checkUndefined = this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified');
-            if (checkUndefined) {
-                body += 'if(this.' + mem.Name + ' != null) { ';
-            }
-
-
-            if (mem.IsArray) {
-                body += 'ec.encodeArray(this.' + mem.Name + ', out';
-                if (mem.Type instanceof SimpleType || mem.Type instanceof EnumTypeFile) {
-                    body += ', ';
-                    if (mem.Type.ImportAs) {
-                        body += mem.Type.ImportAs + '.';
-                    }
-                    body += 'encode' + mem.Type.Name;
-                }
-                body += ');';
-            } else {
-                if (mem.Type instanceof SimpleType || mem.Type instanceof EnumTypeFile) {
-
-                    if (mem.Type.ImportAs) {
-                        body += mem.Type.ImportAs + '.';
-                    }
-                    body += 'encode' + mem.Type.Name + '(this.' + mem.Name + ', out);';
-                } else {
-                    body += 'this.' + mem.Name + '.encode(out);';
-                }
-            }
-
-            if (checkUndefined) {
-                body += ' }';
-            }
-            body += '\n';
-        }
-
-        const enc = new ClassMethod('', null, 'encode',
-            [new ClassMember('out', ClassFile.IO_TYPE)],
-            null,
-            body);
-        this.cls.addMethod(enc);
+      if (checkUndefined) {
+        body += ' }';
+      }
+      body += '\n';
     }
 
-    protected createDecodeMethod(): void {
-        let body = '';
-        if (!this.cls || !this.cls.hasAnyMembers()) {
-            return;
-        }
-        if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
-            body += '  super.decode(inp);\n';
-        }
+    const enc = new ClassMethod(
+      '',
+      null,
+      'encode',
+      [new ClassMember('out', ClassFile.IO_TYPE)],
+      null,
+      body
+    );
+    this.cls.addMethod(enc);
+  }
 
-        body += this.createDecodeEncodingByteCode();
-
-        for (const mem of this.cls.Members) {
-            let addIf = false;
-            if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
-                addIf = true;
-                body += '  if(' + mem.Name + 'Specified) {\n ';
-                if (mem.Type instanceof StructTypeFile) {
-                    body += '  this.' + mem.Name + '= new ' + mem.Type.FullName + '();\n ';
-                }
-            }
-
-            body += '  this.' + mem.Name;
-            if (mem.Type instanceof SimpleType || mem.Type instanceof EnumTypeFile || mem.IsArray) {
-                body += ' = ';
-
-                if (mem.IsArray) {
-                    body += 'ec.decodeArray(inp, ' + ((mem.Type.ImportAs) ? (mem.Type.ImportAs + '.') : '')
-                        + 'decode' + mem.Type.Name + ');\n';
-                } else {
-                    body += ((mem.Type.ImportAs) ? (mem.Type.ImportAs + '.') : '') + 'decode' + mem.Type.Name + '(inp);\n';
-                }
-            } else {
-                body += '.decode(inp);\n';
-            }
-
-            if (addIf) {
-                body += '  }\n';
-            }
-        }
-
-        const dec = new ClassMethod('', null, 'decode',
-            [new ClassMember('inp', ClassFile.IO_TYPE)],
-            null,
-            body);
-        this.cls.addMethod(dec);
-
-        // create decode as array method
-        body = '  const obj = new ' + this.cls.Name + '();\n';
-        body += '   obj.decode(inp);\n   return obj;\n';
-        const fnDec = new ClassMethod(null, this.cls.Name, 'decode' + this.cls.Name,
-            [new ClassMember('inp', ClassFile.IO_TYPE)],
-            null,
-            body);
-        this.cls.addUtilityFunction(fnDec);
-
+  protected createDecodeMethod(): void {
+    let body = '';
+    if (!this.cls || !this.cls.hasAnyMembers()) {
+      return;
+    }
+    if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
+      body += '  super.decode(inp);\n';
     }
 
-    protected createDecodeEncodingByteCode() {
-        if (!this.encodingByteMap) {
-            return '';
-        }
-        let str = '  let encodingByte = inp.getUint8();\n';
-        for (const name in this.encodingByteMap) {
-            if (name.indexOf('Reserved') != 0) {
-                str += '  let ' + name + ' = (encodingByte & ' + (1 << this.encodingByteMap[name].BitPos) + ') != 0;\n';
-            }
-        }
+    body += this.createDecodeEncodingByteCode();
 
-        return str;
+    for (const mem of this.cls.Members) {
+      let addIf = false;
+      if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
+        addIf = true;
+        body += '  if(' + mem.Name + 'Specified) {\n ';
+        if (mem.Type instanceof StructTypeFile) {
+          body += '  this.' + mem.Name + '= new ' + mem.Type.FullName + '();\n ';
+        }
+      }
+
+      body += '  this.' + mem.Name;
+      if (mem.Type instanceof SimpleType || mem.Type instanceof EnumTypeFile || mem.IsArray) {
+        body += ' = ';
+
+        if (mem.IsArray) {
+          body +=
+            'ec.decodeArray(inp, ' +
+            (mem.Type.ImportAs ? mem.Type.ImportAs + '.' : '') +
+            'decode' +
+            mem.Type.Name +
+            ');\n';
+        } else {
+          body +=
+            (mem.Type.ImportAs ? mem.Type.ImportAs + '.' : '') +
+            'decode' +
+            mem.Type.Name +
+            '(inp);\n';
+        }
+      } else {
+        body += '.decode(inp);\n';
+      }
+
+      if (addIf) {
+        body += '  }\n';
+      }
     }
 
-    protected createEncodeEncodingByteCode() {
-        if (!this.encodingByteMap) {
-            return '';
-        }
-        let str = '  let encodingByte = 0;\n';
-        for (const name in this.encodingByteMap) {
-            if (name.indexOf('Reserved') == 0) {
-                continue;
-            }
-            const memName = name.replace('Specified', '');
-            if (memName != name) {
-                // this was: {mymember}Specified
-                str += '  if (this.' + memName + ' != null) { encodingByte |= 1 << ' + this.encodingByteMap[name].BitPos + ';}\n';
-            }
-        }
-        str += '  out.setUint8(encodingByte);\n';
-        return str;
+    const dec = new ClassMethod(
+      '',
+      null,
+      'decode',
+      [new ClassMember('inp', ClassFile.IO_TYPE)],
+      null,
+      body
+    );
+    this.cls.addMethod(dec);
+
+    // create decode as array method
+    body = '  const obj = new ' + this.cls.Name + '();\n';
+    body += '   obj.decode(inp);\n   return obj;\n';
+    const fnDec = new ClassMethod(
+      null,
+      this.cls.Name,
+      'decode' + this.cls.Name,
+      [new ClassMember('inp', ClassFile.IO_TYPE)],
+      null,
+      body
+    );
+    this.cls.addUtilityFunction(fnDec);
+  }
+
+  protected createDecodeEncodingByteCode() {
+    if (!this.encodingByteMap) {
+      return '';
+    }
+    let str = '  let encodingByte = inp.getUint8();\n';
+    for (const name in this.encodingByteMap) {
+      if (name.indexOf('Reserved') !== 0) {
+        str +=
+          '  let ' +
+          name +
+          ' = (encodingByte & ' +
+          (1 << this.encodingByteMap[name].BitPos) +
+          ') != 0;\n';
+      }
     }
 
-    protected createCloneMethod(): void {
-        if (!this.cls) {
-            return;
-        }
-        let body: string = '  if (!target) {\n   target = new ' + this.cls.Name + '();\n  }\n';
-        if (this.cls.BaseClass != null && this.cls.BaseClass.hasAnyMembers()) {
-            body += '  super.clone(target);\n';
-        }
+    return str;
+  }
 
-        for (const mem of this.cls.Members) {
-            if (mem.Type instanceof StructTypeFile) {
-                if (mem.IsArray) {
-                    body += '  if (this.' + mem.Name + ') { target.' + mem.Name + ' = ec.cloneComplexArray(this.' + mem.Name + '); }\n';
-                } else {
-                    body += '  if (this.' + mem.Name + ') { target.' + mem.Name + ' = this.' + mem.Name + '.clone(); }\n';
-                }
-            } else {
-                if (mem.IsArray) {
-                    body += '  target.' + mem.Name + ' = ec.cloneArray(this.' + mem.Name + ');\n';
-                } else {
-                    body += '  target.' + mem.Name + ' = this.' + mem.Name + ';\n';
-                }
-            }
-        }
+  protected createEncodeEncodingByteCode() {
+    if (!this.encodingByteMap) {
+      return '';
+    }
+    let str = '  let encodingByte = 0;\n';
+    for (const name in this.encodingByteMap) {
+      if (name.indexOf('Reserved') === 0) {
+        continue;
+      }
+      const memName = name.replace('Specified', '');
+      if (memName !== name) {
+        // this was: {mymember}Specified
+        str +=
+          '  if (this.' +
+          memName +
+          ' != null) { encodingByte |= 1 << ' +
+          this.encodingByteMap[name].BitPos +
+          ';}\n';
+      }
+    }
+    str += '  out.setUint8(encodingByte);\n';
+    return str;
+  }
 
-        body += '  return target;';
-
-        const cl = new ClassMethod('', this.cls, 'clone',
-            [new ClassMember('target', this.cls, false)],
-            null,
-            body);
-        this.cls.addMethod(cl);
-
+  protected createCloneMethod(): void {
+    if (!this.cls) {
+      return;
+    }
+    let body: string = '  if (!target) {\n   target = new ' + this.cls.Name + '();\n  }\n';
+    if (this.cls.BaseClass != null && this.cls.BaseClass.hasAnyMembers()) {
+      body += '  super.clone(target);\n';
     }
 
-    protected createDefines() {
-        if (!this.cls || !this.cls.hasAnyMembers()) {
-            return;
+    for (const mem of this.cls.Members) {
+      if (mem.Type instanceof StructTypeFile) {
+        if (mem.IsArray) {
+          body +=
+            '  if (this.' +
+            mem.Name +
+            ') { target.' +
+            mem.Name +
+            ' = ec.cloneComplexArray(this.' +
+            mem.Name +
+            '); }\n';
+        } else {
+          body +=
+            '  if (this.' +
+            mem.Name +
+            ') { target.' +
+            mem.Name +
+            ' = this.' +
+            mem.Name +
+            '.clone(); }\n';
         }
-        // header
-        let str = 'export interface I' + this.cls.Name;
-        if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
-            str += ' extends I' + this.cls.BaseClass.Name;
+      } else {
+        if (mem.IsArray) {
+          body += '  target.' + mem.Name + ' = ec.cloneArray(this.' + mem.Name + ');\n';
+        } else {
+          body += '  target.' + mem.Name + ' = this.' + mem.Name + ';\n';
         }
-        str += ' {\n';
+      }
+    }
 
-        for (const mem of this.cls.Members) {
-            const option: any = {};
-            option['required'] = false;
-            /*
+    body += '  return target;';
+
+    const cl = new ClassMethod(
+      '',
+      this.cls,
+      'clone',
+      [new ClassMember('target', this.cls, false)],
+      null,
+      body
+    );
+    this.cls.addMethod(cl);
+  }
+
+  protected createDefines() {
+    if (!this.cls || !this.cls.hasAnyMembers()) {
+      return;
+    }
+    // header
+    let str = 'export interface I' + this.cls.Name;
+    if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
+      str += ' extends I' + this.cls.BaseClass.Name;
+    }
+    str += ' {\n';
+
+    for (const mem of this.cls.Members) {
+      const option: any = {};
+      option['required'] = false;
+      /*
               if (!(mem.Type instanceof SimpleType)) {
                   option["typePrefix"] = "I";
                   this.createImport(mem.Type,true);
               }
               */
-            str += ' ' + mem.toString(option) + ';\n';
-        }
-        str += '}\n';
-        this.cls.Defines = str;
+      str += ' ' + mem.toString(option) + ';\n';
+    }
+    str += '}\n';
+    this.cls.Defines = str;
+  }
+
+  protected createJsonEncodeMethod(): void {
+    if (!this.cls || !this.cls.hasAnyMembers()) {
+      return;
     }
 
-    protected createJsonEncodeMethod(): void {
-        if (!this.cls || !this.cls.hasAnyMembers()) {
-            return;
-        }
+    let body = '  ';
 
-        let body = '  ';
+    if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
+      body += 'const out: any = super.toJSON();\n';
+    } else {
+      body += 'const out: any = {};\n';
+    }
 
-        if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
-            body += 'const out: any = super.toJSON();\n';
+    for (const mem of this.cls.Members) {
+      body += '  ';
+      const prefix = mem.Type.ImportAs ? mem.Type.ImportAs + '.' : '';
+      const checkUndefined =
+        this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified');
+      if (checkUndefined) {
+        body += 'if(this.' + mem.Name + ' != null) { ';
+      }
+
+      body += 'out.' + mem.OrigName + ' = ';
+
+      if (mem.IsArray) {
+        if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
+          body +=
+            'ec.jsonEncodeArray(this.' +
+            mem.Name +
+            ', ' +
+            prefix +
+            'jsonEncode' +
+            mem.Type.Name +
+            ');';
         } else {
-            body += 'const out: any = {};\n';
+          body += 'this.' + mem.Name + ';';
         }
-
-        for (const mem of this.cls.Members) {
-            body += '  ';
-            const prefix = (mem.Type.ImportAs) ? (mem.Type.ImportAs + '.') : '';
-            const checkUndefined = this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified');
-            if (checkUndefined) {
-                body += 'if(this.' + mem.Name + ' != null) { ';
-            }
-
-            body += 'out.' + mem.OrigName + ' = ';
-
-            if (mem.IsArray) {
-                if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
-                    body += 'ec.jsonEncodeArray(this.' + mem.Name + ', ' + prefix + 'jsonEncode' + mem.Type.Name + ');';
-                } else {
-                    body += 'this.' + mem.Name + ';';
-                }
-            } else {
-                if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
-                    body += prefix + 'jsonEncode' + mem.Type.Name + '(this.' + mem.Name +  ');';
-                } else {
-                    body += 'this.' + mem.Name + ';';
-                }
-            }
-
-            if (checkUndefined) {
-                body += ' }';
-            }
-            body += '\n';
+      } else {
+        if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
+          body += prefix + 'jsonEncode' + mem.Type.Name + '(this.' + mem.Name + ');';
+        } else {
+          body += 'this.' + mem.Name + ';';
         }
+      }
 
-        body += ' return out;';
-
-        const enc = new ClassMethod('', null, 'toJSON',
-            null,
-            null,
-            body);
-        this.cls.addMethod(enc);
+      if (checkUndefined) {
+        body += ' }';
+      }
+      body += '\n';
     }
 
-    protected createJsonDecodeMethod(): void {
-        if (!this.cls || !this.cls.hasAnyMembers()) {
-            return;
-        }
-        let body = 'if (!inp) { return; }\n';
-        if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
-            body += '  super.fromJSON(inp);\n';
-        }
+    body += ' return out;';
 
-        for (const mem of this.cls.Members) {
-            let addIf = false;
-            const prefix = (mem.Type.ImportAs) ? (mem.Type.ImportAs + '.') : '';
-            if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
-                addIf = true;
-                body += '  if(inp.' + mem.OrigName + ') {\n ';
-            }
+    const enc = new ClassMethod('', null, 'toJSON', null, null, body);
+    this.cls.addMethod(enc);
+  }
 
-            body += '  this.' + mem.Name;
-            if (mem.IsArray) {
-                if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
-                    body +=  ' = ec.jsonDecodeArray( inp.' + mem.OrigName + ', ' + prefix + 'jsonDecode' + mem.Type.Name + ')';
-                } else if (mem.Type instanceof StructTypeFile) {
-                    body += ' = ec.jsonDecodeStructArray( inp.' + mem.OrigName + ',' +  mem.Type.Name + ')';
-                } else {
-                    body += ' = inp.' + mem.OrigName;
-                }
-                body += ';\n';
-            } else {
-                if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
-                    body += ' = ' + prefix + 'jsonDecode' + mem.Type.Name + '(inp.' + mem.OrigName + ');\n';
-                } else if (mem.Type instanceof StructTypeFile) {
-                        body += '.fromJSON(inp.' + mem.OrigName + ');\n';
-                } else {
-                    body += ' = inp.' + mem.OrigName + ';\n';
-                }
-
-            }
-
-            if (addIf) {
-                body += '  }\n';
-            }
-        }
-
-        const dec = new ClassMethod('', null, 'fromJSON',
-            [new ClassMember('inp')],
-            null,
-            body);
-        this.cls.addMethod(dec);
-
+  protected createJsonDecodeMethod(): void {
+    if (!this.cls || !this.cls.hasAnyMembers()) {
+      return;
     }
+    let body = 'if (!inp) { return; }\n';
+    if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
+      body += '  super.fromJSON(inp);\n';
+    }
+
+    for (const mem of this.cls.Members) {
+      let addIf = false;
+      const prefix = mem.Type.ImportAs ? mem.Type.ImportAs + '.' : '';
+      if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
+        addIf = true;
+        body += '  if(inp.' + mem.OrigName + ') {\n ';
+      }
+
+      body += '  this.' + mem.Name;
+      if (mem.IsArray) {
+        if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
+          body +=
+            ' = ec.jsonDecodeArray( inp.' +
+            mem.OrigName +
+            ', ' +
+            prefix +
+            'jsonDecode' +
+            mem.Type.Name +
+            ')';
+        } else if (mem.Type instanceof StructTypeFile) {
+          body += ' = ec.jsonDecodeStructArray( inp.' + mem.OrigName + ',' + mem.Type.Name + ')';
+        } else {
+          body += ' = inp.' + mem.OrigName;
+        }
+        body += ';\n';
+      } else {
+        if (mem.Type instanceof SimpleType && mem.Type.hasJsonEnDeCodeFunctions) {
+          body += ' = ' + prefix + 'jsonDecode' + mem.Type.Name + '(inp.' + mem.OrigName + ');\n';
+        } else if (mem.Type instanceof StructTypeFile) {
+          body += '.fromJSON(inp.' + mem.OrigName + ');\n';
+        } else {
+          body += ' = inp.' + mem.OrigName + ';\n';
+        }
+      }
+
+      if (addIf) {
+        body += '  }\n';
+      }
+    }
+
+    const dec = new ClassMethod('', null, 'fromJSON', [new ClassMember('inp')], null, body);
+    this.cls.addMethod(dec);
+  }
 }

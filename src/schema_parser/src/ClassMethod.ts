@@ -1,4 +1,4 @@
-/*import {ClassFile} from './ClassFile'
+/* import {ClassFile} from './ClassFile'
 import { ClassMember } from './ClassMember';
 */
 import {ClassMember, ClassFile} from './SchemaParser.module';
@@ -67,7 +67,7 @@ export class ClassMethod {
         return str;
     }
 
-    public getHeader(args ?: string): string {
+    public getHeader(args?: string): string {
         if (!this.name) {
             return '';
         }

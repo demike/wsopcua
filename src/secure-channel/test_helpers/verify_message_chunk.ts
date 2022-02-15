@@ -1,4 +1,4 @@
-// tslint:disable:no-console
+/* eslint-disable no-console */
 import { analyseExtensionObject } from '../../packet-analyzer';
 import { MessageSecurityMode } from '../../service-secure-channel';
 import { SecurityPolicy } from '..';

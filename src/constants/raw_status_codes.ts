@@ -6,9 +6,9 @@
     // this file has been automatically generated
     import { ConstantStatusCode, ModifiableStatusCode, ExtraStatusCodeBits } from '../basic-types/status_code';
 
-    // tslint:disable: max-line-length
-    // tslint:disable: quotemark
- export class StatusCodes  { 
+    /* eslint-disable max-len */
+    /* eslint-disable quotes,@typescript-eslint/quotes */
+ export class StatusCodes  {
  /** Good: No Error */
  static Good: ConstantStatusCode =  new ConstantStatusCode({ name: 'Good', value: 0, description: 'No Error' });
 /** The value is bad but no specific reason is known. */
@@ -505,3 +505,4 @@
  /** The operation could not be finished because all available connections are in use. */
   static BadMaxConnectionsReached: ConstantStatusCode = new ConstantStatusCode({ name: 'BadMaxConnectionsReached' , value: 0x80b70000  , description: "The operation could not be finished because all available connections are in use."});
 };
+

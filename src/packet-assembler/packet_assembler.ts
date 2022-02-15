@@ -29,7 +29,7 @@ export interface PacketAssemblerEvents {
     'message':  (messageChunk: DataView) => void;
 }
 
-/***
+/** *
  * @class PacketAssembler
  * @param options
  * @param options.readMessageFunc {Function} a function to read
@@ -44,7 +44,7 @@ export class PacketAssembler extends EventEmitter<PacketAssemblerEvents> {
     currentLength: number;
     expectedLength: number;
     protected _stack: DataView[];
-constructor (options: { readMessageFunc: ReadMessageFuncType; minimumSizeInBytes?: number; }) {
+constructor (options: { readMessageFunc: ReadMessageFuncType; minimumSizeInBytes?: number }) {
     super();
     this._stack = [];
     this.expectedLength = 0;

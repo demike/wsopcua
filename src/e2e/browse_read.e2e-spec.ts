@@ -74,7 +74,7 @@ describe('Browse-Read-Write Services', function () {
       referenceTypeId: coerceNodeId(bad_referenceid_node),
       browseDirection: BrowseDirection.Forward,
     };
-    session.browse(nodeToBrowse, function (err, browseResult /*, diagnosticInfos*/) {
+    session.browse(nodeToBrowse, function (err, browseResult /* , diagnosticInfos*/) {
       expect(Array.isArray(browseResult)).toBeTruthy();
       expect(browseResult.length).toBe(1);
       expect(browseResult[0] instanceof BrowseResult).toBeTruthy();
@@ -84,7 +84,7 @@ describe('Browse-Read-Write Services', function () {
   });
 
   it('T8-3 - should read a Variable', function (done) {
-    session.readVariableValue([RootFolderNodeId], function (err, dataValues /*, diagnosticInfos*/) {
+    session.readVariableValue([RootFolderNodeId], function (err, dataValues /* , diagnosticInfos*/) {
       if (!err) {
         expect(dataValues.length).toEqual(1);
         expect(dataValues[0] instanceof DataValue).toBeTruthy();
@@ -100,7 +100,7 @@ describe('Browse-Read-Write Services', function () {
       timestampsToReturn: TimestampsToReturn.Both,
     });
 
-    session.performMessageTransaction(request, function (err /*, response */) {
+    session.performMessageTransaction(request, function (err /* , response */) {
       //
       expect(err.message).toMatch(/BadNothingToDo/);
       done();
@@ -114,7 +114,7 @@ describe('Browse-Read-Write Services', function () {
       timestampsToReturn: TimestampsToReturn.Invalid,
     });
 
-    session.performMessageTransaction(request, function (err /*, response*/) {
+    session.performMessageTransaction(request, function (err /* , response*/) {
       //
       expect(err.message).toMatch(/BadTimestampsToReturnInvalid/);
       done();
@@ -175,7 +175,7 @@ describe('Browse-Read-Write Services', function () {
       nodesToRead: [],
     });
 
-    session.performMessageTransaction(readRequest, function (err /*, response*/) {
+    session.performMessageTransaction(readRequest, function (err /* , response*/) {
       if (err) {
         expect(err.message).toMatch(/BadNothingToDo/);
         done();
@@ -196,7 +196,7 @@ describe('Browse-Read-Write Services', function () {
     // make sure nodesToRead is really null !
     readRequest.nodesToRead = null;
 
-    session.performMessageTransaction(readRequest, function (err /*, response*/) {
+    session.performMessageTransaction(readRequest, function (err /* , response*/) {
       if (err) {
         expect(err.message).toMatch(/BadNothingToDo/);
         done();
@@ -226,7 +226,7 @@ describe('Browse-Read-Write Services', function () {
   it('T8-17 - #readVariableValue - should read the TemperatureTarget value', function (done) {
     session.readVariableValue([CurrentTimeVariableId], function (
       err,
-      dataValues /*, diagnosticInfos*/
+      dataValues /* , diagnosticInfos*/
     ) {
       if (!err) {
         expect(dataValues.length).toEqual(1);
@@ -244,7 +244,7 @@ describe('Browse-Read-Write Services', function () {
     session.writeSingleNode(
       CurrentTimeVariableId,
       new Variant({ dataType: DataType.UInt16, value: 3000 }),
-      function (err, statusCode /*,diagnosticInfo*/) {
+      function (err, statusCode /* ,diagnosticInfo*/) {
         if (!err) {
           expect(statusCode).toEqual(StatusCodes.Good);
           done();
@@ -266,16 +266,14 @@ describe('Browse-Read-Write Services', function () {
       },
     ];
 
-    session.browse(nodesToBrowse, function (err, browseResults /*,diagnosticInfos*/) {
+    session.browse(nodesToBrowse, function (err, browseResults /* ,diagnosticInfos*/) {
       if (!err) {
         expect(browseResults.length).toEqual(1);
         expect(browseResults[0] instanceof BrowseResult).toBeTruthy();
 
         // xx console.log(util.inspect(browseResults[0].references,{colors:true,depth:10}));
 
-        const foundNode = browseResults[0].references.filter((result) => {
-          return result.browseName.name === 'Server';
-        });
+        const foundNode = browseResults[0].references.filter((result) => result.browseName.name === 'Server');
         expect(foundNode.length).toEqual(1);
         expect(foundNode[0].browseName.name).toEqual('Server');
         expect(foundNode[0].nodeId.toString()).toEqual('ns=0;i=2253');
@@ -290,7 +288,7 @@ describe('Browse-Read-Write Services', function () {
     const server_NamespaceArray_Id = makeNodeId(/* VariableIds.Server_NamespaceArray */ 2255); // ns=0;i=2255
     session.readVariableValue(server_NamespaceArray_Id, function (
       err,
-      dataValue /*, diagnosticsInfo*/
+      dataValue /* , diagnosticsInfo*/
     ) {
       if (err) {
         return done.fail(err);
@@ -313,7 +311,7 @@ describe('Browse-Read-Write Services', function () {
     const server_NamespaceArray_Id = makeNodeId(/* VariableIds.Server_ServerStatus */ 2256);
     session.readVariableValue(server_NamespaceArray_Id, function (
       err,
-      dataValue /*, diagnosticsInfo*/
+      dataValue /* , diagnosticsInfo*/
     ) {
       if (err) {
         return done.fail(err);

@@ -72,7 +72,7 @@ export function makeStatusCode(
   return tmp;
 }
 
-// tslint:disable-next-line:forin
+// eslint-disable-next-line guard-for-in
 for (const code of Object.values(StatusCodes) as StatusCode[]) {
   statusCodesReversedMap[code.value] = code;
 }

@@ -1,7 +1,7 @@
 import { Variant, DataType, VariantArrayType } from '../variant';
 import { DeadbandType, check_deadband } from '.';
 
-/*global describe, it, require*/
+/* global describe, it, require*/
 
 
 describe('test DeadBand Checker', function() {

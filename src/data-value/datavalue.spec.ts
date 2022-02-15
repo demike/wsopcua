@@ -45,7 +45,7 @@ describe('DataValue', function () {
   it('should create a empty DataValue and encode it as a 1-Byte length block', function () {
     const dataValue = new DataValue();
 
-    encode_decode_round_trip_test(dataValue, function (buffer /*, id*/) {
+    encode_decode_round_trip_test(dataValue, function (buffer /* , id*/) {
       expect(buffer.byteLength).toBe(1);
     });
   });
@@ -54,7 +54,7 @@ describe('DataValue', function () {
     const dataValue = new DataValue({
       value: new Variant({ dataType: DataType.String, value: 'Hello' }),
     });
-    encode_decode_round_trip_test(dataValue, function (buffer /*, id*/) {
+    encode_decode_round_trip_test(dataValue, function (buffer /* , id*/) {
       expect(buffer.byteLength).toBe(1 + 1 + 4 + 5);
     });
   });
@@ -68,7 +68,7 @@ describe('DataValue', function () {
       sourcePicoseconds: 25000, // 25 nano
     });
     // xx var str = dataValue.toString();
-    encode_decode_round_trip_test(dataValue, function (/*buffer, id*/) {});
+    encode_decode_round_trip_test(dataValue, function (/* buffer, id*/) {});
   });
 
   it('should create a DataValue with string variant and all dates and encode/decode it nicely', function () {
@@ -80,7 +80,7 @@ describe('DataValue', function () {
       sourceTimestamp: new Date(Date.UTC(2018, 1, 23, 18, 54, 12, 345)),
       sourcePicoseconds: 12345, // 670
     });
-    encode_decode_round_trip_test(dataValue, function (/*buffer, id*/) {});
+    encode_decode_round_trip_test(dataValue, function (/* buffer, id*/) {});
   });
   /*
     it("DataValue#toString", function () {

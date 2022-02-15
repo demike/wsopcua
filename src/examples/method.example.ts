@@ -9,7 +9,7 @@ export async function methodExample(session: ClientSession) {
     ObjectWithMethods.MethoIO(1);
 
     For detailed information take a look at the "method service set" documentation
-    https://reference.opcfoundation.org/v104/Core/docs/Part4/5.11.2/ 
+    https://reference.opcfoundation.org/v104/Core/docs/Part4/5.11.2/
   */
 
   const response = await session.callP([

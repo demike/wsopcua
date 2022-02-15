@@ -87,7 +87,7 @@ import { enocdeLocalizedText, coerceLocalizedText } from '../data-model/localize
 import { ITypeSchema, TypeSchema } from './type_schema';
 import { DataStream } from '../basic-types/DataStream';
 
-export let minDate = new Date(Date.UTC(1601, 0, 1, 0, 0));
+export const minDate = new Date(Date.UTC(1601, 0, 1, 0, 0));
 
 function encodeNull(value: any, stream: DataStream): void {}
 
@@ -314,7 +314,7 @@ export function findSimpleType(name: string) {
 }
 
 // populate the default type map
-export let _defaultTypeMap: { [key: string]: TypeSchema } = {};
+export const _defaultTypeMap: { [key: string]: TypeSchema } = {};
 for (const t of _defaultType) {
   registerType(t);
 }

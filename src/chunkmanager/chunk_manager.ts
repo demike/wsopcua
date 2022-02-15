@@ -258,7 +258,7 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
     // --- lock the write until, and keep the requests in order ----
     const oldLock = this.writeLock;
     let releaseLock: () => void;
-    let currentLock = (this.writeLock = new Promise((resolve) => {
+    const currentLock = (this.writeLock = new Promise((resolve) => {
       releaseLock = resolve;
     }));
     if (oldLock) {
@@ -355,7 +355,7 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
     this.dataEnd = this.dataOffset + this.cursor;
     // calculate the expected length of the chunk, once encrypted if encryption apply
     const expected_length = this.dataEnd + this.signatureLength + extra_encryption_bytes;
-    this.pending_chunk = this.chunk!.subarray(0, expected_length);
+    this.pending_chunk = this.chunk.subarray(0, expected_length);
     // note :
     //  - this.pending_chunk has the correct size but is not signed nor encrypted yet
     //    as we don't know what to write in the header yet

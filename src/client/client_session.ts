@@ -173,7 +173,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   serverCertificate?: Uint8Array;
   serverNonce: Uint8Array;
   serverSignature: SignatureData;
-  authenticationToken: NodeId /*| ExpandedNodeId*/;
+  authenticationToken: NodeId /* | ExpandedNodeId*/;
   sessionId: any;
   name: any;
   protected _closeEventHasBeenEmmitted: boolean;
@@ -304,6 +304,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       (<any>nodesToBrowse) = [nodesToBrowse];
     }
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     nodesToBrowse = (<any>nodesToBrowse).map(ClientSession.coerceBrowseDescription);
 
     const request = new browse_service.BrowseRequest({
@@ -783,10 +784,9 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
     this.readHistoryValue(nodes as string[], details, (error, value, diagnosticInfos) => {
       if (isArr) {
-        (callback as ResponseCallback<
-          historizing_service.HistoryReadRawResult[],
-          DiagnosticInfo[]
-        >)(error, value as historizing_service.HistoryReadRawResult[], diagnosticInfos);
+        (
+          callback as ResponseCallback<historizing_service.HistoryReadRawResult[], DiagnosticInfo[]>
+        )(error, value as historizing_service.HistoryReadRawResult[], diagnosticInfos);
       } else {
         (callback as ResponseCallback<historizing_service.HistoryReadRawResult, DiagnosticInfo>)(
           error,
@@ -962,7 +962,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res(status!);
+          res(status);
         }
       });
     });
@@ -1015,7 +1015,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res({ status: status!, diagnosticInfos });
+          res({ status: status, diagnosticInfos });
         }
       });
     });
@@ -1110,7 +1110,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       }
     }
 
-    this.read(nodesToRead, 0, (err: Error, dataValues: DataValue[] /*, diagnosticInfos */) => {
+    this.read(nodesToRead, 0, (err: Error, dataValues: DataValue[] /* , diagnosticInfos */) => {
       if (err) {
         return callback(err);
       }
@@ -1193,7 +1193,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     maxAge: number,
     callback: ResponseCallback<any, any>
   ) {
-    if (maxAge == undefined) {
+    if (maxAge == null) {
       maxAge = 0;
     }
 
@@ -1427,7 +1427,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res(response!);
+          res(response);
         }
       });
     });
@@ -1461,7 +1461,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res(response!);
+          res(response);
         }
       });
     });
@@ -1563,7 +1563,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res(response!);
+          res(response);
         }
       });
     });
@@ -1588,7 +1588,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res(response!);
+          res(response);
         }
       });
     });
@@ -1736,7 +1736,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res(response!);
+          res(response);
         }
       });
     });
@@ -1807,7 +1807,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res(response!);
+          res(response);
         }
       });
     });
@@ -2001,7 +2001,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res({ result: result!, diagnosticInfo });
+          res({ result: result, diagnosticInfo });
         }
       });
     });
@@ -2200,7 +2200,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res(response!);
+          res(response);
         }
       });
     });
@@ -2270,7 +2270,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res(response!);
+          res(response);
         }
       });
     });
@@ -2415,7 +2415,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
           new Error('cannot read DataType Attribute ' + dataValue.statusCode.toString())
         );
       }
-      const dataTypeId: NodeId = dataValue.value!.value;
+      const dataTypeId: NodeId = dataValue.value.value;
       assert(dataTypeId instanceof NodeId);
       this.__findBasicDataType(session, dataTypeId, callback);
     });
@@ -2426,7 +2426,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res(dataType!);
+          res(dataType);
         }
       });
     });
@@ -2448,7 +2448,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   public readNamespaceArray(callback: ResponseCallback<string[]>) {
     this.read(
       new read_service.ReadValueId({
-        nodeId: new NodeId(NodeIdType.Numeric, /*VariableIds.Server_NamespaceArray*/ 2255, 0),
+        nodeId: new NodeId(NodeIdType.Numeric, /* VariableIds.Server_NamespaceArray*/ 2255, 0),
         // resolveNodeId('Server_NamespaceArray'),
         attributeId: AttributeIds.Value,
       }),
@@ -2465,8 +2465,8 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (dataValue.statusCode && dataValue.statusCode !== StatusCodes.Good) {
           return callback(new Error('readNamespaceArray : ' + dataValue.statusCode.toString()));
         }
-        assert(dataValue.value!.value instanceof Array);
-        this._namespaceArray = dataValue.value!.value; // keep a cache
+        assert(dataValue.value.value instanceof Array);
+        this._namespaceArray = dataValue.value.value; // keep a cache
         callback(null, this._namespaceArray);
       }
     );
@@ -2477,7 +2477,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res(nsarray!);
+          res(nsarray);
         }
       });
     });
@@ -2485,7 +2485,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
   public getNamespaceIndex(namespaceUri: string) {
     assert(this._namespaceArray, 'please make sure that readNamespaceArray has been called');
-    return this._namespaceArray!.indexOf(namespaceUri);
+    return this._namespaceArray.indexOf(namespaceUri);
   }
 
   /**

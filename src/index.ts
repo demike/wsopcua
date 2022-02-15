@@ -1,12 +1,12 @@
 // ---------------------------------------------------------------------------------------------------------------------
 // Common
 // ---------------------------------------------------------------------------------------------------------------------
-export { NodeId, resolveNodeId, makeNodeId, coerceNodeId /*sameNodeId*/ } from './nodeid/nodeid';
+export { NodeId, resolveNodeId, makeNodeId, coerceNodeId /* sameNodeId*/ } from './nodeid/nodeid';
 export { NodeIdType } from './generated';
 
 export {
   ExpandedNodeId,
-  makeExpandedNodeId /*,coerceExpandedNodeId*/,
+  makeExpandedNodeId /* ,coerceExpandedNodeId*/,
 } from './nodeid/expanded_nodeid';
 
 export { StatusCodes } from './constants/raw_status_codes';
@@ -34,7 +34,7 @@ export { AttributeIds } from './constants/AttributeIds';
 // not used? module.exports.AttributeNameById   = require("node-opcua-data-model").AttributeNameById;
 // generated module.exports.BrowseDirection     = require("node-opcua-data-model").BrowseDirection;
 
-export { /*VariableTypeIds, ObjectTypeIds,*/ DataTypeIds, ReferenceTypeIds } from './constants';
+export { /* VariableTypeIds, ObjectTypeIds,*/ DataTypeIds, ReferenceTypeIds } from './constants';
 // is it really necessary to export all these ids?
 // export {VariableIds, MethodIds, ObjectIds} from './constants/opcua_node_ids';
 

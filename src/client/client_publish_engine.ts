@@ -347,7 +347,7 @@ export class ClientSidePublishEngine {
     return Object.keys(this.subscriptionMap).map(parseInt);
   }
 
-  /***
+  /** *
    * get the client subscription from Id
    * @method getSubscription
    * @param subscriptionId {Number} the subscription Id

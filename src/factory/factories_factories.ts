@@ -45,7 +45,7 @@ export function callConstructor(constructor: Function) {
 }
 
 export function getConstructor(expandedId: NodeId) {
-  if (!(expandedId && (expandedId.value as any) /*.toString()*/ in constructorMap)) {
+  if (!(expandedId && (expandedId.value as any) /* .toString()*/ in constructorMap)) {
     console.log('#getConstructor : cannot find constructor for expandedId ', expandedId.toString());
     return null;
   }
@@ -80,7 +80,7 @@ export function register_class_definition(
   registerFactory(classname, class_constructor);
 
   /* istanbul ignore next */
-  if ((nodeId.value as any) /*.toString()*/ in constructorMap) {
+  if ((nodeId.value as any) /* .toString()*/ in constructorMap) {
     throw new Error(
       ' Class ' +
         classname +

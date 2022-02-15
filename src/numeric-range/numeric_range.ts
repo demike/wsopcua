@@ -178,7 +178,7 @@ function _construct_from_string(self: NumericRange, value: string) {
 }
 
 function _construct_from_values(self: NumericRange, value: number, second_value?: number) {
-  if (second_value === void 0.0 /*is undefined*/) {
+  if (second_value === void 0.0 /* is undefined*/) {
     (<any>self)._set_single_value(value);
   } else {
     if (!Number.isFinite(second_value)) {
@@ -596,7 +596,7 @@ function assert_array_or_buffer(array: any) {
   assert(
     Array.isArray(array) ||
       array instanceof ArrayBuffer ||
-      array.buffer instanceof ArrayBuffer /*|| array instanceof Buffer*/
+      array.buffer instanceof ArrayBuffer /* || array instanceof Buffer*/
   );
 }
 

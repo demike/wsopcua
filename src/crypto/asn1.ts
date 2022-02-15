@@ -48,7 +48,7 @@ export function readTag(arbuf: Uint8Array, pos: number): BlockInfo {
   let length = arbuf[pos];
   pos += 1;
 
-  // tslint:disable:no-bitwise
+  /* eslint-disable no-bitwise */
   if (length > 127) {
     const nbBytes = length & 0x7f;
     length = 0;
@@ -160,9 +160,7 @@ export function _readIntegerAsByteString(buffer: Uint8Array, block: BlockInfo): 
 export function _readListOfInteger(buffer: Uint8Array): Uint8Array[] {
   const block = readTag(buffer, 0);
   const inner_blocks = _readStruct(buffer, block);
-  return inner_blocks.map((bblock: BlockInfo) => {
-    return _readIntegerAsByteString(buffer, bblock);
-  });
+  return inner_blocks.map((bblock: BlockInfo) => _readIntegerAsByteString(buffer, bblock));
 }
 
 function parseOID(buffer: Uint8Array, start: number, end: number): string {
@@ -174,12 +172,12 @@ function parseOID(buffer: Uint8Array, start: number, end: number): string {
   for (let i = start; i < end; ++i) {
     const v = buffer[i];
 
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     n = n * 128 + (v & 0x7f);
     bits += 7;
 
     // noinspection JSBitwiseOperatorUsage
-    // tslint:disable-next-line: no-bitwise
+    // eslint-disable-next-line no-bitwise
     if (!(v & 0x80)) {
       // finished
       if (s === '') {
@@ -268,7 +266,7 @@ export function _readBooleanValue(buffer: Uint8Array, block: BlockInfo): boolean
   const nbBytes = block.length;
   assert(nbBytes < 4);
   const value = buffer[pos] ? true : false;
-  return value as boolean;
+  return value ;
 }
 
 export function _readVersionValue(buffer: Uint8Array, block: BlockInfo): number {
@@ -372,7 +370,7 @@ export function _readValue(buffer: Uint8Array, block: BlockInfo): any {
       return convertGeneralizedTime(buf2string(_getBlock(buffer, block)));
     default:
       throw new Error('Invalid tag 0x' + block.tag.toString(16) + '');
-    //xx return " ??? <" + block.tag + ">";
+    // xx return " ??? <" + block.tag + ">";
   }
 }
 

@@ -29,7 +29,7 @@ import { DerivedKeys, PrivateKey } from '../crypto';
 
 const decodeStatusCode = ec.decodeStatusCode;
 
-export let doTraceChunk = false;
+export const doTraceChunk = false;
 
 export class MessageBuilder extends MessageBuilderBase {
   protected _tokenStack: {
@@ -148,7 +148,7 @@ export class MessageBuilder extends MessageBuilderBase {
     // xx assert(this.securityMode !== MessageSecurityMode.INVALID);
 
     const asymmetricAlgorithmSecurityHeader = this
-      ._securityHeader! as AsymmetricAlgorithmSecurityHeader;
+      ._securityHeader as AsymmetricAlgorithmSecurityHeader;
 
     if (doDebug) {
       debugLog('securityHeader', JSON.stringify(this._securityHeader, null, ' '));
@@ -220,7 +220,7 @@ export class MessageBuilder extends MessageBuilderBase {
         signatureLength === 512
     );
 
-    const chunk = binaryStream.getUint8ArrayWithoutAdvancingPositionPointer(0); //new Uint8Array(binaryStream.view.buffer, binaryStream.view.byteOffset);
+    const chunk = binaryStream.getUint8ArrayWithoutAdvancingPositionPointer(0); // new Uint8Array(binaryStream.view.buffer, binaryStream.view.byteOffset);
 
     const signatureIsOK = await this._cryptoFactory.asymmetricVerifyChunk(
       chunk,
@@ -288,7 +288,7 @@ export class MessageBuilder extends MessageBuilderBase {
 
     // Check  security token
     // securityToken may have been renewed
-    var securityTokenData = this._select_matching_token(
+    const securityTokenData = this._select_matching_token(
       (this._securityHeader as SymmetricAlgorithmSecurityHeader).tokenId
     );
     if (!securityTokenData) {
@@ -319,7 +319,7 @@ export class MessageBuilder extends MessageBuilderBase {
     assert(derivedKeys.signatureLength, ' must provide a signature length');
 
     if (this.securityMode === MessageSecurityMode.SignAndEncrypt) {
-      var decryptedBuffer = await crypto_utils.decryptBufferWithDerivedKeys(buf, derivedKeys);
+      const decryptedBuffer = await crypto_utils.decryptBufferWithDerivedKeys(buf, derivedKeys);
 
       // replace decrypted buffer in initial buffer
       buf.set(decryptedBuffer);
@@ -343,7 +343,7 @@ export class MessageBuilder extends MessageBuilderBase {
     // now check signature ....
     const chunk = binaryStream.getUint8ArrayWithoutAdvancingPositionPointer(0);
 
-    var signatureIsOK = crypto_utils.verifyChunkSignatureWithDerivedKeys(chunk, derivedKeys);
+    const signatureIsOK = crypto_utils.verifyChunkSignatureWithDerivedKeys(chunk, derivedKeys);
     if (!signatureIsOK) {
       this._report_error('SIGN and ENCRYPT : Invalid packet signature');
       return false;
@@ -369,7 +369,7 @@ export class MessageBuilder extends MessageBuilderBase {
       return true;
     }
 
-    var msgType = this.messageHeader.msgType;
+    const msgType = this.messageHeader.msgType;
 
     // check if security is active or not
     if (this._securityPolicy === SecurityPolicy.None) {
@@ -476,7 +476,7 @@ export class MessageBuilder extends MessageBuilderBase {
 
   protected _safe_decode_message_body(
     full_message_body: ArrayBuffer,
-    objMessage: any /*ExtensionObject*/,
+    objMessage: any /* ExtensionObject*/,
     binaryStream: DataStream
   ) {
     try {

@@ -102,7 +102,7 @@ export function randomNodeId() {
 function _encodeNodeId(encoding_byte: number, nodeId: NodeId, stream: DataStream) {
   stream.setUint8(encoding_byte); // encoding byte
 
-  // tslint:disable-next-line:no-bitwise
+  // eslint-disable-next-line no-bitwise
   encoding_byte &= 0x3f;
 
   switch (encoding_byte) {
@@ -135,7 +135,7 @@ function _encodeNodeId(encoding_byte: number, nodeId: NodeId, stream: DataStream
 
 export function encodeNodeId(nodeId: NodeId, stream: DataStream) {
   let encoding_byte = nodeID_encodingByte(nodeId);
-  // tslint:disable-next-line:no-bitwise
+  // eslint-disable-next-line no-bitwise
   encoding_byte &= 0x3f;
   _encodeNodeId(encoding_byte, nodeId, stream);
 }
@@ -164,7 +164,7 @@ const _decodeNodeId = function (
   createExpandedNodeId: boolean = false
 ): NodeId | ExpandedNodeId {
   let value, namespace, nodeIdType;
-  // tslint:disable-next-line:no-bitwise
+  // eslint-disable-next-line no-bitwise
   encoding_byte &= 0x3f; // 1 to 5
 
   switch (encoding_byte) {
@@ -194,7 +194,7 @@ const _decodeNodeId = function (
       break;
     default:
       if (encoding_byte !== EnumNodeIdEncoding.Guid) {
-        // tslint:disable-next-line:no-bitwise
+        // eslint-disable-next-line no-bitwise
         console.log(
           ' encoding_byte = 0x' + encoding_byte.toString(16),
           ' bin=',
@@ -267,7 +267,7 @@ export function jsonDecodeNodeId(id: any) {
 
 export function jsonEncodeExpandedNodeId(id: ExpandedNodeId) {
   const out = jsonEncodeNodeId(id);
-  if (id.namespace <= 0 /*!== 1*/ && id.namespaceUri) {
+  if (id.namespace <= 0 /* !== 1*/ && id.namespaceUri) {
     out.Namespace = id.namespaceUri;
   }
 
