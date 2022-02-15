@@ -928,4 +928,3 @@ export function generateSignKeyFromDER(
       return key;
     });
 }
-

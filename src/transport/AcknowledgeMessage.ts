@@ -1,7 +1,6 @@
 // --------- This code has been automatically generated !!! 2018-02-08T10:26:02.549Z
 'use strict';
 
-
 import * as ec from '../basic-types';
 
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
@@ -13,7 +12,6 @@ import { register_class_definition } from '../factory/factories_factories';
 import { DataStream } from '../basic-types/DataStream';
 import { UInt32 } from '../basic-types';
 
-
 const encode_UInt32 = ec.encodeUInt32;
 const decode_UInt32 = ec.decodeUInt32;
 
@@ -23,7 +21,6 @@ export interface IAcknowledgeMessage {
   sendBufferSize?: UInt32;
   maxMessageSize?: UInt32;
   maxChunkCount?: UInt32;
-
 }
 
 /**
@@ -44,38 +41,38 @@ export class AcknowledgeMessage extends BaseUAObject {
     /* istanbul ignore next */
 
     /**
-      * The latest version of the OPC UA TCP protocol supported by the Server.
-      * @property protocolVersion
-      * @type {UInt32}
-      */
+     * The latest version of the OPC UA TCP protocol supported by the Server.
+     * @property protocolVersion
+     * @type {UInt32}
+     */
     this.protocolVersion = options.protocolVersion;
 
     /**
-      *
-      * @property receiveBufferSize
-      * @type {UInt32}
-      */
+     *
+     * @property receiveBufferSize
+     * @type {UInt32}
+     */
     this.receiveBufferSize = options.receiveBufferSize;
 
     /**
-      *
-      * @property sendBufferSize
-      * @type {UInt32}
-      */
+     *
+     * @property sendBufferSize
+     * @type {UInt32}
+     */
     this.sendBufferSize = options.sendBufferSize;
 
     /**
-      * The maximum size for any request message.
-      * @property maxMessageSize
-      * @type {UInt32}
-      */
+     * The maximum size for any request message.
+     * @property maxMessageSize
+     * @type {UInt32}
+     */
     this.maxMessageSize = options.maxMessageSize;
 
     /**
-      * The maximum number of chunks in any request message.
-      * @property maxChunkCount
-      * @type {UInt32}
-      */
+     * The maximum number of chunks in any request message.
+     * @property maxChunkCount
+     * @type {UInt32}
+     */
     this.maxChunkCount = options.maxChunkCount;
 
     // Object.preventExtensions(self);
@@ -142,8 +139,10 @@ export class AcknowledgeMessage extends BaseUAObject {
     this.maxMessageSize = json.MaxMessageSize;
     this.maxChunkCount = json.MaxChunkCount;
   }
-
 }
 
-
-register_class_definition('AcknowledgeMessage', AcknowledgeMessage, makeExpandedNodeId(generate_new_id(), 0));
+register_class_definition(
+  'AcknowledgeMessage',
+  AcknowledgeMessage,
+  makeExpandedNodeId(generate_new_id(), 0)
+);

@@ -302,9 +302,8 @@ export class BSDSchemaParser {
     for (const file of ar) {
       if (!file.Written) {
         if (!this.importConfig.readonly) {
-          let arParams = this.metaTypeMap[/* "DataType"*/ 'Object'][
-            file.Name + '_Encoding_DefaultBinary'
-          ];
+          let arParams =
+            this.metaTypeMap[/* "DataType"*/ 'Object'][file.Name + '_Encoding_DefaultBinary'];
           if (!arParams) {
             arParams = this.metaTypeMap['DataType'][file.Name];
           }

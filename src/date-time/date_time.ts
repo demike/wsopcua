@@ -1,25 +1,23 @@
 'use strict';
-import {assert} from '../assert';
+import { assert } from '../assert';
 
 export function offset_factor_1601() {
+  const utc1600 = new Date(Date.UTC(1601, 0, 1, 0, 0, 0));
+  const t1600 = utc1600.getTime();
 
-    const utc1600 = new Date(Date.UTC(1601, 0, 1, 0, 0, 0));
-    const t1600 = utc1600.getTime();
+  const utc1600_plus_one_day = new Date(Date.UTC(1601, 0, 2, 0, 0, 0));
+  const t1600_1d = utc1600_plus_one_day.getTime();
 
-    const utc1600_plus_one_day = new Date(Date.UTC(1601, 0, 2, 0, 0, 0));
-    const t1600_1d = utc1600_plus_one_day.getTime();
+  const _factor = (24 * 60 * 60 * 1000 * 10000) / (t1600_1d - t1600);
 
-    const _factor = (24 * 60 * 60 * 1000) * 10000 / (t1600_1d - t1600);
+  const utc1970 = new Date(Date.UTC(1970, 0, 1, 0, 0, 0));
+  const t1970 = utc1970.getTime();
 
-    const utc1970 = new Date(Date.UTC(1970, 0, 1, 0, 0, 0));
-    const t1970 = utc1970.getTime();
+  const offsetToGregorianCalendarZero = -t1600 + t1970;
 
-    const offsetToGregorianCalendarZero = -t1600 + t1970;
-
-    assert(_factor === 10000);
-    assert(offsetToGregorianCalendarZero === 11644473600000);
-    return [offsetToGregorianCalendarZero, _factor];
-
+  assert(_factor === 10000);
+  assert(offsetToGregorianCalendarZero === 11644473600000);
+  return [offsetToGregorianCalendarZero, _factor];
 }
 
 const [offset, factor] = offset_factor_1601();
@@ -30,7 +28,7 @@ const B = offset * A;
 const oh = Math.floor(offset / F);
 const ol = offset % F;
 const fl = factor % F;
-const F_div_factor = (F / factor);
+const F_div_factor = F / factor;
 
 // Extracted from OpcUA Spec v1.02 : part 6:
 //
@@ -72,94 +70,96 @@ const F_div_factor = (F / factor);
  * @returns {[high,low]}
  */
 export function bn_dateToHundredNanoSecondFrom1601_fast(date: Date): number[] {
-    assert(date instanceof Date);
-    if ((<any>date).high_low) {
-         return (<any>date).high_low;
-    }
+  assert(date instanceof Date);
+  if ((<any>date).high_low) {
+    return (<any>date).high_low;
+  }
 
-    // note : The value returned by the getTime method is the number
-    //        of milliseconds since 1 January 1970 00:00:00 UTC.
-    //
-    const t = date.getTime(); // number of milliseconds since since 1 January 1970 00:00:00 UTC.
+  // note : The value returned by the getTime method is the number
+  //        of milliseconds since 1 January 1970 00:00:00 UTC.
+  //
+  const t = date.getTime(); // number of milliseconds since since 1 January 1970 00:00:00 UTC.
 
-    // Note:
-    // The number of 100-nano since 1 Jan 1601 is given by the formula :
-    //
-    //           value_64 = (t + offset ) * factor;
-    //
-    // However this number is too large and shall be converted to a 64 bits integer
-    //
-    // Let say that value_64 = (value_h * 0xFFFFFFFF ) + value_l, where value_h and value_l are two 32bits integers.
-    //
-    //  Let say F = 0x100000000
-    //  (value_h * F ) + value_l =  (t+ offset)*factor;
-    //
-    //  value_h =  (t+ offset)*factor // F;
-    //  value_l =  (t+ offset)*factor %  F;
-    //
-    //  value_h =  floor(t * factor / F + offset*factor / F)
-    //             floor(t * A                    + B)
-    //
-    //  value_l = ((t % F + offset % F) * (factor % F) )% F
-    //  value_l = ((t % F + ol        ) * fl           )% F
+  // Note:
+  // The number of 100-nano since 1 Jan 1601 is given by the formula :
+  //
+  //           value_64 = (t + offset ) * factor;
+  //
+  // However this number is too large and shall be converted to a 64 bits integer
+  //
+  // Let say that value_64 = (value_h * 0xFFFFFFFF ) + value_l, where value_h and value_l are two 32bits integers.
+  //
+  //  Let say F = 0x100000000
+  //  (value_h * F ) + value_l =  (t+ offset)*factor;
+  //
+  //  value_h =  (t+ offset)*factor // F;
+  //  value_l =  (t+ offset)*factor %  F;
+  //
+  //  value_h =  floor(t * factor / F + offset*factor / F)
+  //             floor(t * A                    + B)
+  //
+  //  value_l = ((t % F + offset % F) * (factor % F) )% F
+  //  value_l = ((t % F + ol        ) * fl           )% F
 
-    const value_h = Math.floor(t * A + B);
-    let value_l = ((t % F + ol) * fl) % F;
-    value_l = (value_l + F) % F;
-    const high_low = [value_h, value_l];
-    (<any>date).high_low = high_low;
-    return high_low;
+  const value_h = Math.floor(t * A + B);
+  let value_l = (((t % F) + ol) * fl) % F;
+  value_l = (value_l + F) % F;
+  const high_low = [value_h, value_l];
+  (<any>date).high_low = high_low;
+  return high_low;
 }
 
 export function bn_hundredNanoSecondFrom1601ToDate_fast(high: number, low: number) {
-    // xx assert(_.isFinite(high), _.isFinite(low));
+  // xx assert(_.isFinite(high), _.isFinite(low));
 
-    //   (h * F + l)/f    - o=
-    //    h / f * F + l/f - o=
-    //
-    //    h   = ((h div f)* f + h % f)
-    //    h/f =     (h div f)   + (h % f) /f
-    //    h/f * F = (h div f)*F + (h % f) * F/f
-    //    o = oh * F + ol
-    const value1 = (Math.floor(high / factor) - oh) * F + Math.floor((high % factor) * F_div_factor + low / factor) - ol;
-    const date = new Date(value1);
+  //   (h * F + l)/f    - o=
+  //    h / f * F + l/f - o=
+  //
+  //    h   = ((h div f)* f + h % f)
+  //    h/f =     (h div f)   + (h % f) /f
+  //    h/f * F = (h div f)*F + (h % f) * F/f
+  //    o = oh * F + ol
+  const value1 =
+    (Math.floor(high / factor) - oh) * F +
+    Math.floor((high % factor) * F_div_factor + low / factor) -
+    ol;
+  const date = new Date(value1);
 
-    // enrich the date
-    (<any>date).high_low = [high, low];
-    // xxObject.defineProperty(date, "high_low", {
-    // xx    get: function () {
-    // xx        return [high, low];
-    // xx    }, enumerable: false
-    // xx});
+  // enrich the date
+  (<any>date).high_low = [high, low];
+  // xxObject.defineProperty(date, "high_low", {
+  // xx    get: function () {
+  // xx        return [high, low];
+  // xx    }, enumerable: false
+  // xx});
 
-    return date;
+  return date;
 }
-
 
 let last_now_date: Date = null;
 let last_picoseconds = 0;
 
 export function getCurrentClock() {
-    const now = new Date();
-    if (last_now_date && now.getTime() === last_now_date.getTime()) {
-        last_picoseconds += 1;
-    } else {
-        last_picoseconds = 1;
-        last_now_date = now;
-    }
-    return {
-        timestamp: last_now_date,
-        picoseconds: last_picoseconds
-    };
+  const now = new Date();
+  if (last_now_date && now.getTime() === last_now_date.getTime()) {
+    last_picoseconds += 1;
+  } else {
+    last_picoseconds = 1;
+    last_now_date = now;
+  }
+  return {
+    timestamp: last_now_date,
+    picoseconds: last_picoseconds,
+  };
 }
 
-export function coerceClock(timestamp: Date , picoseconds: number) {
-    if (timestamp) {
-        return {
-            timestamp: timestamp,
-            picoseconds: picoseconds
-        };
-    } else {
-        return getCurrentClock();
-    }
+export function coerceClock(timestamp: Date, picoseconds: number) {
+  if (timestamp) {
+    return {
+      timestamp: timestamp,
+      picoseconds: picoseconds,
+    };
+  } else {
+    return getCurrentClock();
+  }
 }

@@ -505,9 +505,9 @@ function extract_array_range<U, T extends ArrayLike<U> | ArrayBuffer>(
 
   if (low_index >= arrayLength) {
     if (typeof array === 'string') {
-      return { array: ('' as any) as T, statusCode: StatusCodes.BadIndexRangeNoData as StatusCode };
+      return { array: '' as any as T, statusCode: StatusCodes.BadIndexRangeNoData as StatusCode };
     }
-    return { array: ([] as any) as T, statusCode: StatusCodes.BadIndexRangeNoData as StatusCode };
+    return { array: [] as any as T, statusCode: StatusCodes.BadIndexRangeNoData as StatusCode };
   }
   // clamp high index
   high_index = Math.min(high_index, arrayLength - 1);

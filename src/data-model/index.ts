@@ -1,7 +1,3 @@
-
-
-
-
 // coerceLocalizedText: require("./src/localized_text").coerceLocalizedText,
 export { LocalizedText } from '../generated/LocalizedText';
 
@@ -29,10 +25,8 @@ export { BrowseResultMask } from '../generated/BrowseResultMask';
 
 export { BrowseDirection } from '../generated/BrowseDirection';
 
-
 // AccessLevelFlag: require("./src/access_level").AccessLevelFlag,
 // makeAccessLevel: require("./src/access_level").makeAccessLevel,
-
 
 // is_dataEncoding:require("./src/data_encoding").is_dataEncoding,
 // is_valid_dataEncoding:require("./src/data_encoding").is_valid_dataEncoding,
@@ -41,7 +35,4 @@ export { EnumValueType } from '../generated/EnumValueType';
 export { AttributeWriteMask } from '../generated/AttributeWriteMask';
 export { TimeZoneDataType } from '../generated/TimeZoneDataType';
 
-export {coerceLocalizedText} from './localized_text_util';
-
-
-
+export { coerceLocalizedText } from './localized_text_util';

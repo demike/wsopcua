@@ -9,6 +9,6 @@
  * @private
  */
 export function getRandomInt(min: number, max: number) {
-    // note : Math.random() returns a random number between 0 (inclusive) and 1 (exclusive):
-    return Math.floor(Math.random() * (max - min)) + min;
+  // note : Math.random() returns a random number between 0 (inclusive) and 1 (exclusive):
+  return Math.floor(Math.random() * (max - min)) + min;
 }

@@ -1,25 +1,22 @@
 import { ObjectRegistry } from './objectRegistry';
 
+describe('testing ObjectRegistry', function () {
+  const registry = new ObjectRegistry();
 
-describe('testing ObjectRegistry', function() {
+  it('should register and unregister an object', function () {
+    const myObj = {
+      name: 'HelloWorld',
+    };
 
-    const registry = new ObjectRegistry();
+    registry.register(myObj);
 
-    it('should register and unregister an object', function() {
+    console.log(registry.toString());
 
-        const myObj = {
-            name: 'HelloWorld'
-        };
+    expect(registry.count()).toBe(1);
 
-        registry.register(myObj);
+    registry.unregister(myObj);
+    expect(registry.count()).toBe(0);
 
-        console.log(registry.toString());
-
-        expect(registry.count()).toBe(1);
-
-        registry.unregister(myObj);
-       expect(registry.count()).toBe(0);
-
-        console.log(registry.toString());
-    });
+    console.log(registry.toString());
+  });
 });

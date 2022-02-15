@@ -225,7 +225,8 @@ export interface ClientSecureChannelLayerOptions {
  */
 export class ClientSecureChannelLayer
   extends EventEmitter<ClientSecureChannelLayerEvents>
-  implements ITransactionStats {
+  implements ITransactionStats
+{
   _receiverPublicKey?: CryptoKey;
   /**
    * true if the secure channel is trying to establish the connection with the server. In this case, the client

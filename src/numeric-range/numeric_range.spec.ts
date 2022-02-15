@@ -562,17 +562,7 @@ describe('Testing numerical range', function () {
     it('S3 - should replace a single element when numeric range is a simple range', function () {
       const nr = new NumericRange('4:6');
       expect(nr.set_values(array, [40, 50, 60]).array).toEqual([
-        0,
-        1,
-        2,
-        3,
-        40,
-        50,
-        60,
-        7,
-        8,
-        9,
-        10,
+        0, 1, 2, 3, 40, 50, 60, 7, 8, 9, 10,
       ]);
       expect(array).toEqual([0, 1, 2, 3, 40, 50, 60, 7, 8, 9, 10]);
     });
@@ -580,17 +570,7 @@ describe('Testing numerical range', function () {
     it('S4 - should replace a single element when numeric range is a pair of values matching the first two elements', function () {
       const nr = new NumericRange('0:2');
       expect(nr.set_values(array, [-3, -2, -1]).array).toEqual([
-        -3,
-        -2,
-        -1,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
+        -3, -2, -1, 3, 4, 5, 6, 7, 8, 9, 10,
       ]);
       expect(array).toEqual([-3, -2, -1, 3, 4, 5, 6, 7, 8, 9, 10]);
     });
@@ -602,34 +582,14 @@ describe('Testing numerical range', function () {
     it('S6 - should replace a single element when numeric range is a pair of values matching the last two elements', function () {
       const nr = new NumericRange('9:10');
       expect(nr.set_values(array, [-90, -100]).array).toEqual([
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        -90,
-        -100,
+        0, 1, 2, 3, 4, 5, 6, 7, 8, -90, -100,
       ]);
       expect(array).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, -90, -100]);
     });
     it('S7 - should replace a single element when numeric range is a pair of values matching the whole array', function () {
       const nr = new NumericRange('0:10');
       expect(nr.set_values(array, [-1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11]).array).toEqual([
-        -1,
-        -2,
-        -3,
-        -4,
-        -5,
-        -6,
-        -7,
-        -8,
-        -9,
-        -10,
-        -11,
+        -1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11,
       ]);
       expect(array).toEqual([-1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -11]);
     });

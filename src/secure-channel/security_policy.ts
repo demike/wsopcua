@@ -195,9 +195,9 @@ function RSAPKCS1V15SHA1_Verify(
 ): PromiseLike<boolean> {
   return generateVerifyKeyFromDER(certificate, 'SHA-1')
     .then((pubKey) => ({
-        algorithm: 'RSASSA-PKCS1-v1_5', // 'RSA-SHA1',
-        publicKey: pubKey,
-      }))
+      algorithm: 'RSASSA-PKCS1-v1_5', // 'RSA-SHA1',
+      publicKey: pubKey,
+    }))
     .then((opts) => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
 }
 const RSAPKCS1OAEPSHA1_Verify = RSAPKCS1V15SHA1_Verify;
@@ -209,9 +209,9 @@ function RSAPKCS1OAEPSHA256_Verify(
 ): PromiseLike<boolean> {
   return generateVerifyKeyFromDER(certificate, 'SHA-256')
     .then((pubKey) => ({
-        algorithm: 'RSASSA-PKCS1-v1_5',
-        publicKey: pubKey,
-      }))
+      algorithm: 'RSASSA-PKCS1-v1_5',
+      publicKey: pubKey,
+    }))
     .then((opts) => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
 }
 
@@ -222,12 +222,12 @@ function RSAPSSSHA256_Verify(
 ): PromiseLike<boolean> {
   return generateVerifyKeyFromDER(certificate, 'SHA-256', 'RSA-PSS')
     .then((pubKey) => ({
-        algorithm: {
-          name: 'RSA-PSS',
-          saltLength: 32 /* same length as the digesting algorithm (= SHA-256) */,
-        },
-        publicKey: pubKey,
-      }))
+      algorithm: {
+        name: 'RSA-PSS',
+        saltLength: 32 /* same length as the digesting algorithm (= SHA-256) */,
+      },
+      publicKey: pubKey,
+    }))
     .then((opts) => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
 }
 
@@ -545,15 +545,18 @@ export function computeSignature(
   buffer.set(senderNonce, senderCertificate.byteLength);
 
   // ... and signing the resulting sequence of bytes.
-  return crypto_factory.asymmetricSign(buffer, receiverPrivatekey).then((signature) => new SignatureData({
-      // This is a signature generated with the private key associated with a Certificate
-      signature: new Uint8Array(signature),
-      // A string containing the URI of the algorithm.
-      // The URI string values are defined as part of the security profiles specified in Part 7.
-      // (The SignatureAlgorithm shall be the AsymmetricSignatureAlgorithm specified in the
-      // SecurityPolicy for the Endpoint)
-      algorithm: crypto_factory.asymmetricSignatureAlgorithm, // "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
-    }));
+  return crypto_factory.asymmetricSign(buffer, receiverPrivatekey).then(
+    (signature) =>
+      new SignatureData({
+        // This is a signature generated with the private key associated with a Certificate
+        signature: new Uint8Array(signature),
+        // A string containing the URI of the algorithm.
+        // The URI string values are defined as part of the security profiles specified in Part 7.
+        // (The SignatureAlgorithm shall be the AsymmetricSignatureAlgorithm specified in the
+        // SecurityPolicy for the Endpoint)
+        algorithm: crypto_factory.asymmetricSignatureAlgorithm, // "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
+      })
+  );
 }
 
 export function verifySignature(
@@ -598,14 +601,16 @@ export function getOptionsForSymmetricSignAndEncrypt(
 
   const options = {
     signatureLength: derivedKeys.signatureLength,
-    signBufferFunc: (chunk: Uint8Array) => crypto_utils.makeMessageChunkSignatureWithDerivedKeys(chunk, derivedKeys),
+    signBufferFunc: (chunk: Uint8Array) =>
+      crypto_utils.makeMessageChunkSignatureWithDerivedKeys(chunk, derivedKeys),
   };
   if (securityMode === MessageSecurityMode.SignAndEncrypt) {
     return {
       ...options,
       plainBlockSize: derivedKeys.encryptingBlockSize,
       cipherBlockSize: derivedKeys.encryptingBlockSize,
-      encryptBufferFunc: (chunk: Uint8Array) => crypto_utils.encryptBufferWithDerivedKeys(chunk, derivedKeys),
+      encryptBufferFunc: (chunk: Uint8Array) =>
+        crypto_utils.encryptBufferWithDerivedKeys(chunk, derivedKeys),
     };
   }
   return options;

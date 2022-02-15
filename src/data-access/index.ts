@@ -2,10 +2,10 @@ import { EUInformation, LocalizedText } from '../generated';
 
 // part 8
 
-export {EUInformation} from '../generated/EUInformation';
-export {AxisInformation} from '../generated/AxisInformation';
-export {AxisScaleEnumeration} from '../generated/AxisScaleEnumeration';
-export {Range} from '../generated/Range';
+export { EUInformation } from '../generated/EUInformation';
+export { AxisInformation } from '../generated/AxisInformation';
+export { AxisScaleEnumeration } from '../generated/AxisScaleEnumeration';
+export { Range } from '../generated/Range';
 // TODO: export standardUnits?
 
 // http://www.unece.org/fileadmin/DAM/cefact/recommendations/rec20/rec20_rev3_Annex2e.pdf
@@ -35,70 +35,77 @@ export {Range} from '../generated/Range';
 // The Common Code is represented as an alphanumeric variable length of 3 characters. It shall be used for the
 // EUInformation.unitId. The following pseudo code specifies the algorithm
 // to convert the Common Code into an Int32 as needed for EUInformation.unitId:
-export function commonCodeToUInt (code: string) {
-    // CEL =>
-    let unitId = 0, c;
-    const m = Math.min(4, code.length);
-    for (let i = 0; i < m; i++) {
-        c = code.charCodeAt(i);
-        /* istanbul ignore if*/
-        if (c === 0) {
-            return unitId;
-        }
-        unitId *= 256;
-        // eslint-disable-next-line no-bitwise
-        unitId |= c;
+export function commonCodeToUInt(code: string) {
+  // CEL =>
+  let unitId = 0,
+    c;
+  const m = Math.min(4, code.length);
+  for (let i = 0; i < m; i++) {
+    c = code.charCodeAt(i);
+    /* istanbul ignore if*/
+    if (c === 0) {
+      return unitId;
     }
-    return unitId;
+    unitId *= 256;
+    // eslint-disable-next-line no-bitwise
+    unitId |= c;
+  }
+  return unitId;
 }
 
-export function makeEUInformation(symbol: string , shortName: string, longName: string) {
-
-    return new EUInformation({
-        unitId: commonCodeToUInt(symbol),
-        displayName: new LocalizedText({text: shortName}),
-        description: new LocalizedText({text: longName})
-    });
+export function makeEUInformation(symbol: string, shortName: string, longName: string) {
+  return new EUInformation({
+    unitId: commonCodeToUInt(symbol),
+    displayName: new LocalizedText({ text: shortName }),
+    description: new LocalizedText({ text: longName }),
+  });
 }
-
 
 // http://www.unece.org/fileadmin/DAM/cefact/recommendations/rec20/rec20_rev3_Annex2e.pdf
 export const standardUnits = {
-    ampere:               makeEUInformation('AMP', 'A',     'ampere'),
-    bar:                  makeEUInformation('BAR', 'bar',   'bar [unit of pressure] = 1E5 Pa'),
-    becquerel:            makeEUInformation('BQL', 'Bq',    'becquerel = 27,027E-12 Ci'),
-    kilobecquerel:        makeEUInformation('2Q', 'kBq',    'kilo becquerel = 1E3 Bq'),
-    gigabecquerel:        makeEUInformation('GBQ', 'GBq',   'Giga becquerel = 1E9 Bq'),
-    curie:                makeEUInformation('CUR', 'Ci',    'Curie = 3,7E-10 Bq'),
-    curie_per_kilogram:   makeEUInformation('A42', 'Ci/kg', 'Curie per kilogram = 3,7E-10 Bq/kg'),
-    cubic_centimetre:     makeEUInformation('CMQ', 'cm^3',  'Cubic centimetre = 1E-6 m^3'),
-    cubic_centimetre_per_second: makeEUInformation('2J',    'cm^3/s', 'Cubic centimetre per second'),
-    cubic_metre:          makeEUInformation('MTQ', 'm^3',   'Cubic metre'),
-    cubic_metre_per_hour: makeEUInformation('MQH', 'm^3',   'Cubic metre per hours = 2,777 78 x 10⁻⁴ m³/s'),
-    degree:               makeEUInformation('DD', '°',      'degree [unit of angle]'),
-    degree_celsius:       makeEUInformation('CEL', '°C',    'degree Celsius'),
-    degree_fahrenheit:    makeEUInformation('FAH', '°F',    'degree Fahrenheit 9/5(°C) + 32°'),
-    kelvin:               makeEUInformation('KEL', 'K',     'degree Kelvin'),
-    dots_per_inch:        makeEUInformation('E39', 'dpi',   'dot per inch'),
-    electron_volt:        makeEUInformation('A53', 'eV',    'electron volt'),
-    kilo_electron_volt:   makeEUInformation('B29', 'keV',   'kilo electron volt'),
-    mega_electron_volt:   makeEUInformation('B71', 'MeV',   'mega electron volt'),
-    farad:                makeEUInformation('FAR', 'F',     'Farad = kg⁻¹ x m⁻² x s⁴ x     A²'),
-    gram:                 makeEUInformation('GRM', 'g',     'gramme 1E-3 kg'),
-    joule:                makeEUInformation('JOU', 'J',     'Joule'),
-    kilohertz:            makeEUInformation('KHZ', 'kHz',   'kilo hertz = 1E3 Hertz'),
-    metre:                makeEUInformation('MTR', 'm',     'metre'),
-    centimetre:           makeEUInformation('CMT', 'cm',    'centimetre = 1E-2 m'),
-    millimetre:           makeEUInformation('MMT', 'mm',    'millimetre = 1E-3 metre'),
-    megawatt:             makeEUInformation('MAW', 'MW',    'Mega Watt'),
-    newton:               makeEUInformation('NEW', 'N',     'Newton (kg x m)/s² '),
-    // xx distance:             makeEUInformation("CEL",  "°C", "degree Celsius"),
-    percent:              makeEUInformation('P1', '%',      'Percent, a unit of proportion equal to 0.01. '),
-    pixel:                makeEUInformation('E37', '',      'pixel:  unit of count defining the number of pixels (pixel: picture element)'),
-    volt:                 makeEUInformation('VLT', 'V',     'Volt'),
-    watt:                 makeEUInformation('WTT', 'W',     'Watt'),
-    second:               makeEUInformation('SEC', 's',     'second'),
-    millisecond:          makeEUInformation('C26', 'ms',    'millisecond =1E-3 second'),
-    microsecond:          makeEUInformation('B98', 'μs',    'microsecond =1E-6 second')
-    // to be continued
+  ampere: makeEUInformation('AMP', 'A', 'ampere'),
+  bar: makeEUInformation('BAR', 'bar', 'bar [unit of pressure] = 1E5 Pa'),
+  becquerel: makeEUInformation('BQL', 'Bq', 'becquerel = 27,027E-12 Ci'),
+  kilobecquerel: makeEUInformation('2Q', 'kBq', 'kilo becquerel = 1E3 Bq'),
+  gigabecquerel: makeEUInformation('GBQ', 'GBq', 'Giga becquerel = 1E9 Bq'),
+  curie: makeEUInformation('CUR', 'Ci', 'Curie = 3,7E-10 Bq'),
+  curie_per_kilogram: makeEUInformation('A42', 'Ci/kg', 'Curie per kilogram = 3,7E-10 Bq/kg'),
+  cubic_centimetre: makeEUInformation('CMQ', 'cm^3', 'Cubic centimetre = 1E-6 m^3'),
+  cubic_centimetre_per_second: makeEUInformation('2J', 'cm^3/s', 'Cubic centimetre per second'),
+  cubic_metre: makeEUInformation('MTQ', 'm^3', 'Cubic metre'),
+  cubic_metre_per_hour: makeEUInformation(
+    'MQH',
+    'm^3',
+    'Cubic metre per hours = 2,777 78 x 10⁻⁴ m³/s'
+  ),
+  degree: makeEUInformation('DD', '°', 'degree [unit of angle]'),
+  degree_celsius: makeEUInformation('CEL', '°C', 'degree Celsius'),
+  degree_fahrenheit: makeEUInformation('FAH', '°F', 'degree Fahrenheit 9/5(°C) + 32°'),
+  kelvin: makeEUInformation('KEL', 'K', 'degree Kelvin'),
+  dots_per_inch: makeEUInformation('E39', 'dpi', 'dot per inch'),
+  electron_volt: makeEUInformation('A53', 'eV', 'electron volt'),
+  kilo_electron_volt: makeEUInformation('B29', 'keV', 'kilo electron volt'),
+  mega_electron_volt: makeEUInformation('B71', 'MeV', 'mega electron volt'),
+  farad: makeEUInformation('FAR', 'F', 'Farad = kg⁻¹ x m⁻² x s⁴ x     A²'),
+  gram: makeEUInformation('GRM', 'g', 'gramme 1E-3 kg'),
+  joule: makeEUInformation('JOU', 'J', 'Joule'),
+  kilohertz: makeEUInformation('KHZ', 'kHz', 'kilo hertz = 1E3 Hertz'),
+  metre: makeEUInformation('MTR', 'm', 'metre'),
+  centimetre: makeEUInformation('CMT', 'cm', 'centimetre = 1E-2 m'),
+  millimetre: makeEUInformation('MMT', 'mm', 'millimetre = 1E-3 metre'),
+  megawatt: makeEUInformation('MAW', 'MW', 'Mega Watt'),
+  newton: makeEUInformation('NEW', 'N', 'Newton (kg x m)/s² '),
+  // xx distance:             makeEUInformation("CEL",  "°C", "degree Celsius"),
+  percent: makeEUInformation('P1', '%', 'Percent, a unit of proportion equal to 0.01. '),
+  pixel: makeEUInformation(
+    'E37',
+    '',
+    'pixel:  unit of count defining the number of pixels (pixel: picture element)'
+  ),
+  volt: makeEUInformation('VLT', 'V', 'Volt'),
+  watt: makeEUInformation('WTT', 'W', 'Watt'),
+  second: makeEUInformation('SEC', 's', 'second'),
+  millisecond: makeEUInformation('C26', 'ms', 'millisecond =1E-3 second'),
+  microsecond: makeEUInformation('B98', 'μs', 'microsecond =1E-6 second'),
+  // to be continued
 };

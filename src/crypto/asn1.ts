@@ -266,7 +266,7 @@ export function _readBooleanValue(buffer: Uint8Array, block: BlockInfo): boolean
   const nbBytes = block.length;
   assert(nbBytes < 4);
   const value = buffer[pos] ? true : false;
-  return value ;
+  return value;
 }
 
 export function _readVersionValue(buffer: Uint8Array, block: BlockInfo): number {

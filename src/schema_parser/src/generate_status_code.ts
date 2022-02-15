@@ -7,45 +7,45 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as util from 'util';
 
-    // see OPC-UA Part 6 , A2
-    const codeMap: {[key: string]: number} = {};
-    const code_list: {name: string; value: number; description: string}[] = [];
+// see OPC-UA Part 6 , A2
+const codeMap: { [key: string]: number } = {};
+const code_list: { name: string; value: number; description: string }[] = [];
 
 export function generateStatusCodes() {
+  const datafolder = path.join(__dirname, '../schemas');
 
+  fs.readFile(
+    path.join(datafolder, '/StatusCodes.csv'),
+    'utf8',
+    (err: Error | null, data: string) => {
+      if (err) {
+        console.log(err);
+      } else {
+        const lines = data.split('\n');
+        lines.forEach(function (line) {
+          const e = line.split(',');
+          const codeName = e[0];
+          console.log(e);
+          code_list.push({
+            name: e[0],
+            value: parseInt(e[1], 16),
+            description: e[2],
+          });
+          codeMap[codeName] = parseInt(e[1], 16);
+        });
 
-
-    const datafolder = path.join(__dirname, '../schemas');
-
-    fs.readFile(path.join(datafolder, '/StatusCodes.csv'), 'utf8', (err: Error|null, data: string) => {
-        if (err) {
-            console.log(err);
-        } else {
-            const lines = data.split('\n');
-            lines.forEach(function(line) {
-                const e = line.split(',');
-                const codeName = e[0];
-                console.log(e);
-                code_list.push({
-                    name: e[0],
-                    value: parseInt(e[1], 16),
-                    description: e[2]
-                });
-            codeMap[codeName] = parseInt(e[1], 16);
-            });
-
-            console.log('codeMap' , codeMap);
-            parseStatusCodeXML();
-
-        }
-    });
+        console.log('codeMap', codeMap);
+        parseStatusCodeXML();
+      }
+    }
+  );
 }
 
 function parseStatusCodeXML() {
-    const obj = {};
-    const outFile = fs.createWriteStream(__dirname + '/../../constants/raw_status_codes.ts');
+  const obj = {};
+  const outFile = fs.createWriteStream(__dirname + '/../../constants/raw_status_codes.ts');
 
-    outFile.write(`\n
+  outFile.write(`\n
     /**
      * @module node-opcua-status-codes
      */
@@ -54,30 +54,42 @@ function parseStatusCodeXML() {
     // tslint:disable: max-line-length
     // tslint:disable: quotemark\n`);
 
-    outFile.write(' export class StatusCodes  { \n');
+  outFile.write(' export class StatusCodes  { \n');
 
-    outFile.write(' /** Good: No Error */\n');
-    outFile.write(' static Good: ConstantStatusCode =  new ConstantStatusCode({ name: \'Good\', value: 0, description: \'No Error\' });\n');
+  outFile.write(' /** Good: No Error */\n');
+  outFile.write(
+    " static Good: ConstantStatusCode =  new ConstantStatusCode({ name: 'Good', value: 0, description: 'No Error' });\n"
+  );
 
-    outFile.write('/** The value is bad but no specific reason is known. */\n');
-    outFile.write(' static Bad: ConstantStatusCode =  new ConstantStatusCode({ name: \'Bad\', value: 0x80000000, description: \'The value is bad but no specific reason is known.\' });\n');
+  outFile.write('/** The value is bad but no specific reason is known. */\n');
+  outFile.write(
+    " static Bad: ConstantStatusCode =  new ConstantStatusCode({ name: 'Bad', value: 0x80000000, description: 'The value is bad but no specific reason is known.' });\n"
+  );
 
-    outFile.write('/** The value is uncertain but no specific reason is known. */\n');
-    outFile.write(' static Uncertain: ConstantStatusCode =  new ConstantStatusCode({ name: \'Uncertain\', value: 0x40000000, description: \'The value is uncertain but no specific reason is known.\' });\n');
+  outFile.write('/** The value is uncertain but no specific reason is known. */\n');
+  outFile.write(
+    " static Uncertain: ConstantStatusCode =  new ConstantStatusCode({ name: 'Uncertain', value: 0x40000000, description: 'The value is uncertain but no specific reason is known.' });\n"
+  );
 
-    outFile.write('  static GoodWithOverflowBit = new ModifiableStatusCode({ base: StatusCodes.Good, extraBits: (ExtraStatusCodeBits.Overflow | ExtraStatusCodeBits.InfoTypeDataValue)});\n');
+  outFile.write(
+    '  static GoodWithOverflowBit = new ModifiableStatusCode({ base: StatusCodes.Good, extraBits: (ExtraStatusCodeBits.Overflow | ExtraStatusCodeBits.InfoTypeDataValue)});\n'
+  );
 
-
-    code_list.forEach(function (obj) {
+  code_list.forEach(function (obj) {
     const description = obj.description.replace(/^"|"$/g, '');
-    const s = util.format(' /** %s */\n  static %s: ConstantStatusCode = new ConstantStatusCode({ name: %s , value: %s  , description: "%s"});\n',
-        description,
-        obj.name, '\'' + obj.name + '\'', '0x' + obj.value.toString(16), description);
-        outFile.write(s);
-    });
-    outFile.write('};\n');
+    const s = util.format(
+      ' /** %s */\n  static %s: ConstantStatusCode = new ConstantStatusCode({ name: %s , value: %s  , description: "%s"});\n',
+      description,
+      obj.name,
+      "'" + obj.name + "'",
+      '0x' + obj.value.toString(16),
+      description
+    );
+    outFile.write(s);
+  });
+  outFile.write('};\n');
 
-    /*
+  /*
     outFile.write('// this file has been automatically generated\n');
     outFile.write('// tslint:disable: max-line-length\n');
     outFile.write('// tslint:disable: quotemark\n');
@@ -96,5 +108,3 @@ function parseStatusCodeXML() {
     outFile.write('};\n');
     */
 }
-
-

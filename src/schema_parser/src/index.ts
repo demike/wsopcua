@@ -1,10 +1,7 @@
-
-
-
 import * as path from 'path';
-import {generateStatusCodes} from './generate_status_code';
-import {generate_data_types} from './generate_data_types';
-import {generateNodeIds, metaTypeMap} from './generate_node_ids';
+import { generateStatusCodes } from './generate_status_code';
+import { generate_data_types } from './generate_data_types';
+import { generateNodeIds, metaTypeMap } from './generate_node_ids';
 import * as fs from 'fs';
 import { SchemaParserConfig, sanitizeProjectImportConfig } from './SchemaParserConfig';
 
@@ -21,48 +18,49 @@ const defaultConfigFilePath = path.join(__dirname, '../schemas/schema_parser_con
 console.log(defaultConfigFilePath);
 
 program
-    .description(pkg.description)
-    .name(appName)
-    .option('-c --config <path>', 'set path to configuration file')
-    .option('--genids', 'generate node ids')
-    .option('--gencodes', 'generate status codes')
-    .version(pkg.verison)
-    .parse(process.argv);
+  .description(pkg.description)
+  .name(appName)
+  .option('-c --config <path>', 'set path to configuration file')
+  .option('--genids', 'generate node ids')
+  .option('--gencodes', 'generate status codes')
+  .version(pkg.verison)
+  .parse(process.argv);
 
 if (program.gencodes) {
-    generateStatusCodes();
+  generateStatusCodes();
 }
 
 if (program.genids) {
-    generateAttributeIds(path.join(datafolder, '/AttributeIds.csv'));
+  generateAttributeIds(path.join(datafolder, '/AttributeIds.csv'));
 }
 
 // parse the default configuration file
-const importConfig: SchemaParserConfig = JSON.parse( fs.readFileSync(defaultConfigFilePath).toString() );
+const importConfig: SchemaParserConfig = JSON.parse(
+  fs.readFileSync(defaultConfigFilePath).toString()
+);
 importConfig.projects[0].projectName = PathGenUtil.PROJECT_NAME;
 for (const projectImport of importConfig.projects) {
-    sanitizeProjectImportConfig(projectImport, defaultConfigFilePath);
+  sanitizeProjectImportConfig(projectImport, defaultConfigFilePath);
 }
 
 // parse the configuration file provided through command line
 if (program.config) {
-
-    // we  use a custom config file --> set the default one to readonly (do not overwrite our own types)
-    importConfig.projects[0].readonly = true;
-    try {
-        const customConfig: SchemaParserConfig = JSON.parse( fs.readFileSync(program.config).toString());
-        for (const projectImport of customConfig.projects) {
-            sanitizeProjectImportConfig(projectImport, program.config);
-        }
-
-        importConfig.projects = [...importConfig.projects, ...customConfig.projects];
-    } catch (err) {
-        console.log('Error reading the config file: ', program.config, err );
+  // we  use a custom config file --> set the default one to readonly (do not overwrite our own types)
+  importConfig.projects[0].readonly = true;
+  try {
+    const customConfig: SchemaParserConfig = JSON.parse(fs.readFileSync(program.config).toString());
+    for (const projectImport of customConfig.projects) {
+      sanitizeProjectImportConfig(projectImport, program.config);
     }
+
+    importConfig.projects = [...importConfig.projects, ...customConfig.projects];
+  } catch (err) {
+    console.log('Error reading the config file: ', program.config, err);
+  }
 }
 
-generateNodeIds(path.join(datafolder, '/NodeIds.csv'), program.genids , () => {
-    generate_data_types(importConfig, metaTypeMap);
+generateNodeIds(path.join(datafolder, '/NodeIds.csv'), program.genids, () => {
+  generate_data_types(importConfig, metaTypeMap);
 });
 
 /*

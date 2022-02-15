@@ -57,7 +57,8 @@
     "e2e:start": "karma start ./karma.e2e.conf.js",
     "test-e2e-headless": "start-server-and-test test-server tcp:4444 e2e:run-headless",
     "start-e2e": "start-server-and-test test-server tcp:4444 e2e:start",
-    "lint": "eslint -c .eslintrc.js --ignore-pattern \"**/*.d.ts\" --ext .ts src"
+    "lint": "eslint -c .eslintrc.js --ignore-pattern \"**/*.d.ts\" --ext .ts src",
+    "format:all": "prettier --write \"src/**/*.ts\""
   },
   "files": [
     "documentation/**/*",

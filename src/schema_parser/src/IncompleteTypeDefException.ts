@@ -1,3 +1,1 @@
-export class IncompleteTypeDefException extends Error {
-
-}
+export class IncompleteTypeDefException extends Error {}

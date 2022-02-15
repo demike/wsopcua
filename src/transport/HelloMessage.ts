@@ -6,11 +6,11 @@
 
 import * as ec from '../basic-types';
 
-import {makeExpandedNodeId} from '../nodeid/expanded_nodeid';
-import {generate_new_id} from '../factory';
+import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
+import { generate_new_id } from '../factory';
 
-import {BaseUAObject} from '../factory/factories_baseobject';
-import {register_class_definition} from '../factory/factories_factories';
+import { BaseUAObject } from '../factory/factories_baseobject';
+import { register_class_definition } from '../factory/factories_factories';
 import { DataStream } from '../basic-types/DataStream';
 
 const encode_UInt32 = ec.encodeUInt32;
@@ -25,7 +25,6 @@ export interface IHelloMessage {
   sendBufferSize?: number;
   receiveBufferSize?: number;
   protocolVersion?: number;
-
 }
 
 /**
@@ -41,7 +40,6 @@ export interface IHelloMessage {
  * @param  [options.endpointUrl] {UAString} The URL of the Endpoint which the Client wished to connect to.
  */
 export class HelloMessage extends BaseUAObject {
-
   public static encodingDefaultBinary = makeExpandedNodeId(generate_new_id());
 
   endpointUrl: string;
@@ -52,80 +50,76 @@ export class HelloMessage extends BaseUAObject {
   protocolVersion: number;
 
   constructor(options: IHelloMessage) {
-  super();
+    super();
     options = options || {};
 
     /**
-      * The latest version of the OPC UA TCP protocol supported by the Client
-      * @property protocolVersion
-      * @type {UInt32}
-      */
+     * The latest version of the OPC UA TCP protocol supported by the Client
+     * @property protocolVersion
+     * @type {UInt32}
+     */
     this.protocolVersion = options.protocolVersion;
 
     /**
-      * The largest message that the sender can receive.
-      * @property receiveBufferSize
-      * @type {UInt32}
-      */
+     * The largest message that the sender can receive.
+     * @property receiveBufferSize
+     * @type {UInt32}
+     */
     this.receiveBufferSize = options.receiveBufferSize;
 
     /**
-      * The largest message that the sender will send.
-      * @property sendBufferSize
-      * @type {UInt32}
-      */
+     * The largest message that the sender will send.
+     * @property sendBufferSize
+     * @type {UInt32}
+     */
     this.sendBufferSize = options.sendBufferSize;
 
     /**
-      * The maximum size for any response message.
-      * @property maxMessageSize
-      * @type {UInt32}
-      */
+     * The maximum size for any response message.
+     * @property maxMessageSize
+     * @type {UInt32}
+     */
     this.maxMessageSize = options.maxMessageSize;
 
     /**
-      * The maximum number of chunks in any response message
-      * @property maxChunkCount
-      * @type {UInt32}
-      */
+     * The maximum number of chunks in any response message
+     * @property maxChunkCount
+     * @type {UInt32}
+     */
     this.maxChunkCount = options.maxChunkCount;
 
     /**
-      * The URL of the Endpoint which the Client wished to connect to.
-      * @property endpointUrl
-      * @type {UAString}
-      */
+     * The URL of the Endpoint which the Client wished to connect to.
+     * @property endpointUrl
+     * @type {UAString}
+     */
     this.endpointUrl = options.endpointUrl;
 
-   // Object.preventExtensions(self);
-}
+    // Object.preventExtensions(self);
+  }
 
-
-
-
-
-/**
- * encode the object into a binary stream
- * @method encode
- *
- * @param stream {BinaryStream}
- */
-public encode(stream: DataStream) {
+  /**
+   * encode the object into a binary stream
+   * @method encode
+   *
+   * @param stream {BinaryStream}
+   */
+  public encode(stream: DataStream) {
     encode_UInt32(this.protocolVersion, stream);
     encode_UInt32(this.receiveBufferSize, stream);
     encode_UInt32(this.sendBufferSize, stream);
     encode_UInt32(this.maxMessageSize, stream);
     encode_UInt32(this.maxChunkCount, stream);
     encode_UAString(this.endpointUrl, stream);
-}
-/**
- * decode the object from a binary stream
- * @method decode
- *
- * @param stream {BinaryStream}
- * @param [option] {object}
- */
-public decode(stream: DataStream) {
+  }
+  /**
+   * decode the object from a binary stream
+   * @method decode
+   *
+   * @param stream {BinaryStream}
+   * @param [option] {object}
+   */
+  public decode(stream: DataStream) {
     // call base class implementation first
 
     this.protocolVersion = decode_UInt32(stream);
@@ -134,13 +128,13 @@ public decode(stream: DataStream) {
     this.maxMessageSize = decode_UInt32(stream);
     this.maxChunkCount = decode_UInt32(stream);
     this.endpointUrl = decode_UAString(stream);
-}
+  }
 
-public clone(target: any): BaseUAObject {
-  throw new Error('Method not implemented.');
-}
+  public clone(target: any): BaseUAObject {
+    throw new Error('Method not implemented.');
+  }
 
- public toJSON() {
+  public toJSON() {
     const out: any = {};
     out.ProtocolVersion = this.protocolVersion;
     out.ReceiveBufferSize = this.receiveBufferSize;
@@ -159,7 +153,6 @@ public clone(target: any): BaseUAObject {
     this.maxChunkCount = json.MaxChunkCount;
     this.endpointUrl = json.EndpointUrl;
   }
-
 }
 
 register_class_definition('HelloMessage', HelloMessage, makeExpandedNodeId(generate_new_id()));

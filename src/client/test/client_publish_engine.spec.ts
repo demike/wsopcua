@@ -24,11 +24,11 @@ function makeSubscription(
     return sub;
     */
 
-  return ({
+  return {
     subscriptionId: subscriptionId,
     timeoutHint: timeoutHint,
     onNotificationMessage: () => {},
-  } as unknown) as ClientSubscription;
+  } as unknown as ClientSubscription;
 }
 
 describe('Testing the client publish engine', function () {

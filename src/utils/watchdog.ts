@@ -155,7 +155,7 @@ export class WatchDog extends EventEmitter<IWatchDogEvents> {
     self._currentTime = Date.now();
 
     const expiredSubscribers: IWatchdogData2[] = [];
-    const keys = (Object.keys(self._watchdogDataMap) as unknown) as number[];
+    const keys = Object.keys(self._watchdogDataMap) as unknown as number[];
     for (const key of keys) {
       const wdd = self._watchdogDataMap[key];
       wdd.visitCount += 1;

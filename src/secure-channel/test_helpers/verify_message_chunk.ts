@@ -10,30 +10,29 @@ import { messageHeaderToString } from '../message_header_to_string';
  * @param packets
  */
 export function verify_multi_chunk_message(packets: ArrayBufferView[]) {
+  const messageBuilder = new MessageBuilder({});
+  messageBuilder.setSecurity(MessageSecurityMode.None, SecurityPolicy.None);
 
-    const messageBuilder = new MessageBuilder({});
-    messageBuilder.setSecurity(MessageSecurityMode.None, SecurityPolicy.None);
+  messageBuilder.on('full_message_body', (fullMessageBody: ArrayBuffer) => {
+    console.log('full_message_body received:');
+    analyseExtensionObject(fullMessageBody, 0, 0);
+  });
+  messageBuilder.on('start_chunk', (info) => {
+    console.log(' starting new chunk ', info);
+  });
 
-    messageBuilder.on('full_message_body', (fullMessageBody: ArrayBuffer) => {
-        console.log('full_message_body received:');
-        analyseExtensionObject(fullMessageBody, 0, 0);
-    });
-    messageBuilder.on('start_chunk', (info) => {
-        console.log(' starting new chunk ', info);
-    });
+  messageBuilder.on('chunk', (messageChunk) => {
+    console.log(messageHeaderToString(messageChunk));
+  });
 
-    messageBuilder.on('chunk', (messageChunk) => {
-        console.log(messageHeaderToString(messageChunk));
-    });
-
-    let totalLength = 0;
-    packets.forEach((packet) => {
-        totalLength += packet.byteLength;
-        // console.log(sprintf(" adding packet size : %5d l=%d", packet.length, totalLength));
-        messageBuilder.feed(new DataView(packet.buffer));
-    });
+  let totalLength = 0;
+  packets.forEach((packet) => {
+    totalLength += packet.byteLength;
+    // console.log(sprintf(" adding packet size : %5d l=%d", packet.length, totalLength));
+    messageBuilder.feed(new DataView(packet.buffer));
+  });
 }
 
 export function verify_single_chunk_message(packet: ArrayBufferView) {
-    verify_multi_chunk_message([packet]);
+  verify_multi_chunk_message([packet]);
 }

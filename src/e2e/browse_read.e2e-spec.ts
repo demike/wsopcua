@@ -84,13 +84,16 @@ describe('Browse-Read-Write Services', function () {
   });
 
   it('T8-3 - should read a Variable', function (done) {
-    session.readVariableValue([RootFolderNodeId], function (err, dataValues /* , diagnosticInfos*/) {
-      if (!err) {
-        expect(dataValues.length).toEqual(1);
-        expect(dataValues[0] instanceof DataValue).toBeTruthy();
+    session.readVariableValue(
+      [RootFolderNodeId],
+      function (err, dataValues /* , diagnosticInfos*/) {
+        if (!err) {
+          expect(dataValues.length).toEqual(1);
+          expect(dataValues[0] instanceof DataValue).toBeTruthy();
+        }
+        done();
       }
-      done();
-    });
+    );
   });
 
   it('T8-11 - #ReadRequest : server should return BadNothingToDo when nodesToRead is empty', function (done) {
@@ -224,19 +227,19 @@ describe('Browse-Read-Write Services', function () {
   });
 
   it('T8-17 - #readVariableValue - should read the TemperatureTarget value', function (done) {
-    session.readVariableValue([CurrentTimeVariableId], function (
-      err,
-      dataValues /* , diagnosticInfos*/
-    ) {
-      if (!err) {
-        expect(dataValues.length).toEqual(1);
-        expect(dataValues[0] instanceof DataValue).toBeTruthy();
-        expect(dataValues[0].value instanceof Variant).toBeTruthy();
-        done();
-      } else {
-        done.fail(err);
+    session.readVariableValue(
+      [CurrentTimeVariableId],
+      function (err, dataValues /* , diagnosticInfos*/) {
+        if (!err) {
+          expect(dataValues.length).toEqual(1);
+          expect(dataValues[0] instanceof DataValue).toBeTruthy();
+          expect(dataValues[0].value instanceof Variant).toBeTruthy();
+          done();
+        } else {
+          done.fail(err);
+        }
       }
-    });
+    );
   });
 
   it('T8-20 - #writeSingleNode -  should write the TemperatureTarget value', function (done) {
@@ -273,7 +276,9 @@ describe('Browse-Read-Write Services', function () {
 
         // xx console.log(util.inspect(browseResults[0].references,{colors:true,depth:10}));
 
-        const foundNode = browseResults[0].references.filter((result) => result.browseName.name === 'Server');
+        const foundNode = browseResults[0].references.filter(
+          (result) => result.browseName.name === 'Server'
+        );
         expect(foundNode.length).toEqual(1);
         expect(foundNode[0].browseName.name).toEqual('Server');
         expect(foundNode[0].nodeId.toString()).toEqual('ns=0;i=2253');
@@ -286,43 +291,43 @@ describe('Browse-Read-Write Services', function () {
 
   it("T9-2 - Server should expose 'Server_NamespaceArray' variable ", function (done) {
     const server_NamespaceArray_Id = makeNodeId(/* VariableIds.Server_NamespaceArray */ 2255); // ns=0;i=2255
-    session.readVariableValue(server_NamespaceArray_Id, function (
-      err,
-      dataValue /* , diagnosticsInfo*/
-    ) {
-      if (err) {
-        return done.fail(err);
+    session.readVariableValue(
+      server_NamespaceArray_Id,
+      function (err, dataValue /* , diagnosticsInfo*/) {
+        if (err) {
+          return done.fail(err);
+        }
+        expect(dataValue instanceof DataValue).toBeTruthy();
+        expect(
+          dataValue.statusCode === undefined || dataValue.statusCode === StatusCodes.Good
+        ).toBeTruthy();
+        expect(dataValue.value.dataType).toEqual(DataType.String);
+        expect(dataValue.value.arrayType).toEqual(VariantArrayType.Array);
+
+        // first namespace must be standard OPC namespace
+        expect(dataValue.value.value[0]).toEqual('http://opcfoundation.org/UA/');
+
+        done();
       }
-      expect(dataValue instanceof DataValue).toBeTruthy();
-      expect(
-        dataValue.statusCode === undefined || dataValue.statusCode === StatusCodes.Good
-      ).toBeTruthy();
-      expect(dataValue.value.dataType).toEqual(DataType.String);
-      expect(dataValue.value.arrayType).toEqual(VariantArrayType.Array);
-
-      // first namespace must be standard OPC namespace
-      expect(dataValue.value.value[0]).toEqual('http://opcfoundation.org/UA/');
-
-      done();
-    });
+    );
   });
 
   it('T9-3 - ServerStatus object shall be accessible as a ExtensionObject', function (done) {
     const server_NamespaceArray_Id = makeNodeId(/* VariableIds.Server_ServerStatus */ 2256);
-    session.readVariableValue(server_NamespaceArray_Id, function (
-      err,
-      dataValue /* , diagnosticsInfo*/
-    ) {
-      if (err) {
-        return done.fail(err);
-      }
-      expect(dataValue instanceof DataValue).toBeTruthy();
-      expect(
-        dataValue.statusCode === undefined || dataValue.statusCode === StatusCodes.Good
-      ).toBeTruthy();
-      expect(dataValue.value.dataType).toEqual(DataType.ExtensionObject);
+    session.readVariableValue(
+      server_NamespaceArray_Id,
+      function (err, dataValue /* , diagnosticsInfo*/) {
+        if (err) {
+          return done.fail(err);
+        }
+        expect(dataValue instanceof DataValue).toBeTruthy();
+        expect(
+          dataValue.statusCode === undefined || dataValue.statusCode === StatusCodes.Good
+        ).toBeTruthy();
+        expect(dataValue.value.dataType).toEqual(DataType.ExtensionObject);
 
-      done();
-    });
+        done();
+      }
+    );
   });
 });
