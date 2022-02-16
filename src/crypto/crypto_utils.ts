@@ -121,13 +121,13 @@ export function makeSHA1Thumbprint(buffer: BufferSource): PromiseLike<Signature>
 // key is 936 bits because of this (unless you disable the padding by adding the OPENSSL_NO_PADDING flag,
 // in which case you can go up to 1023-1024 bits). With a 2048-bit key it's 1960 bits instead.
 
-export const RSA_PKCS1_PADDING = 1;
-export const RSA_PKCS1_OAEP_PADDING = 4;
-
 export enum PaddingAlgorithm {
   RSA_PKCS1_OAEP_PADDING = 4,
   RSA_PKCS1_PADDING = 1,
 }
+
+export const RSA_PKCS1_PADDING = PaddingAlgorithm.RSA_PKCS1_PADDING;
+export const RSA_PKCS1_OAEP_PADDING = PaddingAlgorithm.RSA_PKCS1_OAEP_PADDING;
 
 export async function publicEncrypt_long(
   buffer: Uint8Array,
@@ -136,7 +136,7 @@ export async function publicEncrypt_long(
   algorithm?: PaddingAlgorithm
 ): Promise<Uint8Array> {
   if (algorithm === undefined) {
-    algorithm = PaddingAlgorithm.RSA_PKCS1_PADDING;
+    algorithm = RSA_PKCS1_PADDING;
   }
   assert(algorithm === RSA_PKCS1_PADDING || algorithm === RSA_PKCS1_OAEP_PADDING);
 

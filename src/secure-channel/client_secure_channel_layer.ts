@@ -47,7 +47,7 @@ import { SecureMessageChunkManagerOptions } from './secure_message_chunk_manager
 import { ISymmetricAlgortihmSecurityHeader } from '../service-secure-channel/SymmetricAlgorithmSecurityHeader';
 import { JSONMessageBuilder } from '../transport/json_message_builder';
 import { MessageBuilderEvents } from '../transport/message_builder_base';
-import { DER, generatePublicKeyFromDER, makeSHA1Thumbprint, rsaKeyLength } from '../crypto';
+import { DER, makeSHA1Thumbprint, rsaKeyLength } from '../crypto';
 
 const OpenSecureChannelRequest = secure_channel_service.OpenSecureChannelRequest;
 const CloseSecureChannelRequest = secure_channel_service.CloseSecureChannelRequest;
@@ -395,6 +395,7 @@ export class ClientSecureChannelLayer
 
     assert(request_data.msgType === 'CLO' || (err && !response) || (!err && response));
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const the_callback_func = request_data.callback;
     request_data.callback = null;
     the_callback_func(err, response);

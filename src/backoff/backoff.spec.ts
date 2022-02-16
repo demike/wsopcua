@@ -95,7 +95,7 @@ describe('Backoff', function () {
     backoff.backoff();
 
     // in progress
-    expect(backoff.backoff).toThrowError();
+    expect(() => backoff.backoff()).toThrowError();
   });
 
   it('backoff limit should be greater than 0', function () {
@@ -124,7 +124,7 @@ describe('Backoff', function () {
 
   it('backoff should be reset after fail', function () {
     spyOn<BackoffStrategy>(backoffStrategy, 'next').and.returnValue(10);
-    spyOn<BackoffStrategy>(backoffStrategy, 'reset');
+    const backoffReset = spyOn<BackoffStrategy>(backoffStrategy, 'reset');
 
     backoff.failAfter(1);
 
@@ -132,7 +132,7 @@ describe('Backoff', function () {
     jasmine.clock().tick(10);
     backoff.backoff();
 
-    expect(backoffStrategy.reset).toHaveBeenCalled();
+    expect(backoffReset).toHaveBeenCalled();
   });
 
   it('the backoff number should increase from 0 to N - 1', function () {

@@ -151,7 +151,11 @@ export class ClassMember {
     if (this._length > 1 || this._isArray) {
       str += '[]';
     } else {
-      if (this._type instanceof SimpleType && this._type.defaultValue == undefined && required) {
+      if (
+        this._type instanceof SimpleType &&
+        this._type.defaultValue == null /* null or undefined */ &&
+        required
+      ) {
         // account for strict null checking
         str += ' | null';
       }

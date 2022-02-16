@@ -355,4 +355,5 @@ export interface EventEmitter<EventTypesMap extends { [evtName: string]: any }> 
     once?: boolean
   ): this;
 }
+// eslint-disable-next-line @typescript-eslint/unbound-method
 EventEmitter.prototype.off = EventEmitter.prototype.removeListener;

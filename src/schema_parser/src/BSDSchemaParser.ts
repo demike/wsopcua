@@ -268,7 +268,7 @@ export class BSDSchemaParser {
       }
       this.clsIncompleteTypes = ar;
 
-      if (ar.length == 0) {
+      if (ar.length === 0) {
         return;
       }
     }
@@ -297,8 +297,7 @@ export class BSDSchemaParser {
     if (!this.importConfig) {
       return;
     }
-    let ar: ClassFile[];
-    ar = TypeRegistry.getTypes();
+    const ar = TypeRegistry.getTypes();
     for (const file of ar) {
       if (!file.Written) {
         if (!this.importConfig.readonly) {

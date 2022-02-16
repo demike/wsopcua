@@ -32,9 +32,8 @@ export class ObjectRegistry {
     const className = this.getClassName();
     let str = ' className :' + className + ' found => ' + this.count() + ' object leaking\n';
 
-    for (const key in this._cache) {
-      const obj = this._cache[key];
-      str += (<any>obj.constructor).name + ' ' + obj.toString() + '\n';
+    for (const obj of Object.values(this._cache) as any[]) {
+      str += obj.constructor.name + ' ' + obj.toString() + '\n';
     }
 
     return str;

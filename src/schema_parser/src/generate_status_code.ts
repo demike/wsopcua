@@ -42,7 +42,6 @@ export function generateStatusCodes() {
 }
 
 function parseStatusCodeXML() {
-  const obj = {};
   const outFile = fs.createWriteStream(__dirname + '/../../constants/raw_status_codes.ts');
 
   outFile.write(`\n

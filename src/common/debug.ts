@@ -6,6 +6,7 @@ export function setDebug(debug: boolean) {
 
 export function debugLog(...args: any[]) {
   if (doDebug) {
+    // eslint-disable-next-line no-console
     console.debug(...args);
   }
 }

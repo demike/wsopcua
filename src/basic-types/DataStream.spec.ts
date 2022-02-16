@@ -143,7 +143,7 @@ describe('Testing DataStream#writeArrayBuffer /  DataStream#readArrayBuffer', fu
   }
 
   it('should provide a working writeArrayBuffer and readArrayBuffer', function () {
-    // tslint:disable-next-line: no-unbound-method
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     perform(DataStream.prototype.writeArrayBuffer, DataStream.prototype.readArrayBuffer);
   });
 

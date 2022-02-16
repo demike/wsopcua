@@ -13,6 +13,7 @@ import { buf2hex } from '../crypto';
 import { IEncodable } from '../factory/factories_baseobject';
 
 const spaces =
+  // eslint-disable-next-line max-len
   '                                                                                                                                                                             ';
 function f(n: number, width: number): string {
   const s = n.toString();
@@ -176,6 +177,7 @@ function make_tracer(buffer: DataView, padding: number, offset: number): any {
   return options;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface AnalyzePacketOptions {}
 
 export function analyzePacket(

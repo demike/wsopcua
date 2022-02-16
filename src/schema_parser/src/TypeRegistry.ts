@@ -20,11 +20,7 @@ export class TypeRegistry {
   }
 
   public static getTypes(): ClassFile[] {
-    const ar: ClassFile[] = [];
-    for (const key in this.typeMap) {
-      ar.push(this.typeMap[key]);
-    }
-    return ar;
+    return Object.values(this.typeMap);
   }
 
   public static init() {

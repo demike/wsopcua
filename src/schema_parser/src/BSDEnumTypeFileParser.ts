@@ -20,7 +20,7 @@ export class BSDEnumTypeFileParser extends BSDClassFileParser {
   public parse(): void {
     const attr = this.el.getAttributeNode(BSDEnumTypeFileParser.ATTR_LENGTH);
     if (attr != null) {
-      this.lengthInBits = parseInt(attr.value);
+      this.lengthInBits = parseInt(attr.value, 10);
     }
     super.parse();
   }
@@ -38,7 +38,7 @@ export class BSDEnumTypeFileParser extends BSDClassFileParser {
       if (!value || !name) {
         throw Error(this.cls.Name + ': Incomplete Enumeration Item');
       }
-      this.cls.addMemberVariable(new EnumItem(name, parseInt(value)));
+      this.cls.addMemberVariable(new EnumItem(name, parseInt(value, 10)));
       return true;
     }
     return false;

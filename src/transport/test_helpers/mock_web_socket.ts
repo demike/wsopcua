@@ -42,7 +42,7 @@ export function installMockWebSocket() {
         }
       },
       _message: function (msg) {
-        socketMock?.onmessage && socketMock.onmessage({ data: msg });
+        socketMock.onmessage?.({ data: msg });
         if (socketMock.listeners['message']) {
           socketMock.listeners['message'].forEach((listener) => {
             listener({ data: msg });
@@ -51,7 +51,7 @@ export function installMockWebSocket() {
       },
       _error: function (code?: number) {
         socketMock.readyState = WebSocket.CLOSED;
-        socketMock.onerror && socketMock.onerror();
+        socketMock.onerror?.();
         if (socketMock.listeners['error']) {
           socketMock.listeners['error'].forEach((listener) => {
             listener({ code: code });
@@ -60,7 +60,7 @@ export function installMockWebSocket() {
       },
       _close: function (code = 1000) {
         socketMock.readyState = WebSocket.CLOSED;
-        socketMock.onclose && socketMock.onclose({ code });
+        socketMock.onclose?.({ code });
         if (socketMock.listeners['close']) {
           socketMock.listeners['close'].forEach((listener) => {
             listener({ code: code });

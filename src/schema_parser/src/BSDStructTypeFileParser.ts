@@ -28,7 +28,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
     let bitLength = 1;
     const bitLengthNode = el.attributes.getNamedItem(ClassFile.ATTR_ARRAY_LENGTH);
     if (bitLengthNode) {
-      bitLength = parseInt(bitLengthNode.value);
+      bitLength = parseInt(bitLengthNode.value, 10);
     }
 
     let lengthField: string | null = null;
