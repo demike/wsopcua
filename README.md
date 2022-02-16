@@ -209,7 +209,7 @@ export async function readExample(session: ClientSession) {
     "arrayDimensions":null,
     "accessLevel":3,
     "userAccessLevel":3,
-    "minimumSamplingInterval":0,"historizing":false,"statusCode":{"value":0}} 
+    "minimumSamplingInterval":0,"historizing":false,"statusCode":{"value":0}}
    */
 }
 
@@ -281,7 +281,7 @@ We can browse the RootFolder to receive a list of all of it's child nodes. With 
 import { ClientSession } from '../client';
 
 export async function browseExample(session: ClientSession) {
-  const browseResult = await session.browseP('ns=0;i=84' /*RootFolder*/);
+  const browseResult = await session.browseP('ns=0;i=84' /* RootFolder*/);
 
   console.log('references of RootFolder :');
   for (const result of browseResult.results[0].references) {
@@ -631,7 +631,7 @@ import { makeBrowsePath } from '../service-translate-browse-path';
 export async function translateBrowsePathExample(session: ClientSession) {
   // create a browse path out of a root node and a string in browse path notation
   const browsePath = makeBrowsePath(
-    'ns=0;i=84' /*RooFolder*/,
+    'ns=0;i=84' /* RooFolder*/,
     '/Objects/Server.ServerStatus.BuildInfo.ProductName'
   );
 
@@ -677,7 +677,7 @@ export async function methodExample(session: ClientSession) {
     ObjectWithMethods.MethoIO(1);
 
     For detailed information take a look at the "method service set" documentation
-    https://reference.opcfoundation.org/v104/Core/docs/Part4/5.11.2/ 
+    https://reference.opcfoundation.org/v104/Core/docs/Part4/5.11.2/
   */
 
   const response = await session.callP([
