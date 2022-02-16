@@ -6,7 +6,7 @@ https://github.com/typescript-eslint/tslint-to-eslint-config/blob/master/docs/FA
 Happy linting! 💖
 */
 module.exports = {
-  ignorePatterns: ['**/generated/**/*.ts', '**/*.d.ts'],
+  ignorePatterns: ['**/generated/**/*.ts', '**/*.d.ts', '**/*.js'],
   env: {
     browser: true,
     es6: true,
