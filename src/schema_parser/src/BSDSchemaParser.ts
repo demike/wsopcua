@@ -235,7 +235,7 @@ export class BSDSchemaParser {
       fs.writeFileSync(strPath, cls.toString(), 'utf8');
       console.log('file written: ' + path);
     } catch (err) {
-      console.log(err.message);
+      console.log((err as Error).message);
     }
   }
 
@@ -336,7 +336,7 @@ export class BSDSchemaParser {
         console.log('file written: ' + indexFilePath);
       }
     } catch (err) {
-      console.log(err.message);
+      console.log((err as Error).message);
     }
   }
 
