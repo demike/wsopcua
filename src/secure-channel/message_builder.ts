@@ -26,6 +26,7 @@ import * as factory from '../factory';
 import * as crypto_utils from '../crypto';
 import { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
 import { DerivedKeys, PrivateKey } from '../crypto';
+import { isPromise } from '../basic-types/utils';
 
 const decodeStatusCode = ec.decodeStatusCode;
 
@@ -364,9 +365,8 @@ export class MessageBuilder extends MessageBuilderBase {
 
   protected _decrypt(binaryStream: DataStream) {
     if (this._securityPolicy === SecurityPolicy.Invalid) {
-      // this._report_error("SecurityPolicy");
-      // return false;
-      return true;
+      this._report_error('SecurityPolicy');
+      return false;
     }
 
     const msgType = this.messageHeader.msgType;
@@ -396,7 +396,7 @@ export class MessageBuilder extends MessageBuilderBase {
    * @private
    */
   protected async _read_headers(binaryStream: DataStream) {
-    if (!(await super._read_headers(binaryStream))) {
+    if (!this.readHeadersInternal(binaryStream)) {
       return false;
     }
 
@@ -442,7 +442,12 @@ export class MessageBuilder extends MessageBuilderBase {
           this._cryptoFactory = securityPolicy_m.getCryptoFactory(this._securityPolicy);
         }
 
-        if (!(await this._decrypt(binaryStream))) {
+        let decryptResult = this._decrypt(binaryStream);
+        if (isPromise(decryptResult)) {
+          decryptResult = await decryptResult;
+        }
+
+        if (!decryptResult) {
           return false;
         }
 

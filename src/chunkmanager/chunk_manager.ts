@@ -8,6 +8,7 @@ import { assert } from '../assert';
 
 import { readMessageHeader } from './read_message_header';
 import { DataStream } from '../basic-types/DataStream';
+import { Lock } from '../basic-types/utils';
 
 const do_debug = false;
 
@@ -113,7 +114,7 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
   cursor: number;
   pending_chunk: Uint8Array | null;
   dataEnd: number;
-  private writeLock?: Promise<void>;
+  private writeLock = new Lock();
   /*    emit(arg0: any, arg1: any, arg2: any,arg3?: any): any {
             throw new Error("Method not implemented.");
         }
@@ -256,13 +257,9 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
    */
   async write(buffer: ArrayBuffer, length?: number) {
     // --- lock the write until, and keep the requests in order ----
-    const oldLock = this.writeLock;
-    let releaseLock: () => void;
-    const currentLock = (this.writeLock = new Promise((resolve) => {
-      releaseLock = resolve;
-    }));
-    if (oldLock) {
-      await oldLock;
+    const locked = this.writeLock.acquire();
+    if (locked) {
+      await locked;
     }
     // ---------------------------------------------------------------
 
@@ -297,10 +294,7 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
     }
 
     // release the write lock (remove the lock if no further requests are blocking)
-    if (currentLock === this.writeLock) {
-      this.writeLock = undefined;
-    }
-    releaseLock();
+    this.writeLock.release();
     // ---------------------------------
   }
 
@@ -367,10 +361,12 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
    * @method end
    */
   async end() {
-    if (this.writeLock) {
+    const locked = this.writeLock.acquire();
+    if (locked) {
       // wait for the writes to be executed
-      await this.writeLock;
+      await locked;
     }
+    this.writeLock.release();
     if (this.cursor > 0) {
       this._postprocess_current_chunk();
     }

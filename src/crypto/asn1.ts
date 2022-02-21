@@ -10,6 +10,7 @@ export enum TagType {
   OCTET_STRING = 0x04,
   NULL = 0x05,
   OBJECT_IDENTIFIER = 0x06,
+  Enumeration = 0x0a,
   UTF8String = 0x0c,
   NumericString = 0x12,
   PrintableString = 0x13,

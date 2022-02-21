@@ -12,6 +12,7 @@ import { readMessageHeader } from '../chunkmanager';
 import { concatArrayBuffers } from '../basic-types/array';
 import { SequenceHeader } from '../service-secure-channel';
 import { IEncodable } from '../factory/factories_baseobject';
+import { Lock } from '../basic-types/utils';
 
 const doPerfMonitoring = false;
 
@@ -40,18 +41,18 @@ export interface MessageBuilderEvents {
 }
 
 export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEvents> {
-  signatureLength: number;
-  options: any;
-  packetAssembler: PacketAssembler;
-  security_defeated: boolean;
-  total_body_size: number;
-  total_message_size: number;
+  protected lock = new Lock();
+  public readonly signatureLength: number;
+  public readonly options: { signatureLength?: number };
+  public readonly packetAssembler: PacketAssembler;
+  protected total_body_size: number;
+  public total_message_size: number;
   status_error: boolean;
   blocks: any[];
   message_chunks: DataView[];
   messageHeader: MessageHeader;
-  secureChannelId: number;
-  expected_secureChannelId: number;
+  public secureChannelId: number;
+  private readonly expected_secureChannelId: number;
 
   protected _tick0: number;
   protected _tick1: number;
@@ -70,10 +71,21 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
     options = options || {};
     this.signatureLength = options.signatureLength || 0;
     this.options = options;
+    this.expected_secureChannelId = 0;
     this.packetAssembler = new PacketAssembler({ readMessageFunc: readRawMessageHeader });
 
-    this.packetAssembler.on('message', (messageChunk) => {
-      this._feed_messageChunk(messageChunk);
+    this.packetAssembler.on('message', async (messageChunk) => {
+      const locked = this.lock.acquire();
+      if (locked) {
+        await locked;
+      }
+      try {
+        await this._feed_messageChunk(messageChunk);
+        this.lock.release();
+      } catch (err) {
+        this.lock.release();
+        throw err;
+      }
     });
     this.packetAssembler.on('newMessage', (info, data) => {
       // record tick 0: when the first data is received
@@ -89,13 +101,12 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
        */
       this.emit('start_chunk', info, data);
     });
-    this.security_defeated = false;
     this.total_body_size = 0;
     this.total_message_size = 0;
+    this.secureChannelId = 0;
     this._init_new();
   }
   protected _init_new() {
-    this.security_defeated = false;
     this.status_error = false;
     this.total_body_size = 0;
     this.total_message_size = 0;
@@ -103,15 +114,23 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
     this.message_chunks = [];
   }
   protected async _read_headers(binaryStream: DataStream) {
-    this.messageHeader = readMessageHeader(binaryStream);
-    assert(binaryStream.length === 8);
-    this.secureChannelId = binaryStream.getUint32();
-    assert(binaryStream.length === 12);
-    // verifying secureChannelId
-    if (this.expected_secureChannelId && this.secureChannelId !== this.expected_secureChannelId) {
-      return this._report_error('Invalid secure channel Id');
+    return this.readHeadersInternal(binaryStream);
+  }
+
+  protected readHeadersInternal(binaryStream: DataStream) {
+    try {
+      this.messageHeader = readMessageHeader(binaryStream);
+      assert(binaryStream.length === 8);
+      this.secureChannelId = binaryStream.getUint32();
+      assert(binaryStream.length === 12);
+      // verifying secureChannelId
+      if (this.expected_secureChannelId && this.secureChannelId !== this.expected_secureChannelId) {
+        return this._report_error('Invalid secure channel Id');
+      }
+      return true;
+    } catch (err) {
+      return false;
     }
-    return true;
   }
   /**
    * append a message chunk
@@ -165,7 +184,7 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
    * @param data
    */
   feed(data: DataView) {
-    if (!this.security_defeated && !this.status_error) {
+    if (!this.status_error) {
       this.packetAssembler.feed(data);
     }
   }

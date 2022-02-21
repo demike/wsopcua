@@ -78,8 +78,6 @@ export class PacketAssembler extends EventEmitter<PacketAssemblerEvents> {
   }
 
   public feed(data: DataView) {
-    const self = this;
-
     let messageChunk: DataView;
     // xx assert(data instanceof Buffer);
     // xx assert(data.length > 0, "PacketAssembler expects a no-zero size data block");
@@ -90,7 +88,6 @@ export class PacketAssembler extends EventEmitter<PacketAssemblerEvents> {
       this.currentLength + data.byteLength >= this.minimumSizeInBytes
     ) {
       // we are at a start of a block and there is enough data provided to read the length  of the block
-
       // let's build the whole data block with previous blocks already read.
       if (this._stack.length > 0) {
         data = this._build_data(data);
@@ -136,12 +133,12 @@ export class PacketAssembler extends EventEmitter<PacketAssemblerEvents> {
       if (size1 > 0) {
         // var chunk1 = new DataView(data.buffer,0,size1);
         const chunk1 = new DataView(data.buffer.slice(0, size1)); // .slice(0, size1);
-        self.feed(chunk1);
+        this.feed(chunk1);
       }
       const chunk2 = new DataView(data.buffer.slice(size1));
       // var chunk2 = new DataView(data.buffer,size1);
       if (chunk2.byteLength > 0) {
-        self.feed(chunk2);
+        this.feed(chunk2);
       }
     }
   }
