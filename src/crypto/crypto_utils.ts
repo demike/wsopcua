@@ -31,6 +31,16 @@ export function buf2hex(buffer: ArrayBuffer) {
     .join('');
 }
 
+export function hex2buf(hex: string) {
+  const buf = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < hex.length; i += 2) {
+    const byteValue = parseInt(hex.substring(i, i + 2), 16);
+    buf[i / 2] = byteValue;
+  }
+
+  return buf;
+}
+
 export function buf2string(buffer: BufferSource) {
   const dec = new TextDecoder('utf-8');
   return dec.decode(buffer);

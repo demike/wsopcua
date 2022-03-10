@@ -1,0 +1,26 @@
+import { exploreCertificate } from '.';
+import { PEMDERCertificateStore } from '../common';
+import { writeCertificate } from './crypto_write_certificate';
+
+describe('explore certificate', () => {
+  fit('should read a certificate and write it again', async () => {
+    const clientCertPEM = await fetch('base/src/test-util/test_cert_full.pem').then((r) =>
+      r.text()
+    );
+    const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
+      r.text()
+    );
+    const certStore = new PEMDERCertificateStore(clientCertPEM, privateKeyPEM);
+
+    const origCert = certStore.getCertificate();
+
+    const certInternals = await exploreCertificate(origCert);
+    const resultCert = writeCertificate(certInternals);
+
+    const resultCertInternals = await exploreCertificate(resultCert);
+
+    certInternals.tbsCertificate.subjectFingerPrint = undefined;
+    resultCertInternals.tbsCertificate.subjectFingerPrint = undefined;
+    expect(certInternals).toEqual(resultCertInternals);
+  });
+});

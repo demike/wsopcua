@@ -63,9 +63,11 @@ import {
   BlockInfo,
   DirectoryName,
   formatBuffer2DigitHexWithColum,
+  parseOID,
   readTag,
   SignatureValue,
   TagType,
+  _findBlockAtIndex,
   _getBlock,
   _readAlgorithmIdentifier,
   _readBitString,
@@ -83,6 +85,7 @@ import {
   _readValue,
   _readVersionValue,
 } from './asn1';
+import { isPromise } from 'src/basic-types/utils';
 
 const PEM_REGEX = /^(-----BEGIN (.*)-----\r?\n([/+=a-zA-Z0-9\r\n]*)\r?\n-----END \2-----\r?\n)/gm;
 const PEM_TYPE_REGEX = /^(-----BEGIN (.*)-----)/m;
@@ -282,6 +285,9 @@ function _readGeneralNames(buffer: Uint8Array, block: BlockInfo) {
       case 'IA5String':
         const dec = new TextDecoder('utf-8');
         return buf2string(buffer.subarray(block.position, block.position + block.length));
+      case 'OBJECT_IDENTIFIER':
+        return parseOID(buffer, block.position, block.position + block.length);
+      // return buf2string(_getBlock(buffer, block));
       default:
         return buf2hex(buffer.subarray(block.position, block.position + block.length));
     }
@@ -295,10 +301,12 @@ function _readGeneralNames(buffer: Uint8Array, block: BlockInfo) {
 
     // istanbul ignore next
     if (!type) {
-      throw new Error(' INVALID TYPE => ' + t + '0x' + t.toString(16));
+      //  throw new Error(' INVALID TYPE => ' + t + '0x' + t.toString(16));
+      console.warn(' INVALID TYPE => ' + t + '0x' + t.toString(16));
+    } else {
+      n[type.name] = n[type.name] || [];
+      n[type.name].push(_readFromType(buffer, block, type.type));
     }
-    n[type.name] = n[type.name] || [];
-    n[type.name].push(_readFromType(buffer, block, type.type));
   }
   return n;
 }
@@ -503,7 +511,10 @@ function _readExtension(buffer: Uint8Array, block: BlockInfo) {
 }
 
 // Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
-function _readExtensions(buffer: Uint8Array, block: BlockInfo): CertificateExtension {
+async function _readExtensions(
+  buffer: Uint8Array,
+  block: BlockInfo
+): Promise<CertificateExtension> {
   assert(block.tag === 0xa3);
   let inner_blocks = _readStruct(buffer, block);
   inner_blocks = _readStruct(buffer, inner_blocks[0]);
@@ -512,17 +523,9 @@ function _readExtensions(buffer: Uint8Array, block: BlockInfo): CertificateExten
 
   const result: any = {};
   for (const e of extensions) {
-    result[e.identifier.name] = e.value;
+    result[e.identifier.name] = isPromise(e.value) ? await e.value : e.value;
   }
   return result as CertificateExtension;
-}
-
-function _findBlockAtIndex(blocks: BlockInfo[], index: number): BlockInfo | null {
-  const tmp = blocks.filter((b: BlockInfo) => b.tag === 0xa0 + index);
-  if (tmp.length === 0) {
-    return null;
-  }
-  return tmp[0];
 }
 
 /*
@@ -616,7 +619,7 @@ export interface CertificateExtension {
   authorityKeyIdentifier?: AuthorityKeyIdentifier;
   keyUsage?: X509KeyUsage;
   extKeyUsage?: X509ExtKeyUsage;
-  subjectAltName?: any;
+  subjectAltName?: { [key: string]: string[] };
 }
 
 export interface TbsCertificate {
@@ -690,7 +693,7 @@ async function readTbsCertificate(buffer: Uint8Array, block: BlockInfo): Promise
       );
       extensions = null;
     } else {
-      extensions = _readExtensions(buffer, extensionBlock);
+      extensions = await _readExtensions(buffer, extensionBlock);
     }
   }
 

@@ -221,7 +221,7 @@ function perform_test(
     expect(chunk_counter).not.toBeGreaterThan(expected_chunk_lengths.length);
 
     expect(chunk.byteLength).toEqual(
-      expected_chunk_lengths[chunk_counter],
+      expected_chunk_lengths[chunk_counter] as number,
       ' testing chunk ' + chunk_counter
     );
 

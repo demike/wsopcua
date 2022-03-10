@@ -164,7 +164,7 @@ export function _readListOfInteger(buffer: Uint8Array): Uint8Array[] {
   return inner_blocks.map((bblock: BlockInfo) => _readIntegerAsByteString(buffer, bblock));
 }
 
-function parseOID(buffer: Uint8Array, start: number, end: number): string {
+export function parseOID(buffer: Uint8Array, start: number, end: number): string {
   // ASN.1 JavaScript decoder
   // Copyright (c) 2008-2014 Lapo Luchini <lapo@lapo.it>
   let s = '',
@@ -291,11 +291,11 @@ export function _readVersionValue(buffer: Uint8Array, block: BlockInfo): number 
  */
 function convertGeneralizedTime(str: string): Date {
   const year = parseInt(str.substring(0, 4), 10);
-  const month = parseInt(str.substring(4, 2), 10) - 1;
-  const day = parseInt(str.substring(6, 2), 10);
-  const hours = parseInt(str.substring(8, 2), 10);
-  const mins = parseInt(str.substring(10, 2), 10);
-  const secs = parseInt(str.substring(12, 2), 10);
+  const month = parseInt(str.substring(4, 6), 10) - 1;
+  const day = parseInt(str.substring(6, 8), 10);
+  const hours = parseInt(str.substring(8, 10), 10);
+  const mins = parseInt(str.substring(10, 12), 10);
+  const secs = parseInt(str.substring(12, 14), 10);
 
   return new Date(Date.UTC(year, month, day, hours, mins, secs));
 }
@@ -343,11 +343,11 @@ function _readBMPString(buffer: Uint8Array, block: BlockInfo): string {
  */
 function convertUTCTime(str: string): Date {
   let year = parseInt(str.substring(0, 2), 10);
-  const month = parseInt(str.substring(2, 2), 10) - 1;
-  const day = parseInt(str.substring(4, 2), 10);
-  const hours = parseInt(str.substring(6, 2), 10);
-  const mins = parseInt(str.substring(8, 2), 10);
-  const secs = parseInt(str.substring(10, 2), 10);
+  const month = parseInt(str.substring(2, 4), 10) - 1;
+  const day = parseInt(str.substring(4, 6), 10);
+  const hours = parseInt(str.substring(6, 8), 10);
+  const mins = parseInt(str.substring(8, 10), 10);
+  const secs = parseInt(str.substring(10, 12), 10);
 
   year += year >= 50 ? 1900 : 2000;
   return new Date(Date.UTC(year, month, day, hours, mins, secs));
