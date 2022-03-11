@@ -85,7 +85,7 @@ import {
   _readValue,
   _readVersionValue,
 } from './asn1';
-import { isPromise } from 'src/basic-types/utils';
+import { isPromise } from '../basic-types/utils';
 
 const PEM_REGEX = /^(-----BEGIN (.*)-----\r?\n([/+=a-zA-Z0-9\r\n]*)\r?\n-----END \2-----\r?\n)/gm;
 const PEM_TYPE_REGEX = /^(-----BEGIN (.*)-----)/m;
