@@ -509,7 +509,10 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     });
   }
 
-  performMessageTransaction(request: any, callback: ResponseCallback<any>): void {
+  performMessageTransaction(
+    request: IEncodable & { requestHeader: IRequestHeader },
+    callback: ResponseCallback<any>
+  ): void {
     if (!this._secureChannel) {
       // this may happen if the Server has closed the connection abruptly for some unknown reason
       // or if the tcp connection has been broken.

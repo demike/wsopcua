@@ -55,7 +55,7 @@ import { doDebug, debugLog } from '../common/debug';
 import { NodeClass } from '../generated/NodeClass';
 import { DiagnosticInfo } from '../data-model';
 import { ReferenceDescription, BrowseDescription } from '../service-browse';
-import { RequestHeader } from '../generated/RequestHeader';
+import { IRequestHeader } from '../generated/RequestHeader';
 import { IBrowseDescription } from '../generated/BrowseDescription';
 import { RegisterNodesRequest } from '../generated/RegisterNodesRequest';
 import { RegisterNodesResponse } from '../generated/RegisterNodesResponse';
@@ -71,6 +71,7 @@ import {
   NodeIdType,
 } from '../generated';
 import { buf2base64, buf2hex } from '../crypto';
+import { IEncodable } from 'src/factory/factories_baseobject';
 
 export enum BrowseDirection {
   Invalid = -1, //
@@ -1825,7 +1826,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   }
 
   public performMessageTransaction(
-    request: { requestHeader: RequestHeader },
+    request: IEncodable & { requestHeader: IRequestHeader },
     callback: ResponseCallback<any>
   ) {
     assert('function' === typeof callback);
@@ -1839,6 +1840,11 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       return callback(new Error('Invalid Channel '));
     }
     request.requestHeader.authenticationToken = this.authenticationToken;
+
+    if (this._namespaceArray) {
+      // add the namespace array for resolving namespace of extension objects
+      (request as any).__namespaceArray = this._namespaceArray;
+    }
 
     this.lastRequestSentTime = Date.now();
 

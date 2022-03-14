@@ -4,7 +4,7 @@ import { DataStream } from './DataStream';
 import { assert } from '../assert';
 import '../nodeid/nodeid';
 import { NodeId, makeNodeId } from '../nodeid/nodeid';
-import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import { ExpandedNodeId, getCurrentNamespaceArray, resolveExpandedNodeId } from '../nodeid/expanded_nodeid';
 import { isValidGuid, decodeGuid, encodeGuid } from './guid';
 import { decodeString, encodeString } from './string';
 import { decodeUInt32, encodeUInt32 } from './integers';
@@ -133,7 +133,10 @@ function _encodeNodeId(encoding_byte: number, nodeId: NodeId, stream: DataStream
   }
 }
 
-export function encodeNodeId(nodeId: NodeId, stream: DataStream) {
+export function encodeNodeId(nodeId: NodeId, stream: DataStream & { __namespaceArray?: string[] }) {
+  // automatically resolve namespaceUri to namespace index if possible (and necessary)
+  nodeId = resolveExpandedNodeId(nodeId, stream.__namespaceArray);
+
   let encoding_byte = nodeID_encodingByte(nodeId);
   // eslint-disable-next-line no-bitwise
   encoding_byte &= 0x3f;
@@ -238,7 +241,10 @@ export function decodeExpandedNodeId(stream: DataStream) {
   return new ExpandedNodeId(e.identifierType, e.value, e.namespace, e.namespaceUri, e.serverIndex);
 }
 
-export function jsonEncodeNodeId(id: NodeId) {
+export function jsonEncodeNodeId(id: NodeId, namespaceArray?: string[]) {
+  // automatically resolve namespaceUri to namespace index if possible (and necessary)
+  id = resolveExpandedNodeId(id, getCurrentNamespaceArray());
+
   const out: any = {};
   const idType = id.identifierType - 2; // yes there is a difference between BIN and JSON types!
   // 5.4.2.11: Uint32 is omitted

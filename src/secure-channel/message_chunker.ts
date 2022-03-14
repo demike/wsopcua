@@ -20,6 +20,7 @@ import {
 import { ISymmetricAlgortihmSecurityHeader } from '../service-secure-channel/SymmetricAlgorithmSecurityHeader';
 import { DerivedKeys } from '../crypto';
 import { IEncodable } from '../factory/factories_baseobject';
+import { resolveExpandedNodeId } from '../nodeid';
 
 export interface IMessageChunkerOptions {
   securityHeader?: AsymmetricAlgorithmSecurityHeader | SymmetricAlgorithmSecurityHeader;
@@ -95,7 +96,7 @@ export class MessageChunker {
   public chunkSecureMessage(
     msgType: string,
     options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader,
-    message: IEncodable,
+    message: IEncodable & { __namespaceArray?: string[] },
     messageChunkCallback: (chunk: ArrayBuffer | null) => void
   ) {
     options = <any>options || {};
@@ -106,8 +107,12 @@ export class MessageChunker {
 
     const stream = new DataStream(binSize);
     this._stream = stream;
+    (this._stream as { __namespaceArray?: string[] }).__namespaceArray = message.__namespaceArray;
 
-    ec.encodeExpandedNodeId(message.encodingDefaultBinary, stream);
+    ec.encodeExpandedNodeId(
+      resolveExpandedNodeId(message.encodingDefaultBinary, message.__namespaceArray),
+      stream
+    );
     message.encode(stream);
 
     let securityHeader;

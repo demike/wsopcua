@@ -8,6 +8,7 @@ import * as factory from '../factory';
 
 import { IEncodable } from '../factory/factories_baseobject';
 import { jsonDecodeExpandedNodeId, jsonEncodeExpandedNodeId } from '../basic-types/nodeid';
+import { resolveExpandedNodeId, setCurrentNamespaceArray } from '../nodeid/expanded_nodeid';
 
 const doPerfMonitoring = false;
 
@@ -75,10 +76,11 @@ export class JSONMessageBuilder extends EventEmitter<JSONMessageBuilderEvents> {
     return this.decodeMessage(data);
   }
 
-  public encodeRequest(request: IEncodable) {
+  public encodeRequest(request: IEncodable & { __namespaceArray?: string[] }) {
+    setCurrentNamespaceArray(request.__namespaceArray);
     return JSON.stringify({
-      TypeId: jsonEncodeExpandedNodeId(request.encodingDefaultBinary),
-      Body: request,
+      TypeId: jsonEncodeExpandedNodeId(resolveExpandedNodeId(request.encodingDefaultBinary)),
+      Body: request.toJSON(),
     });
   }
 

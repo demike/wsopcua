@@ -170,3 +170,30 @@ export function makeExpandedNodeId(
   namespace = namespace || 0;
   return new ExpandedNodeId(NodeIdType.Numeric, valueInt, namespace, namespaceUri, serverIndex);
 }
+
+export function resolveExpandedNodeId<T extends Readonly<NodeId | ExpandedNodeId>>(
+  id?: T,
+  namespaceArray?: string[]
+) {
+  if (!id || !namespaceArray || !(id as ExpandedNodeId).namespaceUri || id.namespace > 0) {
+    return id;
+  }
+
+  const namespace = namespaceArray.indexOf((id as ExpandedNodeId).namespaceUri);
+  if (namespace === -1) {
+    throw new Error(
+      'could not find namespace for namespaceUri: ' + (id as ExpandedNodeId).namespaceUri
+    );
+  }
+
+  return new ExpandedNodeId(id.identifierType, id.value, namespace);
+}
+
+let __currentNamespaceArray__: string[] | undefined;
+export function setCurrentNamespaceArray(namespaceArray?: string[]) {
+  __currentNamespaceArray__ = namespaceArray;
+}
+
+export function getCurrentNamespaceArray(): string[] | undefined {
+  return __currentNamespaceArray__;
+}

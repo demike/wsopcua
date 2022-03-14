@@ -1,4 +1,4 @@
-import { makeExpandedNodeId, ExpandedNodeId } from './expanded_nodeid';
+import { makeExpandedNodeId, ExpandedNodeId, resolveExpandedNodeId } from './expanded_nodeid';
 import { makeNodeId } from './nodeid';
 import { NodeIdType } from '../generated/NodeIdType';
 import { coerceExpandedNodeId } from './expanded_nodeid';
@@ -104,5 +104,32 @@ describe('testing ExpandedNodeId', function () {
 
     const exNodeId = coerceExpandedNodeId(obj);
     expect(exNodeId.toString()).toBe('svr=2;nsu=testuri;ns=0;i=10');
+  });
+});
+
+describe('resolveExpandedNodeId', function () {
+  it('should pass through the input nodeId if no namespace array is given', () => {
+    const nodeId = new ExpandedNodeId(NodeIdType.String, 'test', undefined, 'thenamespace');
+    const result = resolveExpandedNodeId(nodeId);
+    expect(result).toBe(nodeId);
+  });
+
+  it('should pass through the input nodeId if it has a namespace index > 0 set', () => {
+    const nodeId = new ExpandedNodeId(NodeIdType.String, 'test', 3, 'thenamespace');
+    const result = resolveExpandedNodeId(nodeId);
+    expect(result).toBe(nodeId);
+  });
+
+  it('should resolve the input nodeId if a valid namespace array is set', () => {
+    const namespaceArray = ['http://opcfoundation.org/UA/', 'namespace1', 'thenamespace'];
+    const nodeId = new ExpandedNodeId(NodeIdType.String, 'test', undefined, 'thenamespace');
+    const result = resolveExpandedNodeId(nodeId, namespaceArray);
+    expect(result).not.toBe(nodeId);
+    expect(result.namespace).toEqual(2);
+  });
+
+  it('should return undefined if no nodeId is given', () => {
+    const result = resolveExpandedNodeId();
+    expect(result).toBeUndefined();
   });
 });

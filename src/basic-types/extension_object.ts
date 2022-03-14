@@ -47,7 +47,7 @@ export function constructEmptyExtensionObject(nodeId: NodeId) {
 
 export function encodeExtensionObject(
   object: IEncodable | null | undefined | ExtensionObject,
-  stream: DataStream
+  stream: DataStream & { __namespaceArray?: string[] }
 ) {
   if (!object) {
     encodeNodeId(makeNodeId(0), stream);

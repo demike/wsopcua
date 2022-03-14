@@ -1040,7 +1040,10 @@ export class ClientSecureChannelLayer
  *    ```
  *
  */
-  public performMessageTransaction(requestMessage: any, callback: ResponseCallback<any>) {
+  public performMessageTransaction(
+    requestMessage: IEncodable & { requestHeader: IRequestHeader },
+    callback: ResponseCallback<any>
+  ) {
     assert('function' === typeof callback);
     this._performMessageTransaction('MSG', requestMessage, callback);
   }
@@ -1183,7 +1186,7 @@ export class ClientSecureChannelLayer
   protected _internal_perform_transaction(transaction_data: {
     timerId?: number;
     msgType: string;
-    request: any;
+    request: IEncodable & { requestHeader: IRequestHeader };
     callback: ResponseCallback<any>;
   }) {
     assert('function' === typeof transaction_data.callback);
@@ -1384,7 +1387,7 @@ export class ClientSecureChannelLayer
 
   protected async _sendSecureOpcUARequest(
     msgType: string,
-    requestMessage: IEncodable & { requestHeader: IRequestHeader },
+    requestMessage: IEncodable & { requestHeader: IRequestHeader; __namespaceArray?: string[] },
     requestId: number
   ) {
     const options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader = {
