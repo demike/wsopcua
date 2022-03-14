@@ -316,9 +316,7 @@ export class DataStream {
       );
     }
 
-    const buf = new Uint8Array(
-      this._view.buffer.slice(this._view.byteOffset + this._pos, this._pos + bufLen)
-    ); // TODO use subarray
+    const buf = new Uint8Array(this._view.buffer, this._pos + this._view.byteOffset, bufLen);
     this._pos += bufLen;
     return buf;
   }
