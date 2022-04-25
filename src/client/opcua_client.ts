@@ -138,9 +138,8 @@ export class OPCUAClient extends OPCUAClientBase {
     return this._clientName + this.___sessionName_counter;
   }
 
+  // get applicationURI from certificate
   protected async _getApplicationUri(): Promise<string> {
-    // get applicationURI from certificate
-
     /** msgcrypt**/
     const certificate = this.getCertificate();
     let applicationUri;
@@ -1158,7 +1157,7 @@ async function createIssuedIdentityToken(
   // server does not provide certificate use unencrypted password (no server certificate !!!)
   // note: this means that password is sent in clear text to the server
   // note: OPCUA specification discourages use of unencrypted password
-  //       but in case of WSS this is no problem
+  //       but in case of WSS this might be acceptable
   if (!session.serverCertificate || securityPolicy === SecurityPolicy.None) {
     identityToken = new IssuedIdentityToken({
       tokenData,

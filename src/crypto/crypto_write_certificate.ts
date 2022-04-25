@@ -15,6 +15,7 @@ import { DirectoryName, SignatureValue, TagType } from './asn1';
 
 import { oid_reverse_map } from './oid_reverse_map';
 import { hex2buf } from './crypto_utils';
+import { DER } from './common';
 import { write } from 'fs';
 
 /*
@@ -163,12 +164,18 @@ extension are following
 
 */
 
-export function writeCertificate(cert: CertificateInternals) {
+export async function writeCertificate(cert: CertificateInternals, signingKeyDer?: DER) {
   const writer = new Asn1Writer({ size: 4096 });
   writer.startSequence();
   writeTbsCertificate(writer, cert.tbsCertificate);
+  let signedCertBuf: Uint8Array | undefined;
+  if (signingKeyDer) {
+    const tbsCertBuf = writer.getBuffer(true).subarray(4, writer.offset);
+    const key = await createSigningKey(signingKeyDer, cert.signatureAlgorithm.identifier);
+    signedCertBuf = await signCertificate(key, tbsCertBuf);
+  }
   writeAlgorithmIdentifier(writer, cert.signatureAlgorithm.identifier);
-  writeSignatureValue(writer, cert.signatureValue);
+  writeSignatureValue(writer, signedCertBuf ?? cert.signatureValue);
   writer.endSequence();
   return writer.buffer;
 }
@@ -235,10 +242,56 @@ function writeAlgorithmIdentifier(writer: Asn1Writer, identiferName: string) {
   writer.endSequence();
 }
 
-function writeSignatureValue(writer: Asn1Writer, signature: SignatureValue) {
-  return writer.writeBitString(
-    new Uint8Array(signature.match(/.{1,2}/g).map((str) => parseInt(str, 16)))
+function writeSignatureValue(writer: Asn1Writer, signature: SignatureValue | Uint8Array) {
+  if (typeof signature === 'string') {
+    signature = new Uint8Array(signature.match(/.{1,2}/g).map((str) => parseInt(str, 16)));
+  }
+  return writer.writeBitString(signature);
+}
+
+async function signCertificate(signingKey: CryptoKey, tbsCert: Uint8Array): Promise<Uint8Array> {
+  const signed = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', signingKey, tbsCert);
+  return new Uint8Array(signed);
+}
+
+async function createSigningKey(
+  signingKeyDer: DER,
+  signatureAlgorithmIdentifier: string
+): Promise<CryptoKey> {
+  // example: sha256WithRSAEncryption
+  const arIdentifier = signatureAlgorithmIdentifier.split('With');
+  if (arIdentifier.length < 2) {
+    throw new Error('malformed signature algorithm identifier');
+  }
+
+  let hash = 'SHA-256';
+  switch (arIdentifier[0]) {
+    case 'sha256':
+      hash = 'SHA-256';
+      break;
+    case 'sha1':
+      hash = 'SHA-1';
+      break;
+    case 'sha512':
+      hash = 'SHA-512';
+      break;
+    case 'sha384':
+      hash = 'SHA-384';
+      break;
+  }
+
+  const signingKey = await crypto.subtle.importKey(
+    'pkcs8',
+    signingKeyDer,
+    {
+      name: 'RSASSA-PKCS1-v1_5',
+      hash,
+    },
+    false,
+    ['sign']
   );
+
+  return signingKey;
 }
 
 function writeSubjectPublicKeyInfo(writer: Asn1Writer, spki: SubjectPublicKeyInfo) {
@@ -347,21 +400,17 @@ function writeExtensions(writer: Asn1Writer, extensions: CertificateExtension) {
   writer.startSequence(0xa3);
   writer.startSequence(); // tag: 48
 
+  if (extensions.basicConstraints) {
+    writeBasicConstraint2_5_29_19(writer, extensions.basicConstraints);
+  }
+
   // subject key identifier
   if (extensions.subjectKeyIdentifier) {
     writeSubjectKeyIdentifier(writer, extensions.subjectKeyIdentifier);
   }
 
-  if (extensions.subjectAltName) {
-    writeSubjectAltName(writer, extensions.subjectAltName);
-  }
-
   if (extensions.authorityKeyIdentifier) {
     writeAuthorityKeyIdentifier(writer, extensions.authorityKeyIdentifier);
-  }
-
-  if (extensions.basicConstraints) {
-    writeBasicConstraints(writer, extensions.basicConstraints);
   }
 
   // certExtension: NOT IMPLEMENTED YET
@@ -372,6 +421,10 @@ function writeExtensions(writer: Asn1Writer, extensions: CertificateExtension) {
 
   if (extensions.extKeyUsage) {
     writeExtKeyUsage(writer, extensions.extKeyUsage);
+  }
+
+  if (extensions.subjectAltName) {
+    writeSubjectAltName(writer, extensions.subjectAltName);
   }
 
   writer.endSequence(); // end tag: 48
@@ -432,20 +485,26 @@ async function writeAuthorityKeyIdentifier(writer: Asn1Writer, identifier: Autho
   writer.endSequence(); // end tag 48
 }
 
-function writeBasicConstraints(writer: Asn1Writer, constraints: BasicConstraints) {
+function writeBasicConstraint2_5_29_19(writer: Asn1Writer, constraints: BasicConstraints) {
   // TODO: further investiage basic constraints
   writer.startSequence(); // start tag 48
-  writer.writeOID(oid_reverse_map.getOidByName('basicConstraints')); // tag 6
-  writer.startSequence(TagType.OCTET_STRING); // tag 4
+  writer.writeOID('2.5.29.19'); // tag 6
 
-  if (constraints.cA) {
+  // critical
+  writer.writeBoolean(constraints.critical);
+
+  writer.startSequence(TagType.OCTET_STRING); // tag 4
+  writer.startSequence();
+
+  if (constraints.cA !== undefined) {
     writer.writeBoolean(constraints.cA);
   }
 
-  if (constraints.pathLengthConstraint) {
+  if (constraints.pathLengthConstraint !== undefined) {
     writer.writeInt(constraints.pathLengthConstraint);
   }
 
+  writer.endSequence(); // end tag 48
   writer.endSequence(); // end tag 4
   writer.endSequence(); // end tag 48
 }
@@ -492,7 +551,9 @@ function writeKeyUsage(writer: Asn1Writer, usage: X509KeyUsage) {
 
   writer.startSequence(); // tag:48
   writer.writeOID(oid_reverse_map.getOidByName('keyUsage')); // tag 6
-  // writer.writeBoolean(true); // TODO: maybe we need write a boolean here too?
+
+  writer.writeBoolean(true); // write the critical flag
+
   writer.startSequence(TagType.OCTET_STRING); // tag 4
   writer.writeBitString(buf);
   writer.endSequence(); // end tag 4
@@ -547,6 +608,7 @@ function writeExtKeyUsage(writer: Asn1Writer, usage: X509ExtKeyUsage) {
 
   writer.startSequence(); // tag 48
   writer.writeOID(oid_reverse_map.getOidByName('extKeyUsage')); // tag 6
+  writer.writeBoolean(true); // write the critical flag
   writer.startSequence(TagType.OCTET_STRING); // tag 4
   writer.startSequence(); // tag 48
   // iterate over all ext usages here

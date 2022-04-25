@@ -405,7 +405,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
       });
     }
 
-    // todo: make sure endpointUrl exists in the list of endpoints send by the server
+    // todo: make sure endpointUrl exists in the list of endpoints sent by the server
     // [...]
 
     // make sure callback will only be call once regardless of outcome, and will be also deferred.
@@ -955,6 +955,18 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
     async_series(
       [
+        // ------------------------------------------------- STEP 1 : initialize certificates (if necessary)
+        (_inner_callback: ErrorCallback) => {
+          if (!this.clientCertificateStore.getCertificate() && this.clientCertificateStore.init) {
+            // initialize the certificates (i.e.: create self signed certificate )
+            this.clientCertificateStore.init().then(
+              () => _inner_callback(),
+              (err) => _inner_callback(err)
+            );
+          } else {
+            _inner_callback();
+          }
+        },
         // ------------------------------------------------- STEP 2 : OpenSecureChannel
         (_inner_callback: ErrorCallback) => {
           secureChannel = new ClientSecureChannelLayer({

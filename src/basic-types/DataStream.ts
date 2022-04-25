@@ -290,6 +290,9 @@ export class DataStream {
 
   /**
    * read a byte stream to the stream.
+   * the data is cloned to avoid references to huge memory blocks
+   * ( and avoid potential problems when using the underlying ArrayBuffer directly)
+   *
    * The method reads the length of the byte array from the stream as a 32 bits integer before reading the byte stream.
    *
    * @method readByteStream
@@ -316,7 +319,11 @@ export class DataStream {
       );
     }
 
-    const buf = new Uint8Array(this._view.buffer, this._pos + this._view.byteOffset, bufLen);
+    // explicitely clone the array data here, to avoid references to huge memory blocks
+    // ( and avoid potential problems when using the underlying ArrayBuffer directly)
+    const buf = new Uint8Array(
+      this._view.buffer.slice(this._view.byteOffset + this._pos, this._pos + bufLen)
+    );
     this._pos += bufLen;
     return buf;
   }

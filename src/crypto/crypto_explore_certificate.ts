@@ -553,7 +553,10 @@ async function _readExtensions(
  :       }
  */
 
-function _readSubjectPublicKeyInfo(buffer: Uint8Array, block: BlockInfo): SubjectPublicKeyInfo {
+export function readSubjectPublicKeyInfo(
+  buffer: Uint8Array,
+  block: BlockInfo
+): SubjectPublicKeyInfo {
   const inner_blocks = _readStruct(buffer, block);
 
   // algorithm identifier
@@ -625,7 +628,7 @@ export interface CertificateExtension {
 export interface TbsCertificate {
   version: number;
   serialNumber: string;
-  issuer: any;
+  issuer: DirectoryName;
   signature: AlgorithmIdentifier;
   validity: Validity;
   subject: DirectoryName;
@@ -637,7 +640,8 @@ export interface TbsCertificate {
 async function readTbsCertificate(buffer: Uint8Array, block: BlockInfo): Promise<TbsCertificate> {
   const blocks = _readStruct(buffer, block);
 
-  let version, serialNumber, signature, issuer, validity, subject, extensions, subjectFingerPrint;
+  let version, signature, issuer, validity, subject, extensions, subjectFingerPrint;
+  let serialNumber: string;
   let subjectPublicKeyInfo: SubjectPublicKeyInfo;
 
   if (blocks.length === 6) {
@@ -651,7 +655,7 @@ async function readTbsCertificate(buffer: Uint8Array, block: BlockInfo): Promise
     subjectFingerPrint = formatBuffer2DigitHexWithColum(
       new Uint8Array(await makeSHA1Thumbprint(_getBlock(buffer, blocks[4])))
     );
-    subjectPublicKeyInfo = _readSubjectPublicKeyInfo(buffer, blocks[5]);
+    subjectPublicKeyInfo = readSubjectPublicKeyInfo(buffer, blocks[5]);
 
     extensions = null;
   } else {
@@ -675,7 +679,7 @@ async function readTbsCertificate(buffer: Uint8Array, block: BlockInfo): Promise
 
     switch (what_type) {
       case 'rsaEncryption': {
-        subjectPublicKeyInfo = _readSubjectPublicKeyInfo(buffer, blocks[6]);
+        subjectPublicKeyInfo = readSubjectPublicKeyInfo(buffer, blocks[6]);
         break;
       }
       case 'ecPublicKey':

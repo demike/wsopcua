@@ -13,7 +13,7 @@ class OidReverseMap {
 
   private findOidByName(name: string) {
     for (const [key, value] of Object.entries(oid_map)) {
-      if (value.d === name) {
+      if (value.d === name && !value.w /* if not deprecated */) {
         this.cache.set(name, key);
         return key;
       }

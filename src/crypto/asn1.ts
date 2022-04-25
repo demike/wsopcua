@@ -379,7 +379,7 @@ export interface DirectoryName {
   stateOrProvinceName?: string;
   localityName?: string;
   organizationName?: string;
-  organizationUnitName?: string;
+  organizationalUnitName?: string;
   commonName?: string;
   countryName?: string;
 }

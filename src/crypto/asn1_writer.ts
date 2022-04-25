@@ -19,10 +19,7 @@ export class Asn1Writer {
   private _seq: number[];
 
   get buffer() {
-    if (this._seq.length) {
-      throw new Error(this._seq.length + ' unended sequence(s)');
-    }
-    return this._buf.slice(0, this._offset);
+    return this.getBuffer();
   }
 
   constructor(options?: WriterOptions) {
@@ -36,6 +33,17 @@ export class Asn1Writer {
     // A list of offsets in the buffer where we need to insert
     // sequence tag/len pairs.
     this._seq = [];
+  }
+
+  public get offset() {
+    return this._offset;
+  }
+
+  public getBuffer(allowOpenSequences = false) {
+    if (!allowOpenSequences && this._seq.length) {
+      throw new Error(this._seq.length + ' unended sequence(s)');
+    }
+    return this._buf.slice(0, this._offset);
   }
 
   public writeByte(b: number) {
