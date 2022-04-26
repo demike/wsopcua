@@ -1,5 +1,5 @@
-import { AlgorithmIdentifier, readTag } from 'src/crypto/asn1';
-import { coerceCertificateInfo } from 'src/crypto/crypto_coerce_certificate';
+import { AlgorithmIdentifier, readTag } from '../crypto/asn1';
+import { coerceCertificateInfo } from '../crypto/crypto_coerce_certificate';
 import {
   CertificateInternals,
   convertPEMtoDER,
