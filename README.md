@@ -67,7 +67,7 @@ we reduced the retry count to 1.
 
 <!-- add-file: ./src/examples/simple.connect.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
 
 export async function connectToServerExample() {
@@ -101,6 +101,7 @@ export async function connectToServerExample() {
   await client.disconnectP();
   console.log('disconnected');
 }
+
 ```
 
 ### Reading Values
@@ -118,8 +119,8 @@ It's also possible to read all attributes of a variable.
 
 <!-- add-file: ./src/examples/read.example.ts -->
 
-```ts markdown-add-files
-import { AttributeIds, MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
+``` ts markdown-add-files
+import { AttributeIds } from '../';
 import { ClientSession } from '../client';
 import { ReadValueId } from '../generated';
 import { coerceNodeId } from '../nodeid/nodeid';
@@ -172,6 +173,7 @@ export async function readExample(session: ClientSession) {
     "minimumSamplingInterval":0,"historizing":false,"statusCode":{"value":0}}
    */
 }
+
 ```
 
 ### Browsing
@@ -180,7 +182,7 @@ We can browse the RootFolder to receive a list of all of it's child nodes. With 
 
 <!-- add-file: ./src/examples/browse.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { ClientSession } from '../client';
 
 export async function browseExample(session: ClientSession) {
@@ -197,6 +199,7 @@ export async function browseExample(session: ClientSession) {
    * '   -> Views: ns=0;i=87'
    */
 }
+
 ```
 
 ### Monitoring
@@ -210,7 +213,7 @@ Define a Timeout for the subscription to end and hook into several subscription 
 
 <!-- add-file: ./src/examples/create.subscription.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { ClientSubscription } from '../';
 import { ClientSession } from '../client';
 
@@ -241,6 +244,7 @@ export function createSubscriptionExample(session: ClientSession): ClientSubscri
 
   return subscription;
 }
+
 ```
 
 #### register a monitored item
@@ -250,7 +254,7 @@ The [monitored item](./src/client/MonitoredItemBase.ts) again allows for hooks i
 
 <!-- add-file: ./src/examples/monitoring.single.item.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { AttributeIds, ClientSubscription, coerceNodeId } from '../';
 import { DataValue, IMonitoringParameters, ReadValueId, TimestampsToReturn } from '../generated';
 import { timeout } from './example.utils';
@@ -295,53 +299,7 @@ export async function monitorSingleItemExample(subscription: ClientSubscription)
   console.log('now terminating subscription');
   await subscription.terminateP();
 }
-```
 
-```ts markdown-add-files
-import { AttributeIds, ClientSubscription, coerceNodeId } from '../';
-import { DataValue, IMonitoringParameters, ReadValueId, TimestampsToReturn } from '../generated';
-import { timeout } from './example.utils';
-
-export async function monitorSingleItemExample(subscription: ClientSubscription) {
-  // install 1 monitored item
-  const itemToMonitor = new ReadValueId({
-    nodeId: coerceNodeId('ns=1;s=free_memory'),
-    attributeId: AttributeIds.Value,
-  });
-
-  // parameter description: https://reference.opcfoundation.org/v104/Core/docs/Part4/5.12.2/
-  const parameters: IMonitoringParameters = {
-    samplingInterval: 100,
-    discardOldest: true,
-    queueSize: 3,
-  };
-
-  // register a monitored item server side:
-  // - the monitor call waits for the subscription to be ready
-  // - when the subscription is ready the given monitored item is registered for monitoring
-  // - the passed in monitoring parameters can be revised by the server
-  // (use subscription.monitorItemsP for multiple items)
-  const monitoredItem = await subscription.monitorP(
-    itemToMonitor,
-    parameters,
-    TimestampsToReturn.Both
-  );
-
-  monitoredItem.on('changed', (dataValue: DataValue) => {
-    console.log(' value has changed : ', dataValue.value.toString());
-  });
-
-  await timeout(600);
-
-  // unmonitor the item
-  await monitoredItem.terminateP();
-
-  // ----- many monitored item registrations / unregistrations could happen here
-
-  // finally terminate the whole subscription
-  console.log('now terminating subscription');
-  await subscription.terminateP();
-}
 ```
 
 #### register multiple monitored items
@@ -351,7 +309,7 @@ multiple monitored items at once.
 
 <!-- add-file: ./src/examples/monitoring.multiple.items.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { AttributeIds, ClientSubscription, coerceNodeId } from '../';
 import { MonitoredItemBase } from '../client';
 import { DataValue, IMonitoringParameters, IReadValueId, TimestampsToReturn } from '../generated';
@@ -406,63 +364,7 @@ export async function monitorMultipleItemsExample(subscription: ClientSubscripti
   console.log('now terminating subscription');
   await subscription.terminateP();
 }
-```
 
-```ts markdown-add-files
-import { AttributeIds, ClientSubscription, coerceNodeId } from '../';
-import { MonitoredItemBase } from '../client';
-import { DataValue, IMonitoringParameters, IReadValueId, TimestampsToReturn } from '../generated';
-import { timeout } from './example.utils';
-
-export async function monitorMultipleItemsExample(subscription: ClientSubscription) {
-  // install monitored items
-
-  const itemsToMonitor: IReadValueId[] = [
-    {
-      nodeId: coerceNodeId('ns=0;i=2255' /* namespace array */),
-      attributeId: AttributeIds.Value,
-    },
-    {
-      nodeId: coerceNodeId('ns=0;i=2254' /* server array */),
-      attributeId: AttributeIds.Value,
-    },
-  ];
-
-  // parameter description: https://reference.opcfoundation.org/v104/Core/docs/Part4/5.12.2/
-  const parameters: IMonitoringParameters = {
-    samplingInterval: 100,
-    discardOldest: true,
-    queueSize: 3,
-  };
-
-  // register multiple monitored items server side
-  // this call waits for the subscription to be ready
-  // before registering the items
-  // the monitoring parameters are applied to all of the monitored items
-  const monitoredItemGroup = await subscription.monitorItemsP(
-    itemsToMonitor,
-    parameters,
-    TimestampsToReturn.Both
-  );
-
-  monitoredItemGroup.on(
-    'changed',
-    (item: MonitoredItemBase, dataValue: DataValue, index: number) => {
-      console.log(` value has changed for item ${index} : ${dataValue.value.toString()}`);
-    }
-  );
-
-  await timeout(600);
-
-  // stop monitoring for all the items in this group
-  await monitoredItemGroup.terminateP();
-
-  // ----- many monitored item registration / unregistrations could happen here
-
-  // finally terminate the whole subscription
-  console.log('now terminating subscription');
-  await subscription.terminateP();
-}
 ```
 
 ### Browse Path Translation
@@ -471,7 +373,7 @@ If a `nodeId` is unknown it may be obtained through browsing for it.
 
 <!-- add-file: ./src/examples/translate.browse.path.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { ClientSession } from '../client';
 import { makeBrowsePath } from '../service-translate-browse-path';
 
@@ -486,23 +388,7 @@ export async function translateBrowsePathExample(session: ClientSession) {
   const productNameNodeId = result.targets[0].targetId;
   console.log(' Product Name nodeId = ', productNameNodeId.toString());
 }
-```
 
-```ts markdown-add-files
-import { ClientSession } from '../client';
-import { makeBrowsePath } from '../service-translate-browse-path';
-
-export async function translateBrowsePathExample(session: ClientSession) {
-  // create a browse path out of a root node and a string in browse path notation
-  const browsePath = makeBrowsePath(
-    'ns=0;i=84' /*RooFolder*/,
-    '/Objects/Server.ServerStatus.BuildInfo.ProductName'
-  );
-
-  const result = await session.translateBrowsePathP(browsePath);
-  const productNameNodeId = result.targets[0].targetId;
-  console.log(' Product Name nodeId = ', productNameNodeId.toString());
-}
 ```
 
 ### Calling Methods
@@ -511,7 +397,7 @@ As one might expect Opcua Objects can have methods.
 
 <!-- add-file: ./src/examples/method.example.ts -->
 
-```ts markdown-add-files
+``` ts markdown-add-files
 import { coerceNodeId, DataType } from '..';
 import { ClientSession } from '../client';
 import { CallMethodRequest } from '../generated';
@@ -543,6 +429,7 @@ export async function methodExample(session: ClientSession) {
   // "Result Value: 42"
   console.log(`Result Value: ${response.result[0].outputArguments[0].value}`);
 }
+
 ```
 
 In addition to this simple example it is also possible
@@ -554,10 +441,10 @@ Because the nodeId of the method has to be translated only once.
 
 <!-- add-file: ./src/examples/write.example.ts -->
 
-```ts markdown-add-files
-import { AttributeIds, MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
+``` ts markdown-add-files
+import { AttributeIds } from '../';
 import { ClientSession } from '../client';
-import { DataValue, ReadValueId, WriteValue } from '../generated';
+import { DataValue, WriteValue } from '../generated';
 import { coerceNodeId } from '../nodeid/nodeid';
 import { DataType, Variant } from '../variant';
 
@@ -578,6 +465,7 @@ export async function writeExample(session: ClientSession) {
 
   console.log(statusCode); // GOOD
 }
+
 ```
 
 `session.writeValueP` supports writing a single node or an array of nodes.
