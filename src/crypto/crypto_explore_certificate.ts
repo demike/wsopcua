@@ -846,8 +846,9 @@ export function generatePublicKeyFromDER(
   der_certificate: Uint8Array,
   hash: 'SHA-1' | 'SHA-256'
 ): PromiseLike<CryptoKey> {
-  if ((der_certificate as any)._publicKey) {
-    return Promise.resolve((der_certificate as any)._publicKey);
+  const cachingKey = '_publicKey_' + hash;
+  if ((der_certificate as any)[cachingKey]) {
+    return Promise.resolve((der_certificate as any)[cachingKey]);
   }
 
   const spki = getSPKIFromCertificate(der_certificate);
@@ -855,7 +856,7 @@ export function generatePublicKeyFromDER(
   return crypto.subtle
     .importKey('spki', spki, { name: 'RSA-OAEP', hash }, true, ['encrypt'])
     .then((key) => {
-      (der_certificate as any)._publicKey = key;
+      (der_certificate as any)[cachingKey] = key;
       return key;
     });
 }
@@ -865,8 +866,9 @@ export function generateVerifyKeyFromDER(
   hash: 'SHA-1' | 'SHA-256',
   algorithm: 'RSASSA-PKCS1-v1_5' | 'RSA-PSS' = 'RSASSA-PKCS1-v1_5'
 ): PromiseLike<CryptoKey> {
-  if ((der_certificate as any)._verifyKey) {
-    return Promise.resolve((der_certificate as any)._verifyKey);
+  const cachingKey = `_verifyKey_${algorithm}_${hash}`;
+  if ((der_certificate as any)[cachingKey]) {
+    return Promise.resolve((der_certificate as any)[cachingKey]);
   }
 
   const spki = getSPKIFromCertificate(der_certificate);
@@ -874,7 +876,7 @@ export function generateVerifyKeyFromDER(
   return crypto.subtle
     .importKey('spki', spki, { name: algorithm, hash }, true, ['verify'])
     .then((key) => {
-      (der_certificate as any)._verifyKey = key;
+      (der_certificate as any)[cachingKey] = key;
       return key;
     });
 }
@@ -886,8 +888,9 @@ export function generatePrivateKeyFromDER(
   der_certificate: Uint8Array,
   hash: 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512'
 ) {
-  if ((der_certificate as any)._decryptKey) {
-    return Promise.resolve((der_certificate as any)._decryptKey);
+  const cachingKey = '_decryptKey_' + hash;
+  if ((der_certificate as any)[cachingKey]) {
+    return Promise.resolve((der_certificate as any)[cachingKey]);
   }
 
   return window.crypto.subtle
@@ -902,7 +905,7 @@ export function generatePrivateKeyFromDER(
       ['decrypt']
     )
     .then((key) => {
-      (der_certificate as any)._decryptKey = key;
+      (der_certificate as any)[cachingKey] = key;
       return key;
     });
 }
@@ -915,8 +918,9 @@ export function generateSignKeyFromDER(
   hash: 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512',
   algorithm: 'RSASSA-PKCS1-v1_5' | 'RSA-PSS' = 'RSASSA-PKCS1-v1_5'
 ) {
-  if ((der_certificate as any)._signKey) {
-    return Promise.resolve((der_certificate as any)._signKey);
+  const cachingKey = '_signtKey_' + hash;
+  if ((der_certificate as any)[cachingKey]) {
+    return Promise.resolve((der_certificate as any)[cachingKey]);
   }
 
   return window.crypto.subtle
@@ -931,7 +935,7 @@ export function generateSignKeyFromDER(
       ['sign']
     )
     .then((key) => {
-      (der_certificate as any)._signKey = key;
+      (der_certificate as any)[cachingKey] = key;
       return key;
     });
 }
