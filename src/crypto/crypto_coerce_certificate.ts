@@ -1,6 +1,6 @@
-import { BasicConstraints } from 'node-opcua-crypto';
 import { AlgorithmIdentifier, DirectoryName } from './asn1';
 import {
+  BasicConstraints,
   CertificateExtension,
   CertificateInternals,
   SubjectPublicKeyInfo,
