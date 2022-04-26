@@ -1,5 +1,4 @@
-import { convertPEMtoDER } from 'node-opcua-crypto';
-import { exploreCertificate } from '.';
+import { convertPEMtoDER, exploreCertificate } from '.';
 import { PEMDERCertificateStore } from '../common';
 import { writeCertificate } from './crypto_write_certificate';
 
