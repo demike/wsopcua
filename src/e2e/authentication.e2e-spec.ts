@@ -134,7 +134,7 @@ describe('OPCUA-Session Activation', function () {
           clientCertificateStore: new PEMDERCertificateStore(clientCertPEM, privateKeyPEM),
         });
 
-        await client.connectP(OPCUA_TEST_SERVER_URI /* 'ws://sjuticd.engel.int:4444'*/);
+        await client.connectP(OPCUA_TEST_SERVER_URI);
 
         try {
           const session = await client.createSessionP({

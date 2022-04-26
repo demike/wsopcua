@@ -8,10 +8,14 @@ import {
   Validity,
 } from './crypto_explore_certificate';
 
-export function coerceCertificateInfo(info?: Partial<CertificateInternals>): CertificateInternals {
+export function coerceCertificateInfo(info?: {
+  tbsCertificate?: Partial<TbsCertificate>;
+  signatureAlgorithm?: AlgorithmIdentifier;
+}): CertificateInternals {
   info = info ?? {};
   info.signatureAlgorithm = coerceSignatureAlgorithm(info?.signatureAlgorithm);
-  info.signatureValue = info?.signatureValue ?? '';
+  (info as CertificateInternals).signatureValue =
+    (info as CertificateInternals)?.signatureValue ?? '';
   info.tbsCertificate = coerceTbsCertificate(info?.tbsCertificate);
   return info as CertificateInternals;
 }

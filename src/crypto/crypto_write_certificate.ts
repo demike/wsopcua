@@ -261,7 +261,8 @@ async function createSigningKey(
   // example: sha256WithRSAEncryption
   const arIdentifier = signatureAlgorithmIdentifier.split('With');
   if (arIdentifier.length < 2) {
-    throw new Error('malformed signature algorithm identifier');
+    throw new Error(`malformed signature algorithm identifier: ${signatureAlgorithmIdentifier}
+    , should be something like "sha256WithRSAEncryption"`);
   }
 
   let hash = 'SHA-256';

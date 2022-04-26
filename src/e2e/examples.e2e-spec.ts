@@ -4,7 +4,10 @@ import { createSubscriptionExample } from '../examples/create.subscription.examp
 import { methodExample } from '../examples/method.example';
 import { monitorMultipleItemsExample } from '../examples/monitoring.multiple.items.example';
 import { monitorSingleItemExample } from '../examples/monitoring.single.item.example';
+import { usingAPEMCertificate } from '../examples/pemder.certificate.example';
 import { readExample } from '../examples/read.example';
+import { usingASelfSignedCertificateAdvanced } from '../examples/selfsigned.certificate.advanced.example';
+import { usingASelfSignedCertificate } from '../examples/selfsigned.certificate.example';
 import { connectToServerExample } from '../examples/simple.connect.example';
 import { translateBrowsePathExample } from '../examples/translate.browse.path.example';
 import { writeExample } from '../examples/write.example';
@@ -58,5 +61,27 @@ describe('Examples', () => {
 
   it('should write a value', async () => {
     await writeExample(session);
+  });
+
+  it('should use a self signed certificate', async () => {
+    const clientAndSession = await usingASelfSignedCertificate();
+    await clientAndSession.session.closeP();
+    await clientAndSession.client.disconnectP();
+  });
+
+  it('should use a self signed certificate advanced', async () => {
+    const clientAndSession = await usingASelfSignedCertificateAdvanced();
+    await clientAndSession.session.closeP();
+    await clientAndSession.client.disconnectP();
+  });
+
+  it('should use PEM certificate and private key', async () => {
+    const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
+    const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
+      r.text()
+    );
+    const clientAndSession = await usingAPEMCertificate(clientCertPEM, privateKeyPEM);
+    await clientAndSession.session.closeP();
+    await clientAndSession.client.disconnectP();
   });
 });

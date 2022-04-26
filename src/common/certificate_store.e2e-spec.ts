@@ -30,11 +30,6 @@ describe('SelfSignedCertificateStore', () => {
     //  SecurityPolicy.Aes256_Sha256_RsaPss, // TODO enable this policy
   ].forEach((policy) =>
     it(`should do username password authentication with default certificate options: ${policy}`, async () => {
-      const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
-      const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
-        r.text()
-      );
-
       const client = new OPCUAClient({
         ...DEFAULT_CLIENT_OPTIONS,
         securityMode: MessageSecurityMode.SignAndEncrypt,
@@ -42,7 +37,7 @@ describe('SelfSignedCertificateStore', () => {
         clientCertificateStore: new SelfSignedCertificateStore(),
       });
 
-      await client.connectP(OPCUA_TEST_SERVER_URI /* 'ws://sjuticd.engel.int:4444'*/);
+      await client.connectP(OPCUA_TEST_SERVER_URI);
 
       try {
         const session = await client.createSessionP({

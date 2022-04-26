@@ -17,8 +17,6 @@ export interface OPCUAClientOptions {
   applicationName?: string; // ="NodeOPCUA-Client"]        {string} the client application name
   endpoint_must_exist?: boolean; // true] {Boolean} set to false if the client should accept server endpoint mismatch
   keepSessionAlive?: boolean; // =false]{Boolean}
-  certificateFile?: string; // "certificates/client_selfsigned_cert_1024.pem"] {String} client certificate pem file.
-  privateKeyFile?: string; // "certificates/client_key_1024.pem"] {String} client private key pem file.
   clientCertificateStore?: CertificateStore; // default: NullCertificateToken
   clientName?: string; // ] {String} a client name string that will be used to generate session names.
   tokenRenewalInterval?: number; // if not specify or set to 0 , token  renewal will happen around 75% of the defaultSecureTokenLiveTime

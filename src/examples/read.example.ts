@@ -1,4 +1,4 @@
-import { AttributeIds, MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
+import { AttributeIds } from '../';
 import { ClientSession } from '../client';
 import { ReadValueId } from '../generated';
 import { coerceNodeId } from '../nodeid/nodeid';

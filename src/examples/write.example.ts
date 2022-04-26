@@ -1,6 +1,6 @@
-import { AttributeIds, MessageSecurityMode, OPCUAClient, SecurityPolicy } from '../';
+import { AttributeIds } from '../';
 import { ClientSession } from '../client';
-import { DataValue, ReadValueId, WriteValue } from '../generated';
+import { DataValue, WriteValue } from '../generated';
 import { coerceNodeId } from '../nodeid/nodeid';
 import { DataType, Variant } from '../variant';
 

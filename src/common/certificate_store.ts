@@ -1,4 +1,4 @@
-import { readTag } from 'src/crypto/asn1';
+import { AlgorithmIdentifier, readTag } from 'src/crypto/asn1';
 import { coerceCertificateInfo } from 'src/crypto/crypto_coerce_certificate';
 import {
   CertificateInternals,
@@ -10,6 +10,7 @@ import {
   readSubjectPublicKeyInfo,
   split_der,
   SubjectPublicKeyInfo,
+  TbsCertificate,
   writeCertificate,
 } from '../crypto';
 
@@ -124,7 +125,10 @@ export class SelfSignedCertificateStore implements CertificateStore {
   protected privateKey: PrivateKey | null;
   protected options: CertificateInternals;
 
-  constructor(options?: CertificateInternals) {
+  constructor(options?: {
+    tbsCertificate: Partial<TbsCertificate>;
+    signatureAlgorithm?: AlgorithmIdentifier;
+  }) {
     this.options = coerceCertificateInfo(options);
   }
   public getCertificate(): Uint8Array | null {
