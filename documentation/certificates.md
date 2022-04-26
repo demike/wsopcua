@@ -1,7 +1,12 @@
 # Certificates
 
 wsopcua supports client certificates by means of utilizing different
-[CertificateStore](../src/common/certificate_store.ts) implementations:
+[CertificateStore](../src/common/certificate_store.ts) implementations.
+
+To be able to utilize client certificates it is necessary that `crypto/subtle` is available.
+This is the case in secure contexts and therfore the application has to be served by means of **https**!
+
+You can provide your own Store by implementing the `CertificateStore` interface or by deriving from one of the existing implementations:
 
 ## NullCertificateStore
 
@@ -9,7 +14,9 @@ This is the default 'dummy' store that does not provide a client certificate at 
 
 ## PEMDERCertificateStore
 
-This store takes certificates and private keys in string (PEM) or Uint8Array (DER) form.
+This store takes certificates and private keys in string (PEM) or Uint8Array (DER) format.
+
+<!-- add-file: ../src/examples/pemder.certificate.example.ts -->
 
 ## SelfSignedCertifcateStore
 

@@ -17,7 +17,6 @@ No Need for a proprietary itermediate protocol!
 
 Get started with wsopcua, learn the fundamentals and explore advanced examples.
 
-- [Getting Started](#quickstart)
 - [Client Setup](#client-setup)
 - [Server Setup](#server-setup)
 
