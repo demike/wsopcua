@@ -4,7 +4,11 @@ import { DataStream } from './DataStream';
 import { assert } from '../assert';
 import '../nodeid/nodeid';
 import { NodeId, makeNodeId } from '../nodeid/nodeid';
-import { ExpandedNodeId, getCurrentNamespaceArray, resolveExpandedNodeId } from '../nodeid/expanded_nodeid';
+import {
+  ExpandedNodeId,
+  getCurrentNamespaceArray,
+  resolveExpandedNodeId,
+} from '../nodeid/expanded_nodeid';
 import { isValidGuid, decodeGuid, encodeGuid } from './guid';
 import { decodeString, encodeString } from './string';
 import { decodeUInt32, encodeUInt32 } from './integers';
@@ -75,7 +79,11 @@ function nodeID_encodingByte(nodeId: NodeId | ExpandedNodeId): number {
   }
 
   if (nodeId instanceof ExpandedNodeId) {
-    if (nodeId.namespaceUri) {
+    if (
+      nodeId.namespaceUri &&
+      !nodeId.namespace &&
+      nodeId.namespaceUri !== 'http://opcfoundation.org/UA/'
+    ) {
       encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.NamespaceUriFlag);
     }
 

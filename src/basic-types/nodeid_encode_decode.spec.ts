@@ -1,6 +1,6 @@
 import { NodeIdType } from '../generated/NodeIdType';
 import { setCurrentNamespaceArray } from '../nodeid/expanded_nodeid';
-import { BinaryStreamSizeCalculator, DataStream } from './DataStream';
+import { DataStream } from './DataStream';
 import { encodeNodeId, ExpandedNodeId, jsonEncodeNodeId } from './nodeid';
 
 describe('testing encodeNodeId', function () {

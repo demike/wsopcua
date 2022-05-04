@@ -370,7 +370,20 @@ describe('testing built-in type encoding', function () {
     );
   });
 
-  it('should encode and decode a Expanded NodeId with namespaceUri', function () {
+  it('should encode and decode a Expanded NodeId with namespaceUri and without namespace set', function () {
+    const serverIndex = 2;
+    const namespaceUri = 'some:namespace:uri';
+    const expandedNodeId = new ExpandedNodeId(
+      NodeIdType.Numeric,
+      4123,
+      undefined,
+      namespaceUri,
+      serverIndex
+    );
+    test_encode_decode(expandedNodeId, ec.encodeExpandedNodeId, ec.decodeExpandedNodeId, 33);
+  });
+
+  it('should encode and decode a Expanded NodeId with namespaceUri, remove namespaceUri if namespace is present', function () {
     const serverIndex = 2;
     const namespaceUri = 'some:namespace:uri';
     const expandedNodeId = new ExpandedNodeId(
@@ -380,7 +393,7 @@ describe('testing built-in type encoding', function () {
       namespaceUri,
       serverIndex
     );
-    test_encode_decode(expandedNodeId, ec.encodeExpandedNodeId, ec.decodeExpandedNodeId, 33);
+    test_encode_decode(expandedNodeId, ec.encodeExpandedNodeId, ec.decodeExpandedNodeId, 11);
   });
 
   it('should encode and decode a UInt64 EightBytes', function () {
