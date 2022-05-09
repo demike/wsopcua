@@ -143,7 +143,11 @@ function _encodeNodeId(encoding_byte: number, nodeId: NodeId, stream: DataStream
 
 export function encodeNodeId(nodeId: NodeId, stream: DataStream & { __namespaceArray?: string[] }) {
   // automatically resolve namespaceUri to namespace index if possible (and necessary)
-  nodeId = resolveExpandedNodeId(nodeId, stream.__namespaceArray);
+  try {
+    nodeId = resolveExpandedNodeId(nodeId, stream.__namespaceArray);
+  } catch (e) {
+    console.warn('failed to resolve expanded nodeid', nodeId);
+  }
 
   let encoding_byte = nodeID_encodingByte(nodeId);
   // eslint-disable-next-line no-bitwise
