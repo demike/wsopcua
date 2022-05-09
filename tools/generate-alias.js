@@ -23,6 +23,45 @@ const insertPackageJsonRecursively = function (dirPath) {
   });
 };
 
+exports.createExports = () => {
+  const exp = {
+    './package.json': {
+      default: './package.json',
+    },
+  };
+  createExportsRecursive(TYPES_PATH, exp);
+
+  return exp;
+};
+
+function createExportsRecursive(dirPath, exp) {
+  files = fs.readdirSync(dirPath);
+
+  files.forEach(function (file) {
+    if (fs.statSync(dirPath + '/' + file).isDirectory()) {
+      createExportsRecursive(dirPath + '/' + file, exp);
+    } else {
+      if (file === 'index.d.ts') {
+        // create exports entry
+        let relPath = toUnixPath(path.relative(TYPES_PATH, dirPath));
+        key = relPath !== '' ? `./${relPath}` : '.';
+
+        if (relPath) {
+          relPath = relPath + '/';
+        }
+
+        exp[key] = {
+          types: `./_types/${relPath}index.d.ts`,
+          node: `./_cjs/${relPath}index.js`,
+          require: `./_cjs/${relPath}index.js`,
+          es2015: `./_esm/${relPath}index.js`,
+          default: `./_esm/${relPath}index.js`,
+        };
+      }
+    }
+  });
+}
+
 function createPackageManifest(barrelPath) {
   let relPath = toUnixPath(path.relative(TYPES_PATH, barrelPath));
   console.log(relPath);

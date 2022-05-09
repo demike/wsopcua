@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const path = require('path');
 
 const packageJson = require('../package.json');
+const generatAlias = require('./generate-alias');
 
 const pkgManifest = {
   name: packageJson.name,
@@ -21,6 +22,7 @@ const pkgManifest = {
   bin: {
     'wsopcua-schema-gen': './bin/wsopcua-schema-gen.js',
   },
+  exports: generatAlias.createExports(),
 };
 
 fs.writeJSONSync(path.resolve(__dirname, `../dist/package.json`), pkgManifest, { spaces: 2 });
