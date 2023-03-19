@@ -118,6 +118,12 @@ export class ClassFile {
     this.id = id;
   }
 
+  public getNodeIdString() {
+    return `${Number.isInteger(this.namespace) ? 'ns=' : 'nsu='}${this.namespace};${
+      Number.isInteger(this.id) ? 'i=' : 's='
+    }${this.id}`;
+  }
+
   constructor(
     modulePath: ProjectModulePath,
     name?: string,
@@ -203,8 +209,11 @@ export class ClassFile {
       str += '\n' + this.defines + '\n';
     }
 
-    str += '/**\n' + this.documentation + '\n*/';
-    str += '\n\n';
+    str += '/**\n' + this.documentation + '\n';
+    if (this.specLink) {
+      str += ' * {@link ' + this.specLink + '\n';
+    }
+    str += '*/\n\n';
     str += this.getClassHeader();
     str += ' {\n';
     for (const mem of this.members) {
@@ -428,6 +437,7 @@ export class ClassFile {
   protected imports: Set<string>;
   protected defines: string;
   protected documentation: string;
+  public specLink?: string;
   protected classHeader: string;
   protected members: ClassMember[];
   protected methods: ClassMethod[];

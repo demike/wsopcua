@@ -165,50 +165,47 @@ export class BSDSchemaParser {
     return data.replace('\r', '');
   }
 
-  public parseBSDDoc(doc: JSDOM) {
+  public async parseBSDDoc(doc: JSDOM) {
     this.fixSchemaFaults(doc);
     for (let i = 0; i < doc.window.document.childNodes.length; i++) {
       const el: HTMLElement = <HTMLElement>doc.window.document.childNodes.item(i);
-      this.parseBSDElement(el);
+      await this.parseBSDElement(el);
     }
     // second pass for incomplete types
-    this.parseSecondPass();
+    await this.parseSecondPass();
     this.writeIndexFile();
     this.writeFiles();
   }
 
-  public parseBSDElement(el: HTMLElement) {
+  public async parseBSDElement(el: HTMLElement) {
     switch (el.tagName) {
       case BSDSchemaParser.TAG_ENUM_TYPE:
-        this.parseBSDEnum(el);
-        break;
+        return this.parseBSDEnum(el);
       case BSDSchemaParser.TAG_STRUCT_TYPE:
-        this.parseBSDStruct(el);
-        break;
+        return this.parseBSDStruct(el);
       case BSDSchemaParser.TAG_TYPE_DICT:
-        this.parseBSDTypeDict(el);
-        break;
+        return this.parseBSDTypeDict(el);
       default:
         for (let i = 0; i < el.childNodes.length; i++) {
           const child: HTMLElement = <HTMLElement>el.childNodes.item(i);
-          this.parseBSDElement(child);
+          await this.parseBSDElement(child);
         }
         break;
     }
   }
 
-  public parseBSDTypeDict(el: HTMLElement) {
+  public async parseBSDTypeDict(el: HTMLElement) {
     if (this.namespace === -1) {
       // namespace not yet defined --> get it from the BSD Type dictonary
       this.namespace = el.getAttribute('TargetNamespace') || -1;
     }
 
     for (let i = 0; i < el.childNodes.length; i++) {
-      this.parseBSDElement(<HTMLElement>el.childNodes.item(i));
+      await this.parseBSDElement(<HTMLElement>el.childNodes.item(i));
     }
   }
 
-  public parseBSDStruct(el: HTMLElement): void {
+  public async parseBSDStruct(el: HTMLElement): Promise<void> {
     const file = new StructTypeFile(this.currentModulePath);
     const parser = new BSDStructTypeFileParser(el, file);
     const at = el.attributes.getNamedItem(ClassFile.ATTR_NAME);
@@ -216,17 +213,17 @@ export class BSDSchemaParser {
       // this type already exists
       return;
     }
-    parser.parse();
+    await parser.parse();
     if (!file.Complete) {
       this.clsIncompleteTypes.push(parser);
     }
     // this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
   }
 
-  public parseBSDEnum(el: HTMLElement): void {
+  public parseBSDEnum(el: HTMLElement): Promise<void> {
     const file = new EnumTypeFile(this.currentModulePath);
     const parser = new BSDEnumTypeFileParser(el, file);
-    parser.parse();
+    return parser.parse();
     // this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
   }
 
@@ -256,12 +253,12 @@ export class BSDSchemaParser {
     });
   }
 
-  protected parseSecondPass() {
+  protected async parseSecondPass() {
     const ar: BSDClassFileParser[] = [];
 
     for (let iterations = 0; iterations < 10; iterations++) {
       for (const t of this.clsIncompleteTypes) {
-        t.parse();
+        await t.parse();
         if (!t.Cls.Complete) {
           ar.push(t);
         }
