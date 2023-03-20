@@ -15,6 +15,7 @@ export interface IThreeDCartesianCoordinates {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15529}
 */
 
 export class ThreeDCartesianCoordinates extends CartesianCoordinates {
@@ -89,4 +90,4 @@ export function decodeThreeDCartesianCoordinates( inp: DataStream): ThreeDCartes
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ThreeDCartesianCoordinates', ThreeDCartesianCoordinates, new ExpandedNodeId(2 /*numeric id*/, 18819, 0));
+register_class_definition('ThreeDCartesianCoordinates', ThreeDCartesianCoordinates, new ExpandedNodeId(2 /*numeric id*/, 18810, 0));

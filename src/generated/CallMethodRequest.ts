@@ -16,6 +16,7 @@ export interface ICallMethodRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16173}
 */
 
 export class CallMethodRequest {
@@ -89,4 +90,4 @@ export function decodeCallMethodRequest( inp: DataStream): CallMethodRequest {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CallMethodRequest', CallMethodRequest, new ExpandedNodeId(2 /*numeric id*/, 706, 0));
+register_class_definition('CallMethodRequest', CallMethodRequest, new ExpandedNodeId(2 /*numeric id*/, 704, 0));

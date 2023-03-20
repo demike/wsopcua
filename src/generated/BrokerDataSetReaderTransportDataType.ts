@@ -18,6 +18,7 @@ export interface IBrokerDataSetReaderTransportDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15841}
 */
 
 export class BrokerDataSetReaderTransportDataType extends DataSetReaderTransportDataType {
@@ -106,4 +107,4 @@ export function decodeBrokerDataSetReaderTransportDataType( inp: DataStream): Br
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('BrokerDataSetReaderTransportDataType', BrokerDataSetReaderTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15733, 0));
+register_class_definition('BrokerDataSetReaderTransportDataType', BrokerDataSetReaderTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15670, 0));

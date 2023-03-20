@@ -16,6 +16,7 @@ export interface IQueryDataSet {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16124}
 */
 
 export class QueryDataSet {
@@ -89,4 +90,4 @@ export function decodeQueryDataSet( inp: DataStream): QueryDataSet {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('QueryDataSet', QueryDataSet, new ExpandedNodeId(2 /*numeric id*/, 579, 0));
+register_class_definition('QueryDataSet', QueryDataSet, new ExpandedNodeId(2 /*numeric id*/, 577, 0));

@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15373}
+*/
+
 export enum NamingRuleType {
   Mandatory = 1,
   Optional = 2,

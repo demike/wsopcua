@@ -19,6 +19,7 @@ export interface IStructureField {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15987}
 */
 
 export class StructureField {
@@ -120,4 +121,4 @@ export function decodeStructureField( inp: DataStream): StructureField {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('StructureField', StructureField, new ExpandedNodeId(2 /*numeric id*/, 14844, 0));
+register_class_definition('StructureField', StructureField, new ExpandedNodeId(2 /*numeric id*/, 101, 0));

@@ -19,6 +19,7 @@ export interface ICreateMonitoredItemsResponse {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16192}
 */
 
 export class CreateMonitoredItemsResponse {
@@ -92,4 +93,4 @@ export function decodeCreateMonitoredItemsResponse( inp: DataStream): CreateMoni
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CreateMonitoredItemsResponse', CreateMonitoredItemsResponse, new ExpandedNodeId(2 /*numeric id*/, 754, 0));
+register_class_definition('CreateMonitoredItemsResponse', CreateMonitoredItemsResponse, new ExpandedNodeId(2 /*numeric id*/, 752, 0));

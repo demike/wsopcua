@@ -14,6 +14,7 @@ export interface IRegisterServerRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16040}
 */
 
 export class RegisterServerRequest {
@@ -80,4 +81,4 @@ export function decodeRegisterServerRequest( inp: DataStream): RegisterServerReq
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RegisterServerRequest', RegisterServerRequest, new ExpandedNodeId(2 /*numeric id*/, 437, 0));
+register_class_definition('RegisterServerRequest', RegisterServerRequest, new ExpandedNodeId(2 /*numeric id*/, 435, 0));

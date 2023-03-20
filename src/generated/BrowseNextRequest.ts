@@ -15,6 +15,7 @@ export interface IBrowseNextRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16105}
 */
 
 export class BrowseNextRequest {
@@ -88,4 +89,4 @@ export function decodeBrowseNextRequest( inp: DataStream): BrowseNextRequest {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('BrowseNextRequest', BrowseNextRequest, new ExpandedNodeId(2 /*numeric id*/, 533, 0));
+register_class_definition('BrowseNextRequest', BrowseNextRequest, new ExpandedNodeId(2 /*numeric id*/, 531, 0));

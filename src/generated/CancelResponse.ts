@@ -14,6 +14,7 @@ export interface ICancelResponse {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16069}
 */
 
 export class CancelResponse {
@@ -80,4 +81,4 @@ export function decodeCancelResponse( inp: DataStream): CancelResponse {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CancelResponse', CancelResponse, new ExpandedNodeId(2 /*numeric id*/, 482, 0));
+register_class_definition('CancelResponse', CancelResponse, new ExpandedNodeId(2 /*numeric id*/, 480, 0));

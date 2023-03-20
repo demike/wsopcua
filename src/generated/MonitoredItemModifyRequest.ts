@@ -14,6 +14,7 @@ export interface IMonitoredItemModifyRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16193}
 */
 
 export class MonitoredItemModifyRequest {
@@ -80,4 +81,4 @@ export function decodeMonitoredItemModifyRequest( inp: DataStream): MonitoredIte
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('MonitoredItemModifyRequest', MonitoredItemModifyRequest, new ExpandedNodeId(2 /*numeric id*/, 757, 0));
+register_class_definition('MonitoredItemModifyRequest', MonitoredItemModifyRequest, new ExpandedNodeId(2 /*numeric id*/, 755, 0));

@@ -14,6 +14,7 @@ export interface IObjectAttributes extends INodeAttributes {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16072}
 */
 
 export class ObjectAttributes extends NodeAttributes {
@@ -78,4 +79,4 @@ export function decodeObjectAttributes( inp: DataStream): ObjectAttributes {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ObjectAttributes', ObjectAttributes, new ExpandedNodeId(2 /*numeric id*/, 354, 0));
+register_class_definition('ObjectAttributes', ObjectAttributes, new ExpandedNodeId(2 /*numeric id*/, 352, 0));

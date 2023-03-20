@@ -15,6 +15,7 @@ export interface ISamplingIntervalDiagnosticsDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16233}
 */
 
 export class SamplingIntervalDiagnosticsDataType {
@@ -95,4 +96,4 @@ export function decodeSamplingIntervalDiagnosticsDataType( inp: DataStream): Sam
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SamplingIntervalDiagnosticsDataType', SamplingIntervalDiagnosticsDataType, new ExpandedNodeId(2 /*numeric id*/, 858, 0));
+register_class_definition('SamplingIntervalDiagnosticsDataType', SamplingIntervalDiagnosticsDataType, new ExpandedNodeId(2 /*numeric id*/, 856, 0));

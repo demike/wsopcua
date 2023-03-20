@@ -16,6 +16,7 @@ export interface IDataTypeNode extends ITypeNode {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16000}
 */
 
 export class DataTypeNode extends TypeNode {
@@ -87,4 +88,4 @@ export function decodeDataTypeNode( inp: DataStream): DataTypeNode {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DataTypeNode', DataTypeNode, new ExpandedNodeId(2 /*numeric id*/, 284, 0));
+register_class_definition('DataTypeNode', DataTypeNode, new ExpandedNodeId(2 /*numeric id*/, 282, 0));

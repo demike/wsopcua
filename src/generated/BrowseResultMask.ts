@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16099}
+*/
+
 export enum BrowseResultMask {
   None = 0,
   ReferenceTypeId = 1,

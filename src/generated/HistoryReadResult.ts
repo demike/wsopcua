@@ -15,6 +15,7 @@ export interface IHistoryReadResult {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16145}
 */
 
 export class HistoryReadResult {
@@ -88,4 +89,4 @@ export function decodeHistoryReadResult( inp: DataStream): HistoryReadResult {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryReadResult', HistoryReadResult, new ExpandedNodeId(2 /*numeric id*/, 640, 0));
+register_class_definition('HistoryReadResult', HistoryReadResult, new ExpandedNodeId(2 /*numeric id*/, 638, 0));

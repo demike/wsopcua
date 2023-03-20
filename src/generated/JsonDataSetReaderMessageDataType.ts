@@ -15,6 +15,7 @@ export interface IJsonDataSetReaderMessageDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15834}
 */
 
 export class JsonDataSetReaderMessageDataType extends DataSetReaderMessageDataType {
@@ -82,4 +83,4 @@ export function decodeJsonDataSetReaderMessageDataType( inp: DataStream): JsonDa
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('JsonDataSetReaderMessageDataType', JsonDataSetReaderMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15725, 0));
+register_class_definition('JsonDataSetReaderMessageDataType', JsonDataSetReaderMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15665, 0));

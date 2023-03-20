@@ -15,6 +15,7 @@ export interface IViewAttributes extends INodeAttributes {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16079}
 */
 
 export class ViewAttributes extends NodeAttributes {
@@ -86,4 +87,4 @@ export function decodeViewAttributes( inp: DataStream): ViewAttributes {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ViewAttributes', ViewAttributes, new ExpandedNodeId(2 /*numeric id*/, 375, 0));
+register_class_definition('ViewAttributes', ViewAttributes, new ExpandedNodeId(2 /*numeric id*/, 373, 0));

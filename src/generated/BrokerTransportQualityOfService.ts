@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15838}
+*/
+
 export enum BrokerTransportQualityOfService {
   NotSpecified = 0,
   BestEffort = 1,

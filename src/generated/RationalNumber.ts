@@ -13,6 +13,7 @@ export interface IRationalNumber {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15525}
 */
 
 export class RationalNumber {
@@ -79,4 +80,4 @@ export function decodeRationalNumber( inp: DataStream): RationalNumber {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RationalNumber', RationalNumber, new ExpandedNodeId(2 /*numeric id*/, 18815, 0));
+register_class_definition('RationalNumber', RationalNumber, new ExpandedNodeId(2 /*numeric id*/, 18806, 0));

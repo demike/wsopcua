@@ -16,6 +16,7 @@ export interface IGetEndpointsRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16037}
 */
 
 export class GetEndpointsRequest {
@@ -96,4 +97,4 @@ export function decodeGetEndpointsRequest( inp: DataStream): GetEndpointsRequest
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('GetEndpointsRequest', GetEndpointsRequest, new ExpandedNodeId(2 /*numeric id*/, 428, 0));
+register_class_definition('GetEndpointsRequest', GetEndpointsRequest, new ExpandedNodeId(2 /*numeric id*/, 426, 0));

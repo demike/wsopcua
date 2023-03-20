@@ -18,6 +18,7 @@ export interface IEventFilterResult {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16186}
 */
 
 export class EventFilterResult extends MonitoringFilterResult {
@@ -92,4 +93,4 @@ export function decodeEventFilterResult( inp: DataStream): EventFilterResult {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EventFilterResult', EventFilterResult, new ExpandedNodeId(2 /*numeric id*/, 736, 0));
+register_class_definition('EventFilterResult', EventFilterResult, new ExpandedNodeId(2 /*numeric id*/, 734, 0));

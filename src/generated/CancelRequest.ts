@@ -14,6 +14,7 @@ export interface ICancelRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16068}
 */
 
 export class CancelRequest {
@@ -80,4 +81,4 @@ export function decodeCancelRequest( inp: DataStream): CancelRequest {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CancelRequest', CancelRequest, new ExpandedNodeId(2 /*numeric id*/, 479, 0));
+register_class_definition('CancelRequest', CancelRequest, new ExpandedNodeId(2 /*numeric id*/, 477, 0));

@@ -17,6 +17,7 @@ export interface IUadpDataSetWriterMessageDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15828}
 */
 
 export class UadpDataSetWriterMessageDataType extends DataSetWriterMessageDataType {
@@ -98,4 +99,4 @@ export function decodeUadpDataSetWriterMessageDataType( inp: DataStream): UadpDa
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UadpDataSetWriterMessageDataType', UadpDataSetWriterMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15717, 0));
+register_class_definition('UadpDataSetWriterMessageDataType', UadpDataSetWriterMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15652, 0));

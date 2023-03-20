@@ -16,6 +16,7 @@ export interface IAddReferencesRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16087}
 */
 
 export class AddReferencesRequest {
@@ -82,4 +83,4 @@ export function decodeAddReferencesRequest( inp: DataStream): AddReferencesReque
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AddReferencesRequest', AddReferencesRequest, new ExpandedNodeId(2 /*numeric id*/, 494, 0));
+register_class_definition('AddReferencesRequest', AddReferencesRequest, new ExpandedNodeId(2 /*numeric id*/, 492, 0));

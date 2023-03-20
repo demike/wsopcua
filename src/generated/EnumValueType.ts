@@ -15,6 +15,7 @@ export interface IEnumValueType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16003}
 */
 
 export class EnumValueType {
@@ -88,4 +89,4 @@ export function decodeEnumValueType( inp: DataStream): EnumValueType {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EnumValueType', EnumValueType, new ExpandedNodeId(2 /*numeric id*/, 8251, 0));
+register_class_definition('EnumValueType', EnumValueType, new ExpandedNodeId(2 /*numeric id*/, 7594, 0));

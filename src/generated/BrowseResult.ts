@@ -16,6 +16,7 @@ export interface IBrowseResult {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16102}
 */
 
 export class BrowseResult {
@@ -89,4 +90,4 @@ export function decodeBrowseResult( inp: DataStream): BrowseResult {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('BrowseResult', BrowseResult, new ExpandedNodeId(2 /*numeric id*/, 524, 0));
+register_class_definition('BrowseResult', BrowseResult, new ExpandedNodeId(2 /*numeric id*/, 522, 0));

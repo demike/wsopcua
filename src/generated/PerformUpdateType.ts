@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16163}
+*/
+
 export enum PerformUpdateType {
   Insert = 1,
   Replace = 2,

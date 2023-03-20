@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16254}
+*/
+
 export enum ExceptionDeviationFormat {
   AbsoluteValue = 0,
   PercentOfValue = 1,

@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15526}
 */
 
 export class Vector {
@@ -22,4 +23,4 @@ export class Vector {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('Vector', Vector, new ExpandedNodeId(2 /*numeric id*/, 18816, 0));
+register_class_definition('Vector', Vector, new ExpandedNodeId(2 /*numeric id*/, 18807, 0));

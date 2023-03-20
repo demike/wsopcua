@@ -16,6 +16,7 @@ export interface IFindServersOnNetworkRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16030}
 */
 
 export class FindServersOnNetworkRequest {
@@ -96,4 +97,4 @@ export function decodeFindServersOnNetworkRequest( inp: DataStream): FindServers
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('FindServersOnNetworkRequest', FindServersOnNetworkRequest, new ExpandedNodeId(2 /*numeric id*/, 12208, 0));
+register_class_definition('FindServersOnNetworkRequest', FindServersOnNetworkRequest, new ExpandedNodeId(2 /*numeric id*/, 12190, 0));

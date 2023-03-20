@@ -14,6 +14,7 @@ export interface IGenericAttributeValue {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16080}
 */
 
 export class GenericAttributeValue {
@@ -80,4 +81,4 @@ export function decodeGenericAttributeValue( inp: DataStream): GenericAttributeV
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('GenericAttributeValue', GenericAttributeValue, new ExpandedNodeId(2 /*numeric id*/, 17610, 0));
+register_class_definition('GenericAttributeValue', GenericAttributeValue, new ExpandedNodeId(2 /*numeric id*/, 17606, 0));

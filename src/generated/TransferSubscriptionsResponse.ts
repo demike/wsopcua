@@ -19,6 +19,7 @@ export interface ITransferSubscriptionsResponse {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16224}
 */
 
 export class TransferSubscriptionsResponse {
@@ -92,4 +93,4 @@ export function decodeTransferSubscriptionsResponse( inp: DataStream): TransferS
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TransferSubscriptionsResponse', TransferSubscriptionsResponse, new ExpandedNodeId(2 /*numeric id*/, 844, 0));
+register_class_definition('TransferSubscriptionsResponse', TransferSubscriptionsResponse, new ExpandedNodeId(2 /*numeric id*/, 842, 0));

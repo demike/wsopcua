@@ -14,6 +14,7 @@ export interface IHistoryData {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16152}
 */
 
 export class HistoryData {
@@ -73,4 +74,4 @@ export function decodeHistoryData( inp: DataStream): HistoryData {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryData', HistoryData, new ExpandedNodeId(2 /*numeric id*/, 658, 0));
+register_class_definition('HistoryData', HistoryData, new ExpandedNodeId(2 /*numeric id*/, 656, 0));

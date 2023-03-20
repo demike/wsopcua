@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15978}
+*/
+
 export enum NodeClass {
   Unspecified = 0,
   Object = 1,

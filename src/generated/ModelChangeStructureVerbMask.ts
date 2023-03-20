@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16241}
+*/
+
 export enum ModelChangeStructureVerbMask {
   NodeAdded = 1,
   NodeDeleted = 2,

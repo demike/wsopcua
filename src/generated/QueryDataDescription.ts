@@ -15,6 +15,7 @@ export interface IQueryDataDescription {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16121}
 */
 
 export class QueryDataDescription {
@@ -88,4 +89,4 @@ export function decodeQueryDataDescription( inp: DataStream): QueryDataDescripti
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('QueryDataDescription', QueryDataDescription, new ExpandedNodeId(2 /*numeric id*/, 572, 0));
+register_class_definition('QueryDataDescription', QueryDataDescription, new ExpandedNodeId(2 /*numeric id*/, 570, 0));

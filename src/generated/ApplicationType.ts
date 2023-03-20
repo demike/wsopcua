@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16019}
+*/
+
 export enum ApplicationType {
   Server = 0,
   Client = 1,

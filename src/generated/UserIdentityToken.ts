@@ -12,6 +12,7 @@ export interface IUserIdentityToken {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16057}
 */
 
 export class UserIdentityToken {
@@ -71,4 +72,4 @@ export function decodeUserIdentityToken( inp: DataStream): UserIdentityToken {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UserIdentityToken', UserIdentityToken, new ExpandedNodeId(2 /*numeric id*/, 318, 0));
+register_class_definition('UserIdentityToken', UserIdentityToken, new ExpandedNodeId(2 /*numeric id*/, 316, 0));

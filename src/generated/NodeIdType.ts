@@ -6,7 +6,9 @@
 import {DataStream} from '../basic-types/DataStream';
 
 /**
-The possible encodings for a NodeId value.*/
+The possible encodings for a NodeId value.
+*/
+
 export enum NodeIdType {
   TwoByte = 0,
   FourByte = 1,

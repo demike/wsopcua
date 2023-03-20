@@ -13,6 +13,7 @@ export interface ISignedSoftwareCertificate {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16052}
 */
 
 export class SignedSoftwareCertificate {
@@ -79,4 +80,4 @@ export function decodeSignedSoftwareCertificate( inp: DataStream): SignedSoftwar
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SignedSoftwareCertificate', SignedSoftwareCertificate, new ExpandedNodeId(2 /*numeric id*/, 346, 0));
+register_class_definition('SignedSoftwareCertificate', SignedSoftwareCertificate, new ExpandedNodeId(2 /*numeric id*/, 344, 0));

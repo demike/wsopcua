@@ -16,6 +16,7 @@ export interface ISubscribedDataSetMirrorDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15822}
 */
 
 export class SubscribedDataSetMirrorDataType extends SubscribedDataSetDataType {
@@ -83,4 +84,4 @@ export function decodeSubscribedDataSetMirrorDataType( inp: DataStream): Subscri
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SubscribedDataSetMirrorDataType', SubscribedDataSetMirrorDataType, new ExpandedNodeId(2 /*numeric id*/, 15713, 0));
+register_class_definition('SubscribedDataSetMirrorDataType', SubscribedDataSetMirrorDataType, new ExpandedNodeId(2 /*numeric id*/, 15635, 0));

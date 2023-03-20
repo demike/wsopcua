@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16096}
+*/
+
 export enum BrowseDirection {
   Forward = 0,
   Inverse = 1,

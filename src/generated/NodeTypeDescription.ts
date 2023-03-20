@@ -16,6 +16,7 @@ export interface INodeTypeDescription {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16122}
 */
 
 export class NodeTypeDescription {
@@ -89,4 +90,4 @@ export function decodeNodeTypeDescription( inp: DataStream): NodeTypeDescription
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('NodeTypeDescription', NodeTypeDescription, new ExpandedNodeId(2 /*numeric id*/, 575, 0));
+register_class_definition('NodeTypeDescription', NodeTypeDescription, new ExpandedNodeId(2 /*numeric id*/, 573, 0));

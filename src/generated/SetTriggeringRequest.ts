@@ -17,6 +17,7 @@ export interface ISetTriggeringRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16199}
 */
 
 export class SetTriggeringRequest {
@@ -104,4 +105,4 @@ export function decodeSetTriggeringRequest( inp: DataStream): SetTriggeringReque
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SetTriggeringRequest', SetTriggeringRequest, new ExpandedNodeId(2 /*numeric id*/, 775, 0));
+register_class_definition('SetTriggeringRequest', SetTriggeringRequest, new ExpandedNodeId(2 /*numeric id*/, 773, 0));

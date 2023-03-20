@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16140}
+*/
+
 export enum TimestampsToReturn {
   Source = 0,
   Server = 1,

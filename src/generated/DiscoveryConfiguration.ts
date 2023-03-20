@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16042}
 */
 
 export class DiscoveryConfiguration {
@@ -22,4 +23,4 @@ export class DiscoveryConfiguration {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DiscoveryConfiguration', DiscoveryConfiguration, new ExpandedNodeId(2 /*numeric id*/, 12900, 0));
+register_class_definition('DiscoveryConfiguration', DiscoveryConfiguration, new ExpandedNodeId(2 /*numeric id*/, 12890, 0));

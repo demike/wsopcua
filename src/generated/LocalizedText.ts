@@ -13,6 +13,7 @@ export interface ILocalizedText {
 
 /**
 A string qualified with a namespace index.
+ * {@link https://reference.opcfoundation.org/nodesets/4/15334}
 */
 
 export class LocalizedText {

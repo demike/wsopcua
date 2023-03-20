@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16246}
+*/
+
 export enum AxisScaleEnumeration {
   Linear = 0,
   Log = 1,

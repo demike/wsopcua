@@ -17,6 +17,7 @@ export interface IUserTokenPolicy {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16035}
 */
 
 export class UserTokenPolicy {
@@ -104,4 +105,4 @@ export function decodeUserTokenPolicy( inp: DataStream): UserTokenPolicy {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UserTokenPolicy', UserTokenPolicy, new ExpandedNodeId(2 /*numeric id*/, 306, 0));
+register_class_definition('UserTokenPolicy', UserTokenPolicy, new ExpandedNodeId(2 /*numeric id*/, 304, 0));

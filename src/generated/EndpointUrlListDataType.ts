@@ -12,6 +12,7 @@ export interface IEndpointUrlListDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16231}
 */
 
 export class EndpointUrlListDataType {
@@ -71,4 +72,4 @@ export function decodeEndpointUrlListDataType( inp: DataStream): EndpointUrlList
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EndpointUrlListDataType', EndpointUrlListDataType, new ExpandedNodeId(2 /*numeric id*/, 11957, 0));
+register_class_definition('EndpointUrlListDataType', EndpointUrlListDataType, new ExpandedNodeId(2 /*numeric id*/, 11943, 0));

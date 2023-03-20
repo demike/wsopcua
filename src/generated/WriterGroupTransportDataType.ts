@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15806}
 */
 
 export class WriterGroupTransportDataType {
@@ -22,4 +23,4 @@ export class WriterGroupTransportDataType {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('WriterGroupTransportDataType', WriterGroupTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15691, 0));
+register_class_definition('WriterGroupTransportDataType', WriterGroupTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15611, 0));

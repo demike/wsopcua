@@ -15,6 +15,7 @@ export interface IChannelSecurityToken {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16047}
 */
 
 export class ChannelSecurityToken {
@@ -95,4 +96,4 @@ export function decodeChannelSecurityToken( inp: DataStream): ChannelSecurityTok
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ChannelSecurityToken', ChannelSecurityToken, new ExpandedNodeId(2 /*numeric id*/, 443, 0));
+register_class_definition('ChannelSecurityToken', ChannelSecurityToken, new ExpandedNodeId(2 /*numeric id*/, 441, 0));

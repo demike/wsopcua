@@ -14,6 +14,7 @@ export interface IModelChangeStructureDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16242}
 */
 
 export class ModelChangeStructureDataType {
@@ -87,4 +88,4 @@ export function decodeModelChangeStructureDataType( inp: DataStream): ModelChang
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ModelChangeStructureDataType', ModelChangeStructureDataType, new ExpandedNodeId(2 /*numeric id*/, 879, 0));
+register_class_definition('ModelChangeStructureDataType', ModelChangeStructureDataType, new ExpandedNodeId(2 /*numeric id*/, 877, 0));

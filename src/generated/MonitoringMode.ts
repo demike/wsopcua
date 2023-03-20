@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16177}
+*/
+
 export enum MonitoringMode {
   Disabled = 0,
   Sampling = 1,

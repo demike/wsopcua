@@ -16,6 +16,7 @@ export interface IModifySubscriptionResponse {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16206}
 */
 
 export class ModifySubscriptionResponse {
@@ -96,4 +97,4 @@ export function decodeModifySubscriptionResponse( inp: DataStream): ModifySubscr
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ModifySubscriptionResponse', ModifySubscriptionResponse, new ExpandedNodeId(2 /*numeric id*/, 796, 0));
+register_class_definition('ModifySubscriptionResponse', ModifySubscriptionResponse, new ExpandedNodeId(2 /*numeric id*/, 794, 0));

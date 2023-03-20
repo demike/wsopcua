@@ -15,6 +15,7 @@ export interface ITargetVariablesDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15819}
 */
 
 export class TargetVariablesDataType extends SubscribedDataSetDataType {
@@ -75,4 +76,4 @@ export function decodeTargetVariablesDataType( inp: DataStream): TargetVariables
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TargetVariablesDataType', TargetVariablesDataType, new ExpandedNodeId(2 /*numeric id*/, 15712, 0));
+register_class_definition('TargetVariablesDataType', TargetVariablesDataType, new ExpandedNodeId(2 /*numeric id*/, 15631, 0));

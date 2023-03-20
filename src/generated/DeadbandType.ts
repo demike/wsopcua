@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16179}
+*/
+
 export enum DeadbandType {
   None = 0,
   Absolute = 1,

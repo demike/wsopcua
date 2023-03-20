@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15911}
+*/
+
 export enum DiagnosticsLevel {
   Basic = 0,
   Advanced = 1,

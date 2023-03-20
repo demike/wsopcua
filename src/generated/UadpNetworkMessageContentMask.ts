@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15825}
+*/
+
 export enum UadpNetworkMessageContentMask {
   None = 0,
   PublisherId = 1,

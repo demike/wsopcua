@@ -16,6 +16,7 @@ export interface IUserNameIdentityToken extends IUserIdentityToken {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16059}
 */
 
 export class UserNameIdentityToken extends UserIdentityToken {
@@ -94,4 +95,4 @@ export function decodeUserNameIdentityToken( inp: DataStream): UserNameIdentityT
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UserNameIdentityToken', UserNameIdentityToken, new ExpandedNodeId(2 /*numeric id*/, 324, 0));
+register_class_definition('UserNameIdentityToken', UserNameIdentityToken, new ExpandedNodeId(2 /*numeric id*/, 322, 0));

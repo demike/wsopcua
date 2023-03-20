@@ -14,6 +14,7 @@ export interface IStatusResult {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16239}
 */
 
 export class StatusResult {
@@ -80,4 +81,4 @@ export function decodeStatusResult( inp: DataStream): StatusResult {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('StatusResult', StatusResult, new ExpandedNodeId(2 /*numeric id*/, 301, 0));
+register_class_definition('StatusResult', StatusResult, new ExpandedNodeId(2 /*numeric id*/, 299, 0));

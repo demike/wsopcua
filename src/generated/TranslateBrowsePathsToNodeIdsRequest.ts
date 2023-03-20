@@ -16,6 +16,7 @@ export interface ITranslateBrowsePathsToNodeIdsRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16112}
 */
 
 export class TranslateBrowsePathsToNodeIdsRequest {
@@ -82,4 +83,4 @@ export function decodeTranslateBrowsePathsToNodeIdsRequest( inp: DataStream): Tr
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TranslateBrowsePathsToNodeIdsRequest', TranslateBrowsePathsToNodeIdsRequest, new ExpandedNodeId(2 /*numeric id*/, 554, 0));
+register_class_definition('TranslateBrowsePathsToNodeIdsRequest', TranslateBrowsePathsToNodeIdsRequest, new ExpandedNodeId(2 /*numeric id*/, 552, 0));

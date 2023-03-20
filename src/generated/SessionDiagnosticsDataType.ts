@@ -56,6 +56,7 @@ export interface ISessionDiagnosticsDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16236}
 */
 
 export class SessionDiagnosticsDataType {
@@ -409,4 +410,4 @@ export function decodeSessionDiagnosticsDataType( inp: DataStream): SessionDiagn
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SessionDiagnosticsDataType', SessionDiagnosticsDataType, new ExpandedNodeId(2 /*numeric id*/, 867, 0));
+register_class_definition('SessionDiagnosticsDataType', SessionDiagnosticsDataType, new ExpandedNodeId(2 /*numeric id*/, 865, 0));

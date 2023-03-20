@@ -20,6 +20,7 @@ export interface IAxisInformation {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16249}
 */
 
 export class AxisInformation {
@@ -107,4 +108,4 @@ export function decodeAxisInformation( inp: DataStream): AxisInformation {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AxisInformation', AxisInformation, new ExpandedNodeId(2 /*numeric id*/, 12089, 0));
+register_class_definition('AxisInformation', AxisInformation, new ExpandedNodeId(2 /*numeric id*/, 12079, 0));

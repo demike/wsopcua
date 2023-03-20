@@ -113,15 +113,10 @@ export class ClassFile {
     return this.utilityFunctions;
   }
 
-  public setTypeId(id: string, namespace: string | number) {
+  public setTypeId(id: string, namespaceUri: string, namespace: string | number) {
     this.namespace = namespace;
+    this.namespaceUri = namespaceUri;
     this.id = id;
-  }
-
-  public getNodeIdString() {
-    return `${Number.isInteger(this.namespace) ? 'ns=' : 'nsu='}${this.namespace};${
-      Number.isInteger(this.id) ? 'i=' : 's='
-    }${this.id}`;
   }
 
   constructor(
@@ -147,6 +142,7 @@ export class ClassFile {
 
     this.id = '-1';
     this.namespace = '';
+    this.namespaceUri = '';
   }
 
   protected sanitizeName(name?: string): string {
@@ -211,7 +207,7 @@ export class ClassFile {
 
     str += '/**\n' + this.documentation + '\n';
     if (this.specLink) {
-      str += ' * {@link ' + this.specLink + '\n';
+      str += ' * {@link ' + this.specLink + '}\n';
     }
     str += '*/\n\n';
     str += this.getClassHeader();
@@ -429,6 +425,7 @@ export class ClassFile {
   public static readonly FROM_JSON_METHOD = 'fromJSON';
   public static readonly TO_JSON_METHOD = 'toJSON';
   protected id: string;
+  protected namespaceUri: string;
   protected namespace: string | number;
 
   protected name: string;

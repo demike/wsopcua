@@ -24,6 +24,7 @@ export interface IProgramDiagnosticDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16251}
 */
 
 export class ProgramDiagnosticDataType {
@@ -146,4 +147,4 @@ export function decodeProgramDiagnosticDataType( inp: DataStream): ProgramDiagno
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ProgramDiagnosticDataType', ProgramDiagnosticDataType, new ExpandedNodeId(2 /*numeric id*/, 896, 0));
+register_class_definition('ProgramDiagnosticDataType', ProgramDiagnosticDataType, new ExpandedNodeId(2 /*numeric id*/, 894, 0));

@@ -17,6 +17,7 @@ export interface INodeAttributes {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16071}
 */
 
 export class NodeAttributes {
@@ -104,4 +105,4 @@ export function decodeNodeAttributes( inp: DataStream): NodeAttributes {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('NodeAttributes', NodeAttributes, new ExpandedNodeId(2 /*numeric id*/, 351, 0));
+register_class_definition('NodeAttributes', NodeAttributes, new ExpandedNodeId(2 /*numeric id*/, 349, 0));

@@ -12,6 +12,7 @@ export interface ICloseSecureChannelResponse {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16051}
 */
 
 export class CloseSecureChannelResponse {
@@ -71,4 +72,4 @@ export function decodeCloseSecureChannelResponse( inp: DataStream): CloseSecureC
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CloseSecureChannelResponse', CloseSecureChannelResponse, new ExpandedNodeId(2 /*numeric id*/, 455, 0));
+register_class_definition('CloseSecureChannelResponse', CloseSecureChannelResponse, new ExpandedNodeId(2 /*numeric id*/, 453, 0));

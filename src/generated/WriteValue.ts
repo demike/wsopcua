@@ -16,6 +16,7 @@ export interface IWriteValue {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16158}
 */
 
 export class WriteValue {
@@ -96,4 +97,4 @@ export function decodeWriteValue( inp: DataStream): WriteValue {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('WriteValue', WriteValue, new ExpandedNodeId(2 /*numeric id*/, 670, 0));
+register_class_definition('WriteValue', WriteValue, new ExpandedNodeId(2 /*numeric id*/, 668, 0));

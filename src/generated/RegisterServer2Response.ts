@@ -17,6 +17,7 @@ export interface IRegisterServer2Response {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16045}
 */
 
 export class RegisterServer2Response {
@@ -90,4 +91,4 @@ export function decodeRegisterServer2Response( inp: DataStream): RegisterServer2
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RegisterServer2Response', RegisterServer2Response, new ExpandedNodeId(2 /*numeric id*/, 12212, 0));
+register_class_definition('RegisterServer2Response', RegisterServer2Response, new ExpandedNodeId(2 /*numeric id*/, 12194, 0));

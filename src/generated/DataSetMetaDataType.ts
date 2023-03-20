@@ -22,6 +22,7 @@ export interface IDataSetMetaDataType extends IDataTypeSchemaHeader {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15791}
 */
 
 export class DataSetMetaDataType extends DataTypeSchemaHeader {
@@ -114,4 +115,4 @@ export function decodeDataSetMetaDataType( inp: DataStream): DataSetMetaDataType
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DataSetMetaDataType', DataSetMetaDataType, new ExpandedNodeId(2 /*numeric id*/, 124, 0));
+register_class_definition('DataSetMetaDataType', DataSetMetaDataType, new ExpandedNodeId(2 /*numeric id*/, 14523, 0));

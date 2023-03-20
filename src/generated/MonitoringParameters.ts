@@ -17,6 +17,7 @@ export interface IMonitoringParameters {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16188}
 */
 
 export class MonitoringParameters {
@@ -104,4 +105,4 @@ export function decodeMonitoringParameters( inp: DataStream): MonitoringParamete
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('MonitoringParameters', MonitoringParameters, new ExpandedNodeId(2 /*numeric id*/, 742, 0));
+register_class_definition('MonitoringParameters', MonitoringParameters, new ExpandedNodeId(2 /*numeric id*/, 740, 0));

@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15790}
+*/
+
 export enum PubSubState {
   Disabled = 0,
   Paused = 1,

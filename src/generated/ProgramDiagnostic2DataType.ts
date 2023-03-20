@@ -164,4 +164,4 @@ export function decodeProgramDiagnostic2DataType( inp: DataStream): ProgramDiagn
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ProgramDiagnostic2DataType', ProgramDiagnostic2DataType, new ExpandedNodeId(2 /*numeric id*/, 15397, 0));
+register_class_definition('ProgramDiagnostic2DataType', ProgramDiagnostic2DataType, new ExpandedNodeId(2 /*numeric id*/, 15396, 0));

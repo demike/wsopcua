@@ -15,6 +15,7 @@ export interface IPublishedDataItemsDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15798}
 */
 
 export class PublishedDataItemsDataType extends PublishedDataSetSourceDataType {
@@ -75,4 +76,4 @@ export function decodePublishedDataItemsDataType( inp: DataStream): PublishedDat
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PublishedDataItemsDataType', PublishedDataItemsDataType, new ExpandedNodeId(2 /*numeric id*/, 15679, 0));
+register_class_definition('PublishedDataItemsDataType', PublishedDataItemsDataType, new ExpandedNodeId(2 /*numeric id*/, 15581, 0));

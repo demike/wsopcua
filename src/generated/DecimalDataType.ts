@@ -13,6 +13,7 @@ export interface IDecimalDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15783}
 */
 
 export class DecimalDataType {
@@ -79,4 +80,4 @@ export function decodeDecimalDataType( inp: DataStream): DecimalDataType {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DecimalDataType', DecimalDataType, new ExpandedNodeId(2 /*numeric id*/, 17863, 0));
+register_class_definition('DecimalDataType', DecimalDataType, new ExpandedNodeId(2 /*numeric id*/, 17861, 0));

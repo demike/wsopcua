@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15986}
+*/
+
 export enum StructureType {
   Structure = 0,
   StructureWithOptionalFields = 1,

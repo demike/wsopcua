@@ -13,6 +13,9 @@ import {
 import { TypeRegistry } from './TypeRegistry';
 import { ClassFile } from './ClassFile';
 import { ProjectImportConfig, ProjectModulePath } from './SchemaParserConfig';
+import { getSpecLink } from './spec-link-Import';
+
+const DEFAULT_NS_URI = 'http://opcfoundation.org/UA/';
 
 export class BSDSchemaParser {
   public static readonly TAG_TYPE_DICT = 'opc:TypeDictionary';
@@ -27,6 +30,7 @@ export class BSDSchemaParser {
 
   protected metaTypeMap: { [key: string]: { [key: string]: string[] } } = {};
   protected namespace: string | number = -1;
+  protected namespaceUri = DEFAULT_NS_URI;
 
   protected importConfig?: ProjectImportConfig;
 
@@ -34,10 +38,10 @@ export class BSDSchemaParser {
     this.clsIncompleteTypes = [];
   }
 
-  public parse(
+  public async parse(
     importConfig: ProjectImportConfig,
     metaTypeMap: { [key: string]: { [key: string]: string[] } }
-  ): void {
+  ): Promise<void> {
     this.metaTypeMap = metaTypeMap;
     this.importConfig = importConfig;
     for (const schema of importConfig.schemaImports) {
@@ -58,9 +62,9 @@ export class BSDSchemaParser {
         // console.log(data);
         const doc = new JSDOM(data, { contentType: 'text/xml' });
         if (schema.pathToSchema.endsWith('.bsd')) {
-          this.parseBSDDoc(doc);
+          await this.parseBSDDoc(doc);
         } else {
-          this.parseNodeSet2XmlDoc(doc);
+          await this.parseNodeSet2XmlDoc(doc);
         }
       } catch (err) {
         throw err;
@@ -73,7 +77,7 @@ export class BSDSchemaParser {
 
     for (let i = 0; i < elements.length; i++) {
       const el = elements.item(i);
-      const nodeId = this.getTypeNodeId(el);
+      const nodeId = this.getTypeId(el);
       let browseName = el.getAttribute('BrowseName');
       if (nodeId && browseName) {
         browseName = browseName.split(':')[1];
@@ -82,7 +86,12 @@ export class BSDSchemaParser {
     }
   }
 
-  protected getTypeNodeId(el: Element) {
+  /**
+   * returns the type id without namespace and prefix (s=, i= ... )
+   * @param el
+   * @returns
+   */
+  protected getTypeId(el: Element) {
     let nodeId: string | null;
     // has encoding reference
     const hasEncodingRef = el.querySelector('References > Reference[ReferenceType="i=38"]');
@@ -94,21 +103,22 @@ export class BSDSchemaParser {
 
     if (nodeId) {
       let split;
-      split = nodeId.split('x=');
+      split = nodeId.split(';');
+      const id = split.length >= 2 ? split[1] : nodeId;
+
+      split = id.split('=');
       if (split.length >= 2) {
-        return split[1];
+        return split[split.length - 1];
       }
-      split = nodeId.split('s=');
-      if (split.length >= 2) {
-        return "'" + split[split.length - 1] + "'";
-      }
+      return id;
     }
 
     return nodeId;
   }
 
-  public parseNodeSet2XmlDoc(doc: JSDOM) {
+  public async parseNodeSet2XmlDoc(doc: JSDOM) {
     let binarySchemaFound = false;
+    this.namespaceUri = this.extractNodeSet2XmlNamespaceUri(doc) ?? DEFAULT_NS_URI;
     this.addTypeIdsFromNodeSet(doc);
     const elements = doc.window.document.querySelectorAll(
       '[DataType="ByteString"][SymbolicName$="_BinarySchema"] > Value,' +
@@ -128,7 +138,7 @@ export class BSDSchemaParser {
         binarySchemaFound = true;
         let docdata = Buffer.from(elByteString.innerHTML, 'base64').toString();
         docdata = this.fixDocData(docdata);
-        this.parseBSDDoc(new JSDOM(docdata, { contentType: 'text/xml' }));
+        await this.parseBSDDoc(new JSDOM(docdata, { contentType: 'text/xml' }));
         break;
       }
     }
@@ -165,47 +175,60 @@ export class BSDSchemaParser {
     return data.replace('\r', '');
   }
 
-  public async parseBSDDoc(doc: JSDOM) {
+  public parseBSDDoc(doc: JSDOM) {
     this.fixSchemaFaults(doc);
+    this.namespaceUri = this.extractBSDNamespaceUri(doc) ?? DEFAULT_NS_URI;
     for (let i = 0; i < doc.window.document.childNodes.length; i++) {
       const el: HTMLElement = <HTMLElement>doc.window.document.childNodes.item(i);
-      await this.parseBSDElement(el);
+      this.parseBSDElement(el);
     }
     // second pass for incomplete types
-    await this.parseSecondPass();
+    this.parseSecondPass();
     this.writeIndexFile();
-    this.writeFiles();
+    return this.writeFiles();
   }
 
-  public async parseBSDElement(el: HTMLElement) {
+  protected extractBSDNamespaceUri(doc: JSDOM) {
+    return doc.window.document.children.item(0)?.attributes.getNamedItem('TargetNamespace')?.value;
+  }
+
+  protected extractNodeSet2XmlNamespaceUri(doc: JSDOM) {
+    // TODO: for now only the first namespace uri is taken into account
+    return doc.window.document.querySelector('NamespaceUris')?.children.item(0)?.textContent;
+  }
+
+  public parseBSDElement(el: HTMLElement) {
     switch (el.tagName) {
       case BSDSchemaParser.TAG_ENUM_TYPE:
-        return this.parseBSDEnum(el);
+        this.parseBSDEnum(el);
+        break;
       case BSDSchemaParser.TAG_STRUCT_TYPE:
-        return this.parseBSDStruct(el);
+        this.parseBSDStruct(el);
+        break;
       case BSDSchemaParser.TAG_TYPE_DICT:
-        return this.parseBSDTypeDict(el);
+        this.parseBSDTypeDict(el);
+        break;
       default:
         for (let i = 0; i < el.childNodes.length; i++) {
           const child: HTMLElement = <HTMLElement>el.childNodes.item(i);
-          await this.parseBSDElement(child);
+          this.parseBSDElement(child);
         }
         break;
     }
   }
 
-  public async parseBSDTypeDict(el: HTMLElement) {
+  public parseBSDTypeDict(el: HTMLElement) {
     if (this.namespace === -1) {
       // namespace not yet defined --> get it from the BSD Type dictonary
       this.namespace = el.getAttribute('TargetNamespace') || -1;
     }
 
     for (let i = 0; i < el.childNodes.length; i++) {
-      await this.parseBSDElement(<HTMLElement>el.childNodes.item(i));
+      this.parseBSDElement(<HTMLElement>el.childNodes.item(i));
     }
   }
 
-  public async parseBSDStruct(el: HTMLElement): Promise<void> {
+  public parseBSDStruct(el: HTMLElement): void {
     const file = new StructTypeFile(this.currentModulePath);
     const parser = new BSDStructTypeFileParser(el, file);
     const at = el.attributes.getNamedItem(ClassFile.ATTR_NAME);
@@ -213,24 +236,24 @@ export class BSDSchemaParser {
       // this type already exists
       return;
     }
-    await parser.parse();
+    parser.parse();
     if (!file.Complete) {
       this.clsIncompleteTypes.push(parser);
     }
     // this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
   }
 
-  public parseBSDEnum(el: HTMLElement): Promise<void> {
+  public parseBSDEnum(el: HTMLElement): void {
     const file = new EnumTypeFile(this.currentModulePath);
     const parser = new BSDEnumTypeFileParser(el, file);
-    return parser.parse();
+    parser.parse();
     // this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
   }
 
   public writeToFile(strPath: string, cls: ClassFile) {
     try {
       fs.writeFileSync(strPath, cls.toString(), 'utf8');
-      console.log('file written: ' + path);
+      console.log('file written: ' + strPath);
     } catch (err) {
       console.log((err as Error).message);
     }
@@ -253,12 +276,12 @@ export class BSDSchemaParser {
     });
   }
 
-  protected async parseSecondPass() {
+  protected parseSecondPass() {
     const ar: BSDClassFileParser[] = [];
 
     for (let iterations = 0; iterations < 10; iterations++) {
       for (const t of this.clsIncompleteTypes) {
-        await t.parse();
+        t.parse();
         if (!t.Cls.Complete) {
           ar.push(t);
         }
@@ -290,7 +313,7 @@ export class BSDSchemaParser {
     }
   }
 
-  protected writeFiles() {
+  protected async writeFiles() {
     if (!this.importConfig) {
       return;
     }
@@ -298,19 +321,58 @@ export class BSDSchemaParser {
     for (const file of ar) {
       if (!file.Written) {
         if (!this.importConfig.readonly) {
-          let arParams =
+          const arParams = this.metaTypeMap['DataType'][file.Name];
+          let arParamsEncodingBinary =
             this.metaTypeMap[/* "DataType"*/ 'Object'][file.Name + '_Encoding_DefaultBinary'];
-          if (!arParams) {
-            arParams = this.metaTypeMap['DataType'][file.Name];
+          if (!arParamsEncodingBinary) {
+            arParamsEncodingBinary = arParams;
           }
+          if (arParamsEncodingBinary) {
+            file.setTypeId(arParams[1], this.namespaceUri, this.namespace);
+          }
+
           if (arParams) {
-            file.setTypeId(arParams[1], this.namespace);
+            try {
+              await this.fetchSpecLink(file, arParams[1], this.namespaceUri, this.namespace);
+            } catch (err) {
+              console.log('error fetching spec link', err);
+            }
           }
-          this.writeToFile(path.resolve(this.outPath, file.Name + '.ts'), file);
         }
-        file.Written = true;
+        this.writeToFile(path.resolve(this.outPath, file.Name + '.ts'), file);
       }
+      file.Written = true;
     }
+  }
+
+  protected async fetchSpecLink(
+    cls: ClassFile,
+    id: string,
+    namespaceUri: string,
+    namespace: string | number
+  ) {
+    if (!namespaceUri.startsWith(DEFAULT_NS_URI)) {
+      // no opcua foundation namespace
+      return;
+    }
+    const strNodeId = this.getNodeIdString(id, namespaceUri, namespace);
+    cls.specLink = await getSpecLink(strNodeId);
+    if (!cls.specLink) {
+      // try with browse name
+      cls.specLink = await getSpecLink(`${namespaceUri}:${cls.Name}`);
+    }
+    if (!cls.specLink) {
+      console.log('missing spec link', cls.Name, strNodeId);
+    }
+  }
+
+  protected getNodeIdString(id: string, namespaceUri: string, namespace?: string | number) {
+    /*
+    return `${!isNaN(namespace as any) ? 'ns=' : 'nsu='}${namespace};${
+      !isNaN(id as any) ? 'i=' : 's='
+    }${id}`;
+    */
+    return `${'nsu='}${namespaceUri};${!isNaN(id as any) ? 'i=' : 's='}${id}`;
   }
 
   protected writeIndexFile() {

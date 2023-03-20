@@ -16,6 +16,7 @@ export interface IDeleteNodesRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16090}
 */
 
 export class DeleteNodesRequest {
@@ -82,4 +83,4 @@ export function decodeDeleteNodesRequest( inp: DataStream): DeleteNodesRequest {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DeleteNodesRequest', DeleteNodesRequest, new ExpandedNodeId(2 /*numeric id*/, 500, 0));
+register_class_definition('DeleteNodesRequest', DeleteNodesRequest, new ExpandedNodeId(2 /*numeric id*/, 498, 0));

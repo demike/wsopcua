@@ -14,6 +14,7 @@ export interface IRelativePath {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16108}
 */
 
 export class RelativePath {
@@ -73,4 +74,4 @@ export function decodeRelativePath( inp: DataStream): RelativePath {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RelativePath', RelativePath, new ExpandedNodeId(2 /*numeric id*/, 542, 0));
+register_class_definition('RelativePath', RelativePath, new ExpandedNodeId(2 /*numeric id*/, 540, 0));

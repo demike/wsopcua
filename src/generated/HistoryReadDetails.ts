@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16146}
 */
 
 export class HistoryReadDetails {
@@ -22,4 +23,4 @@ export class HistoryReadDetails {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryReadDetails', HistoryReadDetails, new ExpandedNodeId(2 /*numeric id*/, 643, 0));
+register_class_definition('HistoryReadDetails', HistoryReadDetails, new ExpandedNodeId(2 /*numeric id*/, 641, 0));

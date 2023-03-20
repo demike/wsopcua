@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15796}
 */
 
 export class PublishedDataSetSourceDataType {
@@ -22,4 +23,4 @@ export class PublishedDataSetSourceDataType {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PublishedDataSetSourceDataType', PublishedDataSetSourceDataType, new ExpandedNodeId(2 /*numeric id*/, 15678, 0));
+register_class_definition('PublishedDataSetSourceDataType', PublishedDataSetSourceDataType, new ExpandedNodeId(2 /*numeric id*/, 15580, 0));

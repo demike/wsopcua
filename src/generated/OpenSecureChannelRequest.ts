@@ -20,6 +20,7 @@ export interface IOpenSecureChannelRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16048}
 */
 
 export class OpenSecureChannelRequest {
@@ -114,4 +115,4 @@ export function decodeOpenSecureChannelRequest( inp: DataStream): OpenSecureChan
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('OpenSecureChannelRequest', OpenSecureChannelRequest, new ExpandedNodeId(2 /*numeric id*/, 446, 0));
+register_class_definition('OpenSecureChannelRequest', OpenSecureChannelRequest, new ExpandedNodeId(2 /*numeric id*/, 444, 0));

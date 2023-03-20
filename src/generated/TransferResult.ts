@@ -13,6 +13,7 @@ export interface ITransferResult {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16222}
 */
 
 export class TransferResult {
@@ -79,4 +80,4 @@ export function decodeTransferResult( inp: DataStream): TransferResult {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TransferResult', TransferResult, new ExpandedNodeId(2 /*numeric id*/, 838, 0));
+register_class_definition('TransferResult', TransferResult, new ExpandedNodeId(2 /*numeric id*/, 836, 0));

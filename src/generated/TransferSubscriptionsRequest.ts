@@ -15,6 +15,7 @@ export interface ITransferSubscriptionsRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16223}
 */
 
 export class TransferSubscriptionsRequest {
@@ -88,4 +89,4 @@ export function decodeTransferSubscriptionsRequest( inp: DataStream): TransferSu
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TransferSubscriptionsRequest', TransferSubscriptionsRequest, new ExpandedNodeId(2 /*numeric id*/, 841, 0));
+register_class_definition('TransferSubscriptionsRequest', TransferSubscriptionsRequest, new ExpandedNodeId(2 /*numeric id*/, 839, 0));

@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15913}
+*/
+
 export enum PubSubDiagnosticsCounterClassification {
   Information = 0,
   Error = 1,

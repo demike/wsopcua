@@ -15,6 +15,7 @@ export interface IThreeDFrame {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15533}
 */
 
 export class ThreeDFrame extends Frame {
@@ -82,4 +83,4 @@ export function decodeThreeDFrame( inp: DataStream): ThreeDFrame {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ThreeDFrame', ThreeDFrame, new ExpandedNodeId(2 /*numeric id*/, 18823, 0));
+register_class_definition('ThreeDFrame', ThreeDFrame, new ExpandedNodeId(2 /*numeric id*/, 18814, 0));

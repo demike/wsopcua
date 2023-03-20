@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16070}
+*/
+
 export enum NodeAttributesMask {
   None = 0,
   AccessLevel = 1,

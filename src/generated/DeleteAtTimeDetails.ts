@@ -14,6 +14,7 @@ export interface IDeleteAtTimeDetails extends IHistoryUpdateDetails {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16168}
 */
 
 export class DeleteAtTimeDetails extends HistoryUpdateDetails {
@@ -78,4 +79,4 @@ export function decodeDeleteAtTimeDetails( inp: DataStream): DeleteAtTimeDetails
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DeleteAtTimeDetails', DeleteAtTimeDetails, new ExpandedNodeId(2 /*numeric id*/, 691, 0));
+register_class_definition('DeleteAtTimeDetails', DeleteAtTimeDetails, new ExpandedNodeId(2 /*numeric id*/, 689, 0));

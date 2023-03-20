@@ -17,6 +17,7 @@ export interface ISetMonitoringModeRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16197}
 */
 
 export class SetMonitoringModeRequest {
@@ -97,4 +98,4 @@ export function decodeSetMonitoringModeRequest( inp: DataStream): SetMonitoringM
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SetMonitoringModeRequest', SetMonitoringModeRequest, new ExpandedNodeId(2 /*numeric id*/, 769, 0));
+register_class_definition('SetMonitoringModeRequest', SetMonitoringModeRequest, new ExpandedNodeId(2 /*numeric id*/, 767, 0));

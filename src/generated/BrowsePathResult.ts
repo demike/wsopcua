@@ -15,6 +15,7 @@ export interface IBrowsePathResult {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16111}
 */
 
 export class BrowsePathResult {
@@ -81,4 +82,4 @@ export function decodeBrowsePathResult( inp: DataStream): BrowsePathResult {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('BrowsePathResult', BrowsePathResult, new ExpandedNodeId(2 /*numeric id*/, 551, 0));
+register_class_definition('BrowsePathResult', BrowsePathResult, new ExpandedNodeId(2 /*numeric id*/, 549, 0));

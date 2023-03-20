@@ -13,6 +13,7 @@ export interface IRange {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16244}
 */
 
 export class Range {
@@ -79,4 +80,4 @@ export function decodeRange( inp: DataStream): Range {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('Range', Range, new ExpandedNodeId(2 /*numeric id*/, 886, 0));
+register_class_definition('Range', Range, new ExpandedNodeId(2 /*numeric id*/, 884, 0));

@@ -16,6 +16,7 @@ export interface IPublishRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16218}
 */
 
 export class PublishRequest {
@@ -82,4 +83,4 @@ export function decodePublishRequest( inp: DataStream): PublishRequest {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PublishRequest', PublishRequest, new ExpandedNodeId(2 /*numeric id*/, 826, 0));
+register_class_definition('PublishRequest', PublishRequest, new ExpandedNodeId(2 /*numeric id*/, 824, 0));

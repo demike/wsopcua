@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16229}
+*/
+
 export enum ServerState {
   Running = 0,
   Failed = 1,

@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15818}
 */
 
 export class SubscribedDataSetDataType {
@@ -22,4 +23,4 @@ export class SubscribedDataSetDataType {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SubscribedDataSetDataType', SubscribedDataSetDataType, new ExpandedNodeId(2 /*numeric id*/, 15707, 0));
+register_class_definition('SubscribedDataSetDataType', SubscribedDataSetDataType, new ExpandedNodeId(2 /*numeric id*/, 15630, 0));

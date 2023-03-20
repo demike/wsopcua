@@ -13,6 +13,7 @@ export interface IDatagramConnectionTransportDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15835}
 */
 
 export class DatagramConnectionTransportDataType extends ConnectionTransportDataType {
@@ -73,4 +74,4 @@ export function decodeDatagramConnectionTransportDataType( inp: DataStream): Dat
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DatagramConnectionTransportDataType', DatagramConnectionTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 17468, 0));
+register_class_definition('DatagramConnectionTransportDataType', DatagramConnectionTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 17467, 0));

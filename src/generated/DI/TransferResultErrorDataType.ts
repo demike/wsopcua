@@ -15,6 +15,7 @@ export interface ITransferResultErrorDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/11/17489}
 */
 
 export class TransferResultErrorDataType extends FetchResultDataType {
@@ -82,4 +83,4 @@ export function decodeTransferResultErrorDataType( inp: DataStream): TransferRes
 
 import {register_class_definition} from '../../factory/factories_factories';
 import { ExpandedNodeId } from '../../nodeid/expanded_nodeid';
-register_class_definition('TransferResultErrorDataType', TransferResultErrorDataType, new ExpandedNodeId(3 /*string id*/,'1;i=15893', 2));
+register_class_definition('TransferResultErrorDataType', TransferResultErrorDataType, new ExpandedNodeId(2 /*numeric id*/, 15893, 2));

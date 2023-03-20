@@ -17,6 +17,7 @@ export interface IReadEventDetails {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16147}
 */
 
 export class ReadEventDetails extends HistoryReadDetails {
@@ -98,4 +99,4 @@ export function decodeReadEventDetails( inp: DataStream): ReadEventDetails {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReadEventDetails', ReadEventDetails, new ExpandedNodeId(2 /*numeric id*/, 646, 0));
+register_class_definition('ReadEventDetails', ReadEventDetails, new ExpandedNodeId(2 /*numeric id*/, 644, 0));

@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16123}
+*/
+
 export enum FilterOperator {
   Equals = 0,
   IsNull = 1,

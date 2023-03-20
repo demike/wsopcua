@@ -13,6 +13,7 @@ export interface ILiteralOperand {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16130}
 */
 
 export class LiteralOperand extends FilterOperand {
@@ -73,4 +74,4 @@ export function decodeLiteralOperand( inp: DataStream): LiteralOperand {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('LiteralOperand', LiteralOperand, new ExpandedNodeId(2 /*numeric id*/, 597, 0));
+register_class_definition('LiteralOperand', LiteralOperand, new ExpandedNodeId(2 /*numeric id*/, 595, 0));

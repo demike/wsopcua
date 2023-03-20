@@ -16,6 +16,7 @@ export interface IContentFilterElementResult {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16133}
 */
 
 export class ContentFilterElementResult {
@@ -89,4 +90,4 @@ export function decodeContentFilterElementResult( inp: DataStream): ContentFilte
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ContentFilterElementResult', ContentFilterElementResult, new ExpandedNodeId(2 /*numeric id*/, 606, 0));
+register_class_definition('ContentFilterElementResult', ContentFilterElementResult, new ExpandedNodeId(2 /*numeric id*/, 604, 0));

@@ -15,6 +15,7 @@ export interface IEventFieldList {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16214}
 */
 
 export class EventFieldList {
@@ -81,4 +82,4 @@ export function decodeEventFieldList( inp: DataStream): EventFieldList {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EventFieldList', EventFieldList, new ExpandedNodeId(2 /*numeric id*/, 919, 0));
+register_class_definition('EventFieldList', EventFieldList, new ExpandedNodeId(2 /*numeric id*/, 917, 0));

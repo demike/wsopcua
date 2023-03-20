@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16033}
+*/
+
 export enum MessageSecurityMode {
   Invalid = 0,
   None = 1,

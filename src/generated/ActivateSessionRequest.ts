@@ -22,6 +22,7 @@ export interface IActivateSessionRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16064}
 */
 
 export class ActivateSessionRequest {
@@ -116,4 +117,4 @@ export function decodeActivateSessionRequest( inp: DataStream): ActivateSessionR
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ActivateSessionRequest', ActivateSessionRequest, new ExpandedNodeId(2 /*numeric id*/, 467, 0));
+register_class_definition('ActivateSessionRequest', ActivateSessionRequest, new ExpandedNodeId(2 /*numeric id*/, 465, 0));

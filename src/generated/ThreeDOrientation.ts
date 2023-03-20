@@ -15,6 +15,7 @@ export interface IThreeDOrientation {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15531}
 */
 
 export class ThreeDOrientation extends Orientation {
@@ -89,4 +90,4 @@ export function decodeThreeDOrientation( inp: DataStream): ThreeDOrientation {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ThreeDOrientation', ThreeDOrientation, new ExpandedNodeId(2 /*numeric id*/, 18821, 0));
+register_class_definition('ThreeDOrientation', ThreeDOrientation, new ExpandedNodeId(2 /*numeric id*/, 18812, 0));

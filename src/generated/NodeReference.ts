@@ -15,6 +15,7 @@ export interface INodeReference {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16125}
 */
 
 export class NodeReference {
@@ -95,4 +96,4 @@ export function decodeNodeReference( inp: DataStream): NodeReference {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('NodeReference', NodeReference, new ExpandedNodeId(2 /*numeric id*/, 582, 0));
+register_class_definition('NodeReference', NodeReference, new ExpandedNodeId(2 /*numeric id*/, 580, 0));

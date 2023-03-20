@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16162}
+*/
+
 export enum HistoryUpdateType {
   Insert = 1,
   Replace = 2,

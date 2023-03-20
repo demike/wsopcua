@@ -14,6 +14,7 @@ export interface IX509IdentityToken extends IUserIdentityToken {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16060}
 */
 
 export class X509IdentityToken extends UserIdentityToken {
@@ -78,4 +79,4 @@ export function decodeX509IdentityToken( inp: DataStream): X509IdentityToken {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('X509IdentityToken', X509IdentityToken, new ExpandedNodeId(2 /*numeric id*/, 327, 0));
+register_class_definition('X509IdentityToken', X509IdentityToken, new ExpandedNodeId(2 /*numeric id*/, 325, 0));

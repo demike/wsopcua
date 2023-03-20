@@ -14,6 +14,7 @@ export interface INetworkAddressUrlDataType extends INetworkAddressDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15811}
 */
 
 export class NetworkAddressUrlDataType extends NetworkAddressDataType {
@@ -78,4 +79,4 @@ export function decodeNetworkAddressUrlDataType( inp: DataStream): NetworkAddres
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('NetworkAddressUrlDataType', NetworkAddressUrlDataType, new ExpandedNodeId(2 /*numeric id*/, 21152, 0));
+register_class_definition('NetworkAddressUrlDataType', NetworkAddressUrlDataType, new ExpandedNodeId(2 /*numeric id*/, 15510, 0));

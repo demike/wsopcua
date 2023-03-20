@@ -17,6 +17,7 @@ export interface IReferenceTypeNode extends ITypeNode {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15997}
 */
 
 export class ReferenceTypeNode extends TypeNode {
@@ -95,4 +96,4 @@ export function decodeReferenceTypeNode( inp: DataStream): ReferenceTypeNode {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReferenceTypeNode', ReferenceTypeNode, new ExpandedNodeId(2 /*numeric id*/, 275, 0));
+register_class_definition('ReferenceTypeNode', ReferenceTypeNode, new ExpandedNodeId(2 /*numeric id*/, 273, 0));

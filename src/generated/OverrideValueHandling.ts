@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15821}
+*/
+
 export enum OverrideValueHandling {
   Disabled = 0,
   LastUsableValue = 1,

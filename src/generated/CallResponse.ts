@@ -19,6 +19,7 @@ export interface ICallResponse {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16176}
 */
 
 export class CallResponse {
@@ -92,4 +93,4 @@ export function decodeCallResponse( inp: DataStream): CallResponse {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CallResponse', CallResponse, new ExpandedNodeId(2 /*numeric id*/, 715, 0));
+register_class_definition('CallResponse', CallResponse, new ExpandedNodeId(2 /*numeric id*/, 713, 0));

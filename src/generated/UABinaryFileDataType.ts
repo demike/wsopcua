@@ -19,6 +19,7 @@ export interface IUABinaryFileDataType extends IDataTypeSchemaHeader {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15789}
 */
 
 export class UABinaryFileDataType extends DataTypeSchemaHeader {
@@ -97,4 +98,4 @@ export function decodeUABinaryFileDataType( inp: DataStream): UABinaryFileDataTy
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UABinaryFileDataType', UABinaryFileDataType, new ExpandedNodeId(2 /*numeric id*/, 15422, 0));
+register_class_definition('UABinaryFileDataType', UABinaryFileDataType, new ExpandedNodeId(2 /*numeric id*/, 15006, 0));

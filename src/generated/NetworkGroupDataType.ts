@@ -15,6 +15,7 @@ export interface INetworkGroupDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16232}
 */
 
 export class NetworkGroupDataType {
@@ -81,4 +82,4 @@ export function decodeNetworkGroupDataType( inp: DataStream): NetworkGroupDataTy
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('NetworkGroupDataType', NetworkGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 11958, 0));
+register_class_definition('NetworkGroupDataType', NetworkGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 11944, 0));

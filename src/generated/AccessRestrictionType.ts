@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15983}
+*/
+
 export enum AccessRestrictionType {
   None = 0,
   SigningRequired = 1,

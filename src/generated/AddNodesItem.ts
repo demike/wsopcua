@@ -21,6 +21,7 @@ export interface IAddNodesItem {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16082}
 */
 
 export class AddNodesItem {
@@ -122,4 +123,4 @@ export function decodeAddNodesItem( inp: DataStream): AddNodesItem {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AddNodesItem', AddNodesItem, new ExpandedNodeId(2 /*numeric id*/, 378, 0));
+register_class_definition('AddNodesItem', AddNodesItem, new ExpandedNodeId(2 /*numeric id*/, 376, 0));

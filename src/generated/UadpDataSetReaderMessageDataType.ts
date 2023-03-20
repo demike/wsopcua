@@ -23,6 +23,7 @@ export interface IUadpDataSetReaderMessageDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15829}
 */
 
 export class UadpDataSetReaderMessageDataType extends DataSetReaderMessageDataType {
@@ -139,4 +140,4 @@ export function decodeUadpDataSetReaderMessageDataType( inp: DataStream): UadpDa
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UadpDataSetReaderMessageDataType', UadpDataSetReaderMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15718, 0));
+register_class_definition('UadpDataSetReaderMessageDataType', UadpDataSetReaderMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15653, 0));

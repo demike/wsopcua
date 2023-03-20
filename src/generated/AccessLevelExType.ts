@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15981}
+*/
+
 export enum AccessLevelExType {
   None = 0,
   CurrentRead = 1,

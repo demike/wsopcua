@@ -16,6 +16,7 @@ export interface IParsingResult {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16135}
 */
 
 export class ParsingResult {
@@ -89,4 +90,4 @@ export function decodeParsingResult( inp: DataStream): ParsingResult {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ParsingResult', ParsingResult, new ExpandedNodeId(2 /*numeric id*/, 612, 0));
+register_class_definition('ParsingResult', ParsingResult, new ExpandedNodeId(2 /*numeric id*/, 610, 0));

@@ -16,6 +16,7 @@ export interface IHistoryModifiedData extends IHistoryData {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16154}
 */
 
 export class HistoryModifiedData extends HistoryData {
@@ -80,4 +81,4 @@ export function decodeHistoryModifiedData( inp: DataStream): HistoryModifiedData
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryModifiedData', HistoryModifiedData, new ExpandedNodeId(2 /*numeric id*/, 11227, 0));
+register_class_definition('HistoryModifiedData', HistoryModifiedData, new ExpandedNodeId(2 /*numeric id*/, 11217, 0));

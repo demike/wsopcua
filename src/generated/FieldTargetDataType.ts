@@ -20,6 +20,7 @@ export interface IFieldTargetDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15820}
 */
 
 export class FieldTargetDataType {
@@ -121,4 +122,4 @@ export function decodeFieldTargetDataType( inp: DataStream): FieldTargetDataType
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('FieldTargetDataType', FieldTargetDataType, new ExpandedNodeId(2 /*numeric id*/, 14848, 0));
+register_class_definition('FieldTargetDataType', FieldTargetDataType, new ExpandedNodeId(2 /*numeric id*/, 14744, 0));

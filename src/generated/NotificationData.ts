@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16210}
 */
 
 export class NotificationData {
@@ -22,4 +23,4 @@ export class NotificationData {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('NotificationData', NotificationData, new ExpandedNodeId(2 /*numeric id*/, 947, 0));
+register_class_definition('NotificationData', NotificationData, new ExpandedNodeId(2 /*numeric id*/, 945, 0));

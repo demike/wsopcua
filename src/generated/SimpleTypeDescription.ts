@@ -15,6 +15,7 @@ export interface ISimpleTypeDescription extends IDataTypeDescription {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15788}
 */
 
 export class SimpleTypeDescription extends DataTypeDescription {
@@ -86,4 +87,4 @@ export function decodeSimpleTypeDescription( inp: DataStream): SimpleTypeDescrip
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SimpleTypeDescription', SimpleTypeDescription, new ExpandedNodeId(2 /*numeric id*/, 15421, 0));
+register_class_definition('SimpleTypeDescription', SimpleTypeDescription, new ExpandedNodeId(2 /*numeric id*/, 15005, 0));

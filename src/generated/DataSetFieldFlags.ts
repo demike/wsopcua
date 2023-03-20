@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15793}
+*/
+
 export enum DataSetFieldFlags {
   None = 0,
   PromotedField = 1,

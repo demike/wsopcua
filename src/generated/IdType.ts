@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15977}
+*/
+
 export enum IdType {
   Numeric = 0,
   String = 1,

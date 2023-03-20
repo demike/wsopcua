@@ -18,6 +18,7 @@ export interface IDataValue {
 
 /**
 A value with an associated timestamp, and quality.
+ * {@link https://reference.opcfoundation.org/nodesets/4/15336}
 */
 
 export class DataValue {

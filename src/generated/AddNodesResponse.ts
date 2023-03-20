@@ -19,6 +19,7 @@ export interface IAddNodesResponse {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16085}
 */
 
 export class AddNodesResponse {
@@ -92,4 +93,4 @@ export function decodeAddNodesResponse( inp: DataStream): AddNodesResponse {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AddNodesResponse', AddNodesResponse, new ExpandedNodeId(2 /*numeric id*/, 491, 0));
+register_class_definition('AddNodesResponse', AddNodesResponse, new ExpandedNodeId(2 /*numeric id*/, 489, 0));

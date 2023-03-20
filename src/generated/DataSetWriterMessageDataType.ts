@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15803}
 */
 
 export class DataSetWriterMessageDataType {
@@ -22,4 +23,4 @@ export class DataSetWriterMessageDataType {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DataSetWriterMessageDataType', DataSetWriterMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15688, 0));
+register_class_definition('DataSetWriterMessageDataType', DataSetWriterMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15605, 0));

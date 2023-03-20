@@ -14,6 +14,7 @@ export interface IDeleteEventDetails extends IHistoryUpdateDetails {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16169}
 */
 
 export class DeleteEventDetails extends HistoryUpdateDetails {
@@ -78,4 +79,4 @@ export function decodeDeleteEventDetails( inp: DataStream): DeleteEventDetails {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DeleteEventDetails', DeleteEventDetails, new ExpandedNodeId(2 /*numeric id*/, 694, 0));
+register_class_definition('DeleteEventDetails', DeleteEventDetails, new ExpandedNodeId(2 /*numeric id*/, 692, 0));

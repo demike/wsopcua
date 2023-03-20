@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15536}
+*/
+
 export enum OpenFileMode {
   Read = 1,
   Write = 2,

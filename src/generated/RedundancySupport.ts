@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/16228}
+*/
+
 export enum RedundancySupport {
   None = 0,
   Cold = 1,

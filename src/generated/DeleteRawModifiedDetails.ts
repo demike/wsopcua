@@ -16,6 +16,7 @@ export interface IDeleteRawModifiedDetails extends IHistoryUpdateDetails {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16167}
 */
 
 export class DeleteRawModifiedDetails extends HistoryUpdateDetails {
@@ -94,4 +95,4 @@ export function decodeDeleteRawModifiedDetails( inp: DataStream): DeleteRawModif
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DeleteRawModifiedDetails', DeleteRawModifiedDetails, new ExpandedNodeId(2 /*numeric id*/, 688, 0));
+register_class_definition('DeleteRawModifiedDetails', DeleteRawModifiedDetails, new ExpandedNodeId(2 /*numeric id*/, 686, 0));

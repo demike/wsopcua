@@ -14,6 +14,7 @@ export interface IHistoryEventFieldList {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16215}
 */
 
 export class HistoryEventFieldList {
@@ -73,4 +74,4 @@ export function decodeHistoryEventFieldList( inp: DataStream): HistoryEventField
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryEventFieldList', HistoryEventFieldList, new ExpandedNodeId(2 /*numeric id*/, 922, 0));
+register_class_definition('HistoryEventFieldList', HistoryEventFieldList, new ExpandedNodeId(2 /*numeric id*/, 920, 0));

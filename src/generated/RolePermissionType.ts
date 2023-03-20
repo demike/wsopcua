@@ -14,6 +14,7 @@ export interface IRolePermissionType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15984}
 */
 
 export class RolePermissionType {
@@ -80,4 +81,4 @@ export function decodeRolePermissionType( inp: DataStream): RolePermissionType {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RolePermissionType', RolePermissionType, new ExpandedNodeId(2 /*numeric id*/, 128, 0));
+register_class_definition('RolePermissionType', RolePermissionType, new ExpandedNodeId(2 /*numeric id*/, 96, 0));

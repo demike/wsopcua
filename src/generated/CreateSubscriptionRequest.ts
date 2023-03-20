@@ -19,6 +19,7 @@ export interface ICreateSubscriptionRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16203}
 */
 
 export class CreateSubscriptionRequest {
@@ -120,4 +121,4 @@ export function decodeCreateSubscriptionRequest( inp: DataStream): CreateSubscri
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CreateSubscriptionRequest', CreateSubscriptionRequest, new ExpandedNodeId(2 /*numeric id*/, 787, 0));
+register_class_definition('CreateSubscriptionRequest', CreateSubscriptionRequest, new ExpandedNodeId(2 /*numeric id*/, 785, 0));

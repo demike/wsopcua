@@ -8,7 +8,6 @@ import { ClassMember } from './ClassMember';
 import { SimpleType } from './SimpleType';
 
 import { getModuleImportPath } from './SchemaParserConfig';
-import { getSpecLink } from './spec-link-Import';
 
 export abstract class BSDClassFileParser {
   public static readonly ATTR_BASE_CLASS = 'BaseType';
@@ -31,7 +30,7 @@ export abstract class BSDClassFileParser {
     this.cls = cls;
   }
 
-  public async parse(): Promise<void> {
+  public parse(): void {
     let at = this.el.attributes.getNamedItem(ClassFile.ATTR_NAME);
     if (at == null) {
       console.log('Error: could not find name attribute');
@@ -76,9 +75,6 @@ export abstract class BSDClassFileParser {
     this.createMethods();
     this.createImports();
     this.createDefines();
-
-    this.cls.specLink = await getSpecLink(this.cls.getNodeIdString());
-
     this.cls.Complete = true;
   }
 

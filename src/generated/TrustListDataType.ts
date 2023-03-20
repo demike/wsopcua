@@ -16,6 +16,7 @@ export interface ITrustListDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15706}
 */
 
 export class TrustListDataType {
@@ -103,4 +104,4 @@ export function decodeTrustListDataType( inp: DataStream): TrustListDataType {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TrustListDataType', TrustListDataType, new ExpandedNodeId(2 /*numeric id*/, 12680, 0));
+register_class_definition('TrustListDataType', TrustListDataType, new ExpandedNodeId(2 /*numeric id*/, 12554, 0));

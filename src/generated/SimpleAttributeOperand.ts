@@ -18,6 +18,7 @@ export interface ISimpleAttributeOperand {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16132}
 */
 
 export class SimpleAttributeOperand extends FilterOperand {
@@ -99,4 +100,4 @@ export function decodeSimpleAttributeOperand( inp: DataStream): SimpleAttributeO
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SimpleAttributeOperand', SimpleAttributeOperand, new ExpandedNodeId(2 /*numeric id*/, 603, 0));
+register_class_definition('SimpleAttributeOperand', SimpleAttributeOperand, new ExpandedNodeId(2 /*numeric id*/, 601, 0));

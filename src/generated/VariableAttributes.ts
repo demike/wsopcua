@@ -22,6 +22,7 @@ export interface IVariableAttributes extends INodeAttributes {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16073}
 */
 
 export class VariableAttributes extends NodeAttributes {
@@ -135,4 +136,4 @@ export function decodeVariableAttributes( inp: DataStream): VariableAttributes {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('VariableAttributes', VariableAttributes, new ExpandedNodeId(2 /*numeric id*/, 357, 0));
+register_class_definition('VariableAttributes', VariableAttributes, new ExpandedNodeId(2 /*numeric id*/, 355, 0));

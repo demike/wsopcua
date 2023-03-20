@@ -18,6 +18,7 @@ export interface IDataChangeNotification {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16211}
 */
 
 export class DataChangeNotification extends NotificationData {
@@ -85,4 +86,4 @@ export function decodeDataChangeNotification( inp: DataStream): DataChangeNotifi
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DataChangeNotification', DataChangeNotification, new ExpandedNodeId(2 /*numeric id*/, 811, 0));
+register_class_definition('DataChangeNotification', DataChangeNotification, new ExpandedNodeId(2 /*numeric id*/, 809, 0));

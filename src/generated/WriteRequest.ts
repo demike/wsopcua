@@ -16,6 +16,7 @@ export interface IWriteRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16159}
 */
 
 export class WriteRequest {
@@ -82,4 +83,4 @@ export function decodeWriteRequest( inp: DataStream): WriteRequest {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('WriteRequest', WriteRequest, new ExpandedNodeId(2 /*numeric id*/, 673, 0));
+register_class_definition('WriteRequest', WriteRequest, new ExpandedNodeId(2 /*numeric id*/, 671, 0));

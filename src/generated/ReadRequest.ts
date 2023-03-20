@@ -19,6 +19,7 @@ export interface IReadRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16142}
 */
 
 export class ReadRequest {
@@ -99,4 +100,4 @@ export function decodeReadRequest( inp: DataStream): ReadRequest {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReadRequest', ReadRequest, new ExpandedNodeId(2 /*numeric id*/, 631, 0));
+register_class_definition('ReadRequest', ReadRequest, new ExpandedNodeId(2 /*numeric id*/, 629, 0));

@@ -22,6 +22,7 @@ export interface ICreateSessionRequest {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16055}
 */
 
 export class CreateSessionRequest {
@@ -137,4 +138,4 @@ export function decodeCreateSessionRequest( inp: DataStream): CreateSessionReque
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CreateSessionRequest', CreateSessionRequest, new ExpandedNodeId(2 /*numeric id*/, 461, 0));
+register_class_definition('CreateSessionRequest', CreateSessionRequest, new ExpandedNodeId(2 /*numeric id*/, 459, 0));

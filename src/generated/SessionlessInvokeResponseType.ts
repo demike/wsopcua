@@ -14,6 +14,7 @@ export interface ISessionlessInvokeResponseType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16026}
 */
 
 export class SessionlessInvokeResponseType {
@@ -87,4 +88,4 @@ export function decodeSessionlessInvokeResponseType( inp: DataStream): Sessionle
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SessionlessInvokeResponseType', SessionlessInvokeResponseType, new ExpandedNodeId(2 /*numeric id*/, 21001, 0));
+register_class_definition('SessionlessInvokeResponseType', SessionlessInvokeResponseType, new ExpandedNodeId(2 /*numeric id*/, 20999, 0));

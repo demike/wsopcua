@@ -23,6 +23,7 @@ export interface IServerDiagnosticsSummaryDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16234}
 */
 
 export class ServerDiagnosticsSummaryDataType {
@@ -159,4 +160,4 @@ export function decodeServerDiagnosticsSummaryDataType( inp: DataStream): Server
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ServerDiagnosticsSummaryDataType', ServerDiagnosticsSummaryDataType, new ExpandedNodeId(2 /*numeric id*/, 861, 0));
+register_class_definition('ServerDiagnosticsSummaryDataType', ServerDiagnosticsSummaryDataType, new ExpandedNodeId(2 /*numeric id*/, 859, 0));

@@ -14,6 +14,7 @@ export interface IEnumDefinition {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15989}
 */
 
 export class EnumDefinition {
@@ -73,4 +74,4 @@ export function decodeEnumDefinition( inp: DataStream): EnumDefinition {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EnumDefinition', EnumDefinition, new ExpandedNodeId(2 /*numeric id*/, 123, 0));
+register_class_definition('EnumDefinition', EnumDefinition, new ExpandedNodeId(2 /*numeric id*/, 100, 0));

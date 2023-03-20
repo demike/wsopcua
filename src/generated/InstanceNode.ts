@@ -12,6 +12,7 @@ export interface IInstanceNode extends INode {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15991}
 */
 
 export class InstanceNode extends Node {
@@ -69,4 +70,4 @@ export function decodeInstanceNode( inp: DataStream): InstanceNode {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('InstanceNode', InstanceNode, new ExpandedNodeId(2 /*numeric id*/, 11889, 0));
+register_class_definition('InstanceNode', InstanceNode, new ExpandedNodeId(2 /*numeric id*/, 11879, 0));

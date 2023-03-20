@@ -16,6 +16,7 @@ export interface IHistoryUpdateResult {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16170}
 */
 
 export class HistoryUpdateResult {
@@ -89,4 +90,4 @@ export function decodeHistoryUpdateResult( inp: DataStream): HistoryUpdateResult
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryUpdateResult', HistoryUpdateResult, new ExpandedNodeId(2 /*numeric id*/, 697, 0));
+register_class_definition('HistoryUpdateResult', HistoryUpdateResult, new ExpandedNodeId(2 /*numeric id*/, 695, 0));

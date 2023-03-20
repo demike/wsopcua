@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15982}
+*/
+
 export enum EventNotifierType {
   None = 0,
   SubscribeToEvents = 1,

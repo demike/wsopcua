@@ -13,6 +13,7 @@ export interface IOptionSet {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16005}
 */
 
 export class OptionSet {
@@ -79,4 +80,4 @@ export function decodeOptionSet( inp: DataStream): OptionSet {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('OptionSet', OptionSet, new ExpandedNodeId(2 /*numeric id*/, 12765, 0));
+register_class_definition('OptionSet', OptionSet, new ExpandedNodeId(2 /*numeric id*/, 12755, 0));

@@ -17,6 +17,7 @@ export interface ISetMonitoringModeResponse {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16198}
 */
 
 export class SetMonitoringModeResponse {
@@ -90,4 +91,4 @@ export function decodeSetMonitoringModeResponse( inp: DataStream): SetMonitoring
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SetMonitoringModeResponse', SetMonitoringModeResponse, new ExpandedNodeId(2 /*numeric id*/, 772, 0));
+register_class_definition('SetMonitoringModeResponse', SetMonitoringModeResponse, new ExpandedNodeId(2 /*numeric id*/, 770, 0));

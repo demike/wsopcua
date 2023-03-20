@@ -13,6 +13,7 @@ export interface IJsonDataSetWriterMessageDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15833}
 */
 
 export class JsonDataSetWriterMessageDataType extends DataSetWriterMessageDataType {
@@ -73,4 +74,4 @@ export function decodeJsonDataSetWriterMessageDataType( inp: DataStream): JsonDa
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('JsonDataSetWriterMessageDataType', JsonDataSetWriterMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15724, 0));
+register_class_definition('JsonDataSetWriterMessageDataType', JsonDataSetWriterMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15664, 0));

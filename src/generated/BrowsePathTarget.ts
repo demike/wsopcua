@@ -13,6 +13,7 @@ export interface IBrowsePathTarget {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16110}
 */
 
 export class BrowsePathTarget {
@@ -79,4 +80,4 @@ export function decodeBrowsePathTarget( inp: DataStream): BrowsePathTarget {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('BrowsePathTarget', BrowsePathTarget, new ExpandedNodeId(2 /*numeric id*/, 548, 0));
+register_class_definition('BrowsePathTarget', BrowsePathTarget, new ExpandedNodeId(2 /*numeric id*/, 546, 0));

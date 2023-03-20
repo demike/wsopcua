@@ -17,6 +17,7 @@ export interface ISetPublishingModeResponse {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16208}
 */
 
 export class SetPublishingModeResponse {
@@ -90,4 +91,4 @@ export function decodeSetPublishingModeResponse( inp: DataStream): SetPublishing
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SetPublishingModeResponse', SetPublishingModeResponse, new ExpandedNodeId(2 /*numeric id*/, 802, 0));
+register_class_definition('SetPublishingModeResponse', SetPublishingModeResponse, new ExpandedNodeId(2 /*numeric id*/, 800, 0));

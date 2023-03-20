@@ -19,6 +19,7 @@ export interface IReaderGroupDataType extends IPubSubGroupDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15812}
 */
 
 export class ReaderGroupDataType extends PubSubGroupDataType {
@@ -97,4 +98,4 @@ export function decodeReaderGroupDataType( inp: DataStream): ReaderGroupDataType
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReaderGroupDataType', ReaderGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 21153, 0));
+register_class_definition('ReaderGroupDataType', ReaderGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 15520, 0));

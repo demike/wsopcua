@@ -17,12 +17,12 @@ export class BSDEnumTypeFileParser extends BSDClassFileParser {
   public static readonly TAG_ENUM_VALUE = 'opc:EnumeratedValue';
 
   lengthInBits = 0;
-  public parse(): Promise<void> {
+  public parse(): void {
     const attr = this.el.getAttributeNode(BSDEnumTypeFileParser.ATTR_LENGTH);
     if (attr != null) {
       this.lengthInBits = parseInt(attr.value, 10);
     }
-    return super.parse();
+    super.parse();
   }
   /**
    *

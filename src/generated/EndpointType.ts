@@ -16,6 +16,7 @@ export interface IEndpointType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15501}
 */
 
 export class EndpointType {
@@ -96,4 +97,4 @@ export function decodeEndpointType( inp: DataStream): EndpointType {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EndpointType', EndpointType, new ExpandedNodeId(2 /*numeric id*/, 15671, 0));
+register_class_definition('EndpointType', EndpointType, new ExpandedNodeId(2 /*numeric id*/, 15528, 0));

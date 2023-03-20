@@ -12,6 +12,7 @@ export interface IUnregisterNodesResponse {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16117}
 */
 
 export class UnregisterNodesResponse {
@@ -71,4 +72,4 @@ export function decodeUnregisterNodesResponse( inp: DataStream): UnregisterNodes
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UnregisterNodesResponse', UnregisterNodesResponse, new ExpandedNodeId(2 /*numeric id*/, 569, 0));
+register_class_definition('UnregisterNodesResponse', UnregisterNodesResponse, new ExpandedNodeId(2 /*numeric id*/, 567, 0));

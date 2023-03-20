@@ -18,6 +18,7 @@ export interface IPubSubConfigurationDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15823}
 */
 
 export class PubSubConfigurationDataType {
@@ -91,4 +92,4 @@ export function decodePubSubConfigurationDataType( inp: DataStream): PubSubConfi
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PubSubConfigurationDataType', PubSubConfigurationDataType, new ExpandedNodeId(2 /*numeric id*/, 21154, 0));
+register_class_definition('PubSubConfigurationDataType', PubSubConfigurationDataType, new ExpandedNodeId(2 /*numeric id*/, 15530, 0));

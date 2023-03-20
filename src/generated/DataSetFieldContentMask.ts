@@ -5,6 +5,11 @@
 
 import {DataStream} from '../basic-types/DataStream';
 
+/**
+
+ * {@link https://reference.opcfoundation.org/nodesets/4/15800}
+*/
+
 export enum DataSetFieldContentMask {
   None = 0,
   StatusCode = 1,

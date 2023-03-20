@@ -21,6 +21,7 @@ export interface IReferenceDescription {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16100}
 */
 
 export class ReferenceDescription {
@@ -122,4 +123,4 @@ export function decodeReferenceDescription( inp: DataStream): ReferenceDescripti
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReferenceDescription', ReferenceDescription, new ExpandedNodeId(2 /*numeric id*/, 520, 0));
+register_class_definition('ReferenceDescription', ReferenceDescription, new ExpandedNodeId(2 /*numeric id*/, 518, 0));

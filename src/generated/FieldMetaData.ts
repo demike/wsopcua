@@ -25,6 +25,7 @@ export interface IFieldMetaData {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15792}
 */
 
 export class FieldMetaData {
@@ -147,4 +148,4 @@ export function decodeFieldMetaData( inp: DataStream): FieldMetaData {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('FieldMetaData', FieldMetaData, new ExpandedNodeId(2 /*numeric id*/, 14839, 0));
+register_class_definition('FieldMetaData', FieldMetaData, new ExpandedNodeId(2 /*numeric id*/, 14524, 0));

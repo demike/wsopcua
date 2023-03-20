@@ -37,6 +37,7 @@ export interface IDataSetReaderDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15815}
 */
 
 export class DataSetReaderDataType {
@@ -208,4 +209,4 @@ export function decodeDataSetReaderDataType( inp: DataStream): DataSetReaderData
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DataSetReaderDataType', DataSetReaderDataType, new ExpandedNodeId(2 /*numeric id*/, 15703, 0));
+register_class_definition('DataSetReaderDataType', DataSetReaderDataType, new ExpandedNodeId(2 /*numeric id*/, 15623, 0));

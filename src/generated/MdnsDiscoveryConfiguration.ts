@@ -14,6 +14,7 @@ export interface IMdnsDiscoveryConfiguration {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16043}
 */
 
 export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
@@ -81,4 +82,4 @@ export function decodeMdnsDiscoveryConfiguration( inp: DataStream): MdnsDiscover
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('MdnsDiscoveryConfiguration', MdnsDiscoveryConfiguration, new ExpandedNodeId(2 /*numeric id*/, 12901, 0));
+register_class_definition('MdnsDiscoveryConfiguration', MdnsDiscoveryConfiguration, new ExpandedNodeId(2 /*numeric id*/, 12891, 0));

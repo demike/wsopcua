@@ -12,6 +12,7 @@ export interface INetworkAddressDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15810}
 */
 
 export class NetworkAddressDataType {
@@ -71,4 +72,4 @@ export function decodeNetworkAddressDataType( inp: DataStream): NetworkAddressDa
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('NetworkAddressDataType', NetworkAddressDataType, new ExpandedNodeId(2 /*numeric id*/, 21151, 0));
+register_class_definition('NetworkAddressDataType', NetworkAddressDataType, new ExpandedNodeId(2 /*numeric id*/, 15502, 0));

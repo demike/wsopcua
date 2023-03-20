@@ -17,6 +17,7 @@ export interface IBrokerWriterGroupTransportDataType {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15839}
 */
 
 export class BrokerWriterGroupTransportDataType extends WriterGroupTransportDataType {
@@ -98,4 +99,4 @@ export function decodeBrokerWriterGroupTransportDataType( inp: DataStream): Brok
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('BrokerWriterGroupTransportDataType', BrokerWriterGroupTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15727, 0));
+register_class_definition('BrokerWriterGroupTransportDataType', BrokerWriterGroupTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15667, 0));

@@ -19,6 +19,7 @@ export interface IVariableTypeNode extends ITypeNode {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15996}
 */
 
 export class VariableTypeNode extends TypeNode {
@@ -111,4 +112,4 @@ export function decodeVariableTypeNode( inp: DataStream): VariableTypeNode {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('VariableTypeNode', VariableTypeNode, new ExpandedNodeId(2 /*numeric id*/, 272, 0));
+register_class_definition('VariableTypeNode', VariableTypeNode, new ExpandedNodeId(2 /*numeric id*/, 270, 0));

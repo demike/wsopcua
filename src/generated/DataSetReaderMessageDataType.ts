@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15817}
 */
 
 export class DataSetReaderMessageDataType {
@@ -22,4 +23,4 @@ export class DataSetReaderMessageDataType {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DataSetReaderMessageDataType', DataSetReaderMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15706, 0));
+register_class_definition('DataSetReaderMessageDataType', DataSetReaderMessageDataType, new ExpandedNodeId(2 /*numeric id*/, 15629, 0));

@@ -15,6 +15,7 @@ export interface IIssuedIdentityToken extends IUserIdentityToken {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16061}
 */
 
 export class IssuedIdentityToken extends UserIdentityToken {
@@ -86,4 +87,4 @@ export function decodeIssuedIdentityToken( inp: DataStream): IssuedIdentityToken
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('IssuedIdentityToken', IssuedIdentityToken, new ExpandedNodeId(2 /*numeric id*/, 940, 0));
+register_class_definition('IssuedIdentityToken', IssuedIdentityToken, new ExpandedNodeId(2 /*numeric id*/, 938, 0));

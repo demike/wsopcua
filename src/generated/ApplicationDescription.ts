@@ -20,6 +20,7 @@ export interface IApplicationDescription {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16020}
 */
 
 export class ApplicationDescription {
@@ -121,4 +122,4 @@ export function decodeApplicationDescription( inp: DataStream): ApplicationDescr
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ApplicationDescription', ApplicationDescription, new ExpandedNodeId(2 /*numeric id*/, 310, 0));
+register_class_definition('ApplicationDescription', ApplicationDescription, new ExpandedNodeId(2 /*numeric id*/, 308, 0));

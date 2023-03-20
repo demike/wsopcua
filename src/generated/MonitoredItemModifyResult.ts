@@ -16,6 +16,7 @@ export interface IMonitoredItemModifyResult {
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16194}
 */
 
 export class MonitoredItemModifyResult {
@@ -96,4 +97,4 @@ export function decodeMonitoredItemModifyResult( inp: DataStream): MonitoredItem
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('MonitoredItemModifyResult', MonitoredItemModifyResult, new ExpandedNodeId(2 /*numeric id*/, 760, 0));
+register_class_definition('MonitoredItemModifyResult', MonitoredItemModifyResult, new ExpandedNodeId(2 /*numeric id*/, 758, 0));
