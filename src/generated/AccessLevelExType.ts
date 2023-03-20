@@ -22,6 +22,9 @@ export enum AccessLevelExType {
   NonatomicRead = 256,
   NonatomicWrite = 512,
   WriteFullArrayOnly = 1024,
+  NoSubDataTypes = 2048,
+  NonVolatile = 4096,
+  Constant = 8192,
 }
 
 export function encodeAccessLevelExType( data: AccessLevelExType,  out: DataStream) {

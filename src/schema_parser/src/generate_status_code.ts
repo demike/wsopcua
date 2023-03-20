@@ -55,27 +55,8 @@ function parseStatusCodeXML() {
 
   outFile.write(' export class StatusCodes  { \n');
 
-  outFile.write(' /** Good: No Error */\n');
-  outFile.write(
-    " static Good: ConstantStatusCode =  new ConstantStatusCode({ name: 'Good', value: 0, description: 'No Error' });\n"
-  );
-
-  outFile.write('/** The value is bad but no specific reason is known. */\n');
-  outFile.write(
-    " static Bad: ConstantStatusCode =  new ConstantStatusCode({ name: 'Bad', value: 0x80000000, description: 'The value is bad but no specific reason is known.' });\n"
-  );
-
-  outFile.write('/** The value is uncertain but no specific reason is known. */\n');
-  outFile.write(
-    " static Uncertain: ConstantStatusCode =  new ConstantStatusCode({ name: 'Uncertain', value: 0x40000000, description: 'The value is uncertain but no specific reason is known.' });\n"
-  );
-
-  outFile.write(
-    '  static GoodWithOverflowBit = new ModifiableStatusCode({ base: StatusCodes.Good, extraBits: (ExtraStatusCodeBits.Overflow | ExtraStatusCodeBits.InfoTypeDataValue)});\n'
-  );
-
   code_list.forEach(function (obj) {
-    const description = obj.description.replace(/^"|"$/g, '');
+    const description = obj.description.trim().replace(/^"|"$/g, '');
     const s = util.format(
       ' /** %s */\n  static %s: ConstantStatusCode = new ConstantStatusCode({ name: %s , value: %s  , description: "%s"});\n',
       description,
@@ -86,6 +67,11 @@ function parseStatusCodeXML() {
     );
     outFile.write(s);
   });
+
+  outFile.write(
+    '  static GoodWithOverflowBit = new ModifiableStatusCode({ base: StatusCodes.Good, extraBits: (ExtraStatusCodeBits.Overflow | ExtraStatusCodeBits.InfoTypeDataValue)});\n'
+  );
+
   outFile.write('};\n');
 
   /*

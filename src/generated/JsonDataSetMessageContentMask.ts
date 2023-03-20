@@ -17,6 +17,9 @@ export enum JsonDataSetMessageContentMask {
   SequenceNumber = 4,
   Timestamp = 8,
   Status = 16,
+  MessageType = 32,
+  DataSetWriterName = 64,
+  ReversibleFieldEncoding = 128,
 }
 
 export function encodeJsonDataSetMessageContentMask( data: JsonDataSetMessageContentMask,  out: DataStream) {

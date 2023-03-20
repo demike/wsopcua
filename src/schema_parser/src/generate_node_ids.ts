@@ -34,7 +34,7 @@ function convert(data: string) {
     }
     const codeName: string = row[0];
     const value: string = row[1];
-    const type: string = row[2];
+    const type: string = row[2].trimEnd(); // remove \r line endings
 
     if (!metaTypeMap.hasOwnProperty(type)) {
       metaTypeMap[type] = {};

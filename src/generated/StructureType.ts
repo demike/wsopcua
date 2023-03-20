@@ -14,6 +14,8 @@ export enum StructureType {
   Structure = 0,
   StructureWithOptionalFields = 1,
   Union = 2,
+  StructureWithSubtypedValues = 3,
+  UnionWithSubtypedValues = 4,
 }
 
 export function encodeStructureType( data: StructureType,  out: DataStream) {

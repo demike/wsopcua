@@ -15,15 +15,16 @@ export enum AccessRestrictionType {
   SigningRequired = 1,
   EncryptionRequired = 2,
   SessionRequired = 4,
+  ApplyRestrictionsToBrowse = 8,
 }
 
 export function encodeAccessRestrictionType( data: AccessRestrictionType,  out: DataStream) {
- out.setUint32(data);
+ out.setUint16(data);
  }
 
 
 export function decodeAccessRestrictionType( inp: DataStream) {
- return inp.getUint32();
+ return inp.getUint16();
  }
 
 

@@ -7,7 +7,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface ISessionlessInvokeRequestType {
-  urisVersion?: ec.UInt32[];
+  urisVersion?: ec.UInt32;
   namespaceUris?: string[];
   serverUris?: string[];
   localeIds?: string[];
@@ -20,7 +20,7 @@ export interface ISessionlessInvokeRequestType {
 */
 
 export class SessionlessInvokeRequestType {
-  urisVersion: ec.UInt32[];
+  urisVersion: ec.UInt32;
   namespaceUris: string[];
   serverUris: string[];
   localeIds: string[];
@@ -28,7 +28,7 @@ export class SessionlessInvokeRequestType {
 
  constructor( options?: ISessionlessInvokeRequestType) {
   options = options || {};
-  this.urisVersion = (options.urisVersion != null) ? options.urisVersion : [];
+  this.urisVersion = (options.urisVersion != null) ? options.urisVersion : 0;
   this.namespaceUris = (options.namespaceUris != null) ? options.namespaceUris : [];
   this.serverUris = (options.serverUris != null) ? options.serverUris : [];
   this.localeIds = (options.localeIds != null) ? options.localeIds : [];
@@ -38,7 +38,7 @@ export class SessionlessInvokeRequestType {
 
 
  encode( out: DataStream) {
-  ec.encodeArray(this.urisVersion, out, ec.encodeUInt32);
+  ec.encodeUInt32(this.urisVersion, out);
   ec.encodeArray(this.namespaceUris, out, ec.encodeString);
   ec.encodeArray(this.serverUris, out, ec.encodeString);
   ec.encodeArray(this.localeIds, out, ec.encodeString);
@@ -48,7 +48,7 @@ export class SessionlessInvokeRequestType {
 
 
  decode( inp: DataStream) {
-  this.urisVersion = ec.decodeArray(inp, ec.decodeUInt32);
+  this.urisVersion = ec.decodeUInt32(inp);
   this.namespaceUris = ec.decodeArray(inp, ec.decodeString);
   this.serverUris = ec.decodeArray(inp, ec.decodeString);
   this.localeIds = ec.decodeArray(inp, ec.decodeString);
@@ -83,7 +83,7 @@ if (!inp) { return; }
   if (!target) {
    target = new SessionlessInvokeRequestType();
   }
-  target.urisVersion = ec.cloneArray(this.urisVersion);
+  target.urisVersion = this.urisVersion;
   target.namespaceUris = ec.cloneArray(this.namespaceUris);
   target.serverUris = ec.cloneArray(this.serverUris);
   target.localeIds = ec.cloneArray(this.localeIds);

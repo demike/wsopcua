@@ -15,6 +15,7 @@ export enum PubSubState {
   Paused = 1,
   Operational = 2,
   Error = 3,
+  PreOperational = 4,
 }
 
 export function encodePubSubState( data: PubSubState,  out: DataStream) {

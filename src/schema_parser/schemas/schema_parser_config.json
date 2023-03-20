@@ -5,7 +5,7 @@
       "projectSrcPath": "../../",
       "schemaImports": [
         {
-          "pathToSchema": "../schemas/Opc.Ua.Types.bsd",
+          "pathToSchema": "../schemas/Opc.Ua.Types.bsd.xml",
           "modulePath": "/generated/",
           "namespace": 0
         },

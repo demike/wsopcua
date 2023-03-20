@@ -25,7 +25,7 @@ function writeEnumFile(data: string) {
     if (!name || !value) {
       return;
     }
-    outFile.write(' ' + name + ' = ' + value + ',\n');
+    outFile.write(' ' + name + ' = ' + value.trimEnd() /* remove \r */ + ',\n');
   });
   outFile.write(' INVALID = 999\n');
   outFile.write('}\n');

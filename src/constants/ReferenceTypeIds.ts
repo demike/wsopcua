@@ -47,4 +47,25 @@ export class ReferenceTypeIds {
   static readonly HasWriterGroup = 18804;
   static readonly HasReaderGroup = 18805;
   static readonly AliasFor = 23469;
+  static readonly IsDeprecated = 23562;
+  static readonly HasStructuredComponent = 24136;
+  static readonly AssociatedWith = 24137;
+  static readonly UsesPriorityMappingTable = 25237;
+  static readonly HasLowerLayerInterface = 25238;
+  static readonly IsExecutableOn = 25253;
+  static readonly Controls = 25254;
+  static readonly Utilizes = 25255;
+  static readonly Requires = 25256;
+  static readonly IsPhysicallyConnectedTo = 25257;
+  static readonly RepresentsSameEntityAs = 25258;
+  static readonly RepresentsSameHardwareAs = 25259;
+  static readonly RepresentsSameFunctionalityAs = 25260;
+  static readonly IsHostedBy = 25261;
+  static readonly HasPhysicalComponent = 25262;
+  static readonly HasContainedComponent = 25263;
+  static readonly HasAttachedComponent = 25264;
+  static readonly IsExecutingOn = 25265;
+  static readonly HasPushedSecurityGroup = 25345;
+  static readonly AlarmSuppressionGroupMember = 32059;
+  static readonly HasReferenceDescription = 32679;
 }

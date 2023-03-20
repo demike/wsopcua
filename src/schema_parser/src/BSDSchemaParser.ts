@@ -61,7 +61,7 @@ export class BSDSchemaParser {
         data = this.fixDocData(data);
         // console.log(data);
         const doc = new JSDOM(data, { contentType: 'text/xml' });
-        if (schema.pathToSchema.endsWith('.bsd')) {
+        if (schema.pathToSchema.indexOf('.bsd') !== -1) {
           await this.parseBSDDoc(doc);
         } else {
           await this.parseNodeSet2XmlDoc(doc);

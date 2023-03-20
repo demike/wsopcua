@@ -92,4 +92,4 @@ export function decodeTransferResultDataDataType( inp: DataStream): TransferResu
 
 import {register_class_definition} from '../../factory/factories_factories';
 import { ExpandedNodeId } from '../../nodeid/expanded_nodeid';
-register_class_definition('TransferResultDataDataType', TransferResultDataDataType, new ExpandedNodeId(2 /*numeric id*/, 15894, 2));
+register_class_definition('TransferResultDataDataType', TransferResultDataDataType, new ExpandedNodeId(2 /*numeric id*/, 15889, 2));

@@ -8,6 +8,7 @@ import {StructureType, encodeStructureType, decodeStructureType} from './Structu
 import {StructureField} from './StructureField';
 import {decodeStructureField} from './StructureField';
 import {DataStream} from '../basic-types/DataStream';
+import {DataTypeDefinition} from './DataTypeDefinition';
 
 export interface IStructureDefinition {
   defaultEncodingId?: ec.NodeId;
@@ -21,7 +22,7 @@ export interface IStructureDefinition {
  * {@link https://reference.opcfoundation.org/nodesets/4/15988}
 */
 
-export class StructureDefinition {
+export class StructureDefinition extends DataTypeDefinition {
   defaultEncodingId: ec.NodeId;
   baseDataType: ec.NodeId;
   structureType: StructureType;
@@ -29,6 +30,7 @@ export class StructureDefinition {
 
  constructor( options?: IStructureDefinition) {
   options = options || {};
+  super();
   this.defaultEncodingId = (options.defaultEncodingId != null) ? options.defaultEncodingId : ec.NodeId.NullNodeId;
   this.baseDataType = (options.baseDataType != null) ? options.baseDataType : ec.NodeId.NullNodeId;
   this.structureType = (options.structureType != null) ? options.structureType : null;

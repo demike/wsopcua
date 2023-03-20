@@ -8,7 +8,6 @@ import {Argument} from './Argument';
 import {decodeArgument} from './Argument';
 import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
-import {StatusResult} from './StatusResult';
 import {DataStream} from '../basic-types/DataStream';
 
 export interface IProgramDiagnostic2DataType {
@@ -23,11 +22,12 @@ export interface IProgramDiagnostic2DataType {
   lastMethodInputValues?: Variant[];
   lastMethodOutputValues?: Variant[];
   lastMethodCallTime?: Date;
-  lastMethodReturnStatus?: StatusResult;
+  lastMethodReturnStatus?: ec.StatusCode;
 }
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16252}
 */
 
 export class ProgramDiagnostic2DataType {
@@ -42,7 +42,7 @@ export class ProgramDiagnostic2DataType {
   lastMethodInputValues: Variant[];
   lastMethodOutputValues: Variant[];
   lastMethodCallTime: Date;
-  lastMethodReturnStatus: StatusResult;
+  lastMethodReturnStatus: ec.StatusCode | null;
 
  constructor( options?: IProgramDiagnostic2DataType) {
   options = options || {};
@@ -57,7 +57,7 @@ export class ProgramDiagnostic2DataType {
   this.lastMethodInputValues = (options.lastMethodInputValues != null) ? options.lastMethodInputValues : [];
   this.lastMethodOutputValues = (options.lastMethodOutputValues != null) ? options.lastMethodOutputValues : [];
   this.lastMethodCallTime = (options.lastMethodCallTime != null) ? options.lastMethodCallTime : new Date();
-  this.lastMethodReturnStatus = (options.lastMethodReturnStatus != null) ? options.lastMethodReturnStatus : new StatusResult();
+  this.lastMethodReturnStatus = (options.lastMethodReturnStatus != null) ? options.lastMethodReturnStatus : null;
 
  }
 
@@ -74,7 +74,7 @@ export class ProgramDiagnostic2DataType {
   ec.encodeArray(this.lastMethodInputValues, out);
   ec.encodeArray(this.lastMethodOutputValues, out);
   ec.encodeDateTime(this.lastMethodCallTime, out);
-  this.lastMethodReturnStatus.encode(out);
+  ec.encodeStatusCode(this.lastMethodReturnStatus, out);
 
  }
 
@@ -91,7 +91,7 @@ export class ProgramDiagnostic2DataType {
   this.lastMethodInputValues = ec.decodeArray(inp, decodeVariant);
   this.lastMethodOutputValues = ec.decodeArray(inp, decodeVariant);
   this.lastMethodCallTime = ec.decodeDateTime(inp);
-  this.lastMethodReturnStatus.decode(inp);
+  this.lastMethodReturnStatus = ec.decodeStatusCode(inp);
 
  }
 
@@ -109,7 +109,7 @@ export class ProgramDiagnostic2DataType {
   out.LastMethodInputValues = this.lastMethodInputValues;
   out.LastMethodOutputValues = this.lastMethodOutputValues;
   out.LastMethodCallTime = ec.jsonEncodeDateTime(this.lastMethodCallTime);
-  out.LastMethodReturnStatus = this.lastMethodReturnStatus;
+  out.LastMethodReturnStatus = ec.jsonEncodeStatusCode(this.lastMethodReturnStatus);
  return out;
  }
 
@@ -127,7 +127,7 @@ if (!inp) { return; }
   this.lastMethodInputValues = ec.jsonDecodeStructArray( inp.LastMethodInputValues,Variant);
   this.lastMethodOutputValues = ec.jsonDecodeStructArray( inp.LastMethodOutputValues,Variant);
   this.lastMethodCallTime = ec.jsonDecodeDateTime(inp.LastMethodCallTime);
-  this.lastMethodReturnStatus.fromJSON(inp.LastMethodReturnStatus);
+  this.lastMethodReturnStatus = ec.jsonDecodeStatusCode(inp.LastMethodReturnStatus);
 
  }
 
@@ -147,7 +147,7 @@ if (!inp) { return; }
   if (this.lastMethodInputValues) { target.lastMethodInputValues = ec.cloneComplexArray(this.lastMethodInputValues); }
   if (this.lastMethodOutputValues) { target.lastMethodOutputValues = ec.cloneComplexArray(this.lastMethodOutputValues); }
   target.lastMethodCallTime = this.lastMethodCallTime;
-  if (this.lastMethodReturnStatus) { target.lastMethodReturnStatus = this.lastMethodReturnStatus.clone(); }
+  target.lastMethodReturnStatus = this.lastMethodReturnStatus;
   return target;
  }
 
@@ -164,4 +164,4 @@ export function decodeProgramDiagnostic2DataType( inp: DataStream): ProgramDiagn
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ProgramDiagnostic2DataType', ProgramDiagnostic2DataType, new ExpandedNodeId(2 /*numeric id*/, 15396, 0));
+register_class_definition('ProgramDiagnostic2DataType', ProgramDiagnostic2DataType, new ExpandedNodeId(2 /*numeric id*/, 24033, 0));

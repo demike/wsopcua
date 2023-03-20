@@ -17,6 +17,8 @@ export enum IdentityCriteriaType {
   GroupId = 4,
   Anonymous = 5,
   AuthenticatedUser = 6,
+  Application = 7,
+  X509Subject = 8,
 }
 
 export function encodeIdentityCriteriaType( data: IdentityCriteriaType,  out: DataStream) {

@@ -7,6 +7,7 @@ import {EnumField} from './EnumField';
 import {decodeEnumField} from './EnumField';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
+import {DataTypeDefinition} from './DataTypeDefinition';
 
 export interface IEnumDefinition {
   fields?: EnumField[];
@@ -17,11 +18,12 @@ export interface IEnumDefinition {
  * {@link https://reference.opcfoundation.org/nodesets/4/15989}
 */
 
-export class EnumDefinition {
+export class EnumDefinition extends DataTypeDefinition {
   fields: EnumField[];
 
  constructor( options?: IEnumDefinition) {
   options = options || {};
+  super();
   this.fields = (options.fields != null) ? options.fields : [];
 
  }

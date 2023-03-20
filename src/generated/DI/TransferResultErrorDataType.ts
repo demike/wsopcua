@@ -83,4 +83,4 @@ export function decodeTransferResultErrorDataType( inp: DataStream): TransferRes
 
 import {register_class_definition} from '../../factory/factories_factories';
 import { ExpandedNodeId } from '../../nodeid/expanded_nodeid';
-register_class_definition('TransferResultErrorDataType', TransferResultErrorDataType, new ExpandedNodeId(2 /*numeric id*/, 15893, 2));
+register_class_definition('TransferResultErrorDataType', TransferResultErrorDataType, new ExpandedNodeId(2 /*numeric id*/, 15888, 2));

@@ -42,6 +42,7 @@
       "request": "launch",
       "name": "Launch Schema Parser",
       "program": "${workspaceFolder}/src/schema_parser/src/index.ts",
+      "args": ["--genids", "--gencodes"],
       //    "preLaunchTask": "tsc: build - tsconfig.json",
       "outFiles": ["${workspaceFolder}/src/schema_parser/dist-es2015/**/*.js"]
     }
