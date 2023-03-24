@@ -12,10 +12,26 @@ import {
 } from './SchemaParser.module';
 import { TypeRegistry } from './TypeRegistry';
 import { ClassFile } from './ClassFile';
-import { ProjectImportConfig, ProjectModulePath } from './SchemaParserConfig';
+import { ProjectImportConfig, ProjectModulePath, SchemaImportConfig } from './SchemaParserConfig';
 import { getSpecLink } from './spec-link-Import';
+import { stringIsValidUrl } from './util';
 
 const DEFAULT_NS_URI = 'http://opcfoundation.org/UA/';
+
+async function importSchema(schema: SchemaImportConfig) {
+  if (stringIsValidUrl(schema.pathToSchema)) {
+    const response = await fetch(schema.pathToSchema);
+
+    if (response.status !== 200) {
+      console.log(`Failed to fetch schema (Error: ${response.status}) : ${schema.pathToSchema}`);
+      throw new Error('failed fetching schema');
+    }
+
+    return await response.text();
+  } else {
+    return fs.readFileSync(schema.pathToSchema, 'utf8');
+  }
+}
 
 export class BSDSchemaParser {
   public static readonly TAG_TYPE_DICT = 'opc:TypeDictionary';
@@ -56,7 +72,7 @@ export class BSDSchemaParser {
       }
 
       try {
-        let data = fs.readFileSync(schema.pathToSchema, 'utf8');
+        let data = await importSchema(schema);
         console.log("Parsing '" + schema.pathToSchema + "':\n");
         data = this.fixDocData(data);
         // console.log(data);
