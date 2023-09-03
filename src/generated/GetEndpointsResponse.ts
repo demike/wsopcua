@@ -83,4 +83,4 @@ export function decodeGetEndpointsResponse( inp: DataStream): GetEndpointsRespon
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('GetEndpointsResponse', GetEndpointsResponse, new ExpandedNodeId(2 /*numeric id*/, 429, 0));
+register_class_definition('GetEndpointsResponse', GetEndpointsResponse, new ExpandedNodeId(2 /*numeric id*/, 431, 0));

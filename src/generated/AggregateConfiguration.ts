@@ -104,4 +104,4 @@ export function decodeAggregateConfiguration( inp: DataStream): AggregateConfigu
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AggregateConfiguration', AggregateConfiguration, new ExpandedNodeId(2 /*numeric id*/, 948, 0));
+register_class_definition('AggregateConfiguration', AggregateConfiguration, new ExpandedNodeId(2 /*numeric id*/, 950, 0));

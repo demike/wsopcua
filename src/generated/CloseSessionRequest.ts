@@ -81,4 +81,4 @@ export function decodeCloseSessionRequest( inp: DataStream): CloseSessionRequest
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CloseSessionRequest', CloseSessionRequest, new ExpandedNodeId(2 /*numeric id*/, 471, 0));
+register_class_definition('CloseSessionRequest', CloseSessionRequest, new ExpandedNodeId(2 /*numeric id*/, 473, 0));

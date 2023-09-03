@@ -81,4 +81,4 @@ export function decodeCancelResponse( inp: DataStream): CancelResponse {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CancelResponse', CancelResponse, new ExpandedNodeId(2 /*numeric id*/, 480, 0));
+register_class_definition('CancelResponse', CancelResponse, new ExpandedNodeId(2 /*numeric id*/, 482, 0));

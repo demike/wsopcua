@@ -137,4 +137,4 @@ export function decodeSessionSecurityDiagnosticsDataType( inp: DataStream): Sess
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SessionSecurityDiagnosticsDataType', SessionSecurityDiagnosticsDataType, new ExpandedNodeId(2 /*numeric id*/, 868, 0));
+register_class_definition('SessionSecurityDiagnosticsDataType', SessionSecurityDiagnosticsDataType, new ExpandedNodeId(2 /*numeric id*/, 870, 0));

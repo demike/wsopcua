@@ -81,4 +81,4 @@ export function decodeHistoryModifiedData( inp: DataStream): HistoryModifiedData
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryModifiedData', HistoryModifiedData, new ExpandedNodeId(2 /*numeric id*/, 11217, 0));
+register_class_definition('HistoryModifiedData', HistoryModifiedData, new ExpandedNodeId(2 /*numeric id*/, 11227, 0));

@@ -23,4 +23,4 @@ export class Frame {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('Frame', Frame, new ExpandedNodeId(2 /*numeric id*/, 18813, 0));
+register_class_definition('Frame', Frame, new ExpandedNodeId(2 /*numeric id*/, 18822, 0));

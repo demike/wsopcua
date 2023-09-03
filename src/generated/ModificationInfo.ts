@@ -89,4 +89,4 @@ export function decodeModificationInfo( inp: DataStream): ModificationInfo {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ModificationInfo', ModificationInfo, new ExpandedNodeId(2 /*numeric id*/, 11216, 0));
+register_class_definition('ModificationInfo', ModificationInfo, new ExpandedNodeId(2 /*numeric id*/, 11226, 0));

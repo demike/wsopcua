@@ -89,4 +89,4 @@ export function decodeNotificationMessage( inp: DataStream): NotificationMessage
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('NotificationMessage', NotificationMessage, new ExpandedNodeId(2 /*numeric id*/, 803, 0));
+register_class_definition('NotificationMessage', NotificationMessage, new ExpandedNodeId(2 /*numeric id*/, 805, 0));

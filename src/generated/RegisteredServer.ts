@@ -131,4 +131,4 @@ export function decodeRegisteredServer( inp: DataStream): RegisteredServer {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RegisteredServer', RegisteredServer, new ExpandedNodeId(2 /*numeric id*/, 432, 0));
+register_class_definition('RegisteredServer', RegisteredServer, new ExpandedNodeId(2 /*numeric id*/, 434, 0));

@@ -93,4 +93,4 @@ export function decodePublishedEventsDataType( inp: DataStream): PublishedEvents
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PublishedEventsDataType', PublishedEventsDataType, new ExpandedNodeId(2 /*numeric id*/, 15582, 0));
+register_class_definition('PublishedEventsDataType', PublishedEventsDataType, new ExpandedNodeId(2 /*numeric id*/, 15681, 0));

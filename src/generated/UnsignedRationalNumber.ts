@@ -80,4 +80,4 @@ export function decodeUnsignedRationalNumber( inp: DataStream): UnsignedRational
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UnsignedRationalNumber', UnsignedRationalNumber, new ExpandedNodeId(2 /*numeric id*/, 24107, 0));
+register_class_definition('UnsignedRationalNumber', UnsignedRationalNumber, new ExpandedNodeId(2 /*numeric id*/, 24110, 0));

@@ -93,4 +93,4 @@ export function decodeTranslateBrowsePathsToNodeIdsResponse( inp: DataStream): T
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TranslateBrowsePathsToNodeIdsResponse', TranslateBrowsePathsToNodeIdsResponse, new ExpandedNodeId(2 /*numeric id*/, 555, 0));
+register_class_definition('TranslateBrowsePathsToNodeIdsResponse', TranslateBrowsePathsToNodeIdsResponse, new ExpandedNodeId(2 /*numeric id*/, 557, 0));

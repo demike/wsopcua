@@ -81,4 +81,4 @@ export function decodeRolePermissionType( inp: DataStream): RolePermissionType {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RolePermissionType', RolePermissionType, new ExpandedNodeId(2 /*numeric id*/, 96, 0));
+register_class_definition('RolePermissionType', RolePermissionType, new ExpandedNodeId(2 /*numeric id*/, 128, 0));

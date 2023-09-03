@@ -80,4 +80,4 @@ export function decodeSubscriptionAcknowledgement( inp: DataStream): Subscriptio
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SubscriptionAcknowledgement', SubscriptionAcknowledgement, new ExpandedNodeId(2 /*numeric id*/, 821, 0));
+register_class_definition('SubscriptionAcknowledgement', SubscriptionAcknowledgement, new ExpandedNodeId(2 /*numeric id*/, 823, 0));

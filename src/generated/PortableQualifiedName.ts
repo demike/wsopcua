@@ -80,4 +80,4 @@ export function decodePortableQualifiedName( inp: DataStream): PortableQualified
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PortableQualifiedName', PortableQualifiedName, new ExpandedNodeId(2 /*numeric id*/, 24105, 0));
+register_class_definition('PortableQualifiedName', PortableQualifiedName, new ExpandedNodeId(2 /*numeric id*/, 24108, 0));

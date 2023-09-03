@@ -79,4 +79,4 @@ export function decodeEnumField( inp: DataStream): EnumField {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EnumField', EnumField, new ExpandedNodeId(2 /*numeric id*/, 102, 0));
+register_class_definition('EnumField', EnumField, new ExpandedNodeId(2 /*numeric id*/, 14845, 0));

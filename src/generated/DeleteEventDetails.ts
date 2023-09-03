@@ -79,4 +79,4 @@ export function decodeDeleteEventDetails( inp: DataStream): DeleteEventDetails {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DeleteEventDetails', DeleteEventDetails, new ExpandedNodeId(2 /*numeric id*/, 692, 0));
+register_class_definition('DeleteEventDetails', DeleteEventDetails, new ExpandedNodeId(2 /*numeric id*/, 694, 0));

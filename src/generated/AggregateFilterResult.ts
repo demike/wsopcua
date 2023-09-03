@@ -91,4 +91,4 @@ export function decodeAggregateFilterResult( inp: DataStream): AggregateFilterRe
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AggregateFilterResult', AggregateFilterResult, new ExpandedNodeId(2 /*numeric id*/, 737, 0));
+register_class_definition('AggregateFilterResult', AggregateFilterResult, new ExpandedNodeId(2 /*numeric id*/, 739, 0));

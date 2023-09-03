@@ -106,4 +106,4 @@ export function decodeReadRawModifiedDetails( inp: DataStream): ReadRawModifiedD
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReadRawModifiedDetails', ReadRawModifiedDetails, new ExpandedNodeId(2 /*numeric id*/, 647, 0));
+register_class_definition('ReadRawModifiedDetails', ReadRawModifiedDetails, new ExpandedNodeId(2 /*numeric id*/, 649, 0));

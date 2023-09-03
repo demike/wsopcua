@@ -82,4 +82,4 @@ export function decodeDatagramWriterGroupTransportDataType( inp: DataStream): Da
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DatagramWriterGroupTransportDataType', DatagramWriterGroupTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15532, 0));
+register_class_definition('DatagramWriterGroupTransportDataType', DatagramWriterGroupTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 21155, 0));

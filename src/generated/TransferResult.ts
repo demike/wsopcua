@@ -80,4 +80,4 @@ export function decodeTransferResult( inp: DataStream): TransferResult {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TransferResult', TransferResult, new ExpandedNodeId(2 /*numeric id*/, 836, 0));
+register_class_definition('TransferResult', TransferResult, new ExpandedNodeId(2 /*numeric id*/, 838, 0));

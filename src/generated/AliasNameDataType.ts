@@ -81,4 +81,4 @@ export function decodeAliasNameDataType( inp: DataStream): AliasNameDataType {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AliasNameDataType', AliasNameDataType, new ExpandedNodeId(2 /*numeric id*/, 23468, 0));
+register_class_definition('AliasNameDataType', AliasNameDataType, new ExpandedNodeId(2 /*numeric id*/, 23499, 0));

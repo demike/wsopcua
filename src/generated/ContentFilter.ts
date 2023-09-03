@@ -74,4 +74,4 @@ export function decodeContentFilter( inp: DataStream): ContentFilter {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ContentFilter', ContentFilter, new ExpandedNodeId(2 /*numeric id*/, 586, 0));
+register_class_definition('ContentFilter', ContentFilter, new ExpandedNodeId(2 /*numeric id*/, 588, 0));

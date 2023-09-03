@@ -108,4 +108,4 @@ export function decodePublishedDataSetDataType( inp: DataStream): PublishedDataS
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PublishedDataSetDataType', PublishedDataSetDataType, new ExpandedNodeId(2 /*numeric id*/, 15578, 0));
+register_class_definition('PublishedDataSetDataType', PublishedDataSetDataType, new ExpandedNodeId(2 /*numeric id*/, 15677, 0));

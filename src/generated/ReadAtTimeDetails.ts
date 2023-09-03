@@ -82,4 +82,4 @@ export function decodeReadAtTimeDetails( inp: DataStream): ReadAtTimeDetails {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReadAtTimeDetails', ReadAtTimeDetails, new ExpandedNodeId(2 /*numeric id*/, 653, 0));
+register_class_definition('ReadAtTimeDetails', ReadAtTimeDetails, new ExpandedNodeId(2 /*numeric id*/, 655, 0));

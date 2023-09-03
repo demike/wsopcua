@@ -72,4 +72,4 @@ export function decodeCloseSecureChannelRequest( inp: DataStream): CloseSecureCh
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CloseSecureChannelRequest', CloseSecureChannelRequest, new ExpandedNodeId(2 /*numeric id*/, 450, 0));
+register_class_definition('CloseSecureChannelRequest', CloseSecureChannelRequest, new ExpandedNodeId(2 /*numeric id*/, 452, 0));

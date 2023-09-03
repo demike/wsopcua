@@ -81,4 +81,4 @@ export function decodeRegisterNodesRequest( inp: DataStream): RegisterNodesReque
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('RegisterNodesRequest', RegisterNodesRequest, new ExpandedNodeId(2 /*numeric id*/, 558, 0));
+register_class_definition('RegisterNodesRequest', RegisterNodesRequest, new ExpandedNodeId(2 /*numeric id*/, 560, 0));

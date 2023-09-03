@@ -140,4 +140,4 @@ export function decodeSecurityGroupDataType( inp: DataStream): SecurityGroupData
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('SecurityGroupDataType', SecurityGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 23601, 0));
+register_class_definition('SecurityGroupDataType', SecurityGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 23853, 0));

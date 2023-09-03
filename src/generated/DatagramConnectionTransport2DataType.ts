@@ -104,4 +104,4 @@ export function decodeDatagramConnectionTransport2DataType( inp: DataStream): Da
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DatagramConnectionTransport2DataType', DatagramConnectionTransport2DataType, new ExpandedNodeId(2 /*numeric id*/, 23612, 0));
+register_class_definition('DatagramConnectionTransport2DataType', DatagramConnectionTransport2DataType, new ExpandedNodeId(2 /*numeric id*/, 23864, 0));

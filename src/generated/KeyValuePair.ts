@@ -81,4 +81,4 @@ export function decodeKeyValuePair( inp: DataStream): KeyValuePair {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('KeyValuePair', KeyValuePair, new ExpandedNodeId(2 /*numeric id*/, 14533, 0));
+register_class_definition('KeyValuePair', KeyValuePair, new ExpandedNodeId(2 /*numeric id*/, 14846, 0));

@@ -89,4 +89,4 @@ export function decodeTransactionErrorType( inp: DataStream): TransactionErrorTy
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TransactionErrorType', TransactionErrorType, new ExpandedNodeId(2 /*numeric id*/, 32285, 0));
+register_class_definition('TransactionErrorType', TransactionErrorType, new ExpandedNodeId(2 /*numeric id*/, 32382, 0));

@@ -74,4 +74,4 @@ export function decodeReadAnnotationDataDetails( inp: DataStream): ReadAnnotatio
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReadAnnotationDataDetails', ReadAnnotationDataDetails, new ExpandedNodeId(2 /*numeric id*/, 23497, 0));
+register_class_definition('ReadAnnotationDataDetails', ReadAnnotationDataDetails, new ExpandedNodeId(2 /*numeric id*/, 23500, 0));

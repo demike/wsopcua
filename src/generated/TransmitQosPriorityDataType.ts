@@ -74,4 +74,4 @@ export function decodeTransmitQosPriorityDataType( inp: DataStream): TransmitQos
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TransmitQosPriorityDataType', TransmitQosPriorityDataType, new ExpandedNodeId(2 /*numeric id*/, 23605, 0));
+register_class_definition('TransmitQosPriorityDataType', TransmitQosPriorityDataType, new ExpandedNodeId(2 /*numeric id*/, 23857, 0));

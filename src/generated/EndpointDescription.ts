@@ -132,4 +132,4 @@ export function decodeEndpointDescription( inp: DataStream): EndpointDescription
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EndpointDescription', EndpointDescription, new ExpandedNodeId(2 /*numeric id*/, 312, 0));
+register_class_definition('EndpointDescription', EndpointDescription, new ExpandedNodeId(2 /*numeric id*/, 314, 0));

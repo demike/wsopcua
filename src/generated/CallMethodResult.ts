@@ -100,4 +100,4 @@ export function decodeCallMethodResult( inp: DataStream): CallMethodResult {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CallMethodResult', CallMethodResult, new ExpandedNodeId(2 /*numeric id*/, 707, 0));
+register_class_definition('CallMethodResult', CallMethodResult, new ExpandedNodeId(2 /*numeric id*/, 709, 0));

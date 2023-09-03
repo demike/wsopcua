@@ -99,4 +99,4 @@ export function decodeActivateSessionResponse( inp: DataStream): ActivateSession
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ActivateSessionResponse', ActivateSessionResponse, new ExpandedNodeId(2 /*numeric id*/, 468, 0));
+register_class_definition('ActivateSessionResponse', ActivateSessionResponse, new ExpandedNodeId(2 /*numeric id*/, 470, 0));

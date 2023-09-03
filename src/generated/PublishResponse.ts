@@ -124,4 +124,4 @@ export function decodePublishResponse( inp: DataStream): PublishResponse {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PublishResponse', PublishResponse, new ExpandedNodeId(2 /*numeric id*/, 827, 0));
+register_class_definition('PublishResponse', PublishResponse, new ExpandedNodeId(2 /*numeric id*/, 829, 0));

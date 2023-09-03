@@ -80,4 +80,4 @@ export function decodeAddNodesResult( inp: DataStream): AddNodesResult {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AddNodesResult', AddNodesResult, new ExpandedNodeId(2 /*numeric id*/, 483, 0));
+register_class_definition('AddNodesResult', AddNodesResult, new ExpandedNodeId(2 /*numeric id*/, 485, 0));

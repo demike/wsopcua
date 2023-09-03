@@ -72,4 +72,4 @@ export function decodeHistoryUpdateDetails( inp: DataStream): HistoryUpdateDetai
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryUpdateDetails', HistoryUpdateDetails, new ExpandedNodeId(2 /*numeric id*/, 677, 0));
+register_class_definition('HistoryUpdateDetails', HistoryUpdateDetails, new ExpandedNodeId(2 /*numeric id*/, 679, 0));

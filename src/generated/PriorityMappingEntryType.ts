@@ -96,4 +96,4 @@ export function decodePriorityMappingEntryType( inp: DataStream): PriorityMappin
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PriorityMappingEntryType', PriorityMappingEntryType, new ExpandedNodeId(2 /*numeric id*/, 25220, 0));
+register_class_definition('PriorityMappingEntryType', PriorityMappingEntryType, new ExpandedNodeId(2 /*numeric id*/, 25239, 0));

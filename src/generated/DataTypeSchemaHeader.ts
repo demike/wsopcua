@@ -102,4 +102,4 @@ export function decodeDataTypeSchemaHeader( inp: DataStream): DataTypeSchemaHead
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DataTypeSchemaHeader', DataTypeSchemaHeader, new ExpandedNodeId(2 /*numeric id*/, 15534, 0));
+register_class_definition('DataTypeSchemaHeader', DataTypeSchemaHeader, new ExpandedNodeId(2 /*numeric id*/, 15676, 0));

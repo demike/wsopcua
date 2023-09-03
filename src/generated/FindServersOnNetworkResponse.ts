@@ -91,4 +91,4 @@ export function decodeFindServersOnNetworkResponse( inp: DataStream): FindServer
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('FindServersOnNetworkResponse', FindServersOnNetworkResponse, new ExpandedNodeId(2 /*numeric id*/, 12191, 0));
+register_class_definition('FindServersOnNetworkResponse', FindServersOnNetworkResponse, new ExpandedNodeId(2 /*numeric id*/, 12209, 0));

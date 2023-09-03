@@ -115,4 +115,4 @@ export function decodeBrokerDataSetWriterTransportDataType( inp: DataStream): Br
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('BrokerDataSetWriterTransportDataType', BrokerDataSetWriterTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15669, 0));
+register_class_definition('BrokerDataSetWriterTransportDataType', BrokerDataSetWriterTransportDataType, new ExpandedNodeId(2 /*numeric id*/, 15729, 0));

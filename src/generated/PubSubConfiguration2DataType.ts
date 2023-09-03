@@ -139,4 +139,4 @@ export function decodePubSubConfiguration2DataType( inp: DataStream): PubSubConf
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PubSubConfiguration2DataType', PubSubConfiguration2DataType, new ExpandedNodeId(2 /*numeric id*/, 23602, 0));
+register_class_definition('PubSubConfiguration2DataType', PubSubConfiguration2DataType, new ExpandedNodeId(2 /*numeric id*/, 23854, 0));

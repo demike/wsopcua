@@ -91,4 +91,4 @@ export function decodeDeleteSubscriptionsResponse( inp: DataStream): DeleteSubsc
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DeleteSubscriptionsResponse', DeleteSubscriptionsResponse, new ExpandedNodeId(2 /*numeric id*/, 848, 0));
+register_class_definition('DeleteSubscriptionsResponse', DeleteSubscriptionsResponse, new ExpandedNodeId(2 /*numeric id*/, 850, 0));

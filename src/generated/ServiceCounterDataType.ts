@@ -80,4 +80,4 @@ export function decodeServiceCounterDataType( inp: DataStream): ServiceCounterDa
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ServiceCounterDataType', ServiceCounterDataType, new ExpandedNodeId(2 /*numeric id*/, 871, 0));
+register_class_definition('ServiceCounterDataType', ServiceCounterDataType, new ExpandedNodeId(2 /*numeric id*/, 873, 0));

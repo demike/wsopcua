@@ -14,12 +14,13 @@ import { TypeRegistry } from './TypeRegistry';
 import { ClassFile } from './ClassFile';
 import { ProjectImportConfig, ProjectModulePath, SchemaImportConfig } from './SchemaParserConfig';
 import { getSpecLink } from './spec-link-Import';
-import { stringIsValidUrl } from './util';
 
 const DEFAULT_NS_URI = 'http://opcfoundation.org/UA/';
 
 async function importSchema(schema: SchemaImportConfig) {
-  if (stringIsValidUrl(schema.pathToSchema)) {
+  if (fs.existsSync(schema.pathToSchema)) {
+    return fs.readFileSync(schema.pathToSchema, 'utf8');
+  } else {
     const response = await fetch(schema.pathToSchema);
 
     if (response.status !== 200) {
@@ -28,8 +29,6 @@ async function importSchema(schema: SchemaImportConfig) {
     }
 
     return await response.text();
-  } else {
-    return fs.readFileSync(schema.pathToSchema, 'utf8');
   }
 }
 
@@ -344,7 +343,7 @@ export class BSDSchemaParser {
             arParamsEncodingBinary = arParams;
           }
           if (arParamsEncodingBinary) {
-            file.setTypeId(arParams[1], this.namespaceUri, this.namespace);
+            file.setTypeId(arParamsEncodingBinary[1], this.namespaceUri, this.namespace);
           }
 
           if (arParams) {

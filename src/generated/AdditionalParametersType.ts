@@ -74,4 +74,4 @@ export function decodeAdditionalParametersType( inp: DataStream): AdditionalPara
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('AdditionalParametersType', AdditionalParametersType, new ExpandedNodeId(2 /*numeric id*/, 16313, 0));
+register_class_definition('AdditionalParametersType', AdditionalParametersType, new ExpandedNodeId(2 /*numeric id*/, 17537, 0));

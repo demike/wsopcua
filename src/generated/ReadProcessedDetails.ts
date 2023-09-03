@@ -107,4 +107,4 @@ export function decodeReadProcessedDetails( inp: DataStream): ReadProcessedDetai
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReadProcessedDetails', ReadProcessedDetails, new ExpandedNodeId(2 /*numeric id*/, 650, 0));
+register_class_definition('ReadProcessedDetails', ReadProcessedDetails, new ExpandedNodeId(2 /*numeric id*/, 652, 0));

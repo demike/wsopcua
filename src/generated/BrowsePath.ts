@@ -81,4 +81,4 @@ export function decodeBrowsePath( inp: DataStream): BrowsePath {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('BrowsePath', BrowsePath, new ExpandedNodeId(2 /*numeric id*/, 543, 0));
+register_class_definition('BrowsePath', BrowsePath, new ExpandedNodeId(2 /*numeric id*/, 545, 0));

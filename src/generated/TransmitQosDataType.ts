@@ -28,4 +28,4 @@ export class TransmitQosDataType extends QosDataType {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TransmitQosDataType', TransmitQosDataType, new ExpandedNodeId(2 /*numeric id*/, 23604, 0));
+register_class_definition('TransmitQosDataType', TransmitQosDataType, new ExpandedNodeId(2 /*numeric id*/, 23856, 0));

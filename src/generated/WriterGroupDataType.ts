@@ -146,4 +146,4 @@ export function decodeWriterGroupDataType( inp: DataStream): WriterGroupDataType
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('WriterGroupDataType', WriterGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 15480, 0));
+register_class_definition('WriterGroupDataType', WriterGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 21150, 0));

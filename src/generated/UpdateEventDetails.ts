@@ -99,4 +99,4 @@ export function decodeUpdateEventDetails( inp: DataStream): UpdateEventDetails {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UpdateEventDetails', UpdateEventDetails, new ExpandedNodeId(2 /*numeric id*/, 683, 0));
+register_class_definition('UpdateEventDetails', UpdateEventDetails, new ExpandedNodeId(2 /*numeric id*/, 685, 0));

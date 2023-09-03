@@ -125,4 +125,4 @@ export function decodePubSubGroupDataType( inp: DataStream): PubSubGroupDataType
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PubSubGroupDataType', PubSubGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 15609, 0));
+register_class_definition('PubSubGroupDataType', PubSubGroupDataType, new ExpandedNodeId(2 /*numeric id*/, 15689, 0));

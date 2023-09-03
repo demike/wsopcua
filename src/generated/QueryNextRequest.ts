@@ -89,4 +89,4 @@ export function decodeQueryNextRequest( inp: DataStream): QueryNextRequest {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('QueryNextRequest', QueryNextRequest, new ExpandedNodeId(2 /*numeric id*/, 619, 0));
+register_class_definition('QueryNextRequest', QueryNextRequest, new ExpandedNodeId(2 /*numeric id*/, 621, 0));

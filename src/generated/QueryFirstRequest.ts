@@ -117,4 +117,4 @@ export function decodeQueryFirstRequest( inp: DataStream): QueryFirstRequest {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('QueryFirstRequest', QueryFirstRequest, new ExpandedNodeId(2 /*numeric id*/, 613, 0));
+register_class_definition('QueryFirstRequest', QueryFirstRequest, new ExpandedNodeId(2 /*numeric id*/, 615, 0));

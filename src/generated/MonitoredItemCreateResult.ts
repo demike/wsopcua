@@ -105,4 +105,4 @@ export function decodeMonitoredItemCreateResult( inp: DataStream): MonitoredItem
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('MonitoredItemCreateResult', MonitoredItemCreateResult, new ExpandedNodeId(2 /*numeric id*/, 746, 0));
+register_class_definition('MonitoredItemCreateResult', MonitoredItemCreateResult, new ExpandedNodeId(2 /*numeric id*/, 748, 0));

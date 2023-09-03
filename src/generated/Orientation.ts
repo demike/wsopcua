@@ -23,4 +23,4 @@ export class Orientation {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('Orientation', Orientation, new ExpandedNodeId(2 /*numeric id*/, 18811, 0));
+register_class_definition('Orientation', Orientation, new ExpandedNodeId(2 /*numeric id*/, 18820, 0));

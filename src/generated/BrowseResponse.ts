@@ -93,4 +93,4 @@ export function decodeBrowseResponse( inp: DataStream): BrowseResponse {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('BrowseResponse', BrowseResponse, new ExpandedNodeId(2 /*numeric id*/, 528, 0));
+register_class_definition('BrowseResponse', BrowseResponse, new ExpandedNodeId(2 /*numeric id*/, 530, 0));

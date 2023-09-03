@@ -100,4 +100,4 @@ export function decodeStandaloneSubscribedDataSetDataType( inp: DataStream): Sta
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('StandaloneSubscribedDataSetDataType', StandaloneSubscribedDataSetDataType, new ExpandedNodeId(2 /*numeric id*/, 23600, 0));
+register_class_definition('StandaloneSubscribedDataSetDataType', StandaloneSubscribedDataSetDataType, new ExpandedNodeId(2 /*numeric id*/, 23852, 0));

@@ -140,4 +140,4 @@ export function decodeDataSetWriterDataType( inp: DataStream): DataSetWriterData
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DataSetWriterDataType', DataSetWriterDataType, new ExpandedNodeId(2 /*numeric id*/, 15597, 0));
+register_class_definition('DataSetWriterDataType', DataSetWriterDataType, new ExpandedNodeId(2 /*numeric id*/, 15682, 0));

@@ -100,4 +100,4 @@ export function decodeCreateMonitoredItemsRequest( inp: DataStream): CreateMonit
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CreateMonitoredItemsRequest', CreateMonitoredItemsRequest, new ExpandedNodeId(2 /*numeric id*/, 749, 0));
+register_class_definition('CreateMonitoredItemsRequest', CreateMonitoredItemsRequest, new ExpandedNodeId(2 /*numeric id*/, 751, 0));

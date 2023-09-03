@@ -90,4 +90,4 @@ export function decodeUpdateStructureDataDetails( inp: DataStream): UpdateStruct
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UpdateStructureDataDetails', UpdateStructureDataDetails, new ExpandedNodeId(2 /*numeric id*/, 11295, 0));
+register_class_definition('UpdateStructureDataDetails', UpdateStructureDataDetails, new ExpandedNodeId(2 /*numeric id*/, 11300, 0));

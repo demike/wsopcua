@@ -97,4 +97,4 @@ export function decodeCurrencyUnitType( inp: DataStream): CurrencyUnitType {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CurrencyUnitType', CurrencyUnitType, new ExpandedNodeId(2 /*numeric id*/, 23498, 0));
+register_class_definition('CurrencyUnitType', CurrencyUnitType, new ExpandedNodeId(2 /*numeric id*/, 23507, 0));

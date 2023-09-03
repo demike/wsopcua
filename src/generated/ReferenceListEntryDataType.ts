@@ -88,4 +88,4 @@ export function decodeReferenceListEntryDataType( inp: DataStream): ReferenceLis
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReferenceListEntryDataType', ReferenceListEntryDataType, new ExpandedNodeId(2 /*numeric id*/, 32660, 0));
+register_class_definition('ReferenceListEntryDataType', ReferenceListEntryDataType, new ExpandedNodeId(2 /*numeric id*/, 32662, 0));

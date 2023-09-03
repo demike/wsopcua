@@ -74,4 +74,4 @@ export function decodeElementOperand( inp: DataStream): ElementOperand {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ElementOperand', ElementOperand, new ExpandedNodeId(2 /*numeric id*/, 592, 0));
+register_class_definition('ElementOperand', ElementOperand, new ExpandedNodeId(2 /*numeric id*/, 594, 0));

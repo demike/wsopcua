@@ -80,4 +80,4 @@ export function decodeEphemeralKeyType( inp: DataStream): EphemeralKeyType {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('EphemeralKeyType', EphemeralKeyType, new ExpandedNodeId(2 /*numeric id*/, 17548, 0));
+register_class_definition('EphemeralKeyType', EphemeralKeyType, new ExpandedNodeId(2 /*numeric id*/, 17549, 0));

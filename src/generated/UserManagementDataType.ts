@@ -89,4 +89,4 @@ export function decodeUserManagementDataType( inp: DataStream): UserManagementDa
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('UserManagementDataType', UserManagementDataType, new ExpandedNodeId(2 /*numeric id*/, 24281, 0));
+register_class_definition('UserManagementDataType', UserManagementDataType, new ExpandedNodeId(2 /*numeric id*/, 24292, 0));

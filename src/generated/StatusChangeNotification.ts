@@ -83,4 +83,4 @@ export function decodeStatusChangeNotification( inp: DataStream): StatusChangeNo
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('StatusChangeNotification', StatusChangeNotification, new ExpandedNodeId(2 /*numeric id*/, 818, 0));
+register_class_definition('StatusChangeNotification', StatusChangeNotification, new ExpandedNodeId(2 /*numeric id*/, 820, 0));

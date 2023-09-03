@@ -74,4 +74,4 @@ export function decodeStandaloneSubscribedDataSetRefDataType( inp: DataStream): 
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('StandaloneSubscribedDataSetRefDataType', StandaloneSubscribedDataSetRefDataType, new ExpandedNodeId(2 /*numeric id*/, 23599, 0));
+register_class_definition('StandaloneSubscribedDataSetRefDataType', StandaloneSubscribedDataSetRefDataType, new ExpandedNodeId(2 /*numeric id*/, 23851, 0));

@@ -74,4 +74,4 @@ export function decodeHistoryEvent( inp: DataStream): HistoryEvent {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('HistoryEvent', HistoryEvent, new ExpandedNodeId(2 /*numeric id*/, 659, 0));
+register_class_definition('HistoryEvent', HistoryEvent, new ExpandedNodeId(2 /*numeric id*/, 661, 0));

@@ -80,4 +80,4 @@ export function decodeTimeZoneDataType( inp: DataStream): TimeZoneDataType {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('TimeZoneDataType', TimeZoneDataType, new ExpandedNodeId(2 /*numeric id*/, 8912, 0));
+register_class_definition('TimeZoneDataType', TimeZoneDataType, new ExpandedNodeId(2 /*numeric id*/, 8917, 0));

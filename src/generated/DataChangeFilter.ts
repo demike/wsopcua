@@ -91,4 +91,4 @@ export function decodeDataChangeFilter( inp: DataStream): DataChangeFilter {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DataChangeFilter', DataChangeFilter, new ExpandedNodeId(2 /*numeric id*/, 722, 0));
+register_class_definition('DataChangeFilter', DataChangeFilter, new ExpandedNodeId(2 /*numeric id*/, 724, 0));

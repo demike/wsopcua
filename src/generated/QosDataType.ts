@@ -23,4 +23,4 @@ export class QosDataType {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('QosDataType', QosDataType, new ExpandedNodeId(2 /*numeric id*/, 23603, 0));
+register_class_definition('QosDataType', QosDataType, new ExpandedNodeId(2 /*numeric id*/, 23855, 0));

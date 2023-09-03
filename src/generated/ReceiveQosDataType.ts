@@ -28,4 +28,4 @@ export class ReceiveQosDataType extends QosDataType {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReceiveQosDataType', ReceiveQosDataType, new ExpandedNodeId(2 /*numeric id*/, 23608, 0));
+register_class_definition('ReceiveQosDataType', ReceiveQosDataType, new ExpandedNodeId(2 /*numeric id*/, 23860, 0));

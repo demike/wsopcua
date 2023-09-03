@@ -80,4 +80,4 @@ export function decodeDeleteNodesItem( inp: DataStream): DeleteNodesItem {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DeleteNodesItem', DeleteNodesItem, new ExpandedNodeId(2 /*numeric id*/, 382, 0));
+register_class_definition('DeleteNodesItem', DeleteNodesItem, new ExpandedNodeId(2 /*numeric id*/, 384, 0));

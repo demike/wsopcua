@@ -96,4 +96,4 @@ export function decodeServerOnNetwork( inp: DataStream): ServerOnNetwork {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ServerOnNetwork', ServerOnNetwork, new ExpandedNodeId(2 /*numeric id*/, 12189, 0));
+register_class_definition('ServerOnNetwork', ServerOnNetwork, new ExpandedNodeId(2 /*numeric id*/, 12207, 0));

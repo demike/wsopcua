@@ -79,4 +79,4 @@ export function decodeDataTypeAttributes( inp: DataStream): DataTypeAttributes {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DataTypeAttributes', DataTypeAttributes, new ExpandedNodeId(2 /*numeric id*/, 370, 0));
+register_class_definition('DataTypeAttributes', DataTypeAttributes, new ExpandedNodeId(2 /*numeric id*/, 372, 0));

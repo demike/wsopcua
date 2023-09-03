@@ -80,4 +80,4 @@ export function decodePortableNodeId( inp: DataStream): PortableNodeId {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('PortableNodeId', PortableNodeId, new ExpandedNodeId(2 /*numeric id*/, 24106, 0));
+register_class_definition('PortableNodeId', PortableNodeId, new ExpandedNodeId(2 /*numeric id*/, 24109, 0));

@@ -23,4 +23,4 @@ export class CartesianCoordinates {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('CartesianCoordinates', CartesianCoordinates, new ExpandedNodeId(2 /*numeric id*/, 18809, 0));
+register_class_definition('CartesianCoordinates', CartesianCoordinates, new ExpandedNodeId(2 /*numeric id*/, 18818, 0));

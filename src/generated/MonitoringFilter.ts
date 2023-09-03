@@ -23,4 +23,4 @@ export class MonitoringFilter {
 }
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('MonitoringFilter', MonitoringFilter, new ExpandedNodeId(2 /*numeric id*/, 719, 0));
+register_class_definition('MonitoringFilter', MonitoringFilter, new ExpandedNodeId(2 /*numeric id*/, 721, 0));

@@ -80,4 +80,4 @@ export function decodeConfigurationVersionDataType( inp: DataStream): Configurat
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ConfigurationVersionDataType', ConfigurationVersionDataType, new ExpandedNodeId(2 /*numeric id*/, 14593, 0));
+register_class_definition('ConfigurationVersionDataType', ConfigurationVersionDataType, new ExpandedNodeId(2 /*numeric id*/, 14847, 0));

@@ -74,4 +74,4 @@ export function decodeReceiveQosPriorityDataType( inp: DataStream): ReceiveQosPr
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReceiveQosPriorityDataType', ReceiveQosPriorityDataType, new ExpandedNodeId(2 /*numeric id*/, 23609, 0));
+register_class_definition('ReceiveQosPriorityDataType', ReceiveQosPriorityDataType, new ExpandedNodeId(2 /*numeric id*/, 23861, 0));
