@@ -39,7 +39,7 @@ export class HistoryUpdateRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.historyUpdateDetails = ec.decodeArray(inp, decodeExtensionObject);
+  this.historyUpdateDetails = ec.decodeArray(inp, decodeExtensionObject) ?? [];
 
  }
 

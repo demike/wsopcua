@@ -43,7 +43,7 @@ export class ParameterResultDataType {
 
 
  decode( inp: DataStream) {
-  this.nodePath = ec.decodeArray(inp, decodeQualifiedName);
+  this.nodePath = ec.decodeArray(inp, decodeQualifiedName) ?? [];
   this.statusCode = ec.decodeStatusCode(inp);
   this.diagnostics.decode(inp);
 

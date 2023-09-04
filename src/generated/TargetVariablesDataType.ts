@@ -36,7 +36,7 @@ export class TargetVariablesDataType extends SubscribedDataSetDataType {
 
 
  decode( inp: DataStream) {
-  this.targetVariables = ec.decodeArray(inp, decodeFieldTargetDataType);
+  this.targetVariables = ec.decodeArray(inp, decodeFieldTargetDataType) ?? [];
 
  }
 

@@ -38,7 +38,7 @@ export class ReadAtTimeDetails extends HistoryReadDetails {
 
 
  decode( inp: DataStream) {
-  this.reqTimes = ec.decodeArray(inp, ec.decodeDateTime);
+  this.reqTimes = ec.decodeArray(inp, ec.decodeDateTime) ?? [];
   this.useSimpleBounds = ec.decodeBoolean(inp);
 
  }

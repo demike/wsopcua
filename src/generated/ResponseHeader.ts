@@ -58,7 +58,7 @@ export class ResponseHeader {
   this.requestHandle = ec.decodeUInt32(inp);
   this.serviceResult = ec.decodeStatusCode(inp);
   this.serviceDiagnostics.decode(inp);
-  this.stringTable = ec.decodeArray(inp, ec.decodeString);
+  this.stringTable = ec.decodeArray(inp, ec.decodeString) ?? [];
   this.additionalHeader = decodeExtensionObject(inp);
 
  }

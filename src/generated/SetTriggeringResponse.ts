@@ -52,10 +52,10 @@ export class SetTriggeringResponse {
 
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
-  this.addResults = ec.decodeArray(inp, ec.decodeStatusCode);
-  this.addDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
-  this.removeResults = ec.decodeArray(inp, ec.decodeStatusCode);
-  this.removeDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.addResults = ec.decodeArray(inp, ec.decodeStatusCode) ?? [];
+  this.addDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
+  this.removeResults = ec.decodeArray(inp, ec.decodeStatusCode) ?? [];
+  this.removeDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

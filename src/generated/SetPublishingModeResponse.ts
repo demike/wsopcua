@@ -44,8 +44,8 @@ export class SetPublishingModeResponse {
 
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
-  this.results = ec.decodeArray(inp, ec.decodeStatusCode);
-  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.results = ec.decodeArray(inp, ec.decodeStatusCode) ?? [];
+  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

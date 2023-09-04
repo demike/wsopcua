@@ -64,7 +64,7 @@ export class ApplicationDescription {
   this.applicationType = decodeApplicationType(inp);
   this.gatewayServerUri = ec.decodeString(inp);
   this.discoveryProfileUri = ec.decodeString(inp);
-  this.discoveryUrls = ec.decodeArray(inp, ec.decodeString);
+  this.discoveryUrls = ec.decodeArray(inp, ec.decodeString) ?? [];
 
  }
 

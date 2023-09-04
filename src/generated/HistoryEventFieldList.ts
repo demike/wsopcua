@@ -34,7 +34,7 @@ export class HistoryEventFieldList {
 
 
  decode( inp: DataStream) {
-  this.eventFields = ec.decodeArray(inp, decodeVariant);
+  this.eventFields = ec.decodeArray(inp, decodeVariant) ?? [];
 
  }
 

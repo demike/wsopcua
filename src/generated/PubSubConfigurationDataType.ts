@@ -44,8 +44,8 @@ export class PubSubConfigurationDataType {
 
 
  decode( inp: DataStream) {
-  this.publishedDataSets = ec.decodeArray(inp, decodePublishedDataSetDataType);
-  this.connections = ec.decodeArray(inp, decodePubSubConnectionDataType);
+  this.publishedDataSets = ec.decodeArray(inp, decodePublishedDataSetDataType) ?? [];
+  this.connections = ec.decodeArray(inp, decodePubSubConnectionDataType) ?? [];
   this.enabled = ec.decodeBoolean(inp);
 
  }

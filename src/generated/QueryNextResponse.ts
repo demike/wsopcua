@@ -44,7 +44,7 @@ export class QueryNextResponse {
 
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
-  this.queryDataSets = ec.decodeArray(inp, decodeQueryDataSet);
+  this.queryDataSets = ec.decodeArray(inp, decodeQueryDataSet) ?? [];
   this.revisedContinuationPoint = ec.decodeByteString(inp);
 
  }

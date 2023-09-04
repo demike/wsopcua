@@ -61,10 +61,10 @@ export class QueryFirstResponse {
 
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
-  this.queryDataSets = ec.decodeArray(inp, decodeQueryDataSet);
+  this.queryDataSets = ec.decodeArray(inp, decodeQueryDataSet) ?? [];
   this.continuationPoint = ec.decodeByteString(inp);
-  this.parsingResults = ec.decodeArray(inp, decodeParsingResult);
-  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.parsingResults = ec.decodeArray(inp, decodeParsingResult) ?? [];
+  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
   this.filterResult.decode(inp);
 
  }

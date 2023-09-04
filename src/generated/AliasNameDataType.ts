@@ -38,7 +38,7 @@ export class AliasNameDataType {
 
  decode( inp: DataStream) {
   this.aliasName.decode(inp);
-  this.referencedNodes = ec.decodeArray(inp, ec.decodeExpandedNodeId);
+  this.referencedNodes = ec.decodeArray(inp, ec.decodeExpandedNodeId) ?? [];
 
  }
 

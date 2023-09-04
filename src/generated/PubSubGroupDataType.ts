@@ -65,9 +65,9 @@ export class PubSubGroupDataType {
   this.enabled = ec.decodeBoolean(inp);
   this.securityMode = decodeMessageSecurityMode(inp);
   this.securityGroupId = ec.decodeString(inp);
-  this.securityKeyServices = ec.decodeArray(inp, decodeEndpointDescription);
+  this.securityKeyServices = ec.decodeArray(inp, decodeEndpointDescription) ?? [];
   this.maxNetworkMessageSize = ec.decodeUInt32(inp);
-  this.groupProperties = ec.decodeArray(inp, decodeKeyValuePair);
+  this.groupProperties = ec.decodeArray(inp, decodeKeyValuePair) ?? [];
 
  }
 

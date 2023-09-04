@@ -59,7 +59,7 @@ export class DataSetMetaDataType extends DataTypeSchemaHeader {
   super.decode(inp);
   this.name = ec.decodeString(inp);
   this.description.decode(inp);
-  this.fields = ec.decodeArray(inp, decodeFieldMetaData);
+  this.fields = ec.decodeArray(inp, decodeFieldMetaData) ?? [];
   this.dataSetClassId = ec.decodeGuid(inp);
   this.configurationVersion.decode(inp);
 

@@ -43,8 +43,8 @@ export class HistoryUpdateResult {
 
  decode( inp: DataStream) {
   this.statusCode = ec.decodeStatusCode(inp);
-  this.operationResults = ec.decodeArray(inp, ec.decodeStatusCode);
-  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.operationResults = ec.decodeArray(inp, ec.decodeStatusCode) ?? [];
+  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

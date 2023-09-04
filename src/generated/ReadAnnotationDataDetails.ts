@@ -34,7 +34,7 @@ export class ReadAnnotationDataDetails extends HistoryReadDetails {
 
 
  decode( inp: DataStream) {
-  this.reqTimes = ec.decodeArray(inp, ec.decodeDateTime);
+  this.reqTimes = ec.decodeArray(inp, ec.decodeDateTime) ?? [];
 
  }
 

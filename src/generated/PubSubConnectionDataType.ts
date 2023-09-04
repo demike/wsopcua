@@ -77,10 +77,10 @@ export class PubSubConnectionDataType {
   this.publisherId.decode(inp);
   this.transportProfileUri = ec.decodeString(inp);
   this.address = decodeExtensionObject(inp);
-  this.connectionProperties = ec.decodeArray(inp, decodeKeyValuePair);
+  this.connectionProperties = ec.decodeArray(inp, decodeKeyValuePair) ?? [];
   this.transportSettings = decodeExtensionObject(inp);
-  this.writerGroups = ec.decodeArray(inp, decodeWriterGroupDataType);
-  this.readerGroups = ec.decodeArray(inp, decodeReaderGroupDataType);
+  this.writerGroups = ec.decodeArray(inp, decodeWriterGroupDataType) ?? [];
+  this.readerGroups = ec.decodeArray(inp, decodeReaderGroupDataType) ?? [];
 
  }
 

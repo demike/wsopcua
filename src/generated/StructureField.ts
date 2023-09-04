@@ -61,7 +61,7 @@ export class StructureField {
   this.description.decode(inp);
   this.dataType = ec.decodeNodeId(inp);
   this.valueRank = ec.decodeInt32(inp);
-  this.arrayDimensions = ec.decodeArray(inp, ec.decodeUInt32);
+  this.arrayDimensions = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
   this.maxStringLength = ec.decodeUInt32(inp);
   this.isOptional = ec.decodeBoolean(inp);
 

@@ -46,8 +46,8 @@ export class HistoryUpdateResponse {
 
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
-  this.results = ec.decodeArray(inp, decodeHistoryUpdateResult);
-  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.results = ec.decodeArray(inp, decodeHistoryUpdateResult) ?? [];
+  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

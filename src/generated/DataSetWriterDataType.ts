@@ -74,7 +74,7 @@ export class DataSetWriterDataType {
   this.dataSetFieldContentMask = decodeDataSetFieldContentMask(inp);
   this.keyFrameCount = ec.decodeUInt32(inp);
   this.dataSetName = ec.decodeString(inp);
-  this.dataSetWriterProperties = ec.decodeArray(inp, decodeKeyValuePair);
+  this.dataSetWriterProperties = ec.decodeArray(inp, decodeKeyValuePair) ?? [];
   this.transportSettings = decodeExtensionObject(inp);
   this.messageSettings = decodeExtensionObject(inp);
 

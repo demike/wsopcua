@@ -38,7 +38,7 @@ export class RegisterNodesResponse {
 
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
-  this.registeredNodeIds = ec.decodeArray(inp, ec.decodeNodeId);
+  this.registeredNodeIds = ec.decodeArray(inp, ec.decodeNodeId) ?? [];
 
  }
 

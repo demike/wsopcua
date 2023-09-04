@@ -42,8 +42,8 @@ export class DataChangeNotification extends NotificationData {
 
 
  decode( inp: DataStream) {
-  this.monitoredItems = ec.decodeArray(inp, decodeMonitoredItemNotification);
-  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.monitoredItems = ec.decodeArray(inp, decodeMonitoredItemNotification) ?? [];
+  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

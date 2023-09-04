@@ -40,7 +40,7 @@ export class CallRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.methodsToCall = ec.decodeArray(inp, decodeCallMethodRequest);
+  this.methodsToCall = ec.decodeArray(inp, decodeCallMethodRequest) ?? [];
 
  }
 

@@ -44,8 +44,8 @@ export class RegisterServer2Response {
 
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
-  this.configurationResults = ec.decodeArray(inp, ec.decodeStatusCode);
-  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.configurationResults = ec.decodeArray(inp, ec.decodeStatusCode) ?? [];
+  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

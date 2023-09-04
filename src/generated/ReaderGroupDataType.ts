@@ -50,7 +50,7 @@ export class ReaderGroupDataType extends PubSubGroupDataType {
   super.decode(inp);
   this.transportSettings = decodeExtensionObject(inp);
   this.messageSettings = decodeExtensionObject(inp);
-  this.dataSetReaders = ec.decodeArray(inp, decodeDataSetReaderDataType);
+  this.dataSetReaders = ec.decodeArray(inp, decodeDataSetReaderDataType) ?? [];
 
  }
 

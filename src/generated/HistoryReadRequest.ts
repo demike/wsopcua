@@ -57,7 +57,7 @@ export class HistoryReadRequest {
   this.historyReadDetails = decodeExtensionObject(inp);
   this.timestampsToReturn = decodeTimestampsToReturn(inp);
   this.releaseContinuationPoints = ec.decodeBoolean(inp);
-  this.nodesToRead = ec.decodeArray(inp, decodeHistoryReadValueId);
+  this.nodesToRead = ec.decodeArray(inp, decodeHistoryReadValueId) ?? [];
 
  }
 

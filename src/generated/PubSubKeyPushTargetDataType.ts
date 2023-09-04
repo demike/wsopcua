@@ -68,14 +68,14 @@ export class PubSubKeyPushTargetDataType {
 
  decode( inp: DataStream) {
   this.applicationUri = ec.decodeString(inp);
-  this.pushTargetFolder = ec.decodeArray(inp, ec.decodeString);
+  this.pushTargetFolder = ec.decodeArray(inp, ec.decodeString) ?? [];
   this.endpointUrl = ec.decodeString(inp);
   this.securityPolicyUri = ec.decodeString(inp);
   this.userTokenType.decode(inp);
   this.requestedKeyCount = ec.decodeUInt16(inp);
   this.retryInterval = ec.decodeDouble(inp);
-  this.pushTargetProperties = ec.decodeArray(inp, decodeKeyValuePair);
-  this.securityGroups = ec.decodeArray(inp, ec.decodeString);
+  this.pushTargetProperties = ec.decodeArray(inp, decodeKeyValuePair) ?? [];
+  this.securityGroups = ec.decodeArray(inp, ec.decodeString) ?? [];
 
  }
 

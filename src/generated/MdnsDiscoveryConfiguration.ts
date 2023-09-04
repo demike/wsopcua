@@ -39,7 +39,7 @@ export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
 
  decode( inp: DataStream) {
   this.mdnsServerName = ec.decodeString(inp);
-  this.serverCapabilities = ec.decodeArray(inp, ec.decodeString);
+  this.serverCapabilities = ec.decodeArray(inp, ec.decodeString) ?? [];
 
  }
 

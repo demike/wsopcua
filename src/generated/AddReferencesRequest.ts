@@ -40,7 +40,7 @@ export class AddReferencesRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.referencesToAdd = ec.decodeArray(inp, decodeAddReferencesItem);
+  this.referencesToAdd = ec.decodeArray(inp, decodeAddReferencesItem) ?? [];
 
  }
 

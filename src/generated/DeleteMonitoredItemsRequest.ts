@@ -43,7 +43,7 @@ export class DeleteMonitoredItemsRequest {
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
   this.subscriptionId = ec.decodeUInt32(inp);
-  this.monitoredItemIds = ec.decodeArray(inp, ec.decodeUInt32);
+  this.monitoredItemIds = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
 
  }
 

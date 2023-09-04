@@ -37,7 +37,7 @@ export class DeleteAtTimeDetails extends HistoryUpdateDetails {
 
  decode( inp: DataStream) {
   super.decode(inp);
-  this.reqTimes = ec.decodeArray(inp, ec.decodeDateTime);
+  this.reqTimes = ec.decodeArray(inp, ec.decodeDateTime) ?? [];
 
  }
 

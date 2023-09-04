@@ -62,11 +62,11 @@ export class PublishResponse {
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
   this.subscriptionId = ec.decodeUInt32(inp);
-  this.availableSequenceNumbers = ec.decodeArray(inp, ec.decodeUInt32);
+  this.availableSequenceNumbers = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
   this.moreNotifications = ec.decodeBoolean(inp);
   this.notificationMessage.decode(inp);
-  this.results = ec.decodeArray(inp, ec.decodeStatusCode);
-  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.results = ec.decodeArray(inp, ec.decodeStatusCode) ?? [];
+  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

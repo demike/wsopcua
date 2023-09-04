@@ -45,7 +45,7 @@ export class FindServersOnNetworkResponse {
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
   this.lastCounterResetTime = ec.decodeDateTime(inp);
-  this.servers = ec.decodeArray(inp, decodeServerOnNetwork);
+  this.servers = ec.decodeArray(inp, decodeServerOnNetwork) ?? [];
 
  }
 

@@ -49,7 +49,7 @@ export class SimpleAttributeOperand extends FilterOperand {
 
  decode( inp: DataStream) {
   this.typeDefinitionId = ec.decodeNodeId(inp);
-  this.browsePath = ec.decodeArray(inp, decodeQualifiedName);
+  this.browsePath = ec.decodeArray(inp, decodeQualifiedName) ?? [];
   this.attributeId = ec.decodeUInt32(inp);
   this.indexRange = ec.decodeString(inp);
 

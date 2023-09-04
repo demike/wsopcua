@@ -44,7 +44,7 @@ export class BrowseResult {
  decode( inp: DataStream) {
   this.statusCode = ec.decodeStatusCode(inp);
   this.continuationPoint = ec.decodeByteString(inp);
-  this.references = ec.decodeArray(inp, decodeReferenceDescription);
+  this.references = ec.decodeArray(inp, decodeReferenceDescription) ?? [];
 
  }
 

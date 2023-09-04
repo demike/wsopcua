@@ -53,9 +53,9 @@ export class PublishedDataSetDataType {
 
  decode( inp: DataStream) {
   this.name = ec.decodeString(inp);
-  this.dataSetFolder = ec.decodeArray(inp, ec.decodeString);
+  this.dataSetFolder = ec.decodeArray(inp, ec.decodeString) ?? [];
   this.dataSetMetaData.decode(inp);
-  this.extensionFields = ec.decodeArray(inp, decodeKeyValuePair);
+  this.extensionFields = ec.decodeArray(inp, decodeKeyValuePair) ?? [];
   this.dataSetSource = decodeExtensionObject(inp);
 
  }

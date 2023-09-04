@@ -49,7 +49,7 @@ export class SetMonitoringModeRequest {
   this.requestHeader.decode(inp);
   this.subscriptionId = ec.decodeUInt32(inp);
   this.monitoringMode = decodeMonitoringMode(inp);
-  this.monitoredItemIds = ec.decodeArray(inp, ec.decodeUInt32);
+  this.monitoredItemIds = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
 
  }
 

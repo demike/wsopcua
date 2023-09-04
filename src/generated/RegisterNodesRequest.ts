@@ -38,7 +38,7 @@ export class RegisterNodesRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.nodesToRegister = ec.decodeArray(inp, ec.decodeNodeId);
+  this.nodesToRegister = ec.decodeArray(inp, ec.decodeNodeId) ?? [];
 
  }
 

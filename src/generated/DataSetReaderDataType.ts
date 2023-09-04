@@ -117,8 +117,8 @@ export class DataSetReaderDataType {
   this.headerLayoutUri = ec.decodeString(inp);
   this.securityMode = decodeMessageSecurityMode(inp);
   this.securityGroupId = ec.decodeString(inp);
-  this.securityKeyServices = ec.decodeArray(inp, decodeEndpointDescription);
-  this.dataSetReaderProperties = ec.decodeArray(inp, decodeKeyValuePair);
+  this.securityKeyServices = ec.decodeArray(inp, decodeEndpointDescription) ?? [];
+  this.dataSetReaderProperties = ec.decodeArray(inp, decodeKeyValuePair) ?? [];
   this.transportSettings = decodeExtensionObject(inp);
   this.messageSettings = decodeExtensionObject(inp);
   this.subscribedDataSet = decodeExtensionObject(inp);

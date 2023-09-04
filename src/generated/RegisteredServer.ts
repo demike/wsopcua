@@ -65,10 +65,10 @@ export class RegisteredServer {
  decode( inp: DataStream) {
   this.serverUri = ec.decodeString(inp);
   this.productUri = ec.decodeString(inp);
-  this.serverNames = ec.decodeArray(inp, decodeLocalizedText);
+  this.serverNames = ec.decodeArray(inp, decodeLocalizedText) ?? [];
   this.serverType = decodeApplicationType(inp);
   this.gatewayServerUri = ec.decodeString(inp);
-  this.discoveryUrls = ec.decodeArray(inp, ec.decodeString);
+  this.discoveryUrls = ec.decodeArray(inp, ec.decodeString) ?? [];
   this.semaphoreFilePath = ec.decodeString(inp);
   this.isOnline = ec.decodeBoolean(inp);
 

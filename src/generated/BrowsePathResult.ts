@@ -39,7 +39,7 @@ export class BrowsePathResult {
 
  decode( inp: DataStream) {
   this.statusCode = ec.decodeStatusCode(inp);
-  this.targets = ec.decodeArray(inp, decodeBrowsePathTarget);
+  this.targets = ec.decodeArray(inp, decodeBrowsePathTarget) ?? [];
 
  }
 

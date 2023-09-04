@@ -45,7 +45,7 @@ export class RegisterServer2Request {
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
   this.server.decode(inp);
-  this.discoveryConfiguration = ec.decodeArray(inp, decodeExtensionObject);
+  this.discoveryConfiguration = ec.decodeArray(inp, decodeExtensionObject) ?? [];
 
  }
 

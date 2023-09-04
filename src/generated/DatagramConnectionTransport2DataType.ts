@@ -53,7 +53,7 @@ export class DatagramConnectionTransport2DataType extends DatagramConnectionTran
   this.discoveryAnnounceRate = ec.decodeUInt32(inp);
   this.discoveryMaxMessageSize = ec.decodeUInt32(inp);
   this.qosCategory = ec.decodeString(inp);
-  this.datagramQos = ec.decodeArray(inp, decodeExtensionObject);
+  this.datagramQos = ec.decodeArray(inp, decodeExtensionObject) ?? [];
 
  }
 

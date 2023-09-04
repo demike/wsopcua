@@ -48,7 +48,7 @@ export class FindServersOnNetworkRequest {
   this.requestHeader.decode(inp);
   this.startingRecordId = ec.decodeUInt32(inp);
   this.maxRecordsToReturn = ec.decodeUInt32(inp);
-  this.serverCapabilityFilter = ec.decodeArray(inp, ec.decodeString);
+  this.serverCapabilityFilter = ec.decodeArray(inp, ec.decodeString) ?? [];
 
  }
 

@@ -43,7 +43,7 @@ export class NotificationMessage {
  decode( inp: DataStream) {
   this.sequenceNumber = ec.decodeUInt32(inp);
   this.publishTime = ec.decodeDateTime(inp);
-  this.notificationData = ec.decodeArray(inp, decodeExtensionObject);
+  this.notificationData = ec.decodeArray(inp, decodeExtensionObject) ?? [];
 
  }
 

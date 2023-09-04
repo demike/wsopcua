@@ -34,7 +34,7 @@ export class HistoryData {
 
 
  decode( inp: DataStream) {
-  this.dataValues = ec.decodeArray(inp, decodeDataValue);
+  this.dataValues = ec.decodeArray(inp, decodeDataValue) ?? [];
 
  }
 

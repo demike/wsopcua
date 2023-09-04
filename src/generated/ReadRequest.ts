@@ -51,7 +51,7 @@ export class ReadRequest {
   this.requestHeader.decode(inp);
   this.maxAge = ec.decodeDouble(inp);
   this.timestampsToReturn = decodeTimestampsToReturn(inp);
-  this.nodesToRead = ec.decodeArray(inp, decodeReadValueId);
+  this.nodesToRead = ec.decodeArray(inp, decodeReadValueId) ?? [];
 
  }
 

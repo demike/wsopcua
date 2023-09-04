@@ -36,7 +36,7 @@ export class PublishedDataItemsDataType extends PublishedDataSetSourceDataType {
 
 
  decode( inp: DataStream) {
-  this.publishedData = ec.decodeArray(inp, decodePublishedVariableDataType);
+  this.publishedData = ec.decodeArray(inp, decodePublishedVariableDataType) ?? [];
 
  }
 

@@ -57,7 +57,7 @@ export class VariableTypeAttributes extends NodeAttributes {
   this.value.decode(inp);
   this.dataType = ec.decodeNodeId(inp);
   this.valueRank = ec.decodeInt32(inp);
-  this.arrayDimensions = ec.decodeArray(inp, ec.decodeUInt32);
+  this.arrayDimensions = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
   this.isAbstract = ec.decodeBoolean(inp);
 
  }

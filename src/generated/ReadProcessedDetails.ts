@@ -54,7 +54,7 @@ export class ReadProcessedDetails extends HistoryReadDetails {
   this.startTime = ec.decodeDateTime(inp);
   this.endTime = ec.decodeDateTime(inp);
   this.processingInterval = ec.decodeDouble(inp);
-  this.aggregateType = ec.decodeArray(inp, ec.decodeNodeId);
+  this.aggregateType = ec.decodeArray(inp, ec.decodeNodeId) ?? [];
   this.aggregateConfiguration.decode(inp);
 
  }

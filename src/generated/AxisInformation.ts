@@ -56,7 +56,7 @@ export class AxisInformation {
   this.eURange.decode(inp);
   this.title.decode(inp);
   this.axisScaleType = decodeAxisScaleEnumeration(inp);
-  this.axisSteps = ec.decodeArray(inp, ec.decodeDouble);
+  this.axisSteps = ec.decodeArray(inp, ec.decodeDouble) ?? [];
 
  }
 

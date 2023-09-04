@@ -41,7 +41,7 @@ export class SubscribedDataSetMirrorDataType extends SubscribedDataSetDataType {
 
  decode( inp: DataStream) {
   this.parentNodeName = ec.decodeString(inp);
-  this.rolePermissions = ec.decodeArray(inp, decodeRolePermissionType);
+  this.rolePermissions = ec.decodeArray(inp, decodeRolePermissionType) ?? [];
 
  }
 

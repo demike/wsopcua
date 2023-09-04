@@ -51,7 +51,7 @@ export class ModifyMonitoredItemsRequest {
   this.requestHeader.decode(inp);
   this.subscriptionId = ec.decodeUInt32(inp);
   this.timestampsToReturn = decodeTimestampsToReturn(inp);
-  this.itemsToModify = ec.decodeArray(inp, decodeMonitoredItemModifyRequest);
+  this.itemsToModify = ec.decodeArray(inp, decodeMonitoredItemModifyRequest) ?? [];
 
  }
 

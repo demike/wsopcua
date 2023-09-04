@@ -73,13 +73,13 @@ export class PubSubConfiguration2DataType extends PubSubConfigurationDataType {
 
  decode( inp: DataStream) {
   super.decode(inp);
-  this.subscribedDataSets = ec.decodeArray(inp, decodeStandaloneSubscribedDataSetDataType);
-  this.dataSetClasses = ec.decodeArray(inp, decodeDataSetMetaDataType);
-  this.defaultSecurityKeyServices = ec.decodeArray(inp, decodeEndpointDescription);
-  this.securityGroups = ec.decodeArray(inp, decodeSecurityGroupDataType);
-  this.pubSubKeyPushTargets = ec.decodeArray(inp, decodePubSubKeyPushTargetDataType);
+  this.subscribedDataSets = ec.decodeArray(inp, decodeStandaloneSubscribedDataSetDataType) ?? [];
+  this.dataSetClasses = ec.decodeArray(inp, decodeDataSetMetaDataType) ?? [];
+  this.defaultSecurityKeyServices = ec.decodeArray(inp, decodeEndpointDescription) ?? [];
+  this.securityGroups = ec.decodeArray(inp, decodeSecurityGroupDataType) ?? [];
+  this.pubSubKeyPushTargets = ec.decodeArray(inp, decodePubSubKeyPushTargetDataType) ?? [];
   this.configurationVersion = ec.decodeUInt32(inp);
-  this.configurationProperties = ec.decodeArray(inp, decodeKeyValuePair);
+  this.configurationProperties = ec.decodeArray(inp, decodeKeyValuePair) ?? [];
 
  }
 

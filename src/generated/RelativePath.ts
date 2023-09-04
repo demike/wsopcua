@@ -34,7 +34,7 @@ export class RelativePath {
 
 
  decode( inp: DataStream) {
-  this.elements = ec.decodeArray(inp, decodeRelativePathElement);
+  this.elements = ec.decodeArray(inp, decodeRelativePathElement) ?? [];
 
  }
 

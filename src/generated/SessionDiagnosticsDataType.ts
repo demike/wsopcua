@@ -207,7 +207,7 @@ export class SessionDiagnosticsDataType {
   this.clientDescription.decode(inp);
   this.serverUri = ec.decodeString(inp);
   this.endpointUrl = ec.decodeString(inp);
-  this.localeIds = ec.decodeArray(inp, ec.decodeString);
+  this.localeIds = ec.decodeArray(inp, ec.decodeString) ?? [];
   this.actualSessionTimeout = ec.decodeDouble(inp);
   this.maxResponseMessageSize = ec.decodeUInt32(inp);
   this.clientConnectionTime = ec.decodeDateTime(inp);

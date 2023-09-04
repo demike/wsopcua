@@ -76,11 +76,11 @@ export class WriterGroupDataType extends PubSubGroupDataType {
   this.publishingInterval = ec.decodeDouble(inp);
   this.keepAliveTime = ec.decodeDouble(inp);
   this.priority = ec.decodeByte(inp);
-  this.localeIds = ec.decodeArray(inp, ec.decodeString);
+  this.localeIds = ec.decodeArray(inp, ec.decodeString) ?? [];
   this.headerLayoutUri = ec.decodeString(inp);
   this.transportSettings = decodeExtensionObject(inp);
   this.messageSettings = decodeExtensionObject(inp);
-  this.dataSetWriters = ec.decodeArray(inp, decodeDataSetWriterDataType);
+  this.dataSetWriters = ec.decodeArray(inp, decodeDataSetWriterDataType) ?? [];
 
  }
 

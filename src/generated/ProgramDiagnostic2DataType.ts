@@ -86,10 +86,10 @@ export class ProgramDiagnostic2DataType {
   this.lastTransitionTime = ec.decodeDateTime(inp);
   this.lastMethodCall = ec.decodeString(inp);
   this.lastMethodSessionId = ec.decodeNodeId(inp);
-  this.lastMethodInputArguments = ec.decodeArray(inp, decodeArgument);
-  this.lastMethodOutputArguments = ec.decodeArray(inp, decodeArgument);
-  this.lastMethodInputValues = ec.decodeArray(inp, decodeVariant);
-  this.lastMethodOutputValues = ec.decodeArray(inp, decodeVariant);
+  this.lastMethodInputArguments = ec.decodeArray(inp, decodeArgument) ?? [];
+  this.lastMethodOutputArguments = ec.decodeArray(inp, decodeArgument) ?? [];
+  this.lastMethodInputValues = ec.decodeArray(inp, decodeVariant) ?? [];
+  this.lastMethodOutputValues = ec.decodeArray(inp, decodeVariant) ?? [];
   this.lastMethodCallTime = ec.decodeDateTime(inp);
   this.lastMethodReturnStatus = ec.decodeStatusCode(inp);
 

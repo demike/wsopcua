@@ -40,7 +40,7 @@ export class TranslateBrowsePathsToNodeIdsRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.browsePaths = ec.decodeArray(inp, decodeBrowsePath);
+  this.browsePaths = ec.decodeArray(inp, decodeBrowsePath) ?? [];
 
  }
 

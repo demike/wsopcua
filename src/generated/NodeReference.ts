@@ -47,7 +47,7 @@ export class NodeReference {
   this.nodeId = ec.decodeNodeId(inp);
   this.referenceTypeId = ec.decodeNodeId(inp);
   this.isForward = ec.decodeBoolean(inp);
-  this.referencedNodeIds = ec.decodeArray(inp, ec.decodeNodeId);
+  this.referencedNodeIds = ec.decodeArray(inp, ec.decodeNodeId) ?? [];
 
  }
 

@@ -36,7 +36,7 @@ export class EventNotificationList extends NotificationData {
 
 
  decode( inp: DataStream) {
-  this.events = ec.decodeArray(inp, decodeEventFieldList);
+  this.events = ec.decodeArray(inp, decodeEventFieldList) ?? [];
 
  }
 

@@ -39,7 +39,7 @@ export class GenericAttributes extends NodeAttributes {
 
  decode( inp: DataStream) {
   super.decode(inp);
-  this.attributeValues = ec.decodeArray(inp, decodeGenericAttributeValue);
+  this.attributeValues = ec.decodeArray(inp, decodeGenericAttributeValue) ?? [];
 
  }
 

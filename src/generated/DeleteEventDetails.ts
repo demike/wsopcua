@@ -37,7 +37,7 @@ export class DeleteEventDetails extends HistoryUpdateDetails {
 
  decode( inp: DataStream) {
   super.decode(inp);
-  this.eventIds = ec.decodeArray(inp, ec.decodeByteString);
+  this.eventIds = ec.decodeArray(inp, ec.decodeByteString) ?? [];
 
  }
 

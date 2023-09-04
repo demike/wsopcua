@@ -70,7 +70,7 @@ export class PublishedVariableDataType {
   this.deadbandValue = ec.decodeDouble(inp);
   this.indexRange = ec.decodeString(inp);
   this.substituteValue.decode(inp);
-  this.metaDataProperties = ec.decodeArray(inp, decodeQualifiedName);
+  this.metaDataProperties = ec.decodeArray(inp, decodeQualifiedName) ?? [];
 
  }
 

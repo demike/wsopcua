@@ -38,7 +38,7 @@ export class UnregisterNodesRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.nodesToUnregister = ec.decodeArray(inp, ec.decodeNodeId);
+  this.nodesToUnregister = ec.decodeArray(inp, ec.decodeNodeId) ?? [];
 
  }
 

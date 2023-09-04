@@ -47,8 +47,8 @@ export class GetEndpointsRequest {
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
   this.endpointUrl = ec.decodeString(inp);
-  this.localeIds = ec.decodeArray(inp, ec.decodeString);
-  this.profileUris = ec.decodeArray(inp, ec.decodeString);
+  this.localeIds = ec.decodeArray(inp, ec.decodeString) ?? [];
+  this.profileUris = ec.decodeArray(inp, ec.decodeString) ?? [];
 
  }
 

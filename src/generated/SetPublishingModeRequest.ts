@@ -43,7 +43,7 @@ export class SetPublishingModeRequest {
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
   this.publishingEnabled = ec.decodeBoolean(inp);
-  this.subscriptionIds = ec.decodeArray(inp, ec.decodeUInt32);
+  this.subscriptionIds = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
 
  }
 

@@ -34,7 +34,7 @@ export class AdditionalParametersType {
 
 
  decode( inp: DataStream) {
-  this.parameters = ec.decodeArray(inp, decodeKeyValuePair);
+  this.parameters = ec.decodeArray(inp, decodeKeyValuePair) ?? [];
 
  }
 

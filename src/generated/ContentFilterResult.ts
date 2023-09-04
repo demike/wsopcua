@@ -40,8 +40,8 @@ export class ContentFilterResult {
 
 
  decode( inp: DataStream) {
-  this.elementResults = ec.decodeArray(inp, decodeContentFilterElementResult);
-  this.elementDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.elementResults = ec.decodeArray(inp, decodeContentFilterElementResult) ?? [];
+  this.elementDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

@@ -67,7 +67,7 @@ export class SessionSecurityDiagnosticsDataType {
  decode( inp: DataStream) {
   this.sessionId = ec.decodeNodeId(inp);
   this.clientUserIdOfSession = ec.decodeString(inp);
-  this.clientUserIdHistory = ec.decodeArray(inp, ec.decodeString);
+  this.clientUserIdHistory = ec.decodeArray(inp, ec.decodeString) ?? [];
   this.authenticationMechanism = ec.decodeString(inp);
   this.encoding = ec.decodeString(inp);
   this.transportProtocol = ec.decodeString(inp);

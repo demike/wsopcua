@@ -49,9 +49,9 @@ export class SessionlessInvokeRequestType {
 
  decode( inp: DataStream) {
   this.urisVersion = ec.decodeUInt32(inp);
-  this.namespaceUris = ec.decodeArray(inp, ec.decodeString);
-  this.serverUris = ec.decodeArray(inp, ec.decodeString);
-  this.localeIds = ec.decodeArray(inp, ec.decodeString);
+  this.namespaceUris = ec.decodeArray(inp, ec.decodeString) ?? [];
+  this.serverUris = ec.decodeArray(inp, ec.decodeString) ?? [];
+  this.localeIds = ec.decodeArray(inp, ec.decodeString) ?? [];
   this.serviceId = ec.decodeUInt32(inp);
 
  }

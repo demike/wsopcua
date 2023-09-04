@@ -45,7 +45,7 @@ export class UpdateStructureDataDetails extends HistoryUpdateDetails {
  decode( inp: DataStream) {
   super.decode(inp);
   this.performInsertReplace = decodePerformUpdateType(inp);
-  this.updateValues = ec.decodeArray(inp, decodeDataValue);
+  this.updateValues = ec.decodeArray(inp, decodeDataValue) ?? [];
 
  }
 

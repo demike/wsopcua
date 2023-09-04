@@ -52,7 +52,7 @@ export class StructureDefinition extends DataTypeDefinition {
   this.defaultEncodingId = ec.decodeNodeId(inp);
   this.baseDataType = ec.decodeNodeId(inp);
   this.structureType = decodeStructureType(inp);
-  this.fields = ec.decodeArray(inp, decodeStructureField);
+  this.fields = ec.decodeArray(inp, decodeStructureField) ?? [];
 
  }
 

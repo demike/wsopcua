@@ -40,7 +40,7 @@ export class FindServersResponse {
 
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
-  this.servers = ec.decodeArray(inp, decodeApplicationDescription);
+  this.servers = ec.decodeArray(inp, decodeApplicationDescription) ?? [];
 
  }
 

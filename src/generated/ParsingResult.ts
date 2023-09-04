@@ -43,8 +43,8 @@ export class ParsingResult {
 
  decode( inp: DataStream) {
   this.statusCode = ec.decodeStatusCode(inp);
-  this.dataStatusCodes = ec.decodeArray(inp, ec.decodeStatusCode);
-  this.dataDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.dataStatusCodes = ec.decodeArray(inp, ec.decodeStatusCode) ?? [];
+  this.dataDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

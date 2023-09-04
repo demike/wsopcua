@@ -69,7 +69,7 @@ export class EndpointDescription {
   this.serverCertificate = ec.decodeByteString(inp);
   this.securityMode = decodeMessageSecurityMode(inp);
   this.securityPolicyUri = ec.decodeString(inp);
-  this.userIdentityTokens = ec.decodeArray(inp, decodeUserTokenPolicy);
+  this.userIdentityTokens = ec.decodeArray(inp, decodeUserTokenPolicy) ?? [];
   this.transportProfileUri = ec.decodeString(inp);
   this.securityLevel = ec.decodeByte(inp);
 

@@ -39,7 +39,7 @@ export class EventFieldList {
 
  decode( inp: DataStream) {
   this.clientHandle = ec.decodeUInt32(inp);
-  this.eventFields = ec.decodeArray(inp, decodeVariant);
+  this.eventFields = ec.decodeArray(inp, decodeVariant) ?? [];
 
  }
 

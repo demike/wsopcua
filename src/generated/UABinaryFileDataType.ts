@@ -49,7 +49,7 @@ export class UABinaryFileDataType extends DataTypeSchemaHeader {
  decode( inp: DataStream) {
   super.decode(inp);
   this.schemaLocation = ec.decodeString(inp);
-  this.fileHeader = ec.decodeArray(inp, decodeKeyValuePair);
+  this.fileHeader = ec.decodeArray(inp, decodeKeyValuePair) ?? [];
   this.body.decode(inp);
 
  }

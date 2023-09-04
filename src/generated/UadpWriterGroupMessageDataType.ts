@@ -56,7 +56,7 @@ export class UadpWriterGroupMessageDataType extends WriterGroupMessageDataType {
   this.dataSetOrdering = decodeDataSetOrderingType(inp);
   this.networkMessageContentMask = decodeUadpNetworkMessageContentMask(inp);
   this.samplingOffset = ec.decodeDouble(inp);
-  this.publishingOffset = ec.decodeArray(inp, ec.decodeDouble);
+  this.publishingOffset = ec.decodeArray(inp, ec.decodeDouble) ?? [];
 
  }
 

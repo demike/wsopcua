@@ -46,7 +46,7 @@ export class TransferResultDataDataType extends FetchResultDataType {
  decode( inp: DataStream) {
   this.sequenceNumber = ec.decodeInt32(inp);
   this.endOfResults = ec.decodeBoolean(inp);
-  this.parameterDefs = ec.decodeArray(inp, decodeParameterResultDataType);
+  this.parameterDefs = ec.decodeArray(inp, decodeParameterResultDataType) ?? [];
 
  }
 

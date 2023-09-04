@@ -46,7 +46,7 @@ export class PublishedEventsDataType extends PublishedDataSetSourceDataType {
 
  decode( inp: DataStream) {
   this.eventNotifier = ec.decodeNodeId(inp);
-  this.selectedFields = ec.decodeArray(inp, decodeSimpleAttributeOperand);
+  this.selectedFields = ec.decodeArray(inp, decodeSimpleAttributeOperand) ?? [];
   this.filter.decode(inp);
 
  }

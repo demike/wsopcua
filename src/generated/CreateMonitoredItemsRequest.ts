@@ -51,7 +51,7 @@ export class CreateMonitoredItemsRequest {
   this.requestHeader.decode(inp);
   this.subscriptionId = ec.decodeUInt32(inp);
   this.timestampsToReturn = decodeTimestampsToReturn(inp);
-  this.itemsToCreate = ec.decodeArray(inp, decodeMonitoredItemCreateRequest);
+  this.itemsToCreate = ec.decodeArray(inp, decodeMonitoredItemCreateRequest) ?? [];
 
  }
 

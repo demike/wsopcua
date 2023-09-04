@@ -59,8 +59,8 @@ export class ActivateSessionRequest {
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
   this.clientSignature.decode(inp);
-  this.clientSoftwareCertificates = ec.decodeArray(inp, decodeSignedSoftwareCertificate);
-  this.localeIds = ec.decodeArray(inp, ec.decodeString);
+  this.clientSoftwareCertificates = ec.decodeArray(inp, decodeSignedSoftwareCertificate) ?? [];
+  this.localeIds = ec.decodeArray(inp, ec.decodeString) ?? [];
   this.userIdentityToken = decodeExtensionObject(inp);
   this.userTokenSignature.decode(inp);
 

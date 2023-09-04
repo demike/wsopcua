@@ -59,7 +59,7 @@ export class QueryFirstRequest {
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
   this.view.decode(inp);
-  this.nodeTypes = ec.decodeArray(inp, decodeNodeTypeDescription);
+  this.nodeTypes = ec.decodeArray(inp, decodeNodeTypeDescription) ?? [];
   this.filter.decode(inp);
   this.maxDataSetsToReturn = ec.decodeUInt32(inp);
   this.maxReferencesToReturn = ec.decodeUInt32(inp);

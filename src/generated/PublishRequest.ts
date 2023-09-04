@@ -40,7 +40,7 @@ export class PublishRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.subscriptionAcknowledgements = ec.decodeArray(inp, decodeSubscriptionAcknowledgement);
+  this.subscriptionAcknowledgements = ec.decodeArray(inp, decodeSubscriptionAcknowledgement) ?? [];
 
  }
 

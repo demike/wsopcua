@@ -40,7 +40,7 @@ export class DeleteReferencesRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.referencesToDelete = ec.decodeArray(inp, decodeDeleteReferencesItem);
+  this.referencesToDelete = ec.decodeArray(inp, decodeDeleteReferencesItem) ?? [];
 
  }
 

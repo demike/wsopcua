@@ -46,8 +46,8 @@ export class CallResponse {
 
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
-  this.results = ec.decodeArray(inp, decodeCallMethodResult);
-  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.results = ec.decodeArray(inp, decodeCallMethodResult) ?? [];
+  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

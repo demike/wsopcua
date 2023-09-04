@@ -52,8 +52,8 @@ export class SetTriggeringRequest {
   this.requestHeader.decode(inp);
   this.subscriptionId = ec.decodeUInt32(inp);
   this.triggeringItemId = ec.decodeUInt32(inp);
-  this.linksToAdd = ec.decodeArray(inp, ec.decodeUInt32);
-  this.linksToRemove = ec.decodeArray(inp, ec.decodeUInt32);
+  this.linksToAdd = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
+  this.linksToRemove = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
 
  }
 

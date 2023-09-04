@@ -46,8 +46,8 @@ export class BrowseNextResponse {
 
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
-  this.results = ec.decodeArray(inp, decodeBrowseResult);
-  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.results = ec.decodeArray(inp, decodeBrowseResult) ?? [];
+  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

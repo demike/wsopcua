@@ -69,7 +69,7 @@ export class VariableAttributes extends NodeAttributes {
   this.value.decode(inp);
   this.dataType = ec.decodeNodeId(inp);
   this.valueRank = ec.decodeInt32(inp);
-  this.arrayDimensions = ec.decodeArray(inp, ec.decodeUInt32);
+  this.arrayDimensions = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
   this.accessLevel = ec.decodeByte(inp);
   this.userAccessLevel = ec.decodeByte(inp);
   this.minimumSamplingInterval = ec.decodeDouble(inp);

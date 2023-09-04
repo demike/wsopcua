@@ -39,7 +39,7 @@ export class NetworkGroupDataType {
 
  decode( inp: DataStream) {
   this.serverUri = ec.decodeString(inp);
-  this.networkPaths = ec.decodeArray(inp, decodeEndpointUrlListDataType);
+  this.networkPaths = ec.decodeArray(inp, decodeEndpointUrlListDataType) ?? [];
 
  }
 

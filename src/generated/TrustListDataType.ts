@@ -49,10 +49,10 @@ export class TrustListDataType {
 
  decode( inp: DataStream) {
   this.specifiedLists = ec.decodeUInt32(inp);
-  this.trustedCertificates = ec.decodeArray(inp, ec.decodeByteString);
-  this.trustedCrls = ec.decodeArray(inp, ec.decodeByteString);
-  this.issuerCertificates = ec.decodeArray(inp, ec.decodeByteString);
-  this.issuerCrls = ec.decodeArray(inp, ec.decodeByteString);
+  this.trustedCertificates = ec.decodeArray(inp, ec.decodeByteString) ?? [];
+  this.trustedCrls = ec.decodeArray(inp, ec.decodeByteString) ?? [];
+  this.issuerCertificates = ec.decodeArray(inp, ec.decodeByteString) ?? [];
+  this.issuerCrls = ec.decodeArray(inp, ec.decodeByteString) ?? [];
 
  }
 

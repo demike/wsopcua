@@ -39,7 +39,7 @@ export class HistoryModifiedData extends HistoryData {
 
  decode( inp: DataStream) {
   super.decode(inp);
-  this.modificationInfos = ec.decodeArray(inp, decodeModificationInfo);
+  this.modificationInfos = ec.decodeArray(inp, decodeModificationInfo) ?? [];
 
  }
 

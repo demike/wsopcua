@@ -44,7 +44,7 @@ export class NodeTypeDescription {
  decode( inp: DataStream) {
   this.typeDefinitionNode = ec.decodeExpandedNodeId(inp);
   this.includeSubTypes = ec.decodeBoolean(inp);
-  this.dataToReturn = ec.decodeArray(inp, decodeQueryDataDescription);
+  this.dataToReturn = ec.decodeArray(inp, decodeQueryDataDescription) ?? [];
 
  }
 

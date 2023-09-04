@@ -40,7 +40,7 @@ export class GetEndpointsResponse {
 
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
-  this.endpoints = ec.decodeArray(inp, decodeEndpointDescription);
+  this.endpoints = ec.decodeArray(inp, decodeEndpointDescription) ?? [];
 
  }
 

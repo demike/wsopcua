@@ -42,7 +42,7 @@ export class TransferSubscriptionsRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.subscriptionIds = ec.decodeArray(inp, ec.decodeUInt32);
+  this.subscriptionIds = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
   this.sendInitialValues = ec.decodeBoolean(inp);
 
  }

@@ -80,8 +80,8 @@ export class CreateSessionResponse {
   this.revisedSessionTimeout = ec.decodeDouble(inp);
   this.serverNonce = ec.decodeByteString(inp);
   this.serverCertificate = ec.decodeByteString(inp);
-  this.serverEndpoints = ec.decodeArray(inp, decodeEndpointDescription);
-  this.serverSoftwareCertificates = ec.decodeArray(inp, decodeSignedSoftwareCertificate);
+  this.serverEndpoints = ec.decodeArray(inp, decodeEndpointDescription) ?? [];
+  this.serverSoftwareCertificates = ec.decodeArray(inp, decodeSignedSoftwareCertificate) ?? [];
   this.serverSignature.decode(inp);
   this.maxRequestMessageSize = ec.decodeUInt32(inp);
 

@@ -69,14 +69,14 @@ export class SecurityGroupDataType {
 
  decode( inp: DataStream) {
   this.name = ec.decodeString(inp);
-  this.securityGroupFolder = ec.decodeArray(inp, ec.decodeString);
+  this.securityGroupFolder = ec.decodeArray(inp, ec.decodeString) ?? [];
   this.keyLifetime = ec.decodeDouble(inp);
   this.securityPolicyUri = ec.decodeString(inp);
   this.maxFutureKeyCount = ec.decodeUInt32(inp);
   this.maxPastKeyCount = ec.decodeUInt32(inp);
   this.securityGroupId = ec.decodeString(inp);
-  this.rolePermissions = ec.decodeArray(inp, decodeRolePermissionType);
-  this.groupProperties = ec.decodeArray(inp, decodeKeyValuePair);
+  this.rolePermissions = ec.decodeArray(inp, decodeRolePermissionType) ?? [];
+  this.groupProperties = ec.decodeArray(inp, decodeKeyValuePair) ?? [];
 
  }
 

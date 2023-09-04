@@ -44,7 +44,7 @@ export class CallMethodRequest {
  decode( inp: DataStream) {
   this.objectId = ec.decodeNodeId(inp);
   this.methodId = ec.decodeNodeId(inp);
-  this.inputArguments = ec.decodeArray(inp, decodeVariant);
+  this.inputArguments = ec.decodeArray(inp, decodeVariant) ?? [];
 
  }
 

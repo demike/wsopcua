@@ -45,8 +45,8 @@ export class EventFilterResult extends MonitoringFilterResult {
 
 
  decode( inp: DataStream) {
-  this.selectClauseResults = ec.decodeArray(inp, ec.decodeStatusCode);
-  this.selectClauseDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.selectClauseResults = ec.decodeArray(inp, ec.decodeStatusCode) ?? [];
+  this.selectClauseDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
   this.whereClauseResult.decode(inp);
 
  }

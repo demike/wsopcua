@@ -49,7 +49,7 @@ export class StandaloneSubscribedDataSetDataType extends SubscribedDataSetDataTy
 
  decode( inp: DataStream) {
   this.name = ec.decodeString(inp);
-  this.dataSetFolder = ec.decodeArray(inp, ec.decodeString);
+  this.dataSetFolder = ec.decodeArray(inp, ec.decodeString) ?? [];
   this.dataSetMetaData.decode(inp);
   this.subscribedDataSet = decodeExtensionObject(inp);
 

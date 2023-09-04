@@ -32,7 +32,7 @@ export class EndpointUrlListDataType {
 
 
  decode( inp: DataStream) {
-  this.endpointUrlList = ec.decodeArray(inp, ec.decodeString);
+  this.endpointUrlList = ec.decodeArray(inp, ec.decodeString) ?? [];
 
  }
 

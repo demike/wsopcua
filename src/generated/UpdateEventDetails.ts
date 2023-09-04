@@ -51,7 +51,7 @@ export class UpdateEventDetails extends HistoryUpdateDetails {
   super.decode(inp);
   this.performInsertReplace = decodePerformUpdateType(inp);
   this.filter.decode(inp);
-  this.eventData = ec.decodeArray(inp, decodeHistoryEventFieldList);
+  this.eventData = ec.decodeArray(inp, decodeHistoryEventFieldList) ?? [];
 
  }
 

@@ -34,7 +34,7 @@ export class ContentFilter {
 
 
  decode( inp: DataStream) {
-  this.elements = ec.decodeArray(inp, decodeContentFilterElement);
+  this.elements = ec.decodeArray(inp, decodeContentFilterElement) ?? [];
 
  }
 

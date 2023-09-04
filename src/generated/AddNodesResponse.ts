@@ -46,8 +46,8 @@ export class AddNodesResponse {
 
  decode( inp: DataStream) {
   this.responseHeader.decode(inp);
-  this.results = ec.decodeArray(inp, decodeAddNodesResult);
-  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.results = ec.decodeArray(inp, decodeAddNodesResult) ?? [];
+  this.diagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

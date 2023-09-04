@@ -38,7 +38,7 @@ export class DeleteSubscriptionsRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.subscriptionIds = ec.decodeArray(inp, ec.decodeUInt32);
+  this.subscriptionIds = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
 
  }
 

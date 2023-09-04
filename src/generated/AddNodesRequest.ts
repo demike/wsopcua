@@ -40,7 +40,7 @@ export class AddNodesRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.nodesToAdd = ec.decodeArray(inp, decodeAddNodesItem);
+  this.nodesToAdd = ec.decodeArray(inp, decodeAddNodesItem) ?? [];
 
  }
 

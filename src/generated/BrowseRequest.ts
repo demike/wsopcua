@@ -51,7 +51,7 @@ export class BrowseRequest {
   this.requestHeader.decode(inp);
   this.view.decode(inp);
   this.requestedMaxReferencesPerNode = ec.decodeUInt32(inp);
-  this.nodesToBrowse = ec.decodeArray(inp, decodeBrowseDescription);
+  this.nodesToBrowse = ec.decodeArray(inp, decodeBrowseDescription) ?? [];
 
  }
 

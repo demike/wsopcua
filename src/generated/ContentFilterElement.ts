@@ -39,7 +39,7 @@ export class ContentFilterElement {
 
  decode( inp: DataStream) {
   this.filterOperator = decodeFilterOperator(inp);
-  this.filterOperands = ec.decodeArray(inp, decodeExtensionObject);
+  this.filterOperands = ec.decodeArray(inp, decodeExtensionObject) ?? [];
 
  }
 

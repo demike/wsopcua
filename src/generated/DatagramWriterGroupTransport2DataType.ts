@@ -56,7 +56,7 @@ export class DatagramWriterGroupTransport2DataType extends DatagramWriterGroupTr
   super.decode(inp);
   this.address = decodeExtensionObject(inp);
   this.qosCategory = ec.decodeString(inp);
-  this.datagramQos = ec.decodeArray(inp, decodeExtensionObject);
+  this.datagramQos = ec.decodeArray(inp, decodeExtensionObject) ?? [];
   this.discoveryAnnounceRate = ec.decodeUInt32(inp);
   this.topic = ec.decodeString(inp);
 

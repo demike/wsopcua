@@ -47,7 +47,7 @@ export class ServerOnNetwork {
   this.recordId = ec.decodeUInt32(inp);
   this.serverName = ec.decodeString(inp);
   this.discoveryUrl = ec.decodeString(inp);
-  this.serverCapabilities = ec.decodeArray(inp, ec.decodeString);
+  this.serverCapabilities = ec.decodeArray(inp, ec.decodeString) ?? [];
 
  }
 

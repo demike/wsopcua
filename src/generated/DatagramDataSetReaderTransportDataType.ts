@@ -49,7 +49,7 @@ export class DatagramDataSetReaderTransportDataType extends DataSetReaderTranspo
  decode( inp: DataStream) {
   this.address = decodeExtensionObject(inp);
   this.qosCategory = ec.decodeString(inp);
-  this.datagramQos = ec.decodeArray(inp, decodeExtensionObject);
+  this.datagramQos = ec.decodeArray(inp, decodeExtensionObject) ?? [];
   this.topic = ec.decodeString(inp);
 
  }

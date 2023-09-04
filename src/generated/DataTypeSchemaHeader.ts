@@ -50,10 +50,10 @@ export class DataTypeSchemaHeader {
 
 
  decode( inp: DataStream) {
-  this.namespaces = ec.decodeArray(inp, ec.decodeString);
-  this.structureDataTypes = ec.decodeArray(inp, decodeStructureDescription);
-  this.enumDataTypes = ec.decodeArray(inp, decodeEnumDescription);
-  this.simpleDataTypes = ec.decodeArray(inp, decodeSimpleTypeDescription);
+  this.namespaces = ec.decodeArray(inp, ec.decodeString) ?? [];
+  this.structureDataTypes = ec.decodeArray(inp, decodeStructureDescription) ?? [];
+  this.enumDataTypes = ec.decodeArray(inp, decodeEnumDescription) ?? [];
+  this.simpleDataTypes = ec.decodeArray(inp, decodeSimpleTypeDescription) ?? [];
 
  }
 

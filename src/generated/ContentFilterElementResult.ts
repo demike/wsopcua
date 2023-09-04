@@ -43,8 +43,8 @@ export class ContentFilterElementResult {
 
  decode( inp: DataStream) {
   this.statusCode = ec.decodeStatusCode(inp);
-  this.operandStatusCodes = ec.decodeArray(inp, ec.decodeStatusCode);
-  this.operandDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
+  this.operandStatusCodes = ec.decodeArray(inp, ec.decodeStatusCode) ?? [];
+  this.operandDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
 
  }
 

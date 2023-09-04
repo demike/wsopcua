@@ -222,7 +222,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
             (mem.Type.ImportAs ? mem.Type.ImportAs + '.' : '') +
             'decode' +
             mem.Type.Name +
-            ');\n';
+            ') ?? [];\n';
         } else {
           body +=
             (mem.Type.ImportAs ? mem.Type.ImportAs + '.' : '') +

@@ -43,7 +43,7 @@ export class BrowseNextRequest {
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
   this.releaseContinuationPoints = ec.decodeBoolean(inp);
-  this.continuationPoints = ec.decodeArray(inp, ec.decodeByteString);
+  this.continuationPoints = ec.decodeArray(inp, ec.decodeByteString) ?? [];
 
  }
 

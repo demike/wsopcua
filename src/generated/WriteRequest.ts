@@ -40,7 +40,7 @@ export class WriteRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.nodesToWrite = ec.decodeArray(inp, decodeWriteValue);
+  this.nodesToWrite = ec.decodeArray(inp, decodeWriteValue) ?? [];
 
  }
 

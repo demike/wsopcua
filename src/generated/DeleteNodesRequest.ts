@@ -40,7 +40,7 @@ export class DeleteNodesRequest {
 
  decode( inp: DataStream) {
   this.requestHeader.decode(inp);
-  this.nodesToDelete = ec.decodeArray(inp, decodeDeleteNodesItem);
+  this.nodesToDelete = ec.decodeArray(inp, decodeDeleteNodesItem) ?? [];
 
  }
 

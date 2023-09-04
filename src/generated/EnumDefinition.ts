@@ -36,7 +36,7 @@ export class EnumDefinition extends DataTypeDefinition {
 
 
  decode( inp: DataStream) {
-  this.fields = ec.decodeArray(inp, decodeEnumField);
+  this.fields = ec.decodeArray(inp, decodeEnumField) ?? [];
 
  }
 

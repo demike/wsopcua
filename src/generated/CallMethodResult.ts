@@ -49,9 +49,9 @@ export class CallMethodResult {
 
  decode( inp: DataStream) {
   this.statusCode = ec.decodeStatusCode(inp);
-  this.inputArgumentResults = ec.decodeArray(inp, ec.decodeStatusCode);
-  this.inputArgumentDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo);
-  this.outputArguments = ec.decodeArray(inp, decodeVariant);
+  this.inputArgumentResults = ec.decodeArray(inp, ec.decodeStatusCode) ?? [];
+  this.inputArgumentDiagnosticInfos = ec.decodeArray(inp, decodeDiagnosticInfo) ?? [];
+  this.outputArguments = ec.decodeArray(inp, decodeVariant) ?? [];
 
  }
 

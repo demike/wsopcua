@@ -37,7 +37,7 @@ export class TransferResult {
 
  decode( inp: DataStream) {
   this.statusCode = ec.decodeStatusCode(inp);
-  this.availableSequenceNumbers = ec.decodeArray(inp, ec.decodeUInt32);
+  this.availableSequenceNumbers = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
 
  }
 

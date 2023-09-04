@@ -44,7 +44,7 @@ export class QueryDataSet {
  decode( inp: DataStream) {
   this.nodeId = ec.decodeExpandedNodeId(inp);
   this.typeDefinitionNode = ec.decodeExpandedNodeId(inp);
-  this.values = ec.decodeArray(inp, decodeVariant);
+  this.values = ec.decodeArray(inp, decodeVariant) ?? [];
 
  }
 
