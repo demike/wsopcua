@@ -11,7 +11,7 @@ export { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
  * @type {Boolean} - True if the security token has expired.
  */
 export function isExpired(token: ChannelSecurityToken): boolean {
-  return this.createdAt.getTime() + this.revisedLifetime < Date.now();
+  return token.createdAt.getTime() + token.revisedLifetime < Date.now();
 }
 
 export { OpenSecureChannelRequest } from '../generated/OpenSecureChannelRequest';

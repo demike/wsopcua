@@ -423,7 +423,7 @@ export class NumericRange {
       ? insertInPlaceArrayBuffer
       : insertInPlaceTypedArray;
     return {
-      array: insertInPlace(arrayToAlter, low_index, high_index, newValues),
+      array: insertInPlace(arrayToAlter as any[], low_index, high_index, newValues as any[]),
       statusCode: StatusCodes.Good,
     };
   }
@@ -606,7 +606,11 @@ function insertInPlaceStandardArray(
   high: number,
   newValues: any[]
 ) {
-  const args = [low, high - low + 1].concat(newValues);
+  const args = [low, high - low + 1].concat(newValues) as [
+    start: number,
+    end: number,
+    ...rest: any[]
+  ];
   arrayToAlter.splice.apply(arrayToAlter, args);
   return arrayToAlter;
 }
@@ -620,7 +624,12 @@ function insertInPlaceTypedArray(arrayToAlter: any, low: number, high: number, n
   return arrayToAlter;
 }
 
-function insertInPlaceArrayBuffer(arrayToAlter: any, low: number, high: number, newValues: any) {
+function insertInPlaceArrayBuffer(
+  arrayToAlter: Iterable<number>,
+  low: number,
+  high: number,
+  newValues: Iterable<number>
+) {
   return insertInPlaceTypedArray(new Uint8Array(arrayToAlter), low, high, new Uint8Array(newValues))
     .buffer;
 }

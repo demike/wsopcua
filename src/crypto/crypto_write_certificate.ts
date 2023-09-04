@@ -16,7 +16,6 @@ import { DirectoryName, SignatureValue, TagType } from './asn1';
 import { oid_reverse_map } from './oid_reverse_map';
 import { hex2buf } from './crypto_utils';
 import { DER } from './common';
-import { write } from 'fs';
 
 /*
 Certificate:
@@ -473,11 +472,17 @@ async function writeAuthorityKeyIdentifier(writer: Asn1Writer, identifier: Autho
   writer.startSequence(); // tag 48
 
   if (identifier.keyIdentifier) {
-    writer.writeBuffer(bufferFromFormated2DigitHexWithColumString(identifier.keyIdentifier), 128);
+    writer.writeBuffer(
+      bufferFromFormated2DigitHexWithColumString(identifier.keyIdentifier),
+      128 as TagType
+    );
   }
 
   if (identifier.serial) {
-    writer.writeBuffer(bufferFromFormated2DigitHexWithColumString(identifier.serial), 130);
+    writer.writeBuffer(
+      bufferFromFormated2DigitHexWithColumString(identifier.serial),
+      130 as TagType
+    );
   }
 
   // TODO: implement authorityCertIssuer writing

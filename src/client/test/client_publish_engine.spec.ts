@@ -46,9 +46,9 @@ describe('Testing the client publish engine', function () {
   });
 
   it('a client should send a publish request to the server for every new subscription', function () {
-    const fakeSession = new ClientSession(null);
+    const fakeSession = new ClientSession(null as any);
     const publish_spy = spyOn<ClientSession>(fakeSession, 'publish');
-    let publish_args: IArguments;
+    let publish_args: IArguments = [] as any;
     publish_spy.and.callFake(function () {
       publish_args = arguments;
     });
@@ -75,7 +75,7 @@ describe('Testing the client publish engine', function () {
   });
 
   it('a client should keep sending a new publish request to the server after receiving a notification, when a subscription is active', function () {
-    const fakeSession = new ClientSession(null);
+    const fakeSession = new ClientSession(null as any);
     const publish_spy = spyOn<ClientSession>(fakeSession, 'publish');
     publish_spy.and.callFake(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
@@ -114,7 +114,7 @@ describe('Testing the client publish engine', function () {
   });
 
   it('a client should stop sending publish request to the server after receiving a notification, when there is no more registered subscription ', function () {
-    const fakeSession = new ClientSession(null);
+    const fakeSession = new ClientSession(null as any);
     const publish_spy = spyOn<ClientSession>(fakeSession, 'publish');
     publish_spy.and.callFake(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
@@ -191,7 +191,7 @@ describe('Testing the client publish engine', function () {
     responses.push(responses[1]);
 
     let count = 0;
-    const fakeSession = new ClientSession(null);
+    const fakeSession = new ClientSession(null as any);
     const publish_spy = spyOn<ClientSession>(fakeSession, 'publish');
     publish_spy.and.callFake(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
@@ -257,14 +257,14 @@ describe('Testing the client publish engine', function () {
         const callback = publishQueue.shift();
         const fakeResponse = new subscription_service.PublishResponse({ subscriptionId: 1 });
         // xx console.log(" Time ", Date.now());
-        callback(null, fakeResponse);
+        callback?.(null, fakeResponse);
       }, 1500);
     }
     function stop() {
       window.clearInterval(timerId);
     }
 
-    const fakeSession = new ClientSession(null);
+    const fakeSession = new ClientSession(null as any);
     const publish_spy = spyOn<ClientSession>(fakeSession, 'publish');
     publish_spy.and.callFake(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
@@ -321,7 +321,7 @@ describe('Testing the client publish engine', function () {
         const callback = publishQueue.shift();
         const fakeResponse = new subscription_service.PublishResponse({ subscriptionId: 1 });
         // xx console.log(" Time ", Date.now());
-        callback(null, fakeResponse);
+        callback?.(null, fakeResponse);
       }, 1500);
     }
 
@@ -329,7 +329,7 @@ describe('Testing the client publish engine', function () {
       window.clearInterval(timerId);
     }
 
-    const fakeSession = new ClientSession(null);
+    const fakeSession = new ClientSession(null as any);
     const publish_spy = spyOn<ClientSession>(fakeSession, 'publish');
     publish_spy.and.callFake(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {

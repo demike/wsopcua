@@ -122,7 +122,7 @@ export class SelfSignedCertificateStore implements CertificateStore {
   public readonly spkiModulusLength = 2048; // 4096;
   protected certificateChain: Uint8Array | null = null;
   protected certificate: Uint8Array | null = null;
-  protected privateKey: PrivateKey | null;
+  protected privateKey: PrivateKey | null = null;
   protected options: CertificateInternals;
 
   constructor(options?: {
@@ -137,7 +137,7 @@ export class SelfSignedCertificateStore implements CertificateStore {
   public getCertificateChain(): Uint8Array | null {
     return this.certificateChain;
   }
-  public getPrivateKey(): PrivateKey {
+  public getPrivateKey(): PrivateKey | null {
     return this.privateKey ?? null;
   }
 

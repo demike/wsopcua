@@ -158,7 +158,7 @@ export class ClientTCP_transport extends TCP_transport {
     try {
       this._socket = createClientSocket(endpointUrl);
     } catch (err) {
-      return callback(err);
+      return callback(err as Error);
     }
     this._socket.name = 'CLIENT';
     this._install_socket(this._socket);

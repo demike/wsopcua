@@ -231,7 +231,7 @@ function _internalAnalyzePacket(
     }
   } catch (err) {
     console.log(' Error in ', err);
-    console.log(' Error in ', err.stack);
+    console.log(' Error in ', (err as Error).stack);
     console.log(' objMessage ', objMessage);
   }
 }

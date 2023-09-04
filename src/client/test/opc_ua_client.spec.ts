@@ -1,7 +1,6 @@
 'use strict';
 import { isAnonymous, isIssued, isUserNamePassword, OPCUAClient } from '../opcua_client';
 import { ClientSecureChannelLayer } from '../../secure-channel/client_secure_channel_layer';
-import { timeout } from 'async';
 
 describe('OPCUA Client', function () {
   it('it should create a client', function () {
@@ -26,7 +25,7 @@ describe('OPCUA Client', function () {
       };
       window.clearInterval = (...args: any[]) => {
         clearIntervalCalls++;
-        return realClearInterval(...args);
+        return (<any>realClearInterval)(...args);
       };
     });
     afterEach(() => {

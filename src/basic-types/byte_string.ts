@@ -28,7 +28,7 @@ export function decodeByteString(stream: DataStream): Uint8Array {
 }
 
 export function coerceByteString(
-  value: number[] | string | Uint8Array | ArrayBuffer | ArrayBufferView
+  value: number[] | string | Uint8Array | ArrayBuffer | ArrayBufferView | null
 ): Uint8Array {
   if (value instanceof Uint8Array) {
     return value;

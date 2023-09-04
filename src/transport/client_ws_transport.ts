@@ -168,7 +168,7 @@ export class ClientWSTransport extends WSTransport {
     try {
       this._socket = createClientSocket(endpointUrl, this.encoding);
     } catch (err) {
-      return callback(err);
+      return callback(err as Error);
     }
     //    this._socket.name = "CLIENT";
     this._install_socket(this._socket);

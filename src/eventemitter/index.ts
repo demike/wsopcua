@@ -40,7 +40,7 @@ if (Object.create) {
  * @constructor
  * @private
  */
-function EE(fn: Function, once: boolean) {
+function EE(this: any, fn: Function, once: boolean) {
   this.fn = fn;
   this.once = once || false;
 }
@@ -91,7 +91,7 @@ export class EventEmitter<EventTypesMap extends { [evtName: string]: any }> {
   public listeners<MessageType extends keyof EventTypesMap>(
     event: MessageType
   ): Array<EventTypesMap[MessageType]> {
-    const evt = prefix ? prefix + event : (event as string);
+    const evt = prefix ? prefix + (event as string) : (event as string);
     const handlers = this._events[evt];
 
     if (!handlers) {
@@ -231,7 +231,7 @@ export class EventEmitter<EventTypesMap extends { [evtName: string]: any }> {
     }
 
     const listener = new (EE as any)(handler, once);
-    const evt = (prefix ? prefix + event : event) as string;
+    const evt = (prefix ? prefix + (event as string) : event) as string;
 
     if (!this._events[evt]) {
       this._events[evt] = listener;
@@ -260,7 +260,7 @@ export class EventEmitter<EventTypesMap extends { [evtName: string]: any }> {
     fn?: EventTypesMap[MessageType],
     once?: boolean
   ): this {
-    const evt = (prefix ? prefix + event : event) as string;
+    const evt = (prefix ? prefix + (event as string) : event) as string;
 
     if (!this._events[evt]) {
       return this;
@@ -309,7 +309,7 @@ export class EventEmitter<EventTypesMap extends { [evtName: string]: any }> {
     let evt: string;
 
     if (event) {
-      evt = (prefix ? prefix + event : event) as string;
+      evt = (prefix ? prefix + (event as string) : event) as string;
       if (this._events[evt]) {
         this.clearEvent(evt);
       }

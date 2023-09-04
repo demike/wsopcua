@@ -174,8 +174,12 @@ function RSAOAEP_SHA256_Decrypt(buffer: Uint8Array, privateKey: PrivateKey) {
 }
 // --------------------
 
-async function asymmetricVerifyChunk(chunk: Uint8Array, certificate: Uint8Array): Promise<boolean> {
-  const crypto_factory: ICryptoFactory = this;
+async function asymmetricVerifyChunk(
+  this: ICryptoFactory,
+  chunk: Uint8Array,
+  certificate: Uint8Array
+): Promise<boolean> {
+  const crypto_factory = this;
   assert(chunk instanceof Uint8Array);
   assert(certificate instanceof Uint8Array);
   // let's get the signatureLength by checking the size
@@ -231,7 +235,7 @@ function RSAPSSSHA256_Verify(
     .then((opts) => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
 }
 
-function RSAPKCS1V15SHA1_Sign(buffer: Uint8Array, privateKey: PrivateKey): Promise<ArrayBuffer> {
+function RSAPKCS1V15SHA1_Sign(buffer: BufferSource, privateKey: PrivateKey): Promise<ArrayBuffer> {
   return privateKey.getSignKey('SHA-1').then((signKey) =>
     crypto_utils.makeMessageChunkSignature(buffer, {
       algorithm: 'RSASSA-PKCS1-v1_5', // 'RSA-SHA256',
@@ -240,7 +244,10 @@ function RSAPKCS1V15SHA1_Sign(buffer: Uint8Array, privateKey: PrivateKey): Promi
   );
 }
 
-function RSAPKCS1V15SHA256_Sign(buffer: Uint8Array, privateKey: PrivateKey): Promise<ArrayBuffer> {
+function RSAPKCS1V15SHA256_Sign(
+  buffer: BufferSource,
+  privateKey: PrivateKey
+): Promise<ArrayBuffer> {
   return privateKey.getSignKey('SHA-256').then((signKey) =>
     crypto_utils.makeMessageChunkSignature(buffer, {
       algorithm: 'RSASSA-PKCS1-v1_5', // 'RSA-SHA256',
@@ -249,7 +256,7 @@ function RSAPKCS1V15SHA256_Sign(buffer: Uint8Array, privateKey: PrivateKey): Pro
   );
 }
 
-function RSAPSSSHA256_Sign(buffer: Uint8Array, privateKey: PrivateKey): Promise<ArrayBuffer> {
+function RSAPSSSHA256_Sign(buffer: BufferSource, privateKey: PrivateKey): Promise<ArrayBuffer> {
   return privateKey
     .getSignKey('SHA-256', 'http://www.w3.org/2000/09/xmldsig#rsa-pss')
     .then((signKey) =>

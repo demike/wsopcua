@@ -15,7 +15,7 @@ export interface TTwoStateStatus extends TVariant<string> {
 export interface EventStuff {
   conditionId: TVariant<NodeId>;
   eventType: TVariant<NodeId>;
-  eventId: TVariant<Buffer>;
+  eventId: TVariant<Uint8Array>;
   retain: TVariant<boolean>;
   activeState: TTwoStateStatus;
   ackedState: TTwoStateStatus;
@@ -40,7 +40,7 @@ export interface ClientAlarmEvents {
 export class ClientAlarm extends EventEmitter<ClientAlarmEvents> {
   public conditionId: NodeId;
   public eventType: NodeId;
-  public eventId: Buffer;
+  public eventId: Uint8Array;
   public fields: EventStuff;
 
   public constructor(eventFields: EventStuff) {

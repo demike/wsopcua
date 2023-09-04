@@ -103,7 +103,7 @@ export class JSONMessageBuilder extends EventEmitter<JSONMessageBuilderEvents> {
       this.emit('message', objMessage, 'MSG', requestHandle, this.secureChannelId);
       return objMessage;
     } catch (err) {
-      this.emit('error', err, requestHandle);
+      this.emit('error', err as Error, requestHandle);
     }
   }
 }

@@ -114,7 +114,7 @@ export function decodeExtensionObject(stream: DataStream) {
   try {
     object.decode(stream);
   } catch (err) {
-    console.log('Cannot decode object ', err.message);
+    console.log('Cannot decode object ', err);
   }
 
   if (streamLengthBefore + length !== stream.length) {
@@ -197,7 +197,7 @@ export function jsonDecodeExtensionObject(jsonObj: any) {
   try {
     object.fromJSON(jsonObj.Body);
   } catch (err) {
-    console.log('Cannot decode object ', err.message);
+    console.log('Cannot decode object ', (err as Error).message);
   }
 
   return object;

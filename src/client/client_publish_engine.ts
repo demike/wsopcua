@@ -326,7 +326,7 @@ export class ClientSidePublishEngine {
   public unregisterSubscription(subscriptionId: number | string) {
     debugLog('ClientSidePublishEngine#unregisterSubscription ' + subscriptionId);
 
-    assert(Number.isFinite(<any>subscriptionId) && subscriptionId > 0);
+    assert(Number.isFinite(subscriptionId) && (subscriptionId as number) > 0);
 
     this.activeSubscriptionCount -= 1;
 
@@ -487,7 +487,7 @@ export class ClientSidePublishEngine {
           (cb: (err: null, truth: boolean) => void) => cb(null, !is_done),
           _send_republish,
           ((err?: Error | null): void => {
-            debugLog('nbPendingPublishRequest = ', this.nbPendingPublishRequests);
+            debugLog('nbPendingPublishRequest = ', self.nbPendingPublishRequests);
             debugLog(' _republish ends with ', err ? err.message : 'null');
             _i_callback(err);
           }) as any // Wait for @type/async bug to be fixed !
@@ -497,10 +497,10 @@ export class ClientSidePublishEngine {
 
     function repairSubscription(
       subscription: ClientSubscription,
-      subscriptionId: number,
+      subscriptionId: number | string,
       _the_callback: ErrorCallback
     ) {
-      _republish(subscription, subscriptionId, function (err) {
+      _republish(subscription, subscriptionId as number, function (err) {
         assert(!err || err instanceof Error);
 
         debugLog(

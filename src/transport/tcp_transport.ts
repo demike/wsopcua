@@ -407,7 +407,7 @@ export class TCP_transport extends EventEmitter<TcpTransportEvents> {
       this._socket = null;
     }
 
-    window.setImmediate(function () {
+    window.setImmediate(() => {
       this.on_socket_ended(null);
       callback();
     });

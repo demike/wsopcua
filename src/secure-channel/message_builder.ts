@@ -490,7 +490,7 @@ export class MessageBuilder extends MessageBuilderBase {
       objMessage.decode(binaryStream, options);
     } catch (err) {
       console.log(err);
-      console.log(err.stack);
+      console.log((err as Error).stack);
       console.log(hexDump(full_message_body));
       analyseExtensionObject(full_message_body, 0, 0);
 
@@ -554,7 +554,7 @@ export class MessageBuilder extends MessageBuilderBase {
           // please check the stack trace to find the problem
           console.log('MessageBuilder : ERROR DETECTED IN event handler');
           console.log(err);
-          console.log(err.stack);
+          console.log((err as Error).stack);
         }
       } else {
         const message =

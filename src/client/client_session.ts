@@ -72,6 +72,7 @@ import {
 } from '../generated';
 import { buf2base64, buf2hex } from '../crypto';
 import { IEncodable } from 'src/factory/factories_baseobject';
+import { findBasicDataType } from './find_basic_datatype';
 
 export enum BrowseDirection {
   Invalid = -1, //
@@ -920,8 +921,18 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
    *   const statusCodes = await session.write(nodesToWrite);
    */
   write(
+    nodesToWrite: write_service.WriteValue[],
+    callback: ResponseCallback<StatusCode[], DiagnosticInfo[]>
+  ): void;
+  write(
+    nodesToWrite: write_service.WriteValue,
+    callback: ResponseCallback<StatusCode, DiagnosticInfo[]>
+  ): void;
+  write(
     nodesToWrite: write_service.WriteValue[] | write_service.WriteValue,
-    callback: ResponseCallback<StatusCode[] | StatusCode, DiagnosticInfo[]>
+    callback:
+      | ResponseCallback<StatusCode[], DiagnosticInfo[]>
+      | ResponseCallback<StatusCode, DiagnosticInfo[]>
   ) {
     assert('function' === typeof callback);
     const isArray = Array.isArray(nodesToWrite);
@@ -959,7 +970,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     nodesToWrite: write_service.WriteValue[] | write_service.WriteValue
   ): Promise<StatusCode[] | StatusCode> {
     return new Promise((res, rej) => {
-      this.write(nodesToWrite, (err, status) => {
+      this.write(nodesToWrite as write_service.WriteValue[], (err, status) => {
         if (err) {
           rej(err);
         } else {
@@ -1279,11 +1290,11 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     }
   }
 
-  protected _defaultRequest(
+  protected _defaultRequest<T>(
     SomeRequest: new (options: any) => any,
     SomeResponse: new () => any,
     options: any,
-    callback: ResponseCallback<unknown>
+    callback: ResponseCallback<T>
   ) {
     assert('function' === typeof callback);
 
@@ -2342,37 +2353,6 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     return str;
   }
 
-  protected __findBasicDataType(
-    session: ClientSession,
-    dataTypeId: NodeId,
-    callback: ResponseCallback<DataType>
-  ) {
-    assert(dataTypeId instanceof NodeId);
-
-    if (dataTypeId.value <= 25) {
-      // we have a well-known DataType
-      const dataType = dataTypeId.value as number;
-      callback(null, dataType);
-    } else {
-      // let's browse for the SuperType of this object
-      const nodeToBrowse = new browse_service.BrowseDescription({
-        referenceTypeId: makeNodeId(ReferenceTypeIds.HasSubtype),
-        includeSubtypes: false,
-        browseDirection: BrowseDirection.Inverse,
-        nodeId: dataTypeId,
-        resultMask: browse_service.BrowseResultMask.ReferenceTypeId,
-      });
-
-      session.browse([nodeToBrowse], function (err, results) {
-        const result = results[0];
-        if (err) {
-          return callback(err);
-        }
-        const baseDataType = result.references[0].nodeId;
-        return this.__findBasicDataType(session, baseDataType, callback);
-      });
-    }
-  }
   /**
    * retrieve the built-in DataType of a Variable, from its DataType attribute
    * useful to determine which DataType to use when constructing a Variant
@@ -2423,7 +2403,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       }
       const dataTypeId: NodeId = dataValue.value.value;
       assert(dataTypeId instanceof NodeId);
-      this.__findBasicDataType(session, dataTypeId, callback);
+      findBasicDataType(session, dataTypeId, callback);
     });
   }
   public getBuiltInDataTypeP(nodeId: NodeId): Promise<DataType> {

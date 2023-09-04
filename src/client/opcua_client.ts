@@ -365,7 +365,7 @@ export class OPCUAClient extends OPCUAClientBase {
         if (err) {
           rej(err);
         } else {
-          res(_userIdentityToken);
+          res(_userIdentityToken as UserIdentityToken);
         }
       });
     });
@@ -383,7 +383,7 @@ export class OPCUAClient extends OPCUAClientBase {
         const token = createAnonymousIdentityToken(session);
         return callback(null, token);
       } catch (err) {
-        return callback(err);
+        return callback(err as Error);
       }
     } else if (isUserNamePassword(userIdentityInfo)) {
       const userName = (userIdentityInfo as UserIdentityInfoUserName).userName;
@@ -396,7 +396,7 @@ export class OPCUAClient extends OPCUAClientBase {
         return;
       } catch (err) {
         // xx console.log(err.stack);
-        return callback(err);
+        return callback(err as Error);
       }
     } else if (isIssued(userIdentityInfo)) {
       const tokenData = (userIdentityInfo as UserIdentityInfoIssued).tokenData;
@@ -628,7 +628,7 @@ export class OPCUAClient extends OPCUAClientBase {
     assert('function' === typeof callback);
 
     this._createSession((err, session) => {
-      if (err) {
+      if (err != null) {
         callback(err);
       } else {
         this._addSession(session);
@@ -861,8 +861,8 @@ export class OPCUAClient extends OPCUAClientBase {
               innerCallback();
             });
           } catch (err) {
-            console.log('OPCUAClient#withClientSession', err.message);
-            the_error = err;
+            console.log('OPCUAClient#withClientSession', (err as Error).message);
+            the_error = err as Error;
             innerCallback();
           }
         },
@@ -923,7 +923,7 @@ export class OPCUAClient extends OPCUAClientBase {
           });
         } catch (err) {
           console.log(err);
-          done(err);
+          done(err as Error);
         }
       },
       callback
@@ -1086,7 +1086,7 @@ async function createUserNameIdentityToken(
     const buffer = await cryptoFactory.asymmetricEncrypt(new Uint8Array(block), publicKey);
     identityToken.password = buffer;
   } catch (err) {
-    console.log(err.message);
+    console.log((err as Error).message);
   }
   return identityToken;
 }
@@ -1200,7 +1200,7 @@ async function createIssuedIdentityToken(
     const buffer = await cryptoFactory.asymmetricEncrypt(new Uint8Array(block), publicKey);
     identityToken.tokenData = buffer;
   } catch (err) {
-    console.log(err.message);
+    console.log((err as Error).message);
   }
   return identityToken;
 }
