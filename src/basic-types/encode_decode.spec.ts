@@ -17,11 +17,7 @@ const littleEndian = true;
 beforeEach(() => {
   jasmine.addCustomEqualityTester((first, second) => {
     if (first instanceof NodeId && second instanceof NodeId) {
-      return (
-        first.namespace === second.namespace &&
-        first.identifierType === second.identifierType &&
-        jasmine.matchersUtil.equals(first.identifierType, second.identifierType)
-      );
+      return NodeId.sameNodeId(first, second);
     }
   });
 });
@@ -137,10 +133,7 @@ describe('testing built-in type encoding', function () {
   });
 
   it('should encode and decode a null string', function () {
-    // tslint:disable-next-line: prefer-const
-    let value: string;
-
-    test_encode_decode(value, ec.encodeString, ec.decodeString, 4, function (buf) {
+    test_encode_decode(undefined, ec.encodeString, ec.decodeString, 4, function (buf) {
       const buffer = new Uint8Array(buf);
       // should be little endian
       expect(buffer[0]).toEqual(0xff);

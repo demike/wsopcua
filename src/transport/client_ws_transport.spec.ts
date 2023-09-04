@@ -15,6 +15,8 @@ import { ClientWSTransport } from './client_ws_transport';
 import { setFakeTransport, getFakeTransport } from './ws_transport';
 import { StatusCodes } from '../constants/raw_status_codes';
 
+import 'setimmediate';
+
 describe('testing ClientWS_transport', function () {
   let transport: ClientWSTransport;
   let spyOnClose: jasmine.Spy, spyOnConnect: jasmine.Spy, spyOnConnectionBreak: jasmine.Spy;

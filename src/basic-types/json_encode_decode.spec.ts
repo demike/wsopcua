@@ -16,11 +16,7 @@ const littleEndian = true;
 beforeEach(() => {
   jasmine.addCustomEqualityTester((first, second) => {
     if (first instanceof NodeId && second instanceof NodeId) {
-      return (
-        first.namespace === second.namespace &&
-        first.identifierType === second.identifierType &&
-        first.value === second.value
-      );
+      return NodeId.sameNodeId(first, second);
     }
   });
 });
@@ -261,10 +257,10 @@ describe('encoding and decoding arrays', function () {
   it('should encode and decode an array of strings', function () {
     const array = ['Hoo', 'Hello', 'World', '你好世界', 'привет мир', 'こんにちは世界'];
     expect(() => {
-      ec.jsonEncodeArray(array, undefined);
+      ec.jsonEncodeArray(array, undefined as any);
     }).toThrow(); // 'it should throw an exception because string array en/decoding is built in and does not need special treatment'
     expect(() => {
-      ec.jsonDecodeArray(array, undefined);
+      ec.jsonDecodeArray(array, undefined as any);
     }).toThrow(); // 'it should throw an exception because string array en/decoding is built in and does not need special treatment'
   });
 

@@ -15,7 +15,7 @@ class MyObject extends EventEmitter<any> implements ISubscriber {
 // http://sinonjs.org/docs/#clock
 describe('watch dog', function () {
   // this.timeout(10000);
-  let watchDog: WatchDog = null;
+  let watchDog: WatchDog;
   let originalTimeout: number;
   beforeEach(function () {
     jasmine.clock().install();

@@ -11,7 +11,7 @@ describe('MessageBuilder', function () {
   let packet_cs_1: Uint8Array;
   let packet_cs_2: Uint8Array;
   beforeEach(function (done) {
-    const base = 'base/src/test-util/';
+    const base = 'src/test-util/';
     const p_packet_cs_1 = makebuffer_from_trace(base + 'packet_cs_1.fixture');
     const p_packet_cs_2 = makebuffer_from_trace(base + 'packet_cs_2.fixture');
     Promise.all([p_packet_cs_1, p_packet_cs_2]).then(([v1, v2]) => {

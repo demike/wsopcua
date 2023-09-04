@@ -416,9 +416,9 @@ describe('Variant', function () {
 });
 
 describe('Variant - Analyser', function () {
-  const manyValues = [];
+  const manyValues: number[] = [];
   for (let i = 0; i < 1000; i++) {
-    manyValues[i] = Math.random() * 1000 - 500;
+    manyValues.push(Math.random() * 1000 - 500);
   }
 
   const veryLargeFloatArray = new Float64Array(10 * 1024);

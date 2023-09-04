@@ -4,6 +4,9 @@
 module.exports = function (config) {
   return config.set({
     basePath: '',
+    proxies: {
+      '/': '/base/',
+    },
     frameworks: ['jasmine', 'karma-typescript', 'source-map-support'],
 
     files: [
