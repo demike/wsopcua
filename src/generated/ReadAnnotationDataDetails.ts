@@ -7,9 +7,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {HistoryReadDetails} from './HistoryReadDetails';
 
-export interface IReadAnnotationDataDetails {
-  reqTimes?: Date[];
-}
+export type IReadAnnotationDataDetails = Partial<ReadAnnotationDataDetails>;
 
 /**
 

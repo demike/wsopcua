@@ -7,10 +7,7 @@ import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ICloseSessionRequest {
-  requestHeader?: RequestHeader;
-  deleteSubscriptions?: boolean;
-}
+export type ICloseSessionRequest = Partial<CloseSessionRequest>;
 
 /**
 

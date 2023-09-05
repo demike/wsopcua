@@ -8,14 +8,7 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IResponseHeader {
-  timestamp?: Date;
-  requestHandle?: ec.UInt32;
-  serviceResult?: ec.StatusCode;
-  serviceDiagnostics?: DiagnosticInfo;
-  stringTable?: string[];
-  additionalHeader?: ExtensionObject;
-}
+export type IResponseHeader = Partial<ResponseHeader>;
 
 /**
 

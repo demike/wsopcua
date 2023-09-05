@@ -8,17 +8,7 @@ import {ApplicationDescription} from './ApplicationDescription';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ICreateSessionRequest {
-  requestHeader?: RequestHeader;
-  clientDescription?: ApplicationDescription;
-  serverUri?: string;
-  endpointUrl?: string;
-  sessionName?: string;
-  clientNonce?: Uint8Array;
-  clientCertificate?: Uint8Array;
-  requestedSessionTimeout?: ec.Double;
-  maxResponseMessageSize?: ec.UInt32;
-}
+export type ICreateSessionRequest = Partial<CreateSessionRequest>;
 
 /**
 

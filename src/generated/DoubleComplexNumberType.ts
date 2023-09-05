@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IDoubleComplexNumberType {
-  real?: ec.Double;
-  imaginary?: ec.Double;
-}
+export type IDoubleComplexNumberType = Partial<DoubleComplexNumberType>;
 
 /**
 

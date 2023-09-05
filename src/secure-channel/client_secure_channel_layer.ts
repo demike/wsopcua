@@ -42,7 +42,7 @@ import * as secure_channel_service from '../service-secure-channel';
 import { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
 import { ClientWSTransport } from '../transport/client_ws_transport';
 import { IEncodable } from '../factory/factories_baseobject';
-import { IRequestHeader } from '../generated/RequestHeader';
+import { IRequestHeader, RequestHeader } from '../generated/RequestHeader';
 import { SecureMessageChunkManagerOptions } from './secure_message_chunk_manager';
 import { ISymmetricAlgortihmSecurityHeader } from '../service-secure-channel/SymmetricAlgorithmSecurityHeader';
 import { JSONMessageBuilder } from '../transport/json_message_builder';
@@ -75,26 +75,26 @@ interface ITransactionStats {
 }
 
 interface RequestData {
-  request?: IEncodable & { requestHeader: IRequestHeader };
+  request: IEncodable & { requestHeader: RequestHeader };
   response?: OpcUaResponse;
-  msgType?: string;
+  msgType: string;
   callback?(err: Error | null, response?: OpcUaResponse): void;
 
-  bytesWritten_before?: number;
-  bytesWritten_after?: number;
+  bytesWritten_before: number;
+  bytesWritten_after: number;
 
   // record tick0 : before request is being sent to server
-  _tick0?: number;
+  _tick0: number;
   // record tick1:  after request has been sent to server
-  _tick1?: number;
+  _tick1: number;
   // record tick2 : after response message has been received, before message processing
-  _tick2?: number;
+  _tick2: number;
   // record tick3 : after response message has been received, before message processing
-  _tick3?: number;
+  _tick3: number;
   // record tick4 after callback
-  _tick4?: number;
-  chunk_count?: number;
-  bytesRead?: number;
+  _tick4: number;
+  chunk_count: number;
+  bytesRead: number;
 }
 
 function dump_transaction_statistics(stats: ITransactionStats) {
@@ -223,10 +223,7 @@ export interface ClientSecureChannelLayerOptions {
  * @param [options.connectionStrategy.maxDelay      = 10000]
  * @constructor
  */
-export class ClientSecureChannelLayer
-  extends EventEmitter<ClientSecureChannelLayerEvents>
-  implements ITransactionStats
-{
+export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLayerEvents> {
   _receiverPublicKey?: CryptoKey;
   /**
    * true if the secure channel is trying to establish the connection with the server. In this case, the client
@@ -269,7 +266,7 @@ export class ClientSecureChannelLayer
 
     this._lastRequestId = 0;
     this.parent = options.parent;
-    this._clientNonce = null; // will be created when needed
+
     this.protocolVersion = 0;
 
     this.encoding = options.encoding || 'opcua+uacp';
@@ -312,10 +309,14 @@ export class ClientSecureChannelLayer
       )
       .on('error', (err, requestId) => {
         //
-        debugLog('request id = ' + requestId + err);
+        if (!requestId) {
+          return;
+        }
+
         let request_data = this._request_data.get(requestId);
         if (doDebug) {
           console.log(' message was ');
+          debugLog('request id = ' + requestId + err);
           console.log(request_data);
         }
         if (!request_data) {
@@ -393,12 +394,19 @@ export class ClientSecureChannelLayer
       response = null;
     }
 
-    assert(request_data.msgType === 'CLO' || (err && !response) || (!err && response));
-
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const the_callback_func = request_data.callback;
-    request_data.callback = null;
-    the_callback_func(err, response);
+
+    if (!the_callback_func) {
+      throw new Error('Internal error');
+    }
+
+    assert(request_data.msgType === 'CLO' || (err && !response) || (!err && response));
+
+    // let set callback to undefined to prevent callback to be called again
+    request_data.callback = undefined;
+
+    the_callback_func(err || null, !err && response !== null ? response : undefined);
   }
 
   protected on_transaction_completed(transaction_stats: ITransactionStats) {
@@ -459,7 +467,7 @@ export class ClientSecureChannelLayer
             request_data.msgType +
             request_data.request.constructor.name
         );
-        this.process_request_callback(request_data, err, null);
+        this.process_request_callback(request_data, err || null, null);
       }
     }
 
@@ -483,13 +491,25 @@ export class ClientSecureChannelLayer
     this.emit('close', err);
     this._cancel_pending_transactions(err);
 
-    this._transport = null;
+    this._transport = undefined;
   }
 
   protected _on_message_received(response: OpcUaResponse, msgType: string, requestId: number) {
-    /* jshint validthis: true */
+    // assert(msgType !== 'ERR');
 
-    assert(msgType !== 'ERR');
+    if (response.responseHeader.requestHandle !== requestId) {
+      /* istanbul ignore next */
+      log.warn(response.toString());
+      log.error(
+        'xxxxx  <<<<<< _on_message_received  ERROR',
+        'requestId=',
+        requestId,
+        this._request_data.get(requestId)?.constructor.name,
+        'response.responseHeader.requestHandle=',
+        response.responseHeader.requestHandle,
+        response.constructor.name
+      );
+    }
 
     /* istanbul ignore next */
     if (doTraceMessage) {
@@ -502,7 +522,6 @@ export class ClientSecureChannelLayer
       throw new Error(' =>  invalid requestId =' + requestId);
     }
 
-    log.debug(' Deleting this._request_data', requestId);
     this._request_data.delete(requestId);
 
     /* istanbul ignore next */
@@ -542,6 +561,10 @@ export class ClientSecureChannelLayer
     request_data._tick4 = get_clock_tick();
     // store some statistics
     this._record_transaction_statistics(request_data);
+
+    if (!this.last_transaction_stats) {
+      throw new Error('internal error');
+    }
 
     // notify that transaction is completed
     this.on_transaction_completed(this.last_transaction_stats);
@@ -598,7 +621,7 @@ export class ClientSecureChannelLayer
 
   protected _build_client_nonce() {
     if (this.securityMode === MessageSecurityMode.None) {
-      return null;
+      return;
     }
     // create a client Nonce if secure mode is requested
     // Release 1.02 page 23 OPC Unified Architecture, Part 4 Table 7 – OpenSecureChannel Service Parameters
@@ -609,7 +632,7 @@ export class ClientSecureChannelLayer
     const cryptoFactory = getCryptoFactory(this.securityPolicy);
     if (!cryptoFactory) {
       // this securityPolicy may not be support yet ... let's return null
-      return null;
+      return;
     }
     assert(typeof cryptoFactory === 'object');
     const arr = new Uint8Array(cryptoFactory.symmetricKeyLength);
@@ -650,15 +673,15 @@ export class ClientSecureChannelLayer
       msg,
       async (error, response: secure_channel_service.OpenSecureChannelResponse) => {
         if (response && response.responseHeader.serviceResult !== StatusCodes.Good) {
-          error = new Error(response.responseHeader.serviceResult.toString());
+          error = new Error(response.responseHeader.serviceResult?.toString());
         }
-        if (!error) {
+        if (!error && response) {
           /* istanbul ignore next */
           if (false && doDebug) {
             debugLog(response.toString());
           }
+
           assert(response instanceof OpenSecureChannelResponse);
-          // xx assert(!is_initial || this._securityToken.secureChannelId === response._securityToken.secureChannelId);
 
           // todo : verify that server certificate is  valid
           // A self-signed application instance certificate does not need to be verified with a CA.
@@ -683,7 +706,7 @@ export class ClientSecureChannelLayer
             }
             // This parameter shall have a length equal to key size used for the symmetric
             // encryption algorithm that is identified by the securityPolicyUri.
-            if (this._serverNonce.length !== this._clientNonce.length) {
+            if (this._serverNonce.length !== this._clientNonce?.length) {
               console.log(' client : server nonce is invalid !');
               return callback(new Error(' Invalid server nonce length'));
             }
@@ -737,7 +760,7 @@ export class ClientSecureChannelLayer
         }
       });
 
-      this._transport.on('close', (err1) => this._on_transport_closed(err1));
+      this._transport.on('close', (err1) => this._on_transport_closed(err1 || undefined));
 
       this._transport.on('connection_break', () => {
         debugLog('Client => CONNECTION BREAK  <=');
@@ -808,7 +831,7 @@ export class ClientSecureChannelLayer
 
       if (!this._receiverPublicKey) {
         const cryptoFactory = getCryptoFactory(this.securityPolicy);
-        cryptoFactory.generatePublicKeyFromDER(this.serverCertificate).then(
+        cryptoFactory?.generatePublicKeyFromDER(this.serverCertificate).then(
           (publicKey) => {
             this._receiverPublicKey = publicKey;
             assert(this._receiverPublicKey); // make sure we wont go into infinite recursion calling create again.
@@ -833,14 +856,14 @@ export class ClientSecureChannelLayer
       endpointUrl: string,
       cb: ErrorCallback
     ) => {
-      let last_err: Error = null;
+      let last_err: Error;
 
       const _connect = (_i_callback: ErrorCallback) => {
         if (this.__call && (this.__call as any)._cancelBackoff) {
           return;
         }
 
-        transport.connect(endpointUrl, (err?: Error) => {
+        transport.connect(endpointUrl, (err?: Error | null) => {
           // force Backoff to fail if err is not ECONNRESET or ECONNREFUSE
           // this mean that the connection to the server has succeeded but for some reason
           // the server has denied the connection
@@ -903,7 +926,7 @@ export class ClientSecureChannelLayer
       this.__call.failAfter(Math.max(this.connectionStrategy.maxRetry, 1));
 
       this.__call.on('backoff', (number: number, delay: number) => {
-        debugLog(' Backoff #' + number + 'delay = ' + delay + this.__call.getMaxNumOfRetries());
+        debugLog(' Backoff #', number, 'delay = ', delay, this.__call?.getMaxNumOfRetries());
         // Do something when backoff starts, e.g. show to the
         // user the delay before next reconnection attempt.
         /**
@@ -913,7 +936,7 @@ export class ClientSecureChannelLayer
       });
 
       this.__call.on('abort', () => {
-        debugLog(' abort # after ' + this.__call.getNumRetries() + ' retries');
+        debugLog(' abort # after ', this.__call?.getNumRetries(), ' retries');
         // Do something when backoff starts, e.g. show to the
         // user the delay before next reconnection attempt.
         /**
@@ -931,7 +954,7 @@ export class ClientSecureChannelLayer
     };
 
     _establish_connection(transp, endpoint_url, (connerr) =>
-      this._on_connection(transp, callback, connerr)
+      this._on_connection(transp, callback, connerr ?? undefined)
     );
   }
 
@@ -1041,7 +1064,7 @@ export class ClientSecureChannelLayer
  *
  */
   public performMessageTransaction(
-    requestMessage: IEncodable & { requestHeader: IRequestHeader },
+    requestMessage: IEncodable & { requestHeader: RequestHeader },
     callback: ResponseCallback<any>
   ) {
     assert('function' === typeof callback);
@@ -1079,7 +1102,7 @@ export class ClientSecureChannelLayer
    */
   protected _performMessageTransaction(
     msgType: string,
-    requestMessage: IEncodable & { requestHeader: IRequestHeader },
+    requestMessage: IEncodable & { requestHeader: RequestHeader },
     callback: ResponseCallback<any>
   ) {
     /* jshint validthis: true */
@@ -1130,10 +1153,10 @@ export class ClientSecureChannelLayer
       // invoke user callback if it has not been intercepted first ( by a abrupt disconnection for instance )
       try {
         // local_callback.apply(this, [err,response]);
-        local_callback(err, response);
+        local_callback(err || null, response);
       } catch (err1) {
         console.log('ERROR !!! , please check here !!!! callback may be called twice !! ', err1);
-        callback(err);
+        callback(err || null);
       } finally {
         local_callback = null;
       }
@@ -1148,10 +1171,7 @@ export class ClientSecureChannelLayer
       );
 
       hasTimedOut = true;
-      modified_callback(
-        new Error('Transaction has timed out ( timeout = ' + timeout + ' ms)'),
-        null
-      );
+      modified_callback(new Error('Transaction has timed out ( timeout = ' + timeout + ' ms)'));
 
       this._timedout_request_count += 1;
       /**
@@ -1186,7 +1206,7 @@ export class ClientSecureChannelLayer
   protected _internal_perform_transaction(transaction_data: {
     timerId?: number;
     msgType: string;
-    request: IEncodable & { requestHeader: IRequestHeader };
+    request: IEncodable & { requestHeader: RequestHeader };
     callback: ResponseCallback<any>;
   }) {
     assert('function' === typeof transaction_data.callback);
@@ -1219,6 +1239,7 @@ export class ClientSecureChannelLayer
       msgType: msgType,
       callback: transaction_data.callback,
 
+      bytesRead: 0,
       bytesWritten_before: this.bytesWritten,
       bytesWritten_after: 0,
 
@@ -1257,8 +1278,10 @@ export class ClientSecureChannelLayer
       //     debugLog(hexDump(messageChunk));
       // }
       assert(this._transport);
-      this._transport.write(messageChunk);
-      request_data.chunk_count += 1;
+      this._transport?.write(messageChunk);
+      if (request_data?.chunk_count) {
+        request_data.chunk_count += 1;
+      }
     } else {
       // last chunk ....
 
@@ -1277,19 +1300,20 @@ export class ClientSecureChannelLayer
   protected _send_json(requestId: number) {
     const request_data = this._request_data.get(requestId);
 
-    assert(this._transport);
-    this._transport.write(
-      (this.messageBuilder as JSONMessageBuilder).encodeRequest(request_data.request)
-    );
-    request_data.chunk_count += 1;
-
-    if (doDebug) {
-      debugLog('CLIENT SEND done.');
-    }
     if (request_data) {
+      assert(this._transport);
+      this._transport?.write(
+        (this.messageBuilder as JSONMessageBuilder).encodeRequest(request_data.request)
+      );
+      request_data.chunk_count += 1;
+
       // record tick1: when request has been sent to server
       request_data._tick1 = get_clock_tick();
       request_data.bytesWritten_after = this.bytesWritten;
+    }
+
+    if (doDebug) {
+      debugLog('CLIENT SEND done.');
     }
   }
 
@@ -1310,8 +1334,8 @@ export class ClientSecureChannelLayer
           : null;
         securityHeader = new AsymmetricAlgorithmSecurityHeader({
           securityPolicyUri: toUri(this.securityPolicy),
-          senderCertificate: this.getCertificateChain(), // (client)certificate of the (client)private key used to sign the message
-          receiverCertificateThumbprint: thumbprint, // thumbprint of the public key used to encrypt the message
+          senderCertificate: this.getCertificateChain() || undefined, // (client)certificate of the (client)private key used to sign the message
+          receiverCertificateThumbprint: thumbprint || undefined, // thumbprint of the public key used to encrypt the message
         });
         break;
       default:
@@ -1387,7 +1411,7 @@ export class ClientSecureChannelLayer
 
   protected async _sendSecureOpcUARequest(
     msgType: string,
-    requestMessage: IEncodable & { requestHeader: IRequestHeader; __namespaceArray?: string[] },
+    requestMessage: IEncodable & { requestHeader: RequestHeader; __namespaceArray?: string[] },
     requestId: number
   ) {
     const options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader = {
@@ -1405,7 +1429,7 @@ export class ClientSecureChannelLayer
     };
 
     // use chunk size that has been negotiated by the transport layer
-    if (this._transport.parameters && this._transport.parameters.sendBufferSize) {
+    if (this._transport?.parameters && this._transport.parameters.sendBufferSize) {
       options.chunkSize = this._transport.parameters.sendBufferSize;
     }
 
@@ -1438,7 +1462,7 @@ export class ClientSecureChannelLayer
         msgType,
         options,
         requestMessage,
-        this._send_chunk.bind(this, requestId)
+        this._send_chunk.bind(this, requestId, undefined)
       );
     } else {
       this._send_json(requestId);
@@ -1542,14 +1566,14 @@ export class ClientSecureChannelLayer
 
   _securityHeader: any;
   _derivedKeys: any;
-  _receiverCertificate: DER;
+  _receiverCertificate?: DER;
   _serverNonce: any;
   _transport?: ClientWSTransport;
   _isOpened: boolean;
   _securityToken: ChannelSecurityToken;
   protected _lastRequestId: number;
   protected parent?: OPCUAClientBase;
-  protected _clientNonce: Uint8Array | null;
+  protected _clientNonce?: Uint8Array; // will be created when needed
   public protocolVersion: number;
   protected messageChunker: MessageChunker;
   public readonly securityMode: MessageSecurityMode;
@@ -1570,16 +1594,10 @@ export class ClientSecureChannelLayer
   protected channelId: number;
   protected connectionStrategy: any;
 
-  protected __call: backoff.FunctionCall | null;
+  protected __call: backoff.FunctionCall | null = null;
 
   // transaction stats
   request: any;
   response: any;
-  lap_sending_request: number;
-  lap_waiting_response: number;
-  lap_receiving_response: number;
-  lap_processing_response: number;
-  lap_transaction: number;
-
-  last_transaction_stats: ITransactionStats;
+  last_transaction_stats?: ITransactionStats;
 }

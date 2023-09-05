@@ -11,15 +11,7 @@ import {KeyValuePair} from './KeyValuePair';
 import {decodeKeyValuePair} from './KeyValuePair';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IPubSubGroupDataType {
-  name?: string;
-  enabled?: boolean;
-  securityMode?: MessageSecurityMode;
-  securityGroupId?: string;
-  securityKeyServices?: EndpointDescription[];
-  maxNetworkMessageSize?: ec.UInt32;
-  groupProperties?: KeyValuePair[];
-}
+export type IPubSubGroupDataType = Partial<PubSubGroupDataType>;
 
 /**
 

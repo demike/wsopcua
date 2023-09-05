@@ -8,10 +8,7 @@ import {JsonDataSetMessageContentMask, encodeJsonDataSetMessageContentMask, deco
 import {DataStream} from '../basic-types/DataStream';
 import {DataSetReaderMessageDataType} from './DataSetReaderMessageDataType';
 
-export interface IJsonDataSetReaderMessageDataType {
-  networkMessageContentMask?: JsonNetworkMessageContentMask;
-  dataSetMessageContentMask?: JsonDataSetMessageContentMask;
-}
+export type IJsonDataSetReaderMessageDataType = Partial<JsonDataSetReaderMessageDataType>;
 
 /**
 

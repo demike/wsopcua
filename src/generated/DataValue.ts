@@ -7,14 +7,7 @@ import {Variant} from '../variant';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IDataValue {
-  value?: Variant;
-  statusCode?: ec.StatusCode;
-  sourceTimestamp?: Date;
-  sourcePicoseconds?: ec.UInt16;
-  serverTimestamp?: Date;
-  serverPicoseconds?: ec.UInt16;
-}
+export type IDataValue = Partial<DataValue>;
 
 /**
 A value with an associated timestamp, and quality.

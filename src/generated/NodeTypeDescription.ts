@@ -8,11 +8,7 @@ import {QueryDataDescription} from './QueryDataDescription';
 import {decodeQueryDataDescription} from './QueryDataDescription';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface INodeTypeDescription {
-  typeDefinitionNode?: ec.ExpandedNodeId;
-  includeSubTypes?: boolean;
-  dataToReturn?: QueryDataDescription[];
-}
+export type INodeTypeDescription = Partial<NodeTypeDescription>;
 
 /**
 

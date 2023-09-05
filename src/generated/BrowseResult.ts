@@ -8,11 +8,7 @@ import {ReferenceDescription} from './ReferenceDescription';
 import {decodeReferenceDescription} from './ReferenceDescription';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IBrowseResult {
-  statusCode?: ec.StatusCode;
-  continuationPoint?: Uint8Array;
-  references?: ReferenceDescription[];
-}
+export type IBrowseResult = Partial<BrowseResult>;
 
 /**
 

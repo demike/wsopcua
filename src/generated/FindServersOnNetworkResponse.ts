@@ -9,11 +9,7 @@ import {ServerOnNetwork} from './ServerOnNetwork';
 import {decodeServerOnNetwork} from './ServerOnNetwork';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IFindServersOnNetworkResponse {
-  responseHeader?: ResponseHeader;
-  lastCounterResetTime?: Date;
-  servers?: ServerOnNetwork[];
-}
+export type IFindServersOnNetworkResponse = Partial<FindServersOnNetworkResponse>;
 
 /**
 

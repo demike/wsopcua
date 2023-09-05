@@ -9,16 +9,7 @@ import {decodeLocalizedText} from './LocalizedText';
 import {ApplicationType, encodeApplicationType, decodeApplicationType} from './ApplicationType';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRegisteredServer {
-  serverUri?: string;
-  productUri?: string;
-  serverNames?: LocalizedText[];
-  serverType?: ApplicationType;
-  gatewayServerUri?: string;
-  discoveryUrls?: string[];
-  semaphoreFilePath?: string;
-  isOnline?: boolean;
-}
+export type IRegisteredServer = Partial<RegisteredServer>;
 
 /**
 

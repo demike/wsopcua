@@ -9,10 +9,7 @@ import {decodeRolePermissionType} from './RolePermissionType';
 import {DataStream} from '../basic-types/DataStream';
 import {SubscribedDataSetDataType} from './SubscribedDataSetDataType';
 
-export interface ISubscribedDataSetMirrorDataType {
-  parentNodeName?: string;
-  rolePermissions?: RolePermissionType[];
-}
+export type ISubscribedDataSetMirrorDataType = Partial<SubscribedDataSetMirrorDataType>;
 
 /**
 

@@ -7,10 +7,7 @@ import * as ec from '../basic-types';
 import {MonitoringParameters} from './MonitoringParameters';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IMonitoredItemModifyRequest {
-  monitoredItemId?: ec.UInt32;
-  requestedParameters?: MonitoringParameters;
-}
+export type IMonitoredItemModifyRequest = Partial<MonitoredItemModifyRequest>;
 
 /**
 

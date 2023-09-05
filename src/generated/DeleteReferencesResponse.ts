@@ -9,11 +9,7 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IDeleteReferencesResponse {
-  responseHeader?: ResponseHeader;
-  results?: ec.StatusCode[];
-  diagnosticInfos?: DiagnosticInfo[];
-}
+export type IDeleteReferencesResponse = Partial<DeleteReferencesResponse>;
 
 /**
 

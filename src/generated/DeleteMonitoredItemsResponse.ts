@@ -9,11 +9,7 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IDeleteMonitoredItemsResponse {
-  responseHeader?: ResponseHeader;
-  results?: ec.StatusCode[];
-  diagnosticInfos?: DiagnosticInfo[];
-}
+export type IDeleteMonitoredItemsResponse = Partial<DeleteMonitoredItemsResponse>;
 
 /**
 

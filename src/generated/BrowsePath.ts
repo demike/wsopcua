@@ -7,10 +7,7 @@ import * as ec from '../basic-types';
 import {RelativePath} from './RelativePath';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IBrowsePath {
-  startingNode?: ec.NodeId;
-  relativePath?: RelativePath;
-}
+export type IBrowsePath = Partial<BrowsePath>;
 
 /**
 

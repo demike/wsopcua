@@ -9,14 +9,7 @@ import {SecurityTokenRequestType, encodeSecurityTokenRequestType, decodeSecurity
 import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMode} from './MessageSecurityMode';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IOpenSecureChannelRequest {
-  requestHeader?: RequestHeader;
-  clientProtocolVersion?: ec.UInt32;
-  requestType?: SecurityTokenRequestType;
-  securityMode?: MessageSecurityMode;
-  clientNonce?: Uint8Array;
-  requestedLifetime?: ec.UInt32;
-}
+export type IOpenSecureChannelRequest = Partial<OpenSecureChannelRequest>;
 
 /**
 

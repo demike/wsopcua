@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IXVType {
-  x?: ec.Double;
-  value?: ec.Float;
-}
+export type IXVType = Partial<XVType>;
 
 /**
 

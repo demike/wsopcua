@@ -7,11 +7,7 @@ import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IQueryNextRequest {
-  requestHeader?: RequestHeader;
-  releaseContinuationPoint?: boolean;
-  continuationPoint?: Uint8Array;
-}
+export type IQueryNextRequest = Partial<QueryNextRequest>;
 
 /**
 

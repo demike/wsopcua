@@ -8,9 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {EnumValueType} from './EnumValueType';
 import {IEnumValueType} from './EnumValueType';
 
-export interface IEnumField extends IEnumValueType {
-  name?: string;
-}
+export type IEnumField = Partial<EnumField>;
 
 /**
 

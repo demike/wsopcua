@@ -7,11 +7,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {Vector} from './Vector';
 
-export interface IThreeDVector {
-  x?: ec.Double;
-  y?: ec.Double;
-  z?: ec.Double;
-}
+export type IThreeDVector = Partial<ThreeDVector>;
 
 /**
 

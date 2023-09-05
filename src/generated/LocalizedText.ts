@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ILocalizedText {
-  locale?: string;
-  text?: string;
-}
+export type ILocalizedText = Partial<LocalizedText>;
 
 /**
 A string qualified with a namespace index.

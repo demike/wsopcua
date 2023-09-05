@@ -8,11 +8,7 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IParsingResult {
-  statusCode?: ec.StatusCode;
-  dataStatusCodes?: ec.StatusCode[];
-  dataDiagnosticInfos?: DiagnosticInfo[];
-}
+export type IParsingResult = Partial<ParsingResult>;
 
 /**
 

@@ -6,9 +6,7 @@
 import {ResponseHeader} from './ResponseHeader';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ICloseSessionResponse {
-  responseHeader?: ResponseHeader;
-}
+export type ICloseSessionResponse = Partial<CloseSessionResponse>;
 
 /**
 

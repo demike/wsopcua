@@ -9,10 +9,7 @@ import {decodeCallMethodRequest} from './CallMethodRequest';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ICallRequest {
-  requestHeader?: RequestHeader;
-  methodsToCall?: CallMethodRequest[];
-}
+export type ICallRequest = Partial<CallRequest>;
 
 /**
 

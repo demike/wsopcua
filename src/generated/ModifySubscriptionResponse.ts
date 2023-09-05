@@ -7,12 +7,7 @@ import {ResponseHeader} from './ResponseHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IModifySubscriptionResponse {
-  responseHeader?: ResponseHeader;
-  revisedPublishingInterval?: ec.Double;
-  revisedLifetimeCount?: ec.UInt32;
-  revisedMaxKeepAliveCount?: ec.UInt32;
-}
+export type IModifySubscriptionResponse = Partial<ModifySubscriptionResponse>;
 
 /**
 

@@ -8,15 +8,7 @@ import {OverrideValueHandling, encodeOverrideValueHandling, decodeOverrideValueH
 import {Variant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IFieldTargetDataType {
-  dataSetFieldId?: ec.Guid;
-  receiverIndexRange?: string;
-  targetNodeId?: ec.NodeId;
-  attributeId?: ec.UInt32;
-  writeIndexRange?: string;
-  overrideValueHandling?: OverrideValueHandling;
-  overrideValue?: Variant;
-}
+export type IFieldTargetDataType = Partial<FieldTargetDataType>;
 
 /**
 

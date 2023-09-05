@@ -7,10 +7,7 @@ import {ResponseHeader} from './ResponseHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRegisterNodesResponse {
-  responseHeader?: ResponseHeader;
-  registeredNodeIds?: ec.NodeId[];
-}
+export type IRegisterNodesResponse = Partial<RegisterNodesResponse>;
 
 /**
 

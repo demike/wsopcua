@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRange {
-  low?: ec.Double;
-  high?: ec.Double;
-}
+export type IRange = Partial<Range>;
 
 /**
 

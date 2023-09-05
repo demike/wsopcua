@@ -7,10 +7,7 @@ import * as ec from '../basic-types';
 import {Variant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IGenericAttributeValue {
-  attributeId?: ec.UInt32;
-  value?: Variant;
-}
+export type IGenericAttributeValue = Partial<GenericAttributeValue>;
 
 /**
 

@@ -9,17 +9,7 @@ import {KeyValuePair} from './KeyValuePair';
 import {decodeKeyValuePair} from './KeyValuePair';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IPubSubKeyPushTargetDataType {
-  applicationUri?: string;
-  pushTargetFolder?: string[];
-  endpointUrl?: string;
-  securityPolicyUri?: string;
-  userTokenType?: UserTokenPolicy;
-  requestedKeyCount?: ec.UInt16;
-  retryInterval?: ec.Double;
-  pushTargetProperties?: KeyValuePair[];
-  securityGroups?: string[];
-}
+export type IPubSubKeyPushTargetDataType = Partial<PubSubKeyPushTargetDataType>;
 
 /**
 

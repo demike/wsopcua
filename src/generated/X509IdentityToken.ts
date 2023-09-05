@@ -8,9 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {UserIdentityToken} from './UserIdentityToken';
 import {IUserIdentityToken} from './UserIdentityToken';
 
-export interface IX509IdentityToken extends IUserIdentityToken {
-  certificateData?: Uint8Array;
-}
+export type IX509IdentityToken = Partial<X509IdentityToken>;
 
 /**
 

@@ -7,9 +7,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {PublishedDataSetSourceDataType} from './PublishedDataSetSourceDataType';
 
-export interface IPublishedDataSetCustomSourceDataType {
-  cyclicDataSet?: boolean;
-}
+export type IPublishedDataSetCustomSourceDataType = Partial<PublishedDataSetCustomSourceDataType>;
 
 /**
 

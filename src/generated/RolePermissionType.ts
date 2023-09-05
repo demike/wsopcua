@@ -7,10 +7,7 @@ import * as ec from '../basic-types';
 import {PermissionType, encodePermissionType, decodePermissionType} from './PermissionType';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRolePermissionType {
-  roleId?: ec.NodeId;
-  permissions?: PermissionType;
-}
+export type IRolePermissionType = Partial<RolePermissionType>;
 
 /**
 

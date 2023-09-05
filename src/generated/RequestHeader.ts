@@ -7,15 +7,7 @@ import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRequestHeader {
-  authenticationToken?: ec.NodeId;
-  timestamp?: Date;
-  requestHandle?: ec.UInt32;
-  returnDiagnostics?: ec.UInt32;
-  auditEntryId?: string;
-  timeoutHint?: ec.UInt32;
-  additionalHeader?: ExtensionObject;
-}
+export type IRequestHeader = Partial<RequestHeader>;
 
 /**
 

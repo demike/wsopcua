@@ -12,11 +12,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {HistoryUpdateDetails} from './HistoryUpdateDetails';
 import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
-export interface IUpdateEventDetails extends IHistoryUpdateDetails {
-  performInsertReplace?: PerformUpdateType;
-  filter?: EventFilter;
-  eventData?: HistoryEventFieldList[];
-}
+export type IUpdateEventDetails = Partial<UpdateEventDetails>;
 
 /**
 

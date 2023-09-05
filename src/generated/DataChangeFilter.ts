@@ -8,11 +8,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {MonitoringFilter} from './MonitoringFilter';
 
-export interface IDataChangeFilter {
-  trigger?: DataChangeTrigger;
-  deadbandType?: ec.UInt32;
-  deadbandValue?: ec.Double;
-}
+export type IDataChangeFilter = Partial<DataChangeFilter>;
 
 /**
 

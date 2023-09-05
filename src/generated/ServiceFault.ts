@@ -6,9 +6,7 @@
 import {ResponseHeader} from './ResponseHeader';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IServiceFault {
-  responseHeader?: ResponseHeader;
-}
+export type IServiceFault = Partial<ServiceFault>;
 
 /**
 

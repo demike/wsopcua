@@ -6,11 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IAnnotation {
-  message?: string;
-  userName?: string;
-  annotationTime?: Date;
-}
+export type IAnnotation = Partial<Annotation>;
 
 /**
 

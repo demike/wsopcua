@@ -11,14 +11,7 @@ import {ContentFilter} from './ContentFilter';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IQueryFirstRequest {
-  requestHeader?: RequestHeader;
-  view?: ViewDescription;
-  nodeTypes?: NodeTypeDescription[];
-  filter?: ContentFilter;
-  maxDataSetsToReturn?: ec.UInt32;
-  maxReferencesToReturn?: ec.UInt32;
-}
+export type IQueryFirstRequest = Partial<QueryFirstRequest>;
 
 /**
 

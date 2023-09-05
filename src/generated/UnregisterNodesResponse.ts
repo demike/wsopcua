@@ -6,9 +6,7 @@
 import {ResponseHeader} from './ResponseHeader';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IUnregisterNodesResponse {
-  responseHeader?: ResponseHeader;
-}
+export type IUnregisterNodesResponse = Partial<UnregisterNodesResponse>;
 
 /**
 

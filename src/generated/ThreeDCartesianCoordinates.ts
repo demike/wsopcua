@@ -7,11 +7,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {CartesianCoordinates} from './CartesianCoordinates';
 
-export interface IThreeDCartesianCoordinates {
-  x?: ec.Double;
-  y?: ec.Double;
-  z?: ec.Double;
-}
+export type IThreeDCartesianCoordinates = Partial<ThreeDCartesianCoordinates>;
 
 /**
 

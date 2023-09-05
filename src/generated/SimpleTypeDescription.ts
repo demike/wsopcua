@@ -8,10 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {DataTypeDescription} from './DataTypeDescription';
 import {IDataTypeDescription} from './DataTypeDescription';
 
-export interface ISimpleTypeDescription extends IDataTypeDescription {
-  baseDataType?: ec.NodeId;
-  builtInType?: ec.Byte;
-}
+export type ISimpleTypeDescription = Partial<SimpleTypeDescription>;
 
 /**
 

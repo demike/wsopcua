@@ -10,12 +10,7 @@ import {BrowseDescription} from './BrowseDescription';
 import {decodeBrowseDescription} from './BrowseDescription';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IBrowseRequest {
-  requestHeader?: RequestHeader;
-  view?: ViewDescription;
-  requestedMaxReferencesPerNode?: ec.UInt32;
-  nodesToBrowse?: BrowseDescription[];
-}
+export type IBrowseRequest = Partial<BrowseRequest>;
 
 /**
 

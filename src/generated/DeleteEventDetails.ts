@@ -8,9 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {HistoryUpdateDetails} from './HistoryUpdateDetails';
 import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
-export interface IDeleteEventDetails extends IHistoryUpdateDetails {
-  eventIds?: Uint8Array[];
-}
+export type IDeleteEventDetails = Partial<DeleteEventDetails>;
 
 /**
 

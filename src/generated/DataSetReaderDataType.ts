@@ -15,25 +15,7 @@ import {decodeKeyValuePair} from './KeyValuePair';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IDataSetReaderDataType {
-  name?: string;
-  enabled?: boolean;
-  publisherId?: Variant;
-  writerGroupId?: ec.UInt16;
-  dataSetWriterId?: ec.UInt16;
-  dataSetMetaData?: DataSetMetaDataType;
-  dataSetFieldContentMask?: DataSetFieldContentMask;
-  messageReceiveTimeout?: ec.Double;
-  keyFrameCount?: ec.UInt32;
-  headerLayoutUri?: string;
-  securityMode?: MessageSecurityMode;
-  securityGroupId?: string;
-  securityKeyServices?: EndpointDescription[];
-  dataSetReaderProperties?: KeyValuePair[];
-  transportSettings?: ExtensionObject;
-  messageSettings?: ExtensionObject;
-  subscribedDataSet?: ExtensionObject;
-}
+export type IDataSetReaderDataType = Partial<DataSetReaderDataType>;
 
 /**
 

@@ -8,10 +8,7 @@ import {BrowsePathTarget} from './BrowsePathTarget';
 import {decodeBrowsePathTarget} from './BrowsePathTarget';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IBrowsePathResult {
-  statusCode?: ec.StatusCode;
-  targets?: BrowsePathTarget[];
-}
+export type IBrowsePathResult = Partial<BrowsePathResult>;
 
 /**
 

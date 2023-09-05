@@ -7,9 +7,7 @@ import {JsonNetworkMessageContentMask, encodeJsonNetworkMessageContentMask, deco
 import {DataStream} from '../basic-types/DataStream';
 import {WriterGroupMessageDataType} from './WriterGroupMessageDataType';
 
-export interface IJsonWriterGroupMessageDataType {
-  networkMessageContentMask?: JsonNetworkMessageContentMask;
-}
+export type IJsonWriterGroupMessageDataType = Partial<JsonWriterGroupMessageDataType>;
 
 /**
 

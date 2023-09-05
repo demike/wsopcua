@@ -8,13 +8,7 @@ import {AggregateConfiguration} from './AggregateConfiguration';
 import {DataStream} from '../basic-types/DataStream';
 import {HistoryReadDetails} from './HistoryReadDetails';
 
-export interface IReadProcessedDetails {
-  startTime?: Date;
-  endTime?: Date;
-  processingInterval?: ec.Double;
-  aggregateType?: ec.NodeId[];
-  aggregateConfiguration?: AggregateConfiguration;
-}
+export type IReadProcessedDetails = Partial<ReadProcessedDetails>;
 
 /**
 

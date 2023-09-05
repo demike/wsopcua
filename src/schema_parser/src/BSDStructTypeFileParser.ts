@@ -363,6 +363,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
       return;
     }
     // header
+    /*
     let str = 'export interface I' + this.cls.Name;
     if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
       str += ' extends I' + this.cls.BaseClass.Name;
@@ -372,15 +373,15 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
     for (const mem of this.cls.Members) {
       const option: any = {};
       option['required'] = false;
-      /*
-              if (!(mem.Type instanceof SimpleType)) {
-                  option["typePrefix"] = "I";
-                  this.createImport(mem.Type,true);
-              }
-              */
+              // if (!(mem.Type instanceof SimpleType)) {
+              //     option["typePrefix"] = "I";
+              //     this.createImport(mem.Type,true);
+              // }
       str += ' ' + mem.toString(option) + ';\n';
     }
     str += '}\n';
+    */
+    const str = `export type I${this.cls.Name} = Partial<${this.cls.Name}>;\n`;
     this.cls.Defines = str;
   }
 

@@ -9,14 +9,7 @@ import {BuildInfo} from './BuildInfo';
 import {LocalizedText} from './LocalizedText';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IServerStatusDataType {
-  startTime?: Date;
-  currentTime?: Date;
-  state?: ServerState;
-  buildInfo?: BuildInfo;
-  secondsTillShutdown?: ec.UInt32;
-  shutdownReason?: LocalizedText;
-}
+export type IServerStatusDataType = Partial<ServerStatusDataType>;
 
 /**
 

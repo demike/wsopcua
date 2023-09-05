@@ -6,9 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IHistoryUpdateDetails {
-  nodeId?: ec.NodeId;
-}
+export type IHistoryUpdateDetails = Partial<HistoryUpdateDetails>;
 
 /**
 

@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRationalNumber {
-  numerator?: ec.Int32;
-  denominator?: ec.UInt32;
-}
+export type IRationalNumber = Partial<RationalNumber>;
 
 /**
 

@@ -11,13 +11,7 @@ import {HistoryReadValueId} from './HistoryReadValueId';
 import {decodeHistoryReadValueId} from './HistoryReadValueId';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IHistoryReadRequest {
-  requestHeader?: RequestHeader;
-  historyReadDetails?: ExtensionObject;
-  timestampsToReturn?: TimestampsToReturn;
-  releaseContinuationPoints?: boolean;
-  nodesToRead?: HistoryReadValueId[];
-}
+export type IHistoryReadRequest = Partial<HistoryReadRequest>;
 
 /**
 

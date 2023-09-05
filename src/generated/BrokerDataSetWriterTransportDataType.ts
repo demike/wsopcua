@@ -8,14 +8,7 @@ import {BrokerTransportQualityOfService, encodeBrokerTransportQualityOfService, 
 import {DataStream} from '../basic-types/DataStream';
 import {DataSetWriterTransportDataType} from './DataSetWriterTransportDataType';
 
-export interface IBrokerDataSetWriterTransportDataType {
-  queueName?: string;
-  resourceUri?: string;
-  authenticationProfileUri?: string;
-  requestedDeliveryGuarantee?: BrokerTransportQualityOfService;
-  metaDataQueueName?: string;
-  metaDataUpdateTime?: ec.Double;
-}
+export type IBrokerDataSetWriterTransportDataType = Partial<BrokerDataSetWriterTransportDataType>;
 
 /**
 

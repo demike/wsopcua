@@ -8,12 +8,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {DataSetReaderTransportDataType} from './DataSetReaderTransportDataType';
 
-export interface IDatagramDataSetReaderTransportDataType {
-  address?: ExtensionObject;
-  qosCategory?: string;
-  datagramQos?: ExtensionObject[];
-  topic?: string;
-}
+export type IDatagramDataSetReaderTransportDataType = Partial<DatagramDataSetReaderTransportDataType>;
 
 /**
 

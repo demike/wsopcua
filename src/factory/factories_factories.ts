@@ -39,7 +39,7 @@ export function dump() {
 export function callConstructor(constructor: Function) {
   assert('function' === typeof constructor);
 
-  const FactoryFunction = constructor.bind.apply(constructor, arguments);
+  const FactoryFunction = constructor.bind.apply(constructor, arguments as any);
 
   return new FactoryFunction();
 }

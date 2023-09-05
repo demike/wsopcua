@@ -9,13 +9,7 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ISetTriggeringResponse {
-  responseHeader?: ResponseHeader;
-  addResults?: ec.StatusCode[];
-  addDiagnosticInfos?: DiagnosticInfo[];
-  removeResults?: ec.StatusCode[];
-  removeDiagnosticInfos?: DiagnosticInfo[];
-}
+export type ISetTriggeringResponse = Partial<SetTriggeringResponse>;
 
 /**
 

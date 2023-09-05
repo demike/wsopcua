@@ -7,13 +7,7 @@ import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IMonitoringParameters {
-  clientHandle?: ec.UInt32;
-  samplingInterval?: ec.Double;
-  filter?: ExtensionObject;
-  queueSize?: ec.UInt32;
-  discardOldest?: boolean;
-}
+export type IMonitoringParameters = Partial<MonitoringParameters>;
 
 /**
 

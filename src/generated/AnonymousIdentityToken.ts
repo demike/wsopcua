@@ -7,8 +7,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {UserIdentityToken} from './UserIdentityToken';
 import {IUserIdentityToken} from './UserIdentityToken';
 
-export interface IAnonymousIdentityToken extends IUserIdentityToken {
-}
+export type IAnonymousIdentityToken = Partial<AnonymousIdentityToken>;
 
 /**
 

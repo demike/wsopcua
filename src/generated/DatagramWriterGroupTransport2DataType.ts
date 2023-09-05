@@ -9,13 +9,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {DatagramWriterGroupTransportDataType} from './DatagramWriterGroupTransportDataType';
 import {IDatagramWriterGroupTransportDataType} from './DatagramWriterGroupTransportDataType';
 
-export interface IDatagramWriterGroupTransport2DataType extends IDatagramWriterGroupTransportDataType {
-  address?: ExtensionObject;
-  qosCategory?: string;
-  datagramQos?: ExtensionObject[];
-  discoveryAnnounceRate?: ec.UInt32;
-  topic?: string;
-}
+export type IDatagramWriterGroupTransport2DataType = Partial<DatagramWriterGroupTransport2DataType>;
 
 /**
 

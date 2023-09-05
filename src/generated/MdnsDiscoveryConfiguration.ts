@@ -7,10 +7,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {DiscoveryConfiguration} from './DiscoveryConfiguration';
 
-export interface IMdnsDiscoveryConfiguration {
-  mdnsServerName?: string;
-  serverCapabilities?: string[];
-}
+export type IMdnsDiscoveryConfiguration = Partial<MdnsDiscoveryConfiguration>;
 
 /**
 

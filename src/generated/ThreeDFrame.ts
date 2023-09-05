@@ -8,10 +8,7 @@ import {ThreeDOrientation} from './ThreeDOrientation';
 import {DataStream} from '../basic-types/DataStream';
 import {Frame} from './Frame';
 
-export interface IThreeDFrame {
-  cartesianCoordinates?: ThreeDCartesianCoordinates;
-  orientation?: ThreeDOrientation;
-}
+export type IThreeDFrame = Partial<ThreeDFrame>;
 
 /**
 

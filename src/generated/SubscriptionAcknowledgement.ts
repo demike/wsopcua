@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ISubscriptionAcknowledgement {
-  subscriptionId?: ec.UInt32;
-  sequenceNumber?: ec.UInt32;
-}
+export type ISubscriptionAcknowledgement = Partial<SubscriptionAcknowledgement>;
 
 /**
 

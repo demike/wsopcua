@@ -7,11 +7,7 @@ import * as ec from '../basic-types';
 import {ServerState, encodeServerState, decodeServerState} from './ServerState';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRedundantServerDataType {
-  serverId?: string;
-  serviceLevel?: ec.Byte;
-  serverState?: ServerState;
-}
+export type IRedundantServerDataType = Partial<RedundantServerDataType>;
 
 /**
 

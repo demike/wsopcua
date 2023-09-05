@@ -7,12 +7,7 @@ import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IFindServersRequest {
-  requestHeader?: RequestHeader;
-  endpointUrl?: string;
-  localeIds?: string[];
-  serverUris?: string[];
-}
+export type IFindServersRequest = Partial<FindServersRequest>;
 
 /**
 

@@ -9,10 +9,7 @@ import {decodeBrowsePath} from './BrowsePath';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ITranslateBrowsePathsToNodeIdsRequest {
-  requestHeader?: RequestHeader;
-  browsePaths?: BrowsePath[];
-}
+export type ITranslateBrowsePathsToNodeIdsRequest = Partial<TranslateBrowsePathsToNodeIdsRequest>;
 
 /**
 

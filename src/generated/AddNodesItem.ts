@@ -9,15 +9,7 @@ import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IAddNodesItem {
-  parentNodeId?: ec.ExpandedNodeId;
-  referenceTypeId?: ec.NodeId;
-  requestedNewNodeId?: ec.ExpandedNodeId;
-  browseName?: QualifiedName;
-  nodeClass?: NodeClass;
-  nodeAttributes?: ExtensionObject;
-  typeDefinition?: ec.ExpandedNodeId;
-}
+export type IAddNodesItem = Partial<AddNodesItem>;
 
 /**
 

@@ -9,10 +9,7 @@ import {decodeWriteValue} from './WriteValue';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IWriteRequest {
-  requestHeader?: RequestHeader;
-  nodesToWrite?: WriteValue[];
-}
+export type IWriteRequest = Partial<WriteRequest>;
 
 /**
 

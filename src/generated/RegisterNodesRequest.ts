@@ -7,10 +7,7 @@ import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRegisterNodesRequest {
-  requestHeader?: RequestHeader;
-  nodesToRegister?: ec.NodeId[];
-}
+export type IRegisterNodesRequest = Partial<RegisterNodesRequest>;
 
 /**
 

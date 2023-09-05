@@ -7,13 +7,7 @@ import * as ec from '../basic-types';
 import {LocalizedText} from './LocalizedText';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IArgument {
-  name?: string;
-  dataType?: ec.NodeId;
-  valueRank?: ec.Int32;
-  arrayDimensions?: ec.UInt32[];
-  description?: LocalizedText;
-}
+export type IArgument = Partial<Argument>;
 
 /**
 

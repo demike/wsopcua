@@ -7,10 +7,7 @@ import * as ec from '../basic-types';
 import {DiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IStatusResult {
-  statusCode?: ec.StatusCode;
-  diagnosticInfo?: DiagnosticInfo;
-}
+export type IStatusResult = Partial<StatusResult>;
 
 /**
 

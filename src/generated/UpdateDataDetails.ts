@@ -11,10 +11,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {HistoryUpdateDetails} from './HistoryUpdateDetails';
 import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
-export interface IUpdateDataDetails extends IHistoryUpdateDetails {
-  performInsertReplace?: PerformUpdateType;
-  updateValues?: DataValue[];
-}
+export type IUpdateDataDetails = Partial<UpdateDataDetails>;
 
 /**
 

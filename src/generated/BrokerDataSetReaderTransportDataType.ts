@@ -8,13 +8,7 @@ import {BrokerTransportQualityOfService, encodeBrokerTransportQualityOfService, 
 import {DataStream} from '../basic-types/DataStream';
 import {DataSetReaderTransportDataType} from './DataSetReaderTransportDataType';
 
-export interface IBrokerDataSetReaderTransportDataType {
-  queueName?: string;
-  resourceUri?: string;
-  authenticationProfileUri?: string;
-  requestedDeliveryGuarantee?: BrokerTransportQualityOfService;
-  metaDataQueueName?: string;
-}
+export type IBrokerDataSetReaderTransportDataType = Partial<BrokerDataSetReaderTransportDataType>;
 
 /**
 

@@ -8,10 +8,7 @@ import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncod
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IHistoryUpdateRequest {
-  requestHeader?: RequestHeader;
-  historyUpdateDetails?: ExtensionObject[];
-}
+export type IHistoryUpdateRequest = Partial<HistoryUpdateRequest>;
 
 /**
 

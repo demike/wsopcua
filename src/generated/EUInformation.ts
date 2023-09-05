@@ -7,12 +7,7 @@ import * as ec from '../basic-types';
 import {LocalizedText} from './LocalizedText';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IEUInformation {
-  namespaceUri?: string;
-  unitId?: ec.Int32;
-  displayName?: LocalizedText;
-  description?: LocalizedText;
-}
+export type IEUInformation = Partial<EUInformation>;
 
 /**
 

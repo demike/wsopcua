@@ -6,11 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ISessionlessInvokeResponseType {
-  namespaceUris?: string[];
-  serverUris?: string[];
-  serviceId?: ec.UInt32;
-}
+export type ISessionlessInvokeResponseType = Partial<SessionlessInvokeResponseType>;
 
 /**
 

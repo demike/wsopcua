@@ -11,11 +11,7 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IModifyMonitoredItemsResponse {
-  responseHeader?: ResponseHeader;
-  results?: MonitoredItemModifyResult[];
-  diagnosticInfos?: DiagnosticInfo[];
-}
+export type IModifyMonitoredItemsResponse = Partial<ModifyMonitoredItemsResponse>;
 
 /**
 

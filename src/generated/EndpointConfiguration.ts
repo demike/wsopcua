@@ -6,17 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IEndpointConfiguration {
-  operationTimeout?: ec.Int32;
-  useBinaryEncoding?: boolean;
-  maxStringLength?: ec.Int32;
-  maxByteStringLength?: ec.Int32;
-  maxArrayLength?: ec.Int32;
-  maxMessageSize?: ec.Int32;
-  maxBufferSize?: ec.Int32;
-  channelLifetime?: ec.Int32;
-  securityTokenLifetime?: ec.Int32;
-}
+export type IEndpointConfiguration = Partial<EndpointConfiguration>;
 
 /**
 

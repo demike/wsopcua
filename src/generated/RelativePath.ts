@@ -8,9 +8,7 @@ import {decodeRelativePathElement} from './RelativePathElement';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRelativePath {
-  elements?: RelativePathElement[];
-}
+export type IRelativePath = Partial<RelativePath>;
 
 /**
 

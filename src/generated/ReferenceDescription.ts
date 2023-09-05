@@ -9,15 +9,7 @@ import {LocalizedText} from './LocalizedText';
 import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IReferenceDescription {
-  referenceTypeId?: ec.NodeId;
-  isForward?: boolean;
-  nodeId?: ec.ExpandedNodeId;
-  browseName?: QualifiedName;
-  displayName?: LocalizedText;
-  nodeClass?: NodeClass;
-  typeDefinition?: ec.ExpandedNodeId;
-}
+export type IReferenceDescription = Partial<ReferenceDescription>;
 
 /**
 

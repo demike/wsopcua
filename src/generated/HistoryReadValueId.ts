@@ -7,12 +7,7 @@ import * as ec from '../basic-types';
 import {QualifiedName} from './QualifiedName';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IHistoryReadValueId {
-  nodeId?: ec.NodeId;
-  indexRange?: string;
-  dataEncoding?: QualifiedName;
-  continuationPoint?: Uint8Array;
-}
+export type IHistoryReadValueId = Partial<HistoryReadValueId>;
 
 /**
 

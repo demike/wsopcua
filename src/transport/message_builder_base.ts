@@ -48,16 +48,16 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
   public readonly packetAssembler: PacketAssembler;
   protected total_body_size: number;
   public total_message_size: number;
-  status_error: boolean;
-  blocks: any[];
-  message_chunks: DataView[];
-  messageHeader: MessageHeader;
+  status_error = false;
+  blocks!: any[];
+  message_chunks!: DataView[];
+  messageHeader?: MessageHeader;
   public secureChannelId: number;
   private readonly expected_secureChannelId: number;
 
-  protected _tick0: number;
-  protected _tick1: number;
-  sequenceHeader: SequenceHeader;
+  protected _tick0 = 0;
+  protected _tick1 = 0;
+  sequenceHeader?: SequenceHeader;
 
   get tick0() {
     return this._tick0;
@@ -157,14 +157,14 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
     }
     assert(binaryStream.length >= 12);
     // verify message chunk length
-    if (this.messageHeader.length !== message_chunk.byteLength) {
+    if (this.messageHeader?.length !== message_chunk.byteLength) {
       return this._report_error(
         'Invalid messageChunk size: ' +
           'the provided chunk is ' +
           message_chunk.byteLength +
           ' bytes long ' +
           'but header specifies ' +
-          this.messageHeader.length
+          this.messageHeader?.length
       );
     }
     // the start of the message body block
@@ -236,7 +236,7 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
     this.emit(
       'error',
       new Error(errorMessage),
-      this.sequenceHeader ? this.sequenceHeader.requestId : null
+      this.sequenceHeader ? this.sequenceHeader.requestId : undefined
     );
     return false;
   }

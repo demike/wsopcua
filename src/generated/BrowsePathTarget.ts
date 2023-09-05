@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IBrowsePathTarget {
-  targetId?: ec.ExpandedNodeId;
-  remainingPathIndex?: ec.UInt32;
-}
+export type IBrowsePathTarget = Partial<BrowsePathTarget>;
 
 /**
 

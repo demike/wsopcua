@@ -9,11 +9,7 @@ import {decodeParameterResultDataType} from './ParameterResultDataType';
 import {DataStream} from '../../basic-types/DataStream';
 import {FetchResultDataType} from './FetchResultDataType';
 
-export interface ITransferResultDataDataType {
-  sequenceNumber?: ec.Int32;
-  endOfResults?: boolean;
-  parameterDefs?: ParameterResultDataType[];
-}
+export type ITransferResultDataDataType = Partial<TransferResultDataDataType>;
 
 /**
 

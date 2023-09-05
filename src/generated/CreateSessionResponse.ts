@@ -12,18 +12,7 @@ import {decodeSignedSoftwareCertificate} from './SignedSoftwareCertificate';
 import {SignatureData} from './SignatureData';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ICreateSessionResponse {
-  responseHeader?: ResponseHeader;
-  sessionId?: ec.NodeId;
-  authenticationToken?: ec.NodeId;
-  revisedSessionTimeout?: ec.Double;
-  serverNonce?: Uint8Array;
-  serverCertificate?: Uint8Array;
-  serverEndpoints?: EndpointDescription[];
-  serverSoftwareCertificates?: SignedSoftwareCertificate[];
-  serverSignature?: SignatureData;
-  maxRequestMessageSize?: ec.UInt32;
-}
+export type ICreateSessionResponse = Partial<CreateSessionResponse>;
 
 /**
 

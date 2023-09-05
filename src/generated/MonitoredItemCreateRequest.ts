@@ -8,11 +8,7 @@ import {MonitoringMode, encodeMonitoringMode, decodeMonitoringMode} from './Moni
 import {MonitoringParameters} from './MonitoringParameters';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IMonitoredItemCreateRequest {
-  itemToMonitor?: ReadValueId;
-  monitoringMode?: MonitoringMode;
-  requestedParameters?: MonitoringParameters;
-}
+export type IMonitoredItemCreateRequest = Partial<MonitoredItemCreateRequest>;
 
 /**
 

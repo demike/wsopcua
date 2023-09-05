@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IConfigurationVersionDataType {
-  majorVersion?: ec.UInt32;
-  minorVersion?: ec.UInt32;
-}
+export type IConfigurationVersionDataType = Partial<ConfigurationVersionDataType>;
 
 /**
 

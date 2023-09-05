@@ -7,11 +7,7 @@ import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ITransferSubscriptionsRequest {
-  requestHeader?: RequestHeader;
-  subscriptionIds?: ec.UInt32[];
-  sendInitialValues?: boolean;
-}
+export type ITransferSubscriptionsRequest = Partial<TransferSubscriptionsRequest>;
 
 /**
 

@@ -7,15 +7,7 @@ import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IModifySubscriptionRequest {
-  requestHeader?: RequestHeader;
-  subscriptionId?: ec.UInt32;
-  requestedPublishingInterval?: ec.Double;
-  requestedLifetimeCount?: ec.UInt32;
-  requestedMaxKeepAliveCount?: ec.UInt32;
-  maxNotificationsPerPublish?: ec.UInt32;
-  priority?: ec.Byte;
-}
+export type IModifySubscriptionRequest = Partial<ModifySubscriptionRequest>;
 
 /**
 

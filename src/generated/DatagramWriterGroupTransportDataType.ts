@@ -7,10 +7,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {WriterGroupTransportDataType} from './WriterGroupTransportDataType';
 
-export interface IDatagramWriterGroupTransportDataType {
-  messageRepeatCount?: ec.Byte;
-  messageRepeatDelay?: ec.Double;
-}
+export type IDatagramWriterGroupTransportDataType = Partial<DatagramWriterGroupTransportDataType>;
 
 /**
 

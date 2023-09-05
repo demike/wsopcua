@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IEphemeralKeyType {
-  publicKey?: Uint8Array;
-  signature?: Uint8Array;
-}
+export type IEphemeralKeyType = Partial<EphemeralKeyType>;
 
 /**
 

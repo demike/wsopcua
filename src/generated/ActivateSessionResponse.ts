@@ -9,12 +9,7 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IActivateSessionResponse {
-  responseHeader?: ResponseHeader;
-  serverNonce?: Uint8Array;
-  results?: ec.StatusCode[];
-  diagnosticInfos?: DiagnosticInfo[];
-}
+export type IActivateSessionResponse = Partial<ActivateSessionResponse>;
 
 /**
 

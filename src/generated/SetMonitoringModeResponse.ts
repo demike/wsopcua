@@ -9,11 +9,7 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ISetMonitoringModeResponse {
-  responseHeader?: ResponseHeader;
-  results?: ec.StatusCode[];
-  diagnosticInfos?: DiagnosticInfo[];
-}
+export type ISetMonitoringModeResponse = Partial<SetMonitoringModeResponse>;
 
 /**
 

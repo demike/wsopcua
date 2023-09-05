@@ -7,9 +7,7 @@ import {JsonDataSetMessageContentMask, encodeJsonDataSetMessageContentMask, deco
 import {DataStream} from '../basic-types/DataStream';
 import {DataSetWriterMessageDataType} from './DataSetWriterMessageDataType';
 
-export interface IJsonDataSetWriterMessageDataType {
-  dataSetMessageContentMask?: JsonDataSetMessageContentMask;
-}
+export type IJsonDataSetWriterMessageDataType = Partial<JsonDataSetWriterMessageDataType>;
 
 /**
 

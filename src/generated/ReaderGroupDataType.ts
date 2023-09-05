@@ -11,11 +11,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {PubSubGroupDataType} from './PubSubGroupDataType';
 import {IPubSubGroupDataType} from './PubSubGroupDataType';
 
-export interface IReaderGroupDataType extends IPubSubGroupDataType {
-  transportSettings?: ExtensionObject;
-  messageSettings?: ExtensionObject;
-  dataSetReaders?: DataSetReaderDataType[];
-}
+export type IReaderGroupDataType = Partial<ReaderGroupDataType>;
 
 /**
 

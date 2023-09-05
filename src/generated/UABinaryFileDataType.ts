@@ -11,11 +11,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {DataTypeSchemaHeader} from './DataTypeSchemaHeader';
 import {IDataTypeSchemaHeader} from './DataTypeSchemaHeader';
 
-export interface IUABinaryFileDataType extends IDataTypeSchemaHeader {
-  schemaLocation?: string;
-  fileHeader?: KeyValuePair[];
-  body?: Variant;
-}
+export type IUABinaryFileDataType = Partial<UABinaryFileDataType>;
 
 /**
 

@@ -12,13 +12,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {DataTypeSchemaHeader} from './DataTypeSchemaHeader';
 import {IDataTypeSchemaHeader} from './DataTypeSchemaHeader';
 
-export interface IDataSetMetaDataType extends IDataTypeSchemaHeader {
-  name?: string;
-  description?: LocalizedText;
-  fields?: FieldMetaData[];
-  dataSetClassId?: ec.Guid;
-  configurationVersion?: ConfigurationVersionDataType;
-}
+export type IDataSetMetaDataType = Partial<DataSetMetaDataType>;
 
 /**
 

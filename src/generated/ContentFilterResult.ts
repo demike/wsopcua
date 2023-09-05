@@ -10,10 +10,7 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IContentFilterResult {
-  elementResults?: ContentFilterElementResult[];
-  elementDiagnosticInfos?: DiagnosticInfo[];
-}
+export type IContentFilterResult = Partial<ContentFilterResult>;
 
 /**
 

@@ -7,11 +7,7 @@ import * as ec from '../basic-types';
 import {UserConfigurationMask, encodeUserConfigurationMask, decodeUserConfigurationMask} from './UserConfigurationMask';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IUserManagementDataType {
-  userName?: string;
-  userConfiguration?: UserConfigurationMask;
-  description?: string;
-}
+export type IUserManagementDataType = Partial<UserManagementDataType>;
 
 /**
 

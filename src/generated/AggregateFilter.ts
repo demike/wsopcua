@@ -8,12 +8,7 @@ import {AggregateConfiguration} from './AggregateConfiguration';
 import {DataStream} from '../basic-types/DataStream';
 import {MonitoringFilter} from './MonitoringFilter';
 
-export interface IAggregateFilter {
-  startTime?: Date;
-  aggregateType?: ec.NodeId;
-  processingInterval?: ec.Double;
-  aggregateConfiguration?: AggregateConfiguration;
-}
+export type IAggregateFilter = Partial<AggregateFilter>;
 
 /**
 

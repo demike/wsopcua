@@ -8,9 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {NetworkAddressDataType} from './NetworkAddressDataType';
 import {INetworkAddressDataType} from './NetworkAddressDataType';
 
-export interface INetworkAddressUrlDataType extends INetworkAddressDataType {
-  url?: string;
-}
+export type INetworkAddressUrlDataType = Partial<NetworkAddressUrlDataType>;
 
 /**
 

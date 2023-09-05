@@ -6,14 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IBuildInfo {
-  productUri?: string;
-  manufacturerName?: string;
-  productName?: string;
-  softwareVersion?: string;
-  buildNumber?: string;
-  buildDate?: Date;
-}
+export type IBuildInfo = Partial<BuildInfo>;
 
 /**
 

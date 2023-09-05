@@ -6,15 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IDiagnosticInfo {
-  symbolicId?: ec.Int32;
-  namespaceURI?: ec.Int32;
-  locale?: ec.Int32;
-  localizedText?: ec.Int32;
-  additionalInfo?: string;
-  innerStatusCode?: ec.StatusCode;
-  innerDiagnosticInfo?: DiagnosticInfo;
-}
+export type IDiagnosticInfo = Partial<DiagnosticInfo>;
 
 /**
 A recursive structure containing diagnostic information associated with a status code.

@@ -7,11 +7,7 @@ import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRepublishRequest {
-  requestHeader?: RequestHeader;
-  subscriptionId?: ec.UInt32;
-  retransmitSequenceNumber?: ec.UInt32;
-}
+export type IRepublishRequest = Partial<RepublishRequest>;
 
 /**
 

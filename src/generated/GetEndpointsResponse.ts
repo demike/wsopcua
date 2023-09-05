@@ -9,10 +9,7 @@ import {decodeEndpointDescription} from './EndpointDescription';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IGetEndpointsResponse {
-  responseHeader?: ResponseHeader;
-  endpoints?: EndpointDescription[];
-}
+export type IGetEndpointsResponse = Partial<GetEndpointsResponse>;
 
 /**
 

@@ -8,9 +8,7 @@ import {decodeHistoryEventFieldList} from './HistoryEventFieldList';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IHistoryEvent {
-  events?: HistoryEventFieldList[];
-}
+export type IHistoryEvent = Partial<HistoryEvent>;
 
 /**
 

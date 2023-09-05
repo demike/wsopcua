@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ITimeZoneDataType {
-  offset?: ec.Int16;
-  daylightSavingInOffset?: boolean;
-}
+export type ITimeZoneDataType = Partial<TimeZoneDataType>;
 
 /**
 

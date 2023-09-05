@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IQualifiedName {
-  namespaceIndex?: ec.UInt16;
-  name?: string;
-}
+export type IQualifiedName = Partial<QualifiedName>;
 
 /**
 A string qualified with a namespace index.

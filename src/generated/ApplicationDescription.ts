@@ -8,15 +8,7 @@ import {LocalizedText} from './LocalizedText';
 import {ApplicationType, encodeApplicationType, decodeApplicationType} from './ApplicationType';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IApplicationDescription {
-  applicationUri?: string;
-  productUri?: string;
-  applicationName?: LocalizedText;
-  applicationType?: ApplicationType;
-  gatewayServerUri?: string;
-  discoveryProfileUri?: string;
-  discoveryUrls?: string[];
-}
+export type IApplicationDescription = Partial<ApplicationDescription>;
 
 /**
 

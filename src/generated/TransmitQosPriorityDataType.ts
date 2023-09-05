@@ -7,9 +7,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {TransmitQosDataType} from './TransmitQosDataType';
 
-export interface ITransmitQosPriorityDataType {
-  priorityLabel?: string;
-}
+export type ITransmitQosPriorityDataType = Partial<TransmitQosPriorityDataType>;
 
 /**
 

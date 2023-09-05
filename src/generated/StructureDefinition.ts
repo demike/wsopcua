@@ -10,12 +10,7 @@ import {decodeStructureField} from './StructureField';
 import {DataStream} from '../basic-types/DataStream';
 import {DataTypeDefinition} from './DataTypeDefinition';
 
-export interface IStructureDefinition {
-  defaultEncodingId?: ec.NodeId;
-  baseDataType?: ec.NodeId;
-  structureType?: StructureType;
-  fields?: StructureField[];
-}
+export type IStructureDefinition = Partial<StructureDefinition>;
 
 /**
 

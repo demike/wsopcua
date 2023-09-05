@@ -7,14 +7,7 @@ import * as ec from '../basic-types';
 import {BrowseDirection, encodeBrowseDirection, decodeBrowseDirection} from './BrowseDirection';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IBrowseDescription {
-  nodeId?: ec.NodeId;
-  browseDirection?: BrowseDirection;
-  referenceTypeId?: ec.NodeId;
-  includeSubtypes?: boolean;
-  nodeClassMask?: ec.UInt32;
-  resultMask?: ec.UInt32;
-}
+export type IBrowseDescription = Partial<BrowseDescription>;
 
 /**
 

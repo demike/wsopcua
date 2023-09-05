@@ -6,11 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IModelChangeStructureDataType {
-  affected?: ec.NodeId;
-  affectedType?: ec.NodeId;
-  verb?: ec.Byte;
-}
+export type IModelChangeStructureDataType = Partial<ModelChangeStructureDataType>;
 
 /**
 

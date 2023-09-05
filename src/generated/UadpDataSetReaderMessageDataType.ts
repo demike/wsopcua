@@ -9,17 +9,7 @@ import {UadpDataSetMessageContentMask, encodeUadpDataSetMessageContentMask, deco
 import {DataStream} from '../basic-types/DataStream';
 import {DataSetReaderMessageDataType} from './DataSetReaderMessageDataType';
 
-export interface IUadpDataSetReaderMessageDataType {
-  groupVersion?: ec.UInt32;
-  networkMessageNumber?: ec.UInt16;
-  dataSetOffset?: ec.UInt16;
-  dataSetClassId?: ec.Guid;
-  networkMessageContentMask?: UadpNetworkMessageContentMask;
-  dataSetMessageContentMask?: UadpDataSetMessageContentMask;
-  publishingInterval?: ec.Double;
-  receiveOffset?: ec.Double;
-  processingOffset?: ec.Double;
-}
+export type IUadpDataSetReaderMessageDataType = Partial<UadpDataSetReaderMessageDataType>;
 
 /**
 

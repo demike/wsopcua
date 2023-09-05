@@ -10,20 +10,7 @@ import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IProgramDiagnostic2DataType {
-  createSessionId?: ec.NodeId;
-  createClientName?: string;
-  invocationCreationTime?: Date;
-  lastTransitionTime?: Date;
-  lastMethodCall?: string;
-  lastMethodSessionId?: ec.NodeId;
-  lastMethodInputArguments?: Argument[];
-  lastMethodOutputArguments?: Argument[];
-  lastMethodInputValues?: Variant[];
-  lastMethodOutputValues?: Variant[];
-  lastMethodCallTime?: Date;
-  lastMethodReturnStatus?: ec.StatusCode;
-}
+export type IProgramDiagnostic2DataType = Partial<ProgramDiagnostic2DataType>;
 
 /**
 

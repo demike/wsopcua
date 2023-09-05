@@ -8,10 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
-export interface IMethodAttributes extends INodeAttributes {
-  executable?: boolean;
-  userExecutable?: boolean;
-}
+export type IMethodAttributes = Partial<MethodAttributes>;
 
 /**
 

@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IOptionSet {
-  value?: Uint8Array;
-  validBits?: Uint8Array;
-}
+export type IOptionSet = Partial<OptionSet>;
 
 /**
 

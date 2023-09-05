@@ -10,12 +10,7 @@ import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ICallMethodResult {
-  statusCode?: ec.StatusCode;
-  inputArgumentResults?: ec.StatusCode[];
-  inputArgumentDiagnosticInfos?: DiagnosticInfo[];
-  outputArguments?: Variant[];
-}
+export type ICallMethodResult = Partial<CallMethodResult>;
 
 /**
 

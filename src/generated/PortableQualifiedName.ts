@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IPortableQualifiedName {
-  namespaceUri?: string;
-  name?: string;
-}
+export type IPortableQualifiedName = Partial<PortableQualifiedName>;
 
 /**
 

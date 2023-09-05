@@ -7,12 +7,7 @@ import * as ec from '../basic-types';
 import {QualifiedName} from './QualifiedName';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRelativePathElement {
-  referenceTypeId?: ec.NodeId;
-  isInverse?: boolean;
-  includeSubtypes?: boolean;
-  targetName?: QualifiedName;
-}
+export type IRelativePathElement = Partial<RelativePathElement>;
 
 /**
 

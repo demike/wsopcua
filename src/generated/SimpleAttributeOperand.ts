@@ -9,12 +9,7 @@ import {decodeQualifiedName} from './QualifiedName';
 import {DataStream} from '../basic-types/DataStream';
 import {FilterOperand} from './FilterOperand';
 
-export interface ISimpleAttributeOperand {
-  typeDefinitionId?: ec.NodeId;
-  browsePath?: QualifiedName[];
-  attributeId?: ec.UInt32;
-  indexRange?: string;
-}
+export type ISimpleAttributeOperand = Partial<SimpleAttributeOperand>;
 
 /**
 

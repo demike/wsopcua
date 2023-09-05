@@ -8,11 +8,7 @@ import * as ec from '../basic-types';
 import {Variant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IPubSubConfigurationValueDataType {
-  configurationElement?: PubSubConfigurationRefDataType;
-  name?: string;
-  identifier?: Variant;
-}
+export type IPubSubConfigurationValueDataType = Partial<PubSubConfigurationValueDataType>;
 
 /**
 

@@ -7,12 +7,7 @@ import * as ec from '../basic-types';
 import {QualifiedName} from './QualifiedName';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IReadValueId {
-  nodeId?: ec.NodeId;
-  attributeId?: ec.UInt32;
-  indexRange?: string;
-  dataEncoding?: QualifiedName;
-}
+export type IReadValueId = Partial<ReadValueId>;
 
 /**
 

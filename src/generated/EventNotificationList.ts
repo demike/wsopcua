@@ -9,9 +9,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {NotificationData} from './NotificationData';
 
-export interface IEventNotificationList {
-  events?: EventFieldList[];
-}
+export type IEventNotificationList = Partial<EventNotificationList>;
 
 /**
 

@@ -7,9 +7,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {FilterOperand} from './FilterOperand';
 
-export interface IElementOperand {
-  index?: ec.UInt32;
-}
+export type IElementOperand = Partial<ElementOperand>;
 
 /**
 

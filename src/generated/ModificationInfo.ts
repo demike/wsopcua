@@ -7,11 +7,7 @@ import * as ec from '../basic-types';
 import {HistoryUpdateType, encodeHistoryUpdateType, decodeHistoryUpdateType} from './HistoryUpdateType';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IModificationInfo {
-  modificationTime?: Date;
-  updateType?: HistoryUpdateType;
-  userName?: string;
-}
+export type IModificationInfo = Partial<ModificationInfo>;
 
 /**
 

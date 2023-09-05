@@ -7,10 +7,7 @@ import {ResponseHeader} from './ResponseHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ICancelResponse {
-  responseHeader?: ResponseHeader;
-  cancelCount?: ec.UInt32;
-}
+export type ICancelResponse = Partial<CancelResponse>;
 
 /**
 

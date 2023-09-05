@@ -9,16 +9,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
-export interface IVariableAttributes extends INodeAttributes {
-  value?: Variant;
-  dataType?: ec.NodeId;
-  valueRank?: ec.Int32;
-  arrayDimensions?: ec.UInt32[];
-  accessLevel?: ec.Byte;
-  userAccessLevel?: ec.Byte;
-  minimumSamplingInterval?: ec.Double;
-  historizing?: boolean;
-}
+export type IVariableAttributes = Partial<VariableAttributes>;
 
 /**
 

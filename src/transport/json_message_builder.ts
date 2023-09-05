@@ -35,13 +35,12 @@ export interface JSONMessageBuilderEvents {
 export class JSONMessageBuilder extends EventEmitter<JSONMessageBuilderEvents> {
   options: any;
   total_message_size: number;
-  status_error: boolean;
   messageHeader: any;
-  secureChannelId: number;
-  expected_secureChannelId: number;
+  secureChannelId = 0;
+  protected expected_secureChannelId = 0;
 
-  protected _tick0: number;
-  protected _tick1: number;
+  protected _tick0 = 0;
+  protected _tick1 = 0;
 
   get tick0() {
     return this._tick0;
@@ -55,11 +54,6 @@ export class JSONMessageBuilder extends EventEmitter<JSONMessageBuilderEvents> {
     super();
     options = options || {};
     this.options = options;
-    this.total_message_size = 0;
-    this._init_new();
-  }
-  protected _init_new() {
-    this.status_error = false;
     this.total_message_size = 0;
   }
 

@@ -9,16 +9,7 @@ import {QualifiedName} from './QualifiedName';
 import {decodeQualifiedName} from './QualifiedName';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IPublishedVariableDataType {
-  publishedVariable?: ec.NodeId;
-  attributeId?: ec.UInt32;
-  samplingIntervalHint?: ec.Double;
-  deadbandType?: ec.UInt32;
-  deadbandValue?: ec.Double;
-  indexRange?: string;
-  substituteValue?: Variant;
-  metaDataProperties?: QualifiedName[];
-}
+export type IPublishedVariableDataType = Partial<PublishedVariableDataType>;
 
 /**
 

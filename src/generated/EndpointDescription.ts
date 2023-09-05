@@ -10,16 +10,7 @@ import {UserTokenPolicy} from './UserTokenPolicy';
 import {decodeUserTokenPolicy} from './UserTokenPolicy';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IEndpointDescription {
-  endpointUrl?: string;
-  server?: ApplicationDescription;
-  serverCertificate?: Uint8Array;
-  securityMode?: MessageSecurityMode;
-  securityPolicyUri?: string;
-  userIdentityTokens?: UserTokenPolicy[];
-  transportProfileUri?: string;
-  securityLevel?: ec.Byte;
-}
+export type IEndpointDescription = Partial<EndpointDescription>;
 
 /**
 

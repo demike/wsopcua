@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IServiceCounterDataType {
-  totalCount?: ec.UInt32;
-  errorCount?: ec.UInt32;
-}
+export type IServiceCounterDataType = Partial<ServiceCounterDataType>;
 
 /**
 

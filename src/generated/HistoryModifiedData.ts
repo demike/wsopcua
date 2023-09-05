@@ -10,9 +10,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {HistoryData} from './HistoryData';
 import {IHistoryData} from './HistoryData';
 
-export interface IHistoryModifiedData extends IHistoryData {
-  modificationInfos?: ModificationInfo[];
-}
+export type IHistoryModifiedData = Partial<HistoryModifiedData>;
 
 /**
 

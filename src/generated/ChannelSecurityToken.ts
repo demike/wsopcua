@@ -6,12 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IChannelSecurityToken {
-  channelId?: ec.UInt32;
-  tokenId?: ec.UInt32;
-  createdAt?: Date;
-  revisedLifetime?: ec.UInt32;
-}
+export type IChannelSecurityToken = Partial<ChannelSecurityToken>;
 
 /**
 

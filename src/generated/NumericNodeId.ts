@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface INumericNodeId {
-  namespaceIndex?: ec.UInt16;
-  identifier?: ec.UInt32;
-}
+export type INumericNodeId = Partial<NumericNodeId>;
 
 /**
 

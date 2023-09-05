@@ -6,11 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IViewDescription {
-  viewId?: ec.NodeId;
-  timestamp?: Date;
-  viewVersion?: ec.UInt32;
-}
+export type IViewDescription = Partial<ViewDescription>;
 
 /**
 

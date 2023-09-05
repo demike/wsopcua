@@ -8,9 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {HistoryUpdateDetails} from './HistoryUpdateDetails';
 import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
-export interface IDeleteAtTimeDetails extends IHistoryUpdateDetails {
-  reqTimes?: Date[];
-}
+export type IDeleteAtTimeDetails = Partial<DeleteAtTimeDetails>;
 
 /**
 

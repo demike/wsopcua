@@ -7,12 +7,7 @@ import {PubSubConfigurationRefMask, encodePubSubConfigurationRefMask, decodePubS
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IPubSubConfigurationRefDataType {
-  configurationMask?: PubSubConfigurationRefMask;
-  elementIndex?: ec.UInt16;
-  connectionIndex?: ec.UInt16;
-  groupIndex?: ec.UInt16;
-}
+export type IPubSubConfigurationRefDataType = Partial<PubSubConfigurationRefDataType>;
 
 /**
 

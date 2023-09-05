@@ -7,12 +7,7 @@ import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IMonitoredItemModifyResult {
-  statusCode?: ec.StatusCode;
-  revisedSamplingInterval?: ec.Double;
-  revisedQueueSize?: ec.UInt32;
-  filterResult?: ExtensionObject;
-}
+export type IMonitoredItemModifyResult = Partial<MonitoredItemModifyResult>;
 
 /**
 

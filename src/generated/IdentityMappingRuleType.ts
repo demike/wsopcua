@@ -7,10 +7,7 @@ import {IdentityCriteriaType, encodeIdentityCriteriaType, decodeIdentityCriteria
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IIdentityMappingRuleType {
-  criteriaType?: IdentityCriteriaType;
-  criteria?: string;
-}
+export type IIdentityMappingRuleType = Partial<IdentityMappingRuleType>;
 
 /**
 

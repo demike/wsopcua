@@ -20,10 +20,7 @@ import { IDeleteMonitoredItemsRequest } from '../generated/DeleteMonitoredItemsR
 import { IModifyMonitoredItemsRequest } from '../generated/ModifyMonitoredItemsRequest';
 import { ModifyMonitoredItemsResponse } from '../generated/ModifyMonitoredItemsResponse';
 import { IDeleteSubscriptionsRequest } from '../generated/DeleteSubscriptionsRequest';
-import {
-  TransferSubscriptionsRequest,
-  ITransferSubscriptionsRequest,
-} from '../generated/TransferSubscriptionsRequest';
+import { ITransferSubscriptionsRequest } from '../generated/TransferSubscriptionsRequest';
 
 import { ClientSidePublishEngine } from './client_publish_engine';
 import { ClientSessionKeepAliveManager } from './client_session_keepalive_manager';
@@ -55,7 +52,7 @@ import { doDebug, debugLog } from '../common/debug';
 import { NodeClass } from '../generated/NodeClass';
 import { DiagnosticInfo } from '../data-model';
 import { ReferenceDescription, BrowseDescription } from '../service-browse';
-import { IRequestHeader } from '../generated/RequestHeader';
+import { IRequestHeader, RequestHeader } from '../generated/RequestHeader';
 import { IBrowseDescription } from '../generated/BrowseDescription';
 import { RegisterNodesRequest } from '../generated/RegisterNodesRequest';
 import { RegisterNodesResponse } from '../generated/RegisterNodesResponse';
@@ -1660,7 +1657,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   }
   public republishP(options: IRepublishRequest): Promise<RepublishResponse> {
     return new Promise((res, rej) => {
-      this.publish(options, (err, response) => {
+      this.republish(options, (err, response) => {
         if (err) {
           rej(err);
         } else {
@@ -1837,7 +1834,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   }
 
   public performMessageTransaction(
-    request: IEncodable & { requestHeader: IRequestHeader },
+    request: IEncodable & { requestHeader: RequestHeader },
     callback: ResponseCallback<any>
   ) {
     assert('function' === typeof callback);

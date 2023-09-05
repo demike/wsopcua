@@ -6,13 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IDeleteReferencesItem {
-  sourceNodeId?: ec.NodeId;
-  referenceTypeId?: ec.NodeId;
-  isForward?: boolean;
-  targetNodeId?: ec.ExpandedNodeId;
-  deleteBidirectional?: boolean;
-}
+export type IDeleteReferencesItem = Partial<DeleteReferencesItem>;
 
 /**
 

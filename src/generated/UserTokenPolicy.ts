@@ -7,13 +7,7 @@ import * as ec from '../basic-types';
 import {UserTokenType, encodeUserTokenType, decodeUserTokenType} from './UserTokenType';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IUserTokenPolicy {
-  policyId?: string;
-  tokenType?: UserTokenType;
-  issuedTokenType?: string;
-  issuerEndpointUrl?: string;
-  securityPolicyUri?: string;
-}
+export type IUserTokenPolicy = Partial<UserTokenPolicy>;
 
 /**
 

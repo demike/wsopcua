@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IAddNodesResult {
-  statusCode?: ec.StatusCode;
-  addedNodeId?: ec.NodeId;
-}
+export type IAddNodesResult = Partial<AddNodesResult>;
 
 /**
 

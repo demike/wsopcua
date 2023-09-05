@@ -7,12 +7,7 @@ import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IGetEndpointsRequest {
-  requestHeader?: RequestHeader;
-  endpointUrl?: string;
-  localeIds?: string[];
-  profileUris?: string[];
-}
+export type IGetEndpointsRequest = Partial<GetEndpointsRequest>;
 
 /**
 

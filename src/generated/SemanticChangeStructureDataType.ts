@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ISemanticChangeStructureDataType {
-  affected?: ec.NodeId;
-  affectedType?: ec.NodeId;
-}
+export type ISemanticChangeStructureDataType = Partial<SemanticChangeStructureDataType>;
 
 /**
 

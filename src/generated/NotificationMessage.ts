@@ -7,11 +7,7 @@ import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface INotificationMessage {
-  sequenceNumber?: ec.UInt32;
-  publishTime?: Date;
-  notificationData?: ExtensionObject[];
-}
+export type INotificationMessage = Partial<NotificationMessage>;
 
 /**
 

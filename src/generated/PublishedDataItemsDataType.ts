@@ -9,9 +9,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {PublishedDataSetSourceDataType} from './PublishedDataSetSourceDataType';
 
-export interface IPublishedDataItemsDataType {
-  publishedData?: PublishedVariableDataType[];
-}
+export type IPublishedDataItemsDataType = Partial<PublishedDataItemsDataType>;
 
 /**
 

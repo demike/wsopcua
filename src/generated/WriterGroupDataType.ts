@@ -11,17 +11,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {PubSubGroupDataType} from './PubSubGroupDataType';
 import {IPubSubGroupDataType} from './PubSubGroupDataType';
 
-export interface IWriterGroupDataType extends IPubSubGroupDataType {
-  writerGroupId?: ec.UInt16;
-  publishingInterval?: ec.Double;
-  keepAliveTime?: ec.Double;
-  priority?: ec.Byte;
-  localeIds?: string[];
-  headerLayoutUri?: string;
-  transportSettings?: ExtensionObject;
-  messageSettings?: ExtensionObject;
-  dataSetWriters?: DataSetWriterDataType[];
-}
+export type IWriterGroupDataType = Partial<WriterGroupDataType>;
 
 /**
 

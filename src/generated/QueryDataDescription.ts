@@ -7,11 +7,7 @@ import {RelativePath} from './RelativePath';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IQueryDataDescription {
-  relativePath?: RelativePath;
-  attributeId?: ec.UInt32;
-  indexRange?: string;
-}
+export type IQueryDataDescription = Partial<QueryDataDescription>;
 
 /**
 

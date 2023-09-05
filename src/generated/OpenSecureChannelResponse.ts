@@ -8,12 +8,7 @@ import * as ec from '../basic-types';
 import {ChannelSecurityToken} from './ChannelSecurityToken';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IOpenSecureChannelResponse {
-  responseHeader?: ResponseHeader;
-  serverProtocolVersion?: ec.UInt32;
-  securityToken?: ChannelSecurityToken;
-  serverNonce?: Uint8Array;
-}
+export type IOpenSecureChannelResponse = Partial<OpenSecureChannelResponse>;
 
 /**
 

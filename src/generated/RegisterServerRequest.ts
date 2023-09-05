@@ -7,10 +7,7 @@ import {RequestHeader} from './RequestHeader';
 import {RegisteredServer} from './RegisteredServer';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRegisterServerRequest {
-  requestHeader?: RequestHeader;
-  server?: RegisteredServer;
-}
+export type IRegisterServerRequest = Partial<RegisterServerRequest>;
 
 /**
 

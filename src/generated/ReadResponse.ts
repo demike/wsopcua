@@ -11,11 +11,7 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IReadResponse {
-  responseHeader?: ResponseHeader;
-  results?: DataValue[];
-  diagnosticInfos?: DiagnosticInfo[];
-}
+export type IReadResponse = Partial<ReadResponse>;
 
 /**
 

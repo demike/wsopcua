@@ -8,11 +8,7 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IContentFilterElementResult {
-  statusCode?: ec.StatusCode;
-  operandStatusCodes?: ec.StatusCode[];
-  operandDiagnosticInfos?: DiagnosticInfo[];
-}
+export type IContentFilterElementResult = Partial<ContentFilterElementResult>;
 
 /**
 

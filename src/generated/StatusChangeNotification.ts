@@ -8,10 +8,7 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 import {NotificationData} from './NotificationData';
 
-export interface IStatusChangeNotification {
-  status?: ec.StatusCode;
-  diagnosticInfo?: DiagnosticInfo;
-}
+export type IStatusChangeNotification = Partial<StatusChangeNotification>;
 
 /**
 

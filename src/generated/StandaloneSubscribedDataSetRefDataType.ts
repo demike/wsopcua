@@ -7,9 +7,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {SubscribedDataSetDataType} from './SubscribedDataSetDataType';
 
-export interface IStandaloneSubscribedDataSetRefDataType {
-  dataSetName?: string;
-}
+export type IStandaloneSubscribedDataSetRefDataType = Partial<StandaloneSubscribedDataSetRefDataType>;
 
 /**
 

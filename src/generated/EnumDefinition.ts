@@ -9,9 +9,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {DataTypeDefinition} from './DataTypeDefinition';
 
-export interface IEnumDefinition {
-  fields?: EnumField[];
-}
+export type IEnumDefinition = Partial<EnumDefinition>;
 
 /**
 

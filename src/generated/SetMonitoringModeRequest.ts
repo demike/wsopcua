@@ -8,12 +8,7 @@ import * as ec from '../basic-types';
 import {MonitoringMode, encodeMonitoringMode, decodeMonitoringMode} from './MonitoringMode';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ISetMonitoringModeRequest {
-  requestHeader?: RequestHeader;
-  subscriptionId?: ec.UInt32;
-  monitoringMode?: MonitoringMode;
-  monitoredItemIds?: ec.UInt32[];
-}
+export type ISetMonitoringModeRequest = Partial<SetMonitoringModeRequest>;
 
 /**
 

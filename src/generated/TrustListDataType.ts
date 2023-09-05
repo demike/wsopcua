@@ -6,13 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ITrustListDataType {
-  specifiedLists?: ec.UInt32;
-  trustedCertificates?: Uint8Array[];
-  trustedCrls?: Uint8Array[];
-  issuerCertificates?: Uint8Array[];
-  issuerCrls?: Uint8Array[];
-}
+export type ITrustListDataType = Partial<TrustListDataType>;
 
 /**
 

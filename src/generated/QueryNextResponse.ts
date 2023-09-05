@@ -9,11 +9,7 @@ import {decodeQueryDataSet} from './QueryDataSet';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IQueryNextResponse {
-  responseHeader?: ResponseHeader;
-  queryDataSets?: QueryDataSet[];
-  revisedContinuationPoint?: Uint8Array;
-}
+export type IQueryNextResponse = Partial<QueryNextResponse>;
 
 /**
 

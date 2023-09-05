@@ -8,9 +8,7 @@ import {decodeContentFilterElement} from './ContentFilterElement';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IContentFilter {
-  elements?: ContentFilterElement[];
-}
+export type IContentFilter = Partial<ContentFilter>;
 
 /**
 

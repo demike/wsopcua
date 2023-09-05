@@ -10,12 +10,7 @@ import {MonitoredItemCreateRequest} from './MonitoredItemCreateRequest';
 import {decodeMonitoredItemCreateRequest} from './MonitoredItemCreateRequest';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ICreateMonitoredItemsRequest {
-  requestHeader?: RequestHeader;
-  subscriptionId?: ec.UInt32;
-  timestampsToReturn?: TimestampsToReturn;
-  itemsToCreate?: MonitoredItemCreateRequest[];
-}
+export type ICreateMonitoredItemsRequest = Partial<CreateMonitoredItemsRequest>;
 
 /**
 

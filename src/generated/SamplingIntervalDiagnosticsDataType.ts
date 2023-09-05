@@ -6,12 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ISamplingIntervalDiagnosticsDataType {
-  samplingInterval?: ec.Double;
-  monitoredItemCount?: ec.UInt32;
-  maxMonitoredItemCount?: ec.UInt32;
-  disabledMonitoredItemCount?: ec.UInt32;
-}
+export type ISamplingIntervalDiagnosticsDataType = Partial<SamplingIntervalDiagnosticsDataType>;
 
 /**
 

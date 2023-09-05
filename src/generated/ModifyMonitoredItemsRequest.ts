@@ -10,12 +10,7 @@ import {MonitoredItemModifyRequest} from './MonitoredItemModifyRequest';
 import {decodeMonitoredItemModifyRequest} from './MonitoredItemModifyRequest';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IModifyMonitoredItemsRequest {
-  requestHeader?: RequestHeader;
-  subscriptionId?: ec.UInt32;
-  timestampsToReturn?: TimestampsToReturn;
-  itemsToModify?: MonitoredItemModifyRequest[];
-}
+export type IModifyMonitoredItemsRequest = Partial<ModifyMonitoredItemsRequest>;
 
 /**
 

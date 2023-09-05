@@ -10,11 +10,7 @@ import {ContentFilter} from './ContentFilter';
 import {DataStream} from '../basic-types/DataStream';
 import {PublishedDataSetSourceDataType} from './PublishedDataSetSourceDataType';
 
-export interface IPublishedEventsDataType {
-  eventNotifier?: ec.NodeId;
-  selectedFields?: SimpleAttributeOperand[];
-  filter?: ContentFilter;
-}
+export type IPublishedEventsDataType = Partial<PublishedEventsDataType>;
 
 /**
 

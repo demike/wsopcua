@@ -9,11 +9,7 @@ import * as ec from '../../basic-types';
 import {DiagnosticInfo} from '../DiagnosticInfo';
 import {DataStream} from '../../basic-types/DataStream';
 
-export interface IParameterResultDataType {
-  nodePath?: QualifiedName[];
-  statusCode?: ec.StatusCode;
-  diagnostics?: DiagnosticInfo;
-}
+export type IParameterResultDataType = Partial<ParameterResultDataType>;
 
 /**
 

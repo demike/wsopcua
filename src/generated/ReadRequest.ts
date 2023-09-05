@@ -10,12 +10,7 @@ import {ReadValueId} from './ReadValueId';
 import {decodeReadValueId} from './ReadValueId';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IReadRequest {
-  requestHeader?: RequestHeader;
-  maxAge?: ec.Double;
-  timestampsToReturn?: TimestampsToReturn;
-  nodesToRead?: ReadValueId[];
-}
+export type IReadRequest = Partial<ReadRequest>;
 
 /**
 

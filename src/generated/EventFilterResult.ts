@@ -10,11 +10,7 @@ import {ContentFilterResult} from './ContentFilterResult';
 import {DataStream} from '../basic-types/DataStream';
 import {MonitoringFilterResult} from './MonitoringFilterResult';
 
-export interface IEventFilterResult {
-  selectClauseResults?: ec.StatusCode[];
-  selectClauseDiagnosticInfos?: DiagnosticInfo[];
-  whereClauseResult?: ContentFilterResult;
-}
+export type IEventFilterResult = Partial<EventFilterResult>;
 
 /**
 

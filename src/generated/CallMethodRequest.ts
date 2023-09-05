@@ -8,11 +8,7 @@ import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ICallMethodRequest {
-  objectId?: ec.NodeId;
-  methodId?: ec.NodeId;
-  inputArguments?: Variant[];
-}
+export type ICallMethodRequest = Partial<CallMethodRequest>;
 
 /**
 

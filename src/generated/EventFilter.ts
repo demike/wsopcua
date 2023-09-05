@@ -10,10 +10,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {MonitoringFilter} from './MonitoringFilter';
 
-export interface IEventFilter {
-  selectClauses?: SimpleAttributeOperand[];
-  whereClause?: ContentFilter;
-}
+export type IEventFilter = Partial<EventFilter>;
 
 /**
 

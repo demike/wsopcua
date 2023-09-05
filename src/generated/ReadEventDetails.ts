@@ -8,12 +8,7 @@ import {EventFilter} from './EventFilter';
 import {DataStream} from '../basic-types/DataStream';
 import {HistoryReadDetails} from './HistoryReadDetails';
 
-export interface IReadEventDetails {
-  numValuesPerNode?: ec.UInt32;
-  startTime?: Date;
-  endTime?: Date;
-  filter?: EventFilter;
-}
+export type IReadEventDetails = Partial<ReadEventDetails>;
 
 /**
 

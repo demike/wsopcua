@@ -7,9 +7,7 @@ import {Variant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 import {FilterOperand} from './FilterOperand';
 
-export interface ILiteralOperand {
-  value?: Variant;
-}
+export type ILiteralOperand = Partial<LiteralOperand>;
 
 /**
 

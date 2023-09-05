@@ -8,13 +8,7 @@ import {RelativePath} from './RelativePath';
 import {DataStream} from '../basic-types/DataStream';
 import {FilterOperand} from './FilterOperand';
 
-export interface IAttributeOperand {
-  nodeId?: ec.NodeId;
-  alias?: string;
-  browsePath?: RelativePath;
-  attributeId?: ec.UInt32;
-  indexRange?: string;
-}
+export type IAttributeOperand = Partial<AttributeOperand>;
 
 /**
 

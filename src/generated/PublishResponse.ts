@@ -10,15 +10,7 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IPublishResponse {
-  responseHeader?: ResponseHeader;
-  subscriptionId?: ec.UInt32;
-  availableSequenceNumbers?: ec.UInt32[];
-  moreNotifications?: boolean;
-  notificationMessage?: NotificationMessage;
-  results?: ec.StatusCode[];
-  diagnosticInfos?: DiagnosticInfo[];
-}
+export type IPublishResponse = Partial<PublishResponse>;
 
 /**
 

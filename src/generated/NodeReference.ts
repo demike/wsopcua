@@ -6,12 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface INodeReference {
-  nodeId?: ec.NodeId;
-  referenceTypeId?: ec.NodeId;
-  isForward?: boolean;
-  referencedNodeIds?: ec.NodeId[];
-}
+export type INodeReference = Partial<NodeReference>;
 
 /**
 

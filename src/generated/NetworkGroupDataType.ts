@@ -8,10 +8,7 @@ import {EndpointUrlListDataType} from './EndpointUrlListDataType';
 import {decodeEndpointUrlListDataType} from './EndpointUrlListDataType';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface INetworkGroupDataType {
-  serverUri?: string;
-  networkPaths?: EndpointUrlListDataType[];
-}
+export type INetworkGroupDataType = Partial<NetworkGroupDataType>;
 
 /**
 

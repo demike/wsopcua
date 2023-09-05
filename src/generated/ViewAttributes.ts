@@ -8,10 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
-export interface IViewAttributes extends INodeAttributes {
-  containsNoLoops?: boolean;
-  eventNotifier?: ec.Byte;
-}
+export type IViewAttributes = Partial<ViewAttributes>;
 
 /**
 

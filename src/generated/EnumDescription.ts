@@ -9,10 +9,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {DataTypeDescription} from './DataTypeDescription';
 import {IDataTypeDescription} from './DataTypeDescription';
 
-export interface IEnumDescription extends IDataTypeDescription {
-  enumDefinition?: EnumDefinition;
-  builtInType?: ec.Byte;
-}
+export type IEnumDescription = Partial<EnumDescription>;
 
 /**
 

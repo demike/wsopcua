@@ -7,10 +7,7 @@ import {ResponseHeader} from './ResponseHeader';
 import {NotificationMessage} from './NotificationMessage';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRepublishResponse {
-  responseHeader?: ResponseHeader;
-  notificationMessage?: NotificationMessage;
-}
+export type IRepublishResponse = Partial<RepublishResponse>;
 
 /**
 

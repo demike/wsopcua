@@ -6,9 +6,7 @@
 import {ResponseHeader} from './ResponseHeader';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRegisterServerResponse {
-  responseHeader?: ResponseHeader;
-}
+export type IRegisterServerResponse = Partial<RegisterServerResponse>;
 
 /**
 

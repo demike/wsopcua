@@ -10,11 +10,7 @@ import {decodePubSubConnectionDataType} from './PubSubConnectionDataType';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IPubSubConfigurationDataType {
-  publishedDataSets?: PublishedDataSetDataType[];
-  connections?: PubSubConnectionDataType[];
-  enabled?: boolean;
-}
+export type IPubSubConfigurationDataType = Partial<PubSubConfigurationDataType>;
 
 /**
 

@@ -10,17 +10,7 @@ import {KeyValuePair} from './KeyValuePair';
 import {decodeKeyValuePair} from './KeyValuePair';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ISecurityGroupDataType {
-  name?: string;
-  securityGroupFolder?: string[];
-  keyLifetime?: ec.Double;
-  securityPolicyUri?: string;
-  maxFutureKeyCount?: ec.UInt32;
-  maxPastKeyCount?: ec.UInt32;
-  securityGroupId?: string;
-  rolePermissions?: RolePermissionType[];
-  groupProperties?: KeyValuePair[];
-}
+export type ISecurityGroupDataType = Partial<SecurityGroupDataType>;
 
 /**
 

@@ -7,11 +7,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {Orientation} from './Orientation';
 
-export interface IThreeDOrientation {
-  a?: ec.Double;
-  b?: ec.Double;
-  c?: ec.Double;
-}
+export type IThreeDOrientation = Partial<ThreeDOrientation>;
 
 /**
 

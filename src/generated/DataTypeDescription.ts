@@ -7,10 +7,7 @@ import * as ec from '../basic-types';
 import {QualifiedName} from './QualifiedName';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IDataTypeDescription {
-  dataTypeId?: ec.NodeId;
-  name?: QualifiedName;
-}
+export type IDataTypeDescription = Partial<DataTypeDescription>;
 
 /**
 

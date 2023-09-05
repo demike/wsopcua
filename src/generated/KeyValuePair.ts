@@ -7,10 +7,7 @@ import {QualifiedName} from './QualifiedName';
 import {Variant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IKeyValuePair {
-  key?: QualifiedName;
-  value?: Variant;
-}
+export type IKeyValuePair = Partial<KeyValuePair>;
 
 /**
 

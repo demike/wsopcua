@@ -8,9 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
-export interface IObjectTypeAttributes extends INodeAttributes {
-  isAbstract?: boolean;
-}
+export type IObjectTypeAttributes = Partial<ObjectTypeAttributes>;
 
 /**
 

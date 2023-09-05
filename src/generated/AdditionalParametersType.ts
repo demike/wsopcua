@@ -8,9 +8,7 @@ import {decodeKeyValuePair} from './KeyValuePair';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IAdditionalParametersType {
-  parameters?: KeyValuePair[];
-}
+export type IAdditionalParametersType = Partial<AdditionalParametersType>;
 
 /**
 

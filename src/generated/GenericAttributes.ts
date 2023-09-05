@@ -10,9 +10,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
-export interface IGenericAttributes extends INodeAttributes {
-  attributeValues?: GenericAttributeValue[];
-}
+export type IGenericAttributes = Partial<GenericAttributes>;
 
 /**
 

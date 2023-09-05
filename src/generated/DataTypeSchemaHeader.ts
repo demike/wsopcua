@@ -12,12 +12,7 @@ import {SimpleTypeDescription} from './SimpleTypeDescription';
 import {decodeSimpleTypeDescription} from './SimpleTypeDescription';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IDataTypeSchemaHeader {
-  namespaces?: string[];
-  structureDataTypes?: StructureDescription[];
-  enumDataTypes?: EnumDescription[];
-  simpleDataTypes?: SimpleTypeDescription[];
-}
+export type IDataTypeSchemaHeader = Partial<DataTypeSchemaHeader>;
 
 /**
 

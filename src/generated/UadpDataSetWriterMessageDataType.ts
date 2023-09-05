@@ -8,12 +8,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {DataSetWriterMessageDataType} from './DataSetWriterMessageDataType';
 
-export interface IUadpDataSetWriterMessageDataType {
-  dataSetMessageContentMask?: UadpDataSetMessageContentMask;
-  configuredSize?: ec.UInt16;
-  networkMessageNumber?: ec.UInt16;
-  dataSetOffset?: ec.UInt16;
-}
+export type IUadpDataSetWriterMessageDataType = Partial<UadpDataSetWriterMessageDataType>;
 
 /**
 

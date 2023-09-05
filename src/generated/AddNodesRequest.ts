@@ -9,10 +9,7 @@ import {decodeAddNodesItem} from './AddNodesItem';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IAddNodesRequest {
-  requestHeader?: RequestHeader;
-  nodesToAdd?: AddNodesItem[];
-}
+export type IAddNodesRequest = Partial<AddNodesRequest>;
 
 /**
 

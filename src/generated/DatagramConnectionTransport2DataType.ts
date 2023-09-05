@@ -9,12 +9,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {DatagramConnectionTransportDataType} from './DatagramConnectionTransportDataType';
 import {IDatagramConnectionTransportDataType} from './DatagramConnectionTransportDataType';
 
-export interface IDatagramConnectionTransport2DataType extends IDatagramConnectionTransportDataType {
-  discoveryAnnounceRate?: ec.UInt32;
-  discoveryMaxMessageSize?: ec.UInt32;
-  qosCategory?: string;
-  datagramQos?: ExtensionObject[];
-}
+export type IDatagramConnectionTransport2DataType = Partial<DatagramConnectionTransport2DataType>;
 
 /**
 

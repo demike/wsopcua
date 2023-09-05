@@ -9,12 +9,7 @@ import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncod
 import {DataStream} from '../basic-types/DataStream';
 import {SubscribedDataSetDataType} from './SubscribedDataSetDataType';
 
-export interface IStandaloneSubscribedDataSetDataType {
-  name?: string;
-  dataSetFolder?: string[];
-  dataSetMetaData?: DataSetMetaDataType;
-  subscribedDataSet?: ExtensionObject;
-}
+export type IStandaloneSubscribedDataSetDataType = Partial<StandaloneSubscribedDataSetDataType>;
 
 /**
 

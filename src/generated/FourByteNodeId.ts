@@ -6,10 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IFourByteNodeId {
-  namespaceIndex?: ec.Byte;
-  identifier?: ec.UInt16;
-}
+export type IFourByteNodeId = Partial<FourByteNodeId>;
 
 /**
 

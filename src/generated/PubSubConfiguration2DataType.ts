@@ -20,15 +20,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {PubSubConfigurationDataType} from './PubSubConfigurationDataType';
 import {IPubSubConfigurationDataType} from './PubSubConfigurationDataType';
 
-export interface IPubSubConfiguration2DataType extends IPubSubConfigurationDataType {
-  subscribedDataSets?: StandaloneSubscribedDataSetDataType[];
-  dataSetClasses?: DataSetMetaDataType[];
-  defaultSecurityKeyServices?: EndpointDescription[];
-  securityGroups?: SecurityGroupDataType[];
-  pubSubKeyPushTargets?: PubSubKeyPushTargetDataType[];
-  configurationVersion?: ec.UInt32;
-  configurationProperties?: KeyValuePair[];
-}
+export type IPubSubConfiguration2DataType = Partial<PubSubConfiguration2DataType>;
 
 /**
 

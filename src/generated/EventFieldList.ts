@@ -8,10 +8,7 @@ import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IEventFieldList {
-  clientHandle?: ec.UInt32;
-  eventFields?: Variant[];
-}
+export type IEventFieldList = Partial<EventFieldList>;
 
 /**
 

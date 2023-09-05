@@ -8,11 +8,7 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IHistoryUpdateResult {
-  statusCode?: ec.StatusCode;
-  operationResults?: ec.StatusCode[];
-  diagnosticInfos?: DiagnosticInfo[];
-}
+export type IHistoryUpdateResult = Partial<HistoryUpdateResult>;
 
 /**
 

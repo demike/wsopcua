@@ -7,13 +7,7 @@ import * as ec from '../basic-types';
 import {LocalizedText} from './LocalizedText';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface INodeAttributes {
-  specifiedAttributes?: ec.UInt32;
-  displayName?: LocalizedText;
-  description?: LocalizedText;
-  writeMask?: ec.UInt32;
-  userWriteMask?: ec.UInt32;
-}
+export type INodeAttributes = Partial<NodeAttributes>;
 
 /**
 

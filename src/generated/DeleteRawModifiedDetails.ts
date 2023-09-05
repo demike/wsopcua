@@ -8,11 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {HistoryUpdateDetails} from './HistoryUpdateDetails';
 import {IHistoryUpdateDetails} from './HistoryUpdateDetails';
 
-export interface IDeleteRawModifiedDetails extends IHistoryUpdateDetails {
-  isDeleteModified?: boolean;
-  startTime?: Date;
-  endTime?: Date;
-}
+export type IDeleteRawModifiedDetails = Partial<DeleteRawModifiedDetails>;
 
 /**
 

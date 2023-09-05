@@ -7,12 +7,7 @@ import * as ec from '../basic-types';
 import {LocalizedText} from './LocalizedText';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ICurrencyUnitType {
-  numericCode?: ec.Int16;
-  exponent?: ec.SByte;
-  alphabeticCode?: string;
-  currency?: LocalizedText;
-}
+export type ICurrencyUnitType = Partial<CurrencyUnitType>;
 
 /**
 

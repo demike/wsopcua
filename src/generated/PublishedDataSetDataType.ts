@@ -10,13 +10,7 @@ import {decodeKeyValuePair} from './KeyValuePair';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IPublishedDataSetDataType {
-  name?: string;
-  dataSetFolder?: string[];
-  dataSetMetaData?: DataSetMetaDataType;
-  extensionFields?: KeyValuePair[];
-  dataSetSource?: ExtensionObject;
-}
+export type IPublishedDataSetDataType = Partial<PublishedDataSetDataType>;
 
 /**
 

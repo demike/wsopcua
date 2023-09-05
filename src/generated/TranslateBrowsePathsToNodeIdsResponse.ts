@@ -11,11 +11,7 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ITranslateBrowsePathsToNodeIdsResponse {
-  responseHeader?: ResponseHeader;
-  results?: BrowsePathResult[];
-  diagnosticInfos?: DiagnosticInfo[];
-}
+export type ITranslateBrowsePathsToNodeIdsResponse = Partial<TranslateBrowsePathsToNodeIdsResponse>;
 
 /**
 

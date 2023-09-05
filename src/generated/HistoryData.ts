@@ -8,9 +8,7 @@ import {decodeDataValue} from './DataValue';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IHistoryData {
-  dataValues?: DataValue[];
-}
+export type IHistoryData = Partial<HistoryData>;
 
 /**
 

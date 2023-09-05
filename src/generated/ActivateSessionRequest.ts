@@ -11,14 +11,7 @@ import * as ec from '../basic-types';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IActivateSessionRequest {
-  requestHeader?: RequestHeader;
-  clientSignature?: SignatureData;
-  clientSoftwareCertificates?: SignedSoftwareCertificate[];
-  localeIds?: string[];
-  userIdentityToken?: ExtensionObject;
-  userTokenSignature?: SignatureData;
-}
+export type IActivateSessionRequest = Partial<ActivateSessionRequest>;
 
 /**
 

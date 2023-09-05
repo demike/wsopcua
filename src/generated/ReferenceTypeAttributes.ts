@@ -9,11 +9,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
-export interface IReferenceTypeAttributes extends INodeAttributes {
-  isAbstract?: boolean;
-  symmetric?: boolean;
-  inverseName?: LocalizedText;
-}
+export type IReferenceTypeAttributes = Partial<ReferenceTypeAttributes>;
 
 /**
 

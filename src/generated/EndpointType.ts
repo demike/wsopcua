@@ -7,12 +7,7 @@ import * as ec from '../basic-types';
 import {MessageSecurityMode, encodeMessageSecurityMode, decodeMessageSecurityMode} from './MessageSecurityMode';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IEndpointType {
-  endpointUrl?: string;
-  securityMode?: MessageSecurityMode;
-  securityPolicyUri?: string;
-  transportProfileUri?: string;
-}
+export type IEndpointType = Partial<EndpointType>;
 
 /**
 

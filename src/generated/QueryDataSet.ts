@@ -8,11 +8,7 @@ import {Variant} from '../variant';
 import {decodeVariant} from '../variant';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IQueryDataSet {
-  nodeId?: ec.ExpandedNodeId;
-  typeDefinitionNode?: ec.ExpandedNodeId;
-  values?: Variant[];
-}
+export type IQueryDataSet = Partial<QueryDataSet>;
 
 /**
 

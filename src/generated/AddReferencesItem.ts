@@ -7,14 +7,7 @@ import * as ec from '../basic-types';
 import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IAddReferencesItem {
-  sourceNodeId?: ec.NodeId;
-  referenceTypeId?: ec.NodeId;
-  isForward?: boolean;
-  targetServerUri?: string;
-  targetNodeId?: ec.ExpandedNodeId;
-  targetNodeClass?: NodeClass;
-}
+export type IAddReferencesItem = Partial<AddReferencesItem>;
 
 /**
 

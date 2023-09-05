@@ -8,12 +8,7 @@ import {BrokerTransportQualityOfService, encodeBrokerTransportQualityOfService, 
 import {DataStream} from '../basic-types/DataStream';
 import {WriterGroupTransportDataType} from './WriterGroupTransportDataType';
 
-export interface IBrokerWriterGroupTransportDataType {
-  queueName?: string;
-  resourceUri?: string;
-  authenticationProfileUri?: string;
-  requestedDeliveryGuarantee?: BrokerTransportQualityOfService;
-}
+export type IBrokerWriterGroupTransportDataType = Partial<BrokerWriterGroupTransportDataType>;
 
 /**
 

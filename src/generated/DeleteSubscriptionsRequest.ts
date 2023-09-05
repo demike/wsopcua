@@ -7,10 +7,7 @@ import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IDeleteSubscriptionsRequest {
-  requestHeader?: RequestHeader;
-  subscriptionIds?: ec.UInt32[];
-}
+export type IDeleteSubscriptionsRequest = Partial<DeleteSubscriptionsRequest>;
 
 /**
 

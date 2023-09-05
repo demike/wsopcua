@@ -7,11 +7,7 @@ import * as ec from '../basic-types';
 import {LocalizedText} from './LocalizedText';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ITransactionErrorType {
-  targetId?: ec.NodeId;
-  error?: ec.StatusCode;
-  message?: LocalizedText;
-}
+export type ITransactionErrorType = Partial<TransactionErrorType>;
 
 /**
 

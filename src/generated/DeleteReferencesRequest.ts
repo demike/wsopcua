@@ -9,10 +9,7 @@ import {decodeDeleteReferencesItem} from './DeleteReferencesItem';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IDeleteReferencesRequest {
-  requestHeader?: RequestHeader;
-  referencesToDelete?: DeleteReferencesItem[];
-}
+export type IDeleteReferencesRequest = Partial<DeleteReferencesRequest>;
 
 /**
 

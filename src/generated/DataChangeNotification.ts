@@ -11,10 +11,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {NotificationData} from './NotificationData';
 
-export interface IDataChangeNotification {
-  monitoredItems?: MonitoredItemNotification[];
-  diagnosticInfos?: DiagnosticInfo[];
-}
+export type IDataChangeNotification = Partial<DataChangeNotification>;
 
 /**
 

@@ -8,10 +8,7 @@ import {DiagnosticInfo} from '../DiagnosticInfo';
 import {DataStream} from '../../basic-types/DataStream';
 import {FetchResultDataType} from './FetchResultDataType';
 
-export interface ITransferResultErrorDataType {
-  status?: ec.Int32;
-  diagnostics?: DiagnosticInfo;
-}
+export type ITransferResultErrorDataType = Partial<TransferResultErrorDataType>;
 
 /**
 

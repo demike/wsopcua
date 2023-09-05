@@ -14,14 +14,7 @@ import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {ContentFilterResult} from './ContentFilterResult';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IQueryFirstResponse {
-  responseHeader?: ResponseHeader;
-  queryDataSets?: QueryDataSet[];
-  continuationPoint?: Uint8Array;
-  parsingResults?: ParsingResult[];
-  diagnosticInfos?: DiagnosticInfo[];
-  filterResult?: ContentFilterResult;
-}
+export type IQueryFirstResponse = Partial<QueryFirstResponse>;
 
 /**
 

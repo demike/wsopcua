@@ -6,12 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IPriorityMappingEntryType {
-  mappingUri?: string;
-  priorityLabel?: string;
-  priorityValue_PCP?: ec.Byte;
-  priorityValue_DSCP?: ec.UInt32;
-}
+export type IPriorityMappingEntryType = Partial<PriorityMappingEntryType>;
 
 /**
 

@@ -6,13 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IAggregateConfiguration {
-  useServerCapabilitiesDefaults?: boolean;
-  treatUncertainAsBad?: boolean;
-  percentDataBad?: ec.Byte;
-  percentDataGood?: ec.Byte;
-  useSlopedExtrapolation?: boolean;
-}
+export type IAggregateConfiguration = Partial<AggregateConfiguration>;
 
 /**
 

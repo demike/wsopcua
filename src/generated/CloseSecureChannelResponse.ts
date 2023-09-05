@@ -6,9 +6,7 @@
 import {ResponseHeader} from './ResponseHeader';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ICloseSecureChannelResponse {
-  responseHeader?: ResponseHeader;
-}
+export type ICloseSecureChannelResponse = Partial<CloseSecureChannelResponse>;
 
 /**
 

@@ -8,9 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {NodeAttributes} from './NodeAttributes';
 import {INodeAttributes} from './NodeAttributes';
 
-export interface IObjectAttributes extends INodeAttributes {
-  eventNotifier?: ec.Byte;
-}
+export type IObjectAttributes = Partial<ObjectAttributes>;
 
 /**
 

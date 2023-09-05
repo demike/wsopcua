@@ -6,9 +6,7 @@
 import {RequestHeader} from './RequestHeader';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface ICloseSecureChannelRequest {
-  requestHeader?: RequestHeader;
-}
+export type ICloseSecureChannelRequest = Partial<CloseSecureChannelRequest>;
 
 /**
 

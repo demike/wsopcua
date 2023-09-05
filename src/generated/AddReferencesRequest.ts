@@ -9,10 +9,7 @@ import {decodeAddReferencesItem} from './AddReferencesItem';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IAddReferencesRequest {
-  requestHeader?: RequestHeader;
-  referencesToAdd?: AddReferencesItem[];
-}
+export type IAddReferencesRequest = Partial<AddReferencesRequest>;
 
 /**
 

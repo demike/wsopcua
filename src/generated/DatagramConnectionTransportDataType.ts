@@ -7,9 +7,7 @@ import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncod
 import {DataStream} from '../basic-types/DataStream';
 import {ConnectionTransportDataType} from './ConnectionTransportDataType';
 
-export interface IDatagramConnectionTransportDataType {
-  discoveryAddress?: ExtensionObject;
-}
+export type IDatagramConnectionTransportDataType = Partial<DatagramConnectionTransportDataType>;
 
 /**
 

@@ -8,9 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {DataTypeDescription} from './DataTypeDescription';
 import {IDataTypeDescription} from './DataTypeDescription';
 
-export interface IStructureDescription extends IDataTypeDescription {
-  structureDefinition?: StructureDefinition;
-}
+export type IStructureDescription = Partial<StructureDescription>;
 
 /**
 

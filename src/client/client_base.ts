@@ -510,7 +510,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
   }
 
   performMessageTransaction(
-    request: IEncodable & { requestHeader: IRequestHeader },
+    request: IEncodable & { requestHeader: RequestHeader },
     callback: ResponseCallback<any>
   ): void {
     if (!this._secureChannel) {

@@ -7,10 +7,7 @@ import * as ec from '../basic-types';
 import {DataValue} from './DataValue';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IMonitoredItemNotification {
-  clientHandle?: ec.UInt32;
-  value?: DataValue;
-}
+export type IMonitoredItemNotification = Partial<MonitoredItemNotification>;
 
 /**
 

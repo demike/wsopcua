@@ -9,11 +9,7 @@ import {DiagnosticInfo} from './DiagnosticInfo';
 import {decodeDiagnosticInfo} from './DiagnosticInfo';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IWriteResponse {
-  responseHeader?: ResponseHeader;
-  results?: ec.StatusCode[];
-  diagnosticInfos?: DiagnosticInfo[];
-}
+export type IWriteResponse = Partial<WriteResponse>;
 
 /**
 

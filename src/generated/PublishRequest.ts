@@ -9,10 +9,7 @@ import {decodeSubscriptionAcknowledgement} from './SubscriptionAcknowledgement';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IPublishRequest {
-  requestHeader?: RequestHeader;
-  subscriptionAcknowledgements?: SubscriptionAcknowledgement[];
-}
+export type IPublishRequest = Partial<PublishRequest>;
 
 /**
 

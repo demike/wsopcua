@@ -7,10 +7,7 @@ import {QualifiedName} from './QualifiedName';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IAliasNameDataType {
-  aliasName?: QualifiedName;
-  referencedNodes?: ec.ExpandedNodeId[];
-}
+export type IAliasNameDataType = Partial<AliasNameDataType>;
 
 /**
 

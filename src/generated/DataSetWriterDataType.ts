@@ -10,17 +10,7 @@ import {decodeKeyValuePair} from './KeyValuePair';
 import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncodeExtensionObject, jsonDecodeExtensionObject} from '../basic-types/extension_object';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IDataSetWriterDataType {
-  name?: string;
-  enabled?: boolean;
-  dataSetWriterId?: ec.UInt16;
-  dataSetFieldContentMask?: DataSetFieldContentMask;
-  keyFrameCount?: ec.UInt32;
-  dataSetName?: string;
-  dataSetWriterProperties?: KeyValuePair[];
-  transportSettings?: ExtensionObject;
-  messageSettings?: ExtensionObject;
-}
+export type IDataSetWriterDataType = Partial<DataSetWriterDataType>;
 
 /**
 

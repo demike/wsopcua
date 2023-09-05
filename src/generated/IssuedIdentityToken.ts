@@ -8,10 +8,7 @@ import {DataStream} from '../basic-types/DataStream';
 import {UserIdentityToken} from './UserIdentityToken';
 import {IUserIdentityToken} from './UserIdentityToken';
 
-export interface IIssuedIdentityToken extends IUserIdentityToken {
-  tokenData?: Uint8Array;
-  encryptionAlgorithm?: string;
-}
+export type IIssuedIdentityToken = Partial<IssuedIdentityToken>;
 
 /**
 

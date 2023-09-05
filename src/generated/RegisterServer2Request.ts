@@ -9,11 +9,7 @@ import {ExtensionObject, encodeExtensionObject, decodeExtensionObject, jsonEncod
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IRegisterServer2Request {
-  requestHeader?: RequestHeader;
-  server?: RegisteredServer;
-  discoveryConfiguration?: ExtensionObject[];
-}
+export type IRegisterServer2Request = Partial<RegisterServer2Request>;
 
 /**
 

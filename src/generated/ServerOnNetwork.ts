@@ -6,12 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IServerOnNetwork {
-  recordId?: ec.UInt32;
-  serverName?: string;
-  discoveryUrl?: string;
-  serverCapabilities?: string[];
-}
+export type IServerOnNetwork = Partial<ServerOnNetwork>;
 
 /**
 

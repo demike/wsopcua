@@ -10,13 +10,7 @@ import {AxisScaleEnumeration, encodeAxisScaleEnumeration, decodeAxisScaleEnumera
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IAxisInformation {
-  engineeringUnits?: EUInformation;
-  eURange?: Range;
-  title?: LocalizedText;
-  axisScaleType?: AxisScaleEnumeration;
-  axisSteps?: ec.Double[];
-}
+export type IAxisInformation = Partial<AxisInformation>;
 
 /**
 

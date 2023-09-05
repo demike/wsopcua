@@ -6,12 +6,7 @@
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IReferenceDescriptionDataType {
-  sourceNode?: ec.NodeId;
-  referenceType?: ec.NodeId;
-  isForward?: boolean;
-  targetNode?: ec.ExpandedNodeId;
-}
+export type IReferenceDescriptionDataType = Partial<ReferenceDescriptionDataType>;
 
 /**
 

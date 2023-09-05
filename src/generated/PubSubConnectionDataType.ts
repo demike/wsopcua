@@ -14,17 +14,7 @@ import {ReaderGroupDataType} from './ReaderGroupDataType';
 import {decodeReaderGroupDataType} from './ReaderGroupDataType';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IPubSubConnectionDataType {
-  name?: string;
-  enabled?: boolean;
-  publisherId?: Variant;
-  transportProfileUri?: string;
-  address?: ExtensionObject;
-  connectionProperties?: KeyValuePair[];
-  transportSettings?: ExtensionObject;
-  writerGroups?: WriterGroupDataType[];
-  readerGroups?: ReaderGroupDataType[];
-}
+export type IPubSubConnectionDataType = Partial<PubSubConnectionDataType>;
 
 /**
 

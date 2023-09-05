@@ -9,13 +9,7 @@ import {UadpNetworkMessageContentMask, encodeUadpNetworkMessageContentMask, deco
 import {DataStream} from '../basic-types/DataStream';
 import {WriterGroupMessageDataType} from './WriterGroupMessageDataType';
 
-export interface IUadpWriterGroupMessageDataType {
-  groupVersion?: ec.UInt32;
-  dataSetOrdering?: DataSetOrderingType;
-  networkMessageContentMask?: UadpNetworkMessageContentMask;
-  samplingOffset?: ec.Double;
-  publishingOffset?: ec.Double[];
-}
+export type IUadpWriterGroupMessageDataType = Partial<UadpWriterGroupMessageDataType>;
 
 /**
 

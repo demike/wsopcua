@@ -7,12 +7,7 @@ import {RequestHeader} from './RequestHeader';
 import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 
-export interface IFindServersOnNetworkRequest {
-  requestHeader?: RequestHeader;
-  startingRecordId?: ec.UInt32;
-  maxRecordsToReturn?: ec.UInt32;
-  serverCapabilityFilter?: string[];
-}
+export type IFindServersOnNetworkRequest = Partial<FindServersOnNetworkRequest>;
 
 /**
 

@@ -7,10 +7,7 @@ import * as ec from '../basic-types';
 import {DataStream} from '../basic-types/DataStream';
 import {ConnectionTransportDataType} from './ConnectionTransportDataType';
 
-export interface IBrokerConnectionTransportDataType {
-  resourceUri?: string;
-  authenticationProfileUri?: string;
-}
+export type IBrokerConnectionTransportDataType = Partial<BrokerConnectionTransportDataType>;
 
 /**
 

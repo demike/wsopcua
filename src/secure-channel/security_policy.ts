@@ -296,8 +296,8 @@ export interface DerivedKeys1 {
 
 export async function computeDerivedKeys(
   cryptoFactory: ICryptoFactory,
-  serverNonce: Uint8Array,
-  clientNonce: Uint8Array
+  serverNonce?: Uint8Array,
+  clientNonce?: Uint8Array
 ): Promise<DerivedKeys1> {
   // calculate derived keys
 
