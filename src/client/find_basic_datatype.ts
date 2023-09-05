@@ -1,8 +1,8 @@
-import { NodeId, makeNodeId } from 'src/nodeid';
+import { NodeId, makeNodeId } from '../nodeid';
 import { BrowseDirection, ClientSession } from './client_session';
-import { BrowseDescription, BrowseResult, BrowseResultMask, NodeIdType } from 'src/generated';
-import { ReferenceTypeIds } from 'src/constants';
-import { DataType } from 'src/variant';
+import { BrowseDescription, BrowseResult, BrowseResultMask, NodeIdType } from '../generated';
+import { ReferenceTypeIds } from '../constants';
+import { DataType } from '../variant';
 
 const hasSubtypeNodeId = makeNodeId(ReferenceTypeIds.HasSubtype);
 

@@ -6,7 +6,7 @@ const path = require('path');
 const packageJson = require('../package.json');
 
 const DIST_PATH = path.resolve(__dirname, `../dist`);
-const TYPES_PATH = path.resolve(__dirname, `../dist/_types`);
+const TYPES_PATH = path.resolve(__dirname, `../dist/`);
 
 const insertPackageJsonRecursively = function (dirPath) {
   files = fs.readdirSync(dirPath);
@@ -51,7 +51,7 @@ function createExportsRecursive(dirPath, exp) {
         }
 
         exp[key] = {
-          types: `./_types/${relPath}index.d.ts`,
+          types: `./${relPath}index.d.ts`,
           node: `./_cjs/${relPath}index.js`,
           require: `./_cjs/${relPath}index.js`,
           es2015: `./_esm/${relPath}index.js`,
@@ -71,7 +71,7 @@ function createPackageManifest(barrelPath) {
 
   const pkgManifest = {
     name: `${packageJson.name}/${relPath}`,
-    types: `${relPathReverse}/_types/${relPath}/index.d.ts`,
+    types: `${relPathReverse}/${relPath}/index.d.ts`,
     main: `${relPathReverse}/_cjs/${relPath}/index.js`,
     module: `${relPathReverse}/_esm/${relPath}/index.js`,
     es2015: `${relPathReverse}/_esm/${relPath}/index.js`,

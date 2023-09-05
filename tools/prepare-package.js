@@ -13,7 +13,7 @@ const pkgManifest = {
   license: packageJson.license,
   author: packageJson.author,
   private: packageJson.private,
-  types: `./_types/index.d.ts`,
+  types: `./index.d.ts`,
   main: `./_cjs/index.js`,
   module: `./_esm/index.js`,
   es2015: `./_esm/index.js`,

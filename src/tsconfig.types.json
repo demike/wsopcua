@@ -7,7 +7,7 @@
     "removeComments": false,
     "declaration": true,
     "declarationMap": true,
-    "declarationDir": "../dist/_types",
+    "declarationDir": "../dist/",
     "emitDeclarationOnly": true
   }
 }
