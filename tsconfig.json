@@ -5,14 +5,15 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     // "declaration": true,
-    // "strict": true,
+    "strict": true,
     // "noImplicitReturns": true,
     "moduleResolution": "node",
     "strictNullChecks": false,
     "noImplicitAny": true,
     "lib": ["esnext", "es2017.object", "dom"],
     "target": "esnext",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "types": ["jasmine"]
   },
   "exclude": [
     "node_modules/",
