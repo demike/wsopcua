@@ -1279,7 +1279,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
       // }
       assert(this._transport);
       this._transport?.write(messageChunk);
-      if (request_data?.chunk_count) {
+      if (request_data?.chunk_count != null) {
         request_data.chunk_count += 1;
       }
     } else {
@@ -1462,7 +1462,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
         msgType,
         options,
         requestMessage,
-        this._send_chunk.bind(this, requestId, undefined)
+        this._send_chunk.bind(this, requestId)
       );
     } else {
       this._send_json(requestId);
