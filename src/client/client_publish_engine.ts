@@ -207,7 +207,7 @@ export class ClientSidePublishEngine {
 
         if (err.message.match('not connected')) {
           debugLog(' WARNING :  CLIENT IS NOT CONNECTED : MAY BE RECONNECTION IS IN PROGRESS');
-          debugLog('self.activeSubscriptionCount =' + this.activeSubscriptionCount);
+          debugLog('this.activeSubscriptionCount =' + this.activeSubscriptionCount);
           // the previous publish request has ended up with an error because
           // the connection has failed ...
           // There is no need to send more publish request for the time being until reconnection is completed
@@ -220,7 +220,7 @@ export class ClientSidePublishEngine {
           // but the client have some active subscription left.
           // This could happen if the client has missed or not received the StatusChange Notification
           debugLog(' WARNING :   SERVER TELLS THAT IT HAS NO SUBSCRIPTION , BUT CLIENT DISAGREE');
-          debugLog('self.activeSubscriptionCount =' + this.activeSubscriptionCount);
+          debugLog('this.activeSubscriptionCount =' + this.activeSubscriptionCount);
           active = false;
         }
 

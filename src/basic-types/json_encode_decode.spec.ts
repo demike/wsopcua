@@ -71,12 +71,14 @@ describe('testing built-in type encoding', function () {
 
   // normal float and double are also encoded as a json number --> no special treatment
   // -Infinity, +Infinity and NaN are encoded as string:  https://reference.opcfoundation.org/v104/Core/docs/Part6/5.4.2/#5.4.2.4
-  [
-    [2345.5678, 2345.5678],
-    [NaN, 'NaN'],
-    [Infinity, 'Infinity'],
-    [-Infinity, '-Infinity'],
-  ].forEach(([num, json]: [number, number | string]) => {
+  (
+    [
+      [2345.5678, 2345.5678],
+      [NaN, 'NaN'],
+      [Infinity, 'Infinity'],
+      [-Infinity, '-Infinity'],
+    ] as const
+  ).forEach(([num, json]) => {
     it('should decode encode and decode a float / double value', () => {
       expect(ec.jsonDecodeDouble(json)).toEqual(num);
       expect(ec.jsonDecodeFloat(json)).toEqual(num);

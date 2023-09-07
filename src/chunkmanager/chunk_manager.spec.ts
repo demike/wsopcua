@@ -23,19 +23,24 @@ function compute_fake_signature(section_to_sign: ArrayBuffer): Promise<ArrayBuff
   return Promise.resolve(signature.buffer);
 }
 
-function write_fake_header(block: DataView | DataStream, isLast: boolean, total_length: number) {
+function write_fake_header(
+  this: ChunkManager,
+  block: DataView | DataStream,
+  isLast: boolean,
+  total_length: number
+) {
   for (let i = 0; i < this.headerSize; i++) {
     block.setUint8(i, 0xaa);
   }
 }
 
-function write_fake_sequence_header(block: DataView) {
+function write_fake_sequence_header(this: ChunkManager, block: DataView) {
   for (let i = 0; i < this.sequenceHeaderSize; i++) {
     block.setUint8(i, 0xbb);
   }
 }
 
-function fake_encrypt_block(block: ArrayBuffer): ArrayBuffer {
+function fake_encrypt_block(this: ChunkManager, block: ArrayBuffer): ArrayBuffer {
   assert(this.plainBlockSize + 2 === this.cipherBlockSize);
   assert(this.plainBlockSize === block.byteLength);
 
@@ -46,9 +51,7 @@ function fake_encrypt_block(block: ArrayBuffer): ArrayBuffer {
   return encrypted_block.buffer;
 }
 
-function fake_encrypt_buffer(buffer: ArrayBuffer) {
-  this.encrypt_block = fake_encrypt_block;
-
+function fake_encrypt_buffer(this: ChunkManager, buffer: ArrayBuffer) {
   const nbBlocks = Math.ceil(buffer.byteLength / this.plainBlockSize);
 
   const outputBuffer = new Uint8Array(nbBlocks * this.cipherBlockSize);
@@ -56,7 +59,7 @@ function fake_encrypt_buffer(buffer: ArrayBuffer) {
   for (let i = 0; i < nbBlocks; i++) {
     const currentBlock = buffer.slice(this.plainBlockSize * i, this.plainBlockSize * (i + 1));
 
-    const encrypted_chunk: ArrayBuffer = this.encrypt_block(currentBlock);
+    const encrypted_chunk: ArrayBuffer = fake_encrypt_block.call(this, currentBlock);
 
     assert(encrypted_chunk.byteLength === this.cipherBlockSize);
 
@@ -65,7 +68,7 @@ function fake_encrypt_buffer(buffer: ArrayBuffer) {
   return Promise.resolve(outputBuffer);
 }
 
-function no_encrypt_block(block: Uint8Array) {
+function no_encrypt_block(this: ChunkManager, block: Uint8Array) {
   assert(this.plainBlockSize === this.cipherBlockSize);
   return Promise.resolve(block);
 }
@@ -203,7 +206,7 @@ function perform_test(
   expected_chunk_lengths: string[] | number[],
   done: () => void
 ) {
-  let expected_chunks: ArrayBuffer[] = null;
+  let expected_chunks: ArrayBuffer[] | undefined;
   if (typeof expected_chunk_lengths[0] === 'string') {
     expected_chunks = (expected_chunk_lengths as string[]).map(make_hex_block);
     expected_chunk_lengths = expected_chunks.map(function (b: ArrayBuffer) {

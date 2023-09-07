@@ -1,9 +1,9 @@
-import { assert } from 'src/assert';
-import { NodeId, StatusCode } from 'src/basic-types';
-import { EventEmitter } from 'src/eventemitter';
-import { resolveNodeId } from 'src/nodeid';
-import { lowerFirstLetter } from 'src/utils';
-import { Variant } from 'src/variant';
+import { assert } from '../../assert';
+import { NodeId, StatusCode } from '../../basic-types';
+import { EventEmitter } from '../../eventemitter';
+import { resolveNodeId } from '../../nodeid';
+import { lowerFirstLetter } from '../../utils';
+import { Variant } from '../../variant';
 import { ClientSession } from '../client_session';
 
 export interface TVariant<T> extends Variant {

@@ -533,8 +533,8 @@ describe('Testing numerical range', function () {
       return new Int8Array(values);
     });
 
-    test('BLOB', function (values: any[]) {
-      return values.map(function (v) {
+    test('BLOB', function (values) {
+      return (values as any[]).map(function (v) {
         return { value: v.toString() };
       });
     });
@@ -740,8 +740,8 @@ describe('Testing numerical range', function () {
       return new Int8Array(values);
     });
 
-    test('BLOB', function (values: any[]) {
-      return values.map(function (v) {
+    test('BLOB', function (values) {
+      return (values as any[]).map(function (v) {
         return { value: v.toString() };
       });
     });

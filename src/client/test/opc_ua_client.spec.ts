@@ -38,7 +38,7 @@ describe('OPCUA Client', function () {
           const client = new OPCUAClient({ connectionStrategy: { maxRetry: 0 } });
           await client.connectP('invalid-proto://test-host');
         } catch (err) {
-          console.log(err.message);
+          console.log((err as Error).message);
           throw err;
         }
       }
