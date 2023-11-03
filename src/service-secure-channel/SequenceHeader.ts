@@ -1,5 +1,3 @@
-// --------- This code has been automatically generated !!! 2018-02-08T10:26:04.257Z
-'use strict';
 /**
  * @module opcua.address_space.types
  */
@@ -33,8 +31,8 @@ export interface ISequenceHeader {
  */
 export class SequenceHeader extends BaseUAObject {
   public static encodingDefaultBinary: ec.ExpandedNodeId = makeExpandedNodeId(generate_new_id());
-  public requestId: UInt32;
-  public sequenceNumber: UInt32;
+  public requestId: UInt32 = 0;
+  public sequenceNumber: UInt32 = 0;
   constructor(options?: ISequenceHeader) {
     super();
     options = options || {};

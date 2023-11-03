@@ -109,7 +109,7 @@ export function check_deadband(
         variant1,
         variant2,
         DeadbandType.Absolute,
-        (valueRange * deadbandValue) / 100
+        (valueRange! * deadbandValue) / 100
       );
   }
 }

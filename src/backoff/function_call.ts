@@ -20,7 +20,7 @@ enum FunctionCallState {
 
 export interface FunctionCallEvents {
   abort: () => void;
-  backoff: (number: number, delay: number, err: Error) => void;
+  backoff: (number: number, delay: number, err?: Error) => void;
 }
 
 // Wraps a function to be called in a backoff loop.
@@ -201,7 +201,7 @@ export class FunctionCall extends EventEmitter<FunctionCallEvents> {
   }
 
   // Handles the backoff event by reemitting it.
-  protected handleBackoff_(number: number, delay: number, err: Error) {
+  protected handleBackoff_(number: number, delay: number, err?: Error) {
     this.emit('backoff', number, delay, err);
   }
 }

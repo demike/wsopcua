@@ -37,7 +37,7 @@ export interface PacketAssemblerEvents {
  * @constructor
  */
 export class PacketAssembler extends EventEmitter<PacketAssemblerEvents> {
-  private packet_info: PacketInfo;
+  private packet_info?: PacketInfo;
   minimumSizeInBytes: number;
   readMessageFunc: ReadMessageFuncType;
   currentLength: number;
@@ -117,7 +117,7 @@ export class PacketAssembler extends EventEmitter<PacketAssemblerEvents> {
       // istanbul ignore next
       if (doDebug) {
         const packet_info = this._read_packet_info(messageChunk);
-        assert(this.packet_info.length === packet_info.length);
+        assert(this.packet_info && this.packet_info.length === packet_info.length);
         assert(messageChunk.byteLength === packet_info.length);
       }
       // reset

@@ -1,4 +1,3 @@
-'use strict';
 /**
  * @module opcua.transport
  */
@@ -95,10 +94,10 @@ function createClientSocket(endpointUrl: string) {
  *
  */
 export class ClientTCP_transport extends TCP_transport {
-  numberOfRetry: number;
+  numberOfRetry?: number;
   _connected: boolean;
-  serverUri: string;
-  endpointUrl: string;
+  serverUri?: string;
+  endpointUrl: string = '';
   _parameters: any;
 
   get protocolVersion() {

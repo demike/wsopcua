@@ -1,5 +1,3 @@
-'use strict';
-
 import { assert } from '../assert';
 import { DataStream } from './DataStream';
 
@@ -198,7 +196,7 @@ export function bn_hundredNanoSecondFrom1601ToDate(high: number, low: number) {
   return date;
 }
 
-let last_now_date: Date = null;
+let last_now_date: Date | null = null;
 let last_picoseconds = 0;
 
 export function getCurrentClock() {

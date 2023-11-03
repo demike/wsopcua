@@ -1,5 +1,4 @@
 // --------- This code has been automatically generated !!! 2018-02-08T10:26:02.549Z
-'use strict';
 
 import * as ec from '../basic-types';
 
@@ -45,35 +44,35 @@ export class AcknowledgeMessage extends BaseUAObject {
      * @property protocolVersion
      * @type {UInt32}
      */
-    this.protocolVersion = options.protocolVersion;
+    this.protocolVersion = options.protocolVersion ?? 0;
 
     /**
      *
      * @property receiveBufferSize
      * @type {UInt32}
      */
-    this.receiveBufferSize = options.receiveBufferSize;
+    this.receiveBufferSize = options.receiveBufferSize ?? 0;
 
     /**
      *
      * @property sendBufferSize
      * @type {UInt32}
      */
-    this.sendBufferSize = options.sendBufferSize;
+    this.sendBufferSize = options.sendBufferSize ?? 0;
 
     /**
      * The maximum size for any request message.
      * @property maxMessageSize
      * @type {UInt32}
      */
-    this.maxMessageSize = options.maxMessageSize;
+    this.maxMessageSize = options.maxMessageSize ?? 0;
 
     /**
      * The maximum number of chunks in any request message.
      * @property maxChunkCount
      * @type {UInt32}
      */
-    this.maxChunkCount = options.maxChunkCount;
+    this.maxChunkCount = options.maxChunkCount ?? 0;
 
     // Object.preventExtensions(self);
   }

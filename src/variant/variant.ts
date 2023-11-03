@@ -205,8 +205,8 @@ export class Variant extends BaseUAObject {
       this.value = decode(inp);
     }
     if (hasDimension) {
-      this.dimensions = decodeGeneralArray(DataType.UInt32, inp);
-      const verification = calculate_product(this.dimensions);
+      this.dimensions = decodeGeneralArray(DataType.UInt32, inp) ?? undefined;
+      const verification = this.dimensions ? calculate_product(this.dimensions) : undefined;
       if (verification !== this.value.length) {
         throw new Error('BadDecodingError');
       }
@@ -281,7 +281,7 @@ export class Variant extends BaseUAObject {
 
     if (this.arrayType === VariantArrayType.Array) {
       out.Body = jsonEncodeVariantArray(this.dataType, this.value);
-    } else if (this.arrayType === VariantArrayType.Matrix) {
+    } else if (this.arrayType === VariantArrayType.Matrix && this.dimensions) {
       out.Body = jsonEncodeMatrix(this.dataType, this.value, this.dimensions);
     } else {
       const encode = get_json_encoder(this.dataType);

@@ -36,7 +36,7 @@ export interface IMessageChunkerOptions {
  */
 export class MessageChunker {
   protected _sequenceNumberGenerator: SequenceNumberGenerator;
-  protected _securityHeader:
+  protected _securityHeader?:
     | AsymmetricAlgorithmSecurityHeader
     | SymmetricAlgorithmSecurityHeader
     | null;
@@ -110,7 +110,7 @@ export class MessageChunker {
     (this._stream as { __namespaceArray?: string[] }).__namespaceArray = message.__namespaceArray;
 
     ec.encodeExpandedNodeId(
-      resolveExpandedNodeId(message.encodingDefaultBinary, message.__namespaceArray),
+      resolveExpandedNodeId(message.encodingDefaultBinary!, message.__namespaceArray),
       stream
     );
     message.encode(stream);
@@ -125,7 +125,7 @@ export class MessageChunker {
     const secure_chunker = new SecureMessageChunkManager(
       msgType,
       options,
-      securityHeader,
+      securityHeader || null,
       this._sequenceNumberGenerator
     )
       .on('chunk', function (messageChunk: ArrayBuffer) {

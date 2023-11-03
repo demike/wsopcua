@@ -1,4 +1,3 @@
-'use strict';
 /**
  * @module opcua.transport
  */
@@ -55,7 +54,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
 
   packetAssembler?: PacketAssembler;
   name: string;
-  private _timerId: number;
+  private _timerId: number | null = null;
   protected _socket: WebSocket | null;
   private _timeout: number;
   public readonly headerSize: number;
@@ -118,10 +117,10 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     this._cleanup_timers();
     assert(!this._timerId);
     if (this._socket) {
-      this._socket.onclose = undefined;
-      this._socket.onerror = undefined;
-      this._socket.onopen = undefined;
-      this._socket.onmessage = undefined;
+      this._socket.onclose = null;
+      this._socket.onerror = null;
+      this._socket.onopen = null;
+      this._socket.onmessage = null;
       this._socket = null;
     }
     WSTransport.registry.unregister(this);
@@ -319,7 +318,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     this._start_one_time_message_receiver();
   }
 
-  protected _fulfill_pending_promises(err: Error, data?: DataView) {
+  protected _fulfill_pending_promises(err: Error | null, data?: DataView) {
     this._cleanup_timers();
 
     const the_callback = this._the_callback;
@@ -365,7 +364,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     }, this._timeout);
   }
 
-  public on_socket_closed(err: Error) {
+  public on_socket_closed(err?: Error) {
     if (this._onSocketClosedHasBeenCalled) {
       return;
     }
@@ -415,7 +414,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
       debugLog('  remote address = ' + this._socket.url);
     }
 
-    let err = null;
+    let err: Error | undefined;
     if (evt.code !== 1000 /* if not normal*/ && evt.code !== 1005 /* no status code set */) {
       /* TODO: what should we do now
         if (this._socket) {

@@ -61,5 +61,5 @@ export class SequenceNumberGenerator {
   // sequence numbers as unique.
   public static readonly MAXVALUE: number = 4294966271;
 
-  private _counter: number;
+  private _counter = 0;
 }

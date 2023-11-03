@@ -1,7 +1,7 @@
 //      Copyright (c) 2012 Mathieu Turcotte
 //      Licensed under the MIT license.
 
-function isDef(value: any) {
+function isDef<T>(value: T | undefined): value is T {
   return value !== undefined && value !== null;
 }
 

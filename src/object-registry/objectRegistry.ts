@@ -45,5 +45,5 @@ export class ObjectRegistry {
   public static registries: any[] = [];
   private static hashCounter = 1;
   protected _objectType: any;
-  protected _cache: { [key: string]: Object };
+  protected _cache: Record<string, object | null>;
 }

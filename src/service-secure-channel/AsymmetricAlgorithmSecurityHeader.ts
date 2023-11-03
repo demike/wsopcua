@@ -15,15 +15,15 @@ export interface IAsymmetricAlgorithmSecurityHeader {
 export class AsymmetricAlgorithmSecurityHeader {
   constructor(options?: IAsymmetricAlgorithmSecurityHeader) {
     options = options || {};
-    this.securityPolicyUri = options.securityPolicyUri;
-    this.senderCertificate = options.senderCertificate;
-    this.receiverCertificateThumbprint = options.receiverCertificateThumbprint;
+    this.securityPolicyUri = options.securityPolicyUri ?? null;
+    this.senderCertificate = options.senderCertificate ?? null;
+    this.receiverCertificateThumbprint = options.receiverCertificateThumbprint ?? null;
   }
 
   // length shall not exceed 256
   // The URI of the security policy used to secure the message.
   // This field is encoded as a UTF8 string without a null terminator
-  securityPolicyUri: string;
+  securityPolicyUri: string | null;
 
   // The X509v3 certificate assigned to the sending application instance.
   // This is a DER encoded blob.
@@ -41,13 +41,13 @@ export class AsymmetricAlgorithmSecurityHeader {
   // Receivers can extract the Certificates from the byte array by using the Certificate size contained
   // in DER header (see X509).
   // Receivers that do not handle Certificate chains shall ignore the extra bytes.
-  senderCertificate: Uint8Array; // ByteString;
+  senderCertificate: Uint8Array | null; // ByteString;
 
   // The thumbprint of the X509v3 certificate assigned to the receiving application
   // The thumbprint is the SHA1 digest of the DER encoded form of the certificate.
   // This indicates what public key was used to encrypt the MessageChunk
   // This field shall be null if the message is not encrypted.
-  receiverCertificateThumbprint: Uint8Array; // ByteString;
+  receiverCertificateThumbprint: Uint8Array | null; // ByteString;
 
   encode(out: DataStream) {
     ec.encodeString(this.securityPolicyUri, out);

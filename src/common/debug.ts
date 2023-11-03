@@ -25,7 +25,10 @@ const _fillUp = function (value: string, count: number, fillWith: string) {
   return ret + value;
 };
 
-export function hexDump(view: DataView | ArrayBuffer, offset?: number, length?: number) {
+export function hexDump(view: DataView | ArrayBuffer | null, offset?: number, length?: number) {
+  if (!view) {
+    return '';
+  }
   // var view = new DataView(arrayBuffer);
   view = view instanceof DataView ? view : new DataView(view);
   offset = offset || 0;

@@ -1,9 +1,3 @@
-// --------- This code has been automatically generated !!! 2018-02-08T10:26:02.544Z
-'use strict';
-/**
- * @module opcua.address_space.types
- */
-
 import * as ec from '../basic-types';
 
 import { makeExpandedNodeId } from '../nodeid/expanded_nodeid';
@@ -42,7 +36,7 @@ export interface IHelloMessage {
 export class HelloMessage extends BaseUAObject {
   public static encodingDefaultBinary = makeExpandedNodeId(generate_new_id());
 
-  endpointUrl: string;
+  endpointUrl: string | null;
   maxChunkCount: number;
   maxMessageSize: number;
   sendBufferSize: number;
@@ -58,42 +52,42 @@ export class HelloMessage extends BaseUAObject {
      * @property protocolVersion
      * @type {UInt32}
      */
-    this.protocolVersion = options.protocolVersion;
+    this.protocolVersion = options.protocolVersion ?? 0;
 
     /**
      * The largest message that the sender can receive.
      * @property receiveBufferSize
      * @type {UInt32}
      */
-    this.receiveBufferSize = options.receiveBufferSize;
+    this.receiveBufferSize = options.receiveBufferSize ?? 0;
 
     /**
      * The largest message that the sender will send.
      * @property sendBufferSize
      * @type {UInt32}
      */
-    this.sendBufferSize = options.sendBufferSize;
+    this.sendBufferSize = options.sendBufferSize ?? 0;
 
     /**
      * The maximum size for any response message.
      * @property maxMessageSize
      * @type {UInt32}
      */
-    this.maxMessageSize = options.maxMessageSize;
+    this.maxMessageSize = options.maxMessageSize ?? 0;
 
     /**
      * The maximum number of chunks in any response message
      * @property maxChunkCount
      * @type {UInt32}
      */
-    this.maxChunkCount = options.maxChunkCount;
+    this.maxChunkCount = options.maxChunkCount ?? 0;
 
     /**
      * The URL of the Endpoint which the Client wished to connect to.
      * @property endpointUrl
      * @type {UAString}
      */
-    this.endpointUrl = options.endpointUrl;
+    this.endpointUrl = options.endpointUrl ?? null;
 
     // Object.preventExtensions(self);
   }

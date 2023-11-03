@@ -264,7 +264,7 @@ export class DataStream {
     this._pos = 0;
   }
 
-  writeByteStream(buf?: Uint8Array) {
+  writeByteStream(buf?: Uint8Array | null) {
     if (!buf) {
       this.setInt32(-1);
       return;
@@ -298,7 +298,7 @@ export class DataStream {
    * @method readByteStream
    * @return {Uint8Array}
    */
-  readByteStream(): Uint8Array {
+  readByteStream(): Uint8Array | null {
     const bufLen = this.getInt32();
     if (bufLen === -1) {
       return null;
@@ -339,7 +339,7 @@ export class DataStream {
     return txtDecoder.decode(buff);
   }
 
-  writeString(str?: string): void {
+  writeString(str?: string | null): void {
     if (str === undefined || str === null) {
       this.setInt32(-1);
       return;
@@ -368,7 +368,7 @@ export class DataStream {
     const byteArr = new Uint8Array(arrayBuf, offset, length);
     const viewBuffer = new Uint8Array(this._view.buffer, this._view.byteOffset);
     viewBuffer.set(byteArr, this._pos);
-    this._pos += length;
+    this._pos += byteArr.length;
   }
 
   /**

@@ -60,7 +60,7 @@ const util = {
 //                             expected: expected })
 
 export interface AssertionErrorOpt {
-  message: string;
+  message?: string;
   actual: any;
   expected: any;
   operator?: any;
@@ -93,7 +93,7 @@ export class AssertionError extends Error {
       // work out the line that called in to assert.js.
       try {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        this.stack = new Error().stack.toString();
+        this.stack = new Error().stack?.toString();
       } catch (e) {}
     }
   }
@@ -144,7 +144,7 @@ function getMessage(self: AssertionError) {
 function fail(
   actual: any,
   expected: any,
-  message: string,
+  message?: string,
   operator?: any,
   stackStartFunction?: Function
 ) {

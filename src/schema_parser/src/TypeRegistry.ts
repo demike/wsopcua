@@ -282,6 +282,8 @@ export class TypeRegistry {
     type = new SimpleType(this.BASIC_TYPES_PATH, 'StatusCode');
     //        type.Path = this.BASIC_TYPES_PATH + "/status_code";
     type.ImportAs = 'ec';
+    type.defaultValue = 'ec.StatusCodes.Good';
+    type.addImport("import { StatusCodes } from '../constants/raw_status_codes';");
     type.hasJsonEnDeCodeFunctions = true;
     this.addType(type.Name, type);
 

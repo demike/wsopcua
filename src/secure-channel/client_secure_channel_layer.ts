@@ -1,5 +1,3 @@
-'use strict';
-
 import { assert } from '../assert';
 import { EventEmitter } from '../eventemitter';
 import { DataStream } from '../basic-types/DataStream';
@@ -571,6 +569,9 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
   }
 
   protected _on_security_token_about_to_expire() {
+    if (!this._securityToken) {
+      throw new Error('Internal Error');
+    }
     debugLog(
       ' client: Security Token ' +
         this._securityToken.tokenId +
@@ -601,7 +602,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     // install timer event to raise a 'lifetime_75' when security token is about to expired
     // so that client can request for a new security token
     //
-    const lifeTime = this._securityToken.revisedLifetime;
+    const lifeTime = this._securityToken?.revisedLifetime ?? 0;
     assert(lifeTime !== 0 && lifeTime > 20);
 
     let timeout = this.tokenRenewalInterval || (lifeTime * 75) / 100;
@@ -671,7 +672,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     this._performMessageTransaction(
       msgType,
       msg,
-      async (error, response: secure_channel_service.OpenSecureChannelResponse) => {
+      async (error: Error | null, response: secure_channel_service.OpenSecureChannelResponse) => {
         if (response && response.responseHeader.serviceResult !== StatusCodes.Good) {
           error = new Error(response.responseHeader.serviceResult?.toString());
         }
@@ -1259,7 +1260,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     this._sendSecureOpcUARequest(msgType, requestMessage, requestId);
   }
 
-  protected _send_chunk(requestId: number, messageChunk?: ArrayBuffer) {
+  protected _send_chunk(requestId: number, messageChunk: ArrayBuffer | null) {
     const request_data = this._request_data.get(requestId);
 
     if (messageChunk) {
@@ -1569,8 +1570,8 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
   _receiverCertificate?: DER;
   _serverNonce: any;
   _transport?: ClientWSTransport;
-  _isOpened: boolean;
-  _securityToken: ChannelSecurityToken;
+  protected _isOpened = false;
+  protected _securityToken?: ChannelSecurityToken;
   protected _lastRequestId: number;
   protected parent?: OPCUAClientBase;
   protected _clientNonce?: Uint8Array; // will be created when needed

@@ -109,6 +109,8 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
           alternativeCode = 'new ' + mem.Type.Name + '()';
         } else if (mem.Type instanceof SimpleType) {
           alternativeCode = mem.Type.defaultValue || 'null';
+        } else if (mem.Type instanceof EnumTypeFile) {
+          alternativeCode = '0';
         }
 
         body +=

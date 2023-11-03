@@ -50,7 +50,8 @@ export class NodeId {
     assert(this.namespace >= 0 && this.namespace <= 0xffff);
 
     assert(
-      this.identifierType !== NodeIdType.Numeric || (this.value >= 0 && this.value <= 0xffffffff)
+      this.identifierType !== NodeIdType.Numeric ||
+        ((this.value as number) >= 0 && (this.value as number) <= 0xffffffff)
     );
     assert(this.identifierType !== NodeIdType.Guid || isValidGuid(<string>this.value));
     assert(this.identifierType !== NodeIdType.String || typeof this.value === 'string');

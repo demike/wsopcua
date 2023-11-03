@@ -1,4 +1,3 @@
-'use strict';
 /**
  * @module opcua.transport
  */
@@ -49,9 +48,9 @@ interface TcpTransportEvents {
  * @extends EventEmitter
  */
 export class TCP_transport extends EventEmitter<TcpTransportEvents> {
-  packetAssembler: PacketAssembler;
-  name: string;
-  _timerId: number;
+  packetAssembler?: PacketAssembler;
+  name?: string;
+  _timerId: number | null = null;
   protected _socket: any;
   timeout: number;
   headerSize: number;
@@ -62,11 +61,11 @@ export class TCP_transport extends EventEmitter<TcpTransportEvents> {
   chunkReadCount: number;
   chunkWrittenCount: number;
   protected __disconnecting__: boolean;
-  protected _on_socket_closed_called: boolean;
-  protected _on_socket_ended_called: boolean;
-  protected _pending_buffer: ArrayBuffer;
+  protected _on_socket_closed_called: boolean = false;
+  protected _on_socket_ended_called: boolean = false;
+  protected _pending_buffer?: ArrayBuffer;
 
-  protected _the_callback: ResponseCallback<DataView>;
+  protected _the_callback: ResponseCallback<DataView> | null;
 
   get disconnecting() {
     return this.__disconnecting__;
@@ -297,7 +296,7 @@ export class TCP_transport extends EventEmitter<TcpTransportEvents> {
       .on('data', (data: any) => {
         this.bytesRead += data.length;
         if (data.length > 0) {
-          this.packetAssembler.feed(data);
+          this.packetAssembler?.feed(data);
         }
       })
       .on('close', (had_error: any) => {

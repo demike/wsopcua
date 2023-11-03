@@ -43,7 +43,7 @@ function hex_block(start: number, end: number, buffer: ArrayBuffer) {
   return 's:' + f(start, 4) + ' e:' + f(end, 4) + ' n:' + f(n, 4) + ' ' + strBuf;
 }
 
-function make_tracer(buffer: DataView, padding: number, offset: number): any {
+function make_tracer(buffer: DataView, padding: number, offset?: number): any {
   padding = padding || 0;
   offset = offset || 0;
 

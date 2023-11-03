@@ -6,10 +6,7 @@ import { resolveNodeId, NodeId } from '../nodeid/nodeid';
 import { INode } from '../generated/Node';
 
 function _get_nodeId(node: string | INode | number | NodeId): NodeId {
-  if ((node as INode).nodeId) {
-    return (node as INode).nodeId;
-  }
-  return resolveNodeId(<string>node);
+  return (node as INode).nodeId ?? resolveNodeId(<string>node);
 }
 
 export function makeBrowsePath(

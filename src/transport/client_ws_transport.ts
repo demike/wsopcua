@@ -102,10 +102,10 @@ function createClientSocket(
  *
  */
 export class ClientWSTransport extends WSTransport {
-  numberOfRetry: number;
+  numberOfRetry = 0;
   _connected: boolean;
-  serverUri: string;
-  endpointUrl: string;
+  serverUri = '';
+  endpointUrl = '';
   _parameters: any;
 
   get protocolVersion() {

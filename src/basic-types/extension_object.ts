@@ -1,4 +1,3 @@
-'use strict';
 /**
  * @module opcua.miscellaneous
  */
@@ -55,31 +54,28 @@ export function encodeExtensionObject(
     // note : Length shall not hbe specified, end of the job!
   } else {
     // ensure we have a valid encoding Default Binary ID !!!
-
+    const encodingDefaultBinary = (object as IEncodable).encodingDefaultBinary;
     /* istanbul ignore next */
-    if (!(object as IEncodable).encodingDefaultBinary) {
+    if (!encodingDefaultBinary) {
       console.log('xxxxxxxxx encoding ExtObj ', object);
       throw new Error('Cannot find encodingDefaultBinary for this object');
     }
     /* istanbul ignore next */
-    if ((object as IEncodable).encodingDefaultBinary.isEmpty()) {
-      console.log(
-        'xxxxxxxxx encoding ExtObj ',
-        (object as IEncodable).encodingDefaultBinary.toString()
-      );
+    if (encodingDefaultBinary.isEmpty()) {
+      console.log('xxxxxxxxx encoding ExtObj ', encodingDefaultBinary.toString());
       throw new Error('Cannot find encodingDefaultBinary for this object');
     }
     /* istanbul ignore next */
-    if (is_internal_id((object as IEncodable).encodingDefaultBinary.value as number)) {
+    if (is_internal_id(encodingDefaultBinary.value as number)) {
       console.log(
         'xxxxxxxxx encoding ExtObj ',
-        (object as IEncodable).encodingDefaultBinary.toString(),
+        encodingDefaultBinary.toString(),
         object.constructor.name
       );
       throw new Error('Cannot find valid OPCUA encodingDefaultBinary for this object');
     }
 
-    encodeNodeId((object as IEncodable).encodingDefaultBinary, stream);
+    encodeNodeId(encodingDefaultBinary, stream);
     stream.setUint8(0x01); // 0x01 The body is encoded as a ByteString.
     stream.setUint32(DataStream.binaryStoreSize(object as IEncodable));
     (object as IEncodable).encode(stream);

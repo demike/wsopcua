@@ -101,10 +101,23 @@ describe('Testing numerical range', function () {
     expect(nr.isValid()).toBe(false);
   });
 
-  it('should be an InvalidRange when constructed with a string with invalid array range (low==high) ', function () {
+  it('should be an InvalidRange when constructed with an array with invalid array range (low==high) ', function () {
     const nr = new NumericRange([12, 12]);
     expect(nr.type).toBe(NumericRangeType.InvalidRange);
     expect(nr.isValid()).toBe(false);
+  });
+
+  it('should be an MatrixRange when constructed with [1, 2], [3, 4]', () => {
+    const nr = new NumericRange([1, 2], [3, 4]);
+    expect(nr.type).toEqual(NumericRange.NumericRangeType.MatrixRange);
+    expect(nr.isValid()).toEqual(true);
+    expect(nr.toString()).toEqual('1:2,3:4');
+  });
+  it('should be an MatrixRange when constructed with [1], [3] ', () => {
+    const nr = new NumericRange([1, 1], [3, 3]);
+    expect(nr.type).toEqual(NumericRange.NumericRangeType.MatrixRange);
+    expect(nr.isValid()).toEqual(true);
+    expect(nr.toString()).toEqual('1,3');
   });
 
   it('should be an InvalidRange when constructed with a string with invalid array range ( low > high )', function () {
@@ -229,6 +242,9 @@ describe('Testing numerical range', function () {
       const nr = new NumericRange('1:2,3:5');
 
       const result = nr.extract_values(matrixString);
+      if (!result.array) {
+        throw new Error('expecting an array');
+      }
       expect(result.array instanceof Array).toBeTruthy();
       expect(result.array.length).toBe(2);
       expect(result.array[0]).toBe('umm');
@@ -236,6 +252,11 @@ describe('Testing numerical range', function () {
 
       const nr2 = new NumericRange('1,3');
       const result2 = nr2.extract_values(matrixString);
+
+      if (!result2.array) {
+        throw new Error('expecting an array');
+      }
+
       expect(result2.array instanceof Array).toBeTruthy();
       expect(result2.array.length).toBe(1);
       expect(result2.array[0]).toBe('u');
@@ -248,7 +269,10 @@ describe('Testing numerical range', function () {
       expect(referenceByteString.length).toBe(11);
       const nr = new NumericRange(2);
       const r = nr.extract_values(referenceByteString);
-      expect(r.array instanceof Uint8Array).toBeTruthy();
+
+      if (!(r.array instanceof Uint8Array)) {
+        throw new Error('expected array to be instance of Uint8Array');
+      }
       expect(new TextDecoder().decode(r.array)).toBe('r');
       expect(r.statusCode).toBe(StatusCodes.Good);
       expect(referenceByteString.length).toBe(11);
@@ -258,7 +282,9 @@ describe('Testing numerical range', function () {
       const nr = new NumericRange(2, 4);
       expect(referenceByteString.length).toBe(11);
       const r = nr.extract_values(referenceByteString);
-      expect(r.array instanceof Uint8Array).toBeTruthy();
+      if (!(r.array instanceof Uint8Array)) {
+        throw new Error('expected array to be instance of Uint8Array');
+      }
       expect(new TextDecoder().decode(r.array)).toBe('rem');
       expect(r.statusCode).toBe(StatusCodes.Good);
       expect(referenceByteString.length).toBe(11);
@@ -278,7 +304,9 @@ describe('Testing numerical range', function () {
       const r = nr.extract_values(referenceByteString);
 
       expect(r.statusCode).toBe(StatusCodes.Good);
-      expect(r.array instanceof Uint8Array).toBeTruthy();
+      if (!(r.array instanceof Uint8Array)) {
+        throw new Error('expected array to be instance of Uint8Array');
+      }
       expect(new TextDecoder().decode(r.array)).toBe('Lorem Ipsum');
       expect(referenceByteString.length).toBe(11);
     });
@@ -288,7 +316,7 @@ describe('Testing numerical range', function () {
 
       expect(referenceByteString.length).toBe(11);
       const r = nr.extract_values(referenceByteString);
-
+      expect(r.array).toBeNull();
       expect(r.statusCode).toBe(StatusCodes.BadIndexRangeNoData);
       expect(referenceByteString.length).toBe(11);
     });
@@ -376,46 +404,46 @@ describe('Testing numerical range', function () {
       const nr = new NumericRange('0,0');
       const r = nr.extract_values(matrix, dimensions);
       expect(r.statusCode).toBe(StatusCodes.Good);
-      expect((<any>r).dimensions).toEqual([1, 1]);
-      expect(r.array.length).toBe(1);
-      expect(r.array[0]).toBe(11);
+      expect(r.dimensions).toEqual([1, 1]);
+      expect(r.array!.length).toBe(1);
+      expect(r.array![0]).toBe(11);
     });
     it('should extract sub matrix at 1,0', function () {
       const nr = new NumericRange('1,0');
       const r = nr.extract_values(matrix, dimensions);
       expect(r.statusCode).toBe(StatusCodes.Good);
-      expect((<any>r).dimensions).toEqual([1, 1]);
-      expect(r.array.length).toBe(1);
-      expect(r.array[0]).toBe(21);
+      expect(r.dimensions).toEqual([1, 1]);
+      expect(r.array!.length).toBe(1);
+      expect(r.array![0]).toBe(21);
     });
     it('should extract sub matrix at 0,1', function () {
       const nr = new NumericRange('0,1');
       const r = nr.extract_values(matrix, dimensions);
       expect(r.statusCode).toBe(StatusCodes.Good);
       expect((<any>r).dimensions).toEqual([1, 1]);
-      expect(r.array.length).toBe(1);
-      expect(r.array[0]).toBe(12);
+      expect(r.array!.length).toBe(1);
+      expect(r.array![0]).toBe(12);
     });
     it('should extract sub matrix column at 0:2,1 ( a column)', function () {
       const nr = new NumericRange('0:2,0');
       const r = nr.extract_values(matrix, dimensions);
       expect(r.statusCode).toBe(StatusCodes.Good);
-      expect(r.array.length).toBe(3);
-      expect((<any>r).dimensions).toEqual([3, 1]);
-      expect(r.array.length).toBe(3);
-      expect(r.array[0]).toBe(11);
-      expect(r.array[1]).toBe(21);
-      expect(r.array[2]).toBe(31);
+      expect(r.array!.length).toBe(3);
+      expect(r.dimensions).toEqual([3, 1]);
+      expect(r.array!.length).toBe(3);
+      expect(r.array![0]).toBe(11);
+      expect(r.array![1]).toBe(21);
+      expect(r.array![2]).toBe(31);
     });
     it('should extract sub matrix row at 0:2,1 ( a row)', function () {
       const nr = new NumericRange('0,0:2');
       const r = nr.extract_values(matrix, dimensions);
       expect(r.statusCode).toBe(StatusCodes.Good);
       expect((<any>r).dimensions).toEqual([1, 3]);
-      expect(r.array.length).toBe(3);
-      expect(r.array[0]).toBe(11);
-      expect(r.array[1]).toBe(12);
-      expect(r.array[2]).toBe(13);
+      expect(r.array!.length).toBe(3);
+      expect(r.array![0]).toBe(11);
+      expect(r.array![1]).toBe(12);
+      expect(r.array![2]).toBe(13);
     });
   });
 

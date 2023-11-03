@@ -1,5 +1,3 @@
-const SymbolProto = typeof Symbol !== 'undefined' ? Symbol.prototype : null;
-
 export function isEqual(a: any, b: any, aStack?: any[], bStack?: any[]) {
   // Identical objects are equal. `0 === -0`, but they aren't identical.
   // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
@@ -53,7 +51,7 @@ function deepEq(a: any, b: any, aStack?: any[], bStack?: any[]) {
       // of `NaN` are not equivalent.
       return +a === +b;
     case '[object Symbol]':
-      return SymbolProto.valueOf.call(a) === SymbolProto.valueOf.call(b);
+      return Symbol.valueOf.call(a) === Symbol.valueOf.call(b);
   }
 
   const areArrays = className === '[object Array]';

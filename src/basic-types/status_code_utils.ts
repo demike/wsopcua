@@ -2,8 +2,8 @@ import { StatusCode, ModifiableStatusCode } from './status_code';
 import { DataStream } from './DataStream';
 import { StatusCodes } from '../constants/raw_status_codes';
 
-export function encodeStatusCode(statusCode: StatusCode, stream: DataStream) {
-  stream.setUint32(statusCode.value);
+export function encodeStatusCode(statusCode: StatusCode | null, stream: DataStream) {
+  stream.setUint32(statusCode ? statusCode.value : StatusCodes.Good.value);
 }
 
 /** @internal construct status codes fast search indexes */

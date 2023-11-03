@@ -28,6 +28,9 @@ export function call(fn: Function, vargs?: any, callback?: Function) {
   fn = args[0];
   vargs = args.slice(1, args.length - 1);
   callback = args[args.length - 1];
+  if (!callback) {
+    throw new Error('missing callback function');
+  }
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return new FunctionCall(fn, vargs, callback);
 }

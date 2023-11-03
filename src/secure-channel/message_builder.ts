@@ -1,5 +1,3 @@
-'use strict';
-
 import { assert } from '../assert';
 import { SecurityPolicy, ICryptoFactory } from '../secure-channel/security_policy';
 import * as ec from '../basic-types';
@@ -36,10 +34,10 @@ export class MessageBuilder extends MessageBuilderBase {
   protected _tokenStack: {
     securityToken: ChannelSecurityToken;
     derivedKeys: crypto_utils.DerivedKeys;
-  }[];
-  protected _privateKey: PrivateKey | null;
-  protected _cryptoFactory: ICryptoFactory | null;
-  protected _securityHeader: AsymmetricAlgorithmSecurityHeader | SymmetricAlgorithmSecurityHeader;
+  }[] = [];
+  protected _privateKey: PrivateKey | null = null;
+  protected _cryptoFactory: ICryptoFactory | null = null;
+  protected _securityHeader?: AsymmetricAlgorithmSecurityHeader | SymmetricAlgorithmSecurityHeader;
   protected _previous_sequenceNumber: number;
   protected _objectFactory: any;
   public securityMode: any;
@@ -185,7 +183,9 @@ export class MessageBuilder extends MessageBuilderBase {
     if (asymmetricAlgorithmSecurityHeader.receiverCertificateThumbprint) {
       // this mean that the message has been encrypted ....
 
-      assert(this._privateKey, 'expecting valid key');
+      if (!this._privateKey) {
+        throw new Error('expecing valid key');
+      }
 
       const decryptedBuffer = await this._cryptoFactory.asymmetricDecrypt(buf, this._privateKey);
 
@@ -207,6 +207,10 @@ export class MessageBuilder extends MessageBuilderBase {
         debugLog('-------------------------------');
         debugLog('Certificate :', hexDump(asymmetricAlgorithmSecurityHeader.senderCertificate));
       }
+    }
+
+    if (!asymmetricAlgorithmSecurityHeader.senderCertificate) {
+      throw new Error('expecting valid senderCertificate');
     }
 
     const cert = await crypto_utils.exploreCertificateInfo(
@@ -252,7 +256,6 @@ export class MessageBuilder extends MessageBuilderBase {
     // xx assert(derivedKeys ); in fact, can be null
 
     // TODO: make sure this list doesn't grow indefinitly
-    this._tokenStack = this._tokenStack || [];
     assert(
       this._tokenStack.length === 0 ||
         this._tokenStack[0].securityToken.tokenId !== securityToken.tokenId
@@ -364,6 +367,10 @@ export class MessageBuilder extends MessageBuilderBase {
   }
 
   protected _decrypt(binaryStream: DataStream) {
+    if (!this.messageHeader) {
+      throw new Error('internal error');
+    }
+
     if (this._securityPolicy === SecurityPolicy.Invalid) {
       this._report_error('SecurityPolicy');
       return false;
@@ -506,6 +513,10 @@ export class MessageBuilder extends MessageBuilderBase {
   }
 
   protected _decode_message_body(full_message_body: ArrayBuffer): boolean {
+    if (!this.messageHeader || !this._securityHeader) {
+      return this._report_error('internal error');
+    }
+
     const binaryStream = new DataStream(full_message_body);
     const msgType = this.messageHeader.msgType;
 
@@ -514,9 +525,9 @@ export class MessageBuilder extends MessageBuilderBase {
       this._report_error('ERROR RECEIVED');
       return false;
     }
-    if (msgType === 'HEL' || msgType === 'ACK') {
+    if (msgType === 'HEL' || msgType === 'ACK' || msgType === 'ERR') {
       // invalid message type
-      this._report_error('Invalid message type ( HEL/ACK )');
+      this._report_error('Invalid message type ( HEL/ACK/ERR )');
       return false;
     }
 
@@ -545,7 +556,7 @@ export class MessageBuilder extends MessageBuilderBase {
             'message',
             objMessage,
             msgType,
-            this.sequenceHeader.requestId,
+            this.sequenceHeader!.requestId,
             this.secureChannelId
           );
         } catch (err) {
