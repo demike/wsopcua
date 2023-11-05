@@ -18,6 +18,11 @@ export class PathGenUtil {
     '/nodeid'
   );
 
+  private static readonly _genModulePath = new ProjectModulePath(
+    PathGenUtil.PROJECT_NAME,
+    '/generated'
+  );
+
   /**
    * the root project path relative to the folder of generated classes
    */
@@ -39,5 +44,9 @@ export class PathGenUtil {
 
   public static get NodeIdModulePath(): ProjectModulePath {
     return this._nodeIdModulePath;
+  }
+
+  public static get GenModulePath(): ProjectModulePath {
+    return this._genModulePath;
   }
 }

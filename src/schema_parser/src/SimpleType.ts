@@ -2,6 +2,7 @@
 import { ClassMethod } from "./ClassMethod";
 import { ClassMember } from "./ClassMember";
 */
+import { ClassFileState } from './ClassFile';
 import { ClassFile, ClassMethod, ClassMember } from './SchemaParser.module';
 import { ProjectModulePath, getModuleImportPath } from './SchemaParserConfig';
 
@@ -22,8 +23,7 @@ export class SimpleType extends ClassFile {
     methods?: ClassMethod[]
   ) {
     super(modulePath, name, baseClass, members, methods);
-    this.complete = true;
-    this.written = true;
+    this.state = ClassFileState.Written;
   }
 
   public get JsType(): string | undefined {

@@ -50,7 +50,7 @@ export class Lock {
 
   public acquire(): Promise<void> | undefined {
     const oldHead = this.pHead;
-    let releaseLock: () => void;
+    let releaseLock: undefined | (() => void);
     const promise = new Promise<void>((resolve) => {
       releaseLock = resolve;
     });

@@ -15,16 +15,15 @@ export interface ClientSessionKeepAliveManagerEvents {
 }
 
 export class ClientSessionKeepAliveManager extends EventEmitter<ClientSessionKeepAliveManagerEvents> {
-  protected timerId: number;
+  protected timerId = 0;
   protected session: ClientSession;
-  protected pingTimeout: number;
-  protected lastKnownState: ServerState;
-  protected checkInterval: number;
+  protected pingTimeout = 0;
+  protected lastKnownState?: ServerState;
+  protected checkInterval = 0;
 
   constructor(session: ClientSession) {
     super();
     this.session = session;
-    this.timerId = 0;
   }
 
   /**
@@ -84,7 +83,7 @@ export class ClientSessionKeepAliveManager extends EventEmitter<ClientSessionKee
           this.lastKnownState = newState;
         }
 
-        this.emit('keepalive', this.lastKnownState);
+        this.emit('keepalive', this.lastKnownState ?? ServerState.Unknown);
       }
       callback();
     });

@@ -3,6 +3,8 @@ import { ClassFile } from './SchemaParser.module';
 import { getModuleImportPath } from './SchemaParserConfig';
 
 export class EnumTypeFile extends ClassFile {
+  public defaultValue: string | undefined;
+
   protected lengthInBits = 0;
 
   public get LenghInBits() {

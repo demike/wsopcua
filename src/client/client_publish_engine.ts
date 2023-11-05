@@ -37,7 +37,7 @@ export class ClientSidePublishEngine {
    */
   public static publishRequestCountInPipeline = 5;
 
-  protected _session: ClientSession;
+  protected _session: ClientSession | null;
   protected subscriptionAcknowledgements: subscription_service.SubscriptionAcknowledgement[];
   protected subscriptionMap: { [key: number]: ClientSubscription };
   protected timeoutHint: number;
@@ -197,7 +197,7 @@ export class ClientSidePublishEngine {
 
     let active = true;
 
-    this._session.publish(publish_request, (err, response) => {
+    this._session!.publish(publish_request, (err, response) => {
       this.nbPendingPublishRequests -= 1;
       if (err) {
         debugLog(
@@ -460,7 +460,7 @@ export class ClientSidePublishEngine {
           );
         }
 
-        if (!self.session || (<any>self.session)._closeEventHasBeenEmmitted) {
+        if (!self._session || self._session['_closeEventHasBeenEmmitted']) {
           debugLog('ClientPublishEngine#_republish aborted ');
           // has  client been disconnected in the mean time ?
           is_done = true;

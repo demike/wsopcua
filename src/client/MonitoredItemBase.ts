@@ -44,9 +44,9 @@ export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
   protected _monitoringParameters: MonitoringParameters;
   protected _subscription: ClientSubscription;
   protected _monitoringMode: MonitoringMode;
-  protected _statusCode: StatusCode;
+  protected _statusCode: StatusCode = StatusCodes.BadDataUnavailable;
   public result?: MonitoredItemCreateResult;
-  protected _monitoredItemId: number;
+  public monitoredItemId?: number;
   public filterResult?: ExtensionObject;
 
   constructor(
@@ -78,14 +78,6 @@ export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
 
   public get monitoringMode() {
     return this._monitoringMode;
-  }
-
-  public get monitoredItemId() {
-    return this._monitoredItemId;
-  }
-
-  public set monitoredItemId(monitoredItemId: number) {
-    this._monitoredItemId = monitoredItemId;
   }
 
   public get statusCode(): StatusCode {
@@ -199,10 +191,10 @@ export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
     /* istanbul ignore else */
     if (monitoredItemResult.statusCode === StatusCodes.Good) {
       this.result = monitoredItemResult;
-      this._monitoredItemId = monitoredItemResult.monitoredItemId;
+      this.monitoredItemId = monitoredItemResult.monitoredItemId;
       this._monitoringParameters.samplingInterval = monitoredItemResult.revisedSamplingInterval;
       this._monitoringParameters.queueSize = monitoredItemResult.revisedQueueSize;
-      this.filterResult = monitoredItemResult.filterResult;
+      this.filterResult = monitoredItemResult.filterResult || undefined;
 
       this._subscription._add_monitored_item(this._monitoringParameters.clientHandle, this);
       /**
@@ -288,7 +280,7 @@ export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
       const monParams = new MonitoringParameters(parameters);
       monParams.clientHandle = monitoredItem.monitoringParameters.clientHandle;
       return new MonitoredItemModifyRequest({
-        monitoredItemId: monitoredItem._monitoredItemId,
+        monitoredItemId: monitoredItem.monitoredItemId,
         requestedParameters: monParams,
       });
     });
@@ -324,8 +316,8 @@ export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
     callback: ResponseCallback<StatusCode[]>
   ) {
     const monitoredItemIds = monitoredItems.map(function (monitoredItem) {
-      return monitoredItem._monitoredItemId;
-    });
+      return monitoredItem.monitoredItemId;
+    }) as number[];
 
     const setMonitoringModeRequest: ISetMonitoringModeRequest = {
       subscriptionId: <number>subscription.subscriptionId,

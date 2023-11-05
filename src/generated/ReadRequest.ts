@@ -27,7 +27,7 @@ export class ReadRequest {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.maxAge = (options.maxAge != null) ? options.maxAge : 0;
-  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : null;
+  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : 0;
   this.nodesToRead = (options.nodesToRead != null) ? options.nodesToRead : [];
 
  }

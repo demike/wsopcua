@@ -22,7 +22,7 @@ export interface ITypeSchema {
  */
 
 export class TypeSchema implements ITypeSchema {
-  name: string;
+  name!: string;
   encode?: (value: any, stream: DataStream) => void;
   decode?: (stream: DataStream) => any;
   jsonEncode?: (arg: any) => any;

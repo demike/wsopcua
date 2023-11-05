@@ -1,6 +1,7 @@
-import { ClassFile, SimpleType, StructTypeFile } from './SchemaParser.module';
+import { ClassFile, EnumTypeFile, SimpleType, StructTypeFile } from './SchemaParser.module';
 import { PathGenUtil } from './PathGenUtil';
 import { ProjectModulePath } from './SchemaParserConfig';
+import { ClassFileState } from './ClassFile';
 
 export class TypeRegistry {
   protected static readonly BASIC_TYPES_PATH = PathGenUtil.SimpleTypesModulePath;
@@ -11,7 +12,10 @@ export class TypeRegistry {
     this.typeMap[name] = type;
   }
 
-  public static getType(name: string) {
+  public static getType(name?: string) {
+    if (!name) {
+      return;
+    }
     const i = name.indexOf(':');
     if (i > 0) {
       name = name.substr(i + 1);
@@ -29,21 +33,18 @@ export class TypeRegistry {
     /*
         type = new SimpleType(this.BASIC_TYPES_PATH, "DataStream");
         this.addType(type.Name, type);
-        type.Written = true;
-        type.Complete = true;
+        type.state = ClassFileState.Written;
         type.hasEnDeCodeFunctions = false;
         */
     let structtype = new StructTypeFile(this.BASIC_TYPES_PATH, 'DataStream');
     this.addType(structtype.Name, structtype);
-    structtype.Written = true;
-    structtype.Complete = true;
+    structtype.state = ClassFileState.Written;
 
     structtype = new StructTypeFile(
       new ProjectModulePath(PathGenUtil.PROJECT_NAME, '/variant', false),
       'Variant'
     );
-    structtype.Complete = true;
-    structtype.Written = true;
+    structtype.state = ClassFileState.Written;
     this.addType(structtype.Name, structtype);
 
     // OPC-UA Standard Data Types - OPC-UA Specification Part 3: 8.*
@@ -154,6 +155,7 @@ export class TypeRegistry {
     type = new SimpleType(this.BASIC_TYPES_PATH, 'Guid');
     //        type.Path = this.BASIC_TYPES_PATH + "guid";
     type.ImportAs = 'ec';
+    type.defaultValue = '""';
     this.addType(type.Name, type);
 
     // SByte: 8.17
@@ -196,6 +198,11 @@ export class TypeRegistry {
     // NamingRuleType: 8.29
     // TODO
     // NodeClass: 8.30
+    /*
+    const enumType = new EnumTypeFile(PathGenUtil.GenModulePath.add('/NodeClass'), 'NodeClass');
+    enumType.defaultValue = 'NodeClass.Unspecified';
+    this.addType(enumType.Name, enumType);
+    */
     // TODO
     // Number: 8.31 abstract type
     // TODO

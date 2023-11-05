@@ -30,7 +30,7 @@ export class ClassMethod {
     }
     if (returnType) {
       this.returnType =
-        returnType instanceof ClassFile ? returnType : ClassFile.getTypeByName(returnType);
+        returnType instanceof ClassFile ? returnType : ClassFile.getTypeByName(returnType) ?? null;
     }
     if (args) {
       this.arguments = args;

@@ -11,7 +11,7 @@ import {
   EnumTypeFile,
 } from './SchemaParser.module';
 import { TypeRegistry } from './TypeRegistry';
-import { ClassFile } from './ClassFile';
+import { ClassFile, ClassFileState } from './ClassFile';
 import { ProjectImportConfig, ProjectModulePath, SchemaImportConfig } from './SchemaParserConfig';
 import { getSpecLink } from './spec-link-Import';
 
@@ -244,22 +244,30 @@ export class BSDSchemaParser {
   }
 
   public parseBSDStruct(el: HTMLElement): void {
-    const file = new StructTypeFile(this.currentModulePath);
-    const parser = new BSDStructTypeFileParser(el, file);
     const at = el.attributes.getNamedItem(ClassFile.ATTR_NAME);
-    if (at && TypeRegistry.getType(at.value)) {
-      // this type already exists
+    const regEntry = TypeRegistry.getType(at?.value);
+    if (regEntry && regEntry.state >= ClassFileState.InProgress) {
+      // this type already exists, and is in progress or already finished
       return;
     }
+    const file = regEntry ?? new StructTypeFile(this.currentModulePath);
+    const parser = new BSDStructTypeFileParser(el, file);
     parser.parse();
-    if (!file.Complete) {
+    if (file.state < ClassFileState.Parsed) {
       this.clsIncompleteTypes.push(parser);
     }
     // this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
   }
 
   public parseBSDEnum(el: HTMLElement): void {
-    const file = new EnumTypeFile(this.currentModulePath);
+    const at = el.attributes.getNamedItem(ClassFile.ATTR_NAME);
+    const regEntry = TypeRegistry.getType(at?.value);
+    if (regEntry && regEntry.state >= ClassFileState.InProgress) {
+      // this type already exists, and is in progress or already finished
+      return;
+    }
+
+    const file = regEntry ?? new EnumTypeFile(this.currentModulePath);
     const parser = new BSDEnumTypeFileParser(el, file);
     parser.parse();
     // this.writeToFile(this.outPath + "/" + file.Name + ".ts",file);
@@ -297,7 +305,7 @@ export class BSDSchemaParser {
     for (let iterations = 0; iterations < 10; iterations++) {
       for (const t of this.clsIncompleteTypes) {
         t.parse();
-        if (!t.Cls.Complete) {
+        if (t.Cls.state < ClassFileState.Parsed) {
           ar.push(t);
         }
       }
@@ -334,7 +342,7 @@ export class BSDSchemaParser {
     }
     const ar = TypeRegistry.getTypes();
     for (const file of ar) {
-      if (!file.Written) {
+      if (file.state !== ClassFileState.Written) {
         if (!this.importConfig.readonly) {
           const arParams = this.metaTypeMap['DataType'][file.Name];
           let arParamsEncodingBinary =
@@ -356,7 +364,7 @@ export class BSDSchemaParser {
         }
         this.writeToFile(path.resolve(this.outPath, file.Name + '.ts'), file);
       }
-      file.Written = true;
+      file.state = ClassFileState.Written;
     }
   }
 
@@ -398,7 +406,7 @@ export class BSDSchemaParser {
     const ar = TypeRegistry.getTypes();
 
     for (const file of ar) {
-      if (file.Written) {
+      if (file.state === ClassFileState.Written) {
         continue;
       }
       strFileContent += "export * from './" + file.Name + "';\n";

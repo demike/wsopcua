@@ -18,6 +18,13 @@ export declare class Set<Value> {
   size: number;
 }
 
+export enum ClassFileState {
+  Initial = 0,
+  InProgress = 1,
+  Parsed = 2,
+  Written = 3,
+}
+
 export class ClassFile {
   public set Name(n: string) {
     this.name = this.sanitizeName(n);
@@ -49,14 +56,6 @@ export class ClassFile {
     return this.modulePath;
   }
 
-  public get Written() {
-    return this.written;
-  }
-
-  public set Written(w: boolean) {
-    this.written = w;
-  }
-
   public get BaseClass(): ClassFile | null | undefined {
     return this.baseClass;
   }
@@ -75,14 +74,6 @@ export class ClassFile {
 
   public set Documentation(doc: string) {
     this.documentation = doc;
-  }
-
-  public get Complete(): boolean {
-    return this.complete;
-  }
-
-  public set Complete(c: boolean) {
-    this.complete = c;
   }
 
   public get ImportAs(): string | undefined {
@@ -257,7 +248,7 @@ export class ClassFile {
     return this.getMethodByName(ClassFile.FROM_JSON_METHOD);
   }
 
-  public static getTypeByName(typeName: string): ClassFile {
+  public static getTypeByName(typeName: string) {
     const i = typeName.indexOf(':');
     if (i > 0) {
       typeName = typeName.substr(i + 1);
@@ -443,6 +434,5 @@ export class ClassFile {
   protected modulePath: ProjectModulePath;
   protected importAs?: string;
 
-  protected complete = false;
-  protected written = false;
+  public state = ClassFileState.Initial;
 }

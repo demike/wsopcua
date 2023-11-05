@@ -9,7 +9,7 @@ import {
   getCurrentNamespaceArray,
   resolveExpandedNodeId,
 } from '../nodeid/expanded_nodeid';
-import { isValidGuid, decodeGuid, encodeGuid } from './guid';
+import { isValidGuid, decodeGuid, encodeGuid, Guid as GUID } from './guid';
 import { decodeString, encodeString } from './string';
 import { decodeUInt32, encodeUInt32 } from './integers';
 import {
@@ -178,7 +178,9 @@ const _decodeNodeId = function (
   stream: DataStream,
   createExpandedNodeId: boolean = false
 ): NodeId | ExpandedNodeId {
-  let value, namespace, nodeIdType;
+  let value: number | string | GUID | Uint8Array;
+  let namespace: number | undefined;
+  let nodeIdType: NodeIdType;
   // eslint-disable-next-line no-bitwise
   encoding_byte &= 0x3f; // 1 to 5
 
@@ -199,12 +201,12 @@ const _decodeNodeId = function (
       break;
     case EnumNodeIdEncoding.String:
       namespace = stream.getUint16();
-      value = decodeString(stream);
+      value = decodeString(stream) || '';
       nodeIdType = NodeIdType.String;
       break;
     case EnumNodeIdEncoding.ByteString:
       namespace = stream.getUint16();
-      value = decodeByteString(stream);
+      value = decodeByteString(stream) as Uint8Array; // TODO: check if this cast is ok;
       nodeIdType = NodeIdType.ByteString;
       break;
     default:

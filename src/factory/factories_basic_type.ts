@@ -38,7 +38,7 @@ import { ITypeSchema } from './type_schema';
 export function registerBasicType(schema: ITypeSchema) {
   const name = schema.name;
 
-  const t = _defaultTypeMap[schema.subtype];
+  const t = schema.subtype ? _defaultTypeMap[schema.subtype] : undefined;
 
   /* istanbul ignore next */
   if (!t) {

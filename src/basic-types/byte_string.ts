@@ -1,4 +1,3 @@
-'use strict';
 import { DataStream } from './DataStream';
 import { buf2base64, base64ToBuf } from '../crypto';
 
@@ -23,13 +22,13 @@ export function encodeByteString(
 ): void {
   stream.writeByteStream(byteString);
 }
-export function decodeByteString(stream: DataStream): Uint8Array {
+export function decodeByteString(stream: DataStream) {
   return stream.readByteStream();
 }
 
 export function coerceByteString(
   value: number[] | string | Uint8Array | ArrayBuffer | ArrayBufferView | null
-): Uint8Array {
+): Uint8Array | null {
   if (value instanceof Uint8Array) {
     return value;
   }
@@ -60,4 +59,5 @@ export function jsonDecodeByteString(b64ByteString?: string) {
   if (b64ByteString) {
     return base64ToBuf(b64ByteString);
   }
+  return null;
 }

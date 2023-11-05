@@ -8,6 +8,7 @@ import { ClassMember } from './ClassMember';
 import { SimpleType } from './SimpleType';
 
 import { getModuleImportPath } from './SchemaParserConfig';
+import { ClassFileState } from './ClassFile';
 
 export abstract class BSDClassFileParser {
   public static readonly ATTR_BASE_CLASS = 'BaseType';
@@ -37,6 +38,8 @@ export abstract class BSDClassFileParser {
       return;
     }
     this.cls.Name = at.value;
+    console.log('parse', this.cls.FullName);
+    this.cls.state = ClassFileState.InProgress;
 
     at = this.el.attributes.getNamedItem(ClassFile.ATTR_BASE_CLASS);
     if (at != null) {
@@ -49,9 +52,9 @@ export abstract class BSDClassFileParser {
 
     TypeRegistry.addType(this.cls.Name, this.cls);
 
-    if (this.cls.BaseClass && !this.cls.BaseClass.Complete) {
+    if (this.cls.BaseClass && this.cls.BaseClass.state < ClassFileState.Parsed) {
       // we can't check members --> have to wait until base class is complete
-      this.cls.Complete = false;
+      this.cls.state = ClassFileState.InProgress;
       return;
     }
 
@@ -62,7 +65,7 @@ export abstract class BSDClassFileParser {
       }
     } catch (e) {
       if (e instanceof IncompleteTypeDefException) {
-        this.cls.Complete = false;
+        this.cls.state = ClassFileState.InProgress;
         this.cls.removeAllMembers();
         return;
       } else {
@@ -75,7 +78,7 @@ export abstract class BSDClassFileParser {
     this.createMethods();
     this.createImports();
     this.createDefines();
-    this.cls.Complete = true;
+    this.cls.state = ClassFileState.Parsed;
   }
 
   /**

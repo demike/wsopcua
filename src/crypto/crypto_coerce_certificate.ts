@@ -49,7 +49,7 @@ function coerceTbsCertificate(cert?: Partial<TbsCertificate>): TbsCertificate {
 }
 
 function coerceTbsCertificateExtensions(
-  extensions?: CertificateExtension
+  extensions?: CertificateExtension | null
 ): CertificateExtension | null {
   return {
     ...extensions,
@@ -58,12 +58,23 @@ function coerceTbsCertificateExtensions(
       keyEncipherment: true,
       digitalSignature: true,
       nonRepudiation: true,
-      //    keyCertSign: true,
+      keyCertSign: false,
+      cRLSign: false,
+      decipherOnly: false,
+      encipherOnly: false,
+      keyAgreement: false,
       ...extensions?.keyUsage,
     },
     extKeyUsage: {
       serverAuth: true,
       clientAuth: true,
+      codeSigning: false,
+      emailProtection: false,
+      timeStamping: false,
+      ipsecEndSystem: false,
+      ipsecTunnel: false,
+      ipsecUser: false,
+      ocspSigning: false,
       ...extensions?.extKeyUsage,
     },
     subjectAltName: {

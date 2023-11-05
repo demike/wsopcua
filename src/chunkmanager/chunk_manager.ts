@@ -323,6 +323,9 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
   }
 
   private _postprocess_current_chunk() {
+    if (!this.chunk) {
+      throw new Error('missing chunk');
+    }
     let extra_encryption_bytes = 0;
     // add padding bytes if needed
     if (this.plainBlockSize > 0) {

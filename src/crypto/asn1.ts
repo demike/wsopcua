@@ -301,7 +301,8 @@ function convertGeneralizedTime(str: string): Date {
 }
 
 function _readBMPString(buffer: Uint8Array, block: BlockInfo): string {
-  const strBuff = new DataView(_getBlock(buffer, block));
+  const blockArr = _getBlock(buffer, block);
+  const strBuff = new DataView(blockArr.buffer, blockArr.byteOffset, blockArr.byteLength);
 
   let str = '';
   for (let i = 0; i < strBuff.byteLength; i += 2) {

@@ -51,7 +51,7 @@ export class MonitoredItem extends MonitoredItemBase {
     ret += 'itemToMonitor:        ' + this._itemToMonitor.toString() + '\n';
     ret += 'monitoringParameters: ' + this._monitoringParameters.toString() + '\n';
     ret += 'timestampsToReturn:   ' + this._timestampsToReturn.toString() + '\n';
-    ret += 'monitoredItemId       ' + this._monitoredItemId + '\n';
+    ret += 'monitoredItemId       ' + this.monitoredItemId + '\n';
     ret += 'statusCode:           ' + this._statusCode ? this._statusCode.toString() : '';
     return ret;
   }
@@ -128,7 +128,7 @@ export class MonitoredItem extends MonitoredItemBase {
    */
   public modify(
     parameters: IMonitoringParameters,
-    timestampsToReturn: TimestampsToReturn,
+    timestampsToReturn: TimestampsToReturn | null,
     callback: ResponseCallback<MonitoredItemModifyResult>
   ) {
     if ('function' === typeof timestampsToReturn) {

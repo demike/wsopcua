@@ -38,8 +38,11 @@ export class ClassMember {
     this._isArray = isArray;
 
     if (type) {
-      this._type = type instanceof ClassFile ? type : ClassFile.getTypeByName(type);
-      if (!this._type) {
+      this._type =
+        type instanceof ClassFile
+          ? type
+          : ClassFile.getTypeByName(type) ?? ClassMember.UNKNOWN_TYPE;
+      if (!this._type || this._type === ClassMember.UNKNOWN_TYPE) {
         throw new IncompleteTypeDefException("Member '" + this._name + "' has no type");
       }
       if (this._type.Name === 'Bit') {
@@ -83,7 +86,7 @@ export class ClassMember {
   }
 
   public setTypeByName(typeName: string) {
-    this._type = ClassFile.getTypeByName(typeName);
+    this._type = ClassFile.getTypeByName(typeName) ?? ClassMember.UNKNOWN_TYPE;
   }
 
   public get BitPos() {
@@ -146,20 +149,23 @@ export class ClassMember {
     if (!required) {
       str += '?';
     }
-    str += ': ' + typeName;
+    str += ': ';
+
+    let typeString = typeName;
+
+    if (
+      this._type instanceof SimpleType &&
+      this._type.defaultValue == null /* null or undefined */
+    ) {
+      // account for strict null checking
+      typeString += ' | null';
+    }
 
     if (this._length > 1 || this._isArray) {
-      str += '[]';
-    } else {
-      if (
-        this._type instanceof SimpleType &&
-        this._type.defaultValue == null /* null or undefined */ &&
-        required
-      ) {
-        // account for strict null checking
-        str += ' | null';
-      }
+      typeString = `(${typeString})[]`;
     }
+
+    str += typeString;
 
     if (this._defaultValue) {
       str += ' = ' + this._defaultValue;
