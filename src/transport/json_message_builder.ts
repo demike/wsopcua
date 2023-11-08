@@ -73,7 +73,7 @@ export class JSONMessageBuilder extends EventEmitter<JSONMessageBuilderEvents> {
   public encodeRequest(request: IEncodable & { __namespaceArray?: string[] }) {
     setCurrentNamespaceArray(request.__namespaceArray);
     return JSON.stringify({
-      TypeId: jsonEncodeExpandedNodeId(resolveExpandedNodeId(request.encodingDefaultBinary)),
+      TypeId: jsonEncodeExpandedNodeId(resolveExpandedNodeId(request.encodingDefaultBinary!)),
       Body: request.toJSON(),
     });
   }

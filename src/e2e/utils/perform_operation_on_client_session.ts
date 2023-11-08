@@ -121,7 +121,7 @@ export async function perform_operation_on_subscriptionP(
   do_func: (session: ClientSession, subscription: ClientSubscription, done: any) => void
 ) {
   return new Promise((resolve, reject) => {
-    perform_operation_on_subscription(client, endpointUrl, do_func, (err?: Error, value?: any) => {
+    perform_operation_on_subscription(client, endpointUrl, do_func, (err, value?: any) => {
       if (err) {
         reject(err);
       } else {

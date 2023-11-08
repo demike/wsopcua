@@ -1,22 +1,16 @@
 import { NodeId, makeNodeId } from '../nodeid';
 import { BrowseDirection, ClientSession } from './client_session';
-import { BrowseDescription, BrowseResult, BrowseResultMask, NodeIdType } from '../generated';
+import { BrowseDescription, BrowseResultMask, NodeIdType } from '../generated';
 import { ReferenceTypeIds } from '../constants';
 import { DataType } from '../variant';
 
 const hasSubtypeNodeId = makeNodeId(ReferenceTypeIds.HasSubtype);
 
-export function findSuperType(session: ClientSession, dataTypeId: NodeId): Promise<NodeId>;
 export function findSuperType(
   session: ClientSession,
   dataTypeId: NodeId,
   callback: (err: Error | null, baseDataTypeId?: NodeId) => void
-): void;
-export function findSuperType(
-  session: ClientSession,
-  dataTypeId: NodeId,
-  callback?: (err: Error | null, baseDataTypeId?: NodeId) => void
-): any {
+): void {
   // let's browse for the SuperType of this object
   const nodeToBrowse = new BrowseDescription({
     browseDirection: BrowseDirection.Inverse,
@@ -26,11 +20,12 @@ export function findSuperType(
     resultMask: BrowseResultMask.ReferenceTypeId,
   });
 
-  session.browse(nodeToBrowse, (err: Error | null, browseResults: BrowseResult[]) => {
-    const result = browseResults[0];
-    if (err) {
-      return callback(err);
+  session.browse(nodeToBrowse, (err, browseResults) => {
+    if (err || !browseResults) {
+      return callback?.(err);
     }
+
+    const result = browseResults[0];
 
     /* istanbul ignore next */
     if (!result) {
@@ -42,17 +37,11 @@ export function findSuperType(
   });
 }
 
-export function findBasicDataType(session: ClientSession, dataTypeId: NodeId): Promise<DataType>;
 export function findBasicDataType(
   session: ClientSession,
   dataTypeId: NodeId,
   callback: (err: Error | null, dataType?: DataType) => void
-): void;
-export function findBasicDataType(
-  session: ClientSession,
-  dataTypeId: NodeId,
-  callback?: (err: Error | null, dataType?: DataType) => void
-): any {
+): void {
   if (
     dataTypeId.identifierType === NodeIdType.Numeric &&
     dataTypeId.value === /* DataTypeIds.Enumeration */ 29
@@ -70,7 +59,7 @@ export function findBasicDataType(
     callback(null, dataTypeId.value as DataType);
   } else {
     findSuperType(session, dataTypeId, (err: Error | null, baseDataTypeId?: NodeId) => {
-      if (err) {
+      if (err || !baseDataTypeId) {
         return callback(err);
       }
       findBasicDataType(session, baseDataTypeId, callback);
