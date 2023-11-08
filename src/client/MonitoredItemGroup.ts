@@ -56,12 +56,10 @@ export class MonitoredItemGroup extends EventEmitter<MonitoredItemGroupEvents> {
     subscription: ClientSubscription,
     itemsToMonitor: IReadValueId[],
     monitoringParameters: IMonitoringParameters | IMonitoringParameters[],
-    timestampsToReturn: TimestampsToReturn
+    timestampsToReturn: TimestampsToReturn = TimestampsToReturn.Neither
   ) {
     super();
     assert(Array.isArray(itemsToMonitor));
-
-    timestampsToReturn = timestampsToReturn || TimestampsToReturn.Neither;
 
     this._subscription = subscription;
 

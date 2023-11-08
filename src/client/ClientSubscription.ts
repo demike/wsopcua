@@ -80,7 +80,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
   protected _next_client_handle: number;
   protected monitoredItems: { [key: number]: MonitoredItemBase };
 
-  protected _timeoutHint: number;
+  protected _timeoutHint = 0;
   protected _lastSequenceNumber: number;
   protected lastRequestSentTime: number;
 
@@ -90,7 +90,8 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
    * @type {ClientSession}
    */
   public get session() {
-    return this._publishEngine.session;
+    assert(this._publishEngine.session, 'expecting a valid session here');
+    return this._publishEngine.session!;
   }
 
   public get subscriptionId() {
@@ -145,6 +146,8 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
     this._next_client_handle = 0;
     this.monitoredItems = {};
 
+    this.lastRequestSentTime = 0;
+
     /**
      * set to True when the server has notified us that this sbuscription has timed out
      * ( maxLifeCounter x published interval without being able to process a PublishRequest
@@ -171,7 +174,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
   protected __create_subscription(callback: ErrorCallback) {
     assert('function' === typeof callback);
 
-    const session = this._publishEngine.session;
+    const session = this.session;
 
     debugLog('ClientSubscription created ');
 
@@ -328,6 +331,9 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
 
       // now process all notifications
       notificationData.forEach((notification) => {
+        if (!notification) {
+          return;
+        }
         // DataChangeNotification / StatusChangeNotification / EventNotification
         switch (notification.constructor) {
           case subscription_service.DataChangeNotification:
@@ -389,7 +395,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
         {
           subscriptionIds: [<number>this._subscriptionId],
         },
-        (err: Error) => {
+        (err) => {
           if (err) {
             /**
              * notify the observers that an error has occurred
@@ -601,12 +607,12 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
       if (err) {
         return done && done(err);
       }
-      monitoredItem._monitor(function (error?: Error) {
+      monitoredItem._monitor(function (error?: Error | null) {
         if (error) {
           return done && done(error);
         }
         if (done) {
-          done(error, monitoredItem);
+          done(error ?? null, monitoredItem);
         }
       });
     });
@@ -619,7 +625,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
   ): Promise<MonitoredItem> {
     return new Promise((res, rej) => {
       this.monitor(itemToMonitor, requestedParameters, timestampsToReturn, (err, monitoredItem) => {
-        if (err) {
+        if (err || !monitoredItem) {
           rej(err);
         } else {
           res(monitoredItem);
@@ -665,12 +671,12 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
       if (err) {
         return done && done(err);
       }
-      monitoredItemGroup._monitor(function (error?: Error) {
-        if (error) {
-          return done && done(error);
+      monitoredItemGroup._monitor(function (error1) {
+        if (error1) {
+          return done && done(error1);
         }
         if (done) {
-          done(error, monitoredItemGroup);
+          done(error1 ?? null, monitoredItemGroup);
         }
       });
     });
@@ -687,7 +693,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
         requestedParameters,
         timestampsToReturn,
         (err, monitoredItemGroup) => {
-          if (err) {
+          if (err || !monitoredItemGroup) {
             rej(err);
           } else {
             res(monitoredItemGroup);
@@ -729,7 +735,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
       {
         subscriptionId: <number>this.subscriptionId,
         monitoredItemIds: monitoredItems.map(function (monitoredItem) {
-          return monitoredItem.monitoredItemId;
+          return monitoredItem.monitoredItemId!;
         }),
       },
       function (err) {
@@ -751,7 +757,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
       publishingEnabled,
       <number>this._subscriptionId,
       (err, results) => {
-        if (err) {
+        if (err || !results) {
           return callback(err);
         }
         if (results[0] !== StatusCodes.Good) {
@@ -816,7 +822,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
           });
 
           this.session.createMonitoredItems(createMonitorItemsRequest, (err, response) => {
-            if (!err) {
+            if (!err && response) {
               assert(response instanceof subscription_service.CreateMonitoredItemsResponse);
               const monitoredItemResults = response.results;
 
@@ -831,7 +837,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
                     monitoredItemResult.revisedSamplingInterval;
                   monitoredItem.monitoringParameters.queueSize =
                     monitoredItemResult.revisedQueueSize;
-                  monitoredItem.filterResult = monitoredItemResult.filterResult;
+                  monitoredItem.filterResult = monitoredItemResult.filterResult ?? undefined;
 
                   // istanbul ignore next
                   if (doDebug) {
