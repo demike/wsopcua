@@ -145,8 +145,8 @@ export class MonitoredItem extends MonitoredItemBase {
         if (err) {
           return callback(err);
         }
-        assert(results.length === 1);
-        callback(null, results[0]);
+        assert(results && results.length === 1);
+        callback(null, results![0]);
       }
     );
   }

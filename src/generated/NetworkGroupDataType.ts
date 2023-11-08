@@ -12,14 +12,13 @@ export type INetworkGroupDataType = Partial<NetworkGroupDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16232}
 */
 
 export class NetworkGroupDataType {
   serverUri: string | null;
-  networkPaths: EndpointUrlListDataType[];
+  networkPaths: (EndpointUrlListDataType)[];
 
- constructor( options?: INetworkGroupDataType) {
+ constructor( options?: INetworkGroupDataType | null) {
   options = options || {};
   this.serverUri = (options.serverUri != null) ? options.serverUri : null;
   this.networkPaths = (options.networkPaths != null) ? options.networkPaths : [];

@@ -13,7 +13,6 @@ export type IOpenSecureChannelRequest = Partial<OpenSecureChannelRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16048}
 */
 
 export class OpenSecureChannelRequest {
@@ -24,12 +23,12 @@ export class OpenSecureChannelRequest {
   clientNonce: Uint8Array | null;
   requestedLifetime: ec.UInt32;
 
- constructor( options?: IOpenSecureChannelRequest) {
+ constructor( options?: IOpenSecureChannelRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.clientProtocolVersion = (options.clientProtocolVersion != null) ? options.clientProtocolVersion : 0;
-  this.requestType = (options.requestType != null) ? options.requestType : null;
-  this.securityMode = (options.securityMode != null) ? options.securityMode : null;
+  this.requestType = (options.requestType != null) ? options.requestType : SecurityTokenRequestType.Invalid;
+  this.securityMode = (options.securityMode != null) ? options.securityMode : MessageSecurityMode.Invalid;
   this.clientNonce = (options.clientNonce != null) ? options.clientNonce : null;
   this.requestedLifetime = (options.requestedLifetime != null) ? options.requestedLifetime : 0;
 

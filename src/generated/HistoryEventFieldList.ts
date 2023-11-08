@@ -12,13 +12,12 @@ export type IHistoryEventFieldList = Partial<HistoryEventFieldList>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16215}
 */
 
 export class HistoryEventFieldList {
-  eventFields: Variant[];
+  eventFields: (Variant)[];
 
- constructor( options?: IHistoryEventFieldList) {
+ constructor( options?: IHistoryEventFieldList | null) {
   options = options || {};
   this.eventFields = (options.eventFields != null) ? options.eventFields : [];
 

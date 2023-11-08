@@ -11,7 +11,6 @@ export type IQueryNextRequest = Partial<QueryNextRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16138}
 */
 
 export class QueryNextRequest {
@@ -19,7 +18,7 @@ export class QueryNextRequest {
   releaseContinuationPoint: boolean;
   continuationPoint: Uint8Array | null;
 
- constructor( options?: IQueryNextRequest) {
+ constructor( options?: IQueryNextRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.releaseContinuationPoint = (options.releaseContinuationPoint != null) ? options.releaseContinuationPoint : false;

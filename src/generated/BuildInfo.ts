@@ -10,7 +10,6 @@ export type IBuildInfo = Partial<BuildInfo>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16227}
 */
 
 export class BuildInfo {
@@ -21,7 +20,7 @@ export class BuildInfo {
   buildNumber: string | null;
   buildDate: Date;
 
- constructor( options?: IBuildInfo) {
+ constructor( options?: IBuildInfo | null) {
   options = options || {};
   this.productUri = (options.productUri != null) ? options.productUri : null;
   this.manufacturerName = (options.manufacturerName != null) ? options.manufacturerName : null;

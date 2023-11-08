@@ -11,14 +11,13 @@ export type ICloseSessionRequest = Partial<CloseSessionRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16066}
 */
 
 export class CloseSessionRequest {
   requestHeader: RequestHeader;
   deleteSubscriptions: boolean;
 
- constructor( options?: ICloseSessionRequest) {
+ constructor( options?: ICloseSessionRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.deleteSubscriptions = (options.deleteSubscriptions != null) ? options.deleteSubscriptions : false;

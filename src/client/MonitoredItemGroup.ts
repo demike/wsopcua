@@ -200,8 +200,8 @@ export class MonitoredItemGroup extends EventEmitter<MonitoredItemGroupEvents> {
    */
   public modify(
     parameters: IMonitoringParameters,
-    timestampsToReturn?: TimestampsToReturn,
-    callback?: ResponseCallback<subscription_service.MonitoredItemModifyResult[]>
+    timestampsToReturn: TimestampsToReturn | null,
+    callback: ResponseCallback<subscription_service.MonitoredItemModifyResult[]>
   ): void {
     this._timestampsToReturn = timestampsToReturn || this._timestampsToReturn;
     MonitoredItemBase._toolbox_modify(
@@ -215,14 +215,14 @@ export class MonitoredItemGroup extends EventEmitter<MonitoredItemGroupEvents> {
 
   public modifyP(
     parameters: IMonitoringParameters,
-    timestampsToReturn?: TimestampsToReturn
+    timestampsToReturn: TimestampsToReturn | null
   ): Promise<subscription_service.MonitoredItemModifyResult[]> {
     return new Promise((res, rej) => {
       this.modify(parameters, timestampsToReturn, (err, result) => {
         if (err) {
           rej(err);
         } else {
-          res(result);
+          res(result!);
         }
       });
     });
@@ -245,7 +245,7 @@ export class MonitoredItemGroup extends EventEmitter<MonitoredItemGroupEvents> {
         if (err) {
           rej(err);
         } else {
-          res(statusCodes);
+          res(statusCodes!);
         }
       });
     });

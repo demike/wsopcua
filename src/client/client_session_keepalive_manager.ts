@@ -63,8 +63,8 @@ export class ClientSessionKeepAliveManager extends EventEmitter<ClientSessionKee
 
     // Server_ServerStatus_State
     the_session.readVariableValue(serverStatus_State_Id, (err, dataValue) => {
-      if (err) {
-        console.log(' warning : ClientSessionKeepAliveManager#ping_server ', err.message);
+      if (err || !dataValue) {
+        console.log(' warning : ClientSessionKeepAliveManager#ping_server ', err?.message);
         this.stop();
 
         /**
@@ -75,7 +75,7 @@ export class ClientSessionKeepAliveManager extends EventEmitter<ClientSessionKee
         this.emit('failure');
       } else {
         if (!dataValue.statusCode || dataValue.statusCode === StatusCodes.Good) {
-          const newState = dataValue.value.value; // ServerState[dataValue.value.value];
+          const newState = dataValue.value?.value; // ServerState[dataValue.value.value];
           // istanbul ignore next
           if (newState !== this.lastKnownState) {
             console.log(' Server State = ', newState.toString());

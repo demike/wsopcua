@@ -10,14 +10,13 @@ export type ISignatureData = Partial<SignatureData>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16054}
 */
 
 export class SignatureData {
   algorithm: string | null;
   signature: Uint8Array | null;
 
- constructor( options?: ISignatureData) {
+ constructor( options?: ISignatureData | null) {
   options = options || {};
   this.algorithm = (options.algorithm != null) ? options.algorithm : null;
   this.signature = (options.signature != null) ? options.signature : null;

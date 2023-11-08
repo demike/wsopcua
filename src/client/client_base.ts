@@ -79,8 +79,9 @@ export type ResponseCallback<R1, R2 = undefined> = (
 ) => void;
 /*
 export interface ResponseCallback<R1, R2 = undefined> {
-    (err: null, response: R1, arg2?: R2): void;
-    (err: Error, response?: R1, arg2?: R2): void;
+  (err: null, response: R1, arg2?: R2): void;
+  (err: Error, response?: R1, arg2?: R2): void;
+  (err: Error | null, response?: R1, arg2?: R2): void;
 }
 */
 
@@ -143,7 +144,6 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
   serverCertificate: Uint8Array | null;
 
   protected protocolVersion: number;
-  protected options: OPCUAClientOptions;
 
   /* TODO: check if this should be static */
   protected registry = new ObjectRegistry();
@@ -153,7 +153,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
   protected tokenRenewalInterval: number;
   protected keepPendingSessionsOnDisconnect: boolean;
 
-  protected _endpointUrl: string;
+  protected _endpointUrl = '';
   protected connectionStrategy: ConnectionStrategy;
 
   public readonly encoding: 'opcua+uacp' | 'opcua+uajson';
@@ -377,7 +377,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         applicationName: appName,
         clientCertificateStore: this.clientCertificateStore,
       };
-      return OPCUAClientBase.__findEndpoint(endpointUrl, params, (err: Error, result) => {
+      return OPCUAClientBase.__findEndpoint(endpointUrl, params, (err, result) => {
         if (err) {
           return callback(err);
         }
@@ -509,9 +509,9 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     });
   }
 
-  performMessageTransaction(
+  performMessageTransaction<T = any>(
     request: IEncodable & { requestHeader: RequestHeader },
-    callback: ResponseCallback<any>
+    callback: ResponseCallback<T>
   ): void {
     if (!this._secureChannel) {
       // this may happen if the Server has closed the connection abruptly for some unknown reason
@@ -536,7 +536,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
    * @param callback
    */
   public findServers(
-    options: IFindServersOptions,
+    options: IFindServersOptions | null,
     callback: ResponseCallback<endpoints_service.ApplicationDescription[]>
   ) {
     if (!this._secureChannel) {
@@ -545,6 +545,8 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
       });
       return;
     }
+
+    options ??= {};
 
     const request = new FindServersRequest({
       endpointUrl: options.endpointUrl || this._endpointUrl,
@@ -579,7 +581,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
   }
 
   public findServersOnNetwork(
-    options: IFindServersOnNetworkRequest,
+    options: IFindServersOnNetworkRequest | null,
     callback: (error: Error | null, servers?: ServerOnNetwork[]) => void
   ) {
     if (!this._secureChannel) {
@@ -591,7 +593,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
 
     const request = new FindServersOnNetworkRequest(options);
 
-    this.performMessageTransaction(request, function (err, response) {
+    this.performMessageTransaction<FindServersOnNetworkResponse>(request, function (err, response) {
       if (err) {
         return callback(err);
       }
@@ -627,18 +629,18 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
           // Session may fail to close , if they haven't been activate and forcefully closed by server
           // in a attempt to preserve resources in the case of a DOS attack for instance.
           if (err) {
-            debugLog(' failing to close session ' + session.authenticationToken.toString());
+            debugLog(' failing to close session ' + session.authenticationToken?.toString());
           }
           next();
         });
       },
-      (err: Error) => {
+      (err) => {
         // istanbul ignore next
         if (this._sessions.length > 0) {
           console.log(
             this._sessions
               .map(function (s) {
-                return s.authenticationToken.toString();
+                return s.authenticationToken?.toString();
               })
               .join(' ')
           );
@@ -702,7 +704,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
   public getEndpointsP(options: IGetEndpointsRequest | null): Promise<EndpointDescription[]> {
     return new Promise((res, rej) => {
       this.getEndpoints(options, (err, eps) => {
-        if (err) {
+        if (err || !eps) {
           rej(err);
         } else {
           res(eps);
@@ -845,8 +847,8 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
       },
       function (cb: ErrorCallback) {
         client.getEndpoints(null, (err, endpoints) => {
-          if (!err) {
-            all_endpoints = endpoints!;
+          if (!err && endpoints) {
+            all_endpoints = endpoints;
             endpoints.forEach(function (endpoint) {
               if (
                 endpoint.securityMode === securityMode &&
@@ -864,7 +866,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
       },
     ];
 
-    async_series(tasks, function (err: Error) {
+    async_series(tasks, function (err) {
       if (err) {
         return callback(err);
       }
@@ -1021,7 +1023,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
           }
         },
       ],
-      (err: Error) => {
+      (err) => {
         if (err) {
           console.log('error creating secure channel', err);
           // xx this.disconnect(function () {
@@ -1029,7 +1031,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
           this._secureChannel = null;
           callback(err);
         } else {
-          callback(err, secureChannel);
+          callback(err ?? null, secureChannel);
         }
       }
     );

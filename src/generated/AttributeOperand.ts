@@ -12,7 +12,6 @@ export type IAttributeOperand = Partial<AttributeOperand>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16131}
 */
 
 export class AttributeOperand extends FilterOperand {
@@ -22,7 +21,7 @@ export class AttributeOperand extends FilterOperand {
   attributeId: ec.UInt32;
   indexRange: string | null;
 
- constructor( options?: IAttributeOperand) {
+ constructor( options?: IAttributeOperand | null) {
   options = options || {};
   super();
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;

@@ -14,19 +14,18 @@ export type IPublishResponse = Partial<PublishResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16219}
 */
 
 export class PublishResponse {
   responseHeader: ResponseHeader;
   subscriptionId: ec.UInt32;
-  availableSequenceNumbers: ec.UInt32[];
+  availableSequenceNumbers: (ec.UInt32)[];
   moreNotifications: boolean;
   notificationMessage: NotificationMessage;
-  results: ec.StatusCode[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (ec.StatusCode)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IPublishResponse) {
+ constructor( options?: IPublishResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

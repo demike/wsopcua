@@ -12,17 +12,16 @@ export type IContentFilterElementResult = Partial<ContentFilterElementResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16133}
 */
 
 export class ContentFilterElementResult {
-  statusCode: ec.StatusCode | null;
-  operandStatusCodes: ec.StatusCode[];
-  operandDiagnosticInfos: DiagnosticInfo[];
+  statusCode: ec.StatusCode;
+  operandStatusCodes: (ec.StatusCode)[];
+  operandDiagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IContentFilterElementResult) {
+ constructor( options?: IContentFilterElementResult | null) {
   options = options || {};
-  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.operandStatusCodes = (options.operandStatusCodes != null) ? options.operandStatusCodes : [];
   this.operandDiagnosticInfos = (options.operandDiagnosticInfos != null) ? options.operandDiagnosticInfos : [];
 

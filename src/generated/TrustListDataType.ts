@@ -10,17 +10,16 @@ export type ITrustListDataType = Partial<TrustListDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15706}
 */
 
 export class TrustListDataType {
   specifiedLists: ec.UInt32;
-  trustedCertificates: Uint8Array[];
-  trustedCrls: Uint8Array[];
-  issuerCertificates: Uint8Array[];
-  issuerCrls: Uint8Array[];
+  trustedCertificates: (Uint8Array | null)[];
+  trustedCrls: (Uint8Array | null)[];
+  issuerCertificates: (Uint8Array | null)[];
+  issuerCrls: (Uint8Array | null)[];
 
- constructor( options?: ITrustListDataType) {
+ constructor( options?: ITrustListDataType | null) {
   options = options || {};
   this.specifiedLists = (options.specifiedLists != null) ? options.specifiedLists : 0;
   this.trustedCertificates = (options.trustedCertificates != null) ? options.trustedCertificates : [];

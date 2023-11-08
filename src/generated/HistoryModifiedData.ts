@@ -14,13 +14,12 @@ export type IHistoryModifiedData = Partial<HistoryModifiedData>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16154}
 */
 
 export class HistoryModifiedData extends HistoryData {
-  modificationInfos: ModificationInfo[];
+  modificationInfos: (ModificationInfo)[];
 
- constructor( options?: IHistoryModifiedData) {
+ constructor( options?: IHistoryModifiedData | null) {
   options = options || {};
   super(options);
   this.modificationInfos = (options.modificationInfos != null) ? options.modificationInfos : [];

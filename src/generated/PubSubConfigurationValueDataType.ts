@@ -12,7 +12,6 @@ export type IPubSubConfigurationValueDataType = Partial<PubSubConfigurationValue
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16875}
 */
 
 export class PubSubConfigurationValueDataType {
@@ -20,7 +19,7 @@ export class PubSubConfigurationValueDataType {
   name: string | null;
   identifier: Variant;
 
- constructor( options?: IPubSubConfigurationValueDataType) {
+ constructor( options?: IPubSubConfigurationValueDataType | null) {
   options = options || {};
   this.configurationElement = (options.configurationElement != null) ? options.configurationElement : new PubSubConfigurationRefDataType();
   this.name = (options.name != null) ? options.name : null;

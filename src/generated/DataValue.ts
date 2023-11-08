@@ -11,7 +11,6 @@ export type IDataValue = Partial<DataValue>;
 
 /**
 A value with an associated timestamp, and quality.
- * {@link https://reference.opcfoundation.org/nodesets/4/15336}
 */
 
 export class DataValue {
@@ -22,7 +21,7 @@ export class DataValue {
   serverTimestamp?: Date;
   serverPicoseconds?: ec.UInt16;
 
- constructor( options?: IDataValue) {
+ constructor( options?: IDataValue | null) {
   options = options || {};
   this.value = (options.value != null) ? options.value : undefined;
   this.statusCode = (options.statusCode != null) ? options.statusCode : undefined;
@@ -100,7 +99,8 @@ export class DataValue {
  fromJSON( inp: any) {
 if (!inp) { return; }
   if(inp.Value) {
-   this.value.fromJSON(inp.Value);
+     this.value ??= new Variant(); 
+  this.value.fromJSON(inp.Value);
   }
   if(inp.StatusCode) {
    this.statusCode = ec.jsonDecodeStatusCode(inp.StatusCode);

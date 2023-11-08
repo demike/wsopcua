@@ -10,16 +10,15 @@ export type INodeReference = Partial<NodeReference>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16125}
 */
 
 export class NodeReference {
   nodeId: ec.NodeId;
   referenceTypeId: ec.NodeId;
   isForward: boolean;
-  referencedNodeIds: ec.NodeId[];
+  referencedNodeIds: (ec.NodeId)[];
 
- constructor( options?: INodeReference) {
+ constructor( options?: INodeReference | null) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;

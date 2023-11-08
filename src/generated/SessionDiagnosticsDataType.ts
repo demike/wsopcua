@@ -12,7 +12,6 @@ export type ISessionDiagnosticsDataType = Partial<SessionDiagnosticsDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16236}
 */
 
 export class SessionDiagnosticsDataType {
@@ -21,7 +20,7 @@ export class SessionDiagnosticsDataType {
   clientDescription: ApplicationDescription;
   serverUri: string | null;
   endpointUrl: string | null;
-  localeIds: string[];
+  localeIds: (string | null)[];
   actualSessionTimeout: ec.Double;
   maxResponseMessageSize: ec.UInt32;
   clientConnectionTime: Date;
@@ -60,7 +59,7 @@ export class SessionDiagnosticsDataType {
   registerNodesCount: ServiceCounterDataType;
   unregisterNodesCount: ServiceCounterDataType;
 
- constructor( options?: ISessionDiagnosticsDataType) {
+ constructor( options?: ISessionDiagnosticsDataType | null) {
   options = options || {};
   this.sessionId = (options.sessionId != null) ? options.sessionId : ec.NodeId.NullNodeId;
   this.sessionName = (options.sessionName != null) ? options.sessionName : null;

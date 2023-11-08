@@ -15,15 +15,14 @@ export type IHistoryUpdateResponse = Partial<HistoryUpdateResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16172}
 */
 
 export class HistoryUpdateResponse {
   responseHeader: ResponseHeader;
-  results: HistoryUpdateResult[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (HistoryUpdateResult)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IHistoryUpdateResponse) {
+ constructor( options?: IHistoryUpdateResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

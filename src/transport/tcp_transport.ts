@@ -61,8 +61,8 @@ export class TCP_transport extends EventEmitter<TcpTransportEvents> {
   chunkReadCount: number;
   chunkWrittenCount: number;
   protected __disconnecting__: boolean;
-  protected _on_socket_closed_called: boolean = false;
-  protected _on_socket_ended_called: boolean = false;
+  protected _on_socket_closed_called = false;
+  protected _on_socket_ended_called = false;
   protected _pending_buffer?: ArrayBuffer;
 
   protected _the_callback: ResponseCallback<DataView> | null;
@@ -180,7 +180,7 @@ export class TCP_transport extends EventEmitter<TcpTransportEvents> {
     this._pending_buffer = undefined;
   }
 
-  protected _fulfill_pending_promises(err: Error, data?: DataView) {
+  protected _fulfill_pending_promises(err: Error | null, data?: DataView) {
     this._cleanup_timers();
 
     const the_callback = this._the_callback;
@@ -224,7 +224,7 @@ export class TCP_transport extends EventEmitter<TcpTransportEvents> {
     }, this.timeout);
   }
 
-  public on_socket_closed(err: Error) {
+  public on_socket_closed(err: Error | null) {
     if (this._on_socket_closed_called) {
       return;
     }
@@ -238,7 +238,7 @@ export class TCP_transport extends EventEmitter<TcpTransportEvents> {
     this.emit('socket_closed', err || null);
   }
 
-  public on_socket_ended(err: Error) {
+  public on_socket_ended(err?: Error) {
     assert(!this._on_socket_ended_called);
     this._on_socket_ended_called = true; // we don't want to send close event twice ...
     /**
@@ -407,7 +407,7 @@ export class TCP_transport extends EventEmitter<TcpTransportEvents> {
     }
 
     window.setImmediate(() => {
-      this.on_socket_ended(null);
+      this.on_socket_ended();
       callback();
     });
   }

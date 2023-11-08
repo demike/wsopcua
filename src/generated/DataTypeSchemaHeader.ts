@@ -16,16 +16,15 @@ export type IDataTypeSchemaHeader = Partial<DataTypeSchemaHeader>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15784}
 */
 
 export class DataTypeSchemaHeader {
-  namespaces: string[];
-  structureDataTypes: StructureDescription[];
-  enumDataTypes: EnumDescription[];
-  simpleDataTypes: SimpleTypeDescription[];
+  namespaces: (string | null)[];
+  structureDataTypes: (StructureDescription)[];
+  enumDataTypes: (EnumDescription)[];
+  simpleDataTypes: (SimpleTypeDescription)[];
 
- constructor( options?: IDataTypeSchemaHeader) {
+ constructor( options?: IDataTypeSchemaHeader | null) {
   options = options || {};
   this.namespaces = (options.namespaces != null) ? options.namespaces : [];
   this.structureDataTypes = (options.structureDataTypes != null) ? options.structureDataTypes : [];

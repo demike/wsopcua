@@ -10,13 +10,12 @@ export type INetworkAddressDataType = Partial<NetworkAddressDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15810}
 */
 
 export class NetworkAddressDataType {
   networkInterface: string | null;
 
- constructor( options?: INetworkAddressDataType) {
+ constructor( options?: INetworkAddressDataType | null) {
   options = options || {};
   this.networkInterface = (options.networkInterface != null) ? options.networkInterface : null;
 

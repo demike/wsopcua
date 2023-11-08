@@ -16,7 +16,6 @@ export type ICreateSessionResponse = Partial<CreateSessionResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16056}
 */
 
 export class CreateSessionResponse {
@@ -26,12 +25,12 @@ export class CreateSessionResponse {
   revisedSessionTimeout: ec.Double;
   serverNonce: Uint8Array | null;
   serverCertificate: Uint8Array | null;
-  serverEndpoints: EndpointDescription[];
-  serverSoftwareCertificates: SignedSoftwareCertificate[];
+  serverEndpoints: (EndpointDescription)[];
+  serverSoftwareCertificates: (SignedSoftwareCertificate)[];
   serverSignature: SignatureData;
   maxRequestMessageSize: ec.UInt32;
 
- constructor( options?: ICreateSessionResponse) {
+ constructor( options?: ICreateSessionResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.sessionId = (options.sessionId != null) ? options.sessionId : ec.NodeId.NullNodeId;

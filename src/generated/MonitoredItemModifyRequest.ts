@@ -11,14 +11,13 @@ export type IMonitoredItemModifyRequest = Partial<MonitoredItemModifyRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16193}
 */
 
 export class MonitoredItemModifyRequest {
   monitoredItemId: ec.UInt32;
   requestedParameters: MonitoringParameters;
 
- constructor( options?: IMonitoredItemModifyRequest) {
+ constructor( options?: IMonitoredItemModifyRequest | null) {
   options = options || {};
   this.monitoredItemId = (options.monitoredItemId != null) ? options.monitoredItemId : 0;
   this.requestedParameters = (options.requestedParameters != null) ? options.requestedParameters : new MonitoringParameters();

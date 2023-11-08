@@ -11,13 +11,12 @@ export type IStandaloneSubscribedDataSetRefDataType = Partial<StandaloneSubscrib
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16812}
 */
 
 export class StandaloneSubscribedDataSetRefDataType extends SubscribedDataSetDataType {
   dataSetName: string | null;
 
- constructor( options?: IStandaloneSubscribedDataSetRefDataType) {
+ constructor( options?: IStandaloneSubscribedDataSetRefDataType | null) {
   options = options || {};
   super();
   this.dataSetName = (options.dataSetName != null) ? options.dataSetName : null;

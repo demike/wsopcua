@@ -13,15 +13,14 @@ export type IAddReferencesResponse = Partial<AddReferencesResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16088}
 */
 
 export class AddReferencesResponse {
   responseHeader: ResponseHeader;
-  results: ec.StatusCode[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (ec.StatusCode)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IAddReferencesResponse) {
+ constructor( options?: IAddReferencesResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

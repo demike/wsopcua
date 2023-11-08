@@ -15,15 +15,14 @@ export type IAddNodesResponse = Partial<AddNodesResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16085}
 */
 
 export class AddNodesResponse {
   responseHeader: ResponseHeader;
-  results: AddNodesResult[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (AddNodesResult)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IAddNodesResponse) {
+ constructor( options?: IAddNodesResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

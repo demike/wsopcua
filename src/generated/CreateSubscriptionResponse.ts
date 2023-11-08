@@ -11,7 +11,6 @@ export type ICreateSubscriptionResponse = Partial<CreateSubscriptionResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16204}
 */
 
 export class CreateSubscriptionResponse {
@@ -21,7 +20,7 @@ export class CreateSubscriptionResponse {
   revisedLifetimeCount: ec.UInt32;
   revisedMaxKeepAliveCount: ec.UInt32;
 
- constructor( options?: ICreateSubscriptionResponse) {
+ constructor( options?: ICreateSubscriptionResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

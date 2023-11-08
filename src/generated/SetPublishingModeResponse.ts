@@ -13,15 +13,14 @@ export type ISetPublishingModeResponse = Partial<SetPublishingModeResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16208}
 */
 
 export class SetPublishingModeResponse {
   responseHeader: ResponseHeader;
-  results: ec.StatusCode[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (ec.StatusCode)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: ISetPublishingModeResponse) {
+ constructor( options?: ISetPublishingModeResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

@@ -11,7 +11,6 @@ export type IBrowseDescription = Partial<BrowseDescription>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16098}
 */
 
 export class BrowseDescription {
@@ -22,10 +21,10 @@ export class BrowseDescription {
   nodeClassMask: ec.UInt32;
   resultMask: ec.UInt32;
 
- constructor( options?: IBrowseDescription) {
+ constructor( options?: IBrowseDescription | null) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
-  this.browseDirection = (options.browseDirection != null) ? options.browseDirection : null;
+  this.browseDirection = (options.browseDirection != null) ? options.browseDirection : BrowseDirection.Invalid;
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;
   this.includeSubtypes = (options.includeSubtypes != null) ? options.includeSubtypes : false;
   this.nodeClassMask = (options.nodeClassMask != null) ? options.nodeClassMask : 0;

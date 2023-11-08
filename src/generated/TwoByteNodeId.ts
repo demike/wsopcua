@@ -15,7 +15,7 @@ export type ITwoByteNodeId = Partial<TwoByteNodeId>;
 export class TwoByteNodeId {
   identifier: ec.Byte;
 
- constructor( options?: ITwoByteNodeId) {
+ constructor( options?: ITwoByteNodeId | null) {
   options = options || {};
   this.identifier = (options.identifier != null) ? options.identifier : 0;
 

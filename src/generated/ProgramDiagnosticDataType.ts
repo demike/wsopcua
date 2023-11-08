@@ -13,7 +13,6 @@ export type IProgramDiagnosticDataType = Partial<ProgramDiagnosticDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16251}
 */
 
 export class ProgramDiagnosticDataType {
@@ -23,12 +22,12 @@ export class ProgramDiagnosticDataType {
   lastTransitionTime: Date;
   lastMethodCall: string | null;
   lastMethodSessionId: ec.NodeId;
-  lastMethodInputArguments: Argument[];
-  lastMethodOutputArguments: Argument[];
+  lastMethodInputArguments: (Argument)[];
+  lastMethodOutputArguments: (Argument)[];
   lastMethodCallTime: Date;
   lastMethodReturnStatus: StatusResult;
 
- constructor( options?: IProgramDiagnosticDataType) {
+ constructor( options?: IProgramDiagnosticDataType | null) {
   options = options || {};
   this.createSessionId = (options.createSessionId != null) ? options.createSessionId : ec.NodeId.NullNodeId;
   this.createClientName = (options.createClientName != null) ? options.createClientName : null;

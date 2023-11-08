@@ -15,15 +15,14 @@ export type IBrowseResponse = Partial<BrowseResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16104}
 */
 
 export class BrowseResponse {
   responseHeader: ResponseHeader;
-  results: BrowseResult[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (BrowseResult)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IBrowseResponse) {
+ constructor( options?: IBrowseResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

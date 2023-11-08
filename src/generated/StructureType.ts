@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15986}
 */
 
 export enum StructureType {
@@ -16,6 +15,7 @@ export enum StructureType {
   Union = 2,
   StructureWithSubtypedValues = 3,
   UnionWithSubtypedValues = 4,
+  Invalid = 4294967295,
 }
 
 export function encodeStructureType( data: StructureType,  out: DataStream) {

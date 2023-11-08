@@ -13,14 +13,13 @@ export type IFindServersResponse = Partial<FindServersResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16028}
 */
 
 export class FindServersResponse {
   responseHeader: ResponseHeader;
-  servers: ApplicationDescription[];
+  servers: (ApplicationDescription)[];
 
- constructor( options?: IFindServersResponse) {
+ constructor( options?: IFindServersResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.servers = (options.servers != null) ? options.servers : [];

@@ -13,15 +13,14 @@ export type IFindServersOnNetworkResponse = Partial<FindServersOnNetworkResponse
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16031}
 */
 
 export class FindServersOnNetworkResponse {
   responseHeader: ResponseHeader;
   lastCounterResetTime: Date;
-  servers: ServerOnNetwork[];
+  servers: (ServerOnNetwork)[];
 
- constructor( options?: IFindServersOnNetworkResponse) {
+ constructor( options?: IFindServersOnNetworkResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.lastCounterResetTime = (options.lastCounterResetTime != null) ? options.lastCounterResetTime : new Date();

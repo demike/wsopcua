@@ -11,7 +11,6 @@ export type IRelativePathElement = Partial<RelativePathElement>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16107}
 */
 
 export class RelativePathElement {
@@ -20,7 +19,7 @@ export class RelativePathElement {
   includeSubtypes: boolean;
   targetName: QualifiedName;
 
- constructor( options?: IRelativePathElement) {
+ constructor( options?: IRelativePathElement | null) {
   options = options || {};
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;
   this.isInverse = (options.isInverse != null) ? options.isInverse : false;

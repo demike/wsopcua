@@ -11,7 +11,6 @@ export type IThreeDCartesianCoordinates = Partial<ThreeDCartesianCoordinates>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15529}
 */
 
 export class ThreeDCartesianCoordinates extends CartesianCoordinates {
@@ -19,7 +18,7 @@ export class ThreeDCartesianCoordinates extends CartesianCoordinates {
   y: ec.Double;
   z: ec.Double;
 
- constructor( options?: IThreeDCartesianCoordinates) {
+ constructor( options?: IThreeDCartesianCoordinates | null) {
   options = options || {};
   super();
   this.x = (options.x != null) ? options.x : 0;

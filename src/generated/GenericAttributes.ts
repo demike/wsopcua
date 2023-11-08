@@ -14,13 +14,12 @@ export type IGenericAttributes = Partial<GenericAttributes>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16081}
 */
 
 export class GenericAttributes extends NodeAttributes {
-  attributeValues: GenericAttributeValue[];
+  attributeValues: (GenericAttributeValue)[];
 
- constructor( options?: IGenericAttributes) {
+ constructor( options?: IGenericAttributes | null) {
   options = options || {};
   super(options);
   this.attributeValues = (options.attributeValues != null) ? options.attributeValues : [];

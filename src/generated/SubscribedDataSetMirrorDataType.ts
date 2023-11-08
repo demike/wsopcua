@@ -13,14 +13,13 @@ export type ISubscribedDataSetMirrorDataType = Partial<SubscribedDataSetMirrorDa
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15822}
 */
 
 export class SubscribedDataSetMirrorDataType extends SubscribedDataSetDataType {
   parentNodeName: string | null;
-  rolePermissions: RolePermissionType[];
+  rolePermissions: (RolePermissionType)[];
 
- constructor( options?: ISubscribedDataSetMirrorDataType) {
+ constructor( options?: ISubscribedDataSetMirrorDataType | null) {
   options = options || {};
   super();
   this.parentNodeName = (options.parentNodeName != null) ? options.parentNodeName : null;

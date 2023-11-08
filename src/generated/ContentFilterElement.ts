@@ -12,16 +12,15 @@ export type IContentFilterElement = Partial<ContentFilterElement>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16126}
 */
 
 export class ContentFilterElement {
   filterOperator: FilterOperator;
-  filterOperands: ExtensionObject[];
+  filterOperands: (ExtensionObject | null)[];
 
- constructor( options?: IContentFilterElement) {
+ constructor( options?: IContentFilterElement | null) {
   options = options || {};
-  this.filterOperator = (options.filterOperator != null) ? options.filterOperator : null;
+  this.filterOperator = (options.filterOperator != null) ? options.filterOperator : FilterOperator.Invalid;
   this.filterOperands = (options.filterOperands != null) ? options.filterOperands : [];
 
  }

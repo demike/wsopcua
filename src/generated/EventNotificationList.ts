@@ -13,13 +13,12 @@ export type IEventNotificationList = Partial<EventNotificationList>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16213}
 */
 
 export class EventNotificationList extends NotificationData {
-  events: EventFieldList[];
+  events: (EventFieldList)[];
 
- constructor( options?: IEventNotificationList) {
+ constructor( options?: IEventNotificationList | null) {
   options = options || {};
   super();
   this.events = (options.events != null) ? options.events : [];

@@ -15,7 +15,6 @@ export type IHistoryReadRequest = Partial<HistoryReadRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16156}
 */
 
 export class HistoryReadRequest {
@@ -23,13 +22,13 @@ export class HistoryReadRequest {
   historyReadDetails: ExtensionObject | null;
   timestampsToReturn: TimestampsToReturn;
   releaseContinuationPoints: boolean;
-  nodesToRead: HistoryReadValueId[];
+  nodesToRead: (HistoryReadValueId)[];
 
- constructor( options?: IHistoryReadRequest) {
+ constructor( options?: IHistoryReadRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.historyReadDetails = (options.historyReadDetails != null) ? options.historyReadDetails : null;
-  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : null;
+  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : TimestampsToReturn.Invalid;
   this.releaseContinuationPoints = (options.releaseContinuationPoints != null) ? options.releaseContinuationPoints : false;
   this.nodesToRead = (options.nodesToRead != null) ? options.nodesToRead : [];
 

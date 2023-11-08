@@ -13,14 +13,13 @@ export type IEnumDescription = Partial<EnumDescription>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15787}
 */
 
 export class EnumDescription extends DataTypeDescription {
   enumDefinition: EnumDefinition;
   builtInType: ec.Byte;
 
- constructor( options?: IEnumDescription) {
+ constructor( options?: IEnumDescription | null) {
   options = options || {};
   super(options);
   this.enumDefinition = (options.enumDefinition != null) ? options.enumDefinition : new EnumDefinition();

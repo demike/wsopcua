@@ -11,7 +11,6 @@ export type IPubSubConfigurationRefDataType = Partial<PubSubConfigurationRefData
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16874}
 */
 
 export class PubSubConfigurationRefDataType {
@@ -20,9 +19,9 @@ export class PubSubConfigurationRefDataType {
   connectionIndex: ec.UInt16;
   groupIndex: ec.UInt16;
 
- constructor( options?: IPubSubConfigurationRefDataType) {
+ constructor( options?: IPubSubConfigurationRefDataType | null) {
   options = options || {};
-  this.configurationMask = (options.configurationMask != null) ? options.configurationMask : null;
+  this.configurationMask = (options.configurationMask != null) ? options.configurationMask : PubSubConfigurationRefMask.None;
   this.elementIndex = (options.elementIndex != null) ? options.elementIndex : 0;
   this.connectionIndex = (options.connectionIndex != null) ? options.connectionIndex : 0;
   this.groupIndex = (options.groupIndex != null) ? options.groupIndex : 0;

@@ -14,21 +14,20 @@ export type ISecurityGroupDataType = Partial<SecurityGroupDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16814}
 */
 
 export class SecurityGroupDataType {
   name: string | null;
-  securityGroupFolder: string[];
+  securityGroupFolder: (string | null)[];
   keyLifetime: ec.Double;
   securityPolicyUri: string | null;
   maxFutureKeyCount: ec.UInt32;
   maxPastKeyCount: ec.UInt32;
   securityGroupId: string | null;
-  rolePermissions: RolePermissionType[];
-  groupProperties: KeyValuePair[];
+  rolePermissions: (RolePermissionType)[];
+  groupProperties: (KeyValuePair)[];
 
- constructor( options?: ISecurityGroupDataType) {
+ constructor( options?: ISecurityGroupDataType | null) {
   options = options || {};
   this.name = (options.name != null) ? options.name : null;
   this.securityGroupFolder = (options.securityGroupFolder != null) ? options.securityGroupFolder : [];

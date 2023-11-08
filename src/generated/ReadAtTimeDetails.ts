@@ -11,14 +11,13 @@ export type IReadAtTimeDetails = Partial<ReadAtTimeDetails>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16150}
 */
 
 export class ReadAtTimeDetails extends HistoryReadDetails {
-  reqTimes: Date[];
+  reqTimes: (Date)[];
   useSimpleBounds: boolean;
 
- constructor( options?: IReadAtTimeDetails) {
+ constructor( options?: IReadAtTimeDetails | null) {
   options = options || {};
   super();
   this.reqTimes = (options.reqTimes != null) ? options.reqTimes : [];

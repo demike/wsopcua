@@ -11,19 +11,18 @@ export type IMonitoredItemCreateResult = Partial<MonitoredItemCreateResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16190}
 */
 
 export class MonitoredItemCreateResult {
-  statusCode: ec.StatusCode | null;
+  statusCode: ec.StatusCode;
   monitoredItemId: ec.UInt32;
   revisedSamplingInterval: ec.Double;
   revisedQueueSize: ec.UInt32;
   filterResult: ExtensionObject | null;
 
- constructor( options?: IMonitoredItemCreateResult) {
+ constructor( options?: IMonitoredItemCreateResult | null) {
   options = options || {};
-  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.monitoredItemId = (options.monitoredItemId != null) ? options.monitoredItemId : 0;
   this.revisedSamplingInterval = (options.revisedSamplingInterval != null) ? options.revisedSamplingInterval : 0;
   this.revisedQueueSize = (options.revisedQueueSize != null) ? options.revisedQueueSize : 0;

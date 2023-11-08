@@ -11,13 +11,12 @@ export type IReadAnnotationDataDetails = Partial<ReadAnnotationDataDetails>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16151}
 */
 
 export class ReadAnnotationDataDetails extends HistoryReadDetails {
-  reqTimes: Date[];
+  reqTimes: (Date)[];
 
- constructor( options?: IReadAnnotationDataDetails) {
+ constructor( options?: IReadAnnotationDataDetails | null) {
   options = options || {};
   super();
   this.reqTimes = (options.reqTimes != null) ? options.reqTimes : [];

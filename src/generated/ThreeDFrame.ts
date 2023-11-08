@@ -12,14 +12,13 @@ export type IThreeDFrame = Partial<ThreeDFrame>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15533}
 */
 
 export class ThreeDFrame extends Frame {
   cartesianCoordinates: ThreeDCartesianCoordinates;
   orientation: ThreeDOrientation;
 
- constructor( options?: IThreeDFrame) {
+ constructor( options?: IThreeDFrame | null) {
   options = options || {};
   super();
   this.cartesianCoordinates = (options.cartesianCoordinates != null) ? options.cartesianCoordinates : new ThreeDCartesianCoordinates();

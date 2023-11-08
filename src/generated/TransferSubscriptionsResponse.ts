@@ -15,15 +15,14 @@ export type ITransferSubscriptionsResponse = Partial<TransferSubscriptionsRespon
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16224}
 */
 
 export class TransferSubscriptionsResponse {
   responseHeader: ResponseHeader;
-  results: TransferResult[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (TransferResult)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: ITransferSubscriptionsResponse) {
+ constructor( options?: ITransferSubscriptionsResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

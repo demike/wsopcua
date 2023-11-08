@@ -13,7 +13,6 @@ export type IReferenceDescription = Partial<ReferenceDescription>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16100}
 */
 
 export class ReferenceDescription {
@@ -25,14 +24,14 @@ export class ReferenceDescription {
   nodeClass: NodeClass;
   typeDefinition: ec.ExpandedNodeId;
 
- constructor( options?: IReferenceDescription) {
+ constructor( options?: IReferenceDescription | null) {
   options = options || {};
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;
   this.isForward = (options.isForward != null) ? options.isForward : false;
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.ExpandedNodeId.NullExpandedNodeId;
   this.browseName = (options.browseName != null) ? options.browseName : new QualifiedName();
   this.displayName = (options.displayName != null) ? options.displayName : new LocalizedText();
-  this.nodeClass = (options.nodeClass != null) ? options.nodeClass : null;
+  this.nodeClass = (options.nodeClass != null) ? options.nodeClass : NodeClass.Invalid;
   this.typeDefinition = (options.typeDefinition != null) ? options.typeDefinition : ec.ExpandedNodeId.NullExpandedNodeId;
 
  }

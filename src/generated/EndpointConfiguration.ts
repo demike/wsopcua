@@ -10,7 +10,6 @@ export type IEndpointConfiguration = Partial<EndpointConfiguration>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16120}
 */
 
 export class EndpointConfiguration {
@@ -24,7 +23,7 @@ export class EndpointConfiguration {
   channelLifetime: ec.Int32;
   securityTokenLifetime: ec.Int32;
 
- constructor( options?: IEndpointConfiguration) {
+ constructor( options?: IEndpointConfiguration | null) {
   options = options || {};
   this.operationTimeout = (options.operationTimeout != null) ? options.operationTimeout : 0;
   this.useBinaryEncoding = (options.useBinaryEncoding != null) ? options.useBinaryEncoding : false;

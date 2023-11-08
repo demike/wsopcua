@@ -12,7 +12,6 @@ export type IAggregateFilterResult = Partial<AggregateFilterResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16187}
 */
 
 export class AggregateFilterResult extends MonitoringFilterResult {
@@ -20,7 +19,7 @@ export class AggregateFilterResult extends MonitoringFilterResult {
   revisedProcessingInterval: ec.Double;
   revisedAggregateConfiguration: AggregateConfiguration;
 
- constructor( options?: IAggregateFilterResult) {
+ constructor( options?: IAggregateFilterResult | null) {
   options = options || {};
   super();
   this.revisedStartTime = (options.revisedStartTime != null) ? options.revisedStartTime : new Date();

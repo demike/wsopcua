@@ -10,16 +10,15 @@ export type ITransferResult = Partial<TransferResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16222}
 */
 
 export class TransferResult {
-  statusCode: ec.StatusCode | null;
-  availableSequenceNumbers: ec.UInt32[];
+  statusCode: ec.StatusCode;
+  availableSequenceNumbers: (ec.UInt32)[];
 
- constructor( options?: ITransferResult) {
+ constructor( options?: ITransferResult | null) {
   options = options || {};
-  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.availableSequenceNumbers = (options.availableSequenceNumbers != null) ? options.availableSequenceNumbers : [];
 
  }

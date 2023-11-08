@@ -14,20 +14,19 @@ export type IReadRequest = Partial<ReadRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16142}
 */
 
 export class ReadRequest {
   requestHeader: RequestHeader;
   maxAge: ec.Double;
   timestampsToReturn: TimestampsToReturn;
-  nodesToRead: ReadValueId[];
+  nodesToRead: (ReadValueId)[];
 
- constructor( options?: IReadRequest) {
+ constructor( options?: IReadRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.maxAge = (options.maxAge != null) ? options.maxAge : 0;
-  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : 0;
+  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : TimestampsToReturn.Invalid;
   this.nodesToRead = (options.nodesToRead != null) ? options.nodesToRead : [];
 
  }

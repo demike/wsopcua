@@ -11,13 +11,12 @@ export type ILiteralOperand = Partial<LiteralOperand>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16130}
 */
 
 export class LiteralOperand extends FilterOperand {
   value: Variant;
 
- constructor( options?: ILiteralOperand) {
+ constructor( options?: ILiteralOperand | null) {
   options = options || {};
   super();
   this.value = (options.value != null) ? options.value : new Variant();

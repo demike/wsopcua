@@ -13,14 +13,13 @@ export type IAddReferencesRequest = Partial<AddReferencesRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16087}
 */
 
 export class AddReferencesRequest {
   requestHeader: RequestHeader;
-  referencesToAdd: AddReferencesItem[];
+  referencesToAdd: (AddReferencesItem)[];
 
- constructor( options?: IAddReferencesRequest) {
+ constructor( options?: IAddReferencesRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.referencesToAdd = (options.referencesToAdd != null) ? options.referencesToAdd : [];

@@ -11,14 +11,13 @@ export type IDataTypeDescription = Partial<DataTypeDescription>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15785}
 */
 
 export class DataTypeDescription {
   dataTypeId: ec.NodeId;
   name: QualifiedName;
 
- constructor( options?: IDataTypeDescription) {
+ constructor( options?: IDataTypeDescription | null) {
   options = options || {};
   this.dataTypeId = (options.dataTypeId != null) ? options.dataTypeId : ec.NodeId.NullNodeId;
   this.name = (options.name != null) ? options.name : new QualifiedName();

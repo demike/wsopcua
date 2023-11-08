@@ -10,13 +10,12 @@ export type IServiceFault = Partial<ServiceFault>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16024}
 */
 
 export class ServiceFault {
   responseHeader: ResponseHeader;
 
- constructor( options?: IServiceFault) {
+ constructor( options?: IServiceFault | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
 

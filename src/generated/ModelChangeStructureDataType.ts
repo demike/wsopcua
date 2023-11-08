@@ -10,7 +10,6 @@ export type IModelChangeStructureDataType = Partial<ModelChangeStructureDataType
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16242}
 */
 
 export class ModelChangeStructureDataType {
@@ -18,7 +17,7 @@ export class ModelChangeStructureDataType {
   affectedType: ec.NodeId;
   verb: ec.Byte;
 
- constructor( options?: IModelChangeStructureDataType) {
+ constructor( options?: IModelChangeStructureDataType | null) {
   options = options || {};
   this.affected = (options.affected != null) ? options.affected : ec.NodeId.NullNodeId;
   this.affectedType = (options.affectedType != null) ? options.affectedType : ec.NodeId.NullNodeId;

@@ -11,7 +11,6 @@ export type IEndpointType = Partial<EndpointType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15501}
 */
 
 export class EndpointType {
@@ -20,10 +19,10 @@ export class EndpointType {
   securityPolicyUri: string | null;
   transportProfileUri: string | null;
 
- constructor( options?: IEndpointType) {
+ constructor( options?: IEndpointType | null) {
   options = options || {};
   this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;
-  this.securityMode = (options.securityMode != null) ? options.securityMode : null;
+  this.securityMode = (options.securityMode != null) ? options.securityMode : MessageSecurityMode.Invalid;
   this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;
   this.transportProfileUri = (options.transportProfileUri != null) ? options.transportProfileUri : null;
 

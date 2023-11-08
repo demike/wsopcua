@@ -10,13 +10,12 @@ export type IRegisterServerResponse = Partial<RegisterServerResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16041}
 */
 
 export class RegisterServerResponse {
   responseHeader: ResponseHeader;
 
- constructor( options?: IRegisterServerResponse) {
+ constructor( options?: IRegisterServerResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
 

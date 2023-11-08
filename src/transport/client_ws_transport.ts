@@ -283,7 +283,7 @@ export class ClientWSTransport extends WSTransport {
       assert(counter === 0);
       counter += 1;
 
-      if (err) {
+      if (err || !data) {
         callback(err);
         if (this._socket) {
           this._socket.close(1000, 'OPC-UA: HELLO - ACK failed');

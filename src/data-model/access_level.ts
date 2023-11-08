@@ -40,7 +40,7 @@ export function makeAccessLevel(str: string): AccessLevelFlag {
   } else {
     //    accessFlag = AccessLevelFlag[str as keyof typeof AccessLevelFlag];
     const flags = str.split(' | ');
-    accessFlag = 0;
+    accessFlag = 0 as any;
     for (const flag of flags) {
       // eslint-disable-next-line no-bitwise
       accessFlag |= (AccessLevelFlag as any)[flag];

@@ -12,7 +12,6 @@ export type IBrokerWriterGroupTransportDataType = Partial<BrokerWriterGroupTrans
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15839}
 */
 
 export class BrokerWriterGroupTransportDataType extends WriterGroupTransportDataType {
@@ -21,13 +20,13 @@ export class BrokerWriterGroupTransportDataType extends WriterGroupTransportData
   authenticationProfileUri: string | null;
   requestedDeliveryGuarantee: BrokerTransportQualityOfService;
 
- constructor( options?: IBrokerWriterGroupTransportDataType) {
+ constructor( options?: IBrokerWriterGroupTransportDataType | null) {
   options = options || {};
   super();
   this.queueName = (options.queueName != null) ? options.queueName : null;
   this.resourceUri = (options.resourceUri != null) ? options.resourceUri : null;
   this.authenticationProfileUri = (options.authenticationProfileUri != null) ? options.authenticationProfileUri : null;
-  this.requestedDeliveryGuarantee = (options.requestedDeliveryGuarantee != null) ? options.requestedDeliveryGuarantee : null;
+  this.requestedDeliveryGuarantee = (options.requestedDeliveryGuarantee != null) ? options.requestedDeliveryGuarantee : BrokerTransportQualityOfService.Invalid;
 
  }
 

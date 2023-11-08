@@ -11,14 +11,13 @@ export type IBrowsePath = Partial<BrowsePath>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16109}
 */
 
 export class BrowsePath {
   startingNode: ec.NodeId;
   relativePath: RelativePath;
 
- constructor( options?: IBrowsePath) {
+ constructor( options?: IBrowsePath | null) {
   options = options || {};
   this.startingNode = (options.startingNode != null) ? options.startingNode : ec.NodeId.NullNodeId;
   this.relativePath = (options.relativePath != null) ? options.relativePath : new RelativePath();

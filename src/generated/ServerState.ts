@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16229}
 */
 
 export enum ServerState {
@@ -19,6 +18,7 @@ export enum ServerState {
   Test = 5,
   CommunicationFault = 6,
   Unknown = 7,
+  Invalid = 4294967295,
 }
 
 export function encodeServerState( data: ServerState,  out: DataStream) {

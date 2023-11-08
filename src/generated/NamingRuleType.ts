@@ -7,13 +7,13 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15373}
 */
 
 export enum NamingRuleType {
   Mandatory = 1,
   Optional = 2,
   Constraint = 3,
+  Invalid = 4294967295,
 }
 
 export function encodeNamingRuleType( data: NamingRuleType,  out: DataStream) {

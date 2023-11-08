@@ -14,12 +14,12 @@ export type IGuidNodeId = Partial<GuidNodeId>;
 
 export class GuidNodeId {
   namespaceIndex: ec.UInt16;
-  identifier: ec.Guid | null;
+  identifier: ec.Guid;
 
- constructor( options?: IGuidNodeId) {
+ constructor( options?: IGuidNodeId | null) {
   options = options || {};
   this.namespaceIndex = (options.namespaceIndex != null) ? options.namespaceIndex : 0;
-  this.identifier = (options.identifier != null) ? options.identifier : null;
+  this.identifier = (options.identifier != null) ? options.identifier : "";
 
  }
 

@@ -14,7 +14,6 @@ export type IProgramDiagnostic2DataType = Partial<ProgramDiagnostic2DataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16252}
 */
 
 export class ProgramDiagnostic2DataType {
@@ -24,14 +23,14 @@ export class ProgramDiagnostic2DataType {
   lastTransitionTime: Date;
   lastMethodCall: string | null;
   lastMethodSessionId: ec.NodeId;
-  lastMethodInputArguments: Argument[];
-  lastMethodOutputArguments: Argument[];
-  lastMethodInputValues: Variant[];
-  lastMethodOutputValues: Variant[];
+  lastMethodInputArguments: (Argument)[];
+  lastMethodOutputArguments: (Argument)[];
+  lastMethodInputValues: (Variant)[];
+  lastMethodOutputValues: (Variant)[];
   lastMethodCallTime: Date;
-  lastMethodReturnStatus: ec.StatusCode | null;
+  lastMethodReturnStatus: ec.StatusCode;
 
- constructor( options?: IProgramDiagnostic2DataType) {
+ constructor( options?: IProgramDiagnostic2DataType | null) {
   options = options || {};
   this.createSessionId = (options.createSessionId != null) ? options.createSessionId : ec.NodeId.NullNodeId;
   this.createClientName = (options.createClientName != null) ? options.createClientName : null;
@@ -44,7 +43,7 @@ export class ProgramDiagnostic2DataType {
   this.lastMethodInputValues = (options.lastMethodInputValues != null) ? options.lastMethodInputValues : [];
   this.lastMethodOutputValues = (options.lastMethodOutputValues != null) ? options.lastMethodOutputValues : [];
   this.lastMethodCallTime = (options.lastMethodCallTime != null) ? options.lastMethodCallTime : new Date();
-  this.lastMethodReturnStatus = (options.lastMethodReturnStatus != null) ? options.lastMethodReturnStatus : null;
+  this.lastMethodReturnStatus = (options.lastMethodReturnStatus != null) ? options.lastMethodReturnStatus : ec.StatusCodes.Good;
 
  }
 

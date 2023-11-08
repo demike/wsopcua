@@ -11,7 +11,6 @@ export type IModificationInfo = Partial<ModificationInfo>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16153}
 */
 
 export class ModificationInfo {
@@ -19,10 +18,10 @@ export class ModificationInfo {
   updateType: HistoryUpdateType;
   userName: string | null;
 
- constructor( options?: IModificationInfo) {
+ constructor( options?: IModificationInfo | null) {
   options = options || {};
   this.modificationTime = (options.modificationTime != null) ? options.modificationTime : new Date();
-  this.updateType = (options.updateType != null) ? options.updateType : null;
+  this.updateType = (options.updateType != null) ? options.updateType : HistoryUpdateType.Invalid;
   this.userName = (options.userName != null) ? options.userName : null;
 
  }

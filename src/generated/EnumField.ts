@@ -12,13 +12,12 @@ export type IEnumField = Partial<EnumField>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16004}
 */
 
 export class EnumField extends EnumValueType {
   name: string | null;
 
- constructor( options?: IEnumField) {
+ constructor( options?: IEnumField | null) {
   options = options || {};
   super(options);
   this.name = (options.name != null) ? options.name : null;

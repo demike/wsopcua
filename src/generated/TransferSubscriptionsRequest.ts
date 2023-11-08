@@ -11,15 +11,14 @@ export type ITransferSubscriptionsRequest = Partial<TransferSubscriptionsRequest
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16223}
 */
 
 export class TransferSubscriptionsRequest {
   requestHeader: RequestHeader;
-  subscriptionIds: ec.UInt32[];
+  subscriptionIds: (ec.UInt32)[];
   sendInitialValues: boolean;
 
- constructor( options?: ITransferSubscriptionsRequest) {
+ constructor( options?: ITransferSubscriptionsRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionIds = (options.subscriptionIds != null) ? options.subscriptionIds : [];

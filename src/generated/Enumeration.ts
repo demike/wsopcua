@@ -7,10 +7,10 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15313}
 */
 
 export enum Enumeration {
+  Invalid = 4294967295,
 }
 
 export function encodeEnumeration( data: Enumeration,  out: DataStream) {

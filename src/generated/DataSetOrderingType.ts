@@ -7,13 +7,13 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15824}
 */
 
 export enum DataSetOrderingType {
   Undefined = 0,
   AscendingWriterId = 1,
   AscendingWriterIdSingle = 2,
+  Invalid = 4294967295,
 }
 
 export function encodeDataSetOrderingType( data: DataSetOrderingType,  out: DataStream) {

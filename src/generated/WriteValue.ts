@@ -11,7 +11,6 @@ export type IWriteValue = Partial<WriteValue>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16158}
 */
 
 export class WriteValue {
@@ -20,7 +19,7 @@ export class WriteValue {
   indexRange: string | null;
   value: DataValue;
 
- constructor( options?: IWriteValue) {
+ constructor( options?: IWriteValue | null) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;

@@ -10,13 +10,12 @@ export type ICloseSecureChannelRequest = Partial<CloseSecureChannelRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16050}
 */
 
 export class CloseSecureChannelRequest {
   requestHeader: RequestHeader;
 
- constructor( options?: ICloseSecureChannelRequest) {
+ constructor( options?: ICloseSecureChannelRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
 

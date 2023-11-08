@@ -11,7 +11,6 @@ export type IThreeDOrientation = Partial<ThreeDOrientation>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15531}
 */
 
 export class ThreeDOrientation extends Orientation {
@@ -19,7 +18,7 @@ export class ThreeDOrientation extends Orientation {
   b: ec.Double;
   c: ec.Double;
 
- constructor( options?: IThreeDOrientation) {
+ constructor( options?: IThreeDOrientation | null) {
   options = options || {};
   super();
   this.a = (options.a != null) ? options.a : 0;

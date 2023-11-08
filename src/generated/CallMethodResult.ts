@@ -14,18 +14,17 @@ export type ICallMethodResult = Partial<CallMethodResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16174}
 */
 
 export class CallMethodResult {
-  statusCode: ec.StatusCode | null;
-  inputArgumentResults: ec.StatusCode[];
-  inputArgumentDiagnosticInfos: DiagnosticInfo[];
-  outputArguments: Variant[];
+  statusCode: ec.StatusCode;
+  inputArgumentResults: (ec.StatusCode)[];
+  inputArgumentDiagnosticInfos: (DiagnosticInfo)[];
+  outputArguments: (Variant)[];
 
- constructor( options?: ICallMethodResult) {
+ constructor( options?: ICallMethodResult | null) {
   options = options || {};
-  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.inputArgumentResults = (options.inputArgumentResults != null) ? options.inputArgumentResults : [];
   this.inputArgumentDiagnosticInfos = (options.inputArgumentDiagnosticInfos != null) ? options.inputArgumentDiagnosticInfos : [];
   this.outputArguments = (options.outputArguments != null) ? options.outputArguments : [];

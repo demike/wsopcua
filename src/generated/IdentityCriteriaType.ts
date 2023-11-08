@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15559}
 */
 
 export enum IdentityCriteriaType {
@@ -19,6 +18,7 @@ export enum IdentityCriteriaType {
   AuthenticatedUser = 6,
   Application = 7,
   X509Subject = 8,
+  Invalid = 4294967295,
 }
 
 export function encodeIdentityCriteriaType( data: IdentityCriteriaType,  out: DataStream) {

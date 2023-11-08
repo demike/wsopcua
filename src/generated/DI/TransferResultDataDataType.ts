@@ -13,15 +13,14 @@ export type ITransferResultDataDataType = Partial<TransferResultDataDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/11/17490}
 */
 
 export class TransferResultDataDataType extends FetchResultDataType {
   sequenceNumber: ec.Int32;
   endOfResults: boolean;
-  parameterDefs: ParameterResultDataType[];
+  parameterDefs: (ParameterResultDataType)[];
 
- constructor( options?: ITransferResultDataDataType) {
+ constructor( options?: ITransferResultDataDataType | null) {
   options = options || {};
   super();
   this.sequenceNumber = (options.sequenceNumber != null) ? options.sequenceNumber : 0;

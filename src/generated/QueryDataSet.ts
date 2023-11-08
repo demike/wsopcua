@@ -12,15 +12,14 @@ export type IQueryDataSet = Partial<QueryDataSet>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16124}
 */
 
 export class QueryDataSet {
   nodeId: ec.ExpandedNodeId;
   typeDefinitionNode: ec.ExpandedNodeId;
-  values: Variant[];
+  values: (Variant)[];
 
- constructor( options?: IQueryDataSet) {
+ constructor( options?: IQueryDataSet | null) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.ExpandedNodeId.NullExpandedNodeId;
   this.typeDefinitionNode = (options.typeDefinitionNode != null) ? options.typeDefinitionNode : ec.ExpandedNodeId.NullExpandedNodeId;

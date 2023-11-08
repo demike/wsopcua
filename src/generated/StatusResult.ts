@@ -11,16 +11,15 @@ export type IStatusResult = Partial<StatusResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16239}
 */
 
 export class StatusResult {
-  statusCode: ec.StatusCode | null;
+  statusCode: ec.StatusCode;
   diagnosticInfo: DiagnosticInfo;
 
- constructor( options?: IStatusResult) {
+ constructor( options?: IStatusResult | null) {
   options = options || {};
-  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.diagnosticInfo = (options.diagnosticInfo != null) ? options.diagnosticInfo : new DiagnosticInfo();
 
  }

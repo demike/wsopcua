@@ -13,15 +13,14 @@ export type IQueryNextResponse = Partial<QueryNextResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16139}
 */
 
 export class QueryNextResponse {
   responseHeader: ResponseHeader;
-  queryDataSets: QueryDataSet[];
+  queryDataSets: (QueryDataSet)[];
   revisedContinuationPoint: Uint8Array | null;
 
- constructor( options?: IQueryNextResponse) {
+ constructor( options?: IQueryNextResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.queryDataSets = (options.queryDataSets != null) ? options.queryDataSets : [];

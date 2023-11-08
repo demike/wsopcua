@@ -10,14 +10,13 @@ export type IEphemeralKeyType = Partial<EphemeralKeyType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15500}
 */
 
 export class EphemeralKeyType {
   publicKey: Uint8Array | null;
   signature: Uint8Array | null;
 
- constructor( options?: IEphemeralKeyType) {
+ constructor( options?: IEphemeralKeyType | null) {
   options = options || {};
   this.publicKey = (options.publicKey != null) ? options.publicKey : null;
   this.signature = (options.signature != null) ? options.signature : null;

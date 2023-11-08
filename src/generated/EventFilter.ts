@@ -14,14 +14,13 @@ export type IEventFilter = Partial<EventFilter>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16182}
 */
 
 export class EventFilter extends MonitoringFilter {
-  selectClauses: SimpleAttributeOperand[];
+  selectClauses: (SimpleAttributeOperand)[];
   whereClause: ContentFilter;
 
- constructor( options?: IEventFilter) {
+ constructor( options?: IEventFilter | null) {
   options = options || {};
   super();
   this.selectClauses = (options.selectClauses != null) ? options.selectClauses : [];

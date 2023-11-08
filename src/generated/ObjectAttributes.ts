@@ -12,13 +12,12 @@ export type IObjectAttributes = Partial<ObjectAttributes>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16072}
 */
 
 export class ObjectAttributes extends NodeAttributes {
   eventNotifier: ec.Byte;
 
- constructor( options?: IObjectAttributes) {
+ constructor( options?: IObjectAttributes | null) {
   options = options || {};
   super(options);
   this.eventNotifier = (options.eventNotifier != null) ? options.eventNotifier : 0;

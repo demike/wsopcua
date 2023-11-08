@@ -5,7 +5,6 @@
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16146}
 */
 
 export class HistoryReadDetails {

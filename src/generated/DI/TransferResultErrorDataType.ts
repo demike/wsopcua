@@ -12,14 +12,13 @@ export type ITransferResultErrorDataType = Partial<TransferResultErrorDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/11/17489}
 */
 
 export class TransferResultErrorDataType extends FetchResultDataType {
   status: ec.Int32;
   diagnostics: DiagnosticInfo;
 
- constructor( options?: ITransferResultErrorDataType) {
+ constructor( options?: ITransferResultErrorDataType | null) {
   options = options || {};
   super();
   this.status = (options.status != null) ? options.status : 0;

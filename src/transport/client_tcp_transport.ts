@@ -97,7 +97,7 @@ export class ClientTCP_transport extends TCP_transport {
   numberOfRetry?: number;
   _connected: boolean;
   serverUri?: string;
-  endpointUrl: string = '';
+  endpointUrl = '';
   _parameters: any;
 
   get protocolVersion() {
@@ -285,7 +285,7 @@ export class ClientTCP_transport extends TCP_transport {
       assert(counter === 0);
       counter += 1;
 
-      if (err) {
+      if (err || !data) {
         callback(err);
         this._socket.end();
         // Xx this._socket.removeAllListeners();

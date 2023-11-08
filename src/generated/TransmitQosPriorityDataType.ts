@@ -11,13 +11,12 @@ export type ITransmitQosPriorityDataType = Partial<TransmitQosPriorityDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16830}
 */
 
 export class TransmitQosPriorityDataType extends TransmitQosDataType {
   priorityLabel: string | null;
 
- constructor( options?: ITransmitQosPriorityDataType) {
+ constructor( options?: ITransmitQosPriorityDataType | null) {
   options = options || {};
   super();
   this.priorityLabel = (options.priorityLabel != null) ? options.priorityLabel : null;

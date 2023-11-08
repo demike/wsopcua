@@ -11,15 +11,14 @@ export type IBrowseNextRequest = Partial<BrowseNextRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16105}
 */
 
 export class BrowseNextRequest {
   requestHeader: RequestHeader;
   releaseContinuationPoints: boolean;
-  continuationPoints: Uint8Array[];
+  continuationPoints: (Uint8Array | null)[];
 
- constructor( options?: IBrowseNextRequest) {
+ constructor( options?: IBrowseNextRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.releaseContinuationPoints = (options.releaseContinuationPoints != null) ? options.releaseContinuationPoints : false;

@@ -13,7 +13,6 @@ export type IReferenceTypeAttributes = Partial<ReferenceTypeAttributes>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16077}
 */
 
 export class ReferenceTypeAttributes extends NodeAttributes {
@@ -21,7 +20,7 @@ export class ReferenceTypeAttributes extends NodeAttributes {
   symmetric: boolean;
   inverseName: LocalizedText;
 
- constructor( options?: IReferenceTypeAttributes) {
+ constructor( options?: IReferenceTypeAttributes | null) {
   options = options || {};
   super(options);
   this.isAbstract = (options.isAbstract != null) ? options.isAbstract : false;

@@ -12,7 +12,6 @@ export type IDataChangeFilter = Partial<DataChangeFilter>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16181}
 */
 
 export class DataChangeFilter extends MonitoringFilter {
@@ -20,10 +19,10 @@ export class DataChangeFilter extends MonitoringFilter {
   deadbandType: ec.UInt32;
   deadbandValue: ec.Double;
 
- constructor( options?: IDataChangeFilter) {
+ constructor( options?: IDataChangeFilter | null) {
   options = options || {};
   super();
-  this.trigger = (options.trigger != null) ? options.trigger : null;
+  this.trigger = (options.trigger != null) ? options.trigger : DataChangeTrigger.Invalid;
   this.deadbandType = (options.deadbandType != null) ? options.deadbandType : 0;
   this.deadbandValue = (options.deadbandValue != null) ? options.deadbandValue : 0;
 

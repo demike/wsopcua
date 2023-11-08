@@ -16,7 +16,7 @@ export class NumericNodeId {
   namespaceIndex: ec.UInt16;
   identifier: ec.UInt32;
 
- constructor( options?: INumericNodeId) {
+ constructor( options?: INumericNodeId | null) {
   options = options || {};
   this.namespaceIndex = (options.namespaceIndex != null) ? options.namespaceIndex : 0;
   this.identifier = (options.identifier != null) ? options.identifier : 0;

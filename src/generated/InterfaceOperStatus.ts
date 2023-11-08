@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15963}
 */
 
 export enum InterfaceOperStatus {
@@ -18,6 +17,7 @@ export enum InterfaceOperStatus {
   Dormant = 4,
   NotPresent = 5,
   LowerLayerDown = 6,
+  Invalid = 4294967295,
 }
 
 export function encodeInterfaceOperStatus( data: InterfaceOperStatus,  out: DataStream) {

@@ -11,15 +11,14 @@ export type INotificationMessage = Partial<NotificationMessage>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16209}
 */
 
 export class NotificationMessage {
   sequenceNumber: ec.UInt32;
   publishTime: Date;
-  notificationData: ExtensionObject[];
+  notificationData: (ExtensionObject | null)[];
 
- constructor( options?: INotificationMessage) {
+ constructor( options?: INotificationMessage | null) {
   options = options || {};
   this.sequenceNumber = (options.sequenceNumber != null) ? options.sequenceNumber : 0;
   this.publishTime = (options.publishTime != null) ? options.publishTime : new Date();

@@ -12,13 +12,12 @@ export type IX509IdentityToken = Partial<X509IdentityToken>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16060}
 */
 
 export class X509IdentityToken extends UserIdentityToken {
   certificateData: Uint8Array | null;
 
- constructor( options?: IX509IdentityToken) {
+ constructor( options?: IX509IdentityToken | null) {
   options = options || {};
   super(options);
   this.certificateData = (options.certificateData != null) ? options.certificateData : null;

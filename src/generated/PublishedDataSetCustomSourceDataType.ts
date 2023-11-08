@@ -11,13 +11,12 @@ export type IPublishedDataSetCustomSourceDataType = Partial<PublishedDataSetCust
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16787}
 */
 
 export class PublishedDataSetCustomSourceDataType extends PublishedDataSetSourceDataType {
   cyclicDataSet: boolean;
 
- constructor( options?: IPublishedDataSetCustomSourceDataType) {
+ constructor( options?: IPublishedDataSetCustomSourceDataType | null) {
   options = options || {};
   super();
   this.cyclicDataSet = (options.cyclicDataSet != null) ? options.cyclicDataSet : false;

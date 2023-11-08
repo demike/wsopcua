@@ -12,14 +12,13 @@ export type ISimpleTypeDescription = Partial<SimpleTypeDescription>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15788}
 */
 
 export class SimpleTypeDescription extends DataTypeDescription {
   baseDataType: ec.NodeId;
   builtInType: ec.Byte;
 
- constructor( options?: ISimpleTypeDescription) {
+ constructor( options?: ISimpleTypeDescription | null) {
   options = options || {};
   super(options);
   this.baseDataType = (options.baseDataType != null) ? options.baseDataType : ec.NodeId.NullNodeId;

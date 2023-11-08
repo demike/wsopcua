@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15838}
 */
 
 export enum BrokerTransportQualityOfService {
@@ -16,6 +15,7 @@ export enum BrokerTransportQualityOfService {
   AtLeastOnce = 2,
   AtMostOnce = 3,
   ExactlyOnce = 4,
+  Invalid = 4294967295,
 }
 
 export function encodeBrokerTransportQualityOfService( data: BrokerTransportQualityOfService,  out: DataStream) {

@@ -15,7 +15,6 @@ export type IPubSubGroupDataType = Partial<PubSubGroupDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15804}
 */
 
 export class PubSubGroupDataType {
@@ -23,15 +22,15 @@ export class PubSubGroupDataType {
   enabled: boolean;
   securityMode: MessageSecurityMode;
   securityGroupId: string | null;
-  securityKeyServices: EndpointDescription[];
+  securityKeyServices: (EndpointDescription)[];
   maxNetworkMessageSize: ec.UInt32;
-  groupProperties: KeyValuePair[];
+  groupProperties: (KeyValuePair)[];
 
- constructor( options?: IPubSubGroupDataType) {
+ constructor( options?: IPubSubGroupDataType | null) {
   options = options || {};
   this.name = (options.name != null) ? options.name : null;
   this.enabled = (options.enabled != null) ? options.enabled : false;
-  this.securityMode = (options.securityMode != null) ? options.securityMode : null;
+  this.securityMode = (options.securityMode != null) ? options.securityMode : MessageSecurityMode.Invalid;
   this.securityGroupId = (options.securityGroupId != null) ? options.securityGroupId : null;
   this.securityKeyServices = (options.securityKeyServices != null) ? options.securityKeyServices : [];
   this.maxNetworkMessageSize = (options.maxNetworkMessageSize != null) ? options.maxNetworkMessageSize : 0;

@@ -11,7 +11,6 @@ export type IReadRawModifiedDetails = Partial<ReadRawModifiedDetails>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16148}
 */
 
 export class ReadRawModifiedDetails extends HistoryReadDetails {
@@ -21,7 +20,7 @@ export class ReadRawModifiedDetails extends HistoryReadDetails {
   numValuesPerNode: ec.UInt32;
   returnBounds: boolean;
 
- constructor( options?: IReadRawModifiedDetails) {
+ constructor( options?: IReadRawModifiedDetails | null) {
   options = options || {};
   super();
   this.isReadModified = (options.isReadModified != null) ? options.isReadModified : false;

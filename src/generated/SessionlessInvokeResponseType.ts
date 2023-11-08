@@ -10,15 +10,14 @@ export type ISessionlessInvokeResponseType = Partial<SessionlessInvokeResponseTy
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16026}
 */
 
 export class SessionlessInvokeResponseType {
-  namespaceUris: string[];
-  serverUris: string[];
+  namespaceUris: (string | null)[];
+  serverUris: (string | null)[];
   serviceId: ec.UInt32;
 
- constructor( options?: ISessionlessInvokeResponseType) {
+ constructor( options?: ISessionlessInvokeResponseType | null) {
   options = options || {};
   this.namespaceUris = (options.namespaceUris != null) ? options.namespaceUris : [];
   this.serverUris = (options.serverUris != null) ? options.serverUris : [];

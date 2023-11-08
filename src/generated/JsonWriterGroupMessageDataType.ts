@@ -11,16 +11,15 @@ export type IJsonWriterGroupMessageDataType = Partial<JsonWriterGroupMessageData
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15831}
 */
 
 export class JsonWriterGroupMessageDataType extends WriterGroupMessageDataType {
   networkMessageContentMask: JsonNetworkMessageContentMask;
 
- constructor( options?: IJsonWriterGroupMessageDataType) {
+ constructor( options?: IJsonWriterGroupMessageDataType | null) {
   options = options || {};
   super();
-  this.networkMessageContentMask = (options.networkMessageContentMask != null) ? options.networkMessageContentMask : null;
+  this.networkMessageContentMask = (options.networkMessageContentMask != null) ? options.networkMessageContentMask : JsonNetworkMessageContentMask.None;
 
  }
 

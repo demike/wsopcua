@@ -11,17 +11,16 @@ export type ISetTriggeringRequest = Partial<SetTriggeringRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16199}
 */
 
 export class SetTriggeringRequest {
   requestHeader: RequestHeader;
   subscriptionId: ec.UInt32;
   triggeringItemId: ec.UInt32;
-  linksToAdd: ec.UInt32[];
-  linksToRemove: ec.UInt32[];
+  linksToAdd: (ec.UInt32)[];
+  linksToRemove: (ec.UInt32)[];
 
- constructor( options?: ISetTriggeringRequest) {
+ constructor( options?: ISetTriggeringRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

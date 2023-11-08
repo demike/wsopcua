@@ -10,7 +10,6 @@ export type ISamplingIntervalDiagnosticsDataType = Partial<SamplingIntervalDiagn
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16233}
 */
 
 export class SamplingIntervalDiagnosticsDataType {
@@ -19,7 +18,7 @@ export class SamplingIntervalDiagnosticsDataType {
   maxMonitoredItemCount: ec.UInt32;
   disabledMonitoredItemCount: ec.UInt32;
 
- constructor( options?: ISamplingIntervalDiagnosticsDataType) {
+ constructor( options?: ISamplingIntervalDiagnosticsDataType | null) {
   options = options || {};
   this.samplingInterval = (options.samplingInterval != null) ? options.samplingInterval : 0;
   this.monitoredItemCount = (options.monitoredItemCount != null) ? options.monitoredItemCount : 0;

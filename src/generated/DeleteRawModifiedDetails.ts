@@ -12,7 +12,6 @@ export type IDeleteRawModifiedDetails = Partial<DeleteRawModifiedDetails>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16167}
 */
 
 export class DeleteRawModifiedDetails extends HistoryUpdateDetails {
@@ -20,7 +19,7 @@ export class DeleteRawModifiedDetails extends HistoryUpdateDetails {
   startTime: Date;
   endTime: Date;
 
- constructor( options?: IDeleteRawModifiedDetails) {
+ constructor( options?: IDeleteRawModifiedDetails | null) {
   options = options || {};
   super(options);
   this.isDeleteModified = (options.isDeleteModified != null) ? options.isDeleteModified : false;

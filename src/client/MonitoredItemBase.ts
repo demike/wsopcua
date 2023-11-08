@@ -251,7 +251,7 @@ export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
     assert(subscription.session);
     subscription.session.createMonitoredItems(createMonitorItemsRequest, function (err, response) {
       /* istanbul ignore next */
-      if (err) {
+      if (err || !response) {
         // xx console.log("ClientMonitoredItemBase#_toolbox_monitor:  ERROR in createMonitoredItems ".red, err.message);
         // xx  console.log("ClientMonitoredItemBase#_toolbox_monitor:  ERROR in createMonitoredItems ".red, err);
         // xx  console.log(createMonitorItemsRequest.toString());
@@ -294,7 +294,7 @@ export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
       modifyMonitoredItemsRequest,
       function (err, response) {
         /* istanbul ignore next */
-        if (err) {
+        if (err || !response) {
           return callback(err);
         }
         assert(response.results.length === monitoredItems.length);
@@ -331,7 +331,7 @@ export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
         });
       }
       if (callback) {
-        callback(err, response ? response.results : null);
+        callback(err, response?.results);
       }
     });
   }

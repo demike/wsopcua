@@ -4,14 +4,14 @@
 */
 
 import * as ec from '../basic-types';
-import {NodeClass, encodeNodeClass, decodeNodeClass} from './NodeClass';
-import {QualifiedName} from './QualifiedName';
-import {LocalizedText} from './LocalizedText';
-import {RolePermissionType} from './RolePermissionType';
-import {decodeRolePermissionType} from './RolePermissionType';
-import {ReferenceNode} from './ReferenceNode';
-import {decodeReferenceNode} from './ReferenceNode';
-import {DataStream} from '../basic-types/DataStream';
+import { NodeClass, encodeNodeClass, decodeNodeClass } from './NodeClass';
+import { QualifiedName } from './QualifiedName';
+import { LocalizedText } from './LocalizedText';
+import { RolePermissionType } from './RolePermissionType';
+import { decodeRolePermissionType } from './RolePermissionType';
+import { ReferenceNode } from './ReferenceNode';
+import { decodeReferenceNode } from './ReferenceNode';
+import { DataStream } from '../basic-types/DataStream';
 
 export interface INode {
   nodeId?: ec.NodeId;
@@ -45,118 +45,122 @@ export class Node {
   accessRestrictions: ec.UInt16;
   references: ReferenceNode[];
 
- constructor( options?: INode) {
-  options = options || {};
-  this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
-  this.nodeClass = (options.nodeClass != null) ? options.nodeClass : null;
-  this.browseName = (options.browseName != null) ? options.browseName : new QualifiedName();
-  this.displayName = (options.displayName != null) ? options.displayName : new LocalizedText();
-  this.description = (options.description != null) ? options.description : new LocalizedText();
-  this.writeMask = (options.writeMask != null) ? options.writeMask : 0;
-  this.userWriteMask = (options.userWriteMask != null) ? options.userWriteMask : 0;
-  this.rolePermissions = (options.rolePermissions != null) ? options.rolePermissions : [];
-  this.userRolePermissions = (options.userRolePermissions != null) ? options.userRolePermissions : [];
-  this.accessRestrictions = (options.accessRestrictions != null) ? options.accessRestrictions : 0;
-  this.references = (options.references != null) ? options.references : [];
-
- }
-
-
- encode( out: DataStream) {
-  ec.encodeNodeId(this.nodeId, out);
-  encodeNodeClass(this.nodeClass, out);
-  this.browseName.encode(out);
-  this.displayName.encode(out);
-  this.description.encode(out);
-  ec.encodeUInt32(this.writeMask, out);
-  ec.encodeUInt32(this.userWriteMask, out);
-  ec.encodeArray(this.rolePermissions, out);
-  ec.encodeArray(this.userRolePermissions, out);
-  ec.encodeUInt16(this.accessRestrictions, out);
-  ec.encodeArray(this.references, out);
-
- }
-
-
- decode( inp: DataStream) {
-  this.nodeId = ec.decodeNodeId(inp);
-  this.nodeClass = decodeNodeClass(inp);
-  this.browseName.decode(inp);
-  this.displayName.decode(inp);
-  this.description.decode(inp);
-  this.writeMask = ec.decodeUInt32(inp);
-  this.userWriteMask = ec.decodeUInt32(inp);
-  this.rolePermissions = ec.decodeArray(inp, decodeRolePermissionType);
-  this.userRolePermissions = ec.decodeArray(inp, decodeRolePermissionType);
-  this.accessRestrictions = ec.decodeUInt16(inp);
-  this.references = ec.decodeArray(inp, decodeReferenceNode);
-
- }
-
-
- toJSON() {
-  const out: any = {};
-  out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
-  out.NodeClass = this.nodeClass;
-  out.BrowseName = this.browseName;
-  out.DisplayName = this.displayName;
-  out.Description = this.description;
-  out.WriteMask = this.writeMask;
-  out.UserWriteMask = this.userWriteMask;
-  out.RolePermissions = this.rolePermissions;
-  out.UserRolePermissions = this.userRolePermissions;
-  out.AccessRestrictions = this.accessRestrictions;
-  out.References = this.references;
- return out;
- }
-
-
- fromJSON( inp: any) {
-if (!inp) { return; }
-  this.nodeId = ec.jsonDecodeNodeId(inp.NodeId);
-  this.nodeClass = inp.NodeClass;
-  this.browseName.fromJSON(inp.BrowseName);
-  this.displayName.fromJSON(inp.DisplayName);
-  this.description.fromJSON(inp.Description);
-  this.writeMask = inp.WriteMask;
-  this.userWriteMask = inp.UserWriteMask;
-  this.rolePermissions = ec.jsonDecodeStructArray( inp.RolePermissions,RolePermissionType);
-  this.userRolePermissions = ec.jsonDecodeStructArray( inp.UserRolePermissions,RolePermissionType);
-  this.accessRestrictions = inp.AccessRestrictions;
-  this.references = ec.jsonDecodeStructArray( inp.References,ReferenceNode);
-
- }
-
-
- clone( target?: Node): Node {
-  if (!target) {
-   target = new Node();
+  constructor(options?: INode) {
+    options = options || {};
+    this.nodeId = options.nodeId != null ? options.nodeId : ec.NodeId.NullNodeId;
+    this.nodeClass = options.nodeClass != null ? options.nodeClass : 0;
+    this.browseName = options.browseName != null ? options.browseName : new QualifiedName();
+    this.displayName = options.displayName != null ? options.displayName : new LocalizedText();
+    this.description = options.description != null ? options.description : new LocalizedText();
+    this.writeMask = options.writeMask != null ? options.writeMask : 0;
+    this.userWriteMask = options.userWriteMask != null ? options.userWriteMask : 0;
+    this.rolePermissions = options.rolePermissions != null ? options.rolePermissions : [];
+    this.userRolePermissions =
+      options.userRolePermissions != null ? options.userRolePermissions : [];
+    this.accessRestrictions = options.accessRestrictions != null ? options.accessRestrictions : 0;
+    this.references = options.references != null ? options.references : [];
   }
-  target.nodeId = this.nodeId;
-  target.nodeClass = this.nodeClass;
-  if (this.browseName) { target.browseName = this.browseName.clone(); }
-  if (this.displayName) { target.displayName = this.displayName.clone(); }
-  if (this.description) { target.description = this.description.clone(); }
-  target.writeMask = this.writeMask;
-  target.userWriteMask = this.userWriteMask;
-  if (this.rolePermissions) { target.rolePermissions = ec.cloneComplexArray(this.rolePermissions); }
-  if (this.userRolePermissions) { target.userRolePermissions = ec.cloneComplexArray(this.userRolePermissions); }
-  target.accessRestrictions = this.accessRestrictions;
-  if (this.references) { target.references = ec.cloneComplexArray(this.references); }
-  return target;
- }
 
+  encode(out: DataStream) {
+    ec.encodeNodeId(this.nodeId, out);
+    encodeNodeClass(this.nodeClass, out);
+    this.browseName.encode(out);
+    this.displayName.encode(out);
+    this.description.encode(out);
+    ec.encodeUInt32(this.writeMask, out);
+    ec.encodeUInt32(this.userWriteMask, out);
+    ec.encodeArray(this.rolePermissions, out);
+    ec.encodeArray(this.userRolePermissions, out);
+    ec.encodeUInt16(this.accessRestrictions, out);
+    ec.encodeArray(this.references, out);
+  }
 
+  decode(inp: DataStream) {
+    this.nodeId = ec.decodeNodeId(inp);
+    this.nodeClass = decodeNodeClass(inp);
+    this.browseName.decode(inp);
+    this.displayName.decode(inp);
+    this.description.decode(inp);
+    this.writeMask = ec.decodeUInt32(inp);
+    this.userWriteMask = ec.decodeUInt32(inp);
+    this.rolePermissions = ec.decodeArray(inp, decodeRolePermissionType) ?? [];
+    this.userRolePermissions = ec.decodeArray(inp, decodeRolePermissionType) ?? [];
+    this.accessRestrictions = ec.decodeUInt16(inp);
+    this.references = ec.decodeArray(inp, decodeReferenceNode) ?? [];
+  }
+
+  toJSON() {
+    const out: any = {};
+    out.NodeId = ec.jsonEncodeNodeId(this.nodeId);
+    out.NodeClass = this.nodeClass;
+    out.BrowseName = this.browseName;
+    out.DisplayName = this.displayName;
+    out.Description = this.description;
+    out.WriteMask = this.writeMask;
+    out.UserWriteMask = this.userWriteMask;
+    out.RolePermissions = this.rolePermissions;
+    out.UserRolePermissions = this.userRolePermissions;
+    out.AccessRestrictions = this.accessRestrictions;
+    out.References = this.references;
+    return out;
+  }
+
+  fromJSON(inp: any) {
+    if (!inp) {
+      return;
+    }
+    this.nodeId = ec.jsonDecodeNodeId(inp.NodeId);
+    this.nodeClass = inp.NodeClass;
+    this.browseName.fromJSON(inp.BrowseName);
+    this.displayName.fromJSON(inp.DisplayName);
+    this.description.fromJSON(inp.Description);
+    this.writeMask = inp.WriteMask;
+    this.userWriteMask = inp.UserWriteMask;
+    this.rolePermissions = ec.jsonDecodeStructArray(inp.RolePermissions, RolePermissionType);
+    this.userRolePermissions = ec.jsonDecodeStructArray(
+      inp.UserRolePermissions,
+      RolePermissionType
+    );
+    this.accessRestrictions = inp.AccessRestrictions;
+    this.references = ec.jsonDecodeStructArray(inp.References, ReferenceNode);
+  }
+
+  clone(target?: Node): Node {
+    if (!target) {
+      target = new Node();
+    }
+    target.nodeId = this.nodeId;
+    target.nodeClass = this.nodeClass;
+    if (this.browseName) {
+      target.browseName = this.browseName.clone();
+    }
+    if (this.displayName) {
+      target.displayName = this.displayName.clone();
+    }
+    if (this.description) {
+      target.description = this.description.clone();
+    }
+    target.writeMask = this.writeMask;
+    target.userWriteMask = this.userWriteMask;
+    if (this.rolePermissions) {
+      target.rolePermissions = ec.cloneComplexArray(this.rolePermissions);
+    }
+    if (this.userRolePermissions) {
+      target.userRolePermissions = ec.cloneComplexArray(this.userRolePermissions);
+    }
+    target.accessRestrictions = this.accessRestrictions;
+    if (this.references) {
+      target.references = ec.cloneComplexArray(this.references);
+    }
+    return target;
+  }
 }
-export function decodeNode( inp: DataStream): Node {
+export function decodeNode(inp: DataStream): Node {
   const obj = new Node();
-   obj.decode(inp);
-   return obj;
+  obj.decode(inp);
+  return obj;
+}
 
- }
-
-
-
-import {register_class_definition} from '../factory/factories_factories';
+import { register_class_definition } from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition('Node', Node, new ExpandedNodeId(2 /*numeric id*/, 258, 0));

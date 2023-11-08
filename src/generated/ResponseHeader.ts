@@ -12,22 +12,21 @@ export type IResponseHeader = Partial<ResponseHeader>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16022}
 */
 
 export class ResponseHeader {
   timestamp: Date;
   requestHandle: ec.UInt32;
-  serviceResult: ec.StatusCode | null;
+  serviceResult: ec.StatusCode;
   serviceDiagnostics: DiagnosticInfo;
-  stringTable: string[];
+  stringTable: (string | null)[];
   additionalHeader: ExtensionObject | null;
 
- constructor( options?: IResponseHeader) {
+ constructor( options?: IResponseHeader | null) {
   options = options || {};
   this.timestamp = (options.timestamp != null) ? options.timestamp : new Date();
   this.requestHandle = (options.requestHandle != null) ? options.requestHandle : 0;
-  this.serviceResult = (options.serviceResult != null) ? options.serviceResult : null;
+  this.serviceResult = (options.serviceResult != null) ? options.serviceResult : ec.StatusCodes.Good;
   this.serviceDiagnostics = (options.serviceDiagnostics != null) ? options.serviceDiagnostics : new DiagnosticInfo();
   this.stringTable = (options.stringTable != null) ? options.stringTable : [];
   this.additionalHeader = (options.additionalHeader != null) ? options.additionalHeader : null;

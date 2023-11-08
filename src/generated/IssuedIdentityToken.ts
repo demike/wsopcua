@@ -12,14 +12,13 @@ export type IIssuedIdentityToken = Partial<IssuedIdentityToken>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16061}
 */
 
 export class IssuedIdentityToken extends UserIdentityToken {
   tokenData: Uint8Array | null;
   encryptionAlgorithm: string | null;
 
- constructor( options?: IIssuedIdentityToken) {
+ constructor( options?: IIssuedIdentityToken | null) {
   options = options || {};
   super(options);
   this.tokenData = (options.tokenData != null) ? options.tokenData : null;

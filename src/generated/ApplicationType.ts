@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16019}
 */
 
 export enum ApplicationType {
@@ -15,6 +14,7 @@ export enum ApplicationType {
   Client = 1,
   ClientAndServer = 2,
   DiscoveryServer = 3,
+  Invalid = 4294967295,
 }
 
 export function encodeApplicationType( data: ApplicationType,  out: DataStream) {

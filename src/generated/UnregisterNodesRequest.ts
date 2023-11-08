@@ -11,14 +11,13 @@ export type IUnregisterNodesRequest = Partial<UnregisterNodesRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16116}
 */
 
 export class UnregisterNodesRequest {
   requestHeader: RequestHeader;
-  nodesToUnregister: ec.NodeId[];
+  nodesToUnregister: (ec.NodeId)[];
 
- constructor( options?: IUnregisterNodesRequest) {
+ constructor( options?: IUnregisterNodesRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.nodesToUnregister = (options.nodesToUnregister != null) ? options.nodesToUnregister : [];

@@ -12,7 +12,6 @@ export type IBrokerDataSetWriterTransportDataType = Partial<BrokerDataSetWriterT
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15840}
 */
 
 export class BrokerDataSetWriterTransportDataType extends DataSetWriterTransportDataType {
@@ -23,13 +22,13 @@ export class BrokerDataSetWriterTransportDataType extends DataSetWriterTransport
   metaDataQueueName: string | null;
   metaDataUpdateTime: ec.Double;
 
- constructor( options?: IBrokerDataSetWriterTransportDataType) {
+ constructor( options?: IBrokerDataSetWriterTransportDataType | null) {
   options = options || {};
   super();
   this.queueName = (options.queueName != null) ? options.queueName : null;
   this.resourceUri = (options.resourceUri != null) ? options.resourceUri : null;
   this.authenticationProfileUri = (options.authenticationProfileUri != null) ? options.authenticationProfileUri : null;
-  this.requestedDeliveryGuarantee = (options.requestedDeliveryGuarantee != null) ? options.requestedDeliveryGuarantee : null;
+  this.requestedDeliveryGuarantee = (options.requestedDeliveryGuarantee != null) ? options.requestedDeliveryGuarantee : BrokerTransportQualityOfService.Invalid;
   this.metaDataQueueName = (options.metaDataQueueName != null) ? options.metaDataQueueName : null;
   this.metaDataUpdateTime = (options.metaDataUpdateTime != null) ? options.metaDataUpdateTime : 0;
 

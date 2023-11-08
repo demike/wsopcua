@@ -10,14 +10,13 @@ export type IPortableNodeId = Partial<PortableNodeId>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16775}
 */
 
 export class PortableNodeId {
   namespaceUri: string | null;
   identifier: ec.NodeId;
 
- constructor( options?: IPortableNodeId) {
+ constructor( options?: IPortableNodeId | null) {
   options = options || {};
   this.namespaceUri = (options.namespaceUri != null) ? options.namespaceUri : null;
   this.identifier = (options.identifier != null) ? options.identifier : ec.NodeId.NullNodeId;

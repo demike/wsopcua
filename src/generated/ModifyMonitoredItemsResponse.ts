@@ -15,15 +15,14 @@ export type IModifyMonitoredItemsResponse = Partial<ModifyMonitoredItemsResponse
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16196}
 */
 
 export class ModifyMonitoredItemsResponse {
   responseHeader: ResponseHeader;
-  results: MonitoredItemModifyResult[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (MonitoredItemModifyResult)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IModifyMonitoredItemsResponse) {
+ constructor( options?: IModifyMonitoredItemsResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

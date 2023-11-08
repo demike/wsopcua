@@ -11,7 +11,6 @@ export type IEnumValueType = Partial<EnumValueType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16003}
 */
 
 export class EnumValueType {
@@ -19,7 +18,7 @@ export class EnumValueType {
   displayName: LocalizedText;
   description: LocalizedText;
 
- constructor( options?: IEnumValueType) {
+ constructor( options?: IEnumValueType | null) {
   options = options || {};
   this.value = (options.value != null) ? options.value : [0, 0];
   this.displayName = (options.displayName != null) ? options.displayName : new LocalizedText();

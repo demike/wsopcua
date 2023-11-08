@@ -12,7 +12,6 @@ export type IMonitoredItemCreateRequest = Partial<MonitoredItemCreateRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16189}
 */
 
 export class MonitoredItemCreateRequest {
@@ -20,10 +19,10 @@ export class MonitoredItemCreateRequest {
   monitoringMode: MonitoringMode;
   requestedParameters: MonitoringParameters;
 
- constructor( options?: IMonitoredItemCreateRequest) {
+ constructor( options?: IMonitoredItemCreateRequest | null) {
   options = options || {};
   this.itemToMonitor = (options.itemToMonitor != null) ? options.itemToMonitor : new ReadValueId();
-  this.monitoringMode = (options.monitoringMode != null) ? options.monitoringMode : null;
+  this.monitoringMode = (options.monitoringMode != null) ? options.monitoringMode : MonitoringMode.Invalid;
   this.requestedParameters = (options.requestedParameters != null) ? options.requestedParameters : new MonitoringParameters();
 
  }

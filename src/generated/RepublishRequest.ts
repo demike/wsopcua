@@ -11,7 +11,6 @@ export type IRepublishRequest = Partial<RepublishRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16220}
 */
 
 export class RepublishRequest {
@@ -19,7 +18,7 @@ export class RepublishRequest {
   subscriptionId: ec.UInt32;
   retransmitSequenceNumber: ec.UInt32;
 
- constructor( options?: IRepublishRequest) {
+ constructor( options?: IRepublishRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

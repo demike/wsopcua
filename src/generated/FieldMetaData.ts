@@ -14,7 +14,6 @@ export type IFieldMetaData = Partial<FieldMetaData>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15792}
 */
 
 export class FieldMetaData {
@@ -24,22 +23,22 @@ export class FieldMetaData {
   builtInType: ec.Byte;
   dataType: ec.NodeId;
   valueRank: ec.Int32;
-  arrayDimensions: ec.UInt32[];
+  arrayDimensions: (ec.UInt32)[];
   maxStringLength: ec.UInt32;
-  dataSetFieldId: ec.Guid | null;
-  properties: KeyValuePair[];
+  dataSetFieldId: ec.Guid;
+  properties: (KeyValuePair)[];
 
- constructor( options?: IFieldMetaData) {
+ constructor( options?: IFieldMetaData | null) {
   options = options || {};
   this.name = (options.name != null) ? options.name : null;
   this.description = (options.description != null) ? options.description : new LocalizedText();
-  this.fieldFlags = (options.fieldFlags != null) ? options.fieldFlags : null;
+  this.fieldFlags = (options.fieldFlags != null) ? options.fieldFlags : DataSetFieldFlags.None;
   this.builtInType = (options.builtInType != null) ? options.builtInType : 0;
   this.dataType = (options.dataType != null) ? options.dataType : ec.NodeId.NullNodeId;
   this.valueRank = (options.valueRank != null) ? options.valueRank : 0;
   this.arrayDimensions = (options.arrayDimensions != null) ? options.arrayDimensions : [];
   this.maxStringLength = (options.maxStringLength != null) ? options.maxStringLength : 0;
-  this.dataSetFieldId = (options.dataSetFieldId != null) ? options.dataSetFieldId : null;
+  this.dataSetFieldId = (options.dataSetFieldId != null) ? options.dataSetFieldId : "";
   this.properties = (options.properties != null) ? options.properties : [];
 
  }

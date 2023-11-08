@@ -18,7 +18,6 @@ export type IPubSubConnectionDataType = Partial<PubSubConnectionDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15808}
 */
 
 export class PubSubConnectionDataType {
@@ -27,12 +26,12 @@ export class PubSubConnectionDataType {
   publisherId: Variant;
   transportProfileUri: string | null;
   address: ExtensionObject | null;
-  connectionProperties: KeyValuePair[];
+  connectionProperties: (KeyValuePair)[];
   transportSettings: ExtensionObject | null;
-  writerGroups: WriterGroupDataType[];
-  readerGroups: ReaderGroupDataType[];
+  writerGroups: (WriterGroupDataType)[];
+  readerGroups: (ReaderGroupDataType)[];
 
- constructor( options?: IPubSubConnectionDataType) {
+ constructor( options?: IPubSubConnectionDataType | null) {
   options = options || {};
   this.name = (options.name != null) ? options.name : null;
   this.enabled = (options.enabled != null) ? options.enabled : false;

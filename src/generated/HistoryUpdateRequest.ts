@@ -12,14 +12,13 @@ export type IHistoryUpdateRequest = Partial<HistoryUpdateRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16171}
 */
 
 export class HistoryUpdateRequest {
   requestHeader: RequestHeader;
-  historyUpdateDetails: ExtensionObject[];
+  historyUpdateDetails: (ExtensionObject | null)[];
 
- constructor( options?: IHistoryUpdateRequest) {
+ constructor( options?: IHistoryUpdateRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.historyUpdateDetails = (options.historyUpdateDetails != null) ? options.historyUpdateDetails : [];

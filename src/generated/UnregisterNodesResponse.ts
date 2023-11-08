@@ -10,13 +10,12 @@ export type IUnregisterNodesResponse = Partial<UnregisterNodesResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16117}
 */
 
 export class UnregisterNodesResponse {
   responseHeader: ResponseHeader;
 
- constructor( options?: IUnregisterNodesResponse) {
+ constructor( options?: IUnregisterNodesResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
 

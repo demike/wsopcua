@@ -136,7 +136,7 @@ export function bn_hundredNanoSecondFrom1601ToDate_fast(high: number, low: numbe
   return date;
 }
 
-let last_now_date: Date = null;
+let last_now_date: Date | null = null;
 let last_picoseconds = 0;
 
 export function getCurrentClock() {

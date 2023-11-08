@@ -5,7 +5,6 @@
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15796}
 */
 
 export class PublishedDataSetSourceDataType {

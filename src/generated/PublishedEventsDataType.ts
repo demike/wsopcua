@@ -14,15 +14,14 @@ export type IPublishedEventsDataType = Partial<PublishedEventsDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15799}
 */
 
 export class PublishedEventsDataType extends PublishedDataSetSourceDataType {
   eventNotifier: ec.NodeId;
-  selectedFields: SimpleAttributeOperand[];
+  selectedFields: (SimpleAttributeOperand)[];
   filter: ContentFilter;
 
- constructor( options?: IPublishedEventsDataType) {
+ constructor( options?: IPublishedEventsDataType | null) {
   options = options || {};
   super();
   this.eventNotifier = (options.eventNotifier != null) ? options.eventNotifier : ec.NodeId.NullNodeId;

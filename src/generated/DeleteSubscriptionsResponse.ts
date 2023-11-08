@@ -13,15 +13,14 @@ export type IDeleteSubscriptionsResponse = Partial<DeleteSubscriptionsResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16226}
 */
 
 export class DeleteSubscriptionsResponse {
   responseHeader: ResponseHeader;
-  results: ec.StatusCode[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (ec.StatusCode)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IDeleteSubscriptionsResponse) {
+ constructor( options?: IDeleteSubscriptionsResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

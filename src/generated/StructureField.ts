@@ -11,7 +11,6 @@ export type IStructureField = Partial<StructureField>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15987}
 */
 
 export class StructureField {
@@ -19,11 +18,11 @@ export class StructureField {
   description: LocalizedText;
   dataType: ec.NodeId;
   valueRank: ec.Int32;
-  arrayDimensions: ec.UInt32[];
+  arrayDimensions: (ec.UInt32)[];
   maxStringLength: ec.UInt32;
   isOptional: boolean;
 
- constructor( options?: IStructureField) {
+ constructor( options?: IStructureField | null) {
   options = options || {};
   this.name = (options.name != null) ? options.name : null;
   this.description = (options.description != null) ? options.description : new LocalizedText();

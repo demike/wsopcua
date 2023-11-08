@@ -11,7 +11,6 @@ export type IUserManagementDataType = Partial<UserManagementDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16981}
 */
 
 export class UserManagementDataType {
@@ -19,10 +18,10 @@ export class UserManagementDataType {
   userConfiguration: UserConfigurationMask;
   description: string | null;
 
- constructor( options?: IUserManagementDataType) {
+ constructor( options?: IUserManagementDataType | null) {
   options = options || {};
   this.userName = (options.userName != null) ? options.userName : null;
-  this.userConfiguration = (options.userConfiguration != null) ? options.userConfiguration : null;
+  this.userConfiguration = (options.userConfiguration != null) ? options.userConfiguration : UserConfigurationMask.None;
   this.description = (options.description != null) ? options.description : null;
 
  }

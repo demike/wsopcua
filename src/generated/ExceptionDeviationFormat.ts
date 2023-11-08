@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16254}
 */
 
 export enum ExceptionDeviationFormat {
@@ -16,6 +15,7 @@ export enum ExceptionDeviationFormat {
   PercentOfRange = 2,
   PercentOfEURange = 3,
   Unknown = 4,
+  Invalid = 4294967295,
 }
 
 export function encodeExceptionDeviationFormat( data: ExceptionDeviationFormat,  out: DataStream) {

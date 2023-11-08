@@ -12,15 +12,14 @@ export type ICallMethodRequest = Partial<CallMethodRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16173}
 */
 
 export class CallMethodRequest {
   objectId: ec.NodeId;
   methodId: ec.NodeId;
-  inputArguments: Variant[];
+  inputArguments: (Variant)[];
 
- constructor( options?: ICallMethodRequest) {
+ constructor( options?: ICallMethodRequest | null) {
   options = options || {};
   this.objectId = (options.objectId != null) ? options.objectId : ec.NodeId.NullNodeId;
   this.methodId = (options.methodId != null) ? options.methodId : ec.NodeId.NullNodeId;

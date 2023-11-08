@@ -13,29 +13,28 @@ export type IUadpDataSetReaderMessageDataType = Partial<UadpDataSetReaderMessage
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15829}
 */
 
 export class UadpDataSetReaderMessageDataType extends DataSetReaderMessageDataType {
   groupVersion: ec.UInt32;
   networkMessageNumber: ec.UInt16;
   dataSetOffset: ec.UInt16;
-  dataSetClassId: ec.Guid | null;
+  dataSetClassId: ec.Guid;
   networkMessageContentMask: UadpNetworkMessageContentMask;
   dataSetMessageContentMask: UadpDataSetMessageContentMask;
   publishingInterval: ec.Double;
   receiveOffset: ec.Double;
   processingOffset: ec.Double;
 
- constructor( options?: IUadpDataSetReaderMessageDataType) {
+ constructor( options?: IUadpDataSetReaderMessageDataType | null) {
   options = options || {};
   super();
   this.groupVersion = (options.groupVersion != null) ? options.groupVersion : 0;
   this.networkMessageNumber = (options.networkMessageNumber != null) ? options.networkMessageNumber : 0;
   this.dataSetOffset = (options.dataSetOffset != null) ? options.dataSetOffset : 0;
-  this.dataSetClassId = (options.dataSetClassId != null) ? options.dataSetClassId : null;
-  this.networkMessageContentMask = (options.networkMessageContentMask != null) ? options.networkMessageContentMask : null;
-  this.dataSetMessageContentMask = (options.dataSetMessageContentMask != null) ? options.dataSetMessageContentMask : null;
+  this.dataSetClassId = (options.dataSetClassId != null) ? options.dataSetClassId : "";
+  this.networkMessageContentMask = (options.networkMessageContentMask != null) ? options.networkMessageContentMask : UadpNetworkMessageContentMask.None;
+  this.dataSetMessageContentMask = (options.dataSetMessageContentMask != null) ? options.dataSetMessageContentMask : UadpDataSetMessageContentMask.None;
   this.publishingInterval = (options.publishingInterval != null) ? options.publishingInterval : 0;
   this.receiveOffset = (options.receiveOffset != null) ? options.receiveOffset : 0;
   this.processingOffset = (options.processingOffset != null) ? options.processingOffset : 0;

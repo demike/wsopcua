@@ -12,7 +12,6 @@ export type ICreateSessionRequest = Partial<CreateSessionRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16055}
 */
 
 export class CreateSessionRequest {
@@ -26,7 +25,7 @@ export class CreateSessionRequest {
   requestedSessionTimeout: ec.Double;
   maxResponseMessageSize: ec.UInt32;
 
- constructor( options?: ICreateSessionRequest) {
+ constructor( options?: ICreateSessionRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.clientDescription = (options.clientDescription != null) ? options.clientDescription : new ApplicationDescription();

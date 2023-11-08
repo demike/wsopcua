@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16873}
 */
 
 export enum PubSubConfigurationRefMask {

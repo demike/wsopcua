@@ -11,17 +11,16 @@ export type IRolePermissionType = Partial<RolePermissionType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15984}
 */
 
 export class RolePermissionType {
   roleId: ec.NodeId;
   permissions: PermissionType;
 
- constructor( options?: IRolePermissionType) {
+ constructor( options?: IRolePermissionType | null) {
   options = options || {};
   this.roleId = (options.roleId != null) ? options.roleId : ec.NodeId.NullNodeId;
-  this.permissions = (options.permissions != null) ? options.permissions : null;
+  this.permissions = (options.permissions != null) ? options.permissions : PermissionType.None;
 
  }
 

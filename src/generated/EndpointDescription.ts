@@ -14,7 +14,6 @@ export type IEndpointDescription = Partial<EndpointDescription>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16036}
 */
 
 export class EndpointDescription {
@@ -23,16 +22,16 @@ export class EndpointDescription {
   serverCertificate: Uint8Array | null;
   securityMode: MessageSecurityMode;
   securityPolicyUri: string | null;
-  userIdentityTokens: UserTokenPolicy[];
+  userIdentityTokens: (UserTokenPolicy)[];
   transportProfileUri: string | null;
   securityLevel: ec.Byte;
 
- constructor( options?: IEndpointDescription) {
+ constructor( options?: IEndpointDescription | null) {
   options = options || {};
   this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;
   this.server = (options.server != null) ? options.server : new ApplicationDescription();
   this.serverCertificate = (options.serverCertificate != null) ? options.serverCertificate : null;
-  this.securityMode = (options.securityMode != null) ? options.securityMode : null;
+  this.securityMode = (options.securityMode != null) ? options.securityMode : MessageSecurityMode.Invalid;
   this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;
   this.userIdentityTokens = (options.userIdentityTokens != null) ? options.userIdentityTokens : [];
   this.transportProfileUri = (options.transportProfileUri != null) ? options.transportProfileUri : null;

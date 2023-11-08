@@ -13,7 +13,6 @@ export type IServerStatusDataType = Partial<ServerStatusDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16235}
 */
 
 export class ServerStatusDataType {
@@ -24,11 +23,11 @@ export class ServerStatusDataType {
   secondsTillShutdown: ec.UInt32;
   shutdownReason: LocalizedText;
 
- constructor( options?: IServerStatusDataType) {
+ constructor( options?: IServerStatusDataType | null) {
   options = options || {};
   this.startTime = (options.startTime != null) ? options.startTime : new Date();
   this.currentTime = (options.currentTime != null) ? options.currentTime : new Date();
-  this.state = (options.state != null) ? options.state : null;
+  this.state = (options.state != null) ? options.state : ServerState.Invalid;
   this.buildInfo = (options.buildInfo != null) ? options.buildInfo : new BuildInfo();
   this.secondsTillShutdown = (options.secondsTillShutdown != null) ? options.secondsTillShutdown : 0;
   this.shutdownReason = (options.shutdownReason != null) ? options.shutdownReason : new LocalizedText();

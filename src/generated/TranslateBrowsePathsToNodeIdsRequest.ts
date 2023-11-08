@@ -13,14 +13,13 @@ export type ITranslateBrowsePathsToNodeIdsRequest = Partial<TranslateBrowsePaths
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16112}
 */
 
 export class TranslateBrowsePathsToNodeIdsRequest {
   requestHeader: RequestHeader;
-  browsePaths: BrowsePath[];
+  browsePaths: (BrowsePath)[];
 
- constructor( options?: ITranslateBrowsePathsToNodeIdsRequest) {
+ constructor( options?: ITranslateBrowsePathsToNodeIdsRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.browsePaths = (options.browsePaths != null) ? options.browsePaths : [];

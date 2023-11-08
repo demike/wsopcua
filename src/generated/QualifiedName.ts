@@ -10,14 +10,13 @@ export type IQualifiedName = Partial<QualifiedName>;
 
 /**
 A string qualified with a namespace index.
- * {@link https://reference.opcfoundation.org/nodesets/4/15333}
 */
 
 export class QualifiedName {
   namespaceIndex: ec.UInt16;
   name: string | null;
 
- constructor( options?: IQualifiedName) {
+ constructor( options?: IQualifiedName | null) {
   options = options || {};
   this.namespaceIndex = (options.namespaceIndex != null) ? options.namespaceIndex : 0;
   this.name = (options.name != null) ? options.name : null;

@@ -11,12 +11,11 @@ export type IAnonymousIdentityToken = Partial<AnonymousIdentityToken>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16058}
 */
 
 export class AnonymousIdentityToken extends UserIdentityToken {
 
- constructor( options?: IAnonymousIdentityToken) {
+ constructor( options?: IAnonymousIdentityToken | null) {
   options = options || {};
   super(options);
 

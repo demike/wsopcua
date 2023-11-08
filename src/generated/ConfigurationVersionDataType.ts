@@ -10,14 +10,13 @@ export type IConfigurationVersionDataType = Partial<ConfigurationVersionDataType
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15794}
 */
 
 export class ConfigurationVersionDataType {
   majorVersion: ec.UInt32;
   minorVersion: ec.UInt32;
 
- constructor( options?: IConfigurationVersionDataType) {
+ constructor( options?: IConfigurationVersionDataType | null) {
   options = options || {};
   this.majorVersion = (options.majorVersion != null) ? options.majorVersion : 0;
   this.minorVersion = (options.minorVersion != null) ? options.minorVersion : 0;

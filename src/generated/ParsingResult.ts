@@ -12,17 +12,16 @@ export type IParsingResult = Partial<ParsingResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16135}
 */
 
 export class ParsingResult {
-  statusCode: ec.StatusCode | null;
-  dataStatusCodes: ec.StatusCode[];
-  dataDiagnosticInfos: DiagnosticInfo[];
+  statusCode: ec.StatusCode;
+  dataStatusCodes: (ec.StatusCode)[];
+  dataDiagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IParsingResult) {
+ constructor( options?: IParsingResult | null) {
   options = options || {};
-  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.dataStatusCodes = (options.dataStatusCodes != null) ? options.dataStatusCodes : [];
   this.dataDiagnosticInfos = (options.dataDiagnosticInfos != null) ? options.dataDiagnosticInfos : [];
 

@@ -11,7 +11,6 @@ export type INodeAttributes = Partial<NodeAttributes>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16071}
 */
 
 export class NodeAttributes {
@@ -21,7 +20,7 @@ export class NodeAttributes {
   writeMask: ec.UInt32;
   userWriteMask: ec.UInt32;
 
- constructor( options?: INodeAttributes) {
+ constructor( options?: INodeAttributes | null) {
   options = options || {};
   this.specifiedAttributes = (options.specifiedAttributes != null) ? options.specifiedAttributes : 0;
   this.displayName = (options.displayName != null) ? options.displayName : new LocalizedText();

@@ -10,7 +10,6 @@ export type IViewDescription = Partial<ViewDescription>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16097}
 */
 
 export class ViewDescription {
@@ -18,7 +17,7 @@ export class ViewDescription {
   timestamp: Date;
   viewVersion: ec.UInt32;
 
- constructor( options?: IViewDescription) {
+ constructor( options?: IViewDescription | null) {
   options = options || {};
   this.viewId = (options.viewId != null) ? options.viewId : ec.NodeId.NullNodeId;
   this.timestamp = (options.timestamp != null) ? options.timestamp : new Date();

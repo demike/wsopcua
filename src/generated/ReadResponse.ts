@@ -15,15 +15,14 @@ export type IReadResponse = Partial<ReadResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16143}
 */
 
 export class ReadResponse {
   responseHeader: ResponseHeader;
-  results: DataValue[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (DataValue)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IReadResponse) {
+ constructor( options?: IReadResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

@@ -11,7 +11,6 @@ export type IHistoryReadValueId = Partial<HistoryReadValueId>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16144}
 */
 
 export class HistoryReadValueId {
@@ -20,7 +19,7 @@ export class HistoryReadValueId {
   dataEncoding: QualifiedName;
   continuationPoint: Uint8Array | null;
 
- constructor( options?: IHistoryReadValueId) {
+ constructor( options?: IHistoryReadValueId | null) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
   this.indexRange = (options.indexRange != null) ? options.indexRange : null;

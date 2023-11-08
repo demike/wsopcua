@@ -13,15 +13,14 @@ export type IWriteResponse = Partial<WriteResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16160}
 */
 
 export class WriteResponse {
   responseHeader: ResponseHeader;
-  results: ec.StatusCode[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (ec.StatusCode)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IWriteResponse) {
+ constructor( options?: IWriteResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

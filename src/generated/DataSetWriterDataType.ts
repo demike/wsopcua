@@ -14,7 +14,6 @@ export type IDataSetWriterDataType = Partial<DataSetWriterDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15801}
 */
 
 export class DataSetWriterDataType {
@@ -24,16 +23,16 @@ export class DataSetWriterDataType {
   dataSetFieldContentMask: DataSetFieldContentMask;
   keyFrameCount: ec.UInt32;
   dataSetName: string | null;
-  dataSetWriterProperties: KeyValuePair[];
+  dataSetWriterProperties: (KeyValuePair)[];
   transportSettings: ExtensionObject | null;
   messageSettings: ExtensionObject | null;
 
- constructor( options?: IDataSetWriterDataType) {
+ constructor( options?: IDataSetWriterDataType | null) {
   options = options || {};
   this.name = (options.name != null) ? options.name : null;
   this.enabled = (options.enabled != null) ? options.enabled : false;
   this.dataSetWriterId = (options.dataSetWriterId != null) ? options.dataSetWriterId : 0;
-  this.dataSetFieldContentMask = (options.dataSetFieldContentMask != null) ? options.dataSetFieldContentMask : null;
+  this.dataSetFieldContentMask = (options.dataSetFieldContentMask != null) ? options.dataSetFieldContentMask : DataSetFieldContentMask.None;
   this.keyFrameCount = (options.keyFrameCount != null) ? options.keyFrameCount : 0;
   this.dataSetName = (options.dataSetName != null) ? options.dataSetName : null;
   this.dataSetWriterProperties = (options.dataSetWriterProperties != null) ? options.dataSetWriterProperties : [];

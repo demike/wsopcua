@@ -16,6 +16,7 @@ export enum NodeIdType {
   String = 3,
   Guid = 4,
   ByteString = 5,
+  Invalid = 4294967295,
 }
 
 export function encodeNodeIdType( data: NodeIdType,  out: DataStream) {

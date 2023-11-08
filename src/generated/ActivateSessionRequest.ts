@@ -15,18 +15,17 @@ export type IActivateSessionRequest = Partial<ActivateSessionRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16064}
 */
 
 export class ActivateSessionRequest {
   requestHeader: RequestHeader;
   clientSignature: SignatureData;
-  clientSoftwareCertificates: SignedSoftwareCertificate[];
-  localeIds: string[];
+  clientSoftwareCertificates: (SignedSoftwareCertificate)[];
+  localeIds: (string | null)[];
   userIdentityToken: ExtensionObject | null;
   userTokenSignature: SignatureData;
 
- constructor( options?: IActivateSessionRequest) {
+ constructor( options?: IActivateSessionRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.clientSignature = (options.clientSignature != null) ? options.clientSignature : new SignatureData();

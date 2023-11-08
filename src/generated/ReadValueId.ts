@@ -11,7 +11,6 @@ export type IReadValueId = Partial<ReadValueId>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16141}
 */
 
 export class ReadValueId {
@@ -20,7 +19,7 @@ export class ReadValueId {
   indexRange: string | null;
   dataEncoding: QualifiedName;
 
- constructor( options?: IReadValueId) {
+ constructor( options?: IReadValueId | null) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;

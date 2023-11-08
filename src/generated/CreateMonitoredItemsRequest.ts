@@ -14,20 +14,19 @@ export type ICreateMonitoredItemsRequest = Partial<CreateMonitoredItemsRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16191}
 */
 
 export class CreateMonitoredItemsRequest {
   requestHeader: RequestHeader;
   subscriptionId: ec.UInt32;
   timestampsToReturn: TimestampsToReturn;
-  itemsToCreate: MonitoredItemCreateRequest[];
+  itemsToCreate: (MonitoredItemCreateRequest)[];
 
- constructor( options?: ICreateMonitoredItemsRequest) {
+ constructor( options?: ICreateMonitoredItemsRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;
-  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : null;
+  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : TimestampsToReturn.Invalid;
   this.itemsToCreate = (options.itemsToCreate != null) ? options.itemsToCreate : [];
 
  }

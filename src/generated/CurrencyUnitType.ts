@@ -11,7 +11,6 @@ export type ICurrencyUnitType = Partial<CurrencyUnitType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15580}
 */
 
 export class CurrencyUnitType {
@@ -20,7 +19,7 @@ export class CurrencyUnitType {
   alphabeticCode: string | null;
   currency: LocalizedText;
 
- constructor( options?: ICurrencyUnitType) {
+ constructor( options?: ICurrencyUnitType | null) {
   options = options || {};
   this.numericCode = (options.numericCode != null) ? options.numericCode : 0;
   this.exponent = (options.exponent != null) ? options.exponent : 0;

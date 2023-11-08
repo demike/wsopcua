@@ -12,17 +12,16 @@ export type IBrowseResult = Partial<BrowseResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16102}
 */
 
 export class BrowseResult {
-  statusCode: ec.StatusCode | null;
+  statusCode: ec.StatusCode;
   continuationPoint: Uint8Array | null;
-  references: ReferenceDescription[];
+  references: (ReferenceDescription)[];
 
- constructor( options?: IBrowseResult) {
+ constructor( options?: IBrowseResult | null) {
   options = options || {};
-  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.continuationPoint = (options.continuationPoint != null) ? options.continuationPoint : null;
   this.references = (options.references != null) ? options.references : [];
 

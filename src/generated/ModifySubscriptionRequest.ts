@@ -11,7 +11,6 @@ export type IModifySubscriptionRequest = Partial<ModifySubscriptionRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16205}
 */
 
 export class ModifySubscriptionRequest {
@@ -23,7 +22,7 @@ export class ModifySubscriptionRequest {
   maxNotificationsPerPublish: ec.UInt32;
   priority: ec.Byte;
 
- constructor( options?: IModifySubscriptionRequest) {
+ constructor( options?: IModifySubscriptionRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

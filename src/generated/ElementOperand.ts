@@ -11,13 +11,12 @@ export type IElementOperand = Partial<ElementOperand>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16129}
 */
 
 export class ElementOperand extends FilterOperand {
   index: ec.UInt32;
 
- constructor( options?: IElementOperand) {
+ constructor( options?: IElementOperand | null) {
   options = options || {};
   super();
   this.index = (options.index != null) ? options.index : 0;

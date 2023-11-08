@@ -118,7 +118,7 @@ export class EventEmitter<EventTypesMap extends { [evtName: string]: any }> {
    * @public
    */
   public listenerCount<MessageType extends keyof EventTypesMap>(event: MessageType): number {
-    const evt = (prefix ? prefix + event : event) as string;
+    const evt = (prefix ? prefix + (event as string) : event) as string;
     const listeners = this._events[evt];
 
     if (!listeners) {
@@ -141,7 +141,7 @@ export class EventEmitter<EventTypesMap extends { [evtName: string]: any }> {
     event: MessageType,
     ...message: Parameters<EventTypesMap[MessageType]>
   ): boolean {
-    const evt = (prefix ? prefix + event : event) as string;
+    const evt = (prefix ? prefix + (event as string) : event) as string;
 
     if (!this._events[evt]) {
       return false;

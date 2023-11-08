@@ -11,13 +11,12 @@ export type IDatagramConnectionTransportDataType = Partial<DatagramConnectionTra
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15835}
 */
 
 export class DatagramConnectionTransportDataType extends ConnectionTransportDataType {
   discoveryAddress: ExtensionObject | null;
 
- constructor( options?: IDatagramConnectionTransportDataType) {
+ constructor( options?: IDatagramConnectionTransportDataType | null) {
   options = options || {};
   super();
   this.discoveryAddress = (options.discoveryAddress != null) ? options.discoveryAddress : null;

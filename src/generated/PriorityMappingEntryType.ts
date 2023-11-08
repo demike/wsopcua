@@ -10,7 +10,6 @@ export type IPriorityMappingEntryType = Partial<PriorityMappingEntryType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/17014}
 */
 
 export class PriorityMappingEntryType {
@@ -19,7 +18,7 @@ export class PriorityMappingEntryType {
   priorityValue_PCP: ec.Byte;
   priorityValue_DSCP: ec.UInt32;
 
- constructor( options?: IPriorityMappingEntryType) {
+ constructor( options?: IPriorityMappingEntryType | null) {
   options = options || {};
   this.mappingUri = (options.mappingUri != null) ? options.mappingUri : null;
   this.priorityLabel = (options.priorityLabel != null) ? options.priorityLabel : null;

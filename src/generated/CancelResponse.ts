@@ -11,14 +11,13 @@ export type ICancelResponse = Partial<CancelResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16069}
 */
 
 export class CancelResponse {
   responseHeader: ResponseHeader;
   cancelCount: ec.UInt32;
 
- constructor( options?: ICancelResponse) {
+ constructor( options?: ICancelResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.cancelCount = (options.cancelCount != null) ? options.cancelCount : 0;

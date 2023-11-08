@@ -13,15 +13,14 @@ export type IRegisterServer2Request = Partial<RegisterServer2Request>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16044}
 */
 
 export class RegisterServer2Request {
   requestHeader: RequestHeader;
   server: RegisteredServer;
-  discoveryConfiguration: ExtensionObject[];
+  discoveryConfiguration: (ExtensionObject | null)[];
 
- constructor( options?: IRegisterServer2Request) {
+ constructor( options?: IRegisterServer2Request | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.server = (options.server != null) ? options.server : new RegisteredServer();

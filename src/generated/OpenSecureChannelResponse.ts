@@ -12,7 +12,6 @@ export type IOpenSecureChannelResponse = Partial<OpenSecureChannelResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16049}
 */
 
 export class OpenSecureChannelResponse {
@@ -21,7 +20,7 @@ export class OpenSecureChannelResponse {
   securityToken: ChannelSecurityToken;
   serverNonce: Uint8Array | null;
 
- constructor( options?: IOpenSecureChannelResponse) {
+ constructor( options?: IOpenSecureChannelResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.serverProtocolVersion = (options.serverProtocolVersion != null) ? options.serverProtocolVersion : 0;

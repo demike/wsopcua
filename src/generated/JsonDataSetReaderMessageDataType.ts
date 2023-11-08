@@ -12,18 +12,17 @@ export type IJsonDataSetReaderMessageDataType = Partial<JsonDataSetReaderMessage
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15834}
 */
 
 export class JsonDataSetReaderMessageDataType extends DataSetReaderMessageDataType {
   networkMessageContentMask: JsonNetworkMessageContentMask;
   dataSetMessageContentMask: JsonDataSetMessageContentMask;
 
- constructor( options?: IJsonDataSetReaderMessageDataType) {
+ constructor( options?: IJsonDataSetReaderMessageDataType | null) {
   options = options || {};
   super();
-  this.networkMessageContentMask = (options.networkMessageContentMask != null) ? options.networkMessageContentMask : null;
-  this.dataSetMessageContentMask = (options.dataSetMessageContentMask != null) ? options.dataSetMessageContentMask : null;
+  this.networkMessageContentMask = (options.networkMessageContentMask != null) ? options.networkMessageContentMask : JsonNetworkMessageContentMask.None;
+  this.dataSetMessageContentMask = (options.dataSetMessageContentMask != null) ? options.dataSetMessageContentMask : JsonDataSetMessageContentMask.None;
 
  }
 

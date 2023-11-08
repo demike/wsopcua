@@ -15,17 +15,16 @@ export type IUpdateStructureDataDetails = Partial<UpdateStructureDataDetails>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16165}
 */
 
 export class UpdateStructureDataDetails extends HistoryUpdateDetails {
   performInsertReplace: PerformUpdateType;
-  updateValues: DataValue[];
+  updateValues: (DataValue)[];
 
- constructor( options?: IUpdateStructureDataDetails) {
+ constructor( options?: IUpdateStructureDataDetails | null) {
   options = options || {};
   super(options);
-  this.performInsertReplace = (options.performInsertReplace != null) ? options.performInsertReplace : null;
+  this.performInsertReplace = (options.performInsertReplace != null) ? options.performInsertReplace : PerformUpdateType.Invalid;
   this.updateValues = (options.updateValues != null) ? options.updateValues : [];
 
  }

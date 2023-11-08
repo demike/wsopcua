@@ -10,14 +10,13 @@ export type IComplexNumberType = Partial<ComplexNumberType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16247}
 */
 
 export class ComplexNumberType {
   real: ec.Float;
   imaginary: ec.Float;
 
- constructor( options?: IComplexNumberType) {
+ constructor( options?: IComplexNumberType | null) {
   options = options || {};
   this.real = (options.real != null) ? options.real : 0;
   this.imaginary = (options.imaginary != null) ? options.imaginary : 0;

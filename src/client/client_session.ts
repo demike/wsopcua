@@ -170,21 +170,21 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   ) as read_service.AttributeIds[];
 
   serverCertificate?: Uint8Array;
-  serverNonce: Uint8Array;
-  serverSignature: SignatureData;
-  authenticationToken: NodeId /* | ExpandedNodeId*/;
+  serverNonce?: Uint8Array;
+  serverSignature?: SignatureData;
+  authenticationToken?: NodeId /* | ExpandedNodeId*/;
   sessionId: any;
   name: any;
   protected _closeEventHasBeenEmmitted: boolean;
   protected _client: OPCUAClientBase | null;
   protected _publishEngine?: ClientSidePublishEngine;
   protected _closed: boolean;
-  protected _requestedMaxReferencesPerNode: number;
+  protected _requestedMaxReferencesPerNode = 10000;
   protected _keepAliveManager?: ClientSessionKeepAliveManager;
 
-  protected lastRequestSentTime: number;
-  protected _lastResponseReceivedTime: number;
-  protected _timeout: number;
+  protected lastRequestSentTime = 0;
+  protected _lastResponseReceivedTime = 0;
+  protected _timeout = 0;
   protected _namespaceArray: string[] | undefined;
 
   get lastResponseReceivedTime() {
@@ -289,13 +289,8 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       | NodeId[]
       | IBrowseDescription
       | IBrowseDescription[],
-    callback: (
-      err: Error,
-      results: browse_service.BrowseResult[],
-      diagnostInfos: DiagnosticInfo[] | browse_service.BrowseResponse
-    ) => void
+    callback: ResponseCallback<browse_service.BrowseResult[], any>
   ) {
-    this._requestedMaxReferencesPerNode = this._requestedMaxReferencesPerNode || 10000;
     assert(Number.isFinite(this._requestedMaxReferencesPerNode));
     assert('function' === typeof callback);
 
@@ -311,15 +306,18 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       requestedMaxReferencesPerNode: this._requestedMaxReferencesPerNode,
     });
 
-    this.performMessageTransaction(request, (err, response: browse_service.BrowseResponse) => {
+    this.performMessageTransaction<browse_service.BrowseResult>(request, (err, response) => {
       let i: number, r: browse_service.BrowseResult;
 
       /* istanbul ignore next */
       if (err) {
-        return callback(err, null, response);
+        return callback(err, undefined, response);
       }
 
-      assert(response instanceof browse_service.BrowseResponse);
+      /* istanbul ignore next */
+      if (!response || !(response instanceof browse_service.BrowseResponse)) {
+        return callback(new Error('Internal Error'));
+      }
 
       if (this._requestedMaxReferencesPerNode > 0) {
         for (i = 0; i < response.results.length; i++) {
@@ -359,7 +357,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   }> {
     return new Promise((res, rej) => {
       this.browse(nodesToBrowse, (err, results, diagnosticInfos) => {
-        if (err) {
+        if (err || !results) {
           rej(err);
         } else {
           res({ results, diagnosticInfos });
@@ -385,11 +383,10 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   browseNext(
     continuationPoints: Uint8Array | Uint8Array[],
     releaseContinuationPoints: boolean = false,
-    callback: (
-      err: Error,
-      results: browse_service.BrowseResult[],
-      diagnostInfos: DiagnosticInfo[] | browse_service.BrowseNextResponse
-    ) => void
+    callback: ResponseCallback<
+      browse_service.BrowseResult[],
+      DiagnosticInfo[] | browse_service.BrowseNextResponse
+    >
   ) {
     assert('function' === typeof callback);
 
@@ -402,10 +399,10 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       releaseContinuationPoints: releaseContinuationPoints,
     });
 
-    this.performMessageTransaction(request, (err, response: browse_service.BrowseNextResponse) => {
+    this.performMessageTransaction(request, (err, response) => {
       let i: number, r: browse_service.BrowseResult;
-      if (err) {
-        return callback(err, null, response);
+      if (err || !response) {
+        return callback(err, undefined, response);
       }
 
       assert(response instanceof browse_service.BrowseNextResponse);
@@ -446,10 +443,10 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         continuationPoints,
         releaseContinuationPoints,
         (err, results, diagnosticInfos) => {
-          if (err) {
+          if (err || !results) {
             rej(err);
           } else {
-            res({ results, diagnosticInfos });
+            res({ results, diagnosticInfos: diagnosticInfos! });
           }
         }
       );
@@ -601,7 +598,9 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res({ value, diagnosticInfos });
+          res({ value, diagnosticInfos } as
+            | { value: DataValue; diagnosticInfos: DiagnosticInfo }
+            | { value: DataValue[]; diagnosticInfos: DiagnosticInfo[] });
         }
       });
     });
@@ -668,11 +667,15 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     });
 
     assert((nodes as any[]).length === request.nodesToRead.length);
-    this.performMessageTransaction(
+    this.performMessageTransaction<historizing_service.HistoryReadResponse>(
       request,
-      (err, response: historizing_service.HistoryReadResponse) => {
+      (err, response) => {
         if (err) {
           return callback(err);
+        }
+
+        if (!response) {
+          throw new Error('internal error');
         }
 
         if (
@@ -682,7 +685,6 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
           return callback(new Error(response.responseHeader.serviceResult.toString()));
         }
 
-        assert(response instanceof historizing_service.HistoryReadResponse);
         assert((nodes as any[]).length === response.results.length);
 
         (callback as ResponseCallback<historizing_service.HistoryReadResult[], DiagnosticInfo[]>)(
@@ -784,12 +786,20 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     this.readHistoryValue(nodes as string[], details, (error, value, diagnosticInfos) => {
       if (isArr) {
         (
-          callback as ResponseCallback<historizing_service.HistoryReadRawResult[], DiagnosticInfo[]>
-        )(error, value as historizing_service.HistoryReadRawResult[], diagnosticInfos);
+          callback as ResponseCallback<
+            historizing_service.HistoryReadRawResult[],
+            DiagnosticInfo[] | undefined
+          >
+        )(error as null, value as historizing_service.HistoryReadRawResult[], diagnosticInfos);
       } else {
-        (callback as ResponseCallback<historizing_service.HistoryReadRawResult, DiagnosticInfo>)(
-          error,
-          value?.[0],
+        (
+          callback as ResponseCallback<
+            historizing_service.HistoryReadRawResult,
+            DiagnosticInfo | undefined
+          >
+        )(
+          error as null,
+          value?.[0] as historizing_service.HistoryReadRawResult,
           diagnosticInfos?.[0]
         );
       }
@@ -941,11 +951,16 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       nodesToWrite: <write_service.WriteValue[]>nodesToWrite,
     });
 
-    this.performMessageTransaction(request, (err, response: write_service.WriteResponse) => {
+    this.performMessageTransaction<write_service.WriteResponse>(request, (err, response) => {
       /* istanbul ignore next */
       if (err) {
-        return (callback as ResponseCallback<any, any>)(err, response);
+        return callback(err, response as undefined);
       }
+
+      if (!response) {
+        throw new Error('internal error');
+      }
+
       if (
         response.responseHeader.serviceResult &&
         response.responseHeader.serviceResult.isNot(StatusCodes.Good)
@@ -971,7 +986,8 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (err) {
           rej(err);
         } else {
-          res(status);
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+          res(status!);
         }
       });
     });
@@ -1004,15 +1020,15 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         value: new DataValue({ value: value }),
       })
     );
-    this.write(nodesToWrite, (err: Error | null, statusCodes: StatusCode[], diagnosticInfos) => {
+    this.write(nodesToWrite, (err, statusCodes, diagnosticInfos) => {
       /* istanbul ignore next */
       if (err) {
         return callback(err);
       }
 
-      assert(statusCodes.length === 1);
+      assert(statusCodes!.length === 1);
       const diagnosticInfo = diagnosticInfos ? diagnosticInfos[0] : undefined;
-      callback(null, statusCodes[0], diagnosticInfo);
+      callback(null, statusCodes![0], diagnosticInfo);
     });
   }
   writeSingleNodeP(
@@ -1021,10 +1037,10 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   ): Promise<{ status: StatusCode; diagnosticInfos?: DiagnosticInfo }> {
     return new Promise((res, rej) => {
       this.writeSingleNode(nodeId, value, (err, status, diagnosticInfos) => {
-        if (err) {
+        if (err || !status) {
           rej(err);
         } else {
-          res({ status: status, diagnosticInfos });
+          res({ status, diagnosticInfos });
         }
       });
     });
@@ -1119,8 +1135,8 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       }
     }
 
-    this.read(nodesToRead, 0, (err: Error, dataValues: DataValue[] /* , diagnosticInfos */) => {
-      if (err) {
+    this.read(nodesToRead, 0, (err, dataValues /* , diagnosticInfos */) => {
+      if (err || !dataValues) {
         return callback(err);
       }
       const results = this.composeResult(nodes as NodeId[], nodesToRead, dataValues);
@@ -1238,9 +1254,9 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       timestampsToReturn: read_service.TimestampsToReturn.Both,
     });
 
-    this.performMessageTransaction(request, (err, response: read_service.ReadResponse) => {
+    this.performMessageTransaction(request, (err, response) => {
       /* istanbul ignore next */
-      if (err) {
+      if (err || !response) {
         return callback(err, response);
       }
       assert(response instanceof read_service.ReadResponse);
@@ -1289,7 +1305,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
   protected _defaultRequest<T>(
     SomeRequest: new (options: any) => any,
-    SomeResponse: new () => any,
+    SomeResponse: new () => T,
     options: any,
     callback: ResponseCallback<T>
   ) {
@@ -1433,7 +1449,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   ): Promise<subscription_service.DeleteSubscriptionsResponse> {
     return new Promise((res, rej) => {
       this.deleteSubscriptions(options, (err, response) => {
-        if (err) {
+        if (err || !response) {
           rej(err);
         } else {
           res(response);
@@ -1467,7 +1483,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   ): Promise<subscription_service.TransferSubscriptionsResponse> {
     return new Promise((res, rej) => {
       this.transferSubscriptions(options, (err, response) => {
-        if (err) {
+        if (err || !response) {
           rej(err);
         } else {
           res(response);
@@ -1487,7 +1503,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
    */
   public createMonitoredItems(
     options: ICreateMonitoredItemsRequest,
-    callback: (err: Error | null, response: CreateMonitoredItemsResponse) => void
+    callback: ResponseCallback<CreateMonitoredItemsResponse>
   ) {
     this._defaultRequest(
       subscription_service.CreateMonitoredItemsRequest,
@@ -1501,7 +1517,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   ): Promise<CreateMonitoredItemsResponse> {
     return new Promise((res, rej) => {
       this.createMonitoredItems(options, (err, response) => {
-        if (err) {
+        if (err || !response) {
           rej(err);
         } else {
           res(response);
@@ -1521,7 +1537,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
    */
   public modifyMonitoredItems(
     options: IModifyMonitoredItemsRequest,
-    callback: (err: Error | null, response: ModifyMonitoredItemsResponse) => void
+    callback: ResponseCallback<ModifyMonitoredItemsResponse>
   ) {
     this._defaultRequest(
       subscription_service.ModifyMonitoredItemsRequest,
@@ -1535,7 +1551,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   ): Promise<ModifyMonitoredItemsResponse> {
     return new Promise((res, rej) => {
       this.modifyMonitoredItems(options, (err, response) => {
-        if (err) {
+        if (err || !response) {
           rej(err);
         } else {
           res(response);
@@ -1569,7 +1585,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   ): Promise<subscription_service.ModifySubscriptionResponse> {
     return new Promise((res, rej) => {
       this.modifySubscription(options, (err, response) => {
-        if (err) {
+        if (err || !response) {
           rej(err);
         } else {
           res(response);
@@ -1594,7 +1610,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   ): Promise<subscription_service.SetMonitoringModeResponse> {
     return new Promise((res, rej) => {
       this.setMonitoringMode(options, (err, response) => {
-        if (err) {
+        if (err || !response) {
           rej(err);
         } else {
           res(response);
@@ -1612,10 +1628,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
    * @param callback.err {Error|null}   - the Error if the async method has failed
    * @param callback.response {PublishResponse} - the response
    */
-  public publish(
-    options: IPublishRequest,
-    callback: (err: Error | null, response: PublishResponse) => void
-  ) {
+  public publish(options: IPublishRequest, callback: ResponseCallback<PublishResponse>) {
     this._defaultRequest(
       subscription_service.PublishRequest,
       subscription_service.PublishResponse,
@@ -1626,7 +1639,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   public publishP(options: IPublishRequest): Promise<PublishResponse> {
     return new Promise((res, rej) => {
       this.publish(options, (err, response) => {
-        if (err) {
+        if (err || !response) {
           rej(err);
         } else {
           res(response);
@@ -1644,10 +1657,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
    * @param callback.err {Error|null}   - the Error if the async method has failed
    * @param callback.response {RepublishResponse} - the response
    */
-  public republish(
-    options: IRepublishRequest,
-    callback: (err: Error | null, response: RepublishResponse) => void
-  ) {
+  public republish(options: IRepublishRequest, callback: ResponseCallback<RepublishResponse>) {
     this._defaultRequest(
       subscription_service.RepublishRequest,
       subscription_service.RepublishResponse,
@@ -1658,7 +1668,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   public republishP(options: IRepublishRequest): Promise<RepublishResponse> {
     return new Promise((res, rej) => {
       this.republish(options, (err, response) => {
-        if (err) {
+        if (err || !response) {
           rej(err);
         } else {
           res(response);
@@ -1728,8 +1738,8 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       subscription_service.SetPublishingModeRequest,
       subscription_service.SetPublishingModeResponse,
       options,
-      function (err: Error, response: subscription_service.SetPublishingModeResponse) {
-        if (err) {
+      function (err, response) {
+        if (err || !response) {
           return callback(err);
         }
         callback(err, response.results);
@@ -1742,7 +1752,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   ): Promise<StatusCode[]> {
     return new Promise((res, rej) => {
       this.setPublishingMode(publishingEnabled, subscriptionIds, (err, response) => {
-        if (err) {
+        if (err || !response) {
           rej(err);
         } else {
           res(response);
@@ -1786,21 +1796,24 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       browsePaths: browsePath,
     });
 
-    this.performMessageTransaction(request, (err, response) => {
-      /* istanbul ignore next */
-      if (err) {
-        return callback(err, response);
-      }
+    this.performMessageTransaction(
+      request,
+      (err, response?: translate_service.TranslateBrowsePathsToNodeIdsResponse) => {
+        /* istanbul ignore next */
+        if (err) {
+          return callback(err, response);
+        }
 
-      if (
-        !response ||
-        !(response instanceof translate_service.TranslateBrowsePathsToNodeIdsResponse)
-      ) {
-        return callback(new Error('Internal Error'));
-      }
+        if (
+          !response ||
+          !(response instanceof translate_service.TranslateBrowsePathsToNodeIdsResponse)
+        ) {
+          return callback(new Error('Internal Error'));
+        }
 
-      callback(null, has_single_element ? response.results[0] : response.results);
-    });
+        callback(null, has_single_element ? response.results[0] : response.results);
+      }
+    );
   }
   public translateBrowsePathP(
     browsePath: translate_service.BrowsePath[]
@@ -1813,7 +1826,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   ): Promise<translate_service.BrowsePathResult | translate_service.BrowsePathResult[]> {
     return new Promise((res, rej) => {
       this.translateBrowsePath(browsePath as any, (err, response) => {
-        if (err) {
+        if (err || !response) {
           rej(err);
         } else {
           res(response);
@@ -1833,21 +1846,27 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     );
   }
 
-  public performMessageTransaction(
+  public performMessageTransaction<T = any>(
     request: IEncodable & { requestHeader: RequestHeader },
-    callback: ResponseCallback<any>
+    callback: ResponseCallback<T>
   ) {
     assert('function' === typeof callback);
-    assert(this._client);
 
-    if (!this._client || !this.isChannelValid()) {
+    if (!this._client) {
+      // session may have been closed by user ... but is still in used !!
+      return callback(
+        new Error('Session has been closed and should not be used to perform a transaction anymore')
+      );
+    }
+
+    if (!this.isChannelValid()) {
       // the secure channel is broken, may be the server has crashed or the network cable has been disconnected
       // for a long time
       // we may need to queue this transaction, as a secure token may be being reprocessed
-      debugLog('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ');
-      return callback(new Error('Invalid Channel '));
+      debugLog('!!! Performing transaction on invalid channel !!! ', request.constructor.name);
+      return callback(new Error('Invalid Channel BadConnectionClosed'));
     }
-    request.requestHeader.authenticationToken = this.authenticationToken;
+    request.requestHeader.authenticationToken = this.authenticationToken!;
 
     if (this._namespaceArray) {
       // add the namespace array for resolving namespace of extension objects
@@ -1856,12 +1875,12 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
     this.lastRequestSentTime = Date.now();
 
-    this._client.performMessageTransaction(request, (err: Error, response: OpcUaResponse) => {
+    this._client.performMessageTransaction<OpcUaResponse>(request, (err, response) => {
       this._lastResponseReceivedTime = Date.now();
 
       /* istanbul ignore next */
-      if (err) {
-        return callback(err, response);
+      if (err || !response) {
+        return callback(err, response as T);
       }
 
       if (
@@ -1875,7 +1894,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             request.constructor.name
         );
       }
-      callback(err, response);
+      callback(err, response as T);
     });
   }
 
@@ -2012,10 +2031,10 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   ): Promise<{ result: CallMethodResult[]; diagnosticInfo?: any }> {
     return new Promise((res, rej) => {
       this.call(methodsToCall, (err, result, diagnosticInfo) => {
-        if (err) {
+        if (err || !result) {
           rej(err);
         } else {
-          res({ result: result, diagnosticInfo });
+          res({ result, diagnosticInfo });
         }
       });
     });
@@ -2120,7 +2139,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     // Xx console.log("xxxx browseDescription", util.inspect(browseDescription, {colors: true, depth: 10}));
     this.browse(browseDescription, (err, browseResult) => {
       /* istanbul ignore next */
-      if (err) {
+      if (err || !browseResult) {
         return callback(err);
       }
       browseResult[0].references = browseResult[0].references || [];
@@ -2176,9 +2195,9 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         return callback(null, inputArguments, outputArguments);
       }
       // now read the variable
-      this.read(nodesToRead, 0, (error: Error | null, dataValues: DataValue[]) => {
+      this.read(nodesToRead, 0, (error, dataValues) => {
         /* istanbul ignore next */
-        if (error) {
+        if (error || !dataValues) {
           return callback(error);
         }
 
@@ -2199,9 +2218,9 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       nodesToRegister: (<any>nodesToRegister).map(resolveNodeId),
     });
 
-    this.performMessageTransaction(request, (err, response: RegisterNodesResponse) => {
+    this.performMessageTransaction(request, (err, response?: RegisterNodesResponse) => {
       /* istanbul ignore next */
-      if (err) {
+      if (err || !response) {
         return callback(err);
       }
       assert(response instanceof RegisterNodesResponse);
@@ -2211,7 +2230,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   public registerNodesP(nodesToRegister: NodeId[] | string[]): Promise<NodeId[]> {
     return new Promise((res, rej) => {
       this.registerNodes(nodesToRegister, (err, response) => {
-        if (err) {
+        if (err || !response) {
           rej(err);
         } else {
           res(response);
@@ -2227,9 +2246,9 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
       nodesToUnregister: (<any>nodesToUnregister).map(resolveNodeId),
     });
 
-    this.performMessageTransaction(request, function (err, response: UnregisterNodesResponse) {
+    this.performMessageTransaction(request, function (err, response?: UnregisterNodesResponse) {
       /* istanbul ignore next */
-      if (err) {
+      if (err || !response) {
         return callback(err);
       }
       assert(response instanceof UnregisterNodesResponse);
@@ -2264,24 +2283,21 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
     const request = new query_service.QueryFirstRequest(queryFirstRequest);
 
-    this.performMessageTransaction(
-      request,
-      (err: Error, response: query_service.QueryFirstResponse) => {
-        /* istanbul ignore next */
-        if (err) {
-          return callback(err);
-        }
-        assert(response instanceof query_service.QueryFirstResponse);
-        callback(null, response);
+    this.performMessageTransaction(request, (err, response?: query_service.QueryFirstResponse) => {
+      /* istanbul ignore next */
+      if (err || !response) {
+        return callback(err);
       }
-    );
+      assert(response instanceof query_service.QueryFirstResponse);
+      callback(null, response);
+    });
   }
   public queryFirstP(
     queryFirstRequest: query_service.IQueryFirstRequest
   ): Promise<query_service.QueryFirstResponse> {
     return new Promise((res, rej) => {
       this.queryFirst(queryFirstRequest, (err, response) => {
-        if (err) {
+        if (err || !response) {
           rej(err);
         } else {
           res(response);
@@ -2331,9 +2347,10 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     let str = '';
     str += '\n name..................... ' + this.name;
     str += '\n sessionId................ ' + this.sessionId.toString();
-    str += '\n authenticationToken...... ' + this.authenticationToken.toString();
+    str += '\n authenticationToken...... ' + this.authenticationToken?.toString();
     str += '\n timeout.................. ' + this.timeout + 'ms';
-    str += '\n serverNonce.............. ' + buf2hex(this.serverNonce?.buffer);
+    str +=
+      '\n serverNonce.............. ' + (this.serverNonce ? buf2hex(this.serverNonce?.buffer) : '');
     str +=
       '\n serverCertificate........ ' +
       (this.serverCertificate ? buf2base64(this.serverCertificate.buffer) : '');
@@ -2384,8 +2401,8 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         attributeId: AttributeIds.DataType,
       }),
     ];
-    session.read(nodes_to_read, 0, (err: Error, dataValues?: DataValue[]) => {
-      if (err) {
+    session.read(nodes_to_read, 0, (err, dataValues?: DataValue[]) => {
+      if (err || !dataValues) {
         return callback(err);
       }
       if (!dataValues) {
@@ -2398,7 +2415,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
           new Error('cannot read DataType Attribute ' + dataValue.statusCode.toString())
         );
       }
-      const dataTypeId: NodeId = dataValue.value.value;
+      const dataTypeId: NodeId = dataValue.value?.value;
       assert(dataTypeId instanceof NodeId);
       findBasicDataType(session, dataTypeId, callback);
     });
@@ -2406,7 +2423,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   public getBuiltInDataTypeP(nodeId: NodeId): Promise<DataType> {
     return new Promise((res, rej) => {
       this.getBuiltInDataType(nodeId, (err, dataType) => {
-        if (err) {
+        if (err || !dataType) {
           rej(err);
         } else {
           res(dataType);
@@ -2436,8 +2453,8 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         attributeId: AttributeIds.Value,
       }),
       0,
-      (err: Error, dataValue: DataValue) => {
-        if (err) {
+      (err, dataValue?: DataValue) => {
+        if (err || !dataValue) {
           return callback(err);
         }
 
@@ -2448,8 +2465,8 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         if (dataValue.statusCode && dataValue.statusCode !== StatusCodes.Good) {
           return callback(new Error('readNamespaceArray : ' + dataValue.statusCode.toString()));
         }
-        assert(dataValue.value.value instanceof Array);
-        this._namespaceArray = dataValue.value.value; // keep a cache
+        assert(dataValue.value?.value instanceof Array);
+        this._namespaceArray = dataValue.value?.value; // keep a cache
         callback(null, this._namespaceArray);
       }
     );
@@ -2457,7 +2474,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   public readNamespaceArrayP(): Promise<string[]> {
     return new Promise((res, rej) => {
       this.readNamespaceArray((err, nsarray) => {
-        if (err) {
+        if (err || !nsarray) {
           rej(err);
         } else {
           res(nsarray);
@@ -2468,7 +2485,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
 
   public getNamespaceIndex(namespaceUri: string) {
     assert(this._namespaceArray, 'please make sure that readNamespaceArray has been called');
-    return this._namespaceArray.indexOf(namespaceUri);
+    return this._namespaceArray?.indexOf(namespaceUri);
   }
 
   /**

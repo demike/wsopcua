@@ -11,7 +11,6 @@ export type IQueryDataDescription = Partial<QueryDataDescription>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16121}
 */
 
 export class QueryDataDescription {
@@ -19,7 +18,7 @@ export class QueryDataDescription {
   attributeId: ec.UInt32;
   indexRange: string | null;
 
- constructor( options?: IQueryDataDescription) {
+ constructor( options?: IQueryDataDescription | null) {
   options = options || {};
   this.relativePath = (options.relativePath != null) ? options.relativePath : new RelativePath();
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;

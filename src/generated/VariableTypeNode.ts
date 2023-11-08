@@ -3,11 +3,11 @@
  do not modify, changes will be overwritten
 */
 
-import {Variant} from '../variant';
+import { Variant } from '../variant';
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
-import {TypeNode} from './TypeNode';
-import {ITypeNode} from './TypeNode';
+import { DataStream } from '../basic-types/DataStream';
+import { TypeNode } from './TypeNode';
+import { ITypeNode } from './TypeNode';
 
 export interface IVariableTypeNode extends ITypeNode {
   value?: Variant;
@@ -29,87 +29,81 @@ export class VariableTypeNode extends TypeNode {
   arrayDimensions: ec.UInt32[];
   isAbstract: boolean;
 
- constructor( options?: IVariableTypeNode) {
-  options = options || {};
-  super(options);
-  this.value = (options.value != null) ? options.value : new Variant();
-  this.dataType = (options.dataType != null) ? options.dataType : ec.NodeId.NullNodeId;
-  this.valueRank = (options.valueRank != null) ? options.valueRank : 0;
-  this.arrayDimensions = (options.arrayDimensions != null) ? options.arrayDimensions : [];
-  this.isAbstract = (options.isAbstract != null) ? options.isAbstract : false;
-
- }
-
-
- encode( out: DataStream) {
-  super.encode(out);
-  this.value.encode(out);
-  ec.encodeNodeId(this.dataType, out);
-  ec.encodeInt32(this.valueRank, out);
-  ec.encodeArray(this.arrayDimensions, out, ec.encodeUInt32);
-  ec.encodeBoolean(this.isAbstract, out);
-
- }
-
-
- decode( inp: DataStream) {
-  super.decode(inp);
-  this.value.decode(inp);
-  this.dataType = ec.decodeNodeId(inp);
-  this.valueRank = ec.decodeInt32(inp);
-  this.arrayDimensions = ec.decodeArray(inp, ec.decodeUInt32);
-  this.isAbstract = ec.decodeBoolean(inp);
-
- }
-
-
- toJSON() {
-  const out: any = super.toJSON();
-  out.Value = this.value;
-  out.DataType = ec.jsonEncodeNodeId(this.dataType);
-  out.ValueRank = this.valueRank;
-  out.ArrayDimensions = this.arrayDimensions;
-  out.IsAbstract = this.isAbstract;
- return out;
- }
-
-
- fromJSON( inp: any) {
-if (!inp) { return; }
-  super.fromJSON(inp);
-  this.value.fromJSON(inp.Value);
-  this.dataType = ec.jsonDecodeNodeId(inp.DataType);
-  this.valueRank = inp.ValueRank;
-  this.arrayDimensions = inp.ArrayDimensions;
-  this.isAbstract = inp.IsAbstract;
-
- }
-
-
- clone( target?: VariableTypeNode): VariableTypeNode {
-  if (!target) {
-   target = new VariableTypeNode();
+  constructor(options?: IVariableTypeNode) {
+    options = options || {};
+    super(options);
+    this.value = options.value != null ? options.value : new Variant();
+    this.dataType = options.dataType != null ? options.dataType : ec.NodeId.NullNodeId;
+    this.valueRank = options.valueRank != null ? options.valueRank : 0;
+    this.arrayDimensions = options.arrayDimensions != null ? options.arrayDimensions : [];
+    this.isAbstract = options.isAbstract != null ? options.isAbstract : false;
   }
-  super.clone(target);
-  if (this.value) { target.value = this.value.clone(); }
-  target.dataType = this.dataType;
-  target.valueRank = this.valueRank;
-  target.arrayDimensions = ec.cloneArray(this.arrayDimensions);
-  target.isAbstract = this.isAbstract;
-  return target;
- }
 
+  encode(out: DataStream) {
+    super.encode(out);
+    this.value.encode(out);
+    ec.encodeNodeId(this.dataType, out);
+    ec.encodeInt32(this.valueRank, out);
+    ec.encodeArray(this.arrayDimensions, out, ec.encodeUInt32);
+    ec.encodeBoolean(this.isAbstract, out);
+  }
 
+  decode(inp: DataStream) {
+    super.decode(inp);
+    this.value.decode(inp);
+    this.dataType = ec.decodeNodeId(inp);
+    this.valueRank = ec.decodeInt32(inp);
+    this.arrayDimensions = ec.decodeArray(inp, ec.decodeUInt32) ?? [];
+    this.isAbstract = ec.decodeBoolean(inp);
+  }
+
+  toJSON() {
+    const out: any = super.toJSON();
+    out.Value = this.value;
+    out.DataType = ec.jsonEncodeNodeId(this.dataType);
+    out.ValueRank = this.valueRank;
+    out.ArrayDimensions = this.arrayDimensions;
+    out.IsAbstract = this.isAbstract;
+    return out;
+  }
+
+  fromJSON(inp: any) {
+    if (!inp) {
+      return;
+    }
+    super.fromJSON(inp);
+    this.value.fromJSON(inp.Value);
+    this.dataType = ec.jsonDecodeNodeId(inp.DataType);
+    this.valueRank = inp.ValueRank;
+    this.arrayDimensions = inp.ArrayDimensions;
+    this.isAbstract = inp.IsAbstract;
+  }
+
+  clone(target?: VariableTypeNode): VariableTypeNode {
+    if (!target) {
+      target = new VariableTypeNode();
+    }
+    super.clone(target);
+    if (this.value) {
+      target.value = this.value.clone();
+    }
+    target.dataType = this.dataType;
+    target.valueRank = this.valueRank;
+    target.arrayDimensions = ec.cloneArray(this.arrayDimensions);
+    target.isAbstract = this.isAbstract;
+    return target;
+  }
 }
-export function decodeVariableTypeNode( inp: DataStream): VariableTypeNode {
+export function decodeVariableTypeNode(inp: DataStream): VariableTypeNode {
   const obj = new VariableTypeNode();
-   obj.decode(inp);
-   return obj;
+  obj.decode(inp);
+  return obj;
+}
 
- }
-
-
-
-import {register_class_definition} from '../factory/factories_factories';
+import { register_class_definition } from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('VariableTypeNode', VariableTypeNode, new ExpandedNodeId(2 /*numeric id*/, 270, 0));
+register_class_definition(
+  'VariableTypeNode',
+  VariableTypeNode,
+  new ExpandedNodeId(2 /*numeric id*/, 270, 0)
+);

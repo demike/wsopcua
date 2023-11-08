@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15911}
 */
 
 export enum DiagnosticsLevel {
@@ -16,6 +15,7 @@ export enum DiagnosticsLevel {
   Info = 2,
   Log = 3,
   Debug = 4,
+  Invalid = 4294967295,
 }
 
 export function encodeDiagnosticsLevel( data: DiagnosticsLevel,  out: DataStream) {

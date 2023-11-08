@@ -243,7 +243,8 @@ function writeAlgorithmIdentifier(writer: Asn1Writer, identiferName: string) {
 
 function writeSignatureValue(writer: Asn1Writer, signature: SignatureValue | Uint8Array) {
   if (typeof signature === 'string') {
-    signature = new Uint8Array(signature.match(/.{1,2}/g).map((str) => parseInt(str, 16)));
+    const val = signature.match(/.{1,2}/g)?.map((str) => parseInt(str, 16));
+    signature = new Uint8Array(val || []);
   }
   return writer.writeBitString(signature);
 }

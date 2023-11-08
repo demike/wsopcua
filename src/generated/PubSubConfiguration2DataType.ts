@@ -24,19 +24,18 @@ export type IPubSubConfiguration2DataType = Partial<PubSubConfiguration2DataType
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16816}
 */
 
 export class PubSubConfiguration2DataType extends PubSubConfigurationDataType {
-  subscribedDataSets: StandaloneSubscribedDataSetDataType[];
-  dataSetClasses: DataSetMetaDataType[];
-  defaultSecurityKeyServices: EndpointDescription[];
-  securityGroups: SecurityGroupDataType[];
-  pubSubKeyPushTargets: PubSubKeyPushTargetDataType[];
+  subscribedDataSets: (StandaloneSubscribedDataSetDataType)[];
+  dataSetClasses: (DataSetMetaDataType)[];
+  defaultSecurityKeyServices: (EndpointDescription)[];
+  securityGroups: (SecurityGroupDataType)[];
+  pubSubKeyPushTargets: (PubSubKeyPushTargetDataType)[];
   configurationVersion: ec.UInt32;
-  configurationProperties: KeyValuePair[];
+  configurationProperties: (KeyValuePair)[];
 
- constructor( options?: IPubSubConfiguration2DataType) {
+ constructor( options?: IPubSubConfiguration2DataType | null) {
   options = options || {};
   super(options);
   this.subscribedDataSets = (options.subscribedDataSets != null) ? options.subscribedDataSets : [];

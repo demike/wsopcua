@@ -11,13 +11,12 @@ export type ISessionSecurityDiagnosticsDataType = Partial<SessionSecurityDiagnos
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16237}
 */
 
 export class SessionSecurityDiagnosticsDataType {
   sessionId: ec.NodeId;
   clientUserIdOfSession: string | null;
-  clientUserIdHistory: string[];
+  clientUserIdHistory: (string | null)[];
   authenticationMechanism: string | null;
   encoding: string | null;
   transportProtocol: string | null;
@@ -25,7 +24,7 @@ export class SessionSecurityDiagnosticsDataType {
   securityPolicyUri: string | null;
   clientCertificate: Uint8Array | null;
 
- constructor( options?: ISessionSecurityDiagnosticsDataType) {
+ constructor( options?: ISessionSecurityDiagnosticsDataType | null) {
   options = options || {};
   this.sessionId = (options.sessionId != null) ? options.sessionId : ec.NodeId.NullNodeId;
   this.clientUserIdOfSession = (options.clientUserIdOfSession != null) ? options.clientUserIdOfSession : null;
@@ -33,7 +32,7 @@ export class SessionSecurityDiagnosticsDataType {
   this.authenticationMechanism = (options.authenticationMechanism != null) ? options.authenticationMechanism : null;
   this.encoding = (options.encoding != null) ? options.encoding : null;
   this.transportProtocol = (options.transportProtocol != null) ? options.transportProtocol : null;
-  this.securityMode = (options.securityMode != null) ? options.securityMode : null;
+  this.securityMode = (options.securityMode != null) ? options.securityMode : MessageSecurityMode.Invalid;
   this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;
   this.clientCertificate = (options.clientCertificate != null) ? options.clientCertificate : null;
 

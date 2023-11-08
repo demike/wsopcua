@@ -10,7 +10,6 @@ export type IDiagnosticInfo = Partial<DiagnosticInfo>;
 
 /**
 A recursive structure containing diagnostic information associated with a status code.
- * {@link https://reference.opcfoundation.org/nodesets/4/15337}
 */
 
 export class DiagnosticInfo {
@@ -18,11 +17,11 @@ export class DiagnosticInfo {
   namespaceURI?: ec.Int32;
   locale?: ec.Int32;
   localizedText?: ec.Int32;
-  additionalInfo?: string;
+  additionalInfo?: string | null;
   innerStatusCode?: ec.StatusCode;
   innerDiagnosticInfo?: DiagnosticInfo;
 
- constructor( options?: IDiagnosticInfo) {
+ constructor( options?: IDiagnosticInfo | null) {
   options = options || {};
   this.symbolicId = (options.symbolicId != null) ? options.symbolicId : undefined;
   this.namespaceURI = (options.namespaceURI != null) ? options.namespaceURI : undefined;
@@ -126,7 +125,8 @@ if (!inp) { return; }
    this.innerStatusCode = ec.jsonDecodeStatusCode(inp.InnerStatusCode);
   }
   if(inp.InnerDiagnosticInfo) {
-   this.innerDiagnosticInfo.fromJSON(inp.InnerDiagnosticInfo);
+     this.innerDiagnosticInfo ??= new DiagnosticInfo(); 
+  this.innerDiagnosticInfo.fromJSON(inp.InnerDiagnosticInfo);
   }
 
  }

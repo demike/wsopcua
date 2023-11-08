@@ -11,14 +11,13 @@ export type IMonitoredItemNotification = Partial<MonitoredItemNotification>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16212}
 */
 
 export class MonitoredItemNotification {
   clientHandle: ec.UInt32;
   value: DataValue;
 
- constructor( options?: IMonitoredItemNotification) {
+ constructor( options?: IMonitoredItemNotification | null) {
   options = options || {};
   this.clientHandle = (options.clientHandle != null) ? options.clientHandle : 0;
   this.value = (options.value != null) ? options.value : new DataValue();

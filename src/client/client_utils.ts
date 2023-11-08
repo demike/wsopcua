@@ -57,26 +57,28 @@ function readVariableProperties(
   }
 
   session.translateBrowsePath(browsePaths, function (err, browsePathResults) {
-    if (err) {
+    if (err || !browsePathResults) {
       return callback(err);
     }
+
+    const results = browsePathResults;
     // xx console.log("xxxx ",browsePathResults.toString());
 
     const actions: ((readResult: DataValue) => void)[] = [];
     const nodesToRead: ReadValueId[] = [];
 
     function processProperty(browsePathIndex: number, propertyName: string) {
-      const statusCode = browsePathResults[browsePathIndex].statusCode;
+      const statusCode = results[browsePathIndex].statusCode;
       if (!statusCode || statusCode === StatusCodes.Good) {
         nodesToRead.push(
           new ReadValueId({
-            nodeId: browsePathResults[browsePathIndex].targets[0].targetId,
+            nodeId: results[browsePathIndex].targets[0].targetId,
             attributeId: AttributeIds.Value,
           })
         );
         actions.push(function (readResult: DataValue) {
           // to do assert is
-          (<any>varObj)[propertyName] = readResult.value.value;
+          (<any>varObj)[propertyName] = readResult.value?.value;
         });
       }
     }
@@ -87,8 +89,8 @@ function readVariableProperties(
       ii++;
     }
 
-    session.read(nodesToRead, 0, function (err1: Error, dataValues: DataValue[]) {
-      if (err1) {
+    session.read(nodesToRead, 0, function (err1, dataValues) {
+      if (err1 || !dataValues) {
         return callback(err1);
       }
       dataValues.forEach(function (result, index) {
@@ -179,7 +181,11 @@ export function readUAAnalogItem(
     const nodesToRead: ReadValueId[] = [];
 
     function processProperty(browsePathIndex: number, propertyName: string) {
-      const statusCode = browsePathResults[browsePathIndex].statusCode;
+      const browsePathResult = browsePathResults?.[browsePathIndex];
+      if (!browsePathResult) {
+        throw new Error('internal error');
+      }
+      const statusCode = browsePathResult.statusCode;
       if (!statusCode || statusCode === StatusCodes.Good) {
         nodesToRead.push(
           new ReadValueId({
@@ -189,7 +195,10 @@ export function readUAAnalogItem(
         );
         actions.push(function (readResult) {
           // to do assert is
-          analogItemData[propertyName] = readResult.value.value;
+          const variant = readResult.value;
+          if (variant) {
+            analogItemData[propertyName] = variant.value;
+          }
         });
       }
     }
@@ -200,8 +209,8 @@ export function readUAAnalogItem(
     processProperty(3, 'valuePrecision');
     processProperty(4, 'definition');
 
-    session.read(nodesToRead, 0, function (err1: Error, dataValues: DataValue[]) {
-      if (err1) {
+    session.read(nodesToRead, 0, function (err1, dataValues) {
+      if (err1 || !dataValues) {
         return callback(err1);
       }
       dataValues.forEach(function (result, index) {
@@ -223,16 +232,12 @@ export function readUAAnalogItem(
  */
 export function perform_findServers(
   discovery_server_endpointUrl: string,
-  callback: (
-    err: Error,
-    servers: ApplicationDescription[],
-    endpoints: EndpointDescription[]
-  ) => void
+  callback: ResponseCallback<ApplicationDescription[], EndpointDescription[]>
 ) {
   const client = new OPCUAClientBase({});
 
-  let servers: ApplicationDescription[] = [];
-  let endpoints: EndpointDescription[] = [];
+  let servers: ApplicationDescription[] | undefined = [];
+  let endpoints: EndpointDescription[] | undefined = [];
 
   async_series(
     [
@@ -252,9 +257,9 @@ export function perform_findServers(
         });
       },
     ],
-    function (err: Error) {
+    function (err) {
       client.disconnect(function () {
-        callback(err, servers, endpoints);
+        callback(err || null, servers, endpoints);
       });
     }
   );
@@ -290,7 +295,7 @@ export function perform_findServersOnNetwork(
 
 export function readHistoryServerCapabilities(
   the_session: ClientSession,
-  callback: (err?: Error, data?: { [key: string]: string }) => void
+  callback: ResponseCallback<{ [key: string]: string }>
 ) {
   // display HistoryCapabilities of server
   const browsePath = makeBrowsePath(
@@ -298,12 +303,12 @@ export function readHistoryServerCapabilities(
     '/Server/ServerCapabilities.HistoryServerCapabilities'
   );
 
-  the_session.translateBrowsePath(browsePath, function (err, result: BrowsePathResult) {
-    if (err) {
+  the_session.translateBrowsePath(browsePath, function (err, result) {
+    if (err || !result) {
       return callback(err);
     }
     if (result.statusCode.isNot(StatusCodes.Good)) {
-      return callback();
+      return callback(null);
     }
     const historyServerCapabilitiesNodeId = result.targets[0].targetId;
     // (should be ns=0;i=11192)
@@ -339,9 +344,9 @@ export function readHistoryServerCapabilities(
       return makeBrowsePath(historyServerCapabilitiesNodeId, '.' + prop);
     });
 
-    the_session.translateBrowsePath(browsePaths, function (err1, results: BrowsePathResult[]) {
-      if (err1) {
-        return callback();
+    the_session.translateBrowsePath(browsePaths, function (err1, results) {
+      if (err1 || !results) {
+        return callback(null);
       }
       const nodeIds = results.map(function (result1) {
         return !result1.statusCode || result1.statusCode === StatusCodes.Good
@@ -354,8 +359,8 @@ export function readHistoryServerCapabilities(
       });
 
       const data = {};
-      the_session.read(nodesToRead, 0, function (err2: Error, dataValues: DataValue[]) {
-        if (err2) {
+      the_session.read(nodesToRead, 0, function (err2, dataValues) {
+        if (err2 || !dataValues) {
           return callback(err2);
         }
 
@@ -363,7 +368,7 @@ export function readHistoryServerCapabilities(
           // xx console.log(properties[i] , "=",
           // xx     dataValues[i].value ? dataValues[i].value.toString() :"<null>" + dataValues[i].statusCode.toString());
           const propName = lowerFirstLetter(properties[i]);
-          (<any>data)[propName] = dataValues[i].value.value;
+          (<any>data)[propName] = dataValues[i].value?.value;
         }
         callback(null, data);
       });

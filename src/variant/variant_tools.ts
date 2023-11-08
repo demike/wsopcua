@@ -256,14 +256,15 @@ function __check_same_array(arr1?: any[], arr2?: any[]) {
   }
   return true;
 }
-export function sameVariant(v1: Variant, v2: Variant): boolean {
+export function sameVariant(v1?: Variant, v2?: Variant): boolean {
   // xx assert(v1 && v1.constructor.name === "Variant");
   if (v1 === v2) {
     return true;
   }
-  if ((!v1 && v2) || (v1 && !v2)) {
+  if (!v1 || !v2) {
     return false;
   }
+
   if (v1.arrayType !== v2.arrayType) {
     return false;
   }

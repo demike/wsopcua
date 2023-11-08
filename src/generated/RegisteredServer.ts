@@ -13,25 +13,24 @@ export type IRegisteredServer = Partial<RegisteredServer>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16039}
 */
 
 export class RegisteredServer {
   serverUri: string | null;
   productUri: string | null;
-  serverNames: LocalizedText[];
+  serverNames: (LocalizedText)[];
   serverType: ApplicationType;
   gatewayServerUri: string | null;
-  discoveryUrls: string[];
+  discoveryUrls: (string | null)[];
   semaphoreFilePath: string | null;
   isOnline: boolean;
 
- constructor( options?: IRegisteredServer) {
+ constructor( options?: IRegisteredServer | null) {
   options = options || {};
   this.serverUri = (options.serverUri != null) ? options.serverUri : null;
   this.productUri = (options.productUri != null) ? options.productUri : null;
   this.serverNames = (options.serverNames != null) ? options.serverNames : [];
-  this.serverType = (options.serverType != null) ? options.serverType : null;
+  this.serverType = (options.serverType != null) ? options.serverType : ApplicationType.Invalid;
   this.gatewayServerUri = (options.gatewayServerUri != null) ? options.gatewayServerUri : null;
   this.discoveryUrls = (options.discoveryUrls != null) ? options.discoveryUrls : [];
   this.semaphoreFilePath = (options.semaphoreFilePath != null) ? options.semaphoreFilePath : null;

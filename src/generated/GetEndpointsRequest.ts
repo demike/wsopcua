@@ -11,16 +11,15 @@ export type IGetEndpointsRequest = Partial<GetEndpointsRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16037}
 */
 
 export class GetEndpointsRequest {
   requestHeader: RequestHeader;
   endpointUrl: string | null;
-  localeIds: string[];
-  profileUris: string[];
+  localeIds: (string | null)[];
+  profileUris: (string | null)[];
 
- constructor( options?: IGetEndpointsRequest) {
+ constructor( options?: IGetEndpointsRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;

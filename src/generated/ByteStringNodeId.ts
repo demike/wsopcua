@@ -16,7 +16,7 @@ export class ByteStringNodeId {
   namespaceIndex: ec.UInt16;
   identifier: Uint8Array | null;
 
- constructor( options?: IByteStringNodeId) {
+ constructor( options?: IByteStringNodeId | null) {
   options = options || {};
   this.namespaceIndex = (options.namespaceIndex != null) ? options.namespaceIndex : 0;
   this.identifier = (options.identifier != null) ? options.identifier : null;

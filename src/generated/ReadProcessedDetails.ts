@@ -12,17 +12,16 @@ export type IReadProcessedDetails = Partial<ReadProcessedDetails>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16149}
 */
 
 export class ReadProcessedDetails extends HistoryReadDetails {
   startTime: Date;
   endTime: Date;
   processingInterval: ec.Double;
-  aggregateType: ec.NodeId[];
+  aggregateType: (ec.NodeId)[];
   aggregateConfiguration: AggregateConfiguration;
 
- constructor( options?: IReadProcessedDetails) {
+ constructor( options?: IReadProcessedDetails | null) {
   options = options || {};
   super();
   this.startTime = (options.startTime != null) ? options.startTime : new Date();

@@ -11,17 +11,16 @@ export type IHistoryReadResult = Partial<HistoryReadResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16145}
 */
 
 export class HistoryReadResult {
-  statusCode: ec.StatusCode | null;
+  statusCode: ec.StatusCode;
   continuationPoint: Uint8Array | null;
   historyData: ExtensionObject | null;
 
- constructor( options?: IHistoryReadResult) {
+ constructor( options?: IHistoryReadResult | null) {
   options = options || {};
-  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.continuationPoint = (options.continuationPoint != null) ? options.continuationPoint : null;
   this.historyData = (options.historyData != null) ? options.historyData : null;
 

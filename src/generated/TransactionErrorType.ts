@@ -11,18 +11,17 @@ export type ITransactionErrorType = Partial<TransactionErrorType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16703}
 */
 
 export class TransactionErrorType {
   targetId: ec.NodeId;
-  error: ec.StatusCode | null;
+  error: ec.StatusCode;
   message: LocalizedText;
 
- constructor( options?: ITransactionErrorType) {
+ constructor( options?: ITransactionErrorType | null) {
   options = options || {};
   this.targetId = (options.targetId != null) ? options.targetId : ec.NodeId.NullNodeId;
-  this.error = (options.error != null) ? options.error : null;
+  this.error = (options.error != null) ? options.error : ec.StatusCodes.Good;
   this.message = (options.message != null) ? options.message : new LocalizedText();
 
  }

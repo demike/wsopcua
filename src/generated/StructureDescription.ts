@@ -12,13 +12,12 @@ export type IStructureDescription = Partial<StructureDescription>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15786}
 */
 
 export class StructureDescription extends DataTypeDescription {
   structureDefinition: StructureDefinition;
 
- constructor( options?: IStructureDescription) {
+ constructor( options?: IStructureDescription | null) {
   options = options || {};
   super(options);
   this.structureDefinition = (options.structureDefinition != null) ? options.structureDefinition : new StructureDefinition();

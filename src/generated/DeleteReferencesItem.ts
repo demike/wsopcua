@@ -10,7 +10,6 @@ export type IDeleteReferencesItem = Partial<DeleteReferencesItem>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16092}
 */
 
 export class DeleteReferencesItem {
@@ -20,7 +19,7 @@ export class DeleteReferencesItem {
   targetNodeId: ec.ExpandedNodeId;
   deleteBidirectional: boolean;
 
- constructor( options?: IDeleteReferencesItem) {
+ constructor( options?: IDeleteReferencesItem | null) {
   options = options || {};
   this.sourceNodeId = (options.sourceNodeId != null) ? options.sourceNodeId : ec.NodeId.NullNodeId;
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;

@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15964}
 */
 
 export enum NegotiationStatus {
@@ -16,6 +15,7 @@ export enum NegotiationStatus {
   Failed = 2,
   Unknown = 3,
   NoNegotiation = 4,
+  Invalid = 4294967295,
 }
 
 export function encodeNegotiationStatus( data: NegotiationStatus,  out: DataStream) {

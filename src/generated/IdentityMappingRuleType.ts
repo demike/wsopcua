@@ -11,16 +11,15 @@ export type IIdentityMappingRuleType = Partial<IdentityMappingRuleType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15560}
 */
 
 export class IdentityMappingRuleType {
   criteriaType: IdentityCriteriaType;
   criteria: string | null;
 
- constructor( options?: IIdentityMappingRuleType) {
+ constructor( options?: IIdentityMappingRuleType | null) {
   options = options || {};
-  this.criteriaType = (options.criteriaType != null) ? options.criteriaType : null;
+  this.criteriaType = (options.criteriaType != null) ? options.criteriaType : IdentityCriteriaType.Invalid;
   this.criteria = (options.criteria != null) ? options.criteria : null;
 
  }

@@ -11,16 +11,15 @@ export type IFindServersRequest = Partial<FindServersRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16027}
 */
 
 export class FindServersRequest {
   requestHeader: RequestHeader;
   endpointUrl: string | null;
-  localeIds: string[];
-  serverUris: string[];
+  localeIds: (string | null)[];
+  serverUris: (string | null)[];
 
- constructor( options?: IFindServersRequest) {
+ constructor( options?: IFindServersRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;

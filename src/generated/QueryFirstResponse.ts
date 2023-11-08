@@ -18,18 +18,17 @@ export type IQueryFirstResponse = Partial<QueryFirstResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16137}
 */
 
 export class QueryFirstResponse {
   responseHeader: ResponseHeader;
-  queryDataSets: QueryDataSet[];
+  queryDataSets: (QueryDataSet)[];
   continuationPoint: Uint8Array | null;
-  parsingResults: ParsingResult[];
-  diagnosticInfos: DiagnosticInfo[];
+  parsingResults: (ParsingResult)[];
+  diagnosticInfos: (DiagnosticInfo)[];
   filterResult: ContentFilterResult;
 
- constructor( options?: IQueryFirstResponse) {
+ constructor( options?: IQueryFirstResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.queryDataSets = (options.queryDataSets != null) ? options.queryDataSets : [];

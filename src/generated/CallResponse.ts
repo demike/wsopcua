@@ -15,15 +15,14 @@ export type ICallResponse = Partial<CallResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16176}
 */
 
 export class CallResponse {
   responseHeader: ResponseHeader;
-  results: CallMethodResult[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (CallMethodResult)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: ICallResponse) {
+ constructor( options?: ICallResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

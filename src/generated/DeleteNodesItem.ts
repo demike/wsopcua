@@ -10,14 +10,13 @@ export type IDeleteNodesItem = Partial<DeleteNodesItem>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16089}
 */
 
 export class DeleteNodesItem {
   nodeId: ec.NodeId;
   deleteTargetReferences: boolean;
 
- constructor( options?: IDeleteNodesItem) {
+ constructor( options?: IDeleteNodesItem | null) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
   this.deleteTargetReferences = (options.deleteTargetReferences != null) ? options.deleteTargetReferences : false;

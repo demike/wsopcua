@@ -14,20 +14,19 @@ export type IModifyMonitoredItemsRequest = Partial<ModifyMonitoredItemsRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16195}
 */
 
 export class ModifyMonitoredItemsRequest {
   requestHeader: RequestHeader;
   subscriptionId: ec.UInt32;
   timestampsToReturn: TimestampsToReturn;
-  itemsToModify: MonitoredItemModifyRequest[];
+  itemsToModify: (MonitoredItemModifyRequest)[];
 
- constructor( options?: IModifyMonitoredItemsRequest) {
+ constructor( options?: IModifyMonitoredItemsRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;
-  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : null;
+  this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : TimestampsToReturn.Invalid;
   this.itemsToModify = (options.itemsToModify != null) ? options.itemsToModify : [];
 
  }

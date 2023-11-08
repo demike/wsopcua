@@ -12,13 +12,12 @@ export type IRelativePath = Partial<RelativePath>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16108}
 */
 
 export class RelativePath {
-  elements: RelativePathElement[];
+  elements: (RelativePathElement)[];
 
- constructor( options?: IRelativePath) {
+ constructor( options?: IRelativePath | null) {
   options = options || {};
   this.elements = (options.elements != null) ? options.elements : [];
 

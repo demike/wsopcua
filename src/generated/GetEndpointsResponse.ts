@@ -13,14 +13,13 @@ export type IGetEndpointsResponse = Partial<GetEndpointsResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16038}
 */
 
 export class GetEndpointsResponse {
   responseHeader: ResponseHeader;
-  endpoints: EndpointDescription[];
+  endpoints: (EndpointDescription)[];
 
- constructor( options?: IGetEndpointsResponse) {
+ constructor( options?: IGetEndpointsResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.endpoints = (options.endpoints != null) ? options.endpoints : [];

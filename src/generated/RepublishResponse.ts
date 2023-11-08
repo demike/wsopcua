@@ -11,14 +11,13 @@ export type IRepublishResponse = Partial<RepublishResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16221}
 */
 
 export class RepublishResponse {
   responseHeader: ResponseHeader;
   notificationMessage: NotificationMessage;
 
- constructor( options?: IRepublishResponse) {
+ constructor( options?: IRepublishResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.notificationMessage = (options.notificationMessage != null) ? options.notificationMessage : new NotificationMessage();

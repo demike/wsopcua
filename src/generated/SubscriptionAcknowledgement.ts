@@ -10,14 +10,13 @@ export type ISubscriptionAcknowledgement = Partial<SubscriptionAcknowledgement>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16217}
 */
 
 export class SubscriptionAcknowledgement {
   subscriptionId: ec.UInt32;
   sequenceNumber: ec.UInt32;
 
- constructor( options?: ISubscriptionAcknowledgement) {
+ constructor( options?: ISubscriptionAcknowledgement | null) {
   options = options || {};
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;
   this.sequenceNumber = (options.sequenceNumber != null) ? options.sequenceNumber : 0;

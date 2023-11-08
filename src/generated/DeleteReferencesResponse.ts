@@ -13,15 +13,14 @@ export type IDeleteReferencesResponse = Partial<DeleteReferencesResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16094}
 */
 
 export class DeleteReferencesResponse {
   responseHeader: ResponseHeader;
-  results: ec.StatusCode[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (ec.StatusCode)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IDeleteReferencesResponse) {
+ constructor( options?: IDeleteReferencesResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

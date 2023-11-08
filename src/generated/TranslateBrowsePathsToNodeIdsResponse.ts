@@ -15,15 +15,14 @@ export type ITranslateBrowsePathsToNodeIdsResponse = Partial<TranslateBrowsePath
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16113}
 */
 
 export class TranslateBrowsePathsToNodeIdsResponse {
   responseHeader: ResponseHeader;
-  results: BrowsePathResult[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (BrowsePathResult)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: ITranslateBrowsePathsToNodeIdsResponse) {
+ constructor( options?: ITranslateBrowsePathsToNodeIdsResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

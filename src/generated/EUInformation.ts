@@ -11,7 +11,6 @@ export type IEUInformation = Partial<EUInformation>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16245}
 */
 
 export class EUInformation {
@@ -20,7 +19,7 @@ export class EUInformation {
   displayName: LocalizedText;
   description: LocalizedText;
 
- constructor( options?: IEUInformation) {
+ constructor( options?: IEUInformation | null) {
   options = options || {};
   this.namespaceUri = (options.namespaceUri != null) ? options.namespaceUri : null;
   this.unitId = (options.unitId != null) ? options.unitId : 0;

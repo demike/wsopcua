@@ -14,16 +14,15 @@ export type IBrowseRequest = Partial<BrowseRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16103}
 */
 
 export class BrowseRequest {
   requestHeader: RequestHeader;
   view: ViewDescription;
   requestedMaxReferencesPerNode: ec.UInt32;
-  nodesToBrowse: BrowseDescription[];
+  nodesToBrowse: (BrowseDescription)[];
 
- constructor( options?: IBrowseRequest) {
+ constructor( options?: IBrowseRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.view = (options.view != null) ? options.view : new ViewDescription();

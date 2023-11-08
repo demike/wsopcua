@@ -13,7 +13,6 @@ export type IPublishedVariableDataType = Partial<PublishedVariableDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15797}
 */
 
 export class PublishedVariableDataType {
@@ -24,9 +23,9 @@ export class PublishedVariableDataType {
   deadbandValue: ec.Double;
   indexRange: string | null;
   substituteValue: Variant;
-  metaDataProperties: QualifiedName[];
+  metaDataProperties: (QualifiedName)[];
 
- constructor( options?: IPublishedVariableDataType) {
+ constructor( options?: IPublishedVariableDataType | null) {
   options = options || {};
   this.publishedVariable = (options.publishedVariable != null) ? options.publishedVariable : ec.NodeId.NullNodeId;
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;

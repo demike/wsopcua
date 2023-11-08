@@ -12,13 +12,12 @@ export type IContentFilter = Partial<ContentFilter>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16127}
 */
 
 export class ContentFilter {
-  elements: ContentFilterElement[];
+  elements: (ContentFilterElement)[];
 
- constructor( options?: IContentFilter) {
+ constructor( options?: IContentFilter | null) {
   options = options || {};
   this.elements = (options.elements != null) ? options.elements : [];
 

@@ -7,12 +7,12 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16046}
 */
 
 export enum SecurityTokenRequestType {
   Issue = 0,
   Renew = 1,
+  Invalid = 4294967295,
 }
 
 export function encodeSecurityTokenRequestType( data: SecurityTokenRequestType,  out: DataStream) {

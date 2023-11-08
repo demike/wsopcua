@@ -3,7 +3,7 @@ import { TagType } from './asn1';
 
 export interface WriterOptions {
   size?: number; // default 1024
-  growthFactor?: number; // default 8
+  growthFactor: number; // default 8
 }
 
 const DEFAULT_OPTS: WriterOptions = {
@@ -22,13 +22,13 @@ export class Asn1Writer {
     return this.getBuffer();
   }
 
-  constructor(options?: WriterOptions) {
+  constructor(options?: Partial<WriterOptions>) {
     options = { ...DEFAULT_OPTS, ...options };
 
     this._buf = new Uint8Array(options.size || 1024);
     this._size = this._buf.length;
     this._offset = 0;
-    this._options = options;
+    this._options = options as WriterOptions;
 
     // A list of offsets in the buffer where we need to insert
     // sequence tag/len pairs.
@@ -174,7 +174,7 @@ export class Asn1Writer {
   }
 
   // This is really to solve DER cases, but whatever for now
-  public writeOID(s: string, tag?: TagType) {
+  public writeOID(s?: string, tag?: TagType) {
     if (typeof s !== 'string') {
       throw new TypeError('argument must be a string');
     }
@@ -287,7 +287,7 @@ export class Asn1Writer {
   }
 
   public endSequence() {
-    const seq = this._seq.pop();
+    const seq = this._seq.pop()!;
     const start = seq + 3;
     const len = this._offset - start;
 

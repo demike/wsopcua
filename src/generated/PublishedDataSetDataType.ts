@@ -14,17 +14,16 @@ export type IPublishedDataSetDataType = Partial<PublishedDataSetDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15795}
 */
 
 export class PublishedDataSetDataType {
   name: string | null;
-  dataSetFolder: string[];
+  dataSetFolder: (string | null)[];
   dataSetMetaData: DataSetMetaDataType;
-  extensionFields: KeyValuePair[];
+  extensionFields: (KeyValuePair)[];
   dataSetSource: ExtensionObject | null;
 
- constructor( options?: IPublishedDataSetDataType) {
+ constructor( options?: IPublishedDataSetDataType | null) {
   options = options || {};
   this.name = (options.name != null) ? options.name : null;
   this.dataSetFolder = (options.dataSetFolder != null) ? options.dataSetFolder : [];

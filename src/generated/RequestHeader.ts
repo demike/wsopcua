@@ -11,7 +11,6 @@ export type IRequestHeader = Partial<RequestHeader>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16021}
 */
 
 export class RequestHeader {
@@ -23,7 +22,7 @@ export class RequestHeader {
   timeoutHint: ec.UInt32;
   additionalHeader: ExtensionObject | null;
 
- constructor( options?: IRequestHeader) {
+ constructor( options?: IRequestHeader | null) {
   options = options || {};
   this.authenticationToken = (options.authenticationToken != null) ? options.authenticationToken : ec.NodeId.NullNodeId;
   this.timestamp = (options.timestamp != null) ? options.timestamp : new Date();

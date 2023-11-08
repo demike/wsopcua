@@ -11,14 +11,13 @@ export type IRegisterServerRequest = Partial<RegisterServerRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16040}
 */
 
 export class RegisterServerRequest {
   requestHeader: RequestHeader;
   server: RegisteredServer;
 
- constructor( options?: IRegisterServerRequest) {
+ constructor( options?: IRegisterServerRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.server = (options.server != null) ? options.server : new RegisteredServer();

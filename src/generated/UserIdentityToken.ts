@@ -10,13 +10,12 @@ export type IUserIdentityToken = Partial<UserIdentityToken>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16057}
 */
 
 export class UserIdentityToken {
   policyId: string | null;
 
- constructor( options?: IUserIdentityToken) {
+ constructor( options?: IUserIdentityToken | null) {
   options = options || {};
   this.policyId = (options.policyId != null) ? options.policyId : null;
 

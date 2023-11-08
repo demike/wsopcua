@@ -335,6 +335,10 @@ export class E2ETestControllerImpl implements E2ETestController {
   public async createSubscription(
     options?: ICreateSubscriptionRequest
   ): Promise<ClientSubscription> {
+    if (!this.testSession) {
+      throw new Error('missing test session');
+    }
+
     const subscription = new ClientSubscription(
       this.testSession,
       options || {

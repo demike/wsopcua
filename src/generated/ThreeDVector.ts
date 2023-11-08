@@ -11,7 +11,6 @@ export type IThreeDVector = Partial<ThreeDVector>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15527}
 */
 
 export class ThreeDVector extends Vector {
@@ -19,7 +18,7 @@ export class ThreeDVector extends Vector {
   y: ec.Double;
   z: ec.Double;
 
- constructor( options?: IThreeDVector) {
+ constructor( options?: IThreeDVector | null) {
   options = options || {};
   super();
   this.x = (options.x != null) ? options.x : 0;

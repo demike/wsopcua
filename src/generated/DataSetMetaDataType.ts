@@ -16,23 +16,22 @@ export type IDataSetMetaDataType = Partial<DataSetMetaDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15791}
 */
 
 export class DataSetMetaDataType extends DataTypeSchemaHeader {
   name: string | null;
   description: LocalizedText;
-  fields: FieldMetaData[];
-  dataSetClassId: ec.Guid | null;
+  fields: (FieldMetaData)[];
+  dataSetClassId: ec.Guid;
   configurationVersion: ConfigurationVersionDataType;
 
- constructor( options?: IDataSetMetaDataType) {
+ constructor( options?: IDataSetMetaDataType | null) {
   options = options || {};
   super(options);
   this.name = (options.name != null) ? options.name : null;
   this.description = (options.description != null) ? options.description : new LocalizedText();
   this.fields = (options.fields != null) ? options.fields : [];
-  this.dataSetClassId = (options.dataSetClassId != null) ? options.dataSetClassId : null;
+  this.dataSetClassId = (options.dataSetClassId != null) ? options.dataSetClassId : "";
   this.configurationVersion = (options.configurationVersion != null) ? options.configurationVersion : new ConfigurationVersionDataType();
 
  }

@@ -10,16 +10,15 @@ export type IServerOnNetwork = Partial<ServerOnNetwork>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16029}
 */
 
 export class ServerOnNetwork {
   recordId: ec.UInt32;
   serverName: string | null;
   discoveryUrl: string | null;
-  serverCapabilities: string[];
+  serverCapabilities: (string | null)[];
 
- constructor( options?: IServerOnNetwork) {
+ constructor( options?: IServerOnNetwork | null) {
   options = options || {};
   this.recordId = (options.recordId != null) ? options.recordId : 0;
   this.serverName = (options.serverName != null) ? options.serverName : null;

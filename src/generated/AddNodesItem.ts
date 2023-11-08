@@ -13,7 +13,6 @@ export type IAddNodesItem = Partial<AddNodesItem>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16082}
 */
 
 export class AddNodesItem {
@@ -25,13 +24,13 @@ export class AddNodesItem {
   nodeAttributes: ExtensionObject | null;
   typeDefinition: ec.ExpandedNodeId;
 
- constructor( options?: IAddNodesItem) {
+ constructor( options?: IAddNodesItem | null) {
   options = options || {};
   this.parentNodeId = (options.parentNodeId != null) ? options.parentNodeId : ec.ExpandedNodeId.NullExpandedNodeId;
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;
   this.requestedNewNodeId = (options.requestedNewNodeId != null) ? options.requestedNewNodeId : ec.ExpandedNodeId.NullExpandedNodeId;
   this.browseName = (options.browseName != null) ? options.browseName : new QualifiedName();
-  this.nodeClass = (options.nodeClass != null) ? options.nodeClass : null;
+  this.nodeClass = (options.nodeClass != null) ? options.nodeClass : NodeClass.Invalid;
   this.nodeAttributes = (options.nodeAttributes != null) ? options.nodeAttributes : null;
   this.typeDefinition = (options.typeDefinition != null) ? options.typeDefinition : ec.ExpandedNodeId.NullExpandedNodeId;
 

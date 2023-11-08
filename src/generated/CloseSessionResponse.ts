@@ -10,13 +10,12 @@ export type ICloseSessionResponse = Partial<CloseSessionResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16067}
 */
 
 export class CloseSessionResponse {
   responseHeader: ResponseHeader;
 
- constructor( options?: ICloseSessionResponse) {
+ constructor( options?: ICloseSessionResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
 

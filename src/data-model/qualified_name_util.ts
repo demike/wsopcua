@@ -33,7 +33,7 @@ export function qualifiedNameToString(qn: QualifiedName): string {
   if (qn.namespaceIndex > 0) {
     return qn.namespaceIndex + ':' + qn.name;
   }
-  return qn.name;
+  return qn.name || '<null>';
 }
 
 export function coerceQualifiedName(value: string | IQualifiedName) {

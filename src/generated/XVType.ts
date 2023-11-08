@@ -10,14 +10,13 @@ export type IXVType = Partial<XVType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16250}
 */
 
 export class XVType {
   x: ec.Double;
   value: ec.Float;
 
- constructor( options?: IXVType) {
+ constructor( options?: IXVType | null) {
   options = options || {};
   this.x = (options.x != null) ? options.x : 0;
   this.value = (options.value != null) ? options.value : 0;

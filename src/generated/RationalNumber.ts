@@ -10,14 +10,13 @@ export type IRationalNumber = Partial<RationalNumber>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15525}
 */
 
 export class RationalNumber {
   numerator: ec.Int32;
   denominator: ec.UInt32;
 
- constructor( options?: IRationalNumber) {
+ constructor( options?: IRationalNumber | null) {
   options = options || {};
   this.numerator = (options.numerator != null) ? options.numerator : 0;
   this.denominator = (options.denominator != null) ? options.denominator : 0;

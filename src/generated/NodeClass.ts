@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15978}
 */
 
 export enum NodeClass {
@@ -20,6 +19,7 @@ export enum NodeClass {
   ReferenceType = 32,
   DataType = 64,
   View = 128,
+  Invalid = 4294967295,
 }
 
 export function encodeNodeClass( data: NodeClass,  out: DataStream) {

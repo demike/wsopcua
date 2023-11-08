@@ -15,14 +15,13 @@ export type IDataChangeNotification = Partial<DataChangeNotification>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16211}
 */
 
 export class DataChangeNotification extends NotificationData {
-  monitoredItems: MonitoredItemNotification[];
-  diagnosticInfos: DiagnosticInfo[];
+  monitoredItems: (MonitoredItemNotification)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IDataChangeNotification) {
+ constructor( options?: IDataChangeNotification | null) {
   options = options || {};
   super();
   this.monitoredItems = (options.monitoredItems != null) ? options.monitoredItems : [];

@@ -14,7 +14,6 @@ export type IAxisInformation = Partial<AxisInformation>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16249}
 */
 
 export class AxisInformation {
@@ -22,14 +21,14 @@ export class AxisInformation {
   eURange: Range;
   title: LocalizedText;
   axisScaleType: AxisScaleEnumeration;
-  axisSteps: ec.Double[];
+  axisSteps: (ec.Double)[];
 
- constructor( options?: IAxisInformation) {
+ constructor( options?: IAxisInformation | null) {
   options = options || {};
   this.engineeringUnits = (options.engineeringUnits != null) ? options.engineeringUnits : new EUInformation();
   this.eURange = (options.eURange != null) ? options.eURange : new Range();
   this.title = (options.title != null) ? options.title : new LocalizedText();
-  this.axisScaleType = (options.axisScaleType != null) ? options.axisScaleType : null;
+  this.axisScaleType = (options.axisScaleType != null) ? options.axisScaleType : AxisScaleEnumeration.Invalid;
   this.axisSteps = (options.axisSteps != null) ? options.axisSteps : [];
 
  }

@@ -13,14 +13,13 @@ export type IWriteRequest = Partial<WriteRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16159}
 */
 
 export class WriteRequest {
   requestHeader: RequestHeader;
-  nodesToWrite: WriteValue[];
+  nodesToWrite: (WriteValue)[];
 
- constructor( options?: IWriteRequest) {
+ constructor( options?: IWriteRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.nodesToWrite = (options.nodesToWrite != null) ? options.nodesToWrite : [];

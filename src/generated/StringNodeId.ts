@@ -16,7 +16,7 @@ export class StringNodeId {
   namespaceIndex: ec.UInt16;
   identifier: string | null;
 
- constructor( options?: IStringNodeId) {
+ constructor( options?: IStringNodeId | null) {
   options = options || {};
   this.namespaceIndex = (options.namespaceIndex != null) ? options.namespaceIndex : 0;
   this.identifier = (options.identifier != null) ? options.identifier : null;

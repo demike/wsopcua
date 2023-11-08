@@ -10,14 +10,13 @@ export type IOptionSet = Partial<OptionSet>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16005}
 */
 
 export class OptionSet {
   value: Uint8Array | null;
   validBits: Uint8Array | null;
 
- constructor( options?: IOptionSet) {
+ constructor( options?: IOptionSet | null) {
   options = options || {};
   this.value = (options.value != null) ? options.value : null;
   this.validBits = (options.validBits != null) ? options.validBits : null;

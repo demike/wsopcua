@@ -19,7 +19,6 @@ export type IDataSetReaderDataType = Partial<DataSetReaderDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15815}
 */
 
 export class DataSetReaderDataType {
@@ -35,13 +34,13 @@ export class DataSetReaderDataType {
   headerLayoutUri: string | null;
   securityMode: MessageSecurityMode;
   securityGroupId: string | null;
-  securityKeyServices: EndpointDescription[];
-  dataSetReaderProperties: KeyValuePair[];
+  securityKeyServices: (EndpointDescription)[];
+  dataSetReaderProperties: (KeyValuePair)[];
   transportSettings: ExtensionObject | null;
   messageSettings: ExtensionObject | null;
   subscribedDataSet: ExtensionObject | null;
 
- constructor( options?: IDataSetReaderDataType) {
+ constructor( options?: IDataSetReaderDataType | null) {
   options = options || {};
   this.name = (options.name != null) ? options.name : null;
   this.enabled = (options.enabled != null) ? options.enabled : false;
@@ -49,11 +48,11 @@ export class DataSetReaderDataType {
   this.writerGroupId = (options.writerGroupId != null) ? options.writerGroupId : 0;
   this.dataSetWriterId = (options.dataSetWriterId != null) ? options.dataSetWriterId : 0;
   this.dataSetMetaData = (options.dataSetMetaData != null) ? options.dataSetMetaData : new DataSetMetaDataType();
-  this.dataSetFieldContentMask = (options.dataSetFieldContentMask != null) ? options.dataSetFieldContentMask : null;
+  this.dataSetFieldContentMask = (options.dataSetFieldContentMask != null) ? options.dataSetFieldContentMask : DataSetFieldContentMask.None;
   this.messageReceiveTimeout = (options.messageReceiveTimeout != null) ? options.messageReceiveTimeout : 0;
   this.keyFrameCount = (options.keyFrameCount != null) ? options.keyFrameCount : 0;
   this.headerLayoutUri = (options.headerLayoutUri != null) ? options.headerLayoutUri : null;
-  this.securityMode = (options.securityMode != null) ? options.securityMode : null;
+  this.securityMode = (options.securityMode != null) ? options.securityMode : MessageSecurityMode.Invalid;
   this.securityGroupId = (options.securityGroupId != null) ? options.securityGroupId : null;
   this.securityKeyServices = (options.securityKeyServices != null) ? options.securityKeyServices : [];
   this.dataSetReaderProperties = (options.dataSetReaderProperties != null) ? options.dataSetReaderProperties : [];

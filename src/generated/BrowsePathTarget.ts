@@ -10,14 +10,13 @@ export type IBrowsePathTarget = Partial<BrowsePathTarget>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16110}
 */
 
 export class BrowsePathTarget {
   targetId: ec.ExpandedNodeId;
   remainingPathIndex: ec.UInt32;
 
- constructor( options?: IBrowsePathTarget) {
+ constructor( options?: IBrowsePathTarget | null) {
   options = options || {};
   this.targetId = (options.targetId != null) ? options.targetId : ec.ExpandedNodeId.NullExpandedNodeId;
   this.remainingPathIndex = (options.remainingPathIndex != null) ? options.remainingPathIndex : 0;

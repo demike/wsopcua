@@ -14,15 +14,14 @@ export type IPubSubConfigurationDataType = Partial<PubSubConfigurationDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15823}
 */
 
 export class PubSubConfigurationDataType {
-  publishedDataSets: PublishedDataSetDataType[];
-  connections: PubSubConnectionDataType[];
+  publishedDataSets: (PublishedDataSetDataType)[];
+  connections: (PubSubConnectionDataType)[];
   enabled: boolean;
 
- constructor( options?: IPubSubConfigurationDataType) {
+ constructor( options?: IPubSubConfigurationDataType | null) {
   options = options || {};
   this.publishedDataSets = (options.publishedDataSets != null) ? options.publishedDataSets : [];
   this.connections = (options.connections != null) ? options.connections : [];

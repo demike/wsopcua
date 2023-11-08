@@ -12,13 +12,12 @@ export type IDeleteAtTimeDetails = Partial<DeleteAtTimeDetails>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16168}
 */
 
 export class DeleteAtTimeDetails extends HistoryUpdateDetails {
-  reqTimes: Date[];
+  reqTimes: (Date)[];
 
- constructor( options?: IDeleteAtTimeDetails) {
+ constructor( options?: IDeleteAtTimeDetails | null) {
   options = options || {};
   super(options);
   this.reqTimes = (options.reqTimes != null) ? options.reqTimes : [];

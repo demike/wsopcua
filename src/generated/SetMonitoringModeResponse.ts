@@ -13,15 +13,14 @@ export type ISetMonitoringModeResponse = Partial<SetMonitoringModeResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16198}
 */
 
 export class SetMonitoringModeResponse {
   responseHeader: ResponseHeader;
-  results: ec.StatusCode[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (ec.StatusCode)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: ISetMonitoringModeResponse) {
+ constructor( options?: ISetMonitoringModeResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

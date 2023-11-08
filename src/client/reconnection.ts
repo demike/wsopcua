@@ -99,7 +99,7 @@ function _ask_for_subscription_republish(session: ClientSession, callback: Error
 
   debugLog('_ask_for_subscription_republish ');
   // xx assert(session.getPublishEngine().nbPendingPublishRequests === 0, "at this time, publish request queue shall still be empty");
-  session.getPublishEngine().republish((err: Error) => {
+  session.getPublishEngine().republish((err) => {
     if (session.hasBeenClosed()) {
       return callback(
         new Error('Cannot complete subscription republish due to session termination')
@@ -130,7 +130,7 @@ function repair_client_session_by_recreating_a_new_session(
     return cb(new Error('reconnection cancelled due to session termination'));
   }
 
-  let new_session: ClientSession = null;
+  let new_session: ClientSession;
   // const listenerCountBefore = session.listenerCount();
 
   async_series(
@@ -218,13 +218,18 @@ function repair_client_session_by_recreating_a_new_session(
               // recreate the subscriptions on the server side
               return callback(err);
             }
+
+            if (!transferSubscriptionsResponse) {
+              throw new Error('internal error');
+            }
+
             const results = transferSubscriptionsResponse.results;
 
             // istanbul ignore next
             if (doDebug) {
               debugLog(
                 '    =>  transfer subscriptions  done',
-                results.map((x) => x.statusCode.toString()).join(' ')
+                results.map((x) => x.statusCode?.toString()).join(' ')
               );
             }
 
@@ -268,7 +273,7 @@ function repair_client_session_by_recreating_a_new_session(
                 debugLog('          => RECREATING SUBSCRIPTION  ', subscriptionId);
                 assert(subscription.session === new_session, 'must have the session');
 
-                subscription.recreateSubscriptionAndMonitoredItem(function (error?: Error) {
+                subscription.recreateSubscriptionAndMonitoredItem(function (error) {
                   if (error) {
                     console.log('_recreateSubscription failed !');
                   }
@@ -346,7 +351,7 @@ export function repair_client_sessions(client: OPCUAClient, callback: ErrorCallb
     function (session: ClientSession, next: ErrorCallback) {
       repair_client_session(client, session, next);
     },
-    function (err: Error, results: any) {
+    function (err) {
       return callback(err);
     }
   );

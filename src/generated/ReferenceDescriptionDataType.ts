@@ -10,7 +10,6 @@ export type IReferenceDescriptionDataType = Partial<ReferenceDescriptionDataType
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/17043}
 */
 
 export class ReferenceDescriptionDataType {
@@ -19,7 +18,7 @@ export class ReferenceDescriptionDataType {
   isForward: boolean;
   targetNode: ec.ExpandedNodeId;
 
- constructor( options?: IReferenceDescriptionDataType) {
+ constructor( options?: IReferenceDescriptionDataType | null) {
   options = options || {};
   this.sourceNode = (options.sourceNode != null) ? options.sourceNode : ec.NodeId.NullNodeId;
   this.referenceType = (options.referenceType != null) ? options.referenceType : ec.NodeId.NullNodeId;

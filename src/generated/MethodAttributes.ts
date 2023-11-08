@@ -12,14 +12,13 @@ export type IMethodAttributes = Partial<MethodAttributes>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16074}
 */
 
 export class MethodAttributes extends NodeAttributes {
   executable: boolean;
   userExecutable: boolean;
 
- constructor( options?: IMethodAttributes) {
+ constructor( options?: IMethodAttributes | null) {
   options = options || {};
   super(options);
   this.executable = (options.executable != null) ? options.executable : false;

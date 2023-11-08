@@ -13,16 +13,15 @@ export type ISimpleAttributeOperand = Partial<SimpleAttributeOperand>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16132}
 */
 
 export class SimpleAttributeOperand extends FilterOperand {
   typeDefinitionId: ec.NodeId;
-  browsePath: QualifiedName[];
+  browsePath: (QualifiedName)[];
   attributeId: ec.UInt32;
   indexRange: string | null;
 
- constructor( options?: ISimpleAttributeOperand) {
+ constructor( options?: ISimpleAttributeOperand | null) {
   options = options || {};
   super();
   this.typeDefinitionId = (options.typeDefinitionId != null) ? options.typeDefinitionId : ec.NodeId.NullNodeId;

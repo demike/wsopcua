@@ -13,18 +13,17 @@ export type IParameterResultDataType = Partial<ParameterResultDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/11/17491}
 */
 
 export class ParameterResultDataType {
-  nodePath: QualifiedName[];
-  statusCode: ec.StatusCode | null;
+  nodePath: (QualifiedName)[];
+  statusCode: ec.StatusCode;
   diagnostics: DiagnosticInfo;
 
- constructor( options?: IParameterResultDataType) {
+ constructor( options?: IParameterResultDataType | null) {
   options = options || {};
   this.nodePath = (options.nodePath != null) ? options.nodePath : [];
-  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.diagnostics = (options.diagnostics != null) ? options.diagnostics : new DiagnosticInfo();
 
  }

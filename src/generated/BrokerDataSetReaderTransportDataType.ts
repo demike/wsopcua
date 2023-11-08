@@ -12,7 +12,6 @@ export type IBrokerDataSetReaderTransportDataType = Partial<BrokerDataSetReaderT
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15841}
 */
 
 export class BrokerDataSetReaderTransportDataType extends DataSetReaderTransportDataType {
@@ -22,13 +21,13 @@ export class BrokerDataSetReaderTransportDataType extends DataSetReaderTransport
   requestedDeliveryGuarantee: BrokerTransportQualityOfService;
   metaDataQueueName: string | null;
 
- constructor( options?: IBrokerDataSetReaderTransportDataType) {
+ constructor( options?: IBrokerDataSetReaderTransportDataType | null) {
   options = options || {};
   super();
   this.queueName = (options.queueName != null) ? options.queueName : null;
   this.resourceUri = (options.resourceUri != null) ? options.resourceUri : null;
   this.authenticationProfileUri = (options.authenticationProfileUri != null) ? options.authenticationProfileUri : null;
-  this.requestedDeliveryGuarantee = (options.requestedDeliveryGuarantee != null) ? options.requestedDeliveryGuarantee : null;
+  this.requestedDeliveryGuarantee = (options.requestedDeliveryGuarantee != null) ? options.requestedDeliveryGuarantee : BrokerTransportQualityOfService.Invalid;
   this.metaDataQueueName = (options.metaDataQueueName != null) ? options.metaDataQueueName : null;
 
  }

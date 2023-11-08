@@ -13,14 +13,13 @@ export type ICallRequest = Partial<CallRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16175}
 */
 
 export class CallRequest {
   requestHeader: RequestHeader;
-  methodsToCall: CallMethodRequest[];
+  methodsToCall: (CallMethodRequest)[];
 
- constructor( options?: ICallRequest) {
+ constructor( options?: ICallRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.methodsToCall = (options.methodsToCall != null) ? options.methodsToCall : [];

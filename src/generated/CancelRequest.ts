@@ -11,14 +11,13 @@ export type ICancelRequest = Partial<CancelRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16068}
 */
 
 export class CancelRequest {
   requestHeader: RequestHeader;
   requestHandle: ec.UInt32;
 
- constructor( options?: ICancelRequest) {
+ constructor( options?: ICancelRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.requestHandle = (options.requestHandle != null) ? options.requestHandle : 0;

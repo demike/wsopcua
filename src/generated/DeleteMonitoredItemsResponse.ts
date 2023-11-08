@@ -13,15 +13,14 @@ export type IDeleteMonitoredItemsResponse = Partial<DeleteMonitoredItemsResponse
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16202}
 */
 
 export class DeleteMonitoredItemsResponse {
   responseHeader: ResponseHeader;
-  results: ec.StatusCode[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (ec.StatusCode)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IDeleteMonitoredItemsResponse) {
+ constructor( options?: IDeleteMonitoredItemsResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

@@ -12,14 +12,13 @@ export type IViewAttributes = Partial<ViewAttributes>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16079}
 */
 
 export class ViewAttributes extends NodeAttributes {
   containsNoLoops: boolean;
   eventNotifier: ec.Byte;
 
- constructor( options?: IViewAttributes) {
+ constructor( options?: IViewAttributes | null) {
   options = options || {};
   super(options);
   this.containsNoLoops = (options.containsNoLoops != null) ? options.containsNoLoops : false;

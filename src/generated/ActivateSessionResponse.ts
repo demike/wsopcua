@@ -13,16 +13,15 @@ export type IActivateSessionResponse = Partial<ActivateSessionResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16065}
 */
 
 export class ActivateSessionResponse {
   responseHeader: ResponseHeader;
   serverNonce: Uint8Array | null;
-  results: ec.StatusCode[];
-  diagnosticInfos: DiagnosticInfo[];
+  results: (ec.StatusCode)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IActivateSessionResponse) {
+ constructor( options?: IActivateSessionResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.serverNonce = (options.serverNonce != null) ? options.serverNonce : null;

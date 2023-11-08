@@ -10,7 +10,6 @@ export type IChannelSecurityToken = Partial<ChannelSecurityToken>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16047}
 */
 
 export class ChannelSecurityToken {
@@ -19,7 +18,7 @@ export class ChannelSecurityToken {
   createdAt: Date;
   revisedLifetime: ec.UInt32;
 
- constructor( options?: IChannelSecurityToken) {
+ constructor( options?: IChannelSecurityToken | null) {
   options = options || {};
   this.channelId = (options.channelId != null) ? options.channelId : 0;
   this.tokenId = (options.tokenId != null) ? options.tokenId : 0;

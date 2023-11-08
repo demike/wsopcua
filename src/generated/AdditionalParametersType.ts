@@ -12,13 +12,12 @@ export type IAdditionalParametersType = Partial<AdditionalParametersType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15499}
 */
 
 export class AdditionalParametersType {
-  parameters: KeyValuePair[];
+  parameters: (KeyValuePair)[];
 
- constructor( options?: IAdditionalParametersType) {
+ constructor( options?: IAdditionalParametersType | null) {
   options = options || {};
   this.parameters = (options.parameters != null) ? options.parameters : [];
 

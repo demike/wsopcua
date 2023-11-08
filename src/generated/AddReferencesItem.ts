@@ -11,7 +11,6 @@ export type IAddReferencesItem = Partial<AddReferencesItem>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16086}
 */
 
 export class AddReferencesItem {
@@ -22,14 +21,14 @@ export class AddReferencesItem {
   targetNodeId: ec.ExpandedNodeId;
   targetNodeClass: NodeClass;
 
- constructor( options?: IAddReferencesItem) {
+ constructor( options?: IAddReferencesItem | null) {
   options = options || {};
   this.sourceNodeId = (options.sourceNodeId != null) ? options.sourceNodeId : ec.NodeId.NullNodeId;
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;
   this.isForward = (options.isForward != null) ? options.isForward : false;
   this.targetServerUri = (options.targetServerUri != null) ? options.targetServerUri : null;
   this.targetNodeId = (options.targetNodeId != null) ? options.targetNodeId : ec.ExpandedNodeId.NullExpandedNodeId;
-  this.targetNodeClass = (options.targetNodeClass != null) ? options.targetNodeClass : null;
+  this.targetNodeClass = (options.targetNodeClass != null) ? options.targetNodeClass : NodeClass.Invalid;
 
  }
 

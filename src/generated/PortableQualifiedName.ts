@@ -10,14 +10,13 @@ export type IPortableQualifiedName = Partial<PortableQualifiedName>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16774}
 */
 
 export class PortableQualifiedName {
   namespaceUri: string | null;
   name: string | null;
 
- constructor( options?: IPortableQualifiedName) {
+ constructor( options?: IPortableQualifiedName | null) {
   options = options || {};
   this.namespaceUri = (options.namespaceUri != null) ? options.namespaceUri : null;
   this.name = (options.name != null) ? options.name : null;

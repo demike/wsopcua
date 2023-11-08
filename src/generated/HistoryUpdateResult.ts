@@ -12,17 +12,16 @@ export type IHistoryUpdateResult = Partial<HistoryUpdateResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16170}
 */
 
 export class HistoryUpdateResult {
-  statusCode: ec.StatusCode | null;
-  operationResults: ec.StatusCode[];
-  diagnosticInfos: DiagnosticInfo[];
+  statusCode: ec.StatusCode;
+  operationResults: (ec.StatusCode)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IHistoryUpdateResult) {
+ constructor( options?: IHistoryUpdateResult | null) {
   options = options || {};
-  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.operationResults = (options.operationResults != null) ? options.operationResults : [];
   this.diagnosticInfos = (options.diagnosticInfos != null) ? options.diagnosticInfos : [];
 

@@ -13,17 +13,16 @@ export type ISetTriggeringResponse = Partial<SetTriggeringResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16200}
 */
 
 export class SetTriggeringResponse {
   responseHeader: ResponseHeader;
-  addResults: ec.StatusCode[];
-  addDiagnosticInfos: DiagnosticInfo[];
-  removeResults: ec.StatusCode[];
-  removeDiagnosticInfos: DiagnosticInfo[];
+  addResults: (ec.StatusCode)[];
+  addDiagnosticInfos: (DiagnosticInfo)[];
+  removeResults: (ec.StatusCode)[];
+  removeDiagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: ISetTriggeringResponse) {
+ constructor( options?: ISetTriggeringResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.addResults = (options.addResults != null) ? options.addResults : [];

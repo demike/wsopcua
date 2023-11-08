@@ -6,7 +6,6 @@
 import {QosDataType} from './QosDataType';
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16831}
 */
 
 export class ReceiveQosDataType extends QosDataType {

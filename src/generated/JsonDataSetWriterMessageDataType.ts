@@ -11,16 +11,15 @@ export type IJsonDataSetWriterMessageDataType = Partial<JsonDataSetWriterMessage
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15833}
 */
 
 export class JsonDataSetWriterMessageDataType extends DataSetWriterMessageDataType {
   dataSetMessageContentMask: JsonDataSetMessageContentMask;
 
- constructor( options?: IJsonDataSetWriterMessageDataType) {
+ constructor( options?: IJsonDataSetWriterMessageDataType | null) {
   options = options || {};
   super();
-  this.dataSetMessageContentMask = (options.dataSetMessageContentMask != null) ? options.dataSetMessageContentMask : null;
+  this.dataSetMessageContentMask = (options.dataSetMessageContentMask != null) ? options.dataSetMessageContentMask : JsonDataSetMessageContentMask.None;
 
  }
 

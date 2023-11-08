@@ -10,14 +10,13 @@ export type IRange = Partial<Range>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16244}
 */
 
 export class Range {
   low: ec.Double;
   high: ec.Double;
 
- constructor( options?: IRange) {
+ constructor( options?: IRange | null) {
   options = options || {};
   this.low = (options.low != null) ? options.low : 0;
   this.high = (options.high != null) ? options.high : 0;

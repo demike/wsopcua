@@ -12,15 +12,14 @@ export type INodeTypeDescription = Partial<NodeTypeDescription>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16122}
 */
 
 export class NodeTypeDescription {
   typeDefinitionNode: ec.ExpandedNodeId;
   includeSubTypes: boolean;
-  dataToReturn: QueryDataDescription[];
+  dataToReturn: (QueryDataDescription)[];
 
- constructor( options?: INodeTypeDescription) {
+ constructor( options?: INodeTypeDescription | null) {
   options = options || {};
   this.typeDefinitionNode = (options.typeDefinitionNode != null) ? options.typeDefinitionNode : ec.ExpandedNodeId.NullExpandedNodeId;
   this.includeSubTypes = (options.includeSubTypes != null) ? options.includeSubTypes : false;

@@ -11,7 +11,6 @@ export type IUserTokenPolicy = Partial<UserTokenPolicy>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16035}
 */
 
 export class UserTokenPolicy {
@@ -21,10 +20,10 @@ export class UserTokenPolicy {
   issuerEndpointUrl: string | null;
   securityPolicyUri: string | null;
 
- constructor( options?: IUserTokenPolicy) {
+ constructor( options?: IUserTokenPolicy | null) {
   options = options || {};
   this.policyId = (options.policyId != null) ? options.policyId : null;
-  this.tokenType = (options.tokenType != null) ? options.tokenType : null;
+  this.tokenType = (options.tokenType != null) ? options.tokenType : UserTokenType.Invalid;
   this.issuedTokenType = (options.issuedTokenType != null) ? options.issuedTokenType : null;
   this.issuerEndpointUrl = (options.issuerEndpointUrl != null) ? options.issuerEndpointUrl : null;
   this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;

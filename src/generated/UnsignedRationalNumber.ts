@@ -10,14 +10,13 @@ export type IUnsignedRationalNumber = Partial<UnsignedRationalNumber>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15969}
 */
 
 export class UnsignedRationalNumber {
   numerator: ec.UInt32;
   denominator: ec.UInt32;
 
- constructor( options?: IUnsignedRationalNumber) {
+ constructor( options?: IUnsignedRationalNumber | null) {
   options = options || {};
   this.numerator = (options.numerator != null) ? options.numerator : 0;
   this.denominator = (options.denominator != null) ? options.denominator : 0;

@@ -10,7 +10,6 @@ export type IReferenceListEntryDataType = Partial<ReferenceListEntryDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/17044}
 */
 
 export class ReferenceListEntryDataType {
@@ -18,7 +17,7 @@ export class ReferenceListEntryDataType {
   isForward: boolean;
   targetNode: ec.ExpandedNodeId;
 
- constructor( options?: IReferenceListEntryDataType) {
+ constructor( options?: IReferenceListEntryDataType | null) {
   options = options || {};
   this.referenceType = (options.referenceType != null) ? options.referenceType : ec.NodeId.NullNodeId;
   this.isForward = (options.isForward != null) ? options.isForward : false;

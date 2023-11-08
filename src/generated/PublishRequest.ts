@@ -13,14 +13,13 @@ export type IPublishRequest = Partial<PublishRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16218}
 */
 
 export class PublishRequest {
   requestHeader: RequestHeader;
-  subscriptionAcknowledgements: SubscriptionAcknowledgement[];
+  subscriptionAcknowledgements: (SubscriptionAcknowledgement)[];
 
- constructor( options?: IPublishRequest) {
+ constructor( options?: IPublishRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionAcknowledgements = (options.subscriptionAcknowledgements != null) ? options.subscriptionAcknowledgements : [];

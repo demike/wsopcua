@@ -7,13 +7,13 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16177}
 */
 
 export enum MonitoringMode {
   Disabled = 0,
   Sampling = 1,
   Reporting = 2,
+  Invalid = 4294967295,
 }
 
 export function encodeMonitoringMode( data: MonitoringMode,  out: DataStream) {

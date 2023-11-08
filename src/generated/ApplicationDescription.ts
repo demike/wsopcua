@@ -12,7 +12,6 @@ export type IApplicationDescription = Partial<ApplicationDescription>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16020}
 */
 
 export class ApplicationDescription {
@@ -22,14 +21,14 @@ export class ApplicationDescription {
   applicationType: ApplicationType;
   gatewayServerUri: string | null;
   discoveryProfileUri: string | null;
-  discoveryUrls: string[];
+  discoveryUrls: (string | null)[];
 
- constructor( options?: IApplicationDescription) {
+ constructor( options?: IApplicationDescription | null) {
   options = options || {};
   this.applicationUri = (options.applicationUri != null) ? options.applicationUri : null;
   this.productUri = (options.productUri != null) ? options.productUri : null;
   this.applicationName = (options.applicationName != null) ? options.applicationName : new LocalizedText();
-  this.applicationType = (options.applicationType != null) ? options.applicationType : null;
+  this.applicationType = (options.applicationType != null) ? options.applicationType : ApplicationType.Invalid;
   this.gatewayServerUri = (options.gatewayServerUri != null) ? options.gatewayServerUri : null;
   this.discoveryProfileUri = (options.discoveryProfileUri != null) ? options.discoveryProfileUri : null;
   this.discoveryUrls = (options.discoveryUrls != null) ? options.discoveryUrls : [];

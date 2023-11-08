@@ -10,14 +10,13 @@ export type IDoubleComplexNumberType = Partial<DoubleComplexNumberType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16248}
 */
 
 export class DoubleComplexNumberType {
   real: ec.Double;
   imaginary: ec.Double;
 
- constructor( options?: IDoubleComplexNumberType) {
+ constructor( options?: IDoubleComplexNumberType | null) {
   options = options || {};
   this.real = (options.real != null) ? options.real : 0;
   this.imaginary = (options.imaginary != null) ? options.imaginary : 0;

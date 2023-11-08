@@ -10,14 +10,13 @@ export type ISignedSoftwareCertificate = Partial<SignedSoftwareCertificate>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16052}
 */
 
 export class SignedSoftwareCertificate {
   certificateData: Uint8Array | null;
   signature: Uint8Array | null;
 
- constructor( options?: ISignedSoftwareCertificate) {
+ constructor( options?: ISignedSoftwareCertificate | null) {
   options = options || {};
   this.certificateData = (options.certificateData != null) ? options.certificateData : null;
   this.signature = (options.signature != null) ? options.signature : null;

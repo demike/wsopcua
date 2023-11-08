@@ -75,7 +75,7 @@ export function apply_timestamps(
 
   // unset sourceTimestamp unless AttributeId is Value
   if (attributeId !== 13 /* AttributeIds.Value*/) {
-    cloneDataValue.sourceTimestamp = null;
+    cloneDataValue.sourceTimestamp = undefined;
   }
   return cloneDataValue;
 }
@@ -101,8 +101,8 @@ function _clone_with_array_replacement(dataValue: DataValue, result: any) {
     sourceTimestamp: dataValue.sourceTimestamp,
     sourcePicoseconds: dataValue.sourcePicoseconds,
     value: new Variant({
-      dataType: dataValue.value.dataType,
-      arrayType: dataValue.value.arrayType,
+      dataType: dataValue.value?.dataType,
+      arrayType: dataValue.value?.arrayType,
       value: result.array,
       dimensions: result.dimensions,
     }),
@@ -121,12 +121,9 @@ function canRange(dataValue: DataValue) {
 }
 
 export function extractRange(dataValue: DataValue, indexRange: NumericRange) {
-  // xx console.log("xxxxxxx indexRange =".yellow,indexRange ? indexRange.toString():"<null>") ;
-  // xx console.log("         dataValue =",dataValue.toString());
-  // xx console.log("         can Range =", canRange(dataValue));
   const variant = dataValue.value;
   if (indexRange && canRange(dataValue)) {
-    const result = indexRange.extract_values(variant.value, variant.dimensions);
+    const result = indexRange.extract_values(variant?.value, variant?.dimensions);
     dataValue = _clone_with_array_replacement(dataValue, result);
     // xx console.log("         dataValue =",dataValue.toString());
   } else {
@@ -136,16 +133,14 @@ export function extractRange(dataValue: DataValue, indexRange: NumericRange) {
   return dataValue;
 }
 
-function sameDate(date1: Date, date2: Date) {
+function sameDate(date1?: Date, date2?: Date) {
   if (date1 === date2) {
     return true;
   }
-  if (date1 && !date2) {
+  if (!date1 || !date2) {
     return false;
   }
-  if (!date1 && date2) {
-    return false;
-  }
+
   return date1.getTime() === date2.getTime();
 }
 

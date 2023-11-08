@@ -10,17 +10,16 @@ export type ISessionlessInvokeRequestType = Partial<SessionlessInvokeRequestType
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16025}
 */
 
 export class SessionlessInvokeRequestType {
   urisVersion: ec.UInt32;
-  namespaceUris: string[];
-  serverUris: string[];
-  localeIds: string[];
+  namespaceUris: (string | null)[];
+  serverUris: (string | null)[];
+  localeIds: (string | null)[];
   serviceId: ec.UInt32;
 
- constructor( options?: ISessionlessInvokeRequestType) {
+ constructor( options?: ISessionlessInvokeRequestType | null) {
   options = options || {};
   this.urisVersion = (options.urisVersion != null) ? options.urisVersion : 0;
   this.namespaceUris = (options.namespaceUris != null) ? options.namespaceUris : [];

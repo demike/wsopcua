@@ -11,14 +11,13 @@ export type IKeyValuePair = Partial<KeyValuePair>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15498}
 */
 
 export class KeyValuePair {
   key: QualifiedName;
   value: Variant;
 
- constructor( options?: IKeyValuePair) {
+ constructor( options?: IKeyValuePair | null) {
   options = options || {};
   this.key = (options.key != null) ? options.key : new QualifiedName();
   this.value = (options.value != null) ? options.value : new Variant();

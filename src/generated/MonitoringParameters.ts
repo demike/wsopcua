@@ -11,7 +11,6 @@ export type IMonitoringParameters = Partial<MonitoringParameters>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16188}
 */
 
 export class MonitoringParameters {
@@ -21,7 +20,7 @@ export class MonitoringParameters {
   queueSize: ec.UInt32;
   discardOldest: boolean;
 
- constructor( options?: IMonitoringParameters) {
+ constructor( options?: IMonitoringParameters | null) {
   options = options || {};
   this.clientHandle = (options.clientHandle != null) ? options.clientHandle : 0;
   this.samplingInterval = (options.samplingInterval != null) ? options.samplingInterval : 0;

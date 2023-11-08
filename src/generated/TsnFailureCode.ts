@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15965}
 */
 
 export enum TsnFailureCode {
@@ -37,6 +36,7 @@ export enum TsnFailureCode {
   StreamTransformNotSupported = 23,
   StreamIdTypeNotSupported = 24,
   FeatureNotSupported = 25,
+  Invalid = 4294967295,
 }
 
 export function encodeTsnFailureCode( data: TsnFailureCode,  out: DataStream) {

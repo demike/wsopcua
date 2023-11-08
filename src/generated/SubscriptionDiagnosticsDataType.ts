@@ -10,7 +10,6 @@ export type ISubscriptionDiagnosticsDataType = Partial<SubscriptionDiagnosticsDa
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16240}
 */
 
 export class SubscriptionDiagnosticsDataType {
@@ -46,7 +45,7 @@ export class SubscriptionDiagnosticsDataType {
   nextSequenceNumber: ec.UInt32;
   eventQueueOverFlowCount: ec.UInt32;
 
- constructor( options?: ISubscriptionDiagnosticsDataType) {
+ constructor( options?: ISubscriptionDiagnosticsDataType | null) {
   options = options || {};
   this.sessionId = (options.sessionId != null) ? options.sessionId : ec.NodeId.NullNodeId;
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

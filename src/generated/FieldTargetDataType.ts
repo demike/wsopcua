@@ -12,11 +12,10 @@ export type IFieldTargetDataType = Partial<FieldTargetDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15820}
 */
 
 export class FieldTargetDataType {
-  dataSetFieldId: ec.Guid | null;
+  dataSetFieldId: ec.Guid;
   receiverIndexRange: string | null;
   targetNodeId: ec.NodeId;
   attributeId: ec.UInt32;
@@ -24,14 +23,14 @@ export class FieldTargetDataType {
   overrideValueHandling: OverrideValueHandling;
   overrideValue: Variant;
 
- constructor( options?: IFieldTargetDataType) {
+ constructor( options?: IFieldTargetDataType | null) {
   options = options || {};
-  this.dataSetFieldId = (options.dataSetFieldId != null) ? options.dataSetFieldId : null;
+  this.dataSetFieldId = (options.dataSetFieldId != null) ? options.dataSetFieldId : "";
   this.receiverIndexRange = (options.receiverIndexRange != null) ? options.receiverIndexRange : null;
   this.targetNodeId = (options.targetNodeId != null) ? options.targetNodeId : ec.NodeId.NullNodeId;
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;
   this.writeIndexRange = (options.writeIndexRange != null) ? options.writeIndexRange : null;
-  this.overrideValueHandling = (options.overrideValueHandling != null) ? options.overrideValueHandling : null;
+  this.overrideValueHandling = (options.overrideValueHandling != null) ? options.overrideValueHandling : OverrideValueHandling.Invalid;
   this.overrideValue = (options.overrideValue != null) ? options.overrideValue : new Variant();
 
  }

@@ -7,13 +7,13 @@ import {DataStream} from '../../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/11/17523}
 */
 
 export enum SoftwareVersionFileType {
   Current = 0,
   Pending = 1,
   Fallback = 2,
+  Invalid = 4294967295,
 }
 
 export function encodeSoftwareVersionFileType( data: SoftwareVersionFileType,  out: DataStream) {

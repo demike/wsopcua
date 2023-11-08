@@ -13,21 +13,20 @@ export type IPubSubKeyPushTargetDataType = Partial<PubSubKeyPushTargetDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16815}
 */
 
 export class PubSubKeyPushTargetDataType {
   applicationUri: string | null;
-  pushTargetFolder: string[];
+  pushTargetFolder: (string | null)[];
   endpointUrl: string | null;
   securityPolicyUri: string | null;
   userTokenType: UserTokenPolicy;
   requestedKeyCount: ec.UInt16;
   retryInterval: ec.Double;
-  pushTargetProperties: KeyValuePair[];
-  securityGroups: string[];
+  pushTargetProperties: (KeyValuePair)[];
+  securityGroups: (string | null)[];
 
- constructor( options?: IPubSubKeyPushTargetDataType) {
+ constructor( options?: IPubSubKeyPushTargetDataType | null) {
   options = options || {};
   this.applicationUri = (options.applicationUri != null) ? options.applicationUri : null;
   this.pushTargetFolder = (options.pushTargetFolder != null) ? options.pushTargetFolder : [];

@@ -11,14 +11,13 @@ export type IRegisterNodesResponse = Partial<RegisterNodesResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16115}
 */
 
 export class RegisterNodesResponse {
   responseHeader: ResponseHeader;
-  registeredNodeIds: ec.NodeId[];
+  registeredNodeIds: (ec.NodeId)[];
 
- constructor( options?: IRegisterNodesResponse) {
+ constructor( options?: IRegisterNodesResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.registeredNodeIds = (options.registeredNodeIds != null) ? options.registeredNodeIds : [];

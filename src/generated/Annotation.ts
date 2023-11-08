@@ -10,7 +10,6 @@ export type IAnnotation = Partial<Annotation>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16253}
 */
 
 export class Annotation {
@@ -18,7 +17,7 @@ export class Annotation {
   userName: string | null;
   annotationTime: Date;
 
- constructor( options?: IAnnotation) {
+ constructor( options?: IAnnotation | null) {
   options = options || {};
   this.message = (options.message != null) ? options.message : null;
   this.userName = (options.userName != null) ? options.userName : null;

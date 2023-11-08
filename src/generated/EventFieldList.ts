@@ -12,14 +12,13 @@ export type IEventFieldList = Partial<EventFieldList>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16214}
 */
 
 export class EventFieldList {
   clientHandle: ec.UInt32;
-  eventFields: Variant[];
+  eventFields: (Variant)[];
 
- constructor( options?: IEventFieldList) {
+ constructor( options?: IEventFieldList | null) {
   options = options || {};
   this.clientHandle = (options.clientHandle != null) ? options.clientHandle : 0;
   this.eventFields = (options.eventFields != null) ? options.eventFields : [];

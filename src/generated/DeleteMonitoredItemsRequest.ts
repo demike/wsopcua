@@ -11,15 +11,14 @@ export type IDeleteMonitoredItemsRequest = Partial<DeleteMonitoredItemsRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16201}
 */
 
 export class DeleteMonitoredItemsRequest {
   requestHeader: RequestHeader;
   subscriptionId: ec.UInt32;
-  monitoredItemIds: ec.UInt32[];
+  monitoredItemIds: (ec.UInt32)[];
 
- constructor( options?: IDeleteMonitoredItemsRequest) {
+ constructor( options?: IDeleteMonitoredItemsRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

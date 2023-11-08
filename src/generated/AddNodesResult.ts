@@ -10,16 +10,15 @@ export type IAddNodesResult = Partial<AddNodesResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16083}
 */
 
 export class AddNodesResult {
-  statusCode: ec.StatusCode | null;
+  statusCode: ec.StatusCode;
   addedNodeId: ec.NodeId;
 
- constructor( options?: IAddNodesResult) {
+ constructor( options?: IAddNodesResult | null) {
   options = options || {};
-  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.addedNodeId = (options.addedNodeId != null) ? options.addedNodeId : ec.NodeId.NullNodeId;
 
  }

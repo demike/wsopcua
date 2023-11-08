@@ -11,7 +11,6 @@ export type IModifySubscriptionResponse = Partial<ModifySubscriptionResponse>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16206}
 */
 
 export class ModifySubscriptionResponse {
@@ -20,7 +19,7 @@ export class ModifySubscriptionResponse {
   revisedLifetimeCount: ec.UInt32;
   revisedMaxKeepAliveCount: ec.UInt32;
 
- constructor( options?: IModifySubscriptionResponse) {
+ constructor( options?: IModifySubscriptionResponse | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.revisedPublishingInterval = (options.revisedPublishingInterval != null) ? options.revisedPublishingInterval : 0;

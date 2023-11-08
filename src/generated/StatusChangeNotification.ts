@@ -12,17 +12,16 @@ export type IStatusChangeNotification = Partial<StatusChangeNotification>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16216}
 */
 
 export class StatusChangeNotification extends NotificationData {
-  status: ec.StatusCode | null;
+  status: ec.StatusCode;
   diagnosticInfo: DiagnosticInfo;
 
- constructor( options?: IStatusChangeNotification) {
+ constructor( options?: IStatusChangeNotification | null) {
   options = options || {};
   super();
-  this.status = (options.status != null) ? options.status : null;
+  this.status = (options.status != null) ? options.status : ec.StatusCodes.Good;
   this.diagnosticInfo = (options.diagnosticInfo != null) ? options.diagnosticInfo : new DiagnosticInfo();
 
  }

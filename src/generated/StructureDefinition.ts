@@ -14,21 +14,20 @@ export type IStructureDefinition = Partial<StructureDefinition>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15988}
 */
 
 export class StructureDefinition extends DataTypeDefinition {
   defaultEncodingId: ec.NodeId;
   baseDataType: ec.NodeId;
   structureType: StructureType;
-  fields: StructureField[];
+  fields: (StructureField)[];
 
- constructor( options?: IStructureDefinition) {
+ constructor( options?: IStructureDefinition | null) {
   options = options || {};
   super();
   this.defaultEncodingId = (options.defaultEncodingId != null) ? options.defaultEncodingId : ec.NodeId.NullNodeId;
   this.baseDataType = (options.baseDataType != null) ? options.baseDataType : ec.NodeId.NullNodeId;
-  this.structureType = (options.structureType != null) ? options.structureType : null;
+  this.structureType = (options.structureType != null) ? options.structureType : StructureType.Invalid;
   this.fields = (options.fields != null) ? options.fields : [];
 
  }

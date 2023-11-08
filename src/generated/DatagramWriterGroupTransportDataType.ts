@@ -11,14 +11,13 @@ export type IDatagramWriterGroupTransportDataType = Partial<DatagramWriterGroupT
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15836}
 */
 
 export class DatagramWriterGroupTransportDataType extends WriterGroupTransportDataType {
   messageRepeatCount: ec.Byte;
   messageRepeatDelay: ec.Double;
 
- constructor( options?: IDatagramWriterGroupTransportDataType) {
+ constructor( options?: IDatagramWriterGroupTransportDataType | null) {
   options = options || {};
   super();
   this.messageRepeatCount = (options.messageRepeatCount != null) ? options.messageRepeatCount : 0;

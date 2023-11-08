@@ -11,14 +11,13 @@ export type IGenericAttributeValue = Partial<GenericAttributeValue>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16080}
 */
 
 export class GenericAttributeValue {
   attributeId: ec.UInt32;
   value: Variant;
 
- constructor( options?: IGenericAttributeValue) {
+ constructor( options?: IGenericAttributeValue | null) {
   options = options || {};
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;
   this.value = (options.value != null) ? options.value : new Variant();

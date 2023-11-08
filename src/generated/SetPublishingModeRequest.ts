@@ -11,15 +11,14 @@ export type ISetPublishingModeRequest = Partial<SetPublishingModeRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16207}
 */
 
 export class SetPublishingModeRequest {
   requestHeader: RequestHeader;
   publishingEnabled: boolean;
-  subscriptionIds: ec.UInt32[];
+  subscriptionIds: (ec.UInt32)[];
 
- constructor( options?: ISetPublishingModeRequest) {
+ constructor( options?: ISetPublishingModeRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.publishingEnabled = (options.publishingEnabled != null) ? options.publishingEnabled : false;

@@ -11,7 +11,6 @@ export type IRedundantServerDataType = Partial<RedundantServerDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16230}
 */
 
 export class RedundantServerDataType {
@@ -19,11 +18,11 @@ export class RedundantServerDataType {
   serviceLevel: ec.Byte;
   serverState: ServerState;
 
- constructor( options?: IRedundantServerDataType) {
+ constructor( options?: IRedundantServerDataType | null) {
   options = options || {};
   this.serverId = (options.serverId != null) ? options.serverId : null;
   this.serviceLevel = (options.serviceLevel != null) ? options.serviceLevel : 0;
-  this.serverState = (options.serverState != null) ? options.serverState : null;
+  this.serverState = (options.serverState != null) ? options.serverState : ServerState.Invalid;
 
  }
 

@@ -10,7 +10,6 @@ export type IServerDiagnosticsSummaryDataType = Partial<ServerDiagnosticsSummary
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16234}
 */
 
 export class ServerDiagnosticsSummaryDataType {
@@ -27,7 +26,7 @@ export class ServerDiagnosticsSummaryDataType {
   securityRejectedRequestsCount: ec.UInt32;
   rejectedRequestsCount: ec.UInt32;
 
- constructor( options?: IServerDiagnosticsSummaryDataType) {
+ constructor( options?: IServerDiagnosticsSummaryDataType | null) {
   options = options || {};
   this.serverViewCount = (options.serverViewCount != null) ? options.serverViewCount : 0;
   this.currentSessionCount = (options.currentSessionCount != null) ? options.currentSessionCount : 0;

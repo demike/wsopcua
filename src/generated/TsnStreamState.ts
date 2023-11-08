@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15966}
 */
 
 export enum TsnStreamState {
@@ -16,6 +15,7 @@ export enum TsnStreamState {
   Ready = 2,
   Operational = 3,
   Error = 4,
+  Invalid = 4294967295,
 }
 
 export function encodeTsnStreamState( data: TsnStreamState,  out: DataStream) {

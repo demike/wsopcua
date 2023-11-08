@@ -11,7 +11,6 @@ export type ICreateSubscriptionRequest = Partial<CreateSubscriptionRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16203}
 */
 
 export class CreateSubscriptionRequest {
@@ -23,7 +22,7 @@ export class CreateSubscriptionRequest {
   publishingEnabled: boolean;
   priority: ec.Byte;
 
- constructor( options?: ICreateSubscriptionRequest) {
+ constructor( options?: ICreateSubscriptionRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.requestedPublishingInterval = (options.requestedPublishingInterval != null) ? options.requestedPublishingInterval : 0;

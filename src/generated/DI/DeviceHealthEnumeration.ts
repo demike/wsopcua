@@ -7,7 +7,6 @@ import {DataStream} from '../../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/11/17484}
 */
 
 export enum DeviceHealthEnumeration {
@@ -16,6 +15,7 @@ export enum DeviceHealthEnumeration {
   CHECK_FUNCTION = 2,
   OFF_SPEC = 3,
   MAINTENANCE_REQUIRED = 4,
+  Invalid = 4294967295,
 }
 
 export function encodeDeviceHealthEnumeration( data: DeviceHealthEnumeration,  out: DataStream) {

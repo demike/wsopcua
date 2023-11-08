@@ -13,17 +13,16 @@ export type IDatagramWriterGroupTransport2DataType = Partial<DatagramWriterGroup
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16836}
 */
 
 export class DatagramWriterGroupTransport2DataType extends DatagramWriterGroupTransportDataType {
   address: ExtensionObject | null;
   qosCategory: string | null;
-  datagramQos: ExtensionObject[];
+  datagramQos: (ExtensionObject | null)[];
   discoveryAnnounceRate: ec.UInt32;
   topic: string | null;
 
- constructor( options?: IDatagramWriterGroupTransport2DataType) {
+ constructor( options?: IDatagramWriterGroupTransport2DataType | null) {
   options = options || {};
   super(options);
   this.address = (options.address != null) ? options.address : null;

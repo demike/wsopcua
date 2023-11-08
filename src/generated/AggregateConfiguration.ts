@@ -10,7 +10,6 @@ export type IAggregateConfiguration = Partial<AggregateConfiguration>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16183}
 */
 
 export class AggregateConfiguration {
@@ -20,7 +19,7 @@ export class AggregateConfiguration {
   percentDataGood: ec.Byte;
   useSlopedExtrapolation: boolean;
 
- constructor( options?: IAggregateConfiguration) {
+ constructor( options?: IAggregateConfiguration | null) {
   options = options || {};
   this.useServerCapabilitiesDefaults = (options.useServerCapabilitiesDefaults != null) ? options.useServerCapabilitiesDefaults : false;
   this.treatUncertainAsBad = (options.treatUncertainAsBad != null) ? options.treatUncertainAsBad : false;

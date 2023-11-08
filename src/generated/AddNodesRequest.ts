@@ -13,14 +13,13 @@ export type IAddNodesRequest = Partial<AddNodesRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16084}
 */
 
 export class AddNodesRequest {
   requestHeader: RequestHeader;
-  nodesToAdd: AddNodesItem[];
+  nodesToAdd: (AddNodesItem)[];
 
- constructor( options?: IAddNodesRequest) {
+ constructor( options?: IAddNodesRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.nodesToAdd = (options.nodesToAdd != null) ? options.nodesToAdd : [];

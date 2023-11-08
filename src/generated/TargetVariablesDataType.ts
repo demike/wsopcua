@@ -13,13 +13,12 @@ export type ITargetVariablesDataType = Partial<TargetVariablesDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15819}
 */
 
 export class TargetVariablesDataType extends SubscribedDataSetDataType {
-  targetVariables: FieldTargetDataType[];
+  targetVariables: (FieldTargetDataType)[];
 
- constructor( options?: ITargetVariablesDataType) {
+ constructor( options?: ITargetVariablesDataType | null) {
   options = options || {};
   super();
   this.targetVariables = (options.targetVariables != null) ? options.targetVariables : [];

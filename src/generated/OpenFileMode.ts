@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15536}
 */
 
 export enum OpenFileMode {
@@ -15,6 +14,7 @@ export enum OpenFileMode {
   Write = 2,
   EraseExisting = 4,
   Append = 8,
+  Invalid = 4294967295,
 }
 
 export function encodeOpenFileMode( data: OpenFileMode,  out: DataStream) {

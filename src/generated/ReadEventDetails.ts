@@ -12,7 +12,6 @@ export type IReadEventDetails = Partial<ReadEventDetails>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16147}
 */
 
 export class ReadEventDetails extends HistoryReadDetails {
@@ -21,7 +20,7 @@ export class ReadEventDetails extends HistoryReadDetails {
   endTime: Date;
   filter: EventFilter;
 
- constructor( options?: IReadEventDetails) {
+ constructor( options?: IReadEventDetails | null) {
   options = options || {};
   super();
   this.numValuesPerNode = (options.numValuesPerNode != null) ? options.numValuesPerNode : 0;

@@ -16,18 +16,17 @@ export type IUpdateEventDetails = Partial<UpdateEventDetails>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16166}
 */
 
 export class UpdateEventDetails extends HistoryUpdateDetails {
   performInsertReplace: PerformUpdateType;
   filter: EventFilter;
-  eventData: HistoryEventFieldList[];
+  eventData: (HistoryEventFieldList)[];
 
- constructor( options?: IUpdateEventDetails) {
+ constructor( options?: IUpdateEventDetails | null) {
   options = options || {};
   super(options);
-  this.performInsertReplace = (options.performInsertReplace != null) ? options.performInsertReplace : null;
+  this.performInsertReplace = (options.performInsertReplace != null) ? options.performInsertReplace : PerformUpdateType.Invalid;
   this.filter = (options.filter != null) ? options.filter : new EventFilter();
   this.eventData = (options.eventData != null) ? options.eventData : [];
 

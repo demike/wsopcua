@@ -12,16 +12,15 @@ export type IBrowsePathResult = Partial<BrowsePathResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16111}
 */
 
 export class BrowsePathResult {
-  statusCode: ec.StatusCode | null;
-  targets: BrowsePathTarget[];
+  statusCode: ec.StatusCode;
+  targets: (BrowsePathTarget)[];
 
- constructor( options?: IBrowsePathResult) {
+ constructor( options?: IBrowsePathResult | null) {
   options = options || {};
-  this.statusCode = (options.statusCode != null) ? options.statusCode : null;
+  this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.targets = (options.targets != null) ? options.targets : [];
 
  }

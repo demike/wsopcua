@@ -15,15 +15,14 @@ export type IReaderGroupDataType = Partial<ReaderGroupDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15812}
 */
 
 export class ReaderGroupDataType extends PubSubGroupDataType {
   transportSettings: ExtensionObject | null;
   messageSettings: ExtensionObject | null;
-  dataSetReaders: DataSetReaderDataType[];
+  dataSetReaders: (DataSetReaderDataType)[];
 
- constructor( options?: IReaderGroupDataType) {
+ constructor( options?: IReaderGroupDataType | null) {
   options = options || {};
   super(options);
   this.transportSettings = (options.transportSettings != null) ? options.transportSettings : null;

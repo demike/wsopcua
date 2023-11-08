@@ -10,13 +10,12 @@ export type IHistoryUpdateDetails = Partial<HistoryUpdateDetails>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16161}
 */
 
 export class HistoryUpdateDetails {
   nodeId: ec.NodeId;
 
- constructor( options?: IHistoryUpdateDetails) {
+ constructor( options?: IHistoryUpdateDetails | null) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
 

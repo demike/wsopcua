@@ -10,14 +10,13 @@ export type ILocalizedText = Partial<LocalizedText>;
 
 /**
 A string qualified with a namespace index.
- * {@link https://reference.opcfoundation.org/nodesets/4/15334}
 */
 
 export class LocalizedText {
-  locale?: string;
-  text?: string;
+  locale?: string | null;
+  text?: string | null;
 
- constructor( options?: ILocalizedText) {
+ constructor( options?: ILocalizedText | null) {
   options = options || {};
   this.locale = (options.locale != null) ? options.locale : undefined;
   this.text = (options.text != null) ? options.text : undefined;

@@ -14,15 +14,14 @@ export type IEventFilterResult = Partial<EventFilterResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16186}
 */
 
 export class EventFilterResult extends MonitoringFilterResult {
-  selectClauseResults: ec.StatusCode[];
-  selectClauseDiagnosticInfos: DiagnosticInfo[];
+  selectClauseResults: (ec.StatusCode)[];
+  selectClauseDiagnosticInfos: (DiagnosticInfo)[];
   whereClauseResult: ContentFilterResult;
 
- constructor( options?: IEventFilterResult) {
+ constructor( options?: IEventFilterResult | null) {
   options = options || {};
   super();
   this.selectClauseResults = (options.selectClauseResults != null) ? options.selectClauseResults : [];

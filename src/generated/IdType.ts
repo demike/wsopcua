@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15977}
 */
 
 export enum IdType {
@@ -15,6 +14,7 @@ export enum IdType {
   String = 1,
   Guid = 2,
   Opaque = 3,
+  Invalid = 4294967295,
 }
 
 export function encodeIdType( data: IdType,  out: DataStream) {

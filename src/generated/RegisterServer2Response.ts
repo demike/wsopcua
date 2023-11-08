@@ -13,15 +13,14 @@ export type IRegisterServer2Response = Partial<RegisterServer2Response>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16045}
 */
 
 export class RegisterServer2Response {
   responseHeader: ResponseHeader;
-  configurationResults: ec.StatusCode[];
-  diagnosticInfos: DiagnosticInfo[];
+  configurationResults: (ec.StatusCode)[];
+  diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IRegisterServer2Response) {
+ constructor( options?: IRegisterServer2Response | null) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.configurationResults = (options.configurationResults != null) ? options.configurationResults : [];

@@ -12,7 +12,6 @@ export type IUserNameIdentityToken = Partial<UserNameIdentityToken>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16059}
 */
 
 export class UserNameIdentityToken extends UserIdentityToken {
@@ -20,7 +19,7 @@ export class UserNameIdentityToken extends UserIdentityToken {
   password: Uint8Array | null;
   encryptionAlgorithm: string | null;
 
- constructor( options?: IUserNameIdentityToken) {
+ constructor( options?: IUserNameIdentityToken | null) {
   options = options || {};
   super(options);
   this.userName = (options.userName != null) ? options.userName : null;

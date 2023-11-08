@@ -13,16 +13,15 @@ export type IDatagramConnectionTransport2DataType = Partial<DatagramConnectionTr
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16834}
 */
 
 export class DatagramConnectionTransport2DataType extends DatagramConnectionTransportDataType {
   discoveryAnnounceRate: ec.UInt32;
   discoveryMaxMessageSize: ec.UInt32;
   qosCategory: string | null;
-  datagramQos: ExtensionObject[];
+  datagramQos: (ExtensionObject | null)[];
 
- constructor( options?: IDatagramConnectionTransport2DataType) {
+ constructor( options?: IDatagramConnectionTransport2DataType | null) {
   options = options || {};
   super(options);
   this.discoveryAnnounceRate = (options.discoveryAnnounceRate != null) ? options.discoveryAnnounceRate : 0;

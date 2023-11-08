@@ -13,14 +13,13 @@ export type IDeleteNodesRequest = Partial<DeleteNodesRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16090}
 */
 
 export class DeleteNodesRequest {
   requestHeader: RequestHeader;
-  nodesToDelete: DeleteNodesItem[];
+  nodesToDelete: (DeleteNodesItem)[];
 
- constructor( options?: IDeleteNodesRequest) {
+ constructor( options?: IDeleteNodesRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.nodesToDelete = (options.nodesToDelete != null) ? options.nodesToDelete : [];

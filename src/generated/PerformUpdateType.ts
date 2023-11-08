@@ -7,7 +7,6 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16163}
 */
 
 export enum PerformUpdateType {
@@ -15,6 +14,7 @@ export enum PerformUpdateType {
   Replace = 2,
   Update = 3,
   Remove = 4,
+  Invalid = 4294967295,
 }
 
 export function encodePerformUpdateType( data: PerformUpdateType,  out: DataStream) {

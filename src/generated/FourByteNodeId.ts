@@ -16,7 +16,7 @@ export class FourByteNodeId {
   namespaceIndex: ec.Byte;
   identifier: ec.UInt16;
 
- constructor( options?: IFourByteNodeId) {
+ constructor( options?: IFourByteNodeId | null) {
   options = options || {};
   this.namespaceIndex = (options.namespaceIndex != null) ? options.namespaceIndex : 0;
   this.identifier = (options.identifier != null) ? options.identifier : 0;

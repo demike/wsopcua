@@ -15,18 +15,17 @@ export type IQueryFirstRequest = Partial<QueryFirstRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16136}
 */
 
 export class QueryFirstRequest {
   requestHeader: RequestHeader;
   view: ViewDescription;
-  nodeTypes: NodeTypeDescription[];
+  nodeTypes: (NodeTypeDescription)[];
   filter: ContentFilter;
   maxDataSetsToReturn: ec.UInt32;
   maxReferencesToReturn: ec.UInt32;
 
- constructor( options?: IQueryFirstRequest) {
+ constructor( options?: IQueryFirstRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.view = (options.view != null) ? options.view : new ViewDescription();

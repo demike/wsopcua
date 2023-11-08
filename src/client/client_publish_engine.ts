@@ -262,7 +262,7 @@ export class ClientSidePublishEngine {
         if (doDebug) {
           debugLog('ClientSidePublishEngine.prototype._send_publish_request callback ');
         }
-        this._receive_publish_response(response);
+        this._receive_publish_response(response!);
       }
 
       // feed the server with a new publish Request to the server
@@ -467,12 +467,12 @@ export class ClientSidePublishEngine {
           return _b_callback();
         }
         self._session.republish(request, function (err, response) {
-          if (!err && response.responseHeader.serviceResult.equals(StatusCodes.Good)) {
+          if (!err && response && response.responseHeader.serviceResult.equals(StatusCodes.Good)) {
             // reprocess notification message  and keep going
             subscription.onNotificationMessage(response.notificationMessage);
           } else {
             if (!err) {
-              err = new Error(response.responseHeader.serviceResult.toString());
+              err = new Error(response?.responseHeader.serviceResult.toString());
             }
             debugLog(' _send_republish ends with ' + err.message);
             is_done = true;

@@ -12,13 +12,12 @@ export type IHistoryData = Partial<HistoryData>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16152}
 */
 
 export class HistoryData {
-  dataValues: DataValue[];
+  dataValues: (DataValue)[];
 
- constructor( options?: IHistoryData) {
+ constructor( options?: IHistoryData | null) {
   options = options || {};
   this.dataValues = (options.dataValues != null) ? options.dataValues : [];
 

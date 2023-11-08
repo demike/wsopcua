@@ -13,14 +13,13 @@ export type IDeleteReferencesRequest = Partial<DeleteReferencesRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16093}
 */
 
 export class DeleteReferencesRequest {
   requestHeader: RequestHeader;
-  referencesToDelete: DeleteReferencesItem[];
+  referencesToDelete: (DeleteReferencesItem)[];
 
- constructor( options?: IDeleteReferencesRequest) {
+ constructor( options?: IDeleteReferencesRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.referencesToDelete = (options.referencesToDelete != null) ? options.referencesToDelete : [];

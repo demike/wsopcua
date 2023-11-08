@@ -11,14 +11,13 @@ export type IMdnsDiscoveryConfiguration = Partial<MdnsDiscoveryConfiguration>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16043}
 */
 
 export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
   mdnsServerName: string | null;
-  serverCapabilities: string[];
+  serverCapabilities: (string | null)[];
 
- constructor( options?: IMdnsDiscoveryConfiguration) {
+ constructor( options?: IMdnsDiscoveryConfiguration | null) {
   options = options || {};
   super();
   this.mdnsServerName = (options.mdnsServerName != null) ? options.mdnsServerName : null;

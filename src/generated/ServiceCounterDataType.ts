@@ -10,14 +10,13 @@ export type IServiceCounterDataType = Partial<ServiceCounterDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16238}
 */
 
 export class ServiceCounterDataType {
   totalCount: ec.UInt32;
   errorCount: ec.UInt32;
 
- constructor( options?: IServiceCounterDataType) {
+ constructor( options?: IServiceCounterDataType | null) {
   options = options || {};
   this.totalCount = (options.totalCount != null) ? options.totalCount : 0;
   this.errorCount = (options.errorCount != null) ? options.errorCount : 0;

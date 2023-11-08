@@ -15,7 +15,6 @@ export type IWriterGroupDataType = Partial<WriterGroupDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15805}
 */
 
 export class WriterGroupDataType extends PubSubGroupDataType {
@@ -23,13 +22,13 @@ export class WriterGroupDataType extends PubSubGroupDataType {
   publishingInterval: ec.Double;
   keepAliveTime: ec.Double;
   priority: ec.Byte;
-  localeIds: string[];
+  localeIds: (string | null)[];
   headerLayoutUri: string | null;
   transportSettings: ExtensionObject | null;
   messageSettings: ExtensionObject | null;
-  dataSetWriters: DataSetWriterDataType[];
+  dataSetWriters: (DataSetWriterDataType)[];
 
- constructor( options?: IWriterGroupDataType) {
+ constructor( options?: IWriterGroupDataType | null) {
   options = options || {};
   super(options);
   this.writerGroupId = (options.writerGroupId != null) ? options.writerGroupId : 0;

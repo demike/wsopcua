@@ -12,20 +12,19 @@ export type ISetMonitoringModeRequest = Partial<SetMonitoringModeRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16197}
 */
 
 export class SetMonitoringModeRequest {
   requestHeader: RequestHeader;
   subscriptionId: ec.UInt32;
   monitoringMode: MonitoringMode;
-  monitoredItemIds: ec.UInt32[];
+  monitoredItemIds: (ec.UInt32)[];
 
- constructor( options?: ISetMonitoringModeRequest) {
+ constructor( options?: ISetMonitoringModeRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;
-  this.monitoringMode = (options.monitoringMode != null) ? options.monitoringMode : null;
+  this.monitoringMode = (options.monitoringMode != null) ? options.monitoringMode : MonitoringMode.Invalid;
   this.monitoredItemIds = (options.monitoredItemIds != null) ? options.monitoredItemIds : [];
 
  }

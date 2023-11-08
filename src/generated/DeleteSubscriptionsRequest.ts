@@ -11,14 +11,13 @@ export type IDeleteSubscriptionsRequest = Partial<DeleteSubscriptionsRequest>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16225}
 */
 
 export class DeleteSubscriptionsRequest {
   requestHeader: RequestHeader;
-  subscriptionIds: ec.UInt32[];
+  subscriptionIds: (ec.UInt32)[];
 
- constructor( options?: IDeleteSubscriptionsRequest) {
+ constructor( options?: IDeleteSubscriptionsRequest | null) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionIds = (options.subscriptionIds != null) ? options.subscriptionIds : [];

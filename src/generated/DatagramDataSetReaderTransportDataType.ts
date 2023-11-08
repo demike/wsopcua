@@ -12,16 +12,15 @@ export type IDatagramDataSetReaderTransportDataType = Partial<DatagramDataSetRea
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/2/16837}
 */
 
 export class DatagramDataSetReaderTransportDataType extends DataSetReaderTransportDataType {
   address: ExtensionObject | null;
   qosCategory: string | null;
-  datagramQos: ExtensionObject[];
+  datagramQos: (ExtensionObject | null)[];
   topic: string | null;
 
- constructor( options?: IDatagramDataSetReaderTransportDataType) {
+ constructor( options?: IDatagramDataSetReaderTransportDataType | null) {
   options = options || {};
   super();
   this.address = (options.address != null) ? options.address : null;

@@ -13,17 +13,16 @@ export type IVariableTypeAttributes = Partial<VariableTypeAttributes>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16076}
 */
 
 export class VariableTypeAttributes extends NodeAttributes {
   value: Variant;
   dataType: ec.NodeId;
   valueRank: ec.Int32;
-  arrayDimensions: ec.UInt32[];
+  arrayDimensions: (ec.UInt32)[];
   isAbstract: boolean;
 
- constructor( options?: IVariableTypeAttributes) {
+ constructor( options?: IVariableTypeAttributes | null) {
   options = options || {};
   super(options);
   this.value = (options.value != null) ? options.value : new Variant();

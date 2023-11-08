@@ -13,13 +13,12 @@ export type IEnumDefinition = Partial<EnumDefinition>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15989}
 */
 
 export class EnumDefinition extends DataTypeDefinition {
-  fields: EnumField[];
+  fields: (EnumField)[];
 
- constructor( options?: IEnumDefinition) {
+ constructor( options?: IEnumDefinition | null) {
   options = options || {};
   super();
   this.fields = (options.fields != null) ? options.fields : [];

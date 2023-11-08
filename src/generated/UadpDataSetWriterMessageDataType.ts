@@ -12,7 +12,6 @@ export type IUadpDataSetWriterMessageDataType = Partial<UadpDataSetWriterMessage
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15828}
 */
 
 export class UadpDataSetWriterMessageDataType extends DataSetWriterMessageDataType {
@@ -21,10 +20,10 @@ export class UadpDataSetWriterMessageDataType extends DataSetWriterMessageDataTy
   networkMessageNumber: ec.UInt16;
   dataSetOffset: ec.UInt16;
 
- constructor( options?: IUadpDataSetWriterMessageDataType) {
+ constructor( options?: IUadpDataSetWriterMessageDataType | null) {
   options = options || {};
   super();
-  this.dataSetMessageContentMask = (options.dataSetMessageContentMask != null) ? options.dataSetMessageContentMask : null;
+  this.dataSetMessageContentMask = (options.dataSetMessageContentMask != null) ? options.dataSetMessageContentMask : UadpDataSetMessageContentMask.None;
   this.configuredSize = (options.configuredSize != null) ? options.configuredSize : 0;
   this.networkMessageNumber = (options.networkMessageNumber != null) ? options.networkMessageNumber : 0;
   this.dataSetOffset = (options.dataSetOffset != null) ? options.dataSetOffset : 0;

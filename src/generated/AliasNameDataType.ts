@@ -11,14 +11,13 @@ export type IAliasNameDataType = Partial<AliasNameDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15940}
 */
 
 export class AliasNameDataType {
   aliasName: QualifiedName;
-  referencedNodes: ec.ExpandedNodeId[];
+  referencedNodes: (ec.ExpandedNodeId)[];
 
- constructor( options?: IAliasNameDataType) {
+ constructor( options?: IAliasNameDataType | null) {
   options = options || {};
   this.aliasName = (options.aliasName != null) ? options.aliasName : new QualifiedName();
   this.referencedNodes = (options.referencedNodes != null) ? options.referencedNodes : [];

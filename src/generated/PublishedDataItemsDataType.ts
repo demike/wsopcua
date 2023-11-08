@@ -13,13 +13,12 @@ export type IPublishedDataItemsDataType = Partial<PublishedDataItemsDataType>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15798}
 */
 
 export class PublishedDataItemsDataType extends PublishedDataSetSourceDataType {
-  publishedData: PublishedVariableDataType[];
+  publishedData: (PublishedVariableDataType)[];
 
- constructor( options?: IPublishedDataItemsDataType) {
+ constructor( options?: IPublishedDataItemsDataType | null) {
   options = options || {};
   super();
   this.publishedData = (options.publishedData != null) ? options.publishedData : [];

@@ -5,7 +5,6 @@
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15817}
 */
 
 export class DataSetReaderMessageDataType {

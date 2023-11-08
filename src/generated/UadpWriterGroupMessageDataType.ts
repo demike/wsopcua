@@ -13,7 +13,6 @@ export type IUadpWriterGroupMessageDataType = Partial<UadpWriterGroupMessageData
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/15826}
 */
 
 export class UadpWriterGroupMessageDataType extends WriterGroupMessageDataType {
@@ -21,14 +20,14 @@ export class UadpWriterGroupMessageDataType extends WriterGroupMessageDataType {
   dataSetOrdering: DataSetOrderingType;
   networkMessageContentMask: UadpNetworkMessageContentMask;
   samplingOffset: ec.Double;
-  publishingOffset: ec.Double[];
+  publishingOffset: (ec.Double)[];
 
- constructor( options?: IUadpWriterGroupMessageDataType) {
+ constructor( options?: IUadpWriterGroupMessageDataType | null) {
   options = options || {};
   super();
   this.groupVersion = (options.groupVersion != null) ? options.groupVersion : 0;
-  this.dataSetOrdering = (options.dataSetOrdering != null) ? options.dataSetOrdering : null;
-  this.networkMessageContentMask = (options.networkMessageContentMask != null) ? options.networkMessageContentMask : null;
+  this.dataSetOrdering = (options.dataSetOrdering != null) ? options.dataSetOrdering : DataSetOrderingType.Invalid;
+  this.networkMessageContentMask = (options.networkMessageContentMask != null) ? options.networkMessageContentMask : UadpNetworkMessageContentMask.None;
   this.samplingOffset = (options.samplingOffset != null) ? options.samplingOffset : 0;
   this.publishingOffset = (options.publishingOffset != null) ? options.publishingOffset : [];
 

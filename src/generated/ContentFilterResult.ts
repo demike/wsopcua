@@ -14,14 +14,13 @@ export type IContentFilterResult = Partial<ContentFilterResult>;
 
 /**
 
- * {@link https://reference.opcfoundation.org/nodesets/4/16134}
 */
 
 export class ContentFilterResult {
-  elementResults: ContentFilterElementResult[];
-  elementDiagnosticInfos: DiagnosticInfo[];
+  elementResults: (ContentFilterElementResult)[];
+  elementDiagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IContentFilterResult) {
+ constructor( options?: IContentFilterResult | null) {
   options = options || {};
   this.elementResults = (options.elementResults != null) ? options.elementResults : [];
   this.elementDiagnosticInfos = (options.elementDiagnosticInfos != null) ? options.elementDiagnosticInfos : [];
