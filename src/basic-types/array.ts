@@ -153,13 +153,13 @@ export function jsonDecodeArray<T>(
   return array.map((el) => {
     const retVal = decode_element_func(el);
     return retVal === undefined ? null : retVal;
-  });
+  }) as T[];
 }
 
 export function jsonEncodeArray<T>(
   array: any[] | undefined,
   encode_element_func: (obj: any) => T
-): T[] {
+): T[] | undefined {
   if (!array || array.length === 0) {
     return undefined;
   }
@@ -167,7 +167,7 @@ export function jsonEncodeArray<T>(
   return array.map((el) => {
     const retVal = encode_element_func(el);
     return retVal === undefined ? null : retVal;
-  });
+  }) as T[];
 }
 
 export function jsonDecodeStructArray<T extends IEncodable>(
@@ -182,13 +182,6 @@ export function jsonDecodeStructArray<T extends IEncodable>(
     s.fromJSON(obj);
     return s;
   });
-}
-
-export function jsonEncodeStructArray<T extends IEncodable>(array: T[] | undefined): any[] {
-  if (!array || array.length === 0) {
-    return undefined;
-  }
-  return array;
 }
 
 /**
@@ -218,7 +211,7 @@ export function unFlattenArray(array: any[], dim: number[]): any[] {
       currentArray = [];
       subArrays.push(currentArray);
     }
-    currentArray.push(array[i]);
+    currentArray!.push(array[i]);
   }
 
   if (dim.length === 2) {
