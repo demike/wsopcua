@@ -203,6 +203,7 @@ export class TypeRegistry {
     enumType.defaultValue = 'NodeClass.Unspecified';
     this.addType(enumType.Name, enumType);
     */
+
     // TODO
     // Number: 8.31 abstract type
     // TODO

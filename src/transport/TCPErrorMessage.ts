@@ -47,14 +47,14 @@ export class TCPErrorMessage extends BaseUAObject {
      * @property statusCode
      * @type {StatusCode}
      */
-    this.statusCode = options.statusCode;
+    this.statusCode = options.statusCode ?? StatusCodes.Good;
 
     /**
      *
      * @property reason
      * @type {String}
      */
-    this.reason = options.reason;
+    this.reason = options.reason ?? null;
 
     // Object.preventExtensions(self);
   }
@@ -99,7 +99,7 @@ export class TCPErrorMessage extends BaseUAObject {
   }
 
   public static encodingDefaultBinary = makeExpandedNodeId(generate_new_id());
-  reason: string;
+  reason: string | null;
   statusCode: StatusCode;
 }
 

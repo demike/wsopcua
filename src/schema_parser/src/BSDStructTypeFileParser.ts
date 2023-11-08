@@ -110,7 +110,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
         } else if (mem.Type instanceof SimpleType) {
           alternativeCode = mem.Type.defaultValue || 'null';
         } else if (mem.Type instanceof EnumTypeFile) {
-          alternativeCode = '0';
+          alternativeCode = mem.Type.defaultValue || '0';
         }
 
         body +=
@@ -459,6 +459,9 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
       if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
         addIf = true;
         body += '  if(inp.' + mem.OrigName + ') {\n ';
+        if (mem.Type instanceof StructTypeFile) {
+          body += `    this.${mem.Name} ??= new ${mem.Type.Name}(); \n`;
+        }
       }
 
       body += '  this.' + mem.Name;

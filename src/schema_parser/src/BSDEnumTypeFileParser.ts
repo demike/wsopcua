@@ -9,6 +9,7 @@ import {
   BSDClassFileParser,
   EnumItem,
   ClassFile,
+  EnumTypeFile,
 } from './SchemaParser.module';
 import { getModuleImportPath } from './SchemaParserConfig';
 
@@ -23,6 +24,7 @@ export class BSDEnumTypeFileParser extends BSDClassFileParser {
       this.lengthInBits = parseInt(attr.value, 10);
     }
     super.parse();
+    this.createDefaultValue();
   }
   /**
    *
@@ -104,5 +106,21 @@ export class BSDEnumTypeFileParser extends BSDClassFileParser {
     }
 
     return '';
+  }
+
+  protected createDefaultValue(): void {
+    const enumType = this.cls as EnumTypeFile;
+    let defaultValue: EnumItem;
+    for (const member of this.cls.Members) {
+      const memberName = member.Name.toLowerCase();
+      if (memberName === 'none' || memberName === 'invalid' || memberName === 'default') {
+        enumType.defaultValue = `${this.cls.Name}.${member.Name}`;
+        return;
+      }
+    }
+
+    // add an invalid member
+    this.cls.Members.push(new EnumItem('Invalid', 4294967295, 'added by wsopcua'));
+    enumType.defaultValue = `${this.cls.Name}.Invalid`;
   }
 }
