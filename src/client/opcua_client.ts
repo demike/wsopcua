@@ -87,7 +87,7 @@ export interface SessionActivationOptions {
   localeIds?: string[];
 }
 
-function validateServerNonce(serverNonce: Uint8Array | null): serverNonce is Uint8Array {
+function validateServerNonce(serverNonce?: Uint8Array | null): serverNonce is Uint8Array {
   return serverNonce && serverNonce.length < 32 ? false : true;
 }
 
@@ -106,8 +106,7 @@ function validateServerNonce(serverNonce: Uint8Array | null): serverNonce is Uin
  */
 export class OPCUAClient extends OPCUAClientBase {
   protected _clientNonce: any;
-  protected _userIdentityInfo: UserIdentityInfo;
-  protected _serverUri: string;
+  protected _serverUri?: string;
   private ___sessionName_counter: any;
 
   requestedSessionTimeout: any;
@@ -116,6 +115,7 @@ export class OPCUAClient extends OPCUAClientBase {
   get clientNonce() {
     return this._clientNonce;
   }
+
   constructor(options: OPCUAClientOptions) {
     super(options);
     options = options || {};
@@ -159,6 +159,7 @@ export class OPCUAClient extends OPCUAClientBase {
   }
 
   protected __resolveEndPoint(): boolean {
+    assert(this._secureChannel);
     this.securityPolicy = this.securityPolicy || SecurityPolicy.None;
 
     let endpoint = this.findEndpoint(
@@ -200,6 +201,7 @@ export class OPCUAClient extends OPCUAClientBase {
   protected _createSession(callback: ResponseCallback<ClientSession>): void {
     assert(typeof callback === 'function');
     assert(this._secureChannel);
+
     if (!this.__resolveEndPoint() || !this.endpoint) {
       console.log(
         this._server_endpoints.map(function (endpoint) {
@@ -287,8 +289,8 @@ export class OPCUAClient extends OPCUAClientBase {
 
     this.performMessageTransaction(
       request,
-      (err, response: session_service.CreateSessionResponse) => {
-        if (!err) {
+      (err, response?: session_service.CreateSessionResponse) => {
+        if (!err && response) {
           // xx console.log("xxxxx response",response.toString());
           // xx console.log("xxxxx response",response.responseHeader.serviceResult);
           if (response.responseHeader.serviceResult === StatusCodes.BadTooManySessions) {
@@ -346,8 +348,8 @@ export class OPCUAClient extends OPCUAClientBase {
   public computeClientSignature(
     channel: ClientSecureChannelLayer,
     serverCertificate: Uint8Array,
-    serverNonce: Uint8Array
-  ): Promise<SignatureData> {
+    serverNonce?: Uint8Array
+  ) {
     return computeSignature(
       serverCertificate,
       serverNonce,
@@ -439,6 +441,7 @@ export class OPCUAClient extends OPCUAClientBase {
       session,
       options.userIdentityInfo ?? null,
       async (err, userIdentityToken) => {
+        assert(this._secureChannel);
         if (err) {
           session.client = _old_client;
           return callback(err);
@@ -475,7 +478,7 @@ export class OPCUAClient extends OPCUAClientBase {
           // shall use any that it has.
           // This parameter only needs to be specified during the first call to ActivateSession during a single
           // application Session. If it is not specified the Server shall keep using the current localeIds for the Session.
-          localeIds: options.localeIds ?? [],
+          localeIds: options!.localeIds ?? [],
 
           // The credentials of the user associated with the Client application. The Server uses these credentials to
           // determine whether the Client should be allowed to activate a Session and what resources the Client has access
@@ -502,7 +505,7 @@ export class OPCUAClient extends OPCUAClientBase {
               return callback(new Error('Invalid server Nonce'));
             }
 
-            session.serverNonce = response.serverNonce;
+            session.serverNonce = response.serverNonce ?? undefined;
             // TODO: session.lastResponseReceivedTime = Date.now();
 
             // 05.11.2019: Derfler added new session_activated
@@ -511,7 +514,7 @@ export class OPCUAClient extends OPCUAClientBase {
           } else {
             err1 = err1 || new Error(response.responseHeader.serviceResult.toString());
             session.client = _old_client;
-            return callback(err1, null);
+            return callback(err1);
           }
         });
       }
@@ -542,7 +545,7 @@ export class OPCUAClient extends OPCUAClientBase {
       !session.client || session.client.endpointUrl === this.endpointUrl,
       'cannot reactivateSession on a different endpoint'
     );
-    const old_client: OPCUAClientBase = session.client;
+    const old_client = session.client;
 
     debugLog('OPCUAClient#reactivateSession');
 
@@ -628,7 +631,7 @@ export class OPCUAClient extends OPCUAClientBase {
     assert('function' === typeof callback);
 
     this._createSession((err, session) => {
-      if (err != null) {
+      if (err || !session) {
         callback(err);
       } else {
         this._addSession(session);
@@ -661,7 +664,7 @@ export class OPCUAClient extends OPCUAClientBase {
   public createSessionP(options: SessionActivationOptions | null): Promise<ClientSession> {
     return new Promise((res, rej) => {
       this.createSession(options, (err, clientSession) => {
-        if (err) {
+        if (err || !clientSession) {
           rej(err);
         } else {
           res(clientSession);
@@ -683,6 +686,7 @@ export class OPCUAClient extends OPCUAClientBase {
     callback: ErrorCallback
   ) {
     assert('function' === typeof callback);
+    assert(session);
 
     this._activateSession(session, options, function (err) {
       callback(err);
@@ -737,7 +741,7 @@ export class OPCUAClient extends OPCUAClientBase {
         // xx self._secureChannel.close(function () {
         // xx     callback(err, null);
         // xx });
-        callback(err, null);
+        callback(err);
       } else {
         callback(err, response);
       }
@@ -799,7 +803,7 @@ export class OPCUAClient extends OPCUAClientBase {
     assert('function' === typeof callback);
 
     // call base class implementation first
-    super._on_connection_reestablished((err: Error) => {
+    super._on_connection_reestablished((err) => {
       repair_client_sessions(this, callback);
     });
   }
@@ -886,7 +890,7 @@ export class OPCUAClient extends OPCUAClientBase {
           });
         },
       ],
-      (err1: Error) => {
+      (err1) => {
         if (need_disconnect) {
           console.log('Disconnecting client after failure');
           this.disconnect(function (err2) {
@@ -1010,7 +1014,7 @@ async function createUserNameIdentityToken(
   const userTokenPolicy = findUserTokenPolicy(endpoint_desc, UserTokenType.UserName);
 
   // istanbul ignore next
-  if (!userTokenPolicy) {
+  if (!userTokenPolicy || !userTokenPolicy.securityPolicyUri) {
     throw new Error('Cannot find USERNAME user token policy in end point description');
   }
 
@@ -1061,9 +1065,11 @@ async function createUserNameIdentityToken(
     throw new Error(' Unsupported security Policy');
   }
 
+  const passwordArray = stringToUint8Array(password);
+
   identityToken = new UserNameIdentityToken({
     encryptionAlgorithm: cryptoFactory.asymmetricEncryptionAlgorithm,
-    password: stringToUint8Array(password),
+    password: passwordArray,
     policyId: userTokenPolicy.policyId,
     userName: userName,
   });
@@ -1073,12 +1079,8 @@ async function createUserNameIdentityToken(
   assert(session.serverCertificate instanceof Uint8Array);
 
   const lenBuf = new Uint32Array(1);
-  lenBuf[0] = identityToken.password.length + serverNonce.length;
-  const block = concatArrayBuffers([
-    lenBuf.buffer,
-    identityToken.password.buffer,
-    serverNonce.buffer,
-  ]);
+  lenBuf[0] = passwordArray.length + serverNonce.length;
+  const block = concatArrayBuffers([lenBuf.buffer, passwordArray.buffer, serverNonce.buffer]);
 
   // let ci = exploreCertificate(session.serverCertificate);
   try {
@@ -1188,12 +1190,8 @@ async function createIssuedIdentityToken(
   assert(session.serverCertificate instanceof Uint8Array);
 
   const lenBuf = new Uint32Array(1);
-  lenBuf[0] = identityToken.tokenData.length + serverNonce.length;
-  const block = concatArrayBuffers([
-    lenBuf.buffer,
-    identityToken.tokenData.buffer,
-    serverNonce.buffer,
-  ]);
+  lenBuf[0] = tokenData.length + serverNonce.length;
+  const block = concatArrayBuffers([lenBuf.buffer, tokenData.buffer, serverNonce.buffer]);
 
   try {
     const publicKey = await cryptoFactory.generatePublicKeyFromDER(session.serverCertificate);

@@ -841,7 +841,7 @@ function coerceNumericRange(value: any | string | NumericRange | null | number[]
     return new NumericRange();
   }
   assert(typeof value === 'string' || Array.isArray(value));
-  return new NumericRange(value);
+  return new NumericRange(value as number[]);
 }
 
 const empty = new NumericRange();

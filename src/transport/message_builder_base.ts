@@ -122,7 +122,7 @@ export abstract class MessageBuilderBase extends EventEmitter<MessageBuilderEven
       this.messageHeader = readMessageHeader(binaryStream);
       assert(binaryStream.length === 8);
       this.secureChannelId = binaryStream.getUint32();
-      assert(binaryStream.length === 12);
+      assert((binaryStream.length as any) === 12);
       // verifying secureChannelId
       if (this.expected_secureChannelId && this.secureChannelId !== this.expected_secureChannelId) {
         return this._report_error('Invalid secure channel Id');

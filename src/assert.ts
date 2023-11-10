@@ -166,7 +166,7 @@ function fail(
 // message_opt);. To test strictly for the value true, use
 // assert.strictEqual(true, guard, message_opt);.
 
-export function assert(value: any, message?: string) {
+export function assert(value: any, message?: string): asserts value {
   if (!value) {
     fail(value, true, message, '==', assert);
   }

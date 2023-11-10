@@ -534,10 +534,10 @@ export function getCryptoFactory(securityPolicy: SecurityPolicy): ICryptoFactory
 export function computeSignature(
   senderCertificate: Uint8Array | undefined,
   senderNonce: Uint8Array | undefined,
-  receiverPrivatekey: PrivateKey,
+  receiverPrivatekey: PrivateKey | null | undefined,
   securityPolicy: SecurityPolicy
 ): Promise<SignatureData> | undefined {
-  if (!senderNonce || !senderCertificate) {
+  if (!senderNonce || !senderCertificate || !receiverPrivatekey) {
     return;
   }
 
