@@ -1,6 +1,7 @@
 import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 import * as opcua from '../';
 import { makeNodeId, MonitoredItemCreateRequest } from '../';
+import { assert } from '../assert';
 
 describe('testing basic Client Server dealing with subscription at low level', function () {
   let session: opcua.ClientSession;
@@ -35,10 +36,11 @@ describe('testing basic Client Server dealing with subscription at low level', f
       subscriptionId = response.subscriptionId;
 
       window.setTimeout(function () {
+        assert(subscriptionId);
         const requ = new opcua.DeleteSubscriptionsRequest({
           subscriptionIds: [subscriptionId],
         });
-        session.deleteSubscriptions(requ, function (error: Error, result) {
+        session.deleteSubscriptions(requ, function (error, result) {
           if (error) {
             throw error;
           }
@@ -49,7 +51,7 @@ describe('testing basic Client Server dealing with subscription at low level', f
   });
 
   it('server should create a monitored item  (CreateMonitoredItems)', function (done) {
-    let subscriptionId = null;
+    let subscriptionId: number | null = null;
     // CreateSubscriptionRequest
     const request = new opcua.CreateSubscriptionRequest({
       requestedPublishingInterval: 100,
@@ -86,7 +88,7 @@ describe('testing basic Client Server dealing with subscription at low level', f
           }),
         ],
       });
-      session.createMonitoredItems(requ, function (error: Error, resp) {
+      session.createMonitoredItems(requ, function (error, resp) {
         if (!error) {
           expect(resp instanceof opcua.CreateMonitoredItemsResponse).toBeTruthy();
           done();
@@ -128,6 +130,7 @@ describe('testing basic Client Server dealing with subscription at low level', f
       session.publish(request, function (err, response) {
         if (!err) {
           expect(response instanceof opcua.PublishResponse).toBeTruthy();
+          assert(response);
 
           expect(response.subscriptionId).toBeTruthy(); // IntegerId
           expect(response.availableSequenceNumbers).toBeTruthy(); // Array,Counter,
@@ -141,6 +144,7 @@ describe('testing basic Client Server dealing with subscription at low level', f
     });
 
     await new Promise((callback) => {
+      assert(subscriptionId);
       const request = new opcua.DeleteSubscriptionsRequest({
         subscriptionIds: [subscriptionId],
       });
@@ -153,7 +157,7 @@ describe('testing basic Client Server dealing with subscription at low level', f
   it('server should handle DeleteMonitoredItems  request', function (done) {
     const request = new opcua.DeleteMonitoredItemsRequest({});
     session.deleteMonitoredItems(request, function (err) {
-      expect(err.message).toMatch(/BadSubscriptionIdInvalid/);
+      expect(err?.message).toMatch(/BadSubscriptionIdInvalid/);
       done();
     });
   });

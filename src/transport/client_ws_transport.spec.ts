@@ -209,7 +209,8 @@ describe('testing ClientWS_transport', function () {
 
     transport.timeout = 1000; // very short timeout;
 
-    transport.on('message', function (message_chunk: DataView) {
+    transport.on('message', function (message_chunk) {
+      assert(message_chunk instanceof DataView);
       debugLog(hexDump(message_chunk));
       expect(new DataView(message_chunk.buffer, 8)).toEqual(message1);
 

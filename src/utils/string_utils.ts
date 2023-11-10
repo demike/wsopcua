@@ -1,6 +1,6 @@
 'use strict';
 
-export function capitalizeFirstLetter(str: string): string {
+export function capitalizeFirstLetter(str?: string | null) {
   if (str == null) {
     return str;
   }

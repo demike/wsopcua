@@ -22,7 +22,7 @@ describe('JSONMessageBuilder', function () {
   it('should decode a valid object', () => {
     const csr = new CreateSessionResponse();
     csr.responseHeader.serviceResult = StatusCodes.Good;
-    const id = ((csr as IEncodable).encodingDefaultBinary.value as number) - 2;
+    const id = ((csr as IEncodable).encodingDefaultBinary!.value as number) - 2;
     const responseJSON = {
       TypeId: { Id: id },
       Body: csr,

@@ -6,7 +6,7 @@ function installTestFor(Transport: new () => DirectTransport) {
   describe(
     'Testing behavior of  ' + Transport.name + '  to emulate client/server communication in tests',
     function () {
-      let transport: DirectTransport = null;
+      let transport: DirectTransport;
 
       beforeEach(function (done) {
         transport = new Transport();
@@ -18,7 +18,6 @@ function installTestFor(Transport: new () => DirectTransport) {
       });
       afterEach(function (done) {
         transport.shutdown(done);
-        transport = null;
       });
 
       it('server side should receive data send by the client only', function (done) {
