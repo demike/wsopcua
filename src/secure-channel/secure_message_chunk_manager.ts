@@ -19,7 +19,7 @@ import {
   EncryptBufferFunc,
   IChunkManagerOptions,
   SignBufferFunc,
-} from 'src/chunkmanager/chunk_manager';
+} from '../chunkmanager/chunk_manager';
 
 export interface SecureMessageChunkManagerEvents {
   chunk: (chunk: ArrayBuffer, is_last: boolean) => void;

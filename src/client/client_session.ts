@@ -68,7 +68,7 @@ import {
   NodeIdType,
 } from '../generated';
 import { buf2base64, buf2hex } from '../crypto';
-import { IEncodable } from 'src/factory/factories_baseobject';
+import { IEncodable } from '../factory/factories_baseobject';
 import { findBasicDataType } from './find_basic_datatype';
 
 export enum BrowseDirection {

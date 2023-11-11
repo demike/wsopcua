@@ -10,9 +10,8 @@ import { MessageHeader, PacketAssembler, PacketInfo } from '../packet-assembler/
 import { readMessageHeader } from '../chunkmanager';
 import { concatArrayBuffers } from '../basic-types/array';
 import { SequenceHeader } from '../service-secure-channel';
-import { IEncodable } from '../factory/factories_baseobject';
 import { Lock } from '../basic-types/utils';
-import { OpcUaResponse } from 'src/client';
+import { OpcUaResponse } from '../client';
 
 const doPerfMonitoring = false;
 
