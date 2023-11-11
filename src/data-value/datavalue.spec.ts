@@ -14,6 +14,8 @@ import { decodeTimestampsToReturn, TimestampsToReturn } from '../generated';
 import { apply_timestamps } from './datavalue';
 import { getFunctionParameterNames } from '../utils';
 import { getCurrentClock } from '../date-time/date_time';
+import { assert } from '../assert';
+import { call } from '../backoff';
 
 function encode_decode_round_trip_test(
   obj: IEncodable,
@@ -27,7 +29,10 @@ function encode_decode_round_trip_test(
 
   obj.encode(stream);
 
-  callback_buffer(stream.view.buffer, obj.encodingDefaultBinary);
+  if (callback_buffer) {
+    assert(obj.encodingDefaultBinary);
+    callback_buffer(stream.view.buffer, obj.encodingDefaultBinary);
+  }
 
   stream.rewind();
 
@@ -130,6 +135,7 @@ describe('DataValue', function () {
       }),
     });
     const dataValue1 = extractRange(dataValue, new NumericRange('2:3'));
+    assert(dataValue1.value);
     expect(dataValue1.value.value.length).toBe(2);
     expect(dataValue1.value.value[0]).toBe(3.0);
     expect(dataValue1.value.value[1]).toBe(4.0);
@@ -145,6 +151,7 @@ describe('DataValue', function () {
       }),
     });
     const dataValue1 = extractRange(dataValue, new NumericRange('2:3'));
+    assert(dataValue1.value);
     expect(dataValue1.value.value.length).toBe(2);
     expect(dataValue1.value.value).toBe('34');
     expect(dataValue1.value.dataType).toBe(DataType.String);
@@ -161,6 +168,7 @@ describe('DataValue', function () {
       }),
     });
     const dataValue1 = extractRange(dataValue, new NumericRange('2:3'));
+    assert(dataValue1.value);
     expect(dataValue1.value.value.length).toEqual(2);
     expect(dataValue1.value.value).toEqual('34');
     expect(dataValue1.value.dataType).toEqual(DataType.String);
@@ -178,6 +186,7 @@ describe('DataValue', function () {
       }),
     });
     const dataValue1 = extractRange(dataValue, new NumericRange('20:30'));
+    assert(dataValue1.value);
     expect(dataValue1.value.value.length).toEqual(0);
     expect(dataValue1.value.value).toEqual('');
     expect(dataValue1.value.dataType).toEqual(DataType.String);
@@ -195,6 +204,7 @@ describe('DataValue', function () {
       }),
     });
     const dataValue1 = extractRange(dataValue, new NumericRange('2:3'));
+    assert(dataValue1.value);
     expect(dataValue1.value.value.length).toBe(2);
     expect(dataValue1.value.value[0]).toBe(3.0);
     expect(dataValue1.value.value[1]).toBe(4.0);
@@ -211,6 +221,7 @@ describe('DataValue', function () {
       }),
     });
     const dataValue1 = extractRange(dataValue, new NumericRange('2:3'));
+    assert(dataValue1.value);
     expect(dataValue1.value.dataType).toBe(DataType.ByteString);
     expect(dataValue1.value.arrayType).toBe(VariantArrayType.Scalar);
     expect(dataValue1.value.value).toBeNull();
@@ -228,6 +239,7 @@ describe('DataValue', function () {
 
     const dec = new TextDecoder();
     const dataValue1 = extractRange(dataValue, new NumericRange('2:3'));
+    assert(dataValue1.value);
     expect(dataValue1.value.value.length).toBe(2);
     expect(dec.decode(dataValue1.value.value[0])).toBe('GHI');
     expect(dec.decode(dataValue1.value.value[1])).toBe('JKL');
@@ -260,6 +272,7 @@ describe('DataValue', function () {
     });
     const dec = new TextDecoder();
     const dataValue1 = extractRange(dataValue, new NumericRange('2,1:2'));
+    assert(dataValue1.value);
     expect(dataValue1.value.value.length).toBe(2);
     expect(dec.decode(dataValue1.value.value[0])).toBe('32');
     expect(dec.decode(dataValue1.value.value[1])).toBe('33');
@@ -302,8 +315,8 @@ describe('DataValue', function () {
         });
         const cloned = copy_construct_or_clone_func(dv);
 
-        expect(cloned.value.dataType).toBe(dv.value.dataType);
-        expect(cloned.value.value).toBe(dv.value.value);
+        expect(cloned.value?.dataType).toBe(dv.value?.dataType);
+        expect(cloned.value?.value).toBe(dv.value?.value);
       });
       it('should ' + copy_construct_or_clone + ' a DataValue with a variant array', function () {
         const dv = new DataValue({
@@ -314,7 +327,8 @@ describe('DataValue', function () {
         });
 
         const cloned = copy_construct_or_clone_func(dv);
-
+        assert(cloned.value);
+        assert(dv.value);
         expect(cloned.value.dataType).toBe(dv.value.dataType);
         expect(cloned.value.value).toEqual(dv.value.value);
         expect(cloned.value.value[0]).toBe(36);
@@ -350,6 +364,8 @@ describe('DataValue', function () {
           });
 
           const cloned = copy_construct_or_clone_func(dv);
+          assert(cloned.value);
+          assert(dv.value);
 
           expect(cloned.value.dataType).toBe(dv.value.dataType);
           expect(cloned.value.value).toEqual(dv.value.value);
@@ -388,6 +404,8 @@ describe('DataValue', function () {
           });
 
           const cloned = copy_construct_or_clone_func(dv);
+          assert(cloned.value);
+          assert(dv.value);
 
           expect(cloned.value.dataType).toBe(dv.value.dataType);
           expect(cloned.value.value.a).toBe(dv.value.value.a);
@@ -422,6 +440,8 @@ describe('DataValue', function () {
 
           // copy construct;,
           const cloned = copy_construct_or_clone_func(dv);
+          assert(cloned.value);
+          assert(dv.value);
 
           expect(cloned.value.dataType).toBe(dv.value.dataType);
           expect(cloned.value.value[0].a).toBe(36);
@@ -473,14 +493,14 @@ describe('apply_timestamps', function () {
 
   it('should apply both timestamps to return', function () {
     const cloneDataValue = apply_timestamps(dataValue, TimestampsToReturn.Both, 13 /* value */);
-    expect(cloneDataValue.value.value).toBe('Hello');
+    expect(cloneDataValue.value?.value).toBe('Hello');
     expect(cloneDataValue.serverTimestamp).toBeDefined();
     expect(cloneDataValue.sourceTimestamp).toBeDefined();
   });
 
   it('should apply server timestamp only', function () {
     const cloneDataValue = apply_timestamps(dataValue, TimestampsToReturn.Server, 13 /* value */);
-    expect(cloneDataValue.value.value).toBe('Hello');
+    expect(cloneDataValue.value?.value).toBe('Hello');
     expect(cloneDataValue.serverTimestamp).toBeDefined();
     expect(cloneDataValue.serverPicoseconds).toBeDefined();
     expect(cloneDataValue.sourceTimestamp).toBeUndefined();
@@ -492,7 +512,7 @@ describe('apply_timestamps', function () {
     dataValue.sourcePicoseconds = now.picoseconds;
     const cloneDataValue = apply_timestamps(dataValue, TimestampsToReturn.Source, 13 /* value */);
 
-    expect(cloneDataValue.value.value).toBe('Hello');
+    expect(cloneDataValue.value?.value).toBe('Hello');
     expect(cloneDataValue.serverTimestamp).toBeUndefined();
     expect(cloneDataValue.sourceTimestamp).toBe(now.timestamp);
     expect(cloneDataValue.sourcePicoseconds).toBe(now.picoseconds);

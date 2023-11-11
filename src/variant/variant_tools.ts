@@ -256,7 +256,7 @@ function __check_same_array(arr1?: any[], arr2?: any[]) {
   }
   return true;
 }
-export function sameVariant(v1?: Variant, v2?: Variant): boolean {
+export function sameVariant(v1?: Variant | null, v2?: Variant | null): boolean {
   // xx assert(v1 && v1.constructor.name === "Variant");
   if (v1 === v2) {
     return true;

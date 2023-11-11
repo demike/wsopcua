@@ -1643,7 +1643,7 @@ describe('testing sameVariant Performance', function () {
 
   function test_variant(
     index: number,
-    sameVariantFN: (v1: Variant | null, v2: Variant | null) => boolean
+    sameVariantFN: (v1?: Variant | null, v2?: Variant | null) => boolean
   ) {
     const v1 = variousVariants[index];
 

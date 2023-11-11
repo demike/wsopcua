@@ -36,7 +36,7 @@ export function qualifiedNameToString(qn: QualifiedName): string {
   return qn.name || '<null>';
 }
 
-export function coerceQualifiedName(value: string | IQualifiedName) {
+export function coerceQualifiedName(value?: string | IQualifiedName | null) {
   if (!value) {
     return null;
   } else if (value instanceof QualifiedName) {

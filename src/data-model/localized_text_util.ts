@@ -2,7 +2,7 @@ import { LocalizedText, ILocalizedText } from '../generated/LocalizedText';
 import { assert } from '../assert';
 import { DataStream } from '../basic-types/DataStream';
 
-export function coerceLocalizedText(value: string | ILocalizedText) {
+export function coerceLocalizedText(value?: string | ILocalizedText | null) {
   if (value === undefined || value === null) {
     return null;
   }

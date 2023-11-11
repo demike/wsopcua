@@ -5,8 +5,8 @@ describe('Testing AccessLevelFlag', function () {
   it('should create a access level flags from a string', function () {
     expect(makeAccessLevel('CurrentRead')).toBe(0x01);
     expect(makeAccessLevel('CurrentWrite')).toBe(0x02);
-    expect(makeAccessLevel('CurrentRead | CurrentWrite')).toBe(0x03);
-    expect(makeAccessLevel('CurrentWrite | CurrentRead')).toBe(0x03);
+    expect(makeAccessLevel('CurrentRead | CurrentWrite') as number).toBe(0x03);
+    expect(makeAccessLevel('CurrentWrite | CurrentRead') as number).toBe(0x03);
 
     expect(AccessLevelFlag[0x1]).toBe('CurrentRead');
     expect(AccessLevelFlag[0x2]).toBe('CurrentWrite');

@@ -1,3 +1,4 @@
+import { assert } from '../assert';
 import { ClientSession } from '../client/client_session';
 import { readUAAnalogItem } from '../client/client_utils';
 import { AttributeIds, ReferenceTypeIds, StatusCodes } from '../constants';
@@ -69,12 +70,12 @@ describe('AnalogItem', function () {
       resultMask: 0x3f,
     });
     sess.browse(browseDescription, function (err, result) {
-      if (err) {
+      if (err || !result) {
         return callback(err);
       }
 
       if (result[0].statusCode !== StatusCodes.Good) {
-        return callback(null, null);
+        return callback(null);
       }
 
       const tmp = result[0].references
@@ -85,7 +86,7 @@ describe('AnalogItem', function () {
           return e.nodeId;
         });
       const found = tmp.length === 1 ? tmp[0] : null;
-      callback(null, found);
+      callback(null, found ?? undefined);
     });
   }
 
@@ -108,7 +109,7 @@ describe('AnalogItem', function () {
         if (error) {
           throw error;
         }
-
+        assert(dataValue && dataValue.value);
         expect(dataValue.value.dataType).toBe(DataType.ExtensionObject);
 
         expect(dataValue.value.value.low).toBe(-200);

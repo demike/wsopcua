@@ -18,8 +18,8 @@ export interface BrowseServiceSet {
       | IBrowseDescription[],
     callback: (
       err: Error | null,
-      results: BrowseResult[],
-      diagnostInfos: DiagnosticInfo[] | BrowseResponse
+      results?: BrowseResult[],
+      diagnostInfos?: DiagnosticInfo[] | BrowseResponse
     ) => void
   ): void;
   browseP(
@@ -44,9 +44,9 @@ export interface BrowseServiceSet {
     continuationPoints: Uint8Array | Uint8Array[],
     releaseContinuationPoints: boolean,
     callback: (
-      err: Error,
-      results: BrowseResult[],
-      diagnostInfos: DiagnosticInfo[] | BrowseNextResponse
+      err: Error | null,
+      results?: BrowseResult[],
+      diagnostInfos?: DiagnosticInfo[] | BrowseNextResponse
     ) => void
   ): void;
   browseNextP(
