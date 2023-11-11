@@ -14,7 +14,7 @@ export async function readExample(session: ClientSession) {
   //                                |   Variant
   //                                |      |   value = "OPCUA"
   //                                |      |     |
-  console.log(' value ', response.value.value.value);
+  console.log(' value ', response.value.value?.value);
 
   // reading a value can also be done by means of
   const response2 = await session.readVariableValueP('ns=2;s=Scalar_Simulation_String');
@@ -26,7 +26,7 @@ export async function readExample(session: ClientSession) {
       attributeId: AttributeIds.DisplayName,
     })
   );
-  console.log(response3.value.value.value); // = "Scalar_Simulation_String"
+  console.log(response3.value.value?.value); // = "Scalar_Simulation_String"
 
   // read all attributes
   const response4 = await session.readAllAttributesP(

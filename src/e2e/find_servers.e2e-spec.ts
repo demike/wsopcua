@@ -21,7 +21,7 @@ describe('OPCUA-Service Discovery Endpoint', function () {
 
     controller.testClient.findServers({}, function (err, servers) {
       expect(err).toBeFalsy();
-      if (!err) {
+      if (!err && servers) {
         expect(servers.length).toBe(1);
       }
       done();
@@ -34,7 +34,7 @@ describe('OPCUA-Service Discovery Endpoint', function () {
     };
 
     controller.testClient.findServers(filters, function (err, servers) {
-      expect(servers.length).toEqual(0);
+      expect(servers?.length).toEqual(0);
       done();
     });
   });

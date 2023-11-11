@@ -28,7 +28,7 @@ export async function monitorSingleItemExample(subscription: ClientSubscription)
   );
 
   monitoredItem.on('changed', (dataValue: DataValue) => {
-    console.log(' value has changed : ', dataValue.value.toString());
+    console.log(' value has changed : ', dataValue.value?.toString());
   });
 
   await timeout(600);

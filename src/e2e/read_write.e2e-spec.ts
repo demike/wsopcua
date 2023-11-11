@@ -59,7 +59,6 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
         nodeId: nodeId,
         attributeId: AttributeIds.Value,
         indexRange: null,
-        dataEncoding: null,
       }),
     ];
     const response = await session.readP(nodesToRead);
@@ -83,13 +82,13 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
     expect(dataValues[0].sourceTimestamp instanceof Date).toBeTruthy();
 
     // verify that value and status codes are identical
-    expect(dataValues[0].serverTimestamp.getTime() + 1).toBeGreaterThan(
-      dataValue.serverTimestamp.getTime()
+    expect(dataValues[0].serverTimestamp!.getTime() + 1).toBeGreaterThan(
+      dataValue.serverTimestamp!.getTime()
     );
 
     // now disregard serverTimestamp
-    dataValue.serverTimestamp = null;
-    dataValues[0].serverTimestamp = null;
+    dataValue.serverTimestamp = undefined;
+    dataValues[0].serverTimestamp = undefined;
     if (!sameDataValue(dataValue, dataValues[0])) {
       console.log(' ------- > expected');
       console.log(dataValue.toString());
@@ -116,7 +115,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
   });
   it('writing dataValue case 2 - serverTimestamp is null & sourceTimestamp is specified', async () => {
     const dataValue = new DataValue({
-      serverTimestamp: null,
+      serverTimestamp: undefined,
       serverPicoseconds: 0,
 
       sourceTimestamp: new Date(2015, 5, 3),
@@ -132,9 +131,9 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
   });
   it('writing dataValue case 3 - serverTimestamp is null & sourceTimestamp is null ', async () => {
     const dataValue = new DataValue({
-      serverTimestamp: null,
+      serverTimestamp: undefined,
       serverPicoseconds: 0,
-      sourceTimestamp: null,
+      sourceTimestamp: undefined,
       sourcePicoseconds: 0,
       value: new Variant({
         dataType: DataType.Float,
@@ -152,7 +151,6 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
         nodeId: nodeId,
         attributeId: AttributeIds.Value,
         indexRange: null,
-        dataEncoding: null,
       }),
     ];
 
@@ -225,7 +223,6 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
         nodeId: nodeId,
         attributeId: AttributeIds.Value,
         indexRange: null,
-        dataEncoding: null,
       });
       const response = await session.readP(nodeToRead);
       expect(response.value).toBeDefined();
@@ -238,7 +235,6 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
         nodeId: nodeId,
         attributeId: AttributeIds.Value,
         indexRange: null,
-        dataEncoding: null,
       });
 
       let readResponse = await session.readP(nodeToRead);
@@ -261,7 +257,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       let writeResponse = await session.writeP(nodesToWrite);
       // xx console.log(nodesToWrite[0].value.value.value.constructor.name);
 
-      expect(nodesToWrite[0].value.value.value instanceof Float32Array).toBeTruthy();
+      expect(nodesToWrite[0].value.value?.value instanceof Float32Array).toBeTruthy();
       nodesToWrite[0].value.value.value = new Float32Array(1024 * 1024);
       writeResponse = await session.writeP(nodesToWrite);
 

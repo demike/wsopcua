@@ -129,7 +129,7 @@ describe('resolveExpandedNodeId', function () {
   });
 
   it('should return undefined if no nodeId is given', () => {
-    const result = resolveExpandedNodeId();
+    const result = resolveExpandedNodeId(undefined);
     expect(result).toBeUndefined();
   });
 });

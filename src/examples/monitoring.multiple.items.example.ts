@@ -37,7 +37,7 @@ export async function monitorMultipleItemsExample(subscription: ClientSubscripti
   monitoredItemGroup.on(
     'changed',
     (item: MonitoredItemBase, dataValue: DataValue, index: number) => {
-      console.log(` value has changed for item ${index} : ${dataValue.value.toString()}`);
+      console.log(` value has changed for item ${index} : ${dataValue.value?.toString()}`);
     }
   );
 
