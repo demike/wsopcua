@@ -8,7 +8,7 @@
     "strict": true,
     // "noImplicitReturns": true,
     "moduleResolution": "node",
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "noImplicitAny": true,
     "lib": ["esnext", "es2017.object", "dom"],
     "target": "esnext",

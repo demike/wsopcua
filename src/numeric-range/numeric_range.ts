@@ -2,10 +2,10 @@
  * @module node-opcua-numeric-range
  */
 
-import { assert } from 'src/assert';
-import { DataStream, StatusCode, decodeString, encodeString } from 'src/basic-types';
-import { StatusCodes } from 'src/constants';
-import { registerBasicType } from 'src/factory/factories_basic_type';
+import { assert } from '../assert';
+import { DataStream, StatusCode, decodeString, encodeString } from '../basic-types';
+import { StatusCodes } from '../constants';
+import { registerBasicType } from '../factory/factories_basic_type';
 
 // OPC.UA Part 4 7.21 Numerical Range
 // The syntax for the string contains one of the following two constructs. The first construct is the string
