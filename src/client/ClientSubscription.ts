@@ -91,7 +91,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
    */
   public get session() {
     assert(this._publishEngine.session, 'expecting a valid session here');
-    return this._publishEngine.session!;
+    return this._publishEngine.session;
   }
 
   public get subscriptionId() {

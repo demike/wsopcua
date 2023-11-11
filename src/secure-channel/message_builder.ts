@@ -292,14 +292,10 @@ export class MessageBuilder extends MessageBuilderBase {
 
     // Check  security token
     // securityToken may have been renewed
-    const securityTokenData = this._select_matching_token(
-      (this._securityHeader as SymmetricAlgorithmSecurityHeader).tokenId
-    );
+    const securityTokenData = this._select_matching_token(this._securityHeader.tokenId);
     if (!securityTokenData) {
       this._report_error(
-        'Security token data for token ' +
-          (this._securityHeader as SymmetricAlgorithmSecurityHeader).tokenId +
-          " doesn't exist"
+        'Security token data for token ' + this._securityHeader.tokenId + " doesn't exist"
       );
       return false;
     }

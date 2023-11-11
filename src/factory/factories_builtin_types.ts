@@ -331,7 +331,7 @@ export function findBuiltInType(datatypeName: string | QualifiedName): TypeSchem
     datatypeName = datatypeName.toString();
   }
   assert(typeof datatypeName === 'string', 'findBuiltInType : expecting a string ' + datatypeName);
-  const t = _defaultTypeMap[datatypeName as string];
+  const t = _defaultTypeMap[datatypeName];
   if (!t) {
     throw new Error('datatype ' + datatypeName + ' must be registered');
   }

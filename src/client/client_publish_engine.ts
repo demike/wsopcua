@@ -197,7 +197,7 @@ export class ClientSidePublishEngine {
 
     let active = true;
 
-    this._session!.publish(publish_request, (err, response) => {
+    this._session.publish(publish_request, (err, response) => {
       this.nbPendingPublishRequests -= 1;
       if (err) {
         debugLog(
