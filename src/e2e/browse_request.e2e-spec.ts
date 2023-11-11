@@ -33,7 +33,7 @@ describe('Test Browse Request', function () {
       nodesToBrowse: [],
     });
     session.performMessageTransaction(browseRequest, function (err, result) {
-      expect(err.message).toMatch(/BadNothingToDo/);
+      expect(err?.message).toMatch(/BadNothingToDo/);
       done();
     });
   });
@@ -41,7 +41,7 @@ describe('Test Browse Request', function () {
   it('T2 - #Browse should return BadViewIdInvalid if viewId is invalid', function (done) {
     const browseDesc = new BrowseDescription({
       nodeId: rootFolderId,
-      referenceTypeId: null,
+      referenceTypeId: undefined,
       browseDirection: BrowseDirection.Forward,
     });
 
@@ -52,7 +52,7 @@ describe('Test Browse Request', function () {
       nodesToBrowse: [browseDesc],
     });
     session.performMessageTransaction(browseRequest, function (err, result) {
-      expect(err.message).toMatch(/BadViewIdUnknown/);
+      expect(err?.message).toMatch(/BadViewIdUnknown/);
       done();
     });
   });
@@ -60,7 +60,7 @@ describe('Test Browse Request', function () {
   it('T3 - #Browse should return BadViewUnknown if object referenced by viewId is not a view', function (done) {
     const browseDesc = new BrowseDescription({
       nodeId: rootFolderId,
-      referenceTypeId: null,
+      referenceTypeId: undefined,
       browseDirection: BrowseDirection.Forward,
     });
 
@@ -72,7 +72,7 @@ describe('Test Browse Request', function () {
     });
     session.performMessageTransaction(browseRequest, function (err, result) {
       // todo
-      expect(err.message).toMatch(/BadViewIdUnknown/);
+      expect(err?.message).toMatch(/BadViewIdUnknown/);
       done();
     });
   });
@@ -80,13 +80,13 @@ describe('Test Browse Request', function () {
   it('T4 - #Browse server should respect Browse maxReferencesPerNode ', async () => {
     const browseDesc = new BrowseDescription({
       nodeId: rootFolderId,
-      referenceTypeId: null,
+      referenceTypeId: undefined,
       includeSubtypes: true,
       browseDirection: BrowseDirection.Both,
       resultMask: 63,
     });
     const browseRequest1 = new BrowseRequest({
-      view: null, // { viewId: 'ns=0;i=85'},
+      view: undefined, // { viewId: 'ns=0;i=85'},
       requestedMaxReferencesPerNode: 10,
       nodesToBrowse: [browseDesc],
     });
@@ -105,7 +105,7 @@ describe('Test Browse Request', function () {
     );
 
     const browseRequest2 = new BrowseRequest({
-      view: null, // { viewId: 'ns=0;i=85'},
+      view: undefined, // { viewId: 'ns=0;i=85'},
       requestedMaxReferencesPerNode: 1,
       nodesToBrowse: [browseDesc],
     });
@@ -124,12 +124,10 @@ describe('Test Browse Request', function () {
   });
 
   it('T5 - #BrowseNext response should have serviceResult=BadNothingToDo if request have no continuationPoints', async () => {
-    const browseNextRequest = new BrowseNextRequest({
-      continuationPoints: null,
-    });
+    const browseNextRequest = new BrowseNextRequest({});
     await new Promise<void>((resolve) =>
       session.performMessageTransaction(browseNextRequest, function (err, response) {
-        expect(err.message).toMatch(/BadNothingToDo/);
+        expect(err?.message).toMatch(/BadNothingToDo/);
         // console.log(response.toString());
         expect(response.responseHeader.serviceResult).toEqual(StatusCodes.BadNothingToDo);
         resolve();
@@ -140,7 +138,6 @@ describe('Test Browse Request', function () {
   it('T6 - #BrowseNext response ', async () => {
     const browseDesc = new BrowseDescription({
       nodeId: rootFolderId,
-      referenceTypeId: null,
       includeSubtypes: true,
       browseDirection: BrowseDirection.Both,
       resultMask: 63,
@@ -150,7 +147,7 @@ describe('Test Browse Request', function () {
     let continuationPoint;
 
     const browseRequest1 = new BrowseRequest({
-      view: null, // { viewId: 'ns=0;i=85'},
+      view: undefined, // { viewId: 'ns=0;i=85'},
       requestedMaxReferencesPerNode: 10,
       nodesToBrowse: [browseDesc],
     });
@@ -169,7 +166,7 @@ describe('Test Browse Request', function () {
     );
 
     const browseRequest2 = new BrowseRequest({
-      view: null, // { viewId: 'ns=0;i=85'},
+      view: undefined, // { viewId: 'ns=0;i=85'},
       requestedMaxReferencesPerNode: 2,
       nodesToBrowse: [browseDesc],
     });
@@ -200,8 +197,8 @@ describe('Test Browse Request', function () {
     await new Promise<void>((resolve, reject) =>
       session.performMessageTransaction(
         browseNextRequest,
-        function (err, response: BrowseNextResponse) {
-          if (err) {
+        function (err, response?: BrowseNextResponse) {
+          if (err || !response) {
             return reject(err);
           }
           // console.log(response.toString());
@@ -231,8 +228,8 @@ describe('Test Browse Request', function () {
     await new Promise<void>((resolve, reject) =>
       session.performMessageTransaction(
         browseNextRequest,
-        function (err, response: BrowseNextResponse) {
-          if (err) {
+        function (err, response?: BrowseNextResponse) {
+          if (err || !response) {
             return reject(err);
           }
           // console.log(response.toString());
@@ -290,7 +287,7 @@ describe('Test Browse Request', function () {
 
       // browse all references
       const browseRequestAll = new BrowseRequest({
-        view: null, // { viewId: 'ns=0;i=85'},
+        view: undefined, // { viewId: 'ns=0;i=85'},
         requestedMaxReferencesPerNode: 100,
         nodesToBrowse: [browseDesc],
       });
@@ -309,7 +306,7 @@ describe('Test Browse Request', function () {
       );
 
       const browseRequest1 = new BrowseRequest({
-        view: null,
+        view: undefined,
         requestedMaxReferencesPerNode: 1,
         nodesToBrowse: [browseDesc],
       });

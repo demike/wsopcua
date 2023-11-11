@@ -58,7 +58,7 @@ describe('Testing ChannelSecurityToken lifetime', function () {
         security_token_renewed_counter += 1;
         if (security_token_renewed_counter > 3) {
           resolve();
-          resolve = null;
+          resolve = null as any;
           window.clearTimeout(id);
         }
       });

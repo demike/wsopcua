@@ -59,7 +59,7 @@ describe('ClientSession#readVariableValue', function () {
     expect(Array.isArray(results)).toBeTruthy();
     expect(results.length).toEqual(2);
 
-    expect(results[0].value.value.name).toEqual('CurrentTime');
-    expect(results[1].value.value).toEqual(2);
+    expect(results[0].value?.value.name).toEqual('CurrentTime');
+    expect(results[1].value?.value).toEqual(2);
   });
 });

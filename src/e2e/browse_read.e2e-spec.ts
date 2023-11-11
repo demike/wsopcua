@@ -19,6 +19,7 @@ import {
   VariantArrayType,
 } from '../';
 import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
+import { assert } from '../assert';
 
 const fail_fast_connectivity_strategy = {
   maxRetry: 1,
@@ -50,6 +51,7 @@ describe('Browse-Read-Write Services', function () {
 
   it('T8-1 - should browse RootFolder', function (done) {
     session.browse(RootFolderNodeId, function (err, browseResult) {
+      assert(browseResult);
       if (!err) {
         expect(Array.isArray(browseResult)).toBeTruthy();
         expect(browseResult.length).toBe(1);
@@ -60,9 +62,9 @@ describe('Browse-Read-Write Services', function () {
 
       expect(browseResult[0].statusCode).toEqual(StatusCodes.Good);
       expect(browseResult[0].references.length).toEqual(3);
-      expect(browseResult[0].references[0].browseName.name.toString()).toEqual('Objects');
-      expect(browseResult[0].references[1].browseName.name.toString()).toEqual('Types');
-      expect(browseResult[0].references[2].browseName.name.toString()).toEqual('Views');
+      expect(browseResult[0].references[0].browseName.name?.toString()).toEqual('Objects');
+      expect(browseResult[0].references[1].browseName.name?.toString()).toEqual('Types');
+      expect(browseResult[0].references[2].browseName.name?.toString()).toEqual('Views');
       done();
     });
   });
@@ -75,6 +77,7 @@ describe('Browse-Read-Write Services', function () {
       browseDirection: BrowseDirection.Forward,
     };
     session.browse(nodeToBrowse, function (err, browseResult /* , diagnosticInfos*/) {
+      assert(browseResult);
       expect(Array.isArray(browseResult)).toBeTruthy();
       expect(browseResult.length).toBe(1);
       expect(browseResult[0] instanceof BrowseResult).toBeTruthy();
@@ -87,7 +90,7 @@ describe('Browse-Read-Write Services', function () {
     session.readVariableValue(
       [RootFolderNodeId],
       function (err, dataValues /* , diagnosticInfos*/) {
-        if (!err) {
+        if (!err && dataValues) {
           expect(dataValues.length).toEqual(1);
           expect(dataValues[0] instanceof DataValue).toBeTruthy();
         }
@@ -105,7 +108,7 @@ describe('Browse-Read-Write Services', function () {
 
     session.performMessageTransaction(request, function (err /* , response */) {
       //
-      expect(err.message).toMatch(/BadNothingToDo/);
+      expect(err?.message).toMatch(/BadNothingToDo/);
       done();
     });
   });
@@ -119,7 +122,7 @@ describe('Browse-Read-Write Services', function () {
 
     session.performMessageTransaction(request, function (err /* , response*/) {
       //
-      expect(err.message).toMatch(/BadTimestampsToReturnInvalid/);
+      expect(err?.message).toMatch(/BadTimestampsToReturnInvalid/);
       done();
     });
   });
@@ -136,6 +139,7 @@ describe('Browse-Read-Write Services', function () {
 
   it('T8-13b - should readAllAttributes - 2 elements', function (done) {
     session.readAllAttributes([RootFolderNodeId, ObjectsFolderNodeId], function (err, data) {
+      assert(data);
       expect(data.length).toEqual(2);
       expect(data[0].browseName.name.toString()).toEqual('Root');
       expect(data[1].browseName.name.toString()).toEqual('Objects');
@@ -146,14 +150,14 @@ describe('Browse-Read-Write Services', function () {
   it("T8-14a - #readVariableValue should return a appropriate status code if nodeid to read doesn't exists", function (done) {
     session.readVariableValue('ns=1;s=this_node_id_does_not_exist', function (err, dataValue) {
       expect(err).toBeFalsy();
-      expect(dataValue.statusCode).toEqual(StatusCodes.BadNodeIdUnknown);
+      expect(dataValue?.statusCode).toEqual(StatusCodes.BadNodeIdUnknown);
       done();
     });
   });
   it("T8-14b - #readVariableValue should return a appropriate status code if nodeid to read doesn't exists", function (done) {
     session.readVariableValue(['ns=1;s=this_node_id_does_not_exist'], function (err, dataValues) {
       expect(err).toBeFalsy();
-      expect(dataValues[0].statusCode).toEqual(StatusCodes.BadNodeIdUnknown);
+      expect(dataValues?.[0].statusCode).toEqual(StatusCodes.BadNodeIdUnknown);
       done();
     });
   });
@@ -193,11 +197,11 @@ describe('Browse-Read-Write Services', function () {
     const readRequest = new ReadRequest({
       maxAge: 0,
       timestampsToReturn: TimestampsToReturn.Both,
-      nodesToRead: null,
+      nodesToRead: undefined,
     });
 
-    // make sure nodesToRead is really null !
-    readRequest.nodesToRead = null;
+    // make sure nodesToRead is really undefined !
+    readRequest.nodesToRead = [];
 
     session.performMessageTransaction(readRequest, function (err /* , response*/) {
       if (err) {
@@ -231,6 +235,7 @@ describe('Browse-Read-Write Services', function () {
       [CurrentTimeVariableId],
       function (err, dataValues /* , diagnosticInfos*/) {
         if (!err) {
+          assert(dataValues);
           expect(dataValues.length).toEqual(1);
           expect(dataValues[0] instanceof DataValue).toBeTruthy();
           expect(dataValues[0].value instanceof Variant).toBeTruthy();
@@ -271,6 +276,7 @@ describe('Browse-Read-Write Services', function () {
 
     session.browse(nodesToBrowse, function (err, browseResults /* ,diagnosticInfos*/) {
       if (!err) {
+        assert(browseResults);
         expect(browseResults.length).toEqual(1);
         expect(browseResults[0] instanceof BrowseResult).toBeTruthy();
 
@@ -297,15 +303,16 @@ describe('Browse-Read-Write Services', function () {
         if (err) {
           return done.fail(err);
         }
+        assert(dataValue);
         expect(dataValue instanceof DataValue).toBeTruthy();
         expect(
           dataValue.statusCode === undefined || dataValue.statusCode === StatusCodes.Good
         ).toBeTruthy();
-        expect(dataValue.value.dataType).toEqual(DataType.String);
-        expect(dataValue.value.arrayType).toEqual(VariantArrayType.Array);
+        expect(dataValue.value?.dataType).toEqual(DataType.String);
+        expect(dataValue.value?.arrayType).toEqual(VariantArrayType.Array);
 
         // first namespace must be standard OPC namespace
-        expect(dataValue.value.value[0]).toEqual('http://opcfoundation.org/UA/');
+        expect(dataValue.value?.value[0]).toEqual('http://opcfoundation.org/UA/');
 
         done();
       }
@@ -320,11 +327,12 @@ describe('Browse-Read-Write Services', function () {
         if (err) {
           return done.fail(err);
         }
+        assert(dataValue);
         expect(dataValue instanceof DataValue).toBeTruthy();
         expect(
           dataValue.statusCode === undefined || dataValue.statusCode === StatusCodes.Good
         ).toBeTruthy();
-        expect(dataValue.value.dataType).toEqual(DataType.ExtensionObject);
+        expect(dataValue.value?.dataType).toEqual(DataType.ExtensionObject);
 
         done();
       }

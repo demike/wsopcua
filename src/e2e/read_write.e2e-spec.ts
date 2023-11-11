@@ -1,3 +1,4 @@
+import { assert } from '../assert';
 import { ClientSession } from '../client/client_session';
 import { OPCUAClient } from '../client/opcua_client';
 import { AttributeIds } from '../constants/AttributeIds';
@@ -242,6 +243,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       // xx console.log(results[0].toString());
 
       const variant = readResponse.value.value;
+      assert(variant);
       variant.value[1] = 2;
       variant.value[3] = 2;
       variant.value[4] = 2;
@@ -258,7 +260,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       // xx console.log(nodesToWrite[0].value.value.value.constructor.name);
 
       expect(nodesToWrite[0].value.value?.value instanceof Float32Array).toBeTruthy();
-      nodesToWrite[0].value.value.value = new Float32Array(1024 * 1024);
+      nodesToWrite[0].value.value!.value = new Float32Array(1024 * 1024);
       writeResponse = await session.writeP(nodesToWrite);
 
       readResponse = await session.readP(nodeToRead);

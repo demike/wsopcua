@@ -60,7 +60,7 @@ describe('Testing ClientMonitoredItemGroup', function () {
         console.log(' Count +++');
       }
 
-      expect(dataValue.value.value instanceof Date).toBeTruthy();
+      expect(dataValue.value?.value instanceof Date).toBeTruthy();
 
       count++;
       if (count === 3) {
@@ -161,7 +161,7 @@ describe('Testing ClientMonitoredItemGroup', function () {
             index
           );
         }
-        expect(dataValue.value.value instanceof Date).toBeTruthy();
+        expect(dataValue.value?.value instanceof Date).toBeTruthy();
 
         if (count === 5) {
           monitoredItemGroup.terminate(function () {
