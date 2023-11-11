@@ -144,7 +144,7 @@ describe('Test Browse Request', function () {
     });
 
     let allReferences: any[];
-    let continuationPoint;
+    let continuationPoint: any;
 
     const browseRequest1 = new BrowseRequest({
       view: undefined, // { viewId: 'ns=0;i=85'},
@@ -281,7 +281,7 @@ describe('Test Browse Request', function () {
         resultMask: 63,
       });
 
-      let continuationPoint;
+      let continuationPoint: any;
 
       let allReferences: any[];
 
