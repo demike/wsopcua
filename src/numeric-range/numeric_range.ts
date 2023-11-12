@@ -3,9 +3,11 @@
  */
 
 import { assert } from '../assert';
-import { DataStream, StatusCode, decodeString, encodeString } from '../basic-types';
+import { DataStream, StatusCode } from '../basic-types';
 import { StatusCodes } from '../constants';
+import * as ec from '../basic-types';
 import { registerBasicType } from '../factory/factories_basic_type';
+import { ITypeSchema } from '../factory/type_schema';
 
 // OPC.UA Part 4 7.21 Numerical Range
 // The syntax for the string contains one of the following two constructs. The first construct is the string
@@ -38,9 +40,9 @@ const NUMERIC_RANGE_EMPTY_STRING = 'NumericRange:<Empty>';
 //
 // tslint:disable:object-literal-shorthand
 // tslint:disable:only-arrow-functions
-export const schemaNumericRange = {
+export const schemaNumericRange: ITypeSchema = {
   name: 'NumericRange',
-  subType: 'String',
+  subtype: 'String',
 
   defaultValue: (): NumericRange => new NumericRange(),
   encode: encodeNumericRange,
@@ -684,7 +686,7 @@ function extract_array_range<U, T extends ArrayLike<U> | ArrayBuffer>(
 }
 
 function isArrayLike(value: any): value is ArrayLike<any> {
-  return typeof value.length === 'number' || Object.prototype.hasOwnProperty.call(value, 'length');
+  return value && (Number.isFinite(value.length) || value.hasOwnProperty('length'));
 }
 
 function extract_matrix_range<U, T extends ArrayLike<U>>(
@@ -822,11 +824,11 @@ function _overlap(l1: number, h1: number, l2: number, h2: number) {
 export function encodeNumericRange(numericRange: NumericRange | null, stream: DataStream) {
   assert(numericRange === null || numericRange instanceof NumericRange);
   const str = numericRange === null ? null : numericRange.toEncodeableString();
-  encodeString(str, stream);
+  ec.encodeString(str, stream);
 }
 
 export function decodeNumericRange(stream: DataStream, _value?: NumericRange): NumericRange {
-  const str = decodeString(stream);
+  const str = ec.decodeString(stream);
   return new NumericRange(str);
 }
 

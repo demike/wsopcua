@@ -76,8 +76,10 @@ describe('Examples', () => {
   });
 
   it('should use PEM certificate and private key', async () => {
-    const clientCertPEM = await fetch('src/test-util/test_cert.pem').then((r) => r.text());
-    const privateKeyPEM = await fetch('src/test-util/test_privatekey.pem').then((r) => r.text());
+    const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
+    const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
+      r.text()
+    );
     const clientAndSession = await usingAPEMCertificate(clientCertPEM, privateKeyPEM);
     await clientAndSession.session.closeP();
     await clientAndSession.client.disconnectP();

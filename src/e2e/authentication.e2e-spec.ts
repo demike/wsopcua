@@ -73,8 +73,8 @@ describe('OPCUA-Session Activation', function () {
       //  SecurityPolicy.Aes256_Sha256_RsaPss, // TODO enable this policy
     ].forEach((policy) =>
       it('should do username password authentication', async () => {
-        const clientCertPEM = await fetch('src/test-util/test_cert.pem').then((r) => r.text());
-        const privateKeyPEM = await fetch('src/test-util/test_privatekey.pem').then((r) =>
+        const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
+        const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
           r.text()
         );
 
@@ -122,8 +122,8 @@ describe('OPCUA-Session Activation', function () {
       //  SecurityPolicy.Aes256_Sha256_RsaPss, // TODO enable this policy
     ].forEach((policy) =>
       it(`should do username password authentication: ${policy}`, async () => {
-        const clientCertPEM = await fetch('src/test-util/test_cert.pem').then((r) => r.text());
-        const privateKeyPEM = await fetch('src/test-util/test_privatekey.pem').then((r) =>
+        const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
+        const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
           r.text()
         );
 
@@ -159,8 +159,10 @@ describe('OPCUA-Session Activation', function () {
 ].forEach((policy) =>
   describe(`asymmetric encrypt decrypt sing verify: ${policy}`, () => {
     it('should encrypt decrypt with a PEM certificate and private key', async () => {
-      const clientCertPEM = await fetch('src/test-util/test_cert.pem').then((r) => r.text());
-      const privateKeyPEM = await fetch('src/test-util/test_privatekey.pem').then((r) => r.text());
+      const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
+      const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
+        r.text()
+      );
 
       const store = new PEMDERCertificateStore(clientCertPEM, privateKeyPEM);
 
@@ -184,8 +186,10 @@ describe('OPCUA-Session Activation', function () {
     });
 
     it('should sign and verify with a PEM certificate and private key', async () => {
-      const clientCertPEM = await fetch('src/test-util/test_cert.pem').then((r) => r.text());
-      const privateKeyPEM = await fetch('src/test-util/test_privatekey.pem').then((r) => r.text());
+      const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
+      const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
+        r.text()
+      );
 
       const store = new PEMDERCertificateStore(clientCertPEM, privateKeyPEM);
 

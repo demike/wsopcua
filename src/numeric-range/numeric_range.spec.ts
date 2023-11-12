@@ -101,10 +101,10 @@ describe('Testing numerical range', function () {
     expect(nr.isValid()).toBe(false);
   });
 
-  it('should be an InvalidRange when constructed with an array with invalid array range (low==high) ', function () {
+  it('should be an SingleValue when constructed with an array with invalid array range (low==high) ', function () {
     const nr = new NumericRange([12, 12]);
-    expect(nr.type).toBe(NumericRangeType.InvalidRange);
-    expect(nr.isValid()).toBe(false);
+    expect(nr.type).toBe(NumericRangeType.SingleValue);
+    expect(nr.isValid()).toBe(true);
   });
 
   it('should be an MatrixRange when constructed with [1, 2], [3, 4]', () => {

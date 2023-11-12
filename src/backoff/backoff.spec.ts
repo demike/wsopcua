@@ -299,7 +299,7 @@ describe('call', () => {
       onerror(new Error('test error'));
     };
 
-    const c = (call as any)(fn, 10, 20, null);
+    const c = (call as any)(fn, 10, 20, () => {});
     c.setStrategy(new ExponentialBackoffStrategy({ initialDelay: 100, maxDelay: 10000 }));
     c.start();
 
