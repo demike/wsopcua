@@ -1,5 +1,5 @@
 export * from './factories_id_generator';
-
+export { IEncodable } from './factories_baseobject';
 export { registerEnumeration, hasEnumeration, getEnumeration } from './factories_enumerations';
 
 export {
