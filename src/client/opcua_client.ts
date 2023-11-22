@@ -1014,7 +1014,7 @@ async function createUserNameIdentityToken(
   const userTokenPolicy = findUserTokenPolicy(endpoint_desc, UserTokenType.UserName);
 
   // istanbul ignore next
-  if (!userTokenPolicy || !userTokenPolicy.securityPolicyUri) {
+  if (!userTokenPolicy) {
     throw new Error('Cannot find USERNAME user token policy in end point description');
   }
 
