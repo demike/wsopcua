@@ -1,6 +1,6 @@
 import { NodeId, makeNodeId } from '../nodeid';
-import { BrowseDirection, ClientSession } from './client_session';
-import { BrowseDescription, BrowseResultMask, NodeIdType } from '../generated';
+import { ClientSession } from './client_session';
+import { BrowseDescription, BrowseDirection, BrowseResultMask, NodeIdType } from '../generated';
 import { ReferenceTypeIds } from '../constants';
 import { DataType } from '../variant';
 
