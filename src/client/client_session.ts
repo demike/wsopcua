@@ -4,7 +4,7 @@
  */
 import { EventEmitter } from '../eventemitter';
 import { assert } from '../assert';
-import { resolveNodeId, coerceNodeId, makeNodeId, NodeId } from '../nodeid/nodeid';
+import { resolveNodeId, coerceNodeId, NodeId } from '../nodeid/nodeid';
 import { OPCUAClientBase, OpcUaResponse, ErrorCallback, ResponseCallback } from './client_base';
 import { StatusCodes } from '../constants/raw_status_codes';
 
@@ -66,17 +66,11 @@ import {
   IReadValueId,
   ServerState,
   NodeIdType,
+  BrowseDirection,
 } from '../generated';
 import { buf2base64, buf2hex } from '../crypto';
 import { IEncodable } from '../factory/factories_baseobject';
 import { findBasicDataType } from './find_basic_datatype';
-
-export enum BrowseDirection {
-  Invalid = -1, //
-  Forward = 0, // Return forward references.
-  Inverse = 1, // Return inverse references.
-  Both = 2, // Return forward and inverse references.
-}
 
 /*
 export interface BrowseDescription {
