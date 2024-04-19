@@ -10,6 +10,7 @@ export type IAnnotation = Partial<Annotation>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16253}
 */
 
 export class Annotation {

@@ -10,6 +10,7 @@ export type IConfigurationVersionDataType = Partial<ConfigurationVersionDataType
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15794}
 */
 
 export class ConfigurationVersionDataType {

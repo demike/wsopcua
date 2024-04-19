@@ -11,6 +11,7 @@ export type IFindServersRequest = Partial<FindServersRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16027}
 */
 
 export class FindServersRequest {

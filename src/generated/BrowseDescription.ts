@@ -11,6 +11,7 @@ export type IBrowseDescription = Partial<BrowseDescription>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16098}
 */
 
 export class BrowseDescription {

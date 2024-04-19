@@ -12,6 +12,7 @@ export type ICallMethodRequest = Partial<CallMethodRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16173}
 */
 
 export class CallMethodRequest {

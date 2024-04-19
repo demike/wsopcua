@@ -11,6 +11,7 @@ export type IMonitoredItemNotification = Partial<MonitoredItemNotification>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16212}
 */
 
 export class MonitoredItemNotification {

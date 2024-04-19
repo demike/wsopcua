@@ -11,6 +11,7 @@ export type IPublishedDataSetCustomSourceDataType = Partial<PublishedDataSetCust
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16787}
 */
 
 export class PublishedDataSetCustomSourceDataType extends PublishedDataSetSourceDataType {

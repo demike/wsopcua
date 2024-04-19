@@ -14,6 +14,7 @@ export type IStructureDefinition = Partial<StructureDefinition>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15988}
 */
 
 export class StructureDefinition extends DataTypeDefinition {

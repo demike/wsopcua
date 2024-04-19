@@ -7,6 +7,7 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15559}
 */
 
 export enum IdentityCriteriaType {

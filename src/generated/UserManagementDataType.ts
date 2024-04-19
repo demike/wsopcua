@@ -11,6 +11,7 @@ export type IUserManagementDataType = Partial<UserManagementDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16981}
 */
 
 export class UserManagementDataType {

@@ -11,6 +11,7 @@ export type IBrowsePath = Partial<BrowsePath>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16109}
 */
 
 export class BrowsePath {

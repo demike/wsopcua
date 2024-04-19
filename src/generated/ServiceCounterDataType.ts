@@ -10,6 +10,7 @@ export type IServiceCounterDataType = Partial<ServiceCounterDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16238}
 */
 
 export class ServiceCounterDataType {

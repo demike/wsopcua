@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16185}
 */
 
 export class MonitoringFilterResult {

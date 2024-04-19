@@ -11,6 +11,7 @@ export type IRegisterServerRequest = Partial<RegisterServerRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16040}
 */
 
 export class RegisterServerRequest {

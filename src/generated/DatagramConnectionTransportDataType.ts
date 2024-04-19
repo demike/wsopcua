@@ -11,6 +11,7 @@ export type IDatagramConnectionTransportDataType = Partial<DatagramConnectionTra
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15835}
 */
 
 export class DatagramConnectionTransportDataType extends ConnectionTransportDataType {

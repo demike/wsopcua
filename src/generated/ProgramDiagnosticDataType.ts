@@ -13,6 +13,7 @@ export type IProgramDiagnosticDataType = Partial<ProgramDiagnosticDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16251}
 */
 
 export class ProgramDiagnosticDataType {

@@ -15,6 +15,7 @@ export type IUpdateStructureDataDetails = Partial<UpdateStructureDataDetails>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16165}
 */
 
 export class UpdateStructureDataDetails extends HistoryUpdateDetails {

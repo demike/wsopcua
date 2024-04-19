@@ -15,6 +15,7 @@ export type IReaderGroupDataType = Partial<ReaderGroupDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15812}
 */
 
 export class ReaderGroupDataType extends PubSubGroupDataType {

@@ -11,6 +11,7 @@ export type IReadValueId = Partial<ReadValueId>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16141}
 */
 
 export class ReadValueId {

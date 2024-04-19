@@ -12,6 +12,7 @@ export type IHistoryData = Partial<HistoryData>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16152}
 */
 
 export class HistoryData {

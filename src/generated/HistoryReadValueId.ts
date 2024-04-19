@@ -11,6 +11,7 @@ export type IHistoryReadValueId = Partial<HistoryReadValueId>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16144}
 */
 
 export class HistoryReadValueId {

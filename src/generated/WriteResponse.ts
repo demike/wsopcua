@@ -13,6 +13,7 @@ export type IWriteResponse = Partial<WriteResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16160}
 */
 
 export class WriteResponse {

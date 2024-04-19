@@ -12,6 +12,7 @@ export type IDatagramDataSetReaderTransportDataType = Partial<DatagramDataSetRea
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16837}
 */
 
 export class DatagramDataSetReaderTransportDataType extends DataSetReaderTransportDataType {

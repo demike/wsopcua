@@ -13,6 +13,7 @@ export type IDeleteMonitoredItemsResponse = Partial<DeleteMonitoredItemsResponse
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16202}
 */
 
 export class DeleteMonitoredItemsResponse {

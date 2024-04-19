@@ -10,6 +10,7 @@ export type IModelChangeStructureDataType = Partial<ModelChangeStructureDataType
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16242}
 */
 
 export class ModelChangeStructureDataType {

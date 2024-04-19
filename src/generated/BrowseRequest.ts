@@ -14,6 +14,7 @@ export type IBrowseRequest = Partial<BrowseRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16103}
 */
 
 export class BrowseRequest {

@@ -12,6 +12,7 @@ export type ISimpleTypeDescription = Partial<SimpleTypeDescription>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15788}
 */
 
 export class SimpleTypeDescription extends DataTypeDescription {

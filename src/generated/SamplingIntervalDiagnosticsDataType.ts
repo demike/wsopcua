@@ -10,6 +10,7 @@ export type ISamplingIntervalDiagnosticsDataType = Partial<SamplingIntervalDiagn
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16233}
 */
 
 export class SamplingIntervalDiagnosticsDataType {

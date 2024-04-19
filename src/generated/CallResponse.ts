@@ -15,6 +15,7 @@ export type ICallResponse = Partial<CallResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16176}
 */
 
 export class CallResponse {

@@ -12,6 +12,7 @@ export type IQueryDataSet = Partial<QueryDataSet>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16124}
 */
 
 export class QueryDataSet {

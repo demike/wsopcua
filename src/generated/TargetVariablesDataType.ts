@@ -13,6 +13,7 @@ export type ITargetVariablesDataType = Partial<TargetVariablesDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15819}
 */
 
 export class TargetVariablesDataType extends SubscribedDataSetDataType {

@@ -10,6 +10,7 @@ export type IServiceFault = Partial<ServiceFault>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16024}
 */
 
 export class ServiceFault {

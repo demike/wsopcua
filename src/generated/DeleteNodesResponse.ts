@@ -13,6 +13,7 @@ export type IDeleteNodesResponse = Partial<DeleteNodesResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16091}
 */
 
 export class DeleteNodesResponse {

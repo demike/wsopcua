@@ -13,6 +13,7 @@ export type IQueryNextResponse = Partial<QueryNextResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16139}
 */
 
 export class QueryNextResponse {

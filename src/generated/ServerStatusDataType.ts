@@ -13,6 +13,7 @@ export type IServerStatusDataType = Partial<ServerStatusDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16235}
 */
 
 export class ServerStatusDataType {

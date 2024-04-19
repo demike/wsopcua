@@ -12,6 +12,7 @@ export type IBrokerWriterGroupTransportDataType = Partial<BrokerWriterGroupTrans
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15839}
 */
 
 export class BrokerWriterGroupTransportDataType extends WriterGroupTransportDataType {

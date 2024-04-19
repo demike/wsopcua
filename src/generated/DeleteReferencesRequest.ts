@@ -13,6 +13,7 @@ export type IDeleteReferencesRequest = Partial<DeleteReferencesRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16093}
 */
 
 export class DeleteReferencesRequest {

@@ -10,6 +10,7 @@ export type ICloseSecureChannelResponse = Partial<CloseSecureChannelResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16051}
 */
 
 export class CloseSecureChannelResponse {

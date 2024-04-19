@@ -12,6 +12,7 @@ export type IRelativePath = Partial<RelativePath>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16108}
 */
 
 export class RelativePath {

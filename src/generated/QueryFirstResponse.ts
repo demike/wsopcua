@@ -18,6 +18,7 @@ export type IQueryFirstResponse = Partial<QueryFirstResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16137}
 */
 
 export class QueryFirstResponse {

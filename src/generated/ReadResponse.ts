@@ -15,6 +15,7 @@ export type IReadResponse = Partial<ReadResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16143}
 */
 
 export class ReadResponse {

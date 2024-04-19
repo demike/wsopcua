@@ -10,6 +10,7 @@ export type IServerDiagnosticsSummaryDataType = Partial<ServerDiagnosticsSummary
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16234}
 */
 
 export class ServerDiagnosticsSummaryDataType {

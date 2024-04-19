@@ -13,6 +13,7 @@ export type ICallRequest = Partial<CallRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16175}
 */
 
 export class CallRequest {

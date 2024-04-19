@@ -12,6 +12,7 @@ export type IPubSubConfigurationValueDataType = Partial<PubSubConfigurationValue
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16875}
 */
 
 export class PubSubConfigurationValueDataType {

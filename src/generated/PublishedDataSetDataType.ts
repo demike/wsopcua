@@ -14,6 +14,7 @@ export type IPublishedDataSetDataType = Partial<PublishedDataSetDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15795}
 */
 
 export class PublishedDataSetDataType {

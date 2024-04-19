@@ -10,6 +10,7 @@ export type IDeleteNodesItem = Partial<DeleteNodesItem>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16089}
 */
 
 export class DeleteNodesItem {

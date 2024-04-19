@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15806}
 */
 
 export class WriterGroupTransportDataType {

@@ -12,6 +12,7 @@ export type IReadEventDetails = Partial<ReadEventDetails>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16147}
 */
 
 export class ReadEventDetails extends HistoryReadDetails {

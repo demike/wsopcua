@@ -11,6 +11,7 @@ export type IThreeDVector = Partial<ThreeDVector>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15527}
 */
 
 export class ThreeDVector extends Vector {

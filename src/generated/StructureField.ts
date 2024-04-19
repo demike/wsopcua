@@ -11,6 +11,7 @@ export type IStructureField = Partial<StructureField>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15987}
 */
 
 export class StructureField {

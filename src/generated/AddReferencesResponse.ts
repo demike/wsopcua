@@ -13,6 +13,7 @@ export type IAddReferencesResponse = Partial<AddReferencesResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16088}
 */
 
 export class AddReferencesResponse {

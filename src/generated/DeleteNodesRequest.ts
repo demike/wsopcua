@@ -13,6 +13,7 @@ export type IDeleteNodesRequest = Partial<DeleteNodesRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16090}
 */
 
 export class DeleteNodesRequest {

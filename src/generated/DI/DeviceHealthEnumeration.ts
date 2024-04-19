@@ -7,6 +7,7 @@ import {DataStream} from '../../basic-types/DataStream';
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/11/17484}
 */
 
 export enum DeviceHealthEnumeration {

@@ -13,6 +13,7 @@ export type IAddNodesRequest = Partial<AddNodesRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16084}
 */
 
 export class AddNodesRequest {

@@ -12,6 +12,7 @@ export type IHistoryUpdateRequest = Partial<HistoryUpdateRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16171}
 */
 
 export class HistoryUpdateRequest {

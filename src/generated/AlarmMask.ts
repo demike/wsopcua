@@ -7,6 +7,7 @@ import {DataStream} from '../basic-types/DataStream';
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16652}
 */
 
 export enum AlarmMask {

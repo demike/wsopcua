@@ -11,6 +11,7 @@ export type IDataTypeDescription = Partial<DataTypeDescription>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15785}
 */
 
 export class DataTypeDescription {

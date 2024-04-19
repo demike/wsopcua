@@ -12,6 +12,7 @@ export type IReadProcessedDetails = Partial<ReadProcessedDetails>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16149}
 */
 
 export class ReadProcessedDetails extends HistoryReadDetails {

@@ -15,6 +15,7 @@ export type ITransferSubscriptionsResponse = Partial<TransferSubscriptionsRespon
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16224}
 */
 
 export class TransferSubscriptionsResponse {

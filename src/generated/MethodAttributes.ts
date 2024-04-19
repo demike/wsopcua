@@ -12,6 +12,7 @@ export type IMethodAttributes = Partial<MethodAttributes>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16074}
 */
 
 export class MethodAttributes extends NodeAttributes {

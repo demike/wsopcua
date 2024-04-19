@@ -11,6 +11,7 @@ export type ICreateSubscriptionRequest = Partial<CreateSubscriptionRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16203}
 */
 
 export class CreateSubscriptionRequest {

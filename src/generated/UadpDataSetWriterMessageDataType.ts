@@ -12,6 +12,7 @@ export type IUadpDataSetWriterMessageDataType = Partial<UadpDataSetWriterMessage
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15828}
 */
 
 export class UadpDataSetWriterMessageDataType extends DataSetWriterMessageDataType {

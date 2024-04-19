@@ -14,6 +14,7 @@ export type IEventFilter = Partial<EventFilter>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16182}
 */
 
 export class EventFilter extends MonitoringFilter {

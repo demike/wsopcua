@@ -11,6 +11,7 @@ export type IJsonWriterGroupMessageDataType = Partial<JsonWriterGroupMessageData
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15831}
 */
 
 export class JsonWriterGroupMessageDataType extends WriterGroupMessageDataType {

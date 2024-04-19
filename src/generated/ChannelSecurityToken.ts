@@ -10,6 +10,7 @@ export type IChannelSecurityToken = Partial<ChannelSecurityToken>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16047}
 */
 
 export class ChannelSecurityToken {

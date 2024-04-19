@@ -11,6 +11,7 @@ export type IMdnsDiscoveryConfiguration = Partial<MdnsDiscoveryConfiguration>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16043}
 */
 
 export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {

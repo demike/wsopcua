@@ -11,6 +11,7 @@ export type IBrokerConnectionTransportDataType = Partial<BrokerConnectionTranspo
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15837}
 */
 
 export class BrokerConnectionTransportDataType extends ConnectionTransportDataType {

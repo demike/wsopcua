@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/11/17488}
 */
 
 export class FetchResultDataType {

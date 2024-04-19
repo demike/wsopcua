@@ -11,6 +11,7 @@ export type IGenericAttributeValue = Partial<GenericAttributeValue>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16080}
 */
 
 export class GenericAttributeValue {

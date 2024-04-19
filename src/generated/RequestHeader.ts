@@ -11,6 +11,7 @@ export type IRequestHeader = Partial<RequestHeader>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16021}
 */
 
 export class RequestHeader {

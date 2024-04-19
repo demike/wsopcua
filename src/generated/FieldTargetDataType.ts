@@ -12,6 +12,7 @@ export type IFieldTargetDataType = Partial<FieldTargetDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15820}
 */
 
 export class FieldTargetDataType {

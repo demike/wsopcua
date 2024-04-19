@@ -10,6 +10,7 @@ export type ISemanticChangeStructureDataType = Partial<SemanticChangeStructureDa
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16243}
 */
 
 export class SemanticChangeStructureDataType {

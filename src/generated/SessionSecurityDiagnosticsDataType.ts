@@ -11,6 +11,7 @@ export type ISessionSecurityDiagnosticsDataType = Partial<SessionSecurityDiagnos
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16237}
 */
 
 export class SessionSecurityDiagnosticsDataType {

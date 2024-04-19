@@ -10,6 +10,7 @@ export type IDiagnosticInfo = Partial<DiagnosticInfo>;
 
 /**
 A recursive structure containing diagnostic information associated with a status code.
+ * {@link https://reference.opcfoundation.org/nodesets/4/15337}
 */
 
 export class DiagnosticInfo {

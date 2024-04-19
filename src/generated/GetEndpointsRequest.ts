@@ -11,6 +11,7 @@ export type IGetEndpointsRequest = Partial<GetEndpointsRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16037}
 */
 
 export class GetEndpointsRequest {

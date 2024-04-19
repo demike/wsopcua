@@ -12,6 +12,7 @@ export type IHistoryEventFieldList = Partial<HistoryEventFieldList>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16215}
 */
 
 export class HistoryEventFieldList {

@@ -12,6 +12,7 @@ export type IObjectAttributes = Partial<ObjectAttributes>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16072}
 */
 
 export class ObjectAttributes extends NodeAttributes {

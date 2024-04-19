@@ -13,6 +13,7 @@ export type IWriteRequest = Partial<WriteRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16159}
 */
 
 export class WriteRequest {

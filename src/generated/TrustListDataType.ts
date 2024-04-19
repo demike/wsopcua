@@ -10,6 +10,7 @@ export type ITrustListDataType = Partial<TrustListDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15706}
 */
 
 export class TrustListDataType {

@@ -15,6 +15,7 @@ export type IActivateSessionRequest = Partial<ActivateSessionRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16064}
 */
 
 export class ActivateSessionRequest {

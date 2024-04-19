@@ -12,6 +12,7 @@ export type IStatusChangeNotification = Partial<StatusChangeNotification>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16216}
 */
 
 export class StatusChangeNotification extends NotificationData {

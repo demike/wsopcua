@@ -11,6 +11,7 @@ export type IEnumValueType = Partial<EnumValueType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16003}
 */
 
 export class EnumValueType {

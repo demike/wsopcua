@@ -11,6 +11,7 @@ export type IThreeDCartesianCoordinates = Partial<ThreeDCartesianCoordinates>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15529}
 */
 
 export class ThreeDCartesianCoordinates extends CartesianCoordinates {

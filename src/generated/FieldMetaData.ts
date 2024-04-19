@@ -14,6 +14,7 @@ export type IFieldMetaData = Partial<FieldMetaData>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15792}
 */
 
 export class FieldMetaData {

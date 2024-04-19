@@ -12,6 +12,7 @@ export type ISessionDiagnosticsDataType = Partial<SessionDiagnosticsDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16236}
 */
 
 export class SessionDiagnosticsDataType {

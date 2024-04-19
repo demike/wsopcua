@@ -10,6 +10,7 @@ export type IEphemeralKeyType = Partial<EphemeralKeyType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15500}
 */
 
 export class EphemeralKeyType {

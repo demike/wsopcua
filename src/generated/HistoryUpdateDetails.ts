@@ -10,6 +10,7 @@ export type IHistoryUpdateDetails = Partial<HistoryUpdateDetails>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16161}
 */
 
 export class HistoryUpdateDetails {

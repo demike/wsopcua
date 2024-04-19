@@ -13,6 +13,7 @@ export type ISubscribedDataSetMirrorDataType = Partial<SubscribedDataSetMirrorDa
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15822}
 */
 
 export class SubscribedDataSetMirrorDataType extends SubscribedDataSetDataType {

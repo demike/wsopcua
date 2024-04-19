@@ -10,6 +10,7 @@ export type IEndpointConfiguration = Partial<EndpointConfiguration>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16120}
 */
 
 export class EndpointConfiguration {

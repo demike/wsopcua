@@ -12,6 +12,7 @@ export type IAdditionalParametersType = Partial<AdditionalParametersType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15499}
 */
 
 export class AdditionalParametersType {

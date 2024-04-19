@@ -13,6 +13,7 @@ export type IUadpDataSetReaderMessageDataType = Partial<UadpDataSetReaderMessage
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15829}
 */
 
 export class UadpDataSetReaderMessageDataType extends DataSetReaderMessageDataType {

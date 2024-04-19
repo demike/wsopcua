@@ -12,6 +12,7 @@ export type IDeleteRawModifiedDetails = Partial<DeleteRawModifiedDetails>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16167}
 */
 
 export class DeleteRawModifiedDetails extends HistoryUpdateDetails {

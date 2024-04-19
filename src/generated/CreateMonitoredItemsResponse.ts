@@ -15,6 +15,7 @@ export type ICreateMonitoredItemsResponse = Partial<CreateMonitoredItemsResponse
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16192}
 */
 
 export class CreateMonitoredItemsResponse {

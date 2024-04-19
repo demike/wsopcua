@@ -11,6 +11,7 @@ export type ISetTriggeringRequest = Partial<SetTriggeringRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16199}
 */
 
 export class SetTriggeringRequest {

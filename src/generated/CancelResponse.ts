@@ -11,6 +11,7 @@ export type ICancelResponse = Partial<CancelResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16069}
 */
 
 export class CancelResponse {

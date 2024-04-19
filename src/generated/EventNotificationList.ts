@@ -13,6 +13,7 @@ export type IEventNotificationList = Partial<EventNotificationList>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16213}
 */
 
 export class EventNotificationList extends NotificationData {

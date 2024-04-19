@@ -12,6 +12,7 @@ export type IDeleteEventDetails = Partial<DeleteEventDetails>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16169}
 */
 
 export class DeleteEventDetails extends HistoryUpdateDetails {

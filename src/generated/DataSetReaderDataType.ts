@@ -19,6 +19,7 @@ export type IDataSetReaderDataType = Partial<DataSetReaderDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15815}
 */
 
 export class DataSetReaderDataType {

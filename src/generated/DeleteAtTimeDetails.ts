@@ -12,6 +12,7 @@ export type IDeleteAtTimeDetails = Partial<DeleteAtTimeDetails>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16168}
 */
 
 export class DeleteAtTimeDetails extends HistoryUpdateDetails {

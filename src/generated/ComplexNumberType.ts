@@ -10,6 +10,7 @@ export type IComplexNumberType = Partial<ComplexNumberType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16247}
 */
 
 export class ComplexNumberType {

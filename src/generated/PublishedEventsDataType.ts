@@ -14,6 +14,7 @@ export type IPublishedEventsDataType = Partial<PublishedEventsDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15799}
 */
 
 export class PublishedEventsDataType extends PublishedDataSetSourceDataType {

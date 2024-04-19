@@ -13,6 +13,7 @@ export type IRegisteredServer = Partial<RegisteredServer>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16039}
 */
 
 export class RegisteredServer {

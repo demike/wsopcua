@@ -10,6 +10,7 @@ export type INodeReference = Partial<NodeReference>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16125}
 */
 
 export class NodeReference {

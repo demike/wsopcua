@@ -13,6 +13,7 @@ export type IPublishedVariableDataType = Partial<PublishedVariableDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15797}
 */
 
 export class PublishedVariableDataType {

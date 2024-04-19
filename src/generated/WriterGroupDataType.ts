@@ -15,6 +15,7 @@ export type IWriterGroupDataType = Partial<WriterGroupDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15805}
 */
 
 export class WriterGroupDataType extends PubSubGroupDataType {

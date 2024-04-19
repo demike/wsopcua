@@ -12,6 +12,7 @@ export type IBrokerDataSetWriterTransportDataType = Partial<BrokerDataSetWriterT
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15840}
 */
 
 export class BrokerDataSetWriterTransportDataType extends DataSetWriterTransportDataType {

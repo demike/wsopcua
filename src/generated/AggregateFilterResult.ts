@@ -12,6 +12,7 @@ export type IAggregateFilterResult = Partial<AggregateFilterResult>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16187}
 */
 
 export class AggregateFilterResult extends MonitoringFilterResult {

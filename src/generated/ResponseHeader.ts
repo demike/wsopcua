@@ -12,6 +12,7 @@ export type IResponseHeader = Partial<ResponseHeader>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16022}
 */
 
 export class ResponseHeader {

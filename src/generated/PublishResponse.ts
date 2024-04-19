@@ -14,6 +14,7 @@ export type IPublishResponse = Partial<PublishResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16219}
 */
 
 export class PublishResponse {

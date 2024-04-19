@@ -13,6 +13,7 @@ export type IActivateSessionResponse = Partial<ActivateSessionResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16065}
 */
 
 export class ActivateSessionResponse {

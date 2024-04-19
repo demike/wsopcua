@@ -13,6 +13,7 @@ export type ISetTriggeringResponse = Partial<SetTriggeringResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16200}
 */
 
 export class SetTriggeringResponse {

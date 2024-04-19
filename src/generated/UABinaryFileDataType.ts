@@ -15,6 +15,7 @@ export type IUABinaryFileDataType = Partial<UABinaryFileDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15789}
 */
 
 export class UABinaryFileDataType extends DataTypeSchemaHeader {

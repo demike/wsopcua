@@ -12,6 +12,7 @@ export type IJsonDataSetReaderMessageDataType = Partial<JsonDataSetReaderMessage
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15834}
 */
 
 export class JsonDataSetReaderMessageDataType extends DataSetReaderMessageDataType {

@@ -11,6 +11,7 @@ export type IReadRawModifiedDetails = Partial<ReadRawModifiedDetails>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16148}
 */
 
 export class ReadRawModifiedDetails extends HistoryReadDetails {

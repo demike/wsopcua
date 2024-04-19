@@ -14,6 +14,7 @@ export type IReadRequest = Partial<ReadRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16142}
 */
 
 export class ReadRequest {

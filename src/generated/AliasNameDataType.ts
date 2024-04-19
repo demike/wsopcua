@@ -11,6 +11,7 @@ export type IAliasNameDataType = Partial<AliasNameDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15940}
 */
 
 export class AliasNameDataType {

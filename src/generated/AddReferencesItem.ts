@@ -11,6 +11,7 @@ export type IAddReferencesItem = Partial<AddReferencesItem>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16086}
 */
 
 export class AddReferencesItem {

@@ -13,6 +13,7 @@ export type IAddNodesItem = Partial<AddNodesItem>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16082}
 */
 
 export class AddNodesItem {

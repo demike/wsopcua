@@ -10,6 +10,7 @@ export type IAddNodesResult = Partial<AddNodesResult>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16083}
 */
 
 export class AddNodesResult {

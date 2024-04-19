@@ -10,6 +10,7 @@ export type IRange = Partial<Range>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16244}
 */
 
 export class Range {

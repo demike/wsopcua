@@ -13,6 +13,7 @@ export type IVariableAttributes = Partial<VariableAttributes>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16073}
 */
 
 export class VariableAttributes extends NodeAttributes {

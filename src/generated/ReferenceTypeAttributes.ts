@@ -13,6 +13,7 @@ export type IReferenceTypeAttributes = Partial<ReferenceTypeAttributes>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16077}
 */
 
 export class ReferenceTypeAttributes extends NodeAttributes {

@@ -12,6 +12,7 @@ export type IX509IdentityToken = Partial<X509IdentityToken>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16060}
 */
 
 export class X509IdentityToken extends UserIdentityToken {

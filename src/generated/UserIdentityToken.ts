@@ -10,6 +10,7 @@ export type IUserIdentityToken = Partial<UserIdentityToken>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16057}
 */
 
 export class UserIdentityToken {

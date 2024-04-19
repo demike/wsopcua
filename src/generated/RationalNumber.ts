@@ -10,6 +10,7 @@ export type IRationalNumber = Partial<RationalNumber>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15525}
 */
 
 export class RationalNumber {

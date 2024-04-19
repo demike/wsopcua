@@ -12,6 +12,7 @@ export type IViewAttributes = Partial<ViewAttributes>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16079}
 */
 
 export class ViewAttributes extends NodeAttributes {

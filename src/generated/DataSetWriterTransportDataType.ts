@@ -5,6 +5,7 @@
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15802}
 */
 
 export class DataSetWriterTransportDataType {

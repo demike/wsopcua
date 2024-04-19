@@ -13,6 +13,7 @@ export type IRegisterServer2Response = Partial<RegisterServer2Response>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16045}
 */
 
 export class RegisterServer2Response {

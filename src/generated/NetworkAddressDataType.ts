@@ -10,6 +10,7 @@ export type INetworkAddressDataType = Partial<NetworkAddressDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15810}
 */
 
 export class NetworkAddressDataType {

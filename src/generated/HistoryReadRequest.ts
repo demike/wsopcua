@@ -15,6 +15,7 @@ export type IHistoryReadRequest = Partial<HistoryReadRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16156}
 */
 
 export class HistoryReadRequest {

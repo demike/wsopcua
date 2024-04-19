@@ -11,6 +11,7 @@ export type IRolePermissionType = Partial<RolePermissionType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15984}
 */
 
 export class RolePermissionType {

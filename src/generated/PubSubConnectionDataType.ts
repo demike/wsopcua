@@ -18,6 +18,7 @@ export type IPubSubConnectionDataType = Partial<PubSubConnectionDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15808}
 */
 
 export class PubSubConnectionDataType {

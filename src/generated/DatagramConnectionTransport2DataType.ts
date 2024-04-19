@@ -13,6 +13,7 @@ export type IDatagramConnectionTransport2DataType = Partial<DatagramConnectionTr
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16834}
 */
 
 export class DatagramConnectionTransport2DataType extends DatagramConnectionTransportDataType {

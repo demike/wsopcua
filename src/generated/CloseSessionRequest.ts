@@ -11,6 +11,7 @@ export type ICloseSessionRequest = Partial<CloseSessionRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16066}
 */
 
 export class CloseSessionRequest {

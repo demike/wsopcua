@@ -15,6 +15,7 @@ export type IBrowseNextResponse = Partial<BrowseNextResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16106}
 */
 
 export class BrowseNextResponse {

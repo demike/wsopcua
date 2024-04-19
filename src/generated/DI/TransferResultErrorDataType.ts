@@ -12,6 +12,7 @@ export type ITransferResultErrorDataType = Partial<TransferResultErrorDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/11/17489}
 */
 
 export class TransferResultErrorDataType extends FetchResultDataType {

@@ -12,6 +12,7 @@ export type ICreateSessionRequest = Partial<CreateSessionRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16055}
 */
 
 export class CreateSessionRequest {

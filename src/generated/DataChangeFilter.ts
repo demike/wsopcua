@@ -12,6 +12,7 @@ export type IDataChangeFilter = Partial<DataChangeFilter>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16181}
 */
 
 export class DataChangeFilter extends MonitoringFilter {

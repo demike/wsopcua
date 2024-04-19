@@ -13,6 +13,7 @@ export type IReferenceDescription = Partial<ReferenceDescription>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16100}
 */
 
 export class ReferenceDescription {

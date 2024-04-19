@@ -10,6 +10,7 @@ export type ICloseSecureChannelRequest = Partial<CloseSecureChannelRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16050}
 */
 
 export class CloseSecureChannelRequest {

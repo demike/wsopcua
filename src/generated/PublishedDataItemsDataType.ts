@@ -13,6 +13,7 @@ export type IPublishedDataItemsDataType = Partial<PublishedDataItemsDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15798}
 */
 
 export class PublishedDataItemsDataType extends PublishedDataSetSourceDataType {

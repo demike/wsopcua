@@ -10,6 +10,7 @@ export type IUnregisterNodesResponse = Partial<UnregisterNodesResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16117}
 */
 
 export class UnregisterNodesResponse {

@@ -10,6 +10,7 @@ export type IDoubleComplexNumberType = Partial<DoubleComplexNumberType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16248}
 */
 
 export class DoubleComplexNumberType {

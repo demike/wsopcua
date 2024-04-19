@@ -13,6 +13,7 @@ export type ITransferResultDataDataType = Partial<TransferResultDataDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/11/17490}
 */
 
 export class TransferResultDataDataType extends FetchResultDataType {

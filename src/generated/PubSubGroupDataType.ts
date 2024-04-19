@@ -15,6 +15,7 @@ export type IPubSubGroupDataType = Partial<PubSubGroupDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15804}
 */
 
 export class PubSubGroupDataType {

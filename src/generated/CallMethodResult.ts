@@ -14,6 +14,7 @@ export type ICallMethodResult = Partial<CallMethodResult>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16174}
 */
 
 export class CallMethodResult {

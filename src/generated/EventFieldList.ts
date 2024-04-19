@@ -12,6 +12,7 @@ export type IEventFieldList = Partial<EventFieldList>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16214}
 */
 
 export class EventFieldList {

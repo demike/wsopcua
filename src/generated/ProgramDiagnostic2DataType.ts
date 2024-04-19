@@ -14,6 +14,7 @@ export type IProgramDiagnostic2DataType = Partial<ProgramDiagnostic2DataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16252}
 */
 
 export class ProgramDiagnostic2DataType {

@@ -13,6 +13,7 @@ export type IStandaloneSubscribedDataSetDataType = Partial<StandaloneSubscribedD
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16813}
 */
 
 export class StandaloneSubscribedDataSetDataType extends SubscribedDataSetDataType {

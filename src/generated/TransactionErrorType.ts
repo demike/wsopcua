@@ -11,6 +11,7 @@ export type ITransactionErrorType = Partial<TransactionErrorType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16703}
 */
 
 export class TransactionErrorType {

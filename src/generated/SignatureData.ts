@@ -10,6 +10,7 @@ export type ISignatureData = Partial<SignatureData>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16054}
 */
 
 export class SignatureData {

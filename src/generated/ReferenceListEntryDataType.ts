@@ -10,6 +10,7 @@ export type IReferenceListEntryDataType = Partial<ReferenceListEntryDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/17044}
 */
 
 export class ReferenceListEntryDataType {

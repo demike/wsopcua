@@ -10,6 +10,7 @@ export type ISessionlessInvokeRequestType = Partial<SessionlessInvokeRequestType
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16025}
 */
 
 export class SessionlessInvokeRequestType {

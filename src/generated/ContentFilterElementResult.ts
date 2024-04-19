@@ -12,6 +12,7 @@ export type IContentFilterElementResult = Partial<ContentFilterElementResult>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16133}
 */
 
 export class ContentFilterElementResult {

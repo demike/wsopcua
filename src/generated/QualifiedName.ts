@@ -10,6 +10,7 @@ export type IQualifiedName = Partial<QualifiedName>;
 
 /**
 A string qualified with a namespace index.
+ * {@link https://reference.opcfoundation.org/nodesets/4/15333}
 */
 
 export class QualifiedName {

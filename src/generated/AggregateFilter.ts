@@ -12,6 +12,7 @@ export type IAggregateFilter = Partial<AggregateFilter>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16184}
 */
 
 export class AggregateFilter extends MonitoringFilter {

@@ -13,6 +13,7 @@ export type IGetEndpointsResponse = Partial<GetEndpointsResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16038}
 */
 
 export class GetEndpointsResponse {

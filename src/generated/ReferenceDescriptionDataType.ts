@@ -10,6 +10,7 @@ export type IReferenceDescriptionDataType = Partial<ReferenceDescriptionDataType
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/17043}
 */
 
 export class ReferenceDescriptionDataType {

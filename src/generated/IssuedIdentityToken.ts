@@ -12,6 +12,7 @@ export type IIssuedIdentityToken = Partial<IssuedIdentityToken>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16061}
 */
 
 export class IssuedIdentityToken extends UserIdentityToken {

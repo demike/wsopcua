@@ -11,6 +11,7 @@ export type IStatusResult = Partial<StatusResult>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16239}
 */
 
 export class StatusResult {

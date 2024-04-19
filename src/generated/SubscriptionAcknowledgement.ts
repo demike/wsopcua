@@ -10,6 +10,7 @@ export type ISubscriptionAcknowledgement = Partial<SubscriptionAcknowledgement>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16217}
 */
 
 export class SubscriptionAcknowledgement {

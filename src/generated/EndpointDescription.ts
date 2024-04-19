@@ -14,6 +14,7 @@ export type IEndpointDescription = Partial<EndpointDescription>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16036}
 */
 
 export class EndpointDescription {

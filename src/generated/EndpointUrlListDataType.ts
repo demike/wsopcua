@@ -10,6 +10,7 @@ export type IEndpointUrlListDataType = Partial<EndpointUrlListDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16231}
 */
 
 export class EndpointUrlListDataType {

@@ -15,6 +15,7 @@ export type IQueryFirstRequest = Partial<QueryFirstRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16136}
 */
 
 export class QueryFirstRequest {

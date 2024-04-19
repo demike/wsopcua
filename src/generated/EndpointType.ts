@@ -11,6 +11,7 @@ export type IEndpointType = Partial<EndpointType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15501}
 */
 
 export class EndpointType {

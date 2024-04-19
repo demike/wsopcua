@@ -13,6 +13,7 @@ export type IDatagramWriterGroupTransport2DataType = Partial<DatagramWriterGroup
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16836}
 */
 
 export class DatagramWriterGroupTransport2DataType extends DatagramWriterGroupTransportDataType {

@@ -15,6 +15,7 @@ export type IModifyMonitoredItemsResponse = Partial<ModifyMonitoredItemsResponse
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16196}
 */
 
 export class ModifyMonitoredItemsResponse {

@@ -11,6 +11,7 @@ export type IMonitoredItemCreateResult = Partial<MonitoredItemCreateResult>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16190}
 */
 
 export class MonitoredItemCreateResult {

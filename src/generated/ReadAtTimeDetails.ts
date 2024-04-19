@@ -11,6 +11,7 @@ export type IReadAtTimeDetails = Partial<ReadAtTimeDetails>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16150}
 */
 
 export class ReadAtTimeDetails extends HistoryReadDetails {

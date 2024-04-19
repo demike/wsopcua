@@ -11,6 +11,7 @@ export type IThreeDOrientation = Partial<ThreeDOrientation>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15531}
 */
 
 export class ThreeDOrientation extends Orientation {

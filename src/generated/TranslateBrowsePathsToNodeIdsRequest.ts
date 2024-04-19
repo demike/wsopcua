@@ -13,6 +13,7 @@ export type ITranslateBrowsePathsToNodeIdsRequest = Partial<TranslateBrowsePaths
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16112}
 */
 
 export class TranslateBrowsePathsToNodeIdsRequest {

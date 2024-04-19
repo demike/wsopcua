@@ -10,6 +10,7 @@ export type IXVType = Partial<XVType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16250}
 */
 
 export class XVType {

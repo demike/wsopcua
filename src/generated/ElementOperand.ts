@@ -11,6 +11,7 @@ export type IElementOperand = Partial<ElementOperand>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16129}
 */
 
 export class ElementOperand extends FilterOperand {

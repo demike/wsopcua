@@ -12,6 +12,7 @@ export type IHistoryUpdateResult = Partial<HistoryUpdateResult>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16170}
 */
 
 export class HistoryUpdateResult {

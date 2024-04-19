@@ -10,6 +10,7 @@ export type ITimeZoneDataType = Partial<TimeZoneDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16016}
 */
 
 export class TimeZoneDataType {

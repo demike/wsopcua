@@ -10,6 +10,7 @@ export type IBuildInfo = Partial<BuildInfo>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16227}
 */
 
 export class BuildInfo {

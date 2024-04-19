@@ -13,6 +13,7 @@ export type IUadpWriterGroupMessageDataType = Partial<UadpWriterGroupMessageData
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15826}
 */
 
 export class UadpWriterGroupMessageDataType extends WriterGroupMessageDataType {

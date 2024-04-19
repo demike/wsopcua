@@ -11,6 +11,7 @@ export type IMonitoredItemModifyResult = Partial<MonitoredItemModifyResult>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16194}
 */
 
 export class MonitoredItemModifyResult {

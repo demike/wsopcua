@@ -11,6 +11,7 @@ export type INodeAttributes = Partial<NodeAttributes>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16071}
 */
 
 export class NodeAttributes {

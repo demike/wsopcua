@@ -16,6 +16,7 @@ export type IDataTypeSchemaHeader = Partial<DataTypeSchemaHeader>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15784}
 */
 
 export class DataTypeSchemaHeader {

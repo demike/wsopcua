@@ -12,6 +12,7 @@ export type IMonitoredItemCreateRequest = Partial<MonitoredItemCreateRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16189}
 */
 
 export class MonitoredItemCreateRequest {

@@ -10,6 +10,7 @@ export type IDeleteReferencesItem = Partial<DeleteReferencesItem>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16092}
 */
 
 export class DeleteReferencesItem {

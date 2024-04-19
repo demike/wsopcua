@@ -12,6 +12,7 @@ export type IThreeDFrame = Partial<ThreeDFrame>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15533}
 */
 
 export class ThreeDFrame extends Frame {

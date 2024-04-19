@@ -10,6 +10,7 @@ export type ITransferResult = Partial<TransferResult>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16222}
 */
 
 export class TransferResult {

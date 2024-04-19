@@ -12,6 +12,7 @@ export type IHistoryEvent = Partial<HistoryEvent>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16155}
 */
 
 export class HistoryEvent {

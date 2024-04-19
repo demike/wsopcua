@@ -12,6 +12,7 @@ export type IDataTypeAttributes = Partial<DataTypeAttributes>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16078}
 */
 
 export class DataTypeAttributes extends NodeAttributes {

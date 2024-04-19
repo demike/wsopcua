@@ -11,6 +11,7 @@ export type IQueryNextRequest = Partial<QueryNextRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16138}
 */
 
 export class QueryNextRequest {

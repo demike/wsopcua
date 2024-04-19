@@ -14,6 +14,7 @@ export type IAxisInformation = Partial<AxisInformation>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16249}
 */
 
 export class AxisInformation {

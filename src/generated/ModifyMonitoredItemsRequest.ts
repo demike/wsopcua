@@ -14,6 +14,7 @@ export type IModifyMonitoredItemsRequest = Partial<ModifyMonitoredItemsRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16195}
 */
 
 export class ModifyMonitoredItemsRequest {

@@ -11,6 +11,7 @@ export type IHistoryReadResult = Partial<HistoryReadResult>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16145}
 */
 
 export class HistoryReadResult {

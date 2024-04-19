@@ -11,6 +11,7 @@ export type IRegisterNodesResponse = Partial<RegisterNodesResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16115}
 */
 
 export class RegisterNodesResponse {

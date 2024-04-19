@@ -10,6 +10,7 @@ export type IBrowsePathTarget = Partial<BrowsePathTarget>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16110}
 */
 
 export class BrowsePathTarget {

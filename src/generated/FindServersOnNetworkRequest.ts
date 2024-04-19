@@ -11,6 +11,7 @@ export type IFindServersOnNetworkRequest = Partial<FindServersOnNetworkRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16030}
 */
 
 export class FindServersOnNetworkRequest {

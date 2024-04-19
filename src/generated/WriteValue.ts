@@ -11,6 +11,7 @@ export type IWriteValue = Partial<WriteValue>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16158}
 */
 
 export class WriteValue {

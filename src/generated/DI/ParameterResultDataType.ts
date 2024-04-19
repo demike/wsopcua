@@ -13,6 +13,7 @@ export type IParameterResultDataType = Partial<ParameterResultDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/11/17491}
 */
 
 export class ParameterResultDataType {

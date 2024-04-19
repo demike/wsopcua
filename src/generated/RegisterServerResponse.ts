@@ -10,6 +10,7 @@ export type IRegisterServerResponse = Partial<RegisterServerResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16041}
 */
 
 export class RegisterServerResponse {

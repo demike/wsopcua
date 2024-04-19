@@ -11,6 +11,7 @@ export type INotificationMessage = Partial<NotificationMessage>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16209}
 */
 
 export class NotificationMessage {

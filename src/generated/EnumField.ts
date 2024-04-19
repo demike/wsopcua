@@ -12,6 +12,7 @@ export type IEnumField = Partial<EnumField>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16004}
 */
 
 export class EnumField extends EnumValueType {

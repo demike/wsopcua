@@ -13,6 +13,7 @@ export type ISimpleAttributeOperand = Partial<SimpleAttributeOperand>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16132}
 */
 
 export class SimpleAttributeOperand extends FilterOperand {

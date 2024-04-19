@@ -11,6 +11,7 @@ export type IQueryDataDescription = Partial<QueryDataDescription>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16121}
 */
 
 export class QueryDataDescription {

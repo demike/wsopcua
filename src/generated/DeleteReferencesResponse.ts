@@ -13,6 +13,7 @@ export type IDeleteReferencesResponse = Partial<DeleteReferencesResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16094}
 */
 
 export class DeleteReferencesResponse {

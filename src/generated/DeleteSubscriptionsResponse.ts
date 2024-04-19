@@ -13,6 +13,7 @@ export type IDeleteSubscriptionsResponse = Partial<DeleteSubscriptionsResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16226}
 */
 
 export class DeleteSubscriptionsResponse {

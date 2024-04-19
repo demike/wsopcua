@@ -11,6 +11,7 @@ export type IIdentityMappingRuleType = Partial<IdentityMappingRuleType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15560}
 */
 
 export class IdentityMappingRuleType {

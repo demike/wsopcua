@@ -11,6 +11,7 @@ export type IArgument = Partial<Argument>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16002}
 */
 
 export class Argument {

@@ -12,6 +12,7 @@ export type IBrokerDataSetReaderTransportDataType = Partial<BrokerDataSetReaderT
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15841}
 */
 
 export class BrokerDataSetReaderTransportDataType extends DataSetReaderTransportDataType {

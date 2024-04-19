@@ -15,6 +15,7 @@ export type IDataChangeNotification = Partial<DataChangeNotification>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16211}
 */
 
 export class DataChangeNotification extends NotificationData {

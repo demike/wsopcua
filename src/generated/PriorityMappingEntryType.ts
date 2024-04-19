@@ -10,6 +10,7 @@ export type IPriorityMappingEntryType = Partial<PriorityMappingEntryType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/17014}
 */
 
 export class PriorityMappingEntryType {

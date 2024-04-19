@@ -10,6 +10,7 @@ export type IOptionSet = Partial<OptionSet>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16005}
 */
 
 export class OptionSet {

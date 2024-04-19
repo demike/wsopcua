@@ -11,6 +11,7 @@ export type IJsonDataSetWriterMessageDataType = Partial<JsonDataSetWriterMessage
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15833}
 */
 
 export class JsonDataSetWriterMessageDataType extends DataSetWriterMessageDataType {

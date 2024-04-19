@@ -14,6 +14,7 @@ export type IDataSetWriterDataType = Partial<DataSetWriterDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15801}
 */
 
 export class DataSetWriterDataType {

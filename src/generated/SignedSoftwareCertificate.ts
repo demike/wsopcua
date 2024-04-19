@@ -10,6 +10,7 @@ export type ISignedSoftwareCertificate = Partial<SignedSoftwareCertificate>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16052}
 */
 
 export class SignedSoftwareCertificate {

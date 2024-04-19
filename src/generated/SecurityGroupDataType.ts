@@ -14,6 +14,7 @@ export type ISecurityGroupDataType = Partial<SecurityGroupDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16814}
 */
 
 export class SecurityGroupDataType {

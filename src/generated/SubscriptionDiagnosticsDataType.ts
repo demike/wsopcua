@@ -10,6 +10,7 @@ export type ISubscriptionDiagnosticsDataType = Partial<SubscriptionDiagnosticsDa
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16240}
 */
 
 export class SubscriptionDiagnosticsDataType {

@@ -10,6 +10,7 @@ export type IPortableQualifiedName = Partial<PortableQualifiedName>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16774}
 */
 
 export class PortableQualifiedName {

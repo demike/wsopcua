@@ -11,6 +11,7 @@ export type IKeyValuePair = Partial<KeyValuePair>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15498}
 */
 
 export class KeyValuePair {

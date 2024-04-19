@@ -12,6 +12,7 @@ export type IParsingResult = Partial<ParsingResult>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16135}
 */
 
 export class ParsingResult {

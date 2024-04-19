@@ -11,6 +11,7 @@ export type IReadAnnotationDataDetails = Partial<ReadAnnotationDataDetails>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16151}
 */
 
 export class ReadAnnotationDataDetails extends HistoryReadDetails {

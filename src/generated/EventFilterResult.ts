@@ -14,6 +14,7 @@ export type IEventFilterResult = Partial<EventFilterResult>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16186}
 */
 
 export class EventFilterResult extends MonitoringFilterResult {

@@ -11,6 +11,7 @@ export type ICancelRequest = Partial<CancelRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16068}
 */
 
 export class CancelRequest {

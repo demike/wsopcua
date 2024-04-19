@@ -13,6 +13,7 @@ export type ISetPublishingModeResponse = Partial<SetPublishingModeResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16208}
 */
 
 export class SetPublishingModeResponse {

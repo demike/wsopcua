@@ -10,6 +10,7 @@ export type IServerOnNetwork = Partial<ServerOnNetwork>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16029}
 */
 
 export class ServerOnNetwork {

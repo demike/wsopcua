@@ -12,6 +12,7 @@ export type IAttributeOperand = Partial<AttributeOperand>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16131}
 */
 
 export class AttributeOperand extends FilterOperand {

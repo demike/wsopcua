@@ -12,6 +12,7 @@ export type ISetMonitoringModeRequest = Partial<SetMonitoringModeRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16197}
 */
 
 export class SetMonitoringModeRequest {

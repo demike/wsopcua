@@ -11,6 +11,7 @@ export type ISetPublishingModeRequest = Partial<SetPublishingModeRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16207}
 */
 
 export class SetPublishingModeRequest {

@@ -12,6 +12,7 @@ export type INetworkGroupDataType = Partial<NetworkGroupDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16232}
 */
 
 export class NetworkGroupDataType {

@@ -11,6 +11,7 @@ export type IDeleteSubscriptionsRequest = Partial<DeleteSubscriptionsRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16225}
 */
 
 export class DeleteSubscriptionsRequest {

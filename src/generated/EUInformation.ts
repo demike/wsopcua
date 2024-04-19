@@ -11,6 +11,7 @@ export type IEUInformation = Partial<EUInformation>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16245}
 */
 
 export class EUInformation {

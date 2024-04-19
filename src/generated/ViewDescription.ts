@@ -10,6 +10,7 @@ export type IViewDescription = Partial<ViewDescription>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16097}
 */
 
 export class ViewDescription {

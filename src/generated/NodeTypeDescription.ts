@@ -12,6 +12,7 @@ export type INodeTypeDescription = Partial<NodeTypeDescription>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16122}
 */
 
 export class NodeTypeDescription {

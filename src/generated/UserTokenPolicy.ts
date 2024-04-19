@@ -11,6 +11,7 @@ export type IUserTokenPolicy = Partial<UserTokenPolicy>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16035}
 */
 
 export class UserTokenPolicy {

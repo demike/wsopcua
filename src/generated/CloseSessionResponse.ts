@@ -10,6 +10,7 @@ export type ICloseSessionResponse = Partial<CloseSessionResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16067}
 */
 
 export class CloseSessionResponse {

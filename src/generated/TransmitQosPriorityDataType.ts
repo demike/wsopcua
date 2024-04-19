@@ -11,6 +11,7 @@ export type ITransmitQosPriorityDataType = Partial<TransmitQosPriorityDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16830}
 */
 
 export class TransmitQosPriorityDataType extends TransmitQosDataType {

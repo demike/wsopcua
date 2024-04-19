@@ -11,6 +11,7 @@ export type IModifySubscriptionRequest = Partial<ModifySubscriptionRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16205}
 */
 
 export class ModifySubscriptionRequest {

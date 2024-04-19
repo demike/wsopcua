@@ -15,6 +15,7 @@ export type IAddNodesResponse = Partial<AddNodesResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16085}
 */
 
 export class AddNodesResponse {

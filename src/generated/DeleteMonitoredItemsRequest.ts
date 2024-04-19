@@ -11,6 +11,7 @@ export type IDeleteMonitoredItemsRequest = Partial<DeleteMonitoredItemsRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16201}
 */
 
 export class DeleteMonitoredItemsRequest {

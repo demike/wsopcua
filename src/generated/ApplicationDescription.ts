@@ -12,6 +12,7 @@ export type IApplicationDescription = Partial<ApplicationDescription>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16020}
 */
 
 export class ApplicationDescription {

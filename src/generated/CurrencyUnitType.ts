@@ -11,6 +11,7 @@ export type ICurrencyUnitType = Partial<CurrencyUnitType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15580}
 */
 
 export class CurrencyUnitType {

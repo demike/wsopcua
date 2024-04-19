@@ -11,6 +11,7 @@ export type IRedundantServerDataType = Partial<RedundantServerDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16230}
 */
 
 export class RedundantServerDataType {

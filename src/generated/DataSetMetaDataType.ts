@@ -16,6 +16,7 @@ export type IDataSetMetaDataType = Partial<DataSetMetaDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15791}
 */
 
 export class DataSetMetaDataType extends DataTypeSchemaHeader {

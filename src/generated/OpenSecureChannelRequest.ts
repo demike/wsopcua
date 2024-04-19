@@ -13,6 +13,7 @@ export type IOpenSecureChannelRequest = Partial<OpenSecureChannelRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16048}
 */
 
 export class OpenSecureChannelRequest {

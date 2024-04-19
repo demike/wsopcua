@@ -11,6 +11,7 @@ export type IUnregisterNodesRequest = Partial<UnregisterNodesRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16116}
 */
 
 export class UnregisterNodesRequest {

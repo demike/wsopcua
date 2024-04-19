@@ -10,6 +10,7 @@ export type IPortableNodeId = Partial<PortableNodeId>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16775}
 */
 
 export class PortableNodeId {

@@ -13,6 +13,7 @@ export type IPubSubKeyPushTargetDataType = Partial<PubSubKeyPushTargetDataType>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/2/16815}
 */
 
 export class PubSubKeyPushTargetDataType {

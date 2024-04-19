@@ -13,6 +13,7 @@ export type IEnumDescription = Partial<EnumDescription>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15787}
 */
 
 export class EnumDescription extends DataTypeDescription {

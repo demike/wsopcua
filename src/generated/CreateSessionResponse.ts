@@ -16,6 +16,7 @@ export type ICreateSessionResponse = Partial<CreateSessionResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16056}
 */
 
 export class CreateSessionResponse {

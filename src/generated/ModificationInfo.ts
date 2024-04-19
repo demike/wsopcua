@@ -11,6 +11,7 @@ export type IModificationInfo = Partial<ModificationInfo>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16153}
 */
 
 export class ModificationInfo {

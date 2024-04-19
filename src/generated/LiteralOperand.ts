@@ -11,6 +11,7 @@ export type ILiteralOperand = Partial<LiteralOperand>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16130}
 */
 
 export class LiteralOperand extends FilterOperand {

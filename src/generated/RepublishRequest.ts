@@ -11,6 +11,7 @@ export type IRepublishRequest = Partial<RepublishRequest>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16220}
 */
 
 export class RepublishRequest {

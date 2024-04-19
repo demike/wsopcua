@@ -11,6 +11,7 @@ export type IMonitoringParameters = Partial<MonitoringParameters>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16188}
 */
 
 export class MonitoringParameters {

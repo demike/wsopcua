@@ -12,6 +12,7 @@ export type IOpenSecureChannelResponse = Partial<OpenSecureChannelResponse>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16049}
 */
 
 export class OpenSecureChannelResponse {

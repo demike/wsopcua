@@ -10,6 +10,7 @@ export type IAggregateConfiguration = Partial<AggregateConfiguration>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16183}
 */
 
 export class AggregateConfiguration {

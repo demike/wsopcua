@@ -14,6 +14,7 @@ export type IGenericAttributes = Partial<GenericAttributes>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16081}
 */
 
 export class GenericAttributes extends NodeAttributes {

@@ -14,6 +14,7 @@ export type IHistoryModifiedData = Partial<HistoryModifiedData>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/16154}
 */
 
 export class HistoryModifiedData extends HistoryData {

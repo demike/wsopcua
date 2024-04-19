@@ -12,6 +12,7 @@ export type IStructureDescription = Partial<StructureDescription>;
 
 /**
 
+ * {@link https://reference.opcfoundation.org/nodesets/4/15786}
 */
 
 export class StructureDescription extends DataTypeDescription {
