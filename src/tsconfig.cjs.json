@@ -2,8 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es5",
-    "downlevelIteration": true,
+    "target": "ES2022",
     "outDir": "../dist/_cjs"
   }
 }
