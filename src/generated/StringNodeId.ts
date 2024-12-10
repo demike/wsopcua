@@ -14,12 +14,12 @@ export type IStringNodeId = Partial<StringNodeId>;
 
 export class StringNodeId {
   namespaceIndex: ec.UInt16;
-  identifier: string | null;
+  identifier: string | undefined;
 
- constructor( options?: IStringNodeId | null) {
+ constructor( options?: IStringNodeId | undefined) {
   options = options || {};
   this.namespaceIndex = (options.namespaceIndex != null) ? options.namespaceIndex : 0;
-  this.identifier = (options.identifier != null) ? options.identifier : null;
+  this.identifier = options.identifier;
 
  }
 

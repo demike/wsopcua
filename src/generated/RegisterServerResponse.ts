@@ -16,7 +16,7 @@ export type IRegisterServerResponse = Partial<RegisterServerResponse>;
 export class RegisterServerResponse {
   responseHeader: ResponseHeader;
 
- constructor( options?: IRegisterServerResponse | null) {
+ constructor( options?: IRegisterServerResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
 

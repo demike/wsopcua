@@ -16,12 +16,12 @@ export type INetworkAddressUrlDataType = Partial<NetworkAddressUrlDataType>;
 */
 
 export class NetworkAddressUrlDataType extends NetworkAddressDataType {
-  url: string | null;
+  url: string | undefined;
 
- constructor( options?: INetworkAddressUrlDataType | null) {
+ constructor( options?: INetworkAddressUrlDataType | undefined) {
   options = options || {};
   super(options);
-  this.url = (options.url != null) ? options.url : null;
+  this.url = options.url;
 
  }
 

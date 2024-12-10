@@ -17,7 +17,7 @@ export class RationalNumber {
   numerator: ec.Int32;
   denominator: ec.UInt32;
 
- constructor( options?: IRationalNumber | null) {
+ constructor( options?: IRationalNumber | undefined) {
   options = options || {};
   this.numerator = (options.numerator != null) ? options.numerator : 0;
   this.denominator = (options.denominator != null) ? options.denominator : 0;

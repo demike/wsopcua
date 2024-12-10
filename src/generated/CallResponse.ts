@@ -23,7 +23,7 @@ export class CallResponse {
   results: (CallMethodResult)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: ICallResponse | null) {
+ constructor( options?: ICallResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

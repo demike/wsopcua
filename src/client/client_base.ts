@@ -141,7 +141,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
   /**
    *
    */
-  serverCertificate: Uint8Array | null;
+  serverCertificate?: Uint8Array;
 
   protected protocolVersion: number;
 
@@ -591,7 +591,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
       return;
     }
 
-    const request = new FindServersOnNetworkRequest(options);
+    const request = new FindServersOnNetworkRequest(options || undefined);
 
     this.performMessageTransaction<FindServersOnNetworkResponse>(request, function (err, response) {
       if (err) {

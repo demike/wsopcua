@@ -17,7 +17,7 @@ export type IElementOperand = Partial<ElementOperand>;
 export class ElementOperand extends FilterOperand {
   index: ec.UInt32;
 
- constructor( options?: IElementOperand | null) {
+ constructor( options?: IElementOperand | undefined) {
   options = options || {};
   super();
   this.index = (options.index != null) ? options.index : 0;

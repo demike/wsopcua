@@ -24,7 +24,7 @@ export class UpdateEventDetails extends HistoryUpdateDetails {
   filter: EventFilter;
   eventData: (HistoryEventFieldList)[];
 
- constructor( options?: IUpdateEventDetails | null) {
+ constructor( options?: IUpdateEventDetails | undefined) {
   options = options || {};
   super(options);
   this.performInsertReplace = (options.performInsertReplace != null) ? options.performInsertReplace : PerformUpdateType.Invalid;

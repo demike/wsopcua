@@ -18,27 +18,27 @@ export type IDataSetWriterDataType = Partial<DataSetWriterDataType>;
 */
 
 export class DataSetWriterDataType {
-  name: string | null;
+  name: string | undefined;
   enabled: boolean;
   dataSetWriterId: ec.UInt16;
   dataSetFieldContentMask: DataSetFieldContentMask;
   keyFrameCount: ec.UInt32;
-  dataSetName: string | null;
+  dataSetName: string | undefined;
   dataSetWriterProperties: (KeyValuePair)[];
-  transportSettings: ExtensionObject | null;
-  messageSettings: ExtensionObject | null;
+  transportSettings: ExtensionObject | undefined;
+  messageSettings: ExtensionObject | undefined;
 
- constructor( options?: IDataSetWriterDataType | null) {
+ constructor( options?: IDataSetWriterDataType | undefined) {
   options = options || {};
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
   this.enabled = (options.enabled != null) ? options.enabled : false;
   this.dataSetWriterId = (options.dataSetWriterId != null) ? options.dataSetWriterId : 0;
   this.dataSetFieldContentMask = (options.dataSetFieldContentMask != null) ? options.dataSetFieldContentMask : DataSetFieldContentMask.None;
   this.keyFrameCount = (options.keyFrameCount != null) ? options.keyFrameCount : 0;
-  this.dataSetName = (options.dataSetName != null) ? options.dataSetName : null;
+  this.dataSetName = options.dataSetName;
   this.dataSetWriterProperties = (options.dataSetWriterProperties != null) ? options.dataSetWriterProperties : [];
-  this.transportSettings = (options.transportSettings != null) ? options.transportSettings : null;
-  this.messageSettings = (options.messageSettings != null) ? options.messageSettings : null;
+  this.transportSettings = options.transportSettings;
+  this.messageSettings = options.messageSettings;
 
  }
 

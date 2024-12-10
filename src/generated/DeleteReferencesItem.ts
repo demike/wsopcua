@@ -20,7 +20,7 @@ export class DeleteReferencesItem {
   targetNodeId: ec.ExpandedNodeId;
   deleteBidirectional: boolean;
 
- constructor( options?: IDeleteReferencesItem | null) {
+ constructor( options?: IDeleteReferencesItem | undefined) {
   options = options || {};
   this.sourceNodeId = (options.sourceNodeId != null) ? options.sourceNodeId : ec.NodeId.NullNodeId;
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;

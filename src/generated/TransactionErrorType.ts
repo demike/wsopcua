@@ -19,7 +19,7 @@ export class TransactionErrorType {
   error: ec.StatusCode;
   message: LocalizedText;
 
- constructor( options?: ITransactionErrorType | null) {
+ constructor( options?: ITransactionErrorType | undefined) {
   options = options || {};
   this.targetId = (options.targetId != null) ? options.targetId : ec.NodeId.NullNodeId;
   this.error = (options.error != null) ? options.error : ec.StatusCodes.Good;

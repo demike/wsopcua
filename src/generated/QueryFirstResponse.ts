@@ -24,16 +24,16 @@ export type IQueryFirstResponse = Partial<QueryFirstResponse>;
 export class QueryFirstResponse {
   responseHeader: ResponseHeader;
   queryDataSets: (QueryDataSet)[];
-  continuationPoint: Uint8Array | null;
+  continuationPoint: Uint8Array | undefined;
   parsingResults: (ParsingResult)[];
   diagnosticInfos: (DiagnosticInfo)[];
   filterResult: ContentFilterResult;
 
- constructor( options?: IQueryFirstResponse | null) {
+ constructor( options?: IQueryFirstResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.queryDataSets = (options.queryDataSets != null) ? options.queryDataSets : [];
-  this.continuationPoint = (options.continuationPoint != null) ? options.continuationPoint : null;
+  this.continuationPoint = options.continuationPoint;
   this.parsingResults = (options.parsingResults != null) ? options.parsingResults : [];
   this.diagnosticInfos = (options.diagnosticInfos != null) ? options.diagnosticInfos : [];
   this.filterResult = (options.filterResult != null) ? options.filterResult : new ContentFilterResult();

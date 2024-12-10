@@ -17,20 +17,20 @@ export type IDatagramWriterGroupTransport2DataType = Partial<DatagramWriterGroup
 */
 
 export class DatagramWriterGroupTransport2DataType extends DatagramWriterGroupTransportDataType {
-  address: ExtensionObject | null;
-  qosCategory: string | null;
-  datagramQos: (ExtensionObject | null)[];
+  address: ExtensionObject | undefined;
+  qosCategory: string | undefined;
+  datagramQos: (ExtensionObject | undefined)[];
   discoveryAnnounceRate: ec.UInt32;
-  topic: string | null;
+  topic: string | undefined;
 
- constructor( options?: IDatagramWriterGroupTransport2DataType | null) {
+ constructor( options?: IDatagramWriterGroupTransport2DataType | undefined) {
   options = options || {};
   super(options);
-  this.address = (options.address != null) ? options.address : null;
-  this.qosCategory = (options.qosCategory != null) ? options.qosCategory : null;
+  this.address = options.address;
+  this.qosCategory = options.qosCategory;
   this.datagramQos = (options.datagramQos != null) ? options.datagramQos : [];
   this.discoveryAnnounceRate = (options.discoveryAnnounceRate != null) ? options.discoveryAnnounceRate : 0;
-  this.topic = (options.topic != null) ? options.topic : null;
+  this.topic = options.topic;
 
  }
 

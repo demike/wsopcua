@@ -23,7 +23,7 @@ export class HistoryReadResponse {
   results: (HistoryReadResult)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IHistoryReadResponse | null) {
+ constructor( options?: IHistoryReadResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

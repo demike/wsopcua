@@ -18,7 +18,7 @@ export class DataTypeDescription {
   dataTypeId: ec.NodeId;
   name: QualifiedName;
 
- constructor( options?: IDataTypeDescription | null) {
+ constructor( options?: IDataTypeDescription | undefined) {
   options = options || {};
   this.dataTypeId = (options.dataTypeId != null) ? options.dataTypeId : ec.NodeId.NullNodeId;
   this.name = (options.name != null) ? options.name : new QualifiedName();

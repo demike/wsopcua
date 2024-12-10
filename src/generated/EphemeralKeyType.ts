@@ -14,13 +14,13 @@ export type IEphemeralKeyType = Partial<EphemeralKeyType>;
 */
 
 export class EphemeralKeyType {
-  publicKey: Uint8Array | null;
-  signature: Uint8Array | null;
+  publicKey: Uint8Array | undefined;
+  signature: Uint8Array | undefined;
 
- constructor( options?: IEphemeralKeyType | null) {
+ constructor( options?: IEphemeralKeyType | undefined) {
   options = options || {};
-  this.publicKey = (options.publicKey != null) ? options.publicKey : null;
-  this.signature = (options.signature != null) ? options.signature : null;
+  this.publicKey = options.publicKey;
+  this.signature = options.signature;
 
  }
 

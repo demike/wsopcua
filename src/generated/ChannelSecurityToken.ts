@@ -19,7 +19,7 @@ export class ChannelSecurityToken {
   createdAt: Date;
   revisedLifetime: ec.UInt32;
 
- constructor( options?: IChannelSecurityToken | null) {
+ constructor( options?: IChannelSecurityToken | undefined) {
   options = options || {};
   this.channelId = (options.channelId != null) ? options.channelId : 0;
   this.tokenId = (options.tokenId != null) ? options.tokenId : 0;

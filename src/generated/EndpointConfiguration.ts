@@ -24,7 +24,7 @@ export class EndpointConfiguration {
   channelLifetime: ec.Int32;
   securityTokenLifetime: ec.Int32;
 
- constructor( options?: IEndpointConfiguration | null) {
+ constructor( options?: IEndpointConfiguration | undefined) {
   options = options || {};
   this.operationTimeout = (options.operationTimeout != null) ? options.operationTimeout : 0;
   this.useBinaryEncoding = (options.useBinaryEncoding != null) ? options.useBinaryEncoding : false;

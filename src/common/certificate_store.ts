@@ -23,17 +23,17 @@ export interface CertificateStore {
   /**
    * @returns client certificate DER
    */
-  getCertificate(): Uint8Array | null;
+  getCertificate(): Uint8Array | undefined;
 
   /**
    * @returns client certificate chain DER
    */
-  getCertificateChain(): Uint8Array | null;
+  getCertificateChain(): Uint8Array | undefined;
 
   /**
    * @returns the crypto key
    */
-  getPrivateKey(): PrivateKey | null;
+  getPrivateKey(): PrivateKey | undefined;
 
   /**
    * optional initialization method
@@ -43,14 +43,14 @@ export interface CertificateStore {
 }
 
 export class NullCertificateStore implements CertificateStore {
-  public getCertificate(): null {
-    return null;
+  public getCertificate(): undefined {
+    return undefined;
   }
-  public getCertificateChain(): null {
-    return null;
+  public getCertificateChain(): undefined {
+    return undefined;
   }
-  public getPrivateKey(): null {
-    return null;
+  public getPrivateKey(): undefined {
+    return undefined;
   }
 }
 
@@ -120,9 +120,9 @@ export class PEMDERCertificateStore implements CertificateStore {
 
 export class SelfSignedCertificateStore implements CertificateStore {
   public readonly spkiModulusLength = 2048; // 4096;
-  protected certificateChain: Uint8Array | null = null;
-  protected certificate: Uint8Array | null = null;
-  protected privateKey: PrivateKey | null = null;
+  protected certificateChain?: Uint8Array;
+  protected certificate?: Uint8Array;
+  protected privateKey?: PrivateKey;
   protected options: CertificateInternals;
 
   constructor(options?: {
@@ -131,14 +131,14 @@ export class SelfSignedCertificateStore implements CertificateStore {
   }) {
     this.options = coerceCertificateInfo(options);
   }
-  public getCertificate(): Uint8Array | null {
+  public getCertificate(): Uint8Array | undefined {
     return this.certificate;
   }
-  public getCertificateChain(): Uint8Array | null {
+  public getCertificateChain(): Uint8Array | undefined {
     return this.certificateChain;
   }
-  public getPrivateKey(): PrivateKey | null {
-    return this.privateKey ?? null;
+  public getPrivateKey(): PrivateKey | undefined {
+    return this.privateKey;
   }
 
   public async init(): Promise<void> {

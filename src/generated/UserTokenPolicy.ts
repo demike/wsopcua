@@ -15,19 +15,19 @@ export type IUserTokenPolicy = Partial<UserTokenPolicy>;
 */
 
 export class UserTokenPolicy {
-  policyId: string | null;
+  policyId: string | undefined;
   tokenType: UserTokenType;
-  issuedTokenType: string | null;
-  issuerEndpointUrl: string | null;
-  securityPolicyUri: string | null;
+  issuedTokenType: string | undefined;
+  issuerEndpointUrl: string | undefined;
+  securityPolicyUri: string | undefined;
 
- constructor( options?: IUserTokenPolicy | null) {
+ constructor( options?: IUserTokenPolicy | undefined) {
   options = options || {};
-  this.policyId = (options.policyId != null) ? options.policyId : null;
+  this.policyId = options.policyId;
   this.tokenType = (options.tokenType != null) ? options.tokenType : UserTokenType.Invalid;
-  this.issuedTokenType = (options.issuedTokenType != null) ? options.issuedTokenType : null;
-  this.issuerEndpointUrl = (options.issuerEndpointUrl != null) ? options.issuerEndpointUrl : null;
-  this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;
+  this.issuedTokenType = options.issuedTokenType;
+  this.issuerEndpointUrl = options.issuerEndpointUrl;
+  this.securityPolicyUri = options.securityPolicyUri;
 
  }
 

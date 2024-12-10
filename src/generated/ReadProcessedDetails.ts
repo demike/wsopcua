@@ -22,7 +22,7 @@ export class ReadProcessedDetails extends HistoryReadDetails {
   aggregateType: (ec.NodeId)[];
   aggregateConfiguration: AggregateConfiguration;
 
- constructor( options?: IReadProcessedDetails | null) {
+ constructor( options?: IReadProcessedDetails | undefined) {
   options = options || {};
   super();
   this.startTime = (options.startTime != null) ? options.startTime : new Date();

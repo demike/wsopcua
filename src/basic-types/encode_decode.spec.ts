@@ -465,7 +465,7 @@ describe('encoding and decoding arrays', function () {
       return ec.decodeArray(stream, ec.decodeByteString);
     }
 
-    let data: any[] = [new TextEncoder().encode('ABCD'), null, new ArrayBuffer(0), []];
+    let data: any[] = [new TextEncoder().encode('ABCD'), undefined, new ArrayBuffer(0), []];
     data = data.map(ec.coerceByteString);
 
     test_encode_decode(

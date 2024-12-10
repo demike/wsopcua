@@ -14,13 +14,13 @@ export type IPortableQualifiedName = Partial<PortableQualifiedName>;
 */
 
 export class PortableQualifiedName {
-  namespaceUri: string | null;
-  name: string | null;
+  namespaceUri: string | undefined;
+  name: string | undefined;
 
- constructor( options?: IPortableQualifiedName | null) {
+ constructor( options?: IPortableQualifiedName | undefined) {
   options = options || {};
-  this.namespaceUri = (options.namespaceUri != null) ? options.namespaceUri : null;
-  this.name = (options.name != null) ? options.name : null;
+  this.namespaceUri = options.namespaceUri;
+  this.name = options.name;
 
  }
 

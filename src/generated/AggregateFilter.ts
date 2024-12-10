@@ -21,7 +21,7 @@ export class AggregateFilter extends MonitoringFilter {
   processingInterval: ec.Double;
   aggregateConfiguration: AggregateConfiguration;
 
- constructor( options?: IAggregateFilter | null) {
+ constructor( options?: IAggregateFilter | undefined) {
   options = options || {};
   super();
   this.startTime = (options.startTime != null) ? options.startTime : new Date();

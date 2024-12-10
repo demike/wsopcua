@@ -17,13 +17,13 @@ export type IQueryDataDescription = Partial<QueryDataDescription>;
 export class QueryDataDescription {
   relativePath: RelativePath;
   attributeId: ec.UInt32;
-  indexRange: string | null;
+  indexRange: string | undefined;
 
- constructor( options?: IQueryDataDescription | null) {
+ constructor( options?: IQueryDataDescription | undefined) {
   options = options || {};
   this.relativePath = (options.relativePath != null) ? options.relativePath : new RelativePath();
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;
-  this.indexRange = (options.indexRange != null) ? options.indexRange : null;
+  this.indexRange = options.indexRange;
 
  }
 

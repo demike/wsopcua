@@ -19,15 +19,15 @@ export type IDatagramConnectionTransport2DataType = Partial<DatagramConnectionTr
 export class DatagramConnectionTransport2DataType extends DatagramConnectionTransportDataType {
   discoveryAnnounceRate: ec.UInt32;
   discoveryMaxMessageSize: ec.UInt32;
-  qosCategory: string | null;
-  datagramQos: (ExtensionObject | null)[];
+  qosCategory: string | undefined;
+  datagramQos: (ExtensionObject | undefined)[];
 
- constructor( options?: IDatagramConnectionTransport2DataType | null) {
+ constructor( options?: IDatagramConnectionTransport2DataType | undefined) {
   options = options || {};
   super(options);
   this.discoveryAnnounceRate = (options.discoveryAnnounceRate != null) ? options.discoveryAnnounceRate : 0;
   this.discoveryMaxMessageSize = (options.discoveryMaxMessageSize != null) ? options.discoveryMaxMessageSize : 0;
-  this.qosCategory = (options.qosCategory != null) ? options.qosCategory : null;
+  this.qosCategory = options.qosCategory;
   this.datagramQos = (options.datagramQos != null) ? options.datagramQos : [];
 
  }

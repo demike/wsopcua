@@ -355,7 +355,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
    * @return {Buffer} the privateKey
    */
   public getPrivateKey() {
-    return this.parent ? this.parent.getPrivateKey() : null;
+    return this.parent?.getPrivateKey();
   }
 
   public getCertificateChain() {

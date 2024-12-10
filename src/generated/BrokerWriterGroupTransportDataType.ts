@@ -16,17 +16,17 @@ export type IBrokerWriterGroupTransportDataType = Partial<BrokerWriterGroupTrans
 */
 
 export class BrokerWriterGroupTransportDataType extends WriterGroupTransportDataType {
-  queueName: string | null;
-  resourceUri: string | null;
-  authenticationProfileUri: string | null;
+  queueName: string | undefined;
+  resourceUri: string | undefined;
+  authenticationProfileUri: string | undefined;
   requestedDeliveryGuarantee: BrokerTransportQualityOfService;
 
- constructor( options?: IBrokerWriterGroupTransportDataType | null) {
+ constructor( options?: IBrokerWriterGroupTransportDataType | undefined) {
   options = options || {};
   super();
-  this.queueName = (options.queueName != null) ? options.queueName : null;
-  this.resourceUri = (options.resourceUri != null) ? options.resourceUri : null;
-  this.authenticationProfileUri = (options.authenticationProfileUri != null) ? options.authenticationProfileUri : null;
+  this.queueName = options.queueName;
+  this.resourceUri = options.resourceUri;
+  this.authenticationProfileUri = options.authenticationProfileUri;
   this.requestedDeliveryGuarantee = (options.requestedDeliveryGuarantee != null) ? options.requestedDeliveryGuarantee : BrokerTransportQualityOfService.Invalid;
 
  }

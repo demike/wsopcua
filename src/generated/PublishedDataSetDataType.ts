@@ -18,19 +18,19 @@ export type IPublishedDataSetDataType = Partial<PublishedDataSetDataType>;
 */
 
 export class PublishedDataSetDataType {
-  name: string | null;
-  dataSetFolder: (string | null)[];
+  name: string | undefined;
+  dataSetFolder: (string | undefined)[];
   dataSetMetaData: DataSetMetaDataType;
   extensionFields: (KeyValuePair)[];
-  dataSetSource: ExtensionObject | null;
+  dataSetSource: ExtensionObject | undefined;
 
- constructor( options?: IPublishedDataSetDataType | null) {
+ constructor( options?: IPublishedDataSetDataType | undefined) {
   options = options || {};
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
   this.dataSetFolder = (options.dataSetFolder != null) ? options.dataSetFolder : [];
   this.dataSetMetaData = (options.dataSetMetaData != null) ? options.dataSetMetaData : new DataSetMetaDataType();
   this.extensionFields = (options.extensionFields != null) ? options.extensionFields : [];
-  this.dataSetSource = (options.dataSetSource != null) ? options.dataSetSource : null;
+  this.dataSetSource = options.dataSetSource;
 
  }
 

@@ -19,14 +19,14 @@ export type IUABinaryFileDataType = Partial<UABinaryFileDataType>;
 */
 
 export class UABinaryFileDataType extends DataTypeSchemaHeader {
-  schemaLocation: string | null;
+  schemaLocation: string | undefined;
   fileHeader: (KeyValuePair)[];
   body: Variant;
 
- constructor( options?: IUABinaryFileDataType | null) {
+ constructor( options?: IUABinaryFileDataType | undefined) {
   options = options || {};
   super(options);
-  this.schemaLocation = (options.schemaLocation != null) ? options.schemaLocation : null;
+  this.schemaLocation = options.schemaLocation;
   this.fileHeader = (options.fileHeader != null) ? options.fileHeader : [];
   this.body = (options.body != null) ? options.body : new Variant();
 

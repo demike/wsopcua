@@ -17,7 +17,7 @@ export class UnsignedRationalNumber {
   numerator: ec.UInt32;
   denominator: ec.UInt32;
 
- constructor( options?: IUnsignedRationalNumber | null) {
+ constructor( options?: IUnsignedRationalNumber | undefined) {
   options = options || {};
   this.numerator = (options.numerator != null) ? options.numerator : 0;
   this.denominator = (options.denominator != null) ? options.denominator : 0;

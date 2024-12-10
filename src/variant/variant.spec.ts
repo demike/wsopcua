@@ -369,7 +369,7 @@ describe('Variant', function () {
   it('should create a Array of ByteString Variant ', function () {
     const var1 = new Variant({
       dataType: DataType.ByteString,
-      value: [str2Uint8Array('ABC'), null],
+      value: [str2Uint8Array('ABC'), undefined],
     });
 
     expect(var1.dataType).toEqual(DataType.ByteString);
@@ -398,7 +398,7 @@ describe('Variant', function () {
   });
 
   it('should create a Array of ByteString Variant', function () {
-    const value = [str2Uint8Array('ABCD'), null];
+    const value = [str2Uint8Array('ABCD'), undefined];
 
     const var1 = new Variant({
       arrayType: VariantArrayType.Array,

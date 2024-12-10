@@ -24,7 +24,7 @@ export class AxisInformation {
   axisScaleType: AxisScaleEnumeration;
   axisSteps: (ec.Double)[];
 
- constructor( options?: IAxisInformation | null) {
+ constructor( options?: IAxisInformation | undefined) {
   options = options || {};
   this.engineeringUnits = (options.engineeringUnits != null) ? options.engineeringUnits : new EUInformation();
   this.eURange = (options.eURange != null) ? options.eURange : new Range();

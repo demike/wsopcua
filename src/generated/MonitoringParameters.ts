@@ -17,15 +17,15 @@ export type IMonitoringParameters = Partial<MonitoringParameters>;
 export class MonitoringParameters {
   clientHandle: ec.UInt32;
   samplingInterval: ec.Double;
-  filter: ExtensionObject | null;
+  filter: ExtensionObject | undefined;
   queueSize: ec.UInt32;
   discardOldest: boolean;
 
- constructor( options?: IMonitoringParameters | null) {
+ constructor( options?: IMonitoringParameters | undefined) {
   options = options || {};
   this.clientHandle = (options.clientHandle != null) ? options.clientHandle : 0;
   this.samplingInterval = (options.samplingInterval != null) ? options.samplingInterval : 0;
-  this.filter = (options.filter != null) ? options.filter : null;
+  this.filter = options.filter;
   this.queueSize = (options.queueSize != null) ? options.queueSize : 0;
   this.discardOldest = (options.discardOldest != null) ? options.discardOldest : false;
 

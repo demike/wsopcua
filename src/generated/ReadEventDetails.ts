@@ -21,7 +21,7 @@ export class ReadEventDetails extends HistoryReadDetails {
   endTime: Date;
   filter: EventFilter;
 
- constructor( options?: IReadEventDetails | null) {
+ constructor( options?: IReadEventDetails | undefined) {
   options = options || {};
   super();
   this.numValuesPerNode = (options.numValuesPerNode != null) ? options.numValuesPerNode : 0;

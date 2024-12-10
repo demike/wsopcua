@@ -21,7 +21,7 @@ export class ReadRawModifiedDetails extends HistoryReadDetails {
   numValuesPerNode: ec.UInt32;
   returnBounds: boolean;
 
- constructor( options?: IReadRawModifiedDetails | null) {
+ constructor( options?: IReadRawModifiedDetails | undefined) {
   options = options || {};
   super();
   this.isReadModified = (options.isReadModified != null) ? options.isReadModified : false;

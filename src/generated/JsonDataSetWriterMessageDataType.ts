@@ -17,7 +17,7 @@ export type IJsonDataSetWriterMessageDataType = Partial<JsonDataSetWriterMessage
 export class JsonDataSetWriterMessageDataType extends DataSetWriterMessageDataType {
   dataSetMessageContentMask: JsonDataSetMessageContentMask;
 
- constructor( options?: IJsonDataSetWriterMessageDataType | null) {
+ constructor( options?: IJsonDataSetWriterMessageDataType | undefined) {
   options = options || {};
   super();
   this.dataSetMessageContentMask = (options.dataSetMessageContentMask != null) ? options.dataSetMessageContentMask : JsonDataSetMessageContentMask.None;

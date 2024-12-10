@@ -19,7 +19,7 @@ export type IEventNotificationList = Partial<EventNotificationList>;
 export class EventNotificationList extends NotificationData {
   events: (EventFieldList)[];
 
- constructor( options?: IEventNotificationList | null) {
+ constructor( options?: IEventNotificationList | undefined) {
   options = options || {};
   super();
   this.events = (options.events != null) ? options.events : [];

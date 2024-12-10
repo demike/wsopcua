@@ -18,16 +18,16 @@ export class AddReferencesItem {
   sourceNodeId: ec.NodeId;
   referenceTypeId: ec.NodeId;
   isForward: boolean;
-  targetServerUri: string | null;
+  targetServerUri: string | undefined;
   targetNodeId: ec.ExpandedNodeId;
   targetNodeClass: NodeClass;
 
- constructor( options?: IAddReferencesItem | null) {
+ constructor( options?: IAddReferencesItem | undefined) {
   options = options || {};
   this.sourceNodeId = (options.sourceNodeId != null) ? options.sourceNodeId : ec.NodeId.NullNodeId;
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;
   this.isForward = (options.isForward != null) ? options.isForward : false;
-  this.targetServerUri = (options.targetServerUri != null) ? options.targetServerUri : null;
+  this.targetServerUri = options.targetServerUri;
   this.targetNodeId = (options.targetNodeId != null) ? options.targetNodeId : ec.ExpandedNodeId.NullExpandedNodeId;
   this.targetNodeClass = (options.targetNodeClass != null) ? options.targetNodeClass : NodeClass.Invalid;
 

@@ -19,15 +19,15 @@ export class MonitoredItemCreateResult {
   monitoredItemId: ec.UInt32;
   revisedSamplingInterval: ec.Double;
   revisedQueueSize: ec.UInt32;
-  filterResult: ExtensionObject | null;
+  filterResult: ExtensionObject | undefined;
 
- constructor( options?: IMonitoredItemCreateResult | null) {
+ constructor( options?: IMonitoredItemCreateResult | undefined) {
   options = options || {};
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.monitoredItemId = (options.monitoredItemId != null) ? options.monitoredItemId : 0;
   this.revisedSamplingInterval = (options.revisedSamplingInterval != null) ? options.revisedSamplingInterval : 0;
   this.revisedQueueSize = (options.revisedQueueSize != null) ? options.revisedQueueSize : 0;
-  this.filterResult = (options.filterResult != null) ? options.filterResult : null;
+  this.filterResult = options.filterResult;
 
  }
 

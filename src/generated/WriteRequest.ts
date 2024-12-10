@@ -20,7 +20,7 @@ export class WriteRequest {
   requestHeader: RequestHeader;
   nodesToWrite: (WriteValue)[];
 
- constructor( options?: IWriteRequest | null) {
+ constructor( options?: IWriteRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.nodesToWrite = (options.nodesToWrite != null) ? options.nodesToWrite : [];

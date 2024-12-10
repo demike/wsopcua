@@ -27,7 +27,7 @@ export class ServerDiagnosticsSummaryDataType {
   securityRejectedRequestsCount: ec.UInt32;
   rejectedRequestsCount: ec.UInt32;
 
- constructor( options?: IServerDiagnosticsSummaryDataType | null) {
+ constructor( options?: IServerDiagnosticsSummaryDataType | undefined) {
   options = options || {};
   this.serverViewCount = (options.serverViewCount != null) ? options.serverViewCount : 0;
   this.currentSessionCount = (options.currentSessionCount != null) ? options.currentSessionCount : 0;

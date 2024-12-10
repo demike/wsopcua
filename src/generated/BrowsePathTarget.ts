@@ -17,7 +17,7 @@ export class BrowsePathTarget {
   targetId: ec.ExpandedNodeId;
   remainingPathIndex: ec.UInt32;
 
- constructor( options?: IBrowsePathTarget | null) {
+ constructor( options?: IBrowsePathTarget | undefined) {
   options = options || {};
   this.targetId = (options.targetId != null) ? options.targetId : ec.ExpandedNodeId.NullExpandedNodeId;
   this.remainingPathIndex = (options.remainingPathIndex != null) ? options.remainingPathIndex : 0;

@@ -19,15 +19,15 @@ export type IReaderGroupDataType = Partial<ReaderGroupDataType>;
 */
 
 export class ReaderGroupDataType extends PubSubGroupDataType {
-  transportSettings: ExtensionObject | null;
-  messageSettings: ExtensionObject | null;
+  transportSettings: ExtensionObject | undefined;
+  messageSettings: ExtensionObject | undefined;
   dataSetReaders: (DataSetReaderDataType)[];
 
- constructor( options?: IReaderGroupDataType | null) {
+ constructor( options?: IReaderGroupDataType | undefined) {
   options = options || {};
   super(options);
-  this.transportSettings = (options.transportSettings != null) ? options.transportSettings : null;
-  this.messageSettings = (options.messageSettings != null) ? options.messageSettings : null;
+  this.transportSettings = options.transportSettings;
+  this.messageSettings = options.messageSettings;
   this.dataSetReaders = (options.dataSetReaders != null) ? options.dataSetReaders : [];
 
  }

@@ -21,7 +21,7 @@ export class CreateSubscriptionResponse {
   revisedLifetimeCount: ec.UInt32;
   revisedMaxKeepAliveCount: ec.UInt32;
 
- constructor( options?: ICreateSubscriptionResponse | null) {
+ constructor( options?: ICreateSubscriptionResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

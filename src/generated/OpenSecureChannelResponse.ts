@@ -19,14 +19,14 @@ export class OpenSecureChannelResponse {
   responseHeader: ResponseHeader;
   serverProtocolVersion: ec.UInt32;
   securityToken: ChannelSecurityToken;
-  serverNonce: Uint8Array | null;
+  serverNonce: Uint8Array | undefined;
 
- constructor( options?: IOpenSecureChannelResponse | null) {
+ constructor( options?: IOpenSecureChannelResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.serverProtocolVersion = (options.serverProtocolVersion != null) ? options.serverProtocolVersion : 0;
   this.securityToken = (options.securityToken != null) ? options.securityToken : new ChannelSecurityToken();
-  this.serverNonce = (options.serverNonce != null) ? options.serverNonce : null;
+  this.serverNonce = options.serverNonce;
 
  }
 

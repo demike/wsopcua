@@ -20,7 +20,7 @@ export class DataChangeFilter extends MonitoringFilter {
   deadbandType: ec.UInt32;
   deadbandValue: ec.Double;
 
- constructor( options?: IDataChangeFilter | null) {
+ constructor( options?: IDataChangeFilter | undefined) {
   options = options || {};
   super();
   this.trigger = (options.trigger != null) ? options.trigger : DataChangeTrigger.Invalid;

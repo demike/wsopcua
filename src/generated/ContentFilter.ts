@@ -18,7 +18,7 @@ export type IContentFilter = Partial<ContentFilter>;
 export class ContentFilter {
   elements: (ContentFilterElement)[];
 
- constructor( options?: IContentFilter | null) {
+ constructor( options?: IContentFilter | undefined) {
   options = options || {};
   this.elements = (options.elements != null) ? options.elements : [];
 

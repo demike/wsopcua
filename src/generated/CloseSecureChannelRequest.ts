@@ -16,7 +16,7 @@ export type ICloseSecureChannelRequest = Partial<CloseSecureChannelRequest>;
 export class CloseSecureChannelRequest {
   requestHeader: RequestHeader;
 
- constructor( options?: ICloseSecureChannelRequest | null) {
+ constructor( options?: ICloseSecureChannelRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
 

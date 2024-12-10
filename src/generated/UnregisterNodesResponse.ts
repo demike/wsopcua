@@ -16,7 +16,7 @@ export type IUnregisterNodesResponse = Partial<UnregisterNodesResponse>;
 export class UnregisterNodesResponse {
   responseHeader: ResponseHeader;
 
- constructor( options?: IUnregisterNodesResponse | null) {
+ constructor( options?: IUnregisterNodesResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
 

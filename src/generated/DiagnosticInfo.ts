@@ -18,11 +18,11 @@ export class DiagnosticInfo {
   namespaceURI?: ec.Int32;
   locale?: ec.Int32;
   localizedText?: ec.Int32;
-  additionalInfo?: string | null;
+  additionalInfo?: string | undefined;
   innerStatusCode?: ec.StatusCode;
   innerDiagnosticInfo?: DiagnosticInfo;
 
- constructor( options?: IDiagnosticInfo | null) {
+ constructor( options?: IDiagnosticInfo | undefined) {
   options = options || {};
   this.symbolicId = (options.symbolicId != null) ? options.symbolicId : undefined;
   this.namespaceURI = (options.namespaceURI != null) ? options.namespaceURI : undefined;

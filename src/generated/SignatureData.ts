@@ -14,13 +14,13 @@ export type ISignatureData = Partial<SignatureData>;
 */
 
 export class SignatureData {
-  algorithm: string | null;
-  signature: Uint8Array | null;
+  algorithm: string | undefined;
+  signature: Uint8Array | undefined;
 
- constructor( options?: ISignatureData | null) {
+ constructor( options?: ISignatureData | undefined) {
   options = options || {};
-  this.algorithm = (options.algorithm != null) ? options.algorithm : null;
-  this.signature = (options.signature != null) ? options.signature : null;
+  this.algorithm = options.algorithm;
+  this.signature = options.signature;
 
  }
 

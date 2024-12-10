@@ -17,7 +17,7 @@ export class AddNodesResult {
   statusCode: ec.StatusCode;
   addedNodeId: ec.NodeId;
 
- constructor( options?: IAddNodesResult | null) {
+ constructor( options?: IAddNodesResult | undefined) {
   options = options || {};
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.addedNodeId = (options.addedNodeId != null) ? options.addedNodeId : ec.NodeId.NullNodeId;

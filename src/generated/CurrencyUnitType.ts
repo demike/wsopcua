@@ -17,14 +17,14 @@ export type ICurrencyUnitType = Partial<CurrencyUnitType>;
 export class CurrencyUnitType {
   numericCode: ec.Int16;
   exponent: ec.SByte;
-  alphabeticCode: string | null;
+  alphabeticCode: string | undefined;
   currency: LocalizedText;
 
- constructor( options?: ICurrencyUnitType | null) {
+ constructor( options?: ICurrencyUnitType | undefined) {
   options = options || {};
   this.numericCode = (options.numericCode != null) ? options.numericCode : 0;
   this.exponent = (options.exponent != null) ? options.exponent : 0;
-  this.alphabeticCode = (options.alphabeticCode != null) ? options.alphabeticCode : null;
+  this.alphabeticCode = options.alphabeticCode;
   this.currency = (options.currency != null) ? options.currency : new LocalizedText();
 
  }

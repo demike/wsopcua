@@ -22,17 +22,17 @@ export class AddNodesItem {
   requestedNewNodeId: ec.ExpandedNodeId;
   browseName: QualifiedName;
   nodeClass: NodeClass;
-  nodeAttributes: ExtensionObject | null;
+  nodeAttributes: ExtensionObject | undefined;
   typeDefinition: ec.ExpandedNodeId;
 
- constructor( options?: IAddNodesItem | null) {
+ constructor( options?: IAddNodesItem | undefined) {
   options = options || {};
   this.parentNodeId = (options.parentNodeId != null) ? options.parentNodeId : ec.ExpandedNodeId.NullExpandedNodeId;
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;
   this.requestedNewNodeId = (options.requestedNewNodeId != null) ? options.requestedNewNodeId : ec.ExpandedNodeId.NullExpandedNodeId;
   this.browseName = (options.browseName != null) ? options.browseName : new QualifiedName();
   this.nodeClass = (options.nodeClass != null) ? options.nodeClass : NodeClass.Invalid;
-  this.nodeAttributes = (options.nodeAttributes != null) ? options.nodeAttributes : null;
+  this.nodeAttributes = options.nodeAttributes;
   this.typeDefinition = (options.typeDefinition != null) ? options.typeDefinition : ec.ExpandedNodeId.NullExpandedNodeId;
 
  }

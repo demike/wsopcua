@@ -17,7 +17,7 @@ export class DeleteNodesItem {
   nodeId: ec.NodeId;
   deleteTargetReferences: boolean;
 
- constructor( options?: IDeleteNodesItem | null) {
+ constructor( options?: IDeleteNodesItem | undefined) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
   this.deleteTargetReferences = (options.deleteTargetReferences != null) ? options.deleteTargetReferences : false;

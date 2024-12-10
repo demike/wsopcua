@@ -18,7 +18,7 @@ export class MonitoredItemNotification {
   clientHandle: ec.UInt32;
   value: DataValue;
 
- constructor( options?: IMonitoredItemNotification | null) {
+ constructor( options?: IMonitoredItemNotification | undefined) {
   options = options || {};
   this.clientHandle = (options.clientHandle != null) ? options.clientHandle : 0;
   this.value = (options.value != null) ? options.value : new DataValue();

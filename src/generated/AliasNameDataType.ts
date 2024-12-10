@@ -18,7 +18,7 @@ export class AliasNameDataType {
   aliasName: QualifiedName;
   referencedNodes: (ec.ExpandedNodeId)[];
 
- constructor( options?: IAliasNameDataType | null) {
+ constructor( options?: IAliasNameDataType | undefined) {
   options = options || {};
   this.aliasName = (options.aliasName != null) ? options.aliasName : new QualifiedName();
   this.referencedNodes = (options.referencedNodes != null) ? options.referencedNodes : [];

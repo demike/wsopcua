@@ -14,11 +14,11 @@ export type IUserIdentityToken = Partial<UserIdentityToken>;
 */
 
 export class UserIdentityToken {
-  policyId: string | null;
+  policyId: string | undefined;
 
- constructor( options?: IUserIdentityToken | null) {
+ constructor( options?: IUserIdentityToken | undefined) {
   options = options || {};
-  this.policyId = (options.policyId != null) ? options.policyId : null;
+  this.policyId = options.policyId;
 
  }
 

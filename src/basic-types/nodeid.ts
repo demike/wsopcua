@@ -242,7 +242,6 @@ export function decodeNodeId(stream: DataStream) {
 export function decodeExpandedNodeId(stream: DataStream) {
   const encoding_byte = stream.getUint8();
   const expandedNodeId = _decodeNodeId(encoding_byte, stream, true) as ExpandedNodeId;
-  expandedNodeId.namespaceUri = null;
   expandedNodeId.serverIndex = 0;
 
   if (check_flag(encoding_byte, EnumNodeIdEncoding.NamespaceUriFlag)) {

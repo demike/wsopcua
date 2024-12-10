@@ -18,14 +18,14 @@ export class MonitoredItemModifyResult {
   statusCode: ec.StatusCode;
   revisedSamplingInterval: ec.Double;
   revisedQueueSize: ec.UInt32;
-  filterResult: ExtensionObject | null;
+  filterResult: ExtensionObject | undefined;
 
- constructor( options?: IMonitoredItemModifyResult | null) {
+ constructor( options?: IMonitoredItemModifyResult | undefined) {
   options = options || {};
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.revisedSamplingInterval = (options.revisedSamplingInterval != null) ? options.revisedSamplingInterval : 0;
   this.revisedQueueSize = (options.revisedQueueSize != null) ? options.revisedQueueSize : 0;
-  this.filterResult = (options.filterResult != null) ? options.filterResult : null;
+  this.filterResult = options.filterResult;
 
  }
 

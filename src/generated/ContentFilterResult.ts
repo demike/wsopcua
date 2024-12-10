@@ -21,7 +21,7 @@ export class ContentFilterResult {
   elementResults: (ContentFilterElementResult)[];
   elementDiagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IContentFilterResult | null) {
+ constructor( options?: IContentFilterResult | undefined) {
   options = options || {};
   this.elementResults = (options.elementResults != null) ? options.elementResults : [];
   this.elementDiagnosticInfos = (options.elementDiagnosticInfos != null) ? options.elementDiagnosticInfos : [];

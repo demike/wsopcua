@@ -18,7 +18,7 @@ export type IRelativePath = Partial<RelativePath>;
 export class RelativePath {
   elements: (RelativePathElement)[];
 
- constructor( options?: IRelativePath | null) {
+ constructor( options?: IRelativePath | undefined) {
   options = options || {};
   this.elements = (options.elements != null) ? options.elements : [];
 

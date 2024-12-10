@@ -17,7 +17,7 @@ export class TimeZoneDataType {
   offset: ec.Int16;
   daylightSavingInOffset: boolean;
 
- constructor( options?: ITimeZoneDataType | null) {
+ constructor( options?: ITimeZoneDataType | undefined) {
   options = options || {};
   this.offset = (options.offset != null) ? options.offset : 0;
   this.daylightSavingInOffset = (options.daylightSavingInOffset != null) ? options.daylightSavingInOffset : false;

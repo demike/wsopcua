@@ -20,7 +20,7 @@ export class DeleteNodesRequest {
   requestHeader: RequestHeader;
   nodesToDelete: (DeleteNodesItem)[];
 
- constructor( options?: IDeleteNodesRequest | null) {
+ constructor( options?: IDeleteNodesRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.nodesToDelete = (options.nodesToDelete != null) ? options.nodesToDelete : [];

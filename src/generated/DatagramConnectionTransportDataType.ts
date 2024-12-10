@@ -15,12 +15,12 @@ export type IDatagramConnectionTransportDataType = Partial<DatagramConnectionTra
 */
 
 export class DatagramConnectionTransportDataType extends ConnectionTransportDataType {
-  discoveryAddress: ExtensionObject | null;
+  discoveryAddress: ExtensionObject | undefined;
 
- constructor( options?: IDatagramConnectionTransportDataType | null) {
+ constructor( options?: IDatagramConnectionTransportDataType | undefined) {
   options = options || {};
   super();
-  this.discoveryAddress = (options.discoveryAddress != null) ? options.discoveryAddress : null;
+  this.discoveryAddress = options.discoveryAddress;
 
  }
 

@@ -14,10 +14,10 @@ A string qualified with a namespace index.
 */
 
 export class LocalizedText {
-  locale?: string | null;
-  text?: string | null;
+  locale?: string | undefined;
+  text?: string | undefined;
 
- constructor( options?: ILocalizedText | null) {
+ constructor( options?: ILocalizedText | undefined) {
   options = options || {};
   this.locale = (options.locale != null) ? options.locale : undefined;
   this.text = (options.text != null) ? options.text : undefined;

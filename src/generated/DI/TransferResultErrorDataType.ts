@@ -19,7 +19,7 @@ export class TransferResultErrorDataType extends FetchResultDataType {
   status: ec.Int32;
   diagnostics: DiagnosticInfo;
 
- constructor( options?: ITransferResultErrorDataType | null) {
+ constructor( options?: ITransferResultErrorDataType | undefined) {
   options = options || {};
   super();
   this.status = (options.status != null) ? options.status : 0;

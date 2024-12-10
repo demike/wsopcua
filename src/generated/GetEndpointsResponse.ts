@@ -20,7 +20,7 @@ export class GetEndpointsResponse {
   responseHeader: ResponseHeader;
   endpoints: (EndpointDescription)[];
 
- constructor( options?: IGetEndpointsResponse | null) {
+ constructor( options?: IGetEndpointsResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.endpoints = (options.endpoints != null) ? options.endpoints : [];

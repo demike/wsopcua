@@ -18,7 +18,7 @@ export class UnregisterNodesRequest {
   requestHeader: RequestHeader;
   nodesToUnregister: (ec.NodeId)[];
 
- constructor( options?: IUnregisterNodesRequest | null) {
+ constructor( options?: IUnregisterNodesRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.nodesToUnregister = (options.nodesToUnregister != null) ? options.nodesToUnregister : [];

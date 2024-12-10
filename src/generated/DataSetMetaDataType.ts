@@ -20,16 +20,16 @@ export type IDataSetMetaDataType = Partial<DataSetMetaDataType>;
 */
 
 export class DataSetMetaDataType extends DataTypeSchemaHeader {
-  name: string | null;
+  name: string | undefined;
   description: LocalizedText;
   fields: (FieldMetaData)[];
   dataSetClassId: ec.Guid;
   configurationVersion: ConfigurationVersionDataType;
 
- constructor( options?: IDataSetMetaDataType | null) {
+ constructor( options?: IDataSetMetaDataType | undefined) {
   options = options || {};
   super(options);
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
   this.description = (options.description != null) ? options.description : new LocalizedText();
   this.fields = (options.fields != null) ? options.fields : [];
   this.dataSetClassId = (options.dataSetClassId != null) ? options.dataSetClassId : "";

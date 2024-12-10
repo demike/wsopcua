@@ -18,7 +18,7 @@ export class ReadAtTimeDetails extends HistoryReadDetails {
   reqTimes: (Date)[];
   useSimpleBounds: boolean;
 
- constructor( options?: IReadAtTimeDetails | null) {
+ constructor( options?: IReadAtTimeDetails | undefined) {
   options = options || {};
   super();
   this.reqTimes = (options.reqTimes != null) ? options.reqTimes : [];

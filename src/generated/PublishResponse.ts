@@ -26,7 +26,7 @@ export class PublishResponse {
   results: (ec.StatusCode)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IPublishResponse | null) {
+ constructor( options?: IPublishResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

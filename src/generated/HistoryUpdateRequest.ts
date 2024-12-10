@@ -17,9 +17,9 @@ export type IHistoryUpdateRequest = Partial<HistoryUpdateRequest>;
 
 export class HistoryUpdateRequest {
   requestHeader: RequestHeader;
-  historyUpdateDetails: (ExtensionObject | null)[];
+  historyUpdateDetails: (ExtensionObject | undefined)[];
 
- constructor( options?: IHistoryUpdateRequest | null) {
+ constructor( options?: IHistoryUpdateRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.historyUpdateDetails = (options.historyUpdateDetails != null) ? options.historyUpdateDetails : [];

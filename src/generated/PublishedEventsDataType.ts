@@ -22,7 +22,7 @@ export class PublishedEventsDataType extends PublishedDataSetSourceDataType {
   selectedFields: (SimpleAttributeOperand)[];
   filter: ContentFilter;
 
- constructor( options?: IPublishedEventsDataType | null) {
+ constructor( options?: IPublishedEventsDataType | undefined) {
   options = options || {};
   super();
   this.eventNotifier = (options.eventNotifier != null) ? options.eventNotifier : ec.NodeId.NullNodeId;

@@ -22,7 +22,7 @@ export class DataValue {
   serverTimestamp?: Date;
   serverPicoseconds?: ec.UInt16;
 
- constructor( options?: IDataValue | null) {
+ constructor( options?: IDataValue | undefined) {
   options = options || {};
   this.value = (options.value != null) ? options.value : undefined;
   this.statusCode = (options.statusCode != null) ? options.statusCode : undefined;

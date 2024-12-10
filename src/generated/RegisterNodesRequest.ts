@@ -18,7 +18,7 @@ export class RegisterNodesRequest {
   requestHeader: RequestHeader;
   nodesToRegister: (ec.NodeId)[];
 
- constructor( options?: IRegisterNodesRequest | null) {
+ constructor( options?: IRegisterNodesRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.nodesToRegister = (options.nodesToRegister != null) ? options.nodesToRegister : [];

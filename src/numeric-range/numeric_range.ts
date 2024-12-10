@@ -329,7 +329,7 @@ export class NumericRange implements NumericalRange1 {
 
   constructor();
   // eslint-disable-next-line @typescript-eslint/unified-signatures
-  constructor(value: string | null);
+  constructor(value: string | null | undefined);
   // eslint-disable-next-line @typescript-eslint/unified-signatures
   constructor(value: number, secondValue?: number);
   // eslint-disable-next-line @typescript-eslint/unified-signatures

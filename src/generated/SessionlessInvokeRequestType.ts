@@ -15,12 +15,12 @@ export type ISessionlessInvokeRequestType = Partial<SessionlessInvokeRequestType
 
 export class SessionlessInvokeRequestType {
   urisVersion: ec.UInt32;
-  namespaceUris: (string | null)[];
-  serverUris: (string | null)[];
-  localeIds: (string | null)[];
+  namespaceUris: (string | undefined)[];
+  serverUris: (string | undefined)[];
+  localeIds: (string | undefined)[];
   serviceId: ec.UInt32;
 
- constructor( options?: ISessionlessInvokeRequestType | null) {
+ constructor( options?: ISessionlessInvokeRequestType | undefined) {
   options = options || {};
   this.urisVersion = (options.urisVersion != null) ? options.urisVersion : 0;
   this.namespaceUris = (options.namespaceUris != null) ? options.namespaceUris : [];

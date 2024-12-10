@@ -23,7 +23,7 @@ export class TranslateBrowsePathsToNodeIdsResponse {
   results: (BrowsePathResult)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: ITranslateBrowsePathsToNodeIdsResponse | null) {
+ constructor( options?: ITranslateBrowsePathsToNodeIdsResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

@@ -17,13 +17,13 @@ export type IPubSubConfigurationValueDataType = Partial<PubSubConfigurationValue
 
 export class PubSubConfigurationValueDataType {
   configurationElement: PubSubConfigurationRefDataType;
-  name: string | null;
+  name: string | undefined;
   identifier: Variant;
 
- constructor( options?: IPubSubConfigurationValueDataType | null) {
+ constructor( options?: IPubSubConfigurationValueDataType | undefined) {
   options = options || {};
   this.configurationElement = (options.configurationElement != null) ? options.configurationElement : new PubSubConfigurationRefDataType();
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
   this.identifier = (options.identifier != null) ? options.identifier : new Variant();
 
  }

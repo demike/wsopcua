@@ -26,7 +26,7 @@ export class QueryFirstRequest {
   maxDataSetsToReturn: ec.UInt32;
   maxReferencesToReturn: ec.UInt32;
 
- constructor( options?: IQueryFirstRequest | null) {
+ constructor( options?: IQueryFirstRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.view = (options.view != null) ? options.view : new ViewDescription();

@@ -20,7 +20,7 @@ export class NodeTypeDescription {
   includeSubTypes: boolean;
   dataToReturn: (QueryDataDescription)[];
 
- constructor( options?: INodeTypeDescription | null) {
+ constructor( options?: INodeTypeDescription | undefined) {
   options = options || {};
   this.typeDefinitionNode = (options.typeDefinitionNode != null) ? options.typeDefinitionNode : ec.ExpandedNodeId.NullExpandedNodeId;
   this.includeSubTypes = (options.includeSubTypes != null) ? options.includeSubTypes : false;

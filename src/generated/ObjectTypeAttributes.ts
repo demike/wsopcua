@@ -18,7 +18,7 @@ export type IObjectTypeAttributes = Partial<ObjectTypeAttributes>;
 export class ObjectTypeAttributes extends NodeAttributes {
   isAbstract: boolean;
 
- constructor( options?: IObjectTypeAttributes | null) {
+ constructor( options?: IObjectTypeAttributes | undefined) {
   options = options || {};
   super(options);
   this.isAbstract = (options.isAbstract != null) ? options.isAbstract : false;

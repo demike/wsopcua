@@ -15,14 +15,14 @@ export type IEUInformation = Partial<EUInformation>;
 */
 
 export class EUInformation {
-  namespaceUri: string | null;
+  namespaceUri: string | undefined;
   unitId: ec.Int32;
   displayName: LocalizedText;
   description: LocalizedText;
 
- constructor( options?: IEUInformation | null) {
+ constructor( options?: IEUInformation | undefined) {
   options = options || {};
-  this.namespaceUri = (options.namespaceUri != null) ? options.namespaceUri : null;
+  this.namespaceUri = options.namespaceUri;
   this.unitId = (options.unitId != null) ? options.unitId : 0;
   this.displayName = (options.displayName != null) ? options.displayName : new LocalizedText();
   this.description = (options.description != null) ? options.description : new LocalizedText();

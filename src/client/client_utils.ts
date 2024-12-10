@@ -251,7 +251,7 @@ export function perform_findServers(
         });
       },
       function (cb: ErrorCallback) {
-        client.getEndpoints({ endpointUrl: null }, function (err, _endpoints) {
+        client.getEndpoints({}, function (err, _endpoints) {
           endpoints = _endpoints;
           cb(err);
         });

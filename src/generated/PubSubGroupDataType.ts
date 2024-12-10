@@ -19,20 +19,20 @@ export type IPubSubGroupDataType = Partial<PubSubGroupDataType>;
 */
 
 export class PubSubGroupDataType {
-  name: string | null;
+  name: string | undefined;
   enabled: boolean;
   securityMode: MessageSecurityMode;
-  securityGroupId: string | null;
+  securityGroupId: string | undefined;
   securityKeyServices: (EndpointDescription)[];
   maxNetworkMessageSize: ec.UInt32;
   groupProperties: (KeyValuePair)[];
 
- constructor( options?: IPubSubGroupDataType | null) {
+ constructor( options?: IPubSubGroupDataType | undefined) {
   options = options || {};
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
   this.enabled = (options.enabled != null) ? options.enabled : false;
   this.securityMode = (options.securityMode != null) ? options.securityMode : MessageSecurityMode.Invalid;
-  this.securityGroupId = (options.securityGroupId != null) ? options.securityGroupId : null;
+  this.securityGroupId = options.securityGroupId;
   this.securityKeyServices = (options.securityKeyServices != null) ? options.securityKeyServices : [];
   this.maxNetworkMessageSize = (options.maxNetworkMessageSize != null) ? options.maxNetworkMessageSize : 0;
   this.groupProperties = (options.groupProperties != null) ? options.groupProperties : [];

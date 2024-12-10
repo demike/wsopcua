@@ -16,7 +16,7 @@ export type ICloseSecureChannelResponse = Partial<CloseSecureChannelResponse>;
 export class CloseSecureChannelResponse {
   responseHeader: ResponseHeader;
 
- constructor( options?: ICloseSecureChannelResponse | null) {
+ constructor( options?: ICloseSecureChannelResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
 

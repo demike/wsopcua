@@ -18,7 +18,7 @@ export class DatagramWriterGroupTransportDataType extends WriterGroupTransportDa
   messageRepeatCount: ec.Byte;
   messageRepeatDelay: ec.Double;
 
- constructor( options?: IDatagramWriterGroupTransportDataType | null) {
+ constructor( options?: IDatagramWriterGroupTransportDataType | undefined) {
   options = options || {};
   super();
   this.messageRepeatCount = (options.messageRepeatCount != null) ? options.messageRepeatCount : 0;

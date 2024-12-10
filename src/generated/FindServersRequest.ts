@@ -16,14 +16,14 @@ export type IFindServersRequest = Partial<FindServersRequest>;
 
 export class FindServersRequest {
   requestHeader: RequestHeader;
-  endpointUrl: string | null;
-  localeIds: (string | null)[];
-  serverUris: (string | null)[];
+  endpointUrl: string | undefined;
+  localeIds: (string | undefined)[];
+  serverUris: (string | undefined)[];
 
- constructor( options?: IFindServersRequest | null) {
+ constructor( options?: IFindServersRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
-  this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;
+  this.endpointUrl = options.endpointUrl;
   this.localeIds = (options.localeIds != null) ? options.localeIds : [];
   this.serverUris = (options.serverUris != null) ? options.serverUris : [];
 

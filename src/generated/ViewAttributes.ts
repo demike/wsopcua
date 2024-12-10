@@ -19,7 +19,7 @@ export class ViewAttributes extends NodeAttributes {
   containsNoLoops: boolean;
   eventNotifier: ec.Byte;
 
- constructor( options?: IViewAttributes | null) {
+ constructor( options?: IViewAttributes | undefined) {
   options = options || {};
   super(options);
   this.containsNoLoops = (options.containsNoLoops != null) ? options.containsNoLoops : false;

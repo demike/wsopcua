@@ -490,8 +490,8 @@ export class OPCUAClient extends OPCUAClientBase {
           // then it shall create a signature and pass it as this parameter. Otherwise the parameter is omitted.
           // The SignatureAlgorithm depends on the identity token type.
           userTokenSignature: new SignatureData({
-            algorithm: null,
-            signature: null,
+            // algorithm: null,
+            // signature: null,
           }),
         });
 
@@ -1032,7 +1032,7 @@ async function createUserNameIdentityToken(
     identityToken = new UserNameIdentityToken({
       userName: userName,
       password: stringToUint8Array(password), // Buffer.from(password, "utf-8"),
-      encryptionAlgorithm: null,
+      // encryptionAlgorithm: null,
       policyId: userTokenPolicy.policyId,
     });
     return identityToken;
@@ -1050,7 +1050,7 @@ async function createUserNameIdentityToken(
   //       still have to support it in the client?
   if (securityPolicy === SecurityPolicy.None) {
     identityToken = new UserNameIdentityToken({
-      encryptionAlgorithm: null,
+      // encryptionAlgorithm: null,
       password: stringToUint8Array(password),
       policyId: userTokenPolicy.policyId,
       userName,
@@ -1163,7 +1163,7 @@ async function createIssuedIdentityToken(
   if (!session.serverCertificate || securityPolicy === SecurityPolicy.None) {
     identityToken = new IssuedIdentityToken({
       tokenData,
-      encryptionAlgorithm: null,
+      // encryptionAlgorithm: null,
       policyId: userTokenPolicy.policyId,
     });
     return identityToken;

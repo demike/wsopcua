@@ -17,9 +17,9 @@ export type INotificationMessage = Partial<NotificationMessage>;
 export class NotificationMessage {
   sequenceNumber: ec.UInt32;
   publishTime: Date;
-  notificationData: (ExtensionObject | null)[];
+  notificationData: (ExtensionObject | undefined)[];
 
- constructor( options?: INotificationMessage | null) {
+ constructor( options?: INotificationMessage | undefined) {
   options = options || {};
   this.sequenceNumber = (options.sequenceNumber != null) ? options.sequenceNumber : 0;
   this.publishTime = (options.publishTime != null) ? options.publishTime : new Date();

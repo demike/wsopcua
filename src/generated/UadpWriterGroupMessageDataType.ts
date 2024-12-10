@@ -23,7 +23,7 @@ export class UadpWriterGroupMessageDataType extends WriterGroupMessageDataType {
   samplingOffset: ec.Double;
   publishingOffset: (ec.Double)[];
 
- constructor( options?: IUadpWriterGroupMessageDataType | null) {
+ constructor( options?: IUadpWriterGroupMessageDataType | undefined) {
   options = options || {};
   super();
   this.groupVersion = (options.groupVersion != null) ? options.groupVersion : 0;

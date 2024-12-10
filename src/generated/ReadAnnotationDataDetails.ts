@@ -17,7 +17,7 @@ export type IReadAnnotationDataDetails = Partial<ReadAnnotationDataDetails>;
 export class ReadAnnotationDataDetails extends HistoryReadDetails {
   reqTimes: (Date)[];
 
- constructor( options?: IReadAnnotationDataDetails | null) {
+ constructor( options?: IReadAnnotationDataDetails | undefined) {
   options = options || {};
   super();
   this.reqTimes = (options.reqTimes != null) ? options.reqTimes : [];

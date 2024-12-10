@@ -14,12 +14,12 @@ export type IByteStringNodeId = Partial<ByteStringNodeId>;
 
 export class ByteStringNodeId {
   namespaceIndex: ec.UInt16;
-  identifier: Uint8Array | null;
+  identifier: Uint8Array | undefined;
 
- constructor( options?: IByteStringNodeId | null) {
+ constructor( options?: IByteStringNodeId | undefined) {
   options = options || {};
   this.namespaceIndex = (options.namespaceIndex != null) ? options.namespaceIndex : 0;
-  this.identifier = (options.identifier != null) ? options.identifier : null;
+  this.identifier = options.identifier;
 
  }
 

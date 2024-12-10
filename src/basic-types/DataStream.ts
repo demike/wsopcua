@@ -298,10 +298,10 @@ export class DataStream {
    * @method readByteStream
    * @return {Uint8Array}
    */
-  readByteStream(): Uint8Array | null {
+  readByteStream(): Uint8Array | undefined {
     const bufLen = this.getInt32();
     if (bufLen === -1) {
-      return null;
+      return;
     }
     if (bufLen === 0) {
       return new Uint8Array(0);
@@ -334,7 +334,7 @@ export class DataStream {
     //        decodedString = decodeURIComponent(encodedString);
     //        return decodedString;
     if (buff == null) {
-      return null;
+      return;
     }
     return txtDecoder.decode(buff);
   }

@@ -16,7 +16,7 @@ export type IHistoryUpdateDetails = Partial<HistoryUpdateDetails>;
 export class HistoryUpdateDetails {
   nodeId: ec.NodeId;
 
- constructor( options?: IHistoryUpdateDetails | null) {
+ constructor( options?: IHistoryUpdateDetails | undefined) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
 

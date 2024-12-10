@@ -23,7 +23,7 @@ export class CreateMonitoredItemsRequest {
   timestampsToReturn: TimestampsToReturn;
   itemsToCreate: (MonitoredItemCreateRequest)[];
 
- constructor( options?: ICreateMonitoredItemsRequest | null) {
+ constructor( options?: ICreateMonitoredItemsRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

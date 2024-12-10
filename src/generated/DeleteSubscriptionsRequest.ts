@@ -18,7 +18,7 @@ export class DeleteSubscriptionsRequest {
   requestHeader: RequestHeader;
   subscriptionIds: (ec.UInt32)[];
 
- constructor( options?: IDeleteSubscriptionsRequest | null) {
+ constructor( options?: IDeleteSubscriptionsRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionIds = (options.subscriptionIds != null) ? options.subscriptionIds : [];

@@ -14,20 +14,20 @@ export type IBuildInfo = Partial<BuildInfo>;
 */
 
 export class BuildInfo {
-  productUri: string | null;
-  manufacturerName: string | null;
-  productName: string | null;
-  softwareVersion: string | null;
-  buildNumber: string | null;
+  productUri: string | undefined;
+  manufacturerName: string | undefined;
+  productName: string | undefined;
+  softwareVersion: string | undefined;
+  buildNumber: string | undefined;
   buildDate: Date;
 
- constructor( options?: IBuildInfo | null) {
+ constructor( options?: IBuildInfo | undefined) {
   options = options || {};
-  this.productUri = (options.productUri != null) ? options.productUri : null;
-  this.manufacturerName = (options.manufacturerName != null) ? options.manufacturerName : null;
-  this.productName = (options.productName != null) ? options.productName : null;
-  this.softwareVersion = (options.softwareVersion != null) ? options.softwareVersion : null;
-  this.buildNumber = (options.buildNumber != null) ? options.buildNumber : null;
+  this.productUri = options.productUri;
+  this.manufacturerName = options.manufacturerName;
+  this.productName = options.productName;
+  this.softwareVersion = options.softwareVersion;
+  this.buildNumber = options.buildNumber;
   this.buildDate = (options.buildDate != null) ? options.buildDate : new Date();
 
  }

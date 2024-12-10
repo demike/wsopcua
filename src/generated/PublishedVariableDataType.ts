@@ -22,18 +22,18 @@ export class PublishedVariableDataType {
   samplingIntervalHint: ec.Double;
   deadbandType: ec.UInt32;
   deadbandValue: ec.Double;
-  indexRange: string | null;
+  indexRange: string | undefined;
   substituteValue: Variant;
   metaDataProperties: (QualifiedName)[];
 
- constructor( options?: IPublishedVariableDataType | null) {
+ constructor( options?: IPublishedVariableDataType | undefined) {
   options = options || {};
   this.publishedVariable = (options.publishedVariable != null) ? options.publishedVariable : ec.NodeId.NullNodeId;
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;
   this.samplingIntervalHint = (options.samplingIntervalHint != null) ? options.samplingIntervalHint : 0;
   this.deadbandType = (options.deadbandType != null) ? options.deadbandType : 0;
   this.deadbandValue = (options.deadbandValue != null) ? options.deadbandValue : 0;
-  this.indexRange = (options.indexRange != null) ? options.indexRange : null;
+  this.indexRange = options.indexRange;
   this.substituteValue = (options.substituteValue != null) ? options.substituteValue : new Variant();
   this.metaDataProperties = (options.metaDataProperties != null) ? options.metaDataProperties : [];
 

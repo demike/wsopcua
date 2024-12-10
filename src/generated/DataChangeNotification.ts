@@ -22,7 +22,7 @@ export class DataChangeNotification extends NotificationData {
   monitoredItems: (MonitoredItemNotification)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IDataChangeNotification | null) {
+ constructor( options?: IDataChangeNotification | undefined) {
   options = options || {};
   super();
   this.monitoredItems = (options.monitoredItems != null) ? options.monitoredItems : [];

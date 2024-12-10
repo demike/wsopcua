@@ -19,7 +19,7 @@ export type IEnumDefinition = Partial<EnumDefinition>;
 export class EnumDefinition extends DataTypeDefinition {
   fields: (EnumField)[];
 
- constructor( options?: IEnumDefinition | null) {
+ constructor( options?: IEnumDefinition | undefined) {
   options = options || {};
   super();
   this.fields = (options.fields != null) ? options.fields : [];

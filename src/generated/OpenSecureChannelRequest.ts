@@ -21,16 +21,16 @@ export class OpenSecureChannelRequest {
   clientProtocolVersion: ec.UInt32;
   requestType: SecurityTokenRequestType;
   securityMode: MessageSecurityMode;
-  clientNonce: Uint8Array | null;
+  clientNonce: Uint8Array | undefined;
   requestedLifetime: ec.UInt32;
 
- constructor( options?: IOpenSecureChannelRequest | null) {
+ constructor( options?: IOpenSecureChannelRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.clientProtocolVersion = (options.clientProtocolVersion != null) ? options.clientProtocolVersion : 0;
   this.requestType = (options.requestType != null) ? options.requestType : SecurityTokenRequestType.Invalid;
   this.securityMode = (options.securityMode != null) ? options.securityMode : MessageSecurityMode.Invalid;
-  this.clientNonce = (options.clientNonce != null) ? options.clientNonce : null;
+  this.clientNonce = options.clientNonce;
   this.requestedLifetime = (options.requestedLifetime != null) ? options.requestedLifetime : 0;
 
  }

@@ -19,7 +19,7 @@ export class ThreeDVector extends Vector {
   y: ec.Double;
   z: ec.Double;
 
- constructor( options?: IThreeDVector | null) {
+ constructor( options?: IThreeDVector | undefined) {
   options = options || {};
   super();
   this.x = (options.x != null) ? options.x : 0;

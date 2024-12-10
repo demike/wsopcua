@@ -14,12 +14,12 @@ export type IPortableNodeId = Partial<PortableNodeId>;
 */
 
 export class PortableNodeId {
-  namespaceUri: string | null;
+  namespaceUri: string | undefined;
   identifier: ec.NodeId;
 
- constructor( options?: IPortableNodeId | null) {
+ constructor( options?: IPortableNodeId | undefined) {
   options = options || {};
-  this.namespaceUri = (options.namespaceUri != null) ? options.namespaceUri : null;
+  this.namespaceUri = options.namespaceUri;
   this.identifier = (options.identifier != null) ? options.identifier : ec.NodeId.NullNodeId;
 
  }

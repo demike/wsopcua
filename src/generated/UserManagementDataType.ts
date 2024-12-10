@@ -15,15 +15,15 @@ export type IUserManagementDataType = Partial<UserManagementDataType>;
 */
 
 export class UserManagementDataType {
-  userName: string | null;
+  userName: string | undefined;
   userConfiguration: UserConfigurationMask;
-  description: string | null;
+  description: string | undefined;
 
- constructor( options?: IUserManagementDataType | null) {
+ constructor( options?: IUserManagementDataType | undefined) {
   options = options || {};
-  this.userName = (options.userName != null) ? options.userName : null;
+  this.userName = options.userName;
   this.userConfiguration = (options.userConfiguration != null) ? options.userConfiguration : UserConfigurationMask.None;
-  this.description = (options.description != null) ? options.description : null;
+  this.description = options.description;
 
  }
 

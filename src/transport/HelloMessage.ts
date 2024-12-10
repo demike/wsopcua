@@ -36,7 +36,7 @@ export interface IHelloMessage {
 export class HelloMessage extends BaseUAObject {
   public static encodingDefaultBinary = makeExpandedNodeId(generate_new_id());
 
-  endpointUrl: string | null;
+  endpointUrl?: string;
   maxChunkCount: number;
   maxMessageSize: number;
   sendBufferSize: number;
@@ -87,7 +87,7 @@ export class HelloMessage extends BaseUAObject {
      * @property endpointUrl
      * @type {UAString}
      */
-    this.endpointUrl = options.endpointUrl ?? null;
+    this.endpointUrl = options.endpointUrl;
 
     // Object.preventExtensions(self);
   }

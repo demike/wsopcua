@@ -21,7 +21,7 @@ export class TransferResultDataDataType extends FetchResultDataType {
   endOfResults: boolean;
   parameterDefs: (ParameterResultDataType)[];
 
- constructor( options?: ITransferResultDataDataType | null) {
+ constructor( options?: ITransferResultDataDataType | undefined) {
   options = options || {};
   super();
   this.sequenceNumber = (options.sequenceNumber != null) ? options.sequenceNumber : 0;

@@ -14,9 +14,9 @@ export type IEndpointUrlListDataType = Partial<EndpointUrlListDataType>;
 */
 
 export class EndpointUrlListDataType {
-  endpointUrlList: (string | null)[];
+  endpointUrlList: (string | undefined)[];
 
- constructor( options?: IEndpointUrlListDataType | null) {
+ constructor( options?: IEndpointUrlListDataType | undefined) {
   options = options || {};
   this.endpointUrlList = (options.endpointUrlList != null) ? options.endpointUrlList : [];
 

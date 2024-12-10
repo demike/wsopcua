@@ -17,14 +17,14 @@ export type IWriteValue = Partial<WriteValue>;
 export class WriteValue {
   nodeId: ec.NodeId;
   attributeId: ec.UInt32;
-  indexRange: string | null;
+  indexRange: string | undefined;
   value: DataValue;
 
- constructor( options?: IWriteValue | null) {
+ constructor( options?: IWriteValue | undefined) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;
-  this.indexRange = (options.indexRange != null) ? options.indexRange : null;
+  this.indexRange = options.indexRange;
   this.value = (options.value != null) ? options.value : new DataValue();
 
  }

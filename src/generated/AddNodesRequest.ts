@@ -20,7 +20,7 @@ export class AddNodesRequest {
   requestHeader: RequestHeader;
   nodesToAdd: (AddNodesItem)[];
 
- constructor( options?: IAddNodesRequest | null) {
+ constructor( options?: IAddNodesRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.nodesToAdd = (options.nodesToAdd != null) ? options.nodesToAdd : [];

@@ -19,7 +19,7 @@ export type IPublishedDataItemsDataType = Partial<PublishedDataItemsDataType>;
 export class PublishedDataItemsDataType extends PublishedDataSetSourceDataType {
   publishedData: (PublishedVariableDataType)[];
 
- constructor( options?: IPublishedDataItemsDataType | null) {
+ constructor( options?: IPublishedDataItemsDataType | undefined) {
   options = options || {};
   super();
   this.publishedData = (options.publishedData != null) ? options.publishedData : [];

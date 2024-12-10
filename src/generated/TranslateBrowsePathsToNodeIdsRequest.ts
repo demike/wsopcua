@@ -20,7 +20,7 @@ export class TranslateBrowsePathsToNodeIdsRequest {
   requestHeader: RequestHeader;
   browsePaths: (BrowsePath)[];
 
- constructor( options?: ITranslateBrowsePathsToNodeIdsRequest | null) {
+ constructor( options?: ITranslateBrowsePathsToNodeIdsRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.browsePaths = (options.browsePaths != null) ? options.browsePaths : [];

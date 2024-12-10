@@ -17,9 +17,9 @@ export type IBrowseNextRequest = Partial<BrowseNextRequest>;
 export class BrowseNextRequest {
   requestHeader: RequestHeader;
   releaseContinuationPoints: boolean;
-  continuationPoints: (Uint8Array | null)[];
+  continuationPoints: (Uint8Array | undefined)[];
 
- constructor( options?: IBrowseNextRequest | null) {
+ constructor( options?: IBrowseNextRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.releaseContinuationPoints = (options.releaseContinuationPoints != null) ? options.releaseContinuationPoints : false;

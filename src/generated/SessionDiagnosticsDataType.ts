@@ -17,11 +17,11 @@ export type ISessionDiagnosticsDataType = Partial<SessionDiagnosticsDataType>;
 
 export class SessionDiagnosticsDataType {
   sessionId: ec.NodeId;
-  sessionName: string | null;
+  sessionName: string | undefined;
   clientDescription: ApplicationDescription;
-  serverUri: string | null;
-  endpointUrl: string | null;
-  localeIds: (string | null)[];
+  serverUri: string | undefined;
+  endpointUrl: string | undefined;
+  localeIds: (string | undefined)[];
   actualSessionTimeout: ec.Double;
   maxResponseMessageSize: ec.UInt32;
   clientConnectionTime: Date;
@@ -60,13 +60,13 @@ export class SessionDiagnosticsDataType {
   registerNodesCount: ServiceCounterDataType;
   unregisterNodesCount: ServiceCounterDataType;
 
- constructor( options?: ISessionDiagnosticsDataType | null) {
+ constructor( options?: ISessionDiagnosticsDataType | undefined) {
   options = options || {};
   this.sessionId = (options.sessionId != null) ? options.sessionId : ec.NodeId.NullNodeId;
-  this.sessionName = (options.sessionName != null) ? options.sessionName : null;
+  this.sessionName = options.sessionName;
   this.clientDescription = (options.clientDescription != null) ? options.clientDescription : new ApplicationDescription();
-  this.serverUri = (options.serverUri != null) ? options.serverUri : null;
-  this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;
+  this.serverUri = options.serverUri;
+  this.endpointUrl = options.endpointUrl;
   this.localeIds = (options.localeIds != null) ? options.localeIds : [];
   this.actualSessionTimeout = (options.actualSessionTimeout != null) ? options.actualSessionTimeout : 0;
   this.maxResponseMessageSize = (options.maxResponseMessageSize != null) ? options.maxResponseMessageSize : 0;

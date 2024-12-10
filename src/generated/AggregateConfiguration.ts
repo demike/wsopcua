@@ -20,7 +20,7 @@ export class AggregateConfiguration {
   percentDataGood: ec.Byte;
   useSlopedExtrapolation: boolean;
 
- constructor( options?: IAggregateConfiguration | null) {
+ constructor( options?: IAggregateConfiguration | undefined) {
   options = options || {};
   this.useServerCapabilitiesDefaults = (options.useServerCapabilitiesDefaults != null) ? options.useServerCapabilitiesDefaults : false;
   this.treatUncertainAsBad = (options.treatUncertainAsBad != null) ? options.treatUncertainAsBad : false;

@@ -19,19 +19,19 @@ export class RequestHeader {
   timestamp: Date;
   requestHandle: ec.UInt32;
   returnDiagnostics: ec.UInt32;
-  auditEntryId: string | null;
+  auditEntryId: string | undefined;
   timeoutHint: ec.UInt32;
-  additionalHeader: ExtensionObject | null;
+  additionalHeader: ExtensionObject | undefined;
 
- constructor( options?: IRequestHeader | null) {
+ constructor( options?: IRequestHeader | undefined) {
   options = options || {};
   this.authenticationToken = (options.authenticationToken != null) ? options.authenticationToken : ec.NodeId.NullNodeId;
   this.timestamp = (options.timestamp != null) ? options.timestamp : new Date();
   this.requestHandle = (options.requestHandle != null) ? options.requestHandle : 0;
   this.returnDiagnostics = (options.returnDiagnostics != null) ? options.returnDiagnostics : 0;
-  this.auditEntryId = (options.auditEntryId != null) ? options.auditEntryId : null;
+  this.auditEntryId = options.auditEntryId;
   this.timeoutHint = (options.timeoutHint != null) ? options.timeoutHint : 0;
-  this.additionalHeader = (options.additionalHeader != null) ? options.additionalHeader : null;
+  this.additionalHeader = options.additionalHeader;
 
  }
 

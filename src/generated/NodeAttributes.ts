@@ -21,7 +21,7 @@ export class NodeAttributes {
   writeMask: ec.UInt32;
   userWriteMask: ec.UInt32;
 
- constructor( options?: INodeAttributes | null) {
+ constructor( options?: INodeAttributes | undefined) {
   options = options || {};
   this.specifiedAttributes = (options.specifiedAttributes != null) ? options.specifiedAttributes : 0;
   this.displayName = (options.displayName != null) ? options.displayName : new LocalizedText();

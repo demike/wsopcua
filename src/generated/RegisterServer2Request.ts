@@ -19,9 +19,9 @@ export type IRegisterServer2Request = Partial<RegisterServer2Request>;
 export class RegisterServer2Request {
   requestHeader: RequestHeader;
   server: RegisteredServer;
-  discoveryConfiguration: (ExtensionObject | null)[];
+  discoveryConfiguration: (ExtensionObject | undefined)[];
 
- constructor( options?: IRegisterServer2Request | null) {
+ constructor( options?: IRegisterServer2Request | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.server = (options.server != null) ? options.server : new RegisteredServer();

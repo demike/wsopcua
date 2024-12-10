@@ -21,7 +21,7 @@ export class DeleteReferencesResponse {
   results: (ec.StatusCode)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IDeleteReferencesResponse | null) {
+ constructor( options?: IDeleteReferencesResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

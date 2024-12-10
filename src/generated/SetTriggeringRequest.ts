@@ -21,7 +21,7 @@ export class SetTriggeringRequest {
   linksToAdd: (ec.UInt32)[];
   linksToRemove: (ec.UInt32)[];
 
- constructor( options?: ISetTriggeringRequest | null) {
+ constructor( options?: ISetTriggeringRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

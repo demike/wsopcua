@@ -19,10 +19,10 @@ export type IProgramDiagnostic2DataType = Partial<ProgramDiagnostic2DataType>;
 
 export class ProgramDiagnostic2DataType {
   createSessionId: ec.NodeId;
-  createClientName: string | null;
+  createClientName: string | undefined;
   invocationCreationTime: Date;
   lastTransitionTime: Date;
-  lastMethodCall: string | null;
+  lastMethodCall: string | undefined;
   lastMethodSessionId: ec.NodeId;
   lastMethodInputArguments: (Argument)[];
   lastMethodOutputArguments: (Argument)[];
@@ -31,13 +31,13 @@ export class ProgramDiagnostic2DataType {
   lastMethodCallTime: Date;
   lastMethodReturnStatus: ec.StatusCode;
 
- constructor( options?: IProgramDiagnostic2DataType | null) {
+ constructor( options?: IProgramDiagnostic2DataType | undefined) {
   options = options || {};
   this.createSessionId = (options.createSessionId != null) ? options.createSessionId : ec.NodeId.NullNodeId;
-  this.createClientName = (options.createClientName != null) ? options.createClientName : null;
+  this.createClientName = options.createClientName;
   this.invocationCreationTime = (options.invocationCreationTime != null) ? options.invocationCreationTime : new Date();
   this.lastTransitionTime = (options.lastTransitionTime != null) ? options.lastTransitionTime : new Date();
-  this.lastMethodCall = (options.lastMethodCall != null) ? options.lastMethodCall : null;
+  this.lastMethodCall = options.lastMethodCall;
   this.lastMethodSessionId = (options.lastMethodSessionId != null) ? options.lastMethodSessionId : ec.NodeId.NullNodeId;
   this.lastMethodInputArguments = (options.lastMethodInputArguments != null) ? options.lastMethodInputArguments : [];
   this.lastMethodOutputArguments = (options.lastMethodOutputArguments != null) ? options.lastMethodOutputArguments : [];

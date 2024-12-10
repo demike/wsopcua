@@ -23,7 +23,7 @@ export class BrowseNextResponse {
   results: (BrowseResult)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IBrowseNextResponse | null) {
+ constructor( options?: IBrowseNextResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

@@ -19,7 +19,7 @@ export class SamplingIntervalDiagnosticsDataType {
   maxMonitoredItemCount: ec.UInt32;
   disabledMonitoredItemCount: ec.UInt32;
 
- constructor( options?: ISamplingIntervalDiagnosticsDataType | null) {
+ constructor( options?: ISamplingIntervalDiagnosticsDataType | undefined) {
   options = options || {};
   this.samplingInterval = (options.samplingInterval != null) ? options.samplingInterval : 0;
   this.monitoredItemCount = (options.monitoredItemCount != null) ? options.monitoredItemCount : 0;

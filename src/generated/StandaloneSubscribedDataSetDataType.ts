@@ -17,18 +17,18 @@ export type IStandaloneSubscribedDataSetDataType = Partial<StandaloneSubscribedD
 */
 
 export class StandaloneSubscribedDataSetDataType extends SubscribedDataSetDataType {
-  name: string | null;
-  dataSetFolder: (string | null)[];
+  name: string | undefined;
+  dataSetFolder: (string | undefined)[];
   dataSetMetaData: DataSetMetaDataType;
-  subscribedDataSet: ExtensionObject | null;
+  subscribedDataSet: ExtensionObject | undefined;
 
- constructor( options?: IStandaloneSubscribedDataSetDataType | null) {
+ constructor( options?: IStandaloneSubscribedDataSetDataType | undefined) {
   options = options || {};
   super();
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
   this.dataSetFolder = (options.dataSetFolder != null) ? options.dataSetFolder : [];
   this.dataSetMetaData = (options.dataSetMetaData != null) ? options.dataSetMetaData : new DataSetMetaDataType();
-  this.subscribedDataSet = (options.subscribedDataSet != null) ? options.subscribedDataSet : null;
+  this.subscribedDataSet = options.subscribedDataSet;
 
  }
 

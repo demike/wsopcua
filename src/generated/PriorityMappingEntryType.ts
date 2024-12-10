@@ -14,15 +14,15 @@ export type IPriorityMappingEntryType = Partial<PriorityMappingEntryType>;
 */
 
 export class PriorityMappingEntryType {
-  mappingUri: string | null;
-  priorityLabel: string | null;
+  mappingUri: string | undefined;
+  priorityLabel: string | undefined;
   priorityValue_PCP: ec.Byte;
   priorityValue_DSCP: ec.UInt32;
 
- constructor( options?: IPriorityMappingEntryType | null) {
+ constructor( options?: IPriorityMappingEntryType | undefined) {
   options = options || {};
-  this.mappingUri = (options.mappingUri != null) ? options.mappingUri : null;
-  this.priorityLabel = (options.priorityLabel != null) ? options.priorityLabel : null;
+  this.mappingUri = options.mappingUri;
+  this.priorityLabel = options.priorityLabel;
   this.priorityValue_PCP = (options.priorityValue_PCP != null) ? options.priorityValue_PCP : 0;
   this.priorityValue_DSCP = (options.priorityValue_DSCP != null) ? options.priorityValue_DSCP : 0;
 

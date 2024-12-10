@@ -16,21 +16,21 @@ export type IBrokerDataSetWriterTransportDataType = Partial<BrokerDataSetWriterT
 */
 
 export class BrokerDataSetWriterTransportDataType extends DataSetWriterTransportDataType {
-  queueName: string | null;
-  resourceUri: string | null;
-  authenticationProfileUri: string | null;
+  queueName: string | undefined;
+  resourceUri: string | undefined;
+  authenticationProfileUri: string | undefined;
   requestedDeliveryGuarantee: BrokerTransportQualityOfService;
-  metaDataQueueName: string | null;
+  metaDataQueueName: string | undefined;
   metaDataUpdateTime: ec.Double;
 
- constructor( options?: IBrokerDataSetWriterTransportDataType | null) {
+ constructor( options?: IBrokerDataSetWriterTransportDataType | undefined) {
   options = options || {};
   super();
-  this.queueName = (options.queueName != null) ? options.queueName : null;
-  this.resourceUri = (options.resourceUri != null) ? options.resourceUri : null;
-  this.authenticationProfileUri = (options.authenticationProfileUri != null) ? options.authenticationProfileUri : null;
+  this.queueName = options.queueName;
+  this.resourceUri = options.resourceUri;
+  this.authenticationProfileUri = options.authenticationProfileUri;
   this.requestedDeliveryGuarantee = (options.requestedDeliveryGuarantee != null) ? options.requestedDeliveryGuarantee : BrokerTransportQualityOfService.Invalid;
-  this.metaDataQueueName = (options.metaDataQueueName != null) ? options.metaDataQueueName : null;
+  this.metaDataQueueName = options.metaDataQueueName;
   this.metaDataUpdateTime = (options.metaDataUpdateTime != null) ? options.metaDataUpdateTime : 0;
 
  }

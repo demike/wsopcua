@@ -18,9 +18,9 @@ export class FindServersOnNetworkRequest {
   requestHeader: RequestHeader;
   startingRecordId: ec.UInt32;
   maxRecordsToReturn: ec.UInt32;
-  serverCapabilityFilter: (string | null)[];
+  serverCapabilityFilter: (string | undefined)[];
 
- constructor( options?: IFindServersOnNetworkRequest | null) {
+ constructor( options?: IFindServersOnNetworkRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.startingRecordId = (options.startingRecordId != null) ? options.startingRecordId : 0;

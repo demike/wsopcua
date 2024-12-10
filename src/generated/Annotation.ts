@@ -14,14 +14,14 @@ export type IAnnotation = Partial<Annotation>;
 */
 
 export class Annotation {
-  message: string | null;
-  userName: string | null;
+  message: string | undefined;
+  userName: string | undefined;
   annotationTime: Date;
 
- constructor( options?: IAnnotation | null) {
+ constructor( options?: IAnnotation | undefined) {
   options = options || {};
-  this.message = (options.message != null) ? options.message : null;
-  this.userName = (options.userName != null) ? options.userName : null;
+  this.message = options.message;
+  this.userName = options.userName;
   this.annotationTime = (options.annotationTime != null) ? options.annotationTime : new Date();
 
  }

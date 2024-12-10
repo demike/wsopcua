@@ -20,7 +20,7 @@ export class CallMethodRequest {
   methodId: ec.NodeId;
   inputArguments: (Variant)[];
 
- constructor( options?: ICallMethodRequest | null) {
+ constructor( options?: ICallMethodRequest | undefined) {
   options = options || {};
   this.objectId = (options.objectId != null) ? options.objectId : ec.NodeId.NullNodeId;
   this.methodId = (options.methodId != null) ? options.methodId : ec.NodeId.NullNodeId;

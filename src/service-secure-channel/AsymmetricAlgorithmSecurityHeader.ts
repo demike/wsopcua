@@ -15,20 +15,20 @@ export interface IAsymmetricAlgorithmSecurityHeader {
 export class AsymmetricAlgorithmSecurityHeader {
   constructor(options?: IAsymmetricAlgorithmSecurityHeader) {
     options = options || {};
-    this.securityPolicyUri = options.securityPolicyUri ?? null;
-    this.senderCertificate = options.senderCertificate ?? null;
-    this.receiverCertificateThumbprint = options.receiverCertificateThumbprint ?? null;
+    this.securityPolicyUri = options.securityPolicyUri;
+    this.senderCertificate = options.senderCertificate;
+    this.receiverCertificateThumbprint = options.receiverCertificateThumbprint;
   }
 
   // length shall not exceed 256
   // The URI of the security policy used to secure the message.
   // This field is encoded as a UTF8 string without a null terminator
-  securityPolicyUri: string | null;
+  securityPolicyUri?: string;
 
   // The X509v3 certificate assigned to the sending application instance.
   // This is a DER encoded blob.
   // This indicates what private key was used to sign the MessageChunk.
-  // This field shall be null if the message is not signed.
+  // This field shall be undefined if the message is not signed.
   // The structure of an X509 Certificate is defined in X509.
   // The DER format for a Certificate is defined in X690
   // The Stack shall close the channel and report an error to the Application if the SenderCertificate
@@ -41,13 +41,13 @@ export class AsymmetricAlgorithmSecurityHeader {
   // Receivers can extract the Certificates from the byte array by using the Certificate size contained
   // in DER header (see X509).
   // Receivers that do not handle Certificate chains shall ignore the extra bytes.
-  senderCertificate: Uint8Array | null; // ByteString;
+  senderCertificate?: Uint8Array; // ByteString;
 
   // The thumbprint of the X509v3 certificate assigned to the receiving application
   // The thumbprint is the SHA1 digest of the DER encoded form of the certificate.
   // This indicates what public key was used to encrypt the MessageChunk
-  // This field shall be null if the message is not encrypted.
-  receiverCertificateThumbprint: Uint8Array | null; // ByteString;
+  // This field shall be undefined if the message is not encrypted.
+  receiverCertificateThumbprint?: Uint8Array; // ByteString;
 
   encode(out: DataStream) {
     ec.encodeString(this.securityPolicyUri, out);

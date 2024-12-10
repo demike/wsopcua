@@ -16,14 +16,14 @@ export type IGetEndpointsRequest = Partial<GetEndpointsRequest>;
 
 export class GetEndpointsRequest {
   requestHeader: RequestHeader;
-  endpointUrl: string | null;
-  localeIds: (string | null)[];
-  profileUris: (string | null)[];
+  endpointUrl: string | undefined;
+  localeIds: (string | undefined)[];
+  profileUris: (string | undefined)[];
 
- constructor( options?: IGetEndpointsRequest | null) {
+ constructor( options?: IGetEndpointsRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
-  this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;
+  this.endpointUrl = options.endpointUrl;
   this.localeIds = (options.localeIds != null) ? options.localeIds : [];
   this.profileUris = (options.profileUris != null) ? options.profileUris : [];
 

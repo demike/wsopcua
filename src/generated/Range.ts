@@ -17,7 +17,7 @@ export class Range {
   low: ec.Double;
   high: ec.Double;
 
- constructor( options?: IRange | null) {
+ constructor( options?: IRange | undefined) {
   options = options || {};
   this.low = (options.low != null) ? options.low : 0;
   this.high = (options.high != null) ? options.high : 0;

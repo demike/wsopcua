@@ -15,7 +15,7 @@ export type IStructureField = Partial<StructureField>;
 */
 
 export class StructureField {
-  name: string | null;
+  name: string | undefined;
   description: LocalizedText;
   dataType: ec.NodeId;
   valueRank: ec.Int32;
@@ -23,9 +23,9 @@ export class StructureField {
   maxStringLength: ec.UInt32;
   isOptional: boolean;
 
- constructor( options?: IStructureField | null) {
+ constructor( options?: IStructureField | undefined) {
   options = options || {};
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
   this.description = (options.description != null) ? options.description : new LocalizedText();
   this.dataType = (options.dataType != null) ? options.dataType : ec.NodeId.NullNodeId;
   this.valueRank = (options.valueRank != null) ? options.valueRank : 0;

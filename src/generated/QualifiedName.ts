@@ -15,12 +15,12 @@ A string qualified with a namespace index.
 
 export class QualifiedName {
   namespaceIndex: ec.UInt16;
-  name: string | null;
+  name: string | undefined;
 
- constructor( options?: IQualifiedName | null) {
+ constructor( options?: IQualifiedName | undefined) {
   options = options || {};
   this.namespaceIndex = (options.namespaceIndex != null) ? options.namespaceIndex : 0;
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
 
  }
 

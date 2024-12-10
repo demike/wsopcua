@@ -23,7 +23,7 @@ export class CreateSubscriptionRequest {
   publishingEnabled: boolean;
   priority: ec.Byte;
 
- constructor( options?: ICreateSubscriptionRequest | null) {
+ constructor( options?: ICreateSubscriptionRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.requestedPublishingInterval = (options.requestedPublishingInterval != null) ? options.requestedPublishingInterval : 0;

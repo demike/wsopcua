@@ -16,7 +16,7 @@ export type IServiceFault = Partial<ServiceFault>;
 export class ServiceFault {
   responseHeader: ResponseHeader;
 
- constructor( options?: IServiceFault | null) {
+ constructor( options?: IServiceFault | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
 

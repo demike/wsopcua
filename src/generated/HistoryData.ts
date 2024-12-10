@@ -18,7 +18,7 @@ export type IHistoryData = Partial<HistoryData>;
 export class HistoryData {
   dataValues: (DataValue)[];
 
- constructor( options?: IHistoryData | null) {
+ constructor( options?: IHistoryData | undefined) {
   options = options || {};
   this.dataValues = (options.dataValues != null) ? options.dataValues : [];
 

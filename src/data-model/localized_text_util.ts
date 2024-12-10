@@ -7,7 +7,7 @@ export function coerceLocalizedText(value?: string | ILocalizedText | null) {
     return null;
   }
   if (typeof value === 'string') {
-    return new LocalizedText({ locale: null, text: value });
+    return new LocalizedText({ /* locale: null,*/ text: value });
   }
   if (value instanceof LocalizedText) {
     return value;

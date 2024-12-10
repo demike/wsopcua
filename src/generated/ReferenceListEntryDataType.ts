@@ -18,7 +18,7 @@ export class ReferenceListEntryDataType {
   isForward: boolean;
   targetNode: ec.ExpandedNodeId;
 
- constructor( options?: IReferenceListEntryDataType | null) {
+ constructor( options?: IReferenceListEntryDataType | undefined) {
   options = options || {};
   this.referenceType = (options.referenceType != null) ? options.referenceType : ec.NodeId.NullNodeId;
   this.isForward = (options.isForward != null) ? options.isForward : false;

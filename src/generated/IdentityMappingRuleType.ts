@@ -16,12 +16,12 @@ export type IIdentityMappingRuleType = Partial<IdentityMappingRuleType>;
 
 export class IdentityMappingRuleType {
   criteriaType: IdentityCriteriaType;
-  criteria: string | null;
+  criteria: string | undefined;
 
- constructor( options?: IIdentityMappingRuleType | null) {
+ constructor( options?: IIdentityMappingRuleType | undefined) {
   options = options || {};
   this.criteriaType = (options.criteriaType != null) ? options.criteriaType : IdentityCriteriaType.Invalid;
-  this.criteria = (options.criteria != null) ? options.criteria : null;
+  this.criteria = options.criteria;
 
  }
 

@@ -15,15 +15,15 @@ export type IArgument = Partial<Argument>;
 */
 
 export class Argument {
-  name: string | null;
+  name: string | undefined;
   dataType: ec.NodeId;
   valueRank: ec.Int32;
   arrayDimensions: (ec.UInt32)[];
   description: LocalizedText;
 
- constructor( options?: IArgument | null) {
+ constructor( options?: IArgument | undefined) {
   options = options || {};
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
   this.dataType = (options.dataType != null) ? options.dataType : ec.NodeId.NullNodeId;
   this.valueRank = (options.valueRank != null) ? options.valueRank : 0;
   this.arrayDimensions = (options.arrayDimensions != null) ? options.arrayDimensions : [];

@@ -19,7 +19,7 @@ export class ReferenceDescriptionDataType {
   isForward: boolean;
   targetNode: ec.ExpandedNodeId;
 
- constructor( options?: IReferenceDescriptionDataType | null) {
+ constructor( options?: IReferenceDescriptionDataType | undefined) {
   options = options || {};
   this.sourceNode = (options.sourceNode != null) ? options.sourceNode : ec.NodeId.NullNodeId;
   this.referenceType = (options.referenceType != null) ? options.referenceType : ec.NodeId.NullNodeId;

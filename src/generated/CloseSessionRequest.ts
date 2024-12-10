@@ -18,7 +18,7 @@ export class CloseSessionRequest {
   requestHeader: RequestHeader;
   deleteSubscriptions: boolean;
 
- constructor( options?: ICloseSessionRequest | null) {
+ constructor( options?: ICloseSessionRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.deleteSubscriptions = (options.deleteSubscriptions != null) ? options.deleteSubscriptions : false;

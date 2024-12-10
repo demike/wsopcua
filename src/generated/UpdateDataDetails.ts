@@ -22,7 +22,7 @@ export class UpdateDataDetails extends HistoryUpdateDetails {
   performInsertReplace: PerformUpdateType;
   updateValues: (DataValue)[];
 
- constructor( options?: IUpdateDataDetails | null) {
+ constructor( options?: IUpdateDataDetails | undefined) {
   options = options || {};
   super(options);
   this.performInsertReplace = (options.performInsertReplace != null) ? options.performInsertReplace : PerformUpdateType.Invalid;

@@ -16,12 +16,12 @@ export type INetworkGroupDataType = Partial<NetworkGroupDataType>;
 */
 
 export class NetworkGroupDataType {
-  serverUri: string | null;
+  serverUri: string | undefined;
   networkPaths: (EndpointUrlListDataType)[];
 
- constructor( options?: INetworkGroupDataType | null) {
+ constructor( options?: INetworkGroupDataType | undefined) {
   options = options || {};
-  this.serverUri = (options.serverUri != null) ? options.serverUri : null;
+  this.serverUri = options.serverUri;
   this.networkPaths = (options.networkPaths != null) ? options.networkPaths : [];
 
  }

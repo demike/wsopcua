@@ -23,7 +23,7 @@ export type IDataSetReaderDataType = Partial<DataSetReaderDataType>;
 */
 
 export class DataSetReaderDataType {
-  name: string | null;
+  name: string | undefined;
   enabled: boolean;
   publisherId: Variant;
   writerGroupId: ec.UInt16;
@@ -32,18 +32,18 @@ export class DataSetReaderDataType {
   dataSetFieldContentMask: DataSetFieldContentMask;
   messageReceiveTimeout: ec.Double;
   keyFrameCount: ec.UInt32;
-  headerLayoutUri: string | null;
+  headerLayoutUri: string | undefined;
   securityMode: MessageSecurityMode;
-  securityGroupId: string | null;
+  securityGroupId: string | undefined;
   securityKeyServices: (EndpointDescription)[];
   dataSetReaderProperties: (KeyValuePair)[];
-  transportSettings: ExtensionObject | null;
-  messageSettings: ExtensionObject | null;
-  subscribedDataSet: ExtensionObject | null;
+  transportSettings: ExtensionObject | undefined;
+  messageSettings: ExtensionObject | undefined;
+  subscribedDataSet: ExtensionObject | undefined;
 
- constructor( options?: IDataSetReaderDataType | null) {
+ constructor( options?: IDataSetReaderDataType | undefined) {
   options = options || {};
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
   this.enabled = (options.enabled != null) ? options.enabled : false;
   this.publisherId = (options.publisherId != null) ? options.publisherId : new Variant();
   this.writerGroupId = (options.writerGroupId != null) ? options.writerGroupId : 0;
@@ -52,14 +52,14 @@ export class DataSetReaderDataType {
   this.dataSetFieldContentMask = (options.dataSetFieldContentMask != null) ? options.dataSetFieldContentMask : DataSetFieldContentMask.None;
   this.messageReceiveTimeout = (options.messageReceiveTimeout != null) ? options.messageReceiveTimeout : 0;
   this.keyFrameCount = (options.keyFrameCount != null) ? options.keyFrameCount : 0;
-  this.headerLayoutUri = (options.headerLayoutUri != null) ? options.headerLayoutUri : null;
+  this.headerLayoutUri = options.headerLayoutUri;
   this.securityMode = (options.securityMode != null) ? options.securityMode : MessageSecurityMode.Invalid;
-  this.securityGroupId = (options.securityGroupId != null) ? options.securityGroupId : null;
+  this.securityGroupId = options.securityGroupId;
   this.securityKeyServices = (options.securityKeyServices != null) ? options.securityKeyServices : [];
   this.dataSetReaderProperties = (options.dataSetReaderProperties != null) ? options.dataSetReaderProperties : [];
-  this.transportSettings = (options.transportSettings != null) ? options.transportSettings : null;
-  this.messageSettings = (options.messageSettings != null) ? options.messageSettings : null;
-  this.subscribedDataSet = (options.subscribedDataSet != null) ? options.subscribedDataSet : null;
+  this.transportSettings = options.transportSettings;
+  this.messageSettings = options.messageSettings;
+  this.subscribedDataSet = options.subscribedDataSet;
 
  }
 

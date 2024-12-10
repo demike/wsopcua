@@ -19,7 +19,7 @@ export class RepublishRequest {
   subscriptionId: ec.UInt32;
   retransmitSequenceNumber: ec.UInt32;
 
- constructor( options?: IRepublishRequest | null) {
+ constructor( options?: IRepublishRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

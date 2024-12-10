@@ -15,12 +15,12 @@ export type ITrustListDataType = Partial<TrustListDataType>;
 
 export class TrustListDataType {
   specifiedLists: ec.UInt32;
-  trustedCertificates: (Uint8Array | null)[];
-  trustedCrls: (Uint8Array | null)[];
-  issuerCertificates: (Uint8Array | null)[];
-  issuerCrls: (Uint8Array | null)[];
+  trustedCertificates: (Uint8Array | undefined)[];
+  trustedCrls: (Uint8Array | undefined)[];
+  issuerCertificates: (Uint8Array | undefined)[];
+  issuerCrls: (Uint8Array | undefined)[];
 
- constructor( options?: ITrustListDataType | null) {
+ constructor( options?: ITrustListDataType | undefined) {
   options = options || {};
   this.specifiedLists = (options.specifiedLists != null) ? options.specifiedLists : 0;
   this.trustedCertificates = (options.trustedCertificates != null) ? options.trustedCertificates : [];

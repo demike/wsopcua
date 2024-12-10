@@ -18,7 +18,7 @@ export class RolePermissionType {
   roleId: ec.NodeId;
   permissions: PermissionType;
 
- constructor( options?: IRolePermissionType | null) {
+ constructor( options?: IRolePermissionType | undefined) {
   options = options || {};
   this.roleId = (options.roleId != null) ? options.roleId : ec.NodeId.NullNodeId;
   this.permissions = (options.permissions != null) ? options.permissions : PermissionType.None;

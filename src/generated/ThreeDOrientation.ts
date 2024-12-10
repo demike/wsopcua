@@ -19,7 +19,7 @@ export class ThreeDOrientation extends Orientation {
   b: ec.Double;
   c: ec.Double;
 
- constructor( options?: IThreeDOrientation | null) {
+ constructor( options?: IThreeDOrientation | undefined) {
   options = options || {};
   super();
   this.a = (options.a != null) ? options.a : 0;

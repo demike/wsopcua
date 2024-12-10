@@ -15,14 +15,14 @@ export type IBrokerConnectionTransportDataType = Partial<BrokerConnectionTranspo
 */
 
 export class BrokerConnectionTransportDataType extends ConnectionTransportDataType {
-  resourceUri: string | null;
-  authenticationProfileUri: string | null;
+  resourceUri: string | undefined;
+  authenticationProfileUri: string | undefined;
 
- constructor( options?: IBrokerConnectionTransportDataType | null) {
+ constructor( options?: IBrokerConnectionTransportDataType | undefined) {
   options = options || {};
   super();
-  this.resourceUri = (options.resourceUri != null) ? options.resourceUri : null;
-  this.authenticationProfileUri = (options.authenticationProfileUri != null) ? options.authenticationProfileUri : null;
+  this.resourceUri = options.resourceUri;
+  this.authenticationProfileUri = options.authenticationProfileUri;
 
  }
 

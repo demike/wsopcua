@@ -81,7 +81,6 @@ describe('testing basic Client Server dealing with subscription at low level', f
             requestedParameters: new opcua.MonitoringParameters({
               clientHandle: 26,
               samplingInterval: 100,
-              filter: null,
               queueSize: 100,
               discardOldest: true,
             }),

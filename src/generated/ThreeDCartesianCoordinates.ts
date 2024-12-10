@@ -19,7 +19,7 @@ export class ThreeDCartesianCoordinates extends CartesianCoordinates {
   y: ec.Double;
   z: ec.Double;
 
- constructor( options?: IThreeDCartesianCoordinates | null) {
+ constructor( options?: IThreeDCartesianCoordinates | undefined) {
   options = options || {};
   super();
   this.x = (options.x != null) ? options.x : 0;

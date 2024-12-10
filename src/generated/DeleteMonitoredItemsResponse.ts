@@ -21,7 +21,7 @@ export class DeleteMonitoredItemsResponse {
   results: (ec.StatusCode)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IDeleteMonitoredItemsResponse | null) {
+ constructor( options?: IDeleteMonitoredItemsResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

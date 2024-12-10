@@ -17,13 +17,13 @@ export type IQueryNextRequest = Partial<QueryNextRequest>;
 export class QueryNextRequest {
   requestHeader: RequestHeader;
   releaseContinuationPoint: boolean;
-  continuationPoint: Uint8Array | null;
+  continuationPoint: Uint8Array | undefined;
 
- constructor( options?: IQueryNextRequest | null) {
+ constructor( options?: IQueryNextRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.releaseContinuationPoint = (options.releaseContinuationPoint != null) ? options.releaseContinuationPoint : false;
-  this.continuationPoint = (options.continuationPoint != null) ? options.continuationPoint : null;
+  this.continuationPoint = options.continuationPoint;
 
  }
 

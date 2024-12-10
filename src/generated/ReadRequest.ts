@@ -23,7 +23,7 @@ export class ReadRequest {
   timestampsToReturn: TimestampsToReturn;
   nodesToRead: (ReadValueId)[];
 
- constructor( options?: IReadRequest | null) {
+ constructor( options?: IReadRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.maxAge = (options.maxAge != null) ? options.maxAge : 0;

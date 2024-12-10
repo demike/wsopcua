@@ -36,7 +36,7 @@ export class PubSubConfiguration2DataType extends PubSubConfigurationDataType {
   configurationVersion: ec.UInt32;
   configurationProperties: (KeyValuePair)[];
 
- constructor( options?: IPubSubConfiguration2DataType | null) {
+ constructor( options?: IPubSubConfiguration2DataType | undefined) {
   options = options || {};
   super(options);
   this.subscribedDataSets = (options.subscribedDataSets != null) ? options.subscribedDataSets : [];

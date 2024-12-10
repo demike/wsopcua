@@ -27,7 +27,7 @@ export class UadpDataSetReaderMessageDataType extends DataSetReaderMessageDataTy
   receiveOffset: ec.Double;
   processingOffset: ec.Double;
 
- constructor( options?: IUadpDataSetReaderMessageDataType | null) {
+ constructor( options?: IUadpDataSetReaderMessageDataType | undefined) {
   options = options || {};
   super();
   this.groupVersion = (options.groupVersion != null) ? options.groupVersion : 0;

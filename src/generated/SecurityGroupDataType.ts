@@ -18,25 +18,25 @@ export type ISecurityGroupDataType = Partial<SecurityGroupDataType>;
 */
 
 export class SecurityGroupDataType {
-  name: string | null;
-  securityGroupFolder: (string | null)[];
+  name: string | undefined;
+  securityGroupFolder: (string | undefined)[];
   keyLifetime: ec.Double;
-  securityPolicyUri: string | null;
+  securityPolicyUri: string | undefined;
   maxFutureKeyCount: ec.UInt32;
   maxPastKeyCount: ec.UInt32;
-  securityGroupId: string | null;
+  securityGroupId: string | undefined;
   rolePermissions: (RolePermissionType)[];
   groupProperties: (KeyValuePair)[];
 
- constructor( options?: ISecurityGroupDataType | null) {
+ constructor( options?: ISecurityGroupDataType | undefined) {
   options = options || {};
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
   this.securityGroupFolder = (options.securityGroupFolder != null) ? options.securityGroupFolder : [];
   this.keyLifetime = (options.keyLifetime != null) ? options.keyLifetime : 0;
-  this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;
+  this.securityPolicyUri = options.securityPolicyUri;
   this.maxFutureKeyCount = (options.maxFutureKeyCount != null) ? options.maxFutureKeyCount : 0;
   this.maxPastKeyCount = (options.maxPastKeyCount != null) ? options.maxPastKeyCount : 0;
-  this.securityGroupId = (options.securityGroupId != null) ? options.securityGroupId : null;
+  this.securityGroupId = options.securityGroupId;
   this.rolePermissions = (options.rolePermissions != null) ? options.rolePermissions : [];
   this.groupProperties = (options.groupProperties != null) ? options.groupProperties : [];
 

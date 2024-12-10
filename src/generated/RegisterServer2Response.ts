@@ -21,7 +21,7 @@ export class RegisterServer2Response {
   configurationResults: (ec.StatusCode)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IRegisterServer2Response | null) {
+ constructor( options?: IRegisterServer2Response | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.configurationResults = (options.configurationResults != null) ? options.configurationResults : [];

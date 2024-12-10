@@ -19,7 +19,7 @@ export class SimpleTypeDescription extends DataTypeDescription {
   baseDataType: ec.NodeId;
   builtInType: ec.Byte;
 
- constructor( options?: ISimpleTypeDescription | null) {
+ constructor( options?: ISimpleTypeDescription | undefined) {
   options = options || {};
   super(options);
   this.baseDataType = (options.baseDataType != null) ? options.baseDataType : ec.NodeId.NullNodeId;

@@ -21,7 +21,7 @@ export class SetMonitoringModeRequest {
   monitoringMode: MonitoringMode;
   monitoredItemIds: (ec.UInt32)[];
 
- constructor( options?: ISetMonitoringModeRequest | null) {
+ constructor( options?: ISetMonitoringModeRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

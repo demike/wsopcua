@@ -21,7 +21,7 @@ export class DeleteSubscriptionsResponse {
   results: (ec.StatusCode)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IDeleteSubscriptionsResponse | null) {
+ constructor( options?: IDeleteSubscriptionsResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

@@ -20,7 +20,7 @@ export class HistoryUpdateResult {
   operationResults: (ec.StatusCode)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IHistoryUpdateResult | null) {
+ constructor( options?: IHistoryUpdateResult | undefined) {
   options = options || {};
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.operationResults = (options.operationResults != null) ? options.operationResults : [];

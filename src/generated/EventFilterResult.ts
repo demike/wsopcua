@@ -22,7 +22,7 @@ export class EventFilterResult extends MonitoringFilterResult {
   selectClauseDiagnosticInfos: (DiagnosticInfo)[];
   whereClauseResult: ContentFilterResult;
 
- constructor( options?: IEventFilterResult | null) {
+ constructor( options?: IEventFilterResult | undefined) {
   options = options || {};
   super();
   this.selectClauseResults = (options.selectClauseResults != null) ? options.selectClauseResults : [];

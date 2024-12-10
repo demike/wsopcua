@@ -19,7 +19,7 @@ export type ITargetVariablesDataType = Partial<TargetVariablesDataType>;
 export class TargetVariablesDataType extends SubscribedDataSetDataType {
   targetVariables: (FieldTargetDataType)[];
 
- constructor( options?: ITargetVariablesDataType | null) {
+ constructor( options?: ITargetVariablesDataType | undefined) {
   options = options || {};
   super();
   this.targetVariables = (options.targetVariables != null) ? options.targetVariables : [];

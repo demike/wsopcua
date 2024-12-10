@@ -15,13 +15,13 @@ export type IMdnsDiscoveryConfiguration = Partial<MdnsDiscoveryConfiguration>;
 */
 
 export class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
-  mdnsServerName: string | null;
-  serverCapabilities: (string | null)[];
+  mdnsServerName: string | undefined;
+  serverCapabilities: (string | undefined)[];
 
- constructor( options?: IMdnsDiscoveryConfiguration | null) {
+ constructor( options?: IMdnsDiscoveryConfiguration | undefined) {
   options = options || {};
   super();
-  this.mdnsServerName = (options.mdnsServerName != null) ? options.mdnsServerName : null;
+  this.mdnsServerName = options.mdnsServerName;
   this.serverCapabilities = (options.serverCapabilities != null) ? options.serverCapabilities : [];
 
  }

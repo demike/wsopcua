@@ -20,12 +20,12 @@ export type IDataTypeSchemaHeader = Partial<DataTypeSchemaHeader>;
 */
 
 export class DataTypeSchemaHeader {
-  namespaces: (string | null)[];
+  namespaces: (string | undefined)[];
   structureDataTypes: (StructureDescription)[];
   enumDataTypes: (EnumDescription)[];
   simpleDataTypes: (SimpleTypeDescription)[];
 
- constructor( options?: IDataTypeSchemaHeader | null) {
+ constructor( options?: IDataTypeSchemaHeader | undefined) {
   options = options || {};
   this.namespaces = (options.namespaces != null) ? options.namespaces : [];
   this.structureDataTypes = (options.structureDataTypes != null) ? options.structureDataTypes : [];

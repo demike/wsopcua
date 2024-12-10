@@ -20,7 +20,7 @@ export class AggregateFilterResult extends MonitoringFilterResult {
   revisedProcessingInterval: ec.Double;
   revisedAggregateConfiguration: AggregateConfiguration;
 
- constructor( options?: IAggregateFilterResult | null) {
+ constructor( options?: IAggregateFilterResult | undefined) {
   options = options || {};
   super();
   this.revisedStartTime = (options.revisedStartTime != null) ? options.revisedStartTime : new Date();

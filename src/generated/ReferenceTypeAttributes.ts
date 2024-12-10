@@ -21,7 +21,7 @@ export class ReferenceTypeAttributes extends NodeAttributes {
   symmetric: boolean;
   inverseName: LocalizedText;
 
- constructor( options?: IReferenceTypeAttributes | null) {
+ constructor( options?: IReferenceTypeAttributes | undefined) {
   options = options || {};
   super(options);
   this.isAbstract = (options.isAbstract != null) ? options.isAbstract : false;

@@ -16,16 +16,16 @@ export type IUserNameIdentityToken = Partial<UserNameIdentityToken>;
 */
 
 export class UserNameIdentityToken extends UserIdentityToken {
-  userName: string | null;
-  password: Uint8Array | null;
-  encryptionAlgorithm: string | null;
+  userName: string | undefined;
+  password: Uint8Array | undefined;
+  encryptionAlgorithm: string | undefined;
 
- constructor( options?: IUserNameIdentityToken | null) {
+ constructor( options?: IUserNameIdentityToken | undefined) {
   options = options || {};
   super(options);
-  this.userName = (options.userName != null) ? options.userName : null;
-  this.password = (options.password != null) ? options.password : null;
-  this.encryptionAlgorithm = (options.encryptionAlgorithm != null) ? options.encryptionAlgorithm : null;
+  this.userName = options.userName;
+  this.password = options.password;
+  this.encryptionAlgorithm = options.encryptionAlgorithm;
 
  }
 

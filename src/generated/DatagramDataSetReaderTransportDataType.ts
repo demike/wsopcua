@@ -16,18 +16,18 @@ export type IDatagramDataSetReaderTransportDataType = Partial<DatagramDataSetRea
 */
 
 export class DatagramDataSetReaderTransportDataType extends DataSetReaderTransportDataType {
-  address: ExtensionObject | null;
-  qosCategory: string | null;
-  datagramQos: (ExtensionObject | null)[];
-  topic: string | null;
+  address: ExtensionObject | undefined;
+  qosCategory: string | undefined;
+  datagramQos: (ExtensionObject | undefined)[];
+  topic: string | undefined;
 
- constructor( options?: IDatagramDataSetReaderTransportDataType | null) {
+ constructor( options?: IDatagramDataSetReaderTransportDataType | undefined) {
   options = options || {};
   super();
-  this.address = (options.address != null) ? options.address : null;
-  this.qosCategory = (options.qosCategory != null) ? options.qosCategory : null;
+  this.address = options.address;
+  this.qosCategory = options.qosCategory;
   this.datagramQos = (options.datagramQos != null) ? options.datagramQos : [];
-  this.topic = (options.topic != null) ? options.topic : null;
+  this.topic = options.topic;
 
  }
 

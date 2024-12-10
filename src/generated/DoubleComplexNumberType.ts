@@ -17,7 +17,7 @@ export class DoubleComplexNumberType {
   real: ec.Double;
   imaginary: ec.Double;
 
- constructor( options?: IDoubleComplexNumberType | null) {
+ constructor( options?: IDoubleComplexNumberType | undefined) {
   options = options || {};
   this.real = (options.real != null) ? options.real : 0;
   this.imaginary = (options.imaginary != null) ? options.imaginary : 0;

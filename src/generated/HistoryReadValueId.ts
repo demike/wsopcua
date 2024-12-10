@@ -16,16 +16,16 @@ export type IHistoryReadValueId = Partial<HistoryReadValueId>;
 
 export class HistoryReadValueId {
   nodeId: ec.NodeId;
-  indexRange: string | null;
+  indexRange: string | undefined;
   dataEncoding: QualifiedName;
-  continuationPoint: Uint8Array | null;
+  continuationPoint: Uint8Array | undefined;
 
- constructor( options?: IHistoryReadValueId | null) {
+ constructor( options?: IHistoryReadValueId | undefined) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
-  this.indexRange = (options.indexRange != null) ? options.indexRange : null;
+  this.indexRange = options.indexRange;
   this.dataEncoding = (options.dataEncoding != null) ? options.dataEncoding : new QualifiedName();
-  this.continuationPoint = (options.continuationPoint != null) ? options.continuationPoint : null;
+  this.continuationPoint = options.continuationPoint;
 
  }
 

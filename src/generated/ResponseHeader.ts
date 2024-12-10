@@ -20,17 +20,17 @@ export class ResponseHeader {
   requestHandle: ec.UInt32;
   serviceResult: ec.StatusCode;
   serviceDiagnostics: DiagnosticInfo;
-  stringTable: (string | null)[];
-  additionalHeader: ExtensionObject | null;
+  stringTable: (string | undefined)[];
+  additionalHeader: ExtensionObject | undefined;
 
- constructor( options?: IResponseHeader | null) {
+ constructor( options?: IResponseHeader | undefined) {
   options = options || {};
   this.timestamp = (options.timestamp != null) ? options.timestamp : new Date();
   this.requestHandle = (options.requestHandle != null) ? options.requestHandle : 0;
   this.serviceResult = (options.serviceResult != null) ? options.serviceResult : ec.StatusCodes.Good;
   this.serviceDiagnostics = (options.serviceDiagnostics != null) ? options.serviceDiagnostics : new DiagnosticInfo();
   this.stringTable = (options.stringTable != null) ? options.stringTable : [];
-  this.additionalHeader = (options.additionalHeader != null) ? options.additionalHeader : null;
+  this.additionalHeader = options.additionalHeader;
 
  }
 

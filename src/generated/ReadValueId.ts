@@ -17,14 +17,14 @@ export type IReadValueId = Partial<ReadValueId>;
 export class ReadValueId {
   nodeId: ec.NodeId;
   attributeId: ec.UInt32;
-  indexRange: string | null;
+  indexRange: string | undefined;
   dataEncoding: QualifiedName;
 
- constructor( options?: IReadValueId | null) {
+ constructor( options?: IReadValueId | undefined) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;
-  this.indexRange = (options.indexRange != null) ? options.indexRange : null;
+  this.indexRange = options.indexRange;
   this.dataEncoding = (options.dataEncoding != null) ? options.dataEncoding : new QualifiedName();
 
  }

@@ -17,7 +17,7 @@ export class XVType {
   x: ec.Double;
   value: ec.Float;
 
- constructor( options?: IXVType | null) {
+ constructor( options?: IXVType | undefined) {
   options = options || {};
   this.x = (options.x != null) ? options.x : 0;
   this.value = (options.value != null) ? options.value : 0;

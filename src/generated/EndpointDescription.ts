@@ -18,24 +18,24 @@ export type IEndpointDescription = Partial<EndpointDescription>;
 */
 
 export class EndpointDescription {
-  endpointUrl: string | null;
+  endpointUrl: string | undefined;
   server: ApplicationDescription;
-  serverCertificate: Uint8Array | null;
+  serverCertificate: Uint8Array | undefined;
   securityMode: MessageSecurityMode;
-  securityPolicyUri: string | null;
+  securityPolicyUri: string | undefined;
   userIdentityTokens: (UserTokenPolicy)[];
-  transportProfileUri: string | null;
+  transportProfileUri: string | undefined;
   securityLevel: ec.Byte;
 
- constructor( options?: IEndpointDescription | null) {
+ constructor( options?: IEndpointDescription | undefined) {
   options = options || {};
-  this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;
+  this.endpointUrl = options.endpointUrl;
   this.server = (options.server != null) ? options.server : new ApplicationDescription();
-  this.serverCertificate = (options.serverCertificate != null) ? options.serverCertificate : null;
+  this.serverCertificate = options.serverCertificate;
   this.securityMode = (options.securityMode != null) ? options.securityMode : MessageSecurityMode.Invalid;
-  this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;
+  this.securityPolicyUri = options.securityPolicyUri;
   this.userIdentityTokens = (options.userIdentityTokens != null) ? options.userIdentityTokens : [];
-  this.transportProfileUri = (options.transportProfileUri != null) ? options.transportProfileUri : null;
+  this.transportProfileUri = options.transportProfileUri;
   this.securityLevel = (options.securityLevel != null) ? options.securityLevel : 0;
 
  }

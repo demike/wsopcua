@@ -17,22 +17,22 @@ export type IPubSubKeyPushTargetDataType = Partial<PubSubKeyPushTargetDataType>;
 */
 
 export class PubSubKeyPushTargetDataType {
-  applicationUri: string | null;
-  pushTargetFolder: (string | null)[];
-  endpointUrl: string | null;
-  securityPolicyUri: string | null;
+  applicationUri: string | undefined;
+  pushTargetFolder: (string | undefined)[];
+  endpointUrl: string | undefined;
+  securityPolicyUri: string | undefined;
   userTokenType: UserTokenPolicy;
   requestedKeyCount: ec.UInt16;
   retryInterval: ec.Double;
   pushTargetProperties: (KeyValuePair)[];
-  securityGroups: (string | null)[];
+  securityGroups: (string | undefined)[];
 
- constructor( options?: IPubSubKeyPushTargetDataType | null) {
+ constructor( options?: IPubSubKeyPushTargetDataType | undefined) {
   options = options || {};
-  this.applicationUri = (options.applicationUri != null) ? options.applicationUri : null;
+  this.applicationUri = options.applicationUri;
   this.pushTargetFolder = (options.pushTargetFolder != null) ? options.pushTargetFolder : [];
-  this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;
-  this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;
+  this.endpointUrl = options.endpointUrl;
+  this.securityPolicyUri = options.securityPolicyUri;
   this.userTokenType = (options.userTokenType != null) ? options.userTokenType : new UserTokenPolicy();
   this.requestedKeyCount = (options.requestedKeyCount != null) ? options.requestedKeyCount : 0;
   this.retryInterval = (options.retryInterval != null) ? options.retryInterval : 0;

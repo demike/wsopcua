@@ -20,7 +20,7 @@ export class QueryDataSet {
   typeDefinitionNode: ec.ExpandedNodeId;
   values: (Variant)[];
 
- constructor( options?: IQueryDataSet | null) {
+ constructor( options?: IQueryDataSet | undefined) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.ExpandedNodeId.NullExpandedNodeId;
   this.typeDefinitionNode = (options.typeDefinitionNode != null) ? options.typeDefinitionNode : ec.ExpandedNodeId.NullExpandedNodeId;

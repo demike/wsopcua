@@ -18,7 +18,7 @@ export class CancelRequest {
   requestHeader: RequestHeader;
   requestHandle: ec.UInt32;
 
- constructor( options?: ICancelRequest | null) {
+ constructor( options?: ICancelRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.requestHandle = (options.requestHandle != null) ? options.requestHandle : 0;

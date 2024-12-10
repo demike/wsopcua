@@ -17,9 +17,9 @@ export type IContentFilterElement = Partial<ContentFilterElement>;
 
 export class ContentFilterElement {
   filterOperator: FilterOperator;
-  filterOperands: (ExtensionObject | null)[];
+  filterOperands: (ExtensionObject | undefined)[];
 
- constructor( options?: IContentFilterElement | null) {
+ constructor( options?: IContentFilterElement | undefined) {
   options = options || {};
   this.filterOperator = (options.filterOperator != null) ? options.filterOperator : FilterOperator.Invalid;
   this.filterOperands = (options.filterOperands != null) ? options.filterOperands : [];

@@ -20,15 +20,15 @@ export type IHistoryReadRequest = Partial<HistoryReadRequest>;
 
 export class HistoryReadRequest {
   requestHeader: RequestHeader;
-  historyReadDetails: ExtensionObject | null;
+  historyReadDetails: ExtensionObject | undefined;
   timestampsToReturn: TimestampsToReturn;
   releaseContinuationPoints: boolean;
   nodesToRead: (HistoryReadValueId)[];
 
- constructor( options?: IHistoryReadRequest | null) {
+ constructor( options?: IHistoryReadRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
-  this.historyReadDetails = (options.historyReadDetails != null) ? options.historyReadDetails : null;
+  this.historyReadDetails = options.historyReadDetails;
   this.timestampsToReturn = (options.timestampsToReturn != null) ? options.timestampsToReturn : TimestampsToReturn.Invalid;
   this.releaseContinuationPoints = (options.releaseContinuationPoints != null) ? options.releaseContinuationPoints : false;
   this.nodesToRead = (options.nodesToRead != null) ? options.nodesToRead : [];

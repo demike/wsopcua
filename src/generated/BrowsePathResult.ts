@@ -19,7 +19,7 @@ export class BrowsePathResult {
   statusCode: ec.StatusCode;
   targets: (BrowsePathTarget)[];
 
- constructor( options?: IBrowsePathResult | null) {
+ constructor( options?: IBrowsePathResult | undefined) {
   options = options || {};
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.targets = (options.targets != null) ? options.targets : [];

@@ -23,7 +23,7 @@ export class ModifySubscriptionRequest {
   maxNotificationsPerPublish: ec.UInt32;
   priority: ec.Byte;
 
- constructor( options?: IModifySubscriptionRequest | null) {
+ constructor( options?: IModifySubscriptionRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;

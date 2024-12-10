@@ -17,13 +17,13 @@ export type IBrowseResult = Partial<BrowseResult>;
 
 export class BrowseResult {
   statusCode: ec.StatusCode;
-  continuationPoint: Uint8Array | null;
+  continuationPoint: Uint8Array | undefined;
   references: (ReferenceDescription)[];
 
- constructor( options?: IBrowseResult | null) {
+ constructor( options?: IBrowseResult | undefined) {
   options = options || {};
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
-  this.continuationPoint = (options.continuationPoint != null) ? options.continuationPoint : null;
+  this.continuationPoint = options.continuationPoint;
   this.references = (options.references != null) ? options.references : [];
 
  }

@@ -22,17 +22,17 @@ export class ActivateSessionRequest {
   requestHeader: RequestHeader;
   clientSignature: SignatureData;
   clientSoftwareCertificates: (SignedSoftwareCertificate)[];
-  localeIds: (string | null)[];
-  userIdentityToken: ExtensionObject | null;
+  localeIds: (string | undefined)[];
+  userIdentityToken: ExtensionObject | undefined;
   userTokenSignature: SignatureData;
 
- constructor( options?: IActivateSessionRequest | null) {
+ constructor( options?: IActivateSessionRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.clientSignature = (options.clientSignature != null) ? options.clientSignature : new SignatureData();
   this.clientSoftwareCertificates = (options.clientSoftwareCertificates != null) ? options.clientSoftwareCertificates : [];
   this.localeIds = (options.localeIds != null) ? options.localeIds : [];
-  this.userIdentityToken = (options.userIdentityToken != null) ? options.userIdentityToken : null;
+  this.userIdentityToken = options.userIdentityToken;
   this.userTokenSignature = (options.userTokenSignature != null) ? options.userTokenSignature : new SignatureData();
 
  }

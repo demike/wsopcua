@@ -20,15 +20,15 @@ export class SimpleAttributeOperand extends FilterOperand {
   typeDefinitionId: ec.NodeId;
   browsePath: (QualifiedName)[];
   attributeId: ec.UInt32;
-  indexRange: string | null;
+  indexRange: string | undefined;
 
- constructor( options?: ISimpleAttributeOperand | null) {
+ constructor( options?: ISimpleAttributeOperand | undefined) {
   options = options || {};
   super();
   this.typeDefinitionId = (options.typeDefinitionId != null) ? options.typeDefinitionId : ec.NodeId.NullNodeId;
   this.browsePath = (options.browsePath != null) ? options.browsePath : [];
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;
-  this.indexRange = (options.indexRange != null) ? options.indexRange : null;
+  this.indexRange = options.indexRange;
 
  }
 

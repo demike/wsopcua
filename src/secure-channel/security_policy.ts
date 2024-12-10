@@ -86,7 +86,7 @@ export enum SecurityPolicy {
   Aes256_Sha256_RsaPss = 'http://opcfoundation.org/UA/SecurityPolicy#Aes256_Sha256_RsaPss',
 }
 
-export function fromURI(uri: string | null): SecurityPolicy {
+export function fromURI(uri?: string | null): SecurityPolicy {
   // istanbul ignore next
   if (typeof uri !== 'string') {
     return SecurityPolicy.Invalid;

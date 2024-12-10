@@ -18,7 +18,7 @@ export class RegisterNodesResponse {
   responseHeader: ResponseHeader;
   registeredNodeIds: (ec.NodeId)[];
 
- constructor( options?: IRegisterNodesResponse | null) {
+ constructor( options?: IRegisterNodesResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.registeredNodeIds = (options.registeredNodeIds != null) ? options.registeredNodeIds : [];

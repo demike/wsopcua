@@ -21,7 +21,7 @@ export class FindServersOnNetworkResponse {
   lastCounterResetTime: Date;
   servers: (ServerOnNetwork)[];
 
- constructor( options?: IFindServersOnNetworkResponse | null) {
+ constructor( options?: IFindServersOnNetworkResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.lastCounterResetTime = (options.lastCounterResetTime != null) ? options.lastCounterResetTime : new Date();

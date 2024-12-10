@@ -19,13 +19,13 @@ export type IQueryNextResponse = Partial<QueryNextResponse>;
 export class QueryNextResponse {
   responseHeader: ResponseHeader;
   queryDataSets: (QueryDataSet)[];
-  revisedContinuationPoint: Uint8Array | null;
+  revisedContinuationPoint: Uint8Array | undefined;
 
- constructor( options?: IQueryNextResponse | null) {
+ constructor( options?: IQueryNextResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.queryDataSets = (options.queryDataSets != null) ? options.queryDataSets : [];
-  this.revisedContinuationPoint = (options.revisedContinuationPoint != null) ? options.revisedContinuationPoint : null;
+  this.revisedContinuationPoint = options.revisedContinuationPoint;
 
  }
 

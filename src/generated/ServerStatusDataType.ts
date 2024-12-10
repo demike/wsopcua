@@ -24,7 +24,7 @@ export class ServerStatusDataType {
   secondsTillShutdown: ec.UInt32;
   shutdownReason: LocalizedText;
 
- constructor( options?: IServerStatusDataType | null) {
+ constructor( options?: IServerStatusDataType | undefined) {
   options = options || {};
   this.startTime = (options.startTime != null) ? options.startTime : new Date();
   this.currentTime = (options.currentTime != null) ? options.currentTime : new Date();

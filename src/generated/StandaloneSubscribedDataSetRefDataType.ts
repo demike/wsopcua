@@ -15,12 +15,12 @@ export type IStandaloneSubscribedDataSetRefDataType = Partial<StandaloneSubscrib
 */
 
 export class StandaloneSubscribedDataSetRefDataType extends SubscribedDataSetDataType {
-  dataSetName: string | null;
+  dataSetName: string | undefined;
 
- constructor( options?: IStandaloneSubscribedDataSetRefDataType | null) {
+ constructor( options?: IStandaloneSubscribedDataSetRefDataType | undefined) {
   options = options || {};
   super();
-  this.dataSetName = (options.dataSetName != null) ? options.dataSetName : null;
+  this.dataSetName = options.dataSetName;
 
  }
 

@@ -21,7 +21,7 @@ export class UadpDataSetWriterMessageDataType extends DataSetWriterMessageDataTy
   networkMessageNumber: ec.UInt16;
   dataSetOffset: ec.UInt16;
 
- constructor( options?: IUadpDataSetWriterMessageDataType | null) {
+ constructor( options?: IUadpDataSetWriterMessageDataType | undefined) {
   options = options || {};
   super();
   this.dataSetMessageContentMask = (options.dataSetMessageContentMask != null) ? options.dataSetMessageContentMask : UadpDataSetMessageContentMask.None;

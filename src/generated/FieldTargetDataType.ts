@@ -17,20 +17,20 @@ export type IFieldTargetDataType = Partial<FieldTargetDataType>;
 
 export class FieldTargetDataType {
   dataSetFieldId: ec.Guid;
-  receiverIndexRange: string | null;
+  receiverIndexRange: string | undefined;
   targetNodeId: ec.NodeId;
   attributeId: ec.UInt32;
-  writeIndexRange: string | null;
+  writeIndexRange: string | undefined;
   overrideValueHandling: OverrideValueHandling;
   overrideValue: Variant;
 
- constructor( options?: IFieldTargetDataType | null) {
+ constructor( options?: IFieldTargetDataType | undefined) {
   options = options || {};
   this.dataSetFieldId = (options.dataSetFieldId != null) ? options.dataSetFieldId : "";
-  this.receiverIndexRange = (options.receiverIndexRange != null) ? options.receiverIndexRange : null;
+  this.receiverIndexRange = options.receiverIndexRange;
   this.targetNodeId = (options.targetNodeId != null) ? options.targetNodeId : ec.NodeId.NullNodeId;
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;
-  this.writeIndexRange = (options.writeIndexRange != null) ? options.writeIndexRange : null;
+  this.writeIndexRange = options.writeIndexRange;
   this.overrideValueHandling = (options.overrideValueHandling != null) ? options.overrideValueHandling : OverrideValueHandling.Invalid;
   this.overrideValue = (options.overrideValue != null) ? options.overrideValue : new Variant();
 

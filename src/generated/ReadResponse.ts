@@ -23,7 +23,7 @@ export class ReadResponse {
   results: (DataValue)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IReadResponse | null) {
+ constructor( options?: IReadResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

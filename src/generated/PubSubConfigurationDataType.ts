@@ -22,7 +22,7 @@ export class PubSubConfigurationDataType {
   connections: (PubSubConnectionDataType)[];
   enabled: boolean;
 
- constructor( options?: IPubSubConfigurationDataType | null) {
+ constructor( options?: IPubSubConfigurationDataType | undefined) {
   options = options || {};
   this.publishedDataSets = (options.publishedDataSets != null) ? options.publishedDataSets : [];
   this.connections = (options.connections != null) ? options.connections : [];

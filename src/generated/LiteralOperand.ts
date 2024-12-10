@@ -17,7 +17,7 @@ export type ILiteralOperand = Partial<LiteralOperand>;
 export class LiteralOperand extends FilterOperand {
   value: Variant;
 
- constructor( options?: ILiteralOperand | null) {
+ constructor( options?: ILiteralOperand | undefined) {
   options = options || {};
   super();
   this.value = (options.value != null) ? options.value : new Variant();

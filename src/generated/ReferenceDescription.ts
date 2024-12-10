@@ -25,7 +25,7 @@ export class ReferenceDescription {
   nodeClass: NodeClass;
   typeDefinition: ec.ExpandedNodeId;
 
- constructor( options?: IReferenceDescription | null) {
+ constructor( options?: IReferenceDescription | undefined) {
   options = options || {};
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;
   this.isForward = (options.isForward != null) ? options.isForward : false;

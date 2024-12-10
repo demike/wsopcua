@@ -15,15 +15,15 @@ export type IServerOnNetwork = Partial<ServerOnNetwork>;
 
 export class ServerOnNetwork {
   recordId: ec.UInt32;
-  serverName: string | null;
-  discoveryUrl: string | null;
-  serverCapabilities: (string | null)[];
+  serverName: string | undefined;
+  discoveryUrl: string | undefined;
+  serverCapabilities: (string | undefined)[];
 
- constructor( options?: IServerOnNetwork | null) {
+ constructor( options?: IServerOnNetwork | undefined) {
   options = options || {};
   this.recordId = (options.recordId != null) ? options.recordId : 0;
-  this.serverName = (options.serverName != null) ? options.serverName : null;
-  this.discoveryUrl = (options.discoveryUrl != null) ? options.discoveryUrl : null;
+  this.serverName = options.serverName;
+  this.discoveryUrl = options.discoveryUrl;
   this.serverCapabilities = (options.serverCapabilities != null) ? options.serverCapabilities : [];
 
  }

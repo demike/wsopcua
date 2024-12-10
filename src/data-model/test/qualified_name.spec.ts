@@ -11,7 +11,7 @@ describe('QualifiedName', function () {
   it('should construct a qualified name', function () {
     const qn = new QualifiedName({});
     expect(qn.namespaceIndex).toEqual(0);
-    expect(qn.name).toBeNull();
+    expect(qn.name).toBeUndefined();
   });
   it('testing qualified name toString', function () {
     const qn = new QualifiedName({ name: 'Hello' });

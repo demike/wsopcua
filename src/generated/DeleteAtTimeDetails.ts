@@ -18,7 +18,7 @@ export type IDeleteAtTimeDetails = Partial<DeleteAtTimeDetails>;
 export class DeleteAtTimeDetails extends HistoryUpdateDetails {
   reqTimes: (Date)[];
 
- constructor( options?: IDeleteAtTimeDetails | null) {
+ constructor( options?: IDeleteAtTimeDetails | undefined) {
   options = options || {};
   super(options);
   this.reqTimes = (options.reqTimes != null) ? options.reqTimes : [];

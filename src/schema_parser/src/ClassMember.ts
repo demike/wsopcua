@@ -158,7 +158,7 @@ export class ClassMember {
       this._type.defaultValue == null /* null or undefined */
     ) {
       // account for strict null checking
-      typeString += ' | null';
+      typeString += ' | undefined';
     }
 
     if (this._length > 1 || this._isArray) {

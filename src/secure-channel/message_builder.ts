@@ -35,7 +35,7 @@ export class MessageBuilder extends MessageBuilderBase {
     securityToken: ChannelSecurityToken;
     derivedKeys: crypto_utils.DerivedKeys;
   }[] = [];
-  protected _privateKey: PrivateKey | null = null;
+  protected _privateKey?: PrivateKey | null = null;
   protected _cryptoFactory: ICryptoFactory | null = null;
   protected _securityHeader?: AsymmetricAlgorithmSecurityHeader | SymmetricAlgorithmSecurityHeader;
   protected _previous_sequenceNumber: number;
@@ -69,7 +69,7 @@ export class MessageBuilder extends MessageBuilderBase {
     assert(Number.isFinite(this._previous_sequenceNumber));
   }
 
-  set privateKey(key: PrivateKey | null) {
+  set privateKey(key: PrivateKey | undefined) {
     this._privateKey = key;
   }
 

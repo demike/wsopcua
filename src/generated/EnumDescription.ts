@@ -20,7 +20,7 @@ export class EnumDescription extends DataTypeDescription {
   enumDefinition: EnumDefinition;
   builtInType: ec.Byte;
 
- constructor( options?: IEnumDescription | null) {
+ constructor( options?: IEnumDescription | undefined) {
   options = options || {};
   super(options);
   this.enumDefinition = (options.enumDefinition != null) ? options.enumDefinition : new EnumDefinition();

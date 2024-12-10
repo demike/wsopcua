@@ -23,7 +23,7 @@ export class VariableTypeAttributes extends NodeAttributes {
   arrayDimensions: (ec.UInt32)[];
   isAbstract: boolean;
 
- constructor( options?: IVariableTypeAttributes | null) {
+ constructor( options?: IVariableTypeAttributes | undefined) {
   options = options || {};
   super(options);
   this.value = (options.value != null) ? options.value : new Variant();

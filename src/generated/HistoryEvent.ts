@@ -18,7 +18,7 @@ export type IHistoryEvent = Partial<HistoryEvent>;
 export class HistoryEvent {
   events: (HistoryEventFieldList)[];
 
- constructor( options?: IHistoryEvent | null) {
+ constructor( options?: IHistoryEvent | undefined) {
   options = options || {};
   this.events = (options.events != null) ? options.events : [];
 

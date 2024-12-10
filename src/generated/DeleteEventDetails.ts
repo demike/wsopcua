@@ -16,9 +16,9 @@ export type IDeleteEventDetails = Partial<DeleteEventDetails>;
 */
 
 export class DeleteEventDetails extends HistoryUpdateDetails {
-  eventIds: (Uint8Array | null)[];
+  eventIds: (Uint8Array | undefined)[];
 
- constructor( options?: IDeleteEventDetails | null) {
+ constructor( options?: IDeleteEventDetails | undefined) {
   options = options || {};
   super(options);
   this.eventIds = (options.eventIds != null) ? options.eventIds : [];

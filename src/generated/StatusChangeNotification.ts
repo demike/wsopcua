@@ -19,7 +19,7 @@ export class StatusChangeNotification extends NotificationData {
   status: ec.StatusCode;
   diagnosticInfo: DiagnosticInfo;
 
- constructor( options?: IStatusChangeNotification | null) {
+ constructor( options?: IStatusChangeNotification | undefined) {
   options = options || {};
   super();
   this.status = (options.status != null) ? options.status : ec.StatusCodes.Good;

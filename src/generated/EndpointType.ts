@@ -15,17 +15,17 @@ export type IEndpointType = Partial<EndpointType>;
 */
 
 export class EndpointType {
-  endpointUrl: string | null;
+  endpointUrl: string | undefined;
   securityMode: MessageSecurityMode;
-  securityPolicyUri: string | null;
-  transportProfileUri: string | null;
+  securityPolicyUri: string | undefined;
+  transportProfileUri: string | undefined;
 
- constructor( options?: IEndpointType | null) {
+ constructor( options?: IEndpointType | undefined) {
   options = options || {};
-  this.endpointUrl = (options.endpointUrl != null) ? options.endpointUrl : null;
+  this.endpointUrl = options.endpointUrl;
   this.securityMode = (options.securityMode != null) ? options.securityMode : MessageSecurityMode.Invalid;
-  this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;
-  this.transportProfileUri = (options.transportProfileUri != null) ? options.transportProfileUri : null;
+  this.securityPolicyUri = options.securityPolicyUri;
+  this.transportProfileUri = options.transportProfileUri;
 
  }
 

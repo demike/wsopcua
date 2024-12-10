@@ -18,7 +18,7 @@ export type IFieldMetaData = Partial<FieldMetaData>;
 */
 
 export class FieldMetaData {
-  name: string | null;
+  name: string | undefined;
   description: LocalizedText;
   fieldFlags: DataSetFieldFlags;
   builtInType: ec.Byte;
@@ -29,9 +29,9 @@ export class FieldMetaData {
   dataSetFieldId: ec.Guid;
   properties: (KeyValuePair)[];
 
- constructor( options?: IFieldMetaData | null) {
+ constructor( options?: IFieldMetaData | undefined) {
   options = options || {};
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
   this.description = (options.description != null) ? options.description : new LocalizedText();
   this.fieldFlags = (options.fieldFlags != null) ? options.fieldFlags : DataSetFieldFlags.None;
   this.builtInType = (options.builtInType != null) ? options.builtInType : 0;

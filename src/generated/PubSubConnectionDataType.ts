@@ -22,25 +22,25 @@ export type IPubSubConnectionDataType = Partial<PubSubConnectionDataType>;
 */
 
 export class PubSubConnectionDataType {
-  name: string | null;
+  name: string | undefined;
   enabled: boolean;
   publisherId: Variant;
-  transportProfileUri: string | null;
-  address: ExtensionObject | null;
+  transportProfileUri: string | undefined;
+  address: ExtensionObject | undefined;
   connectionProperties: (KeyValuePair)[];
-  transportSettings: ExtensionObject | null;
+  transportSettings: ExtensionObject | undefined;
   writerGroups: (WriterGroupDataType)[];
   readerGroups: (ReaderGroupDataType)[];
 
- constructor( options?: IPubSubConnectionDataType | null) {
+ constructor( options?: IPubSubConnectionDataType | undefined) {
   options = options || {};
-  this.name = (options.name != null) ? options.name : null;
+  this.name = options.name;
   this.enabled = (options.enabled != null) ? options.enabled : false;
   this.publisherId = (options.publisherId != null) ? options.publisherId : new Variant();
-  this.transportProfileUri = (options.transportProfileUri != null) ? options.transportProfileUri : null;
-  this.address = (options.address != null) ? options.address : null;
+  this.transportProfileUri = options.transportProfileUri;
+  this.address = options.address;
   this.connectionProperties = (options.connectionProperties != null) ? options.connectionProperties : [];
-  this.transportSettings = (options.transportSettings != null) ? options.transportSettings : null;
+  this.transportSettings = options.transportSettings;
   this.writerGroups = (options.writerGroups != null) ? options.writerGroups : [];
   this.readerGroups = (options.readerGroups != null) ? options.readerGroups : [];
 

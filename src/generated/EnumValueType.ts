@@ -19,7 +19,7 @@ export class EnumValueType {
   displayName: LocalizedText;
   description: LocalizedText;
 
- constructor( options?: IEnumValueType | null) {
+ constructor( options?: IEnumValueType | undefined) {
   options = options || {};
   this.value = (options.value != null) ? options.value : [0, 0];
   this.displayName = (options.displayName != null) ? options.displayName : new LocalizedText();

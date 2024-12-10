@@ -23,7 +23,7 @@ export class StructureDefinition extends DataTypeDefinition {
   structureType: StructureType;
   fields: (StructureField)[];
 
- constructor( options?: IStructureDefinition | null) {
+ constructor( options?: IStructureDefinition | undefined) {
   options = options || {};
   super();
   this.defaultEncodingId = (options.defaultEncodingId != null) ? options.defaultEncodingId : ec.NodeId.NullNodeId;

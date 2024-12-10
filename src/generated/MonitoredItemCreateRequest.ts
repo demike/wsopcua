@@ -20,7 +20,7 @@ export class MonitoredItemCreateRequest {
   monitoringMode: MonitoringMode;
   requestedParameters: MonitoringParameters;
 
- constructor( options?: IMonitoredItemCreateRequest | null) {
+ constructor( options?: IMonitoredItemCreateRequest | undefined) {
   options = options || {};
   this.itemToMonitor = (options.itemToMonitor != null) ? options.itemToMonitor : new ReadValueId();
   this.monitoringMode = (options.monitoringMode != null) ? options.monitoringMode : MonitoringMode.Invalid;

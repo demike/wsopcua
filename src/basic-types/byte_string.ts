@@ -59,5 +59,4 @@ export function jsonDecodeByteString(b64ByteString?: string) {
   if (b64ByteString) {
     return base64ToBuf(b64ByteString);
   }
-  return null;
 }

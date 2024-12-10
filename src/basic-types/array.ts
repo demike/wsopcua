@@ -42,10 +42,10 @@ export function encodeArray(
 export function decodeArray<T>(
   stream: DataStream,
   decode_element_func: (stream: DataStream) => T
-): T[] | null {
+): T[] | undefined {
   const length = stream.getInt32();
   if (length === -1) {
-    return null;
+    return;
   }
 
   const arr: T[] = [];

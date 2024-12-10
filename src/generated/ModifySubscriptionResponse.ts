@@ -20,7 +20,7 @@ export class ModifySubscriptionResponse {
   revisedLifetimeCount: ec.UInt32;
   revisedMaxKeepAliveCount: ec.UInt32;
 
- constructor( options?: IModifySubscriptionResponse | null) {
+ constructor( options?: IModifySubscriptionResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.revisedPublishingInterval = (options.revisedPublishingInterval != null) ? options.revisedPublishingInterval : 0;

@@ -16,26 +16,26 @@ export type ISessionSecurityDiagnosticsDataType = Partial<SessionSecurityDiagnos
 
 export class SessionSecurityDiagnosticsDataType {
   sessionId: ec.NodeId;
-  clientUserIdOfSession: string | null;
-  clientUserIdHistory: (string | null)[];
-  authenticationMechanism: string | null;
-  encoding: string | null;
-  transportProtocol: string | null;
+  clientUserIdOfSession: string | undefined;
+  clientUserIdHistory: (string | undefined)[];
+  authenticationMechanism: string | undefined;
+  encoding: string | undefined;
+  transportProtocol: string | undefined;
   securityMode: MessageSecurityMode;
-  securityPolicyUri: string | null;
-  clientCertificate: Uint8Array | null;
+  securityPolicyUri: string | undefined;
+  clientCertificate: Uint8Array | undefined;
 
- constructor( options?: ISessionSecurityDiagnosticsDataType | null) {
+ constructor( options?: ISessionSecurityDiagnosticsDataType | undefined) {
   options = options || {};
   this.sessionId = (options.sessionId != null) ? options.sessionId : ec.NodeId.NullNodeId;
-  this.clientUserIdOfSession = (options.clientUserIdOfSession != null) ? options.clientUserIdOfSession : null;
+  this.clientUserIdOfSession = options.clientUserIdOfSession;
   this.clientUserIdHistory = (options.clientUserIdHistory != null) ? options.clientUserIdHistory : [];
-  this.authenticationMechanism = (options.authenticationMechanism != null) ? options.authenticationMechanism : null;
-  this.encoding = (options.encoding != null) ? options.encoding : null;
-  this.transportProtocol = (options.transportProtocol != null) ? options.transportProtocol : null;
+  this.authenticationMechanism = options.authenticationMechanism;
+  this.encoding = options.encoding;
+  this.transportProtocol = options.transportProtocol;
   this.securityMode = (options.securityMode != null) ? options.securityMode : MessageSecurityMode.Invalid;
-  this.securityPolicyUri = (options.securityPolicyUri != null) ? options.securityPolicyUri : null;
-  this.clientCertificate = (options.clientCertificate != null) ? options.clientCertificate : null;
+  this.securityPolicyUri = options.securityPolicyUri;
+  this.clientCertificate = options.clientCertificate;
 
  }
 

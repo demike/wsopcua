@@ -20,7 +20,7 @@ export type IGenericAttributes = Partial<GenericAttributes>;
 export class GenericAttributes extends NodeAttributes {
   attributeValues: (GenericAttributeValue)[];
 
- constructor( options?: IGenericAttributes | null) {
+ constructor( options?: IGenericAttributes | undefined) {
   options = options || {};
   super(options);
   this.attributeValues = (options.attributeValues != null) ? options.attributeValues : [];

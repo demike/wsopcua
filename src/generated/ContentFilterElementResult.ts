@@ -20,7 +20,7 @@ export class ContentFilterElementResult {
   operandStatusCodes: (ec.StatusCode)[];
   operandDiagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IContentFilterElementResult | null) {
+ constructor( options?: IContentFilterElementResult | undefined) {
   options = options || {};
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.operandStatusCodes = (options.operandStatusCodes != null) ? options.operandStatusCodes : [];

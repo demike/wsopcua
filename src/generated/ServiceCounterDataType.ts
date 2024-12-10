@@ -17,7 +17,7 @@ export class ServiceCounterDataType {
   totalCount: ec.UInt32;
   errorCount: ec.UInt32;
 
- constructor( options?: IServiceCounterDataType | null) {
+ constructor( options?: IServiceCounterDataType | undefined) {
   options = options || {};
   this.totalCount = (options.totalCount != null) ? options.totalCount : 0;
   this.errorCount = (options.errorCount != null) ? options.errorCount : 0;

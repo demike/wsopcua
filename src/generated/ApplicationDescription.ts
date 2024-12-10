@@ -16,22 +16,22 @@ export type IApplicationDescription = Partial<ApplicationDescription>;
 */
 
 export class ApplicationDescription {
-  applicationUri: string | null;
-  productUri: string | null;
+  applicationUri: string | undefined;
+  productUri: string | undefined;
   applicationName: LocalizedText;
   applicationType: ApplicationType;
-  gatewayServerUri: string | null;
-  discoveryProfileUri: string | null;
-  discoveryUrls: (string | null)[];
+  gatewayServerUri: string | undefined;
+  discoveryProfileUri: string | undefined;
+  discoveryUrls: (string | undefined)[];
 
- constructor( options?: IApplicationDescription | null) {
+ constructor( options?: IApplicationDescription | undefined) {
   options = options || {};
-  this.applicationUri = (options.applicationUri != null) ? options.applicationUri : null;
-  this.productUri = (options.productUri != null) ? options.productUri : null;
+  this.applicationUri = options.applicationUri;
+  this.productUri = options.productUri;
   this.applicationName = (options.applicationName != null) ? options.applicationName : new LocalizedText();
   this.applicationType = (options.applicationType != null) ? options.applicationType : ApplicationType.Invalid;
-  this.gatewayServerUri = (options.gatewayServerUri != null) ? options.gatewayServerUri : null;
-  this.discoveryProfileUri = (options.discoveryProfileUri != null) ? options.discoveryProfileUri : null;
+  this.gatewayServerUri = options.gatewayServerUri;
+  this.discoveryProfileUri = options.discoveryProfileUri;
   this.discoveryUrls = (options.discoveryUrls != null) ? options.discoveryUrls : [];
 
  }

@@ -23,7 +23,7 @@ export class CreateMonitoredItemsResponse {
   results: (MonitoredItemCreateResult)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: ICreateMonitoredItemsResponse | null) {
+ constructor( options?: ICreateMonitoredItemsResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

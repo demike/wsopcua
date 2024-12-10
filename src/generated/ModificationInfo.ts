@@ -17,13 +17,13 @@ export type IModificationInfo = Partial<ModificationInfo>;
 export class ModificationInfo {
   modificationTime: Date;
   updateType: HistoryUpdateType;
-  userName: string | null;
+  userName: string | undefined;
 
- constructor( options?: IModificationInfo | null) {
+ constructor( options?: IModificationInfo | undefined) {
   options = options || {};
   this.modificationTime = (options.modificationTime != null) ? options.modificationTime : new Date();
   this.updateType = (options.updateType != null) ? options.updateType : HistoryUpdateType.Invalid;
-  this.userName = (options.userName != null) ? options.userName : null;
+  this.userName = options.userName;
 
  }
 

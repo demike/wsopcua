@@ -19,7 +19,7 @@ export class SetPublishingModeRequest {
   publishingEnabled: boolean;
   subscriptionIds: (ec.UInt32)[];
 
- constructor( options?: ISetPublishingModeRequest | null) {
+ constructor( options?: ISetPublishingModeRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.publishingEnabled = (options.publishingEnabled != null) ? options.publishingEnabled : false;

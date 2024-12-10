@@ -19,7 +19,7 @@ export class EventFieldList {
   clientHandle: ec.UInt32;
   eventFields: (Variant)[];
 
- constructor( options?: IEventFieldList | null) {
+ constructor( options?: IEventFieldList | undefined) {
   options = options || {};
   this.clientHandle = (options.clientHandle != null) ? options.clientHandle : 0;
   this.eventFields = (options.eventFields != null) ? options.eventFields : [];

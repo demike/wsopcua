@@ -18,7 +18,7 @@ export type IStructureDescription = Partial<StructureDescription>;
 export class StructureDescription extends DataTypeDescription {
   structureDefinition: StructureDefinition;
 
- constructor( options?: IStructureDescription | null) {
+ constructor( options?: IStructureDescription | undefined) {
   options = options || {};
   super(options);
   this.structureDefinition = (options.structureDefinition != null) ? options.structureDefinition : new StructureDefinition();

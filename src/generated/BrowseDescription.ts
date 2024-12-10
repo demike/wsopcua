@@ -22,7 +22,7 @@ export class BrowseDescription {
   nodeClassMask: ec.UInt32;
   resultMask: ec.UInt32;
 
- constructor( options?: IBrowseDescription | null) {
+ constructor( options?: IBrowseDescription | undefined) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
   this.browseDirection = (options.browseDirection != null) ? options.browseDirection : BrowseDirection.Invalid;

@@ -23,7 +23,7 @@ export class SetTriggeringResponse {
   removeResults: (ec.StatusCode)[];
   removeDiagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: ISetTriggeringResponse | null) {
+ constructor( options?: ISetTriggeringResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.addResults = (options.addResults != null) ? options.addResults : [];

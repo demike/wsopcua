@@ -46,7 +46,6 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       new WriteValue({
         nodeId: nodeId,
         attributeId: AttributeIds.Value,
-        indexRange: null,
         value: dataValue,
       }),
     ];
@@ -59,7 +58,6 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       new ReadValueId({
         nodeId: nodeId,
         attributeId: AttributeIds.Value,
-        indexRange: null,
       }),
     ];
     const response = await session.readP(nodesToRead);
@@ -151,7 +149,6 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       new ReadValueId({
         nodeId: nodeId,
         attributeId: AttributeIds.Value,
-        indexRange: null,
       }),
     ];
 
@@ -223,7 +220,6 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       const nodeToRead = new ReadValueId({
         nodeId: nodeId,
         attributeId: AttributeIds.Value,
-        indexRange: null,
       });
       const response = await session.readP(nodeToRead);
       expect(response.value).toBeDefined();
@@ -235,7 +231,6 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
       const nodeToRead = new ReadValueId({
         nodeId: nodeId,
         attributeId: AttributeIds.Value,
-        indexRange: null,
       });
 
       let readResponse = await session.readP(nodeToRead);
@@ -252,7 +247,6 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
         new WriteValue({
           nodeId: nodeId,
           attributeId: AttributeIds.Value,
-          indexRange: null,
           value: readResponse.value,
         }),
       ];

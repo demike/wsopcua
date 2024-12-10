@@ -21,7 +21,7 @@ export class AddReferencesResponse {
   results: (ec.StatusCode)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IAddReferencesResponse | null) {
+ constructor( options?: IAddReferencesResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

@@ -18,7 +18,7 @@ export class ModelChangeStructureDataType {
   affectedType: ec.NodeId;
   verb: ec.Byte;
 
- constructor( options?: IModelChangeStructureDataType | null) {
+ constructor( options?: IModelChangeStructureDataType | undefined) {
   options = options || {};
   this.affected = (options.affected != null) ? options.affected : ec.NodeId.NullNodeId;
   this.affectedType = (options.affectedType != null) ? options.affectedType : ec.NodeId.NullNodeId;

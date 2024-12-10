@@ -100,7 +100,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
 
     for (const mem of this.cls.Members) {
       if (mem.Type.Name !== 'Bit') {
-        let alternativeCode = 'null';
+        let alternativeCode: string | undefined;
         if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
           alternativeCode = 'undefined'; // availability is specified in encoding byte
         } else if (mem.IsArray) {
@@ -108,21 +108,25 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
         } else if (mem.Type instanceof StructTypeFile) {
           alternativeCode = 'new ' + mem.Type.Name + '()';
         } else if (mem.Type instanceof SimpleType) {
-          alternativeCode = mem.Type.defaultValue || 'null';
+          alternativeCode = mem.Type.defaultValue;
         } else if (mem.Type instanceof EnumTypeFile) {
           alternativeCode = mem.Type.defaultValue || '0';
         }
 
-        body +=
-          '  this.' +
-          mem.Name +
-          ' = (options.' +
-          mem.Name +
-          ' != null) ? options.' +
-          mem.Name +
-          ' : ' +
-          alternativeCode +
-          ';\n';
+        if (alternativeCode != null) {
+          body +=
+            '  this.' +
+            mem.Name +
+            ' = (options.' +
+            mem.Name +
+            ' != null) ? options.' +
+            mem.Name +
+            ' : ' +
+            alternativeCode +
+            ';\n';
+        } else {
+          body += '  this.' + mem.Name + ' = options.' + mem.Name + ';\n';
+        }
       }
     }
     const args = [];

@@ -23,7 +23,7 @@ export class AddNodesResponse {
   results: (AddNodesResult)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IAddNodesResponse | null) {
+ constructor( options?: IAddNodesResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

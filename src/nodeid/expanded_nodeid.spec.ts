@@ -11,7 +11,7 @@ describe('testing ExpandedNodeId', function () {
     expect(exnodeId.identifierType).toBe(NodeIdType.Numeric);
     expect(exnodeId.value).toBe(1);
     expect(exnodeId.namespace).toBe(0);
-    expect(exnodeId.namespaceUri).toBe(null);
+    expect(exnodeId.namespaceUri).toBeUndefined();
     expect(exnodeId.serverIndex).toBe(0);
     expect(exnodeId.toString()).toBe('ns=0;i=1');
   });
@@ -47,7 +47,7 @@ describe('testing ExpandedNodeId', function () {
     expect(exnodeId.identifierType).toBe(NodeIdType.String);
     expect(exnodeId.value).toBe('some_text');
     expect(exnodeId.namespace).toBe(2);
-    expect(exnodeId.namespaceUri).toBe(null);
+    expect(exnodeId.namespaceUri).toBeUndefined();
     expect(exnodeId.serverIndex).toBe(0);
     expect(exnodeId.toString()).toBe('ns=2;s=some_text');
   });

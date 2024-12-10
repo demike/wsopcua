@@ -14,11 +14,11 @@ export type INetworkAddressDataType = Partial<NetworkAddressDataType>;
 */
 
 export class NetworkAddressDataType {
-  networkInterface: string | null;
+  networkInterface: string | undefined;
 
- constructor( options?: INetworkAddressDataType | null) {
+ constructor( options?: INetworkAddressDataType | undefined) {
   options = options || {};
-  this.networkInterface = (options.networkInterface != null) ? options.networkInterface : null;
+  this.networkInterface = options.networkInterface;
 
  }
 

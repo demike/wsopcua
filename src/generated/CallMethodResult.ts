@@ -23,7 +23,7 @@ export class CallMethodResult {
   inputArgumentDiagnosticInfos: (DiagnosticInfo)[];
   outputArguments: (Variant)[];
 
- constructor( options?: ICallMethodResult | null) {
+ constructor( options?: ICallMethodResult | undefined) {
   options = options || {};
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.inputArgumentResults = (options.inputArgumentResults != null) ? options.inputArgumentResults : [];

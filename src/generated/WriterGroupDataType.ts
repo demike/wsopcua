@@ -23,13 +23,13 @@ export class WriterGroupDataType extends PubSubGroupDataType {
   publishingInterval: ec.Double;
   keepAliveTime: ec.Double;
   priority: ec.Byte;
-  localeIds: (string | null)[];
-  headerLayoutUri: string | null;
-  transportSettings: ExtensionObject | null;
-  messageSettings: ExtensionObject | null;
+  localeIds: (string | undefined)[];
+  headerLayoutUri: string | undefined;
+  transportSettings: ExtensionObject | undefined;
+  messageSettings: ExtensionObject | undefined;
   dataSetWriters: (DataSetWriterDataType)[];
 
- constructor( options?: IWriterGroupDataType | null) {
+ constructor( options?: IWriterGroupDataType | undefined) {
   options = options || {};
   super(options);
   this.writerGroupId = (options.writerGroupId != null) ? options.writerGroupId : 0;
@@ -37,9 +37,9 @@ export class WriterGroupDataType extends PubSubGroupDataType {
   this.keepAliveTime = (options.keepAliveTime != null) ? options.keepAliveTime : 0;
   this.priority = (options.priority != null) ? options.priority : 0;
   this.localeIds = (options.localeIds != null) ? options.localeIds : [];
-  this.headerLayoutUri = (options.headerLayoutUri != null) ? options.headerLayoutUri : null;
-  this.transportSettings = (options.transportSettings != null) ? options.transportSettings : null;
-  this.messageSettings = (options.messageSettings != null) ? options.messageSettings : null;
+  this.headerLayoutUri = options.headerLayoutUri;
+  this.transportSettings = options.transportSettings;
+  this.messageSettings = options.messageSettings;
   this.dataSetWriters = (options.dataSetWriters != null) ? options.dataSetWriters : [];
 
  }

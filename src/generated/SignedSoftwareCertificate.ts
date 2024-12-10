@@ -14,13 +14,13 @@ export type ISignedSoftwareCertificate = Partial<SignedSoftwareCertificate>;
 */
 
 export class SignedSoftwareCertificate {
-  certificateData: Uint8Array | null;
-  signature: Uint8Array | null;
+  certificateData: Uint8Array | undefined;
+  signature: Uint8Array | undefined;
 
- constructor( options?: ISignedSoftwareCertificate | null) {
+ constructor( options?: ISignedSoftwareCertificate | undefined) {
   options = options || {};
-  this.certificateData = (options.certificateData != null) ? options.certificateData : null;
-  this.signature = (options.signature != null) ? options.signature : null;
+  this.certificateData = options.certificateData;
+  this.signature = options.signature;
 
  }
 

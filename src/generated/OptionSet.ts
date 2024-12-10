@@ -14,13 +14,13 @@ export type IOptionSet = Partial<OptionSet>;
 */
 
 export class OptionSet {
-  value: Uint8Array | null;
-  validBits: Uint8Array | null;
+  value: Uint8Array | undefined;
+  validBits: Uint8Array | undefined;
 
- constructor( options?: IOptionSet | null) {
+ constructor( options?: IOptionSet | undefined) {
   options = options || {};
-  this.value = (options.value != null) ? options.value : null;
-  this.validBits = (options.validBits != null) ? options.validBits : null;
+  this.value = options.value;
+  this.validBits = options.validBits;
 
  }
 

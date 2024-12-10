@@ -20,7 +20,7 @@ export class FindServersResponse {
   responseHeader: ResponseHeader;
   servers: (ApplicationDescription)[];
 
- constructor( options?: IFindServersResponse | null) {
+ constructor( options?: IFindServersResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.servers = (options.servers != null) ? options.servers : [];

@@ -21,7 +21,7 @@ export class ParameterResultDataType {
   statusCode: ec.StatusCode;
   diagnostics: DiagnosticInfo;
 
- constructor( options?: IParameterResultDataType | null) {
+ constructor( options?: IParameterResultDataType | undefined) {
   options = options || {};
   this.nodePath = (options.nodePath != null) ? options.nodePath : [];
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;

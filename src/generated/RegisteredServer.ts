@@ -17,24 +17,24 @@ export type IRegisteredServer = Partial<RegisteredServer>;
 */
 
 export class RegisteredServer {
-  serverUri: string | null;
-  productUri: string | null;
+  serverUri: string | undefined;
+  productUri: string | undefined;
   serverNames: (LocalizedText)[];
   serverType: ApplicationType;
-  gatewayServerUri: string | null;
-  discoveryUrls: (string | null)[];
-  semaphoreFilePath: string | null;
+  gatewayServerUri: string | undefined;
+  discoveryUrls: (string | undefined)[];
+  semaphoreFilePath: string | undefined;
   isOnline: boolean;
 
- constructor( options?: IRegisteredServer | null) {
+ constructor( options?: IRegisteredServer | undefined) {
   options = options || {};
-  this.serverUri = (options.serverUri != null) ? options.serverUri : null;
-  this.productUri = (options.productUri != null) ? options.productUri : null;
+  this.serverUri = options.serverUri;
+  this.productUri = options.productUri;
   this.serverNames = (options.serverNames != null) ? options.serverNames : [];
   this.serverType = (options.serverType != null) ? options.serverType : ApplicationType.Invalid;
-  this.gatewayServerUri = (options.gatewayServerUri != null) ? options.gatewayServerUri : null;
+  this.gatewayServerUri = options.gatewayServerUri;
   this.discoveryUrls = (options.discoveryUrls != null) ? options.discoveryUrls : [];
-  this.semaphoreFilePath = (options.semaphoreFilePath != null) ? options.semaphoreFilePath : null;
+  this.semaphoreFilePath = options.semaphoreFilePath;
   this.isOnline = (options.isOnline != null) ? options.isOnline : false;
 
  }

@@ -26,7 +26,7 @@ export class VariableAttributes extends NodeAttributes {
   minimumSamplingInterval: ec.Double;
   historizing: boolean;
 
- constructor( options?: IVariableAttributes | null) {
+ constructor( options?: IVariableAttributes | undefined) {
   options = options || {};
   super(options);
   this.value = (options.value != null) ? options.value : new Variant();

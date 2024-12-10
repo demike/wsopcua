@@ -19,7 +19,7 @@ export class TransferSubscriptionsRequest {
   subscriptionIds: (ec.UInt32)[];
   sendInitialValues: boolean;
 
- constructor( options?: ITransferSubscriptionsRequest | null) {
+ constructor( options?: ITransferSubscriptionsRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionIds = (options.subscriptionIds != null) ? options.subscriptionIds : [];

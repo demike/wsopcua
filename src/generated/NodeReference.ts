@@ -19,7 +19,7 @@ export class NodeReference {
   isForward: boolean;
   referencedNodeIds: (ec.NodeId)[];
 
- constructor( options?: INodeReference | null) {
+ constructor( options?: INodeReference | undefined) {
   options = options || {};
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;

@@ -17,7 +17,7 @@ export type IJsonWriterGroupMessageDataType = Partial<JsonWriterGroupMessageData
 export class JsonWriterGroupMessageDataType extends WriterGroupMessageDataType {
   networkMessageContentMask: JsonNetworkMessageContentMask;
 
- constructor( options?: IJsonWriterGroupMessageDataType | null) {
+ constructor( options?: IJsonWriterGroupMessageDataType | undefined) {
   options = options || {};
   super();
   this.networkMessageContentMask = (options.networkMessageContentMask != null) ? options.networkMessageContentMask : JsonNetworkMessageContentMask.None;

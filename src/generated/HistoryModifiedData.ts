@@ -20,7 +20,7 @@ export type IHistoryModifiedData = Partial<HistoryModifiedData>;
 export class HistoryModifiedData extends HistoryData {
   modificationInfos: (ModificationInfo)[];
 
- constructor( options?: IHistoryModifiedData | null) {
+ constructor( options?: IHistoryModifiedData | undefined) {
   options = options || {};
   super(options);
   this.modificationInfos = (options.modificationInfos != null) ? options.modificationInfos : [];

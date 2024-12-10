@@ -15,13 +15,13 @@ export type IRedundantServerDataType = Partial<RedundantServerDataType>;
 */
 
 export class RedundantServerDataType {
-  serverId: string | null;
+  serverId: string | undefined;
   serviceLevel: ec.Byte;
   serverState: ServerState;
 
- constructor( options?: IRedundantServerDataType | null) {
+ constructor( options?: IRedundantServerDataType | undefined) {
   options = options || {};
-  this.serverId = (options.serverId != null) ? options.serverId : null;
+  this.serverId = options.serverId;
   this.serviceLevel = (options.serviceLevel != null) ? options.serviceLevel : 0;
   this.serverState = (options.serverState != null) ? options.serverState : ServerState.Invalid;
 

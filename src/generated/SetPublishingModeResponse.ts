@@ -21,7 +21,7 @@ export class SetPublishingModeResponse {
   results: (ec.StatusCode)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: ISetPublishingModeResponse | null) {
+ constructor( options?: ISetPublishingModeResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

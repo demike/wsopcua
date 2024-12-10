@@ -17,7 +17,7 @@ export class SemanticChangeStructureDataType {
   affected: ec.NodeId;
   affectedType: ec.NodeId;
 
- constructor( options?: ISemanticChangeStructureDataType | null) {
+ constructor( options?: ISemanticChangeStructureDataType | undefined) {
   options = options || {};
   this.affected = (options.affected != null) ? options.affected : ec.NodeId.NullNodeId;
   this.affectedType = (options.affectedType != null) ? options.affectedType : ec.NodeId.NullNodeId;

@@ -18,7 +18,7 @@ export type IDataTypeAttributes = Partial<DataTypeAttributes>;
 export class DataTypeAttributes extends NodeAttributes {
   isAbstract: boolean;
 
- constructor( options?: IDataTypeAttributes | null) {
+ constructor( options?: IDataTypeAttributes | undefined) {
   options = options || {};
   super(options);
   this.isAbstract = (options.isAbstract != null) ? options.isAbstract : false;

@@ -16,7 +16,7 @@ export class GuidNodeId {
   namespaceIndex: ec.UInt16;
   identifier: ec.Guid;
 
- constructor( options?: IGuidNodeId | null) {
+ constructor( options?: IGuidNodeId | undefined) {
   options = options || {};
   this.namespaceIndex = (options.namespaceIndex != null) ? options.namespaceIndex : 0;
   this.identifier = (options.identifier != null) ? options.identifier : "";

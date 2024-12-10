@@ -20,7 +20,7 @@ export class PubSubConfigurationRefDataType {
   connectionIndex: ec.UInt16;
   groupIndex: ec.UInt16;
 
- constructor( options?: IPubSubConfigurationRefDataType | null) {
+ constructor( options?: IPubSubConfigurationRefDataType | undefined) {
   options = options || {};
   this.configurationMask = (options.configurationMask != null) ? options.configurationMask : PubSubConfigurationRefMask.None;
   this.elementIndex = (options.elementIndex != null) ? options.elementIndex : 0;

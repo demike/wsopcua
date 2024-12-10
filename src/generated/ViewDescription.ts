@@ -18,7 +18,7 @@ export class ViewDescription {
   timestamp: Date;
   viewVersion: ec.UInt32;
 
- constructor( options?: IViewDescription | null) {
+ constructor( options?: IViewDescription | undefined) {
   options = options || {};
   this.viewId = (options.viewId != null) ? options.viewId : ec.NodeId.NullNodeId;
   this.timestamp = (options.timestamp != null) ? options.timestamp : new Date();

@@ -15,12 +15,12 @@ export type IReceiveQosPriorityDataType = Partial<ReceiveQosPriorityDataType>;
 */
 
 export class ReceiveQosPriorityDataType extends ReceiveQosDataType {
-  priorityLabel: string | null;
+  priorityLabel: string | undefined;
 
- constructor( options?: IReceiveQosPriorityDataType | null) {
+ constructor( options?: IReceiveQosPriorityDataType | undefined) {
   options = options || {};
   super();
-  this.priorityLabel = (options.priorityLabel != null) ? options.priorityLabel : null;
+  this.priorityLabel = options.priorityLabel;
 
  }
 

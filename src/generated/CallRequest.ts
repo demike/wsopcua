@@ -20,7 +20,7 @@ export class CallRequest {
   requestHeader: RequestHeader;
   methodsToCall: (CallMethodRequest)[];
 
- constructor( options?: ICallRequest | null) {
+ constructor( options?: ICallRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.methodsToCall = (options.methodsToCall != null) ? options.methodsToCall : [];

@@ -16,14 +16,14 @@ export type IHistoryReadResult = Partial<HistoryReadResult>;
 
 export class HistoryReadResult {
   statusCode: ec.StatusCode;
-  continuationPoint: Uint8Array | null;
-  historyData: ExtensionObject | null;
+  continuationPoint: Uint8Array | undefined;
+  historyData: ExtensionObject | undefined;
 
- constructor( options?: IHistoryReadResult | null) {
+ constructor( options?: IHistoryReadResult | undefined) {
   options = options || {};
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
-  this.continuationPoint = (options.continuationPoint != null) ? options.continuationPoint : null;
-  this.historyData = (options.historyData != null) ? options.historyData : null;
+  this.continuationPoint = options.continuationPoint;
+  this.historyData = options.historyData;
 
  }
 

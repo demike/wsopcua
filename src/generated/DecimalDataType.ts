@@ -4,7 +4,7 @@
 */
 
 import * as ec from '../basic-types';
-import {DataStream} from '../basic-types/DataStream';
+import { DataStream } from '../basic-types/DataStream';
 
 export interface IDecimalDataType {
   scale?: ec.Int16;
@@ -18,66 +18,58 @@ export interface IDecimalDataType {
 
 export class DecimalDataType {
   scale: ec.Int16;
-  value: Uint8Array | null;
+  value: Uint8Array | undefined;
 
- constructor( options?: IDecimalDataType) {
-  options = options || {};
-  this.scale = (options.scale != null) ? options.scale : 0;
-  this.value = (options.value != null) ? options.value : null;
-
- }
-
-
- encode( out: DataStream) {
-  ec.encodeInt16(this.scale, out);
-  ec.encodeByteString(this.value, out);
-
- }
-
-
- decode( inp: DataStream) {
-  this.scale = ec.decodeInt16(inp);
-  this.value = ec.decodeByteString(inp);
-
- }
-
-
- toJSON() {
-  const out: any = {};
-  out.Scale = this.scale;
-  out.Value = ec.jsonEncodeByteString(this.value);
- return out;
- }
-
-
- fromJSON( inp: any) {
-if (!inp) { return; }
-  this.scale = inp.Scale;
-  this.value = ec.jsonDecodeByteString(inp.Value);
-
- }
-
-
- clone( target?: DecimalDataType): DecimalDataType {
-  if (!target) {
-   target = new DecimalDataType();
+  constructor(options?: IDecimalDataType) {
+    options = options || {};
+    this.scale = options.scale != null ? options.scale : 0;
+    this.value = options.value;
   }
-  target.scale = this.scale;
-  target.value = this.value;
-  return target;
- }
 
+  encode(out: DataStream) {
+    ec.encodeInt16(this.scale, out);
+    ec.encodeByteString(this.value, out);
+  }
 
+  decode(inp: DataStream) {
+    this.scale = ec.decodeInt16(inp);
+    this.value = ec.decodeByteString(inp);
+  }
+
+  toJSON() {
+    const out: any = {};
+    out.Scale = this.scale;
+    out.Value = ec.jsonEncodeByteString(this.value);
+    return out;
+  }
+
+  fromJSON(inp: any) {
+    if (!inp) {
+      return;
+    }
+    this.scale = inp.Scale;
+    this.value = ec.jsonDecodeByteString(inp.Value);
+  }
+
+  clone(target?: DecimalDataType): DecimalDataType {
+    if (!target) {
+      target = new DecimalDataType();
+    }
+    target.scale = this.scale;
+    target.value = this.value;
+    return target;
+  }
 }
-export function decodeDecimalDataType( inp: DataStream): DecimalDataType {
+export function decodeDecimalDataType(inp: DataStream): DecimalDataType {
   const obj = new DecimalDataType();
-   obj.decode(inp);
-   return obj;
+  obj.decode(inp);
+  return obj;
+}
 
- }
-
-
-
-import {register_class_definition} from '../factory/factories_factories';
+import { register_class_definition } from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DecimalDataType', DecimalDataType, new ExpandedNodeId(2 /*numeric id*/, 17861, 0));
+register_class_definition(
+  'DecimalDataType',
+  DecimalDataType,
+  new ExpandedNodeId(2 /*numeric id*/, 17861, 0)
+);

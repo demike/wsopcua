@@ -23,7 +23,7 @@ export class BrowseRequest {
   requestedMaxReferencesPerNode: ec.UInt32;
   nodesToBrowse: (BrowseDescription)[];
 
- constructor( options?: IBrowseRequest | null) {
+ constructor( options?: IBrowseRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.view = (options.view != null) ? options.view : new ViewDescription();

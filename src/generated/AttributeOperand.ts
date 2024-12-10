@@ -17,19 +17,19 @@ export type IAttributeOperand = Partial<AttributeOperand>;
 
 export class AttributeOperand extends FilterOperand {
   nodeId: ec.NodeId;
-  alias: string | null;
+  alias: string | undefined;
   browsePath: RelativePath;
   attributeId: ec.UInt32;
-  indexRange: string | null;
+  indexRange: string | undefined;
 
- constructor( options?: IAttributeOperand | null) {
+ constructor( options?: IAttributeOperand | undefined) {
   options = options || {};
   super();
   this.nodeId = (options.nodeId != null) ? options.nodeId : ec.NodeId.NullNodeId;
-  this.alias = (options.alias != null) ? options.alias : null;
+  this.alias = options.alias;
   this.browsePath = (options.browsePath != null) ? options.browsePath : new RelativePath();
   this.attributeId = (options.attributeId != null) ? options.attributeId : 0;
-  this.indexRange = (options.indexRange != null) ? options.indexRange : null;
+  this.indexRange = options.indexRange;
 
  }
 

@@ -23,7 +23,7 @@ export class HistoryUpdateResponse {
   results: (HistoryUpdateResult)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IHistoryUpdateResponse | null) {
+ constructor( options?: IHistoryUpdateResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.results = (options.results != null) ? options.results : [];

@@ -20,7 +20,7 @@ export class PublishRequest {
   requestHeader: RequestHeader;
   subscriptionAcknowledgements: (SubscriptionAcknowledgement)[];
 
- constructor( options?: IPublishRequest | null) {
+ constructor( options?: IPublishRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.subscriptionAcknowledgements = (options.subscriptionAcknowledgements != null) ? options.subscriptionAcknowledgements : [];

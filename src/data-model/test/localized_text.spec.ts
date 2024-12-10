@@ -34,7 +34,7 @@ describe('LocalizedText', function () {
   });
 
   it('should encode and decode a LocalizeText that have text but no locale', function () {
-    const ltext = new LocalizedText({ text: 'HelloWorld', locale: null });
+    const ltext = new LocalizedText({ text: 'HelloWorld' });
 
     expect(ltext.text).toBeDefined();
     expect(ltext.locale).toBeUndefined();
@@ -56,7 +56,7 @@ describe('LocalizedText', function () {
   });
 
   it('should encode and decode a LocalizeText that have no text but a locale', function () {
-    const ltext = new LocalizedText({ text: null, locale: 'en-US' });
+    const ltext = new LocalizedText({ locale: 'en-US' });
 
     expect(ltext.text).toBeUndefined();
     expect(ltext.text).toBeUndefined();
@@ -82,13 +82,11 @@ describe('LocalizedText', function () {
     expect(coerceLocalizedText(null)).toBeNull();
   });
   it('#coerceLocalizedText - string', function () {
-    expect(coerceLocalizedText('Hello World')).toEqual(
-      new LocalizedText({ locale: null, text: 'Hello World' })
-    );
+    expect(coerceLocalizedText('Hello World')).toEqual(new LocalizedText({ text: 'Hello World' }));
   });
   it('#coerceLocalizedText - LocalizedText', function () {
     expect(coerceLocalizedText(new LocalizedText({ text: 'Hello World' }))).toEqual(
-      new LocalizedText({ locale: null, text: 'Hello World' })
+      new LocalizedText({ text: 'Hello World' })
     );
   });
 });

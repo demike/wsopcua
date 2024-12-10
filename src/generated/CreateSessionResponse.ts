@@ -24,21 +24,21 @@ export class CreateSessionResponse {
   sessionId: ec.NodeId;
   authenticationToken: ec.NodeId;
   revisedSessionTimeout: ec.Double;
-  serverNonce: Uint8Array | null;
-  serverCertificate: Uint8Array | null;
+  serverNonce: Uint8Array | undefined;
+  serverCertificate: Uint8Array | undefined;
   serverEndpoints: (EndpointDescription)[];
   serverSoftwareCertificates: (SignedSoftwareCertificate)[];
   serverSignature: SignatureData;
   maxRequestMessageSize: ec.UInt32;
 
- constructor( options?: ICreateSessionResponse | null) {
+ constructor( options?: ICreateSessionResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.sessionId = (options.sessionId != null) ? options.sessionId : ec.NodeId.NullNodeId;
   this.authenticationToken = (options.authenticationToken != null) ? options.authenticationToken : ec.NodeId.NullNodeId;
   this.revisedSessionTimeout = (options.revisedSessionTimeout != null) ? options.revisedSessionTimeout : 0;
-  this.serverNonce = (options.serverNonce != null) ? options.serverNonce : null;
-  this.serverCertificate = (options.serverCertificate != null) ? options.serverCertificate : null;
+  this.serverNonce = options.serverNonce;
+  this.serverCertificate = options.serverCertificate;
   this.serverEndpoints = (options.serverEndpoints != null) ? options.serverEndpoints : [];
   this.serverSoftwareCertificates = (options.serverSoftwareCertificates != null) ? options.serverSoftwareCertificates : [];
   this.serverSignature = (options.serverSignature != null) ? options.serverSignature : new SignatureData();

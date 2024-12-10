@@ -18,7 +18,7 @@ export class MonitoredItemModifyRequest {
   monitoredItemId: ec.UInt32;
   requestedParameters: MonitoringParameters;
 
- constructor( options?: IMonitoredItemModifyRequest | null) {
+ constructor( options?: IMonitoredItemModifyRequest | undefined) {
   options = options || {};
   this.monitoredItemId = (options.monitoredItemId != null) ? options.monitoredItemId : 0;
   this.requestedParameters = (options.requestedParameters != null) ? options.requestedParameters : new MonitoringParameters();

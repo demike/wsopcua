@@ -18,14 +18,14 @@ export type IActivateSessionResponse = Partial<ActivateSessionResponse>;
 
 export class ActivateSessionResponse {
   responseHeader: ResponseHeader;
-  serverNonce: Uint8Array | null;
+  serverNonce: Uint8Array | undefined;
   results: (ec.StatusCode)[];
   diagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IActivateSessionResponse | null) {
+ constructor( options?: IActivateSessionResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
-  this.serverNonce = (options.serverNonce != null) ? options.serverNonce : null;
+  this.serverNonce = options.serverNonce;
   this.results = (options.results != null) ? options.results : [];
   this.diagnosticInfos = (options.diagnosticInfos != null) ? options.diagnosticInfos : [];
 

@@ -20,7 +20,7 @@ export class ParsingResult {
   dataStatusCodes: (ec.StatusCode)[];
   dataDiagnosticInfos: (DiagnosticInfo)[];
 
- constructor( options?: IParsingResult | null) {
+ constructor( options?: IParsingResult | undefined) {
   options = options || {};
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.dataStatusCodes = (options.dataStatusCodes != null) ? options.dataStatusCodes : [];

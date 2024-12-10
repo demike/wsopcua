@@ -20,7 +20,7 @@ export class RelativePathElement {
   includeSubtypes: boolean;
   targetName: QualifiedName;
 
- constructor( options?: IRelativePathElement | null) {
+ constructor( options?: IRelativePathElement | undefined) {
   options = options || {};
   this.referenceTypeId = (options.referenceTypeId != null) ? options.referenceTypeId : ec.NodeId.NullNodeId;
   this.isInverse = (options.isInverse != null) ? options.isInverse : false;

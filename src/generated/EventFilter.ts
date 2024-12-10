@@ -21,7 +21,7 @@ export class EventFilter extends MonitoringFilter {
   selectClauses: (SimpleAttributeOperand)[];
   whereClause: ContentFilter;
 
- constructor( options?: IEventFilter | null) {
+ constructor( options?: IEventFilter | undefined) {
   options = options || {};
   super();
   this.selectClauses = (options.selectClauses != null) ? options.selectClauses : [];

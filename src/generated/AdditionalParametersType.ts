@@ -18,7 +18,7 @@ export type IAdditionalParametersType = Partial<AdditionalParametersType>;
 export class AdditionalParametersType {
   parameters: (KeyValuePair)[];
 
- constructor( options?: IAdditionalParametersType | null) {
+ constructor( options?: IAdditionalParametersType | undefined) {
   options = options || {};
   this.parameters = (options.parameters != null) ? options.parameters : [];
 

@@ -17,7 +17,7 @@ export class SubscriptionAcknowledgement {
   subscriptionId: ec.UInt32;
   sequenceNumber: ec.UInt32;
 
- constructor( options?: ISubscriptionAcknowledgement | null) {
+ constructor( options?: ISubscriptionAcknowledgement | undefined) {
   options = options || {};
   this.subscriptionId = (options.subscriptionId != null) ? options.subscriptionId : 0;
   this.sequenceNumber = (options.sequenceNumber != null) ? options.sequenceNumber : 0;

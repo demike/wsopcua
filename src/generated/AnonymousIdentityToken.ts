@@ -16,7 +16,7 @@ export type IAnonymousIdentityToken = Partial<AnonymousIdentityToken>;
 
 export class AnonymousIdentityToken extends UserIdentityToken {
 
- constructor( options?: IAnonymousIdentityToken | null) {
+ constructor( options?: IAnonymousIdentityToken | undefined) {
   options = options || {};
   super(options);
 

@@ -17,7 +17,7 @@ export class TransferResult {
   statusCode: ec.StatusCode;
   availableSequenceNumbers: (ec.UInt32)[];
 
- constructor( options?: ITransferResult | null) {
+ constructor( options?: ITransferResult | undefined) {
   options = options || {};
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.availableSequenceNumbers = (options.availableSequenceNumbers != null) ? options.availableSequenceNumbers : [];

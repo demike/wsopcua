@@ -16,14 +16,14 @@ export type IIssuedIdentityToken = Partial<IssuedIdentityToken>;
 */
 
 export class IssuedIdentityToken extends UserIdentityToken {
-  tokenData: Uint8Array | null;
-  encryptionAlgorithm: string | null;
+  tokenData: Uint8Array | undefined;
+  encryptionAlgorithm: string | undefined;
 
- constructor( options?: IIssuedIdentityToken | null) {
+ constructor( options?: IIssuedIdentityToken | undefined) {
   options = options || {};
   super(options);
-  this.tokenData = (options.tokenData != null) ? options.tokenData : null;
-  this.encryptionAlgorithm = (options.encryptionAlgorithm != null) ? options.encryptionAlgorithm : null;
+  this.tokenData = options.tokenData;
+  this.encryptionAlgorithm = options.encryptionAlgorithm;
 
  }
 

@@ -20,7 +20,7 @@ export class AddReferencesRequest {
   requestHeader: RequestHeader;
   referencesToAdd: (AddReferencesItem)[];
 
- constructor( options?: IAddReferencesRequest | null) {
+ constructor( options?: IAddReferencesRequest | undefined) {
   options = options || {};
   this.requestHeader = (options.requestHeader != null) ? options.requestHeader : new RequestHeader();
   this.referencesToAdd = (options.referencesToAdd != null) ? options.referencesToAdd : [];

@@ -18,7 +18,7 @@ export class CancelResponse {
   responseHeader: ResponseHeader;
   cancelCount: ec.UInt32;
 
- constructor( options?: ICancelResponse | null) {
+ constructor( options?: ICancelResponse | undefined) {
   options = options || {};
   this.responseHeader = (options.responseHeader != null) ? options.responseHeader : new ResponseHeader();
   this.cancelCount = (options.cancelCount != null) ? options.cancelCount : 0;

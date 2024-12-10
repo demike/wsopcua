@@ -19,7 +19,7 @@ export class MethodAttributes extends NodeAttributes {
   executable: boolean;
   userExecutable: boolean;
 
- constructor( options?: IMethodAttributes | null) {
+ constructor( options?: IMethodAttributes | undefined) {
   options = options || {};
   super(options);
   this.executable = (options.executable != null) ? options.executable : false;

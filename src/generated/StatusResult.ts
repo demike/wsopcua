@@ -18,7 +18,7 @@ export class StatusResult {
   statusCode: ec.StatusCode;
   diagnosticInfo: DiagnosticInfo;
 
- constructor( options?: IStatusResult | null) {
+ constructor( options?: IStatusResult | undefined) {
   options = options || {};
   this.statusCode = (options.statusCode != null) ? options.statusCode : ec.StatusCodes.Good;
   this.diagnosticInfo = (options.diagnosticInfo != null) ? options.diagnosticInfo : new DiagnosticInfo();
