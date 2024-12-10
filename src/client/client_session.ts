@@ -52,7 +52,7 @@ import { doDebug, debugLog } from '../common/debug';
 import { NodeClass } from '../generated/NodeClass';
 import { DiagnosticInfo } from '../data-model';
 import { ReferenceDescription, BrowseDescription } from '../service-browse';
-import { IRequestHeader, RequestHeader } from '../generated/RequestHeader';
+import { RequestHeader } from '../generated/RequestHeader';
 import { IBrowseDescription } from '../generated/BrowseDescription';
 import { RegisterNodesRequest } from '../generated/RegisterNodesRequest';
 import { RegisterNodesResponse } from '../generated/RegisterNodesResponse';
