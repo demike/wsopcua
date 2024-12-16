@@ -99,7 +99,7 @@ describe('Test Browse Request', function () {
         // console.log(response.toString());
         expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
         expect(response.results[0].references.length).toBeGreaterThan(3);
-        expect(response.results[0].continuationPoint).toEqual(null);
+        expect(response.results[0].continuationPoint).toBeUndefined();
         resolve();
       })
     );
@@ -159,7 +159,7 @@ describe('Test Browse Request', function () {
         // console.log(response.toString());
         expect(response.results[0].statusCode).toEqual(StatusCodes.Good);
         expect(response.results[0].references.length).toBeGreaterThan(3); // want 4 at least
-        expect(response.results[0].continuationPoint).toBeNull();
+        expect(response.results[0].continuationPoint).toBeUndefined();
         allReferences = response.results[0].references;
         resolve();
       })
@@ -209,7 +209,7 @@ describe('Test Browse Request', function () {
           expect(response.results[0].references.length).toEqual(2);
 
           // this is last request
-          expect(response.results[0].continuationPoint).toBeNull();
+          expect(response.results[0].continuationPoint).toBeUndefined();
 
           expect(response.results[0].references[0]).toEqual(allReferences[2]);
           expect(response.results[0].references[1]).toEqual(allReferences[3]);

@@ -31,54 +31,27 @@ fs.writeJSONSync(path.resolve(__dirname, `../dist/package.json`), pkgManifest, {
  * copy docs to dist
  */
 
-fs.copySync(
-  path.resolve(__dirname, '../documentation'),
-  path.resolve(__dirname, '../dist/documentation'),
-  { overwrite: true },
-  function (err) {
-    if (err) {
-      console.error(err);
-      process.exit(-1);
-    }
-  }
-);
-
-fs.copySync(
-  path.resolve(__dirname, '../README.md'),
-  path.resolve(__dirname, '../dist/README.md'),
-  { overwrite: true },
-  function (err) {
-    if (err) {
-      console.error(err);
-      process.exit(-1);
-    }
-  }
-);
+copySync('../documentation', '../dist/documentation');
+copySync('../README.md', '../dist/README.md');
+copySync('../LICENSE.md', '../dist/LICENSE.md');
 
 /**
  * copy the schema generator
  */
 
-fs.copySync(
-  path.resolve(__dirname, '../src/schema_parser/dist/wsopcua-schema-gen.js'),
-  path.resolve(__dirname, '../dist/bin/wsopcua-schema-gen.js'),
-  { overwrite: true },
-  function (err) {
-    if (err) {
-      console.error(err);
-      process.exit(-1);
-    }
-  }
-);
+copySync('../src/schema_parser/dist/wsopcua-schema-gen.js', '../dist/bin/wsopcua-schema-gen.js');
+copySync('../src/schema_parser/schemas', '../dist/schemas');
 
-fs.copySync(
-  path.resolve(__dirname, '../src/schema_parser/schemas'),
-  path.resolve(__dirname, '../dist/schemas'),
-  { overwrite: true },
-  function (err) {
-    if (err) {
-      console.error(err);
-      process.exit(-1);
+function copySync(src, dst) {
+  fs.copySync(
+    path.resolve(__dirname, src),
+    path.resolve(__dirname, dst),
+    { overwrite: true },
+    function (err) {
+      if (err) {
+        console.error(err);
+        process.exit(-1);
+      }
     }
-  }
-);
+  );
+}

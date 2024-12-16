@@ -7,8 +7,6 @@ import {
   browseAll,
   BrowseDescription,
   BrowseDirection,
-  BrowseResult,
-  BrowseResultMask,
   ClientSession,
   coerceNodeId,
   NodeIdType,
@@ -72,7 +70,7 @@ describe('testing browse & browseNext', () => {
     const responseNext2 = await session.browseNextP(resultNext1.continuationPoint!, false);
     const resultNext2 = responseNext2.results[0];
     expect(resultNext2.references.length).toBe(7);
-    expect(resultNext2.continuationPoint).toBeNull();
+    expect(resultNext2.continuationPoint).toBeUndefined();
   });
 
   it('should browse all references using browseAll  ', async () => {
@@ -87,7 +85,7 @@ describe('testing browse & browseNext', () => {
     const result = await browseAll(session, nodeToBrowse);
     expect(result[0].references.length).toBe(27);
 
-    expect(result[0].continuationPoint).toBeNull();
+    expect(result[0].continuationPoint).toBeUndefined();
 
     expect(browseSpy.calls.count()).toBe(1);
     expect(browseNextSpy.calls.count()).toBe(2);
