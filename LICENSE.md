@@ -2,7 +2,7 @@
 
 ## 1. Scope
 
-This License Agreement allows you to use the OPC Client Library “wsopcua” (hereinafter the "Software") made available by Michael Derfler (hereinafter the “Provider”) subject to the terms of this License Agreement. This License Agreement is a legally binding agreement between you and #####.
+This License Agreement allows you to use the OPC Client Library “wsopcua” (hereinafter the "Software") made available by Michael Derfler (hereinafter the “Provider”) subject to the terms of this License Agreement. This License Agreement is a legally binding agreement between you and Michael Derfler.
 
 ## 2. Non-Commercial and Educational Use License
 
