@@ -91,7 +91,7 @@ export function coerceExpandedNodeId(value: any): ExpandedNodeId {
   if (value instanceof ExpandedNodeId) {
     return value;
   }
-  let namespaceUri = null;
+  let namespaceUri: string | undefined;
   let serverIndex = 0;
 
   if (typeof value === 'string') {
@@ -108,7 +108,7 @@ export function coerceExpandedNodeId(value: any): ExpandedNodeId {
       const idStart = value.indexOf(';');
       namespaceUri = value.substring(4, idStart);
       // check for valid namespace uri (a number would be wrong here)
-      assert(isNaN(namespaceUri), 'nsu should not be a number did you mean ns=...');
+      assert(isNaN(namespaceUri as any), 'nsu should not be a number did you mean ns=...');
 
       value = value.substring(idStart + 1);
     }
