@@ -28,7 +28,7 @@ describe('QualifiedName', function () {
   });
   it('should coerce a qualified name with namespaceIndex into a qualified name ', function () {
     const qn = coerceQualifiedName({ namespaceIndex: 0, name: 'Hello' });
-    expect(qualifiedNameToString(qn!)).toBe('Hello');
+    expect(qualifiedNameToString(qn)).toBe('Hello');
   });
   it('should coerce a null object  into a null qualified name ', function () {
     const qn = coerceQualifiedName(null);
