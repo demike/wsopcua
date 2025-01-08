@@ -42,12 +42,10 @@
     "wsopcua-test-server": "^1.6.2"
   },
   "scripts": {
-    "start-es2015": "tsc -p ./src/tsconfig.esm.json --watch",
     "compile": "tsc -b ./src/tsconfig.cjs.json ./src/tsconfig.esm.json  ./src/tsconfig.types.json",
     "package:prepare": "npm run compile && node ./tools/prepare-package.js && node ./tools/generate-alias",
-    "build": "webpack --config webpack.mod.js && npm run build-es2015",
-    "build-es2015": "tsc -p ./src/tsconfig.esm.json",
-    "watch-es2015": "tsc -p ./src/tsconfig.esm.json --watch",
+    "build": "tsc -p ./src/tsconfig.esm.json",
+    "watch": "tsc -p ./src/tsconfig.esm.json --watch",
     "build-examples": "webpack --config webpack.example.js",
     "test": "karma start",
     "test-server": "wsopcua-test-server",
