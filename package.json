@@ -46,7 +46,6 @@
     "package:prepare": "npm run compile && node ./tools/prepare-package.js && node ./tools/generate-alias",
     "build": "tsc -p ./src/tsconfig.esm.json",
     "watch": "tsc -p ./src/tsconfig.esm.json --watch",
-    "build-examples": "webpack --config webpack.example.js",
     "test": "karma start",
     "test-server": "wsopcua-test-server",
     "e2e:run-headless": "karma start ./karma.e2e.conf.js --single-run --browsers ChromeHeadless",
