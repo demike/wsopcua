@@ -1,4 +1,4 @@
-import { ClassFile, EnumTypeFile, SimpleType, StructTypeFile } from './SchemaParser.module';
+import { ClassFile, SimpleType, StructTypeFile } from './SchemaParser.module';
 import { PathGenUtil } from './PathGenUtil';
 import { ProjectModulePath } from './SchemaParserConfig';
 import { ClassFileState } from './ClassFile';
