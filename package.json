@@ -1,9 +1,9 @@
 {
   "name": "@wsopcua/wsopcua",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "license": "SEE LICENSE IN LICENSE.md",
   "author": "Michael Derfler",
-  "private": true,
+  "private": false,
   "main": "dist/_cjs/index.js",
   "jsnext:main": "dist/_esm/index.js",
   "es2015": "dist/_esm/index.js",
