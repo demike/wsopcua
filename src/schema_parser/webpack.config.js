@@ -1,41 +1,40 @@
 const path = require('path');
 
 module.exports = {
-  watch: true,
-  mode:"development",
+  // watch: true,
+  mode: 'development',
   entry: {
-    main : [
-            './src/index']
+    main: ['./src/index'],
   },
   // Enable sourcemaps for debugging webpack's output.
-  devtool: "source-map",
+  devtool: 'source-map',
   module: {
     rules: [
       {
         test: /\.ts?$/,
         loader: 'ts-loader',
-      }
-    ]
+      },
+    ],
   },
   resolve: {
-    modules : [path.resolve(__dirname,"node_modules")],
-    extensions: [ '.tsx', '.ts', '.js' ]
+    modules: [path.resolve(__dirname, 'node_modules')],
+    extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
     //filename: 'wsopcua.js',
-		filename: "wsopcua-schema-gen.js",
+    filename: 'wsopcua-schema-gen.js',
     path: path.resolve(__dirname, 'dist'),
-  //  library: "mylib"
+    //  library: "mylib"
   },
   target: 'node',
   node: {
     __dirname: false,
     __filename: false,
   },
- 
+
   externals: {
-      canvas: 'void 0',
-  }
-  
-  
+    canvas: 'void 0',
+    'utf-8-validate': 'commonjs utf-8-validate',
+    bufferutil: 'commonjs bufferutil',
+  },
 };
