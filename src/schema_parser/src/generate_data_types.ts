@@ -1,5 +1,3 @@
-import * as path from 'path';
-import { XSDSchemaParser } from './XSDSchemaParser';
 import { PathGenUtil } from './PathGenUtil';
 import { TypeRegistry, BSDSchemaParser } from './SchemaParser.module';
 import { SchemaParserConfig } from './SchemaParserConfig';
