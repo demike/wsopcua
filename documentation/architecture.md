@@ -25,11 +25,11 @@ The following chart shows a typical workflow when using wsopcua:
 6. **Disconnect the Client**:
    Finally, disconnect the `OPCUAClient` instance from the server to terminate the secure connection.
 
-![image](./client-session.svg)
+![image](./client-session.png)
 
 # Sending / Receiving Messages
 
-![image](./request-response.svg)
+![image](./request-response.png)
 
 When using wsopcua, communication with the OPC UA server is done through sending requests and receiving responses. Here is a brief overview of how this process works:
 
