@@ -30,3 +30,8 @@ it into one of Wireshark's plugin folders
 > Restart your Application in order to make Wireshark detect the WebSocket connection
 
 ![image](./wireshark-example.png)
+
+## Debugging With a secure connection
+
+In order to inspect OPC-UA over WSS with wireshark you to decrypt the trafic first.
+This can be done like described in [Using a pre-master secret key to decrypt SSL and TLS](https://www.comparitech.com/net-admin/decrypt-ssl-with-wireshark/#Using_a_pre-master_secret_key_to_decrypt_SSL_and_TLS)

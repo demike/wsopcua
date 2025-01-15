@@ -35,7 +35,7 @@ Get started with wsopcua, learn the fundamentals and explore advanced examples.
 
 - Install the wsopcua library
   ```
-  npm i wsopcua
+  npm i @wsopcua/wsopcua
   ```
 
 ### Client Workflow
@@ -502,11 +502,12 @@ Hint:
 
 ### Using a WebSocket Proxy
 
-TODO
+With a websocket proxy like [websockify](https://github.com/novnc/websockify) it's possible
+to connect to any OPC UA server without websocket support.
+In this case the proxy does not have to run on the same machine / system / container ...
+as the opc-ua server 
 
-## Quickstart
-
-TODO
+For a usage example take a look at https://linux.die.net/man/1/websockify
 
 ## Ecosystem
 
