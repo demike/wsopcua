@@ -56,6 +56,7 @@ The following example is structured in multiple async steps
 8.  write a value [example 7](#writing-values)
 9.  close session [example 1](#connecting-to-a-server)
 10. disconnecting [example 1](#connecting-to-a-server)
+11. automatic disconnect on unload [example 8](#automatic-disconnection-on-client-unload)
 
 ### Connecting to a Server
 
@@ -479,6 +480,19 @@ To write a value one needs to specify:
   - and (optional) arrayType and dimension
 
 For details take a look at [Attribute Service Set:Write](https://reference.opcfoundation.org/v104/Core/docs/Part4/5.10.4/)
+
+### Automatic Disconnect on Client Unload
+
+To avoid leaking server side sessions / connections (i.e.: when the user hits F5) it is recommended to do a propper
+client disconnect on window unload.
+
+```ts
+import { OPCUAClient } from '../';
+
+export async function automaticDisconnect(client: OPCUAClient) {
+  window.addEventListener('beforeunload', () => client.disconnectP());
+}
+```
 
 ## Server Setup
 
