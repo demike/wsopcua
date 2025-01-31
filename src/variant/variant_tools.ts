@@ -95,6 +95,7 @@ export function coerceVariantType(dataType: DataType, value: any) {
 }
 
 function isValidScalarVariant(dataType: DataType, value: any) {
+  /*
   assert(
     value === null ||
       DataType.Int64 === dataType ||
@@ -104,6 +105,7 @@ function isValidScalarVariant(dataType: DataType, value: any) {
   );
   assert(value === null || !(value instanceof Int32Array));
   assert(value === null || !(value instanceof Uint32Array));
+  */
   switch (dataType) {
     case DataType.NodeId:
       return ec.isValidNodeId(value);
@@ -153,7 +155,10 @@ function isValidArrayVariant(dataType: DataType, value: any) {
     return true;
   }
   // array values can be store in ArrayBuffer, Float32Array
-  assert(Array.isArray(value));
+  if (!Array.isArray(value)) {
+    return false;
+  }
+
   for (let i = 0; i < value.length; i++) {
     if (!isValidScalarVariant(dataType, value[i])) {
       return false;
@@ -179,16 +184,17 @@ export function isValidVariant(
   value: any,
   dimensions?: number[]
 ) {
-  assert(dataType, 'expecting a variant type');
+  // assert(dataType, 'expecting a variant type');
 
   switch (arrayType) {
     case VariantArrayType.Scalar:
       return isValidScalarVariant(dataType, value);
     case VariantArrayType.Array:
       return isValidArrayVariant(dataType, value);
-    default:
-      assert(arrayType === VariantArrayType.Matrix);
+    case VariantArrayType.Matrix:
       return isValidMatrixVariant(dataType, value, dimensions);
+    default:
+      return false;
   }
 }
 
