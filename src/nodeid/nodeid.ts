@@ -1,7 +1,7 @@
 'use strict';
 
 import { assert } from '../assert';
-import { isValidGuid, emptyGuid } from '../basic-types/guid';
+import { isValidGuid, emptyGuid, normalizeGuid } from '../basic-types/guid';
 import * as constants from '../constants';
 import { isEqual } from '../utils';
 import { NodeIdType } from '../generated/NodeIdType';
@@ -55,13 +55,17 @@ export class NodeId {
     );
     assert(this.identifierType !== NodeIdType.Guid || isValidGuid(<string>this.value));
     assert(this.identifierType !== NodeIdType.String || typeof this.value === 'string');
+    if (this.identifierType === NodeIdType.Guid) {
+      this.value = normalizeGuid(value as string);
+    }
   }
 
   /**
    * get the string representation of the nodeID.
    *
-   * @method toString
    * @example
+   *
+   * by default, toString will return the "ns=" representation
    *
    *    ``` javascript
    *    var nodeid = new NodeId(NodeIdType.NUMERIC, 123,1);
@@ -71,22 +75,38 @@ export class NodeId {
    *    ```
    *    >"ns=1;i=123"
    *    ```
+   * @example
    *
-   * @param [options.addressSpace] {AddressSpace}
-   * @return {string}
+   *  toString can also be used to make the nsu= version of the nodeid.
+   *
+   *  ```javascript
+   *  const namespaceArray = ["http://opcfoundation.com/UA/","http://mynamespace2"];
+   *  const nodeid = new NodeId(NodeIdType.STRING, "Hello",1);
+   *  console.log(nodeid.toString({namespaceArray}));
+   *  ```
+   *  ```
+   *  >"nsu=http://mynamespace;i=123"
+   *  ```
+   *
    */
-  toString(options?: any): string {
-    const addressSpace = options ? options.addressSpace : null;
+  toString(namespaceArray?: string[]): string {
     let str;
+    const namespaceStr: string = namespaceArray
+      ? this.namespace === 0
+        ? ''
+        : `nsu=${
+            namespaceArray[this.namespace] || `<unknown namespace with index ${this.namespace}>`
+          };`
+      : `ns=${this.namespace};`;
     switch (this.identifierType) {
       case NodeIdType.Numeric:
-        str = 'ns=' + this.namespace + ';i=' + this.value;
+        str = namespaceStr + 'i=' + this.value;
         break;
       case NodeIdType.String:
-        str = 'ns=' + this.namespace + ';s=' + this.value;
+        str = namespaceStr + 's=' + this.value;
         break;
       case NodeIdType.Guid:
-        str = 'ns=' + this.namespace + ';g=' + this.value;
+        str = namespaceStr + +'g=' + normalizeGuid(this.value as string);
         break;
       default:
         assert(
@@ -107,18 +127,6 @@ export class NodeId {
         break;
     }
 
-    if (addressSpace) {
-      if (this.namespace === 0 && this.identifierType === NodeIdType.Numeric) {
-        // find standard browse name
-        const name = reverse_map(<number>this.value) || '<undefined>';
-        str += ' ' + name;
-      } else {
-        // let use the provided address space to figure out the browseNode of this node.
-        // to make the message a little bit more useful.
-        const n = addressSpace.findNode(this);
-        str += ' ' + (n ? n.browseName.toString() : ' (????)');
-      }
-    }
     return str;
   }
 
@@ -216,13 +224,9 @@ export function makeNodeId(value: Uint8Array | string | number, namespace?: numb
     // "72962B91-FA75-4AE6-8D28-B404DC7DAF63"
     if (isValidGuid(value)) {
       identifierType = NodeIdType.Guid;
+      value = normalizeGuid(value);
     } else {
       identifierType = NodeIdType.String;
-      // detect accidental string of form "ns=x;x";
-      assert(
-        value.indexOf('ns=') === -1,
-        ' makeNodeId(string) ? did you mean using coerceNodeId instead? '
-      );
     }
   } else if (value instanceof Uint8Array) {
     identifierType = NodeIdType.ByteString;
@@ -290,20 +294,46 @@ function reverse_map(nodeId: number) {
 }
 
 /**
- * @class opcua
- * @method resolveNodeId
- * @static
- * @param node_or_string {NodeId|String}
- * @return {NodeId}
+ * resolveNodeId can be helpful to convert a wellknown Node Name to a nodeid
+ * if a wellknown node name cannot be detected, the function falls back to
+ * calling coerceNodeId {@link coerceNodeId}.
+ *
+ * @example
+ * ```javascript
+ * const nodeId = resolveNodeId("ObjectsFolder");
+ * console.log(nodeId.toString());
+ * ```
+ * ```text
+ * >ns=0;i=85
+ * ```
+ *
+ * ```javascript
+ * const nodeId = resolveNodeId("HasComponent");
+ * console.log(nodeId.toString());
+ * ```
+ * ```text
+ * >ns=0;i=33
+ * ```
+ *
+ * ```javascript
+ * const nodeId = resolveNodeId("ns=1;i=4444");
+ * console.log(nodeId.toString());
+ * ```
+ * ```text
+ * >ns=1;i=4444
+ * ```
  */
-export function resolveNodeId(node_or_string: NodeId | string | undefined): NodeId {
+export function resolveNodeId(
+  node_or_string: NodeId | string | undefined,
+  options?: ResolveNodeIdOptions
+): NodeId {
   let nodeId: NodeId;
   const raw_id =
     typeof node_or_string === 'string' ? _name_to_nodeid_index[node_or_string] : undefined;
   if (raw_id !== undefined) {
     return raw_id;
   } else {
-    nodeId = coerceNodeId(node_or_string);
+    nodeId = coerceNodeId(node_or_string, options);
   }
   return nodeId;
 }
@@ -329,7 +359,13 @@ export function from_hex(str: string): Uint8Array {
 const rege_ns_i = /ns=([0-9]+);i=([0-9]+)/;
 const rege_ns_s = /ns=([0-9]+);s=(.*)/;
 const rege_ns_b = /ns=([0-9]+);b=(.*)/;
-const rege_ns_g = /ns=([0-9]+);g=(.*)/;
+const rege_ns_g =
+  /ns=([0-9]+);g=([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})/;
+
+export interface ResolveNodeIdOptions {
+  namespaceArray?: string[];
+  defaultNamespaceIndex?: number;
+}
 
 /**
  * Convert a value into a nodeId:
@@ -345,7 +381,10 @@ const rege_ns_g = /ns=([0-9]+);g=(.*)/;
  * @param value
  * @param namespace {Integer}
  */
-export function coerceNodeId(value: any, namespace?: number): NodeId {
+export function coerceNodeId(
+  value: unknown,
+  namespaceOptions?: number | ResolveNodeIdOptions
+): NodeId {
   if (value == null) {
     return NodeId.NullNodeId;
   }
@@ -357,29 +396,33 @@ export function coerceNodeId(value: any, namespace?: number): NodeId {
   }
 
   value = value || 0;
-  namespace = namespace || 0;
+  let namespace =
+    (typeof namespaceOptions === 'number'
+      ? namespaceOptions
+      : namespaceOptions?.defaultNamespaceIndex) || 0;
 
   let identifierType = NodeIdType.Numeric;
 
   if (typeof value === 'string') {
     identifierType = NodeIdType.String;
 
-    two_first = value.substr(0, 2);
+    two_first = value.substring(0, 2);
     if (two_first === 'i=') {
       identifierType = NodeIdType.Numeric;
-      value = parseInt(value.substr(2), 10);
+      value = parseInt(value.substring(2), 10);
     } else if (two_first === 's=') {
       identifierType = NodeIdType.String;
-      value = value.substr(2);
+      value = value.substring(2);
     } else if (two_first === 'b=') {
       identifierType = NodeIdType.ByteString;
 
-      value = from_hex(value.substr(2));
+      value = from_hex(value.substring(2));
     } else if (two_first === 'g=') {
       identifierType = NodeIdType.Guid;
-      value = value.substr(2);
+      value = normalizeGuid(value.substring(2));
     } else if (isValidGuid(value)) {
       identifierType = NodeIdType.Guid;
+      value = normalizeGuid(value);
     } else if ((matches = rege_ns_i.exec(value)) !== null) {
       identifierType = NodeIdType.Numeric;
       namespace = parseInt(matches[1], 10);
@@ -395,7 +438,7 @@ export function coerceNodeId(value: any, namespace?: number): NodeId {
     } else if ((matches = rege_ns_g.exec(value)) !== null) {
       identifierType = NodeIdType.Guid;
       namespace = parseInt(matches[1], 10);
-      value = matches[2];
+      value = normalizeGuid(matches[2]);
     } else {
       throw new Error('String cannot be coerced to a nodeId : ' + value);
     }
@@ -406,11 +449,11 @@ export function coerceNodeId(value: any, namespace?: number): NodeId {
     value = new Uint8Array(value);
   } else if (value instanceof Object) {
     // it could be a Enum or a NodeId Like object
-    const tmp = value;
+    const tmp = value as any;
     value = tmp.value;
     namespace = namespace || tmp.namespace;
     identifierType = tmp.identifierType || identifierType;
-    return new NodeId(identifierType, value, namespace);
+    return new NodeId(identifierType, value as any, namespace);
   }
-  return new NodeId(identifierType, value, namespace);
+  return new NodeId(identifierType, value as any, namespace);
 }

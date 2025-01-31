@@ -40,6 +40,10 @@ export function randomGuid(): string {
   return value;
 }
 
+export function normalizeGuid(guid: Guid | null | undefined): Guid {
+  return guid ? guid.toUpperCase() : emptyGuid;
+}
+
 export function encodeGuid(guid: string, stream: DataStream): void {
   if (!isValidGuid(guid)) {
     throw new Error(" Invalid GUID : '" + JSON.stringify(guid) + "'");
