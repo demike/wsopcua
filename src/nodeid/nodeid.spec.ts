@@ -188,6 +188,12 @@ describe('testing coerceNodeId', function () {
     // see issue#
     const nodeId = coerceNodeId('ns=3;s={360273AA-F2B9-4A7F-A5E3-37B7074E2529}.MechanicalDomain');
   });
+
+  it('should return the same NodeId if a NodeId is provided', () => {
+    const originalNodeId = coerceNodeId('ns=1;s=SomeString');
+    const nodeId = coerceNodeId(originalNodeId);
+    expect(nodeId).toBe(originalNodeId);
+  });
 });
 
 describe('#sameNodeId', function () {
