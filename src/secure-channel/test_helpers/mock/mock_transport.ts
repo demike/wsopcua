@@ -98,7 +98,7 @@ export class MockServerTransport extends EventEmitter<any> {
         console.log('%c ' + hexDump(data), 'color:blue;');
 
         // display_trace_from_this_projet_only();
-        analyseExtensionObject(data, 0, 0, {});
+        analyseExtensionObject(data.buffer, 0, 0, {});
 
         this.emit('done');
       }

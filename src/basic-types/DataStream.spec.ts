@@ -117,7 +117,11 @@ describe('Testing DataStream#writeArrayBuffer /  DataStream#readArrayBuffer', fu
   }
 
   function perform(
-    binStream_writeArrayBuffer: (arrayBuf: ArrayBuffer, offset: number, length?: number) => void,
+    binStream_writeArrayBuffer: (
+      arrayBuf: ArrayBufferLike,
+      offset: number,
+      length?: number
+    ) => void,
     binStream_readArrayBuffer: (lengthInBytes: number) => ArrayBuffer
   ) {
     expect(largeArray[10]).toEqual(10 * 0.14);

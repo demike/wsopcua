@@ -37,7 +37,7 @@ function display_encoding_mask(padding: string, encoding_mask: any, encoding_inf
   // DataValueEncodingByte
 }
 
-function hex_block(start: number, end: number, buffer: ArrayBuffer) {
+function hex_block(start: number, end: number, buffer: ArrayBufferLike) {
   const n = end - start;
   const strBuf = buffer_ellipsis(buffer);
   return 's:' + f(start, 4) + ' e:' + f(end, 4) + ' n:' + f(n, 4) + ' ' + strBuf;
@@ -181,7 +181,7 @@ function make_tracer(buffer: DataView, padding: number, offset?: number): any {
 interface AnalyzePacketOptions {}
 
 export function analyzePacket(
-  buffer: ArrayBuffer | DataView,
+  buffer: ArrayBufferLike | DataView,
   objMessage: any,
   padding: number,
   offset?: number,
@@ -192,7 +192,7 @@ export function analyzePacket(
 }
 
 export function analyseExtensionObject(
-  buffer: ArrayBuffer,
+  buffer: ArrayBufferLike,
   padding: number,
   offset: number,
   customOptions?: AnalyzePacketOptions

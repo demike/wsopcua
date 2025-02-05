@@ -125,8 +125,8 @@ describe('check coerce various types', () => {
 
   types.forEach(function (type) {
     it('should have a coerce method for ' + type, () => {
-      const coerceFunc: any = ec['coerce' + type];
-      const randomFunc: any = ec['random' + type];
+      const coerceFunc = ec['coerce' + type] as any;
+      const randomFunc = ec['random' + type] as any;
 
       expect(ec['coerce' + type]).toBeDefined();
       expect(ec['random' + type]).toBeDefined();
@@ -142,13 +142,13 @@ describe('check coerce various types', () => {
     });
   });
 
-  function w(str, l) {
+  function w(str, l: number) {
     return (str + '                        ').substring(0, l);
   }
 
   types.forEach((type) => {
     it('coerce' + w(type, 8) + ' should preserves null or undefined values ', () => {
-      const coerceFunc = ec['coerce' + type];
+      const coerceFunc: any = ec['coerce' + type];
 
       expect(coerceFunc).toBeDefined();
 

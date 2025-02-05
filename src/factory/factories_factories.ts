@@ -46,7 +46,10 @@ export function callConstructor(constructor: Function) {
 
 export function getConstructor(expandedId: NodeId) {
   if (!(expandedId && (expandedId.value as any) /* .toString()*/ in constructorMap)) {
-    console.log('#getConstructor : cannot find constructor for expandedId ', expandedId.toString());
+    console.error(
+      '#getConstructor : cannot find constructor for expandedId ',
+      expandedId.toString()
+    );
     return null;
   }
   return constructorMap[<string | number>expandedId.value];

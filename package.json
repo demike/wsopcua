@@ -36,7 +36,7 @@
     "prettier": "^2.5.1",
     "start-server-and-test": "^1.14.0",
     "ts-loader": "^9.2.6",
-    "typescript": "^5.2.2",
+    "typescript": "5.7.3",
     "wsopcua-test-server": "^1.6.2"
   },
   "scripts": {

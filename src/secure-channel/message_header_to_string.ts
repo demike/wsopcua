@@ -34,7 +34,7 @@ export function messageHeaderToString(messageChunk: DataView | ArrayBuffer): str
   securityHeader.decode(stream);
   sequenceHeader.decode(stream);
 
-  let slice: ArrayBuffer;
+  let slice: ArrayBufferLike;
   if (ArrayBuffer.isView(messageChunk)) {
     slice = messageChunk.buffer.slice(0, stream.length);
   } else {

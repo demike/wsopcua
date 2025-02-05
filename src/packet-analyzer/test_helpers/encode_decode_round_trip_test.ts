@@ -10,7 +10,7 @@ import { NodeId } from '../../nodeid/nodeid';
 
 /* eslint-disable no-console */
 
-function dump_block_in_debug_mode(buffer: ArrayBuffer, id: any, options: any) {
+function dump_block_in_debug_mode(buffer: ArrayBufferLike, id: any, options: any) {
   if (doDebug) {
     console.log(hexDump(buffer));
     analyzePacket(buffer, id, 0, 0, options);
@@ -87,8 +87,8 @@ function redirectToNull(functor: () => void) {
  */
 export function encode_decode_round_trip_test(
   obj: IEncodable,
-  options?: ((stream: ArrayBuffer, encoding: NodeId, options: any) => void) | any,
-  callback_buffer?: (stream: ArrayBuffer, encoding: NodeId, options: any) => void
+  options?: ((stream: ArrayBufferLike, encoding: NodeId, options: any) => void) | any,
+  callback_buffer?: (stream: ArrayBufferLike, encoding: NodeId, options: any) => void
 ) {
   if (!callback_buffer && typeof options === 'function') {
     callback_buffer = options;

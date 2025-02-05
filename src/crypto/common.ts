@@ -1,4 +1,4 @@
-export type Nonce = Uint8Array;
+export type Nonce = Uint8Array<ArrayBufferLike>;
 
 export type PEM = string;
 export type DER = Uint8Array;

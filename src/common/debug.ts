@@ -26,15 +26,20 @@ const _fillUp = function (value: string, count: number, fillWith: string) {
 };
 
 export function hexDump(
-  view: DataView | ArrayBuffer | null | undefined,
+  view: DataView | ArrayBufferLike | ArrayBufferView | null | undefined,
   offset?: number,
   length?: number
 ) {
   if (!view) {
     return '';
   }
-  // var view = new DataView(arrayBuffer);
-  view = view instanceof DataView ? view : new DataView(view);
+
+  let v: DataView;
+  if (ArrayBuffer.isView(view)) {
+    v = new DataView(view.buffer, view.byteOffset, view.byteLength);
+  } else {
+    v = view instanceof DataView ? view : new DataView(view);
+  }
   offset = offset || 0;
   length = length || view.byteLength;
 
@@ -46,7 +51,7 @@ export function hexDump(
     let string = '';
     for (let j = 0; j < 16; ++j) {
       if (j < n) {
-        const value = view.getUint8(offset);
+        const value = v.getUint8(offset);
         string += value >= 32 ? String.fromCharCode(value) : '.';
         row += _fillUp(value.toString(16).toUpperCase(), 2, '0') + ' ';
         offset++;

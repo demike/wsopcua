@@ -40,7 +40,7 @@ function test_encode_decode(
   encode_func: Function,
   decode_func: Function,
   expectedLength: number,
-  verify_buffer_func?: (buf: ArrayBuffer) => void
+  verify_buffer_func?: (buf: ArrayBufferLike) => void
 ) {
   const binaryStream = new DataStream(new ArrayBuffer(expectedLength));
   expect(binaryStream.length).toBe(0);

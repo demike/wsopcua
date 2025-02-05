@@ -124,7 +124,7 @@ export function concatDataViews(views: DataView[]) {
   return new DataView(buf.buffer);
 }
 
-export function concatArrayBuffers(arrays: ArrayBuffer[]): ArrayBuffer {
+export function concatArrayBuffers<T extends ArrayBufferLike>(arrays: T[]): T {
   if (arrays.length === 1) {
     return arrays[0];
   }
@@ -140,7 +140,7 @@ export function concatArrayBuffers(arrays: ArrayBuffer[]): ArrayBuffer {
     buf.set(new Uint8Array(ar), offset);
     offset += ar.byteLength;
   }
-  return buf.buffer;
+  return buf.buffer as T;
 }
 
 export function jsonDecodeArray<T>(

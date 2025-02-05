@@ -26,10 +26,10 @@ function HMAC_HASH(hmacKey: CryptoKey, message: BufferSource) {
   return crypto.sign('HMAC', hmacKey, message as any);
 }
 
-function plus(buf1: ArrayBuffer, buf2: ArrayBuffer): ArrayBuffer {
+function plus(buf1: Uint8Array, buf2: Uint8Array) {
   const tmp = new Uint8Array(buf1.byteLength + buf2.byteLength);
-  tmp.set(new Uint8Array(buf1), 0);
-  tmp.set(new Uint8Array(buf2), buf1.byteLength);
+  tmp.set(buf1, 0);
+  tmp.set(buf2, buf1.byteLength);
   return tmp;
 }
 
@@ -89,15 +89,15 @@ export async function makePseudoRandomBuffer(
   assert(seed instanceof Uint8Array);
   assert(sha1or256 === 'SHA-1' || sha1or256 === 'SHA-256');
 
-  const a = [];
+  const a: Nonce[] = [];
   a[0] = seed;
   let index = 1;
-  let p_hash = new ArrayBuffer(0);
+  let p_hash = new Uint8Array(0);
   const hmacKey = await HMAC_KEY(sha1or256, secret);
   while (p_hash.byteLength <= minLength) {
     /* eslint  new-cap:0 */
-    a[index] = await HMAC_HASH(hmacKey, a[index - 1]);
-    const hash2 = await HMAC_HASH(hmacKey, plus(a[index], seed));
+    a[index] = new Uint8Array(await HMAC_HASH(hmacKey, a[index - 1]));
+    const hash2 = new Uint8Array(await HMAC_HASH(hmacKey, plus(a[index], seed)));
     p_hash = plus(p_hash, hash2);
     index += 1;
   }
@@ -126,7 +126,7 @@ export interface DerivedKeys extends ComputeDerivedKeysOptions {
 
   signingKey: BufferSource;
   encryptingKey: BufferSource;
-  initializationVector: ArrayBuffer;
+  initializationVector: BufferSource;
 }
 
 export async function computeDerivedKeys(
@@ -168,8 +168,10 @@ export async function computeDerivedKeys(
  * @param byteToRemove
  * @return buffer
  */
-export function reduceLength(buffer: ArrayBuffer, byteToRemove: number): ArrayBuffer {
-  return buffer.slice(0, buffer.byteLength - byteToRemove);
+// export function reduceLength(buffer: ArrayBuffer, byteToRemove: number): ArrayBuffer;
+// export function reduceLength(buffer: SharedArrayBuffer, byteToRemove: number): SharedArrayBuffer;
+export function reduceLength<T extends ArrayBufferLike>(buffer: T, byteToRemove: number): T {
+  return buffer.slice(0, buffer.byteLength - byteToRemove) as T;
 }
 
 /**
@@ -177,7 +179,7 @@ export function reduceLength(buffer: ArrayBuffer, byteToRemove: number): ArrayBu
  * @param buffer
  * @return buffer with padding removed
  */
-export function removePadding(buffer: ArrayBuffer): ArrayBuffer {
+export function removePadding<T extends ArrayBufferLike>(buffer: T): T {
   const buf8 = new Uint8Array(buffer);
   const nbPaddingBytes = buf8[buffer.byteLength - 1] + 1;
   return reduceLength(buffer, nbPaddingBytes);
@@ -396,7 +398,7 @@ export async function makeMessageChunkSignatureWithDerivedKeys(
  * @return
  */
 export async function verifyChunkSignatureWithDerivedKeys(
-  chunk: ArrayBuffer,
+  chunk: ArrayBuffer | Uint8Array,
   derivedKeys: DerivedKeys
 ): Promise<boolean> {
   const message = chunk.slice(0, chunk.byteLength - derivedKeys.signatureLength);

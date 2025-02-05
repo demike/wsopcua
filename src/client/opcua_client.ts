@@ -478,7 +478,7 @@ export class OPCUAClient extends OPCUAClientBase {
           // shall use any that it has.
           // This parameter only needs to be specified during the first call to ActivateSession during a single
           // application Session. If it is not specified the Server shall keep using the current localeIds for the Session.
-          localeIds: options!.localeIds ?? [],
+          localeIds: options.localeIds ?? [],
 
           // The credentials of the user associated with the Client application. The Server uses these credentials to
           // determine whether the Client should be allowed to activate a Session and what resources the Client has access

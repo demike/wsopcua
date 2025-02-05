@@ -39,7 +39,7 @@ export class MessageBuilder extends MessageBuilderBase {
   protected _cryptoFactory: ICryptoFactory | null = null;
   protected _securityHeader?: AsymmetricAlgorithmSecurityHeader | SymmetricAlgorithmSecurityHeader;
   protected _previous_sequenceNumber: number;
-  protected _objectFactory: any;
+  protected _objectFactory: typeof factory;
   public securityMode: any;
   protected _securityPolicy: SecurityPolicy;
   /**

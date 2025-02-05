@@ -22,7 +22,7 @@
   "problemMatcher": "$tsc",
 
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES2022",
     "module": "commonjs",
     "outDir": "dist-es2015",
     "declaration": true,

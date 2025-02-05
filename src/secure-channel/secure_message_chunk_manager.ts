@@ -196,7 +196,7 @@ export class SecureMessageChunkManager extends EventEmitter<SecureMessageChunkMa
    * @param buffer {Buffer}
    * @param length {Integer} - optional if not provided  buffer.length is used instead.
    */
-  public write(buffer: ArrayBuffer, length: number): Promise<void> {
+  public write(buffer: ArrayBufferLike, length: number): Promise<void> {
     length = length || buffer.byteLength;
     return this._chunkManager.write(buffer, length);
   }

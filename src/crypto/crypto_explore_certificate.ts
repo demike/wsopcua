@@ -493,7 +493,7 @@ function _readExtension(buffer: Uint8Array, block: BlockInfo) {
       // "basicConstraints ( not implemented yet) " + buf.toString("hex");
       break;
     case 'certExtension': // Netscape
-      value = 'basicConstraints ( not implemented yet) ' + buf2hex(buf);
+      value = 'basicConstraints ( not implemented yet) ' + buf2hex(buf.buffer);
       break;
     case 'extKeyUsage':
       value = readExtKeyUsage(identifier.oid, buf);
@@ -502,7 +502,7 @@ function _readExtension(buffer: Uint8Array, block: BlockInfo) {
       value = readKeyUsage(identifier.oid, buf);
       break;
     default:
-      value = 'Unknown ' + identifier.name + buf2hex(buf);
+      value = 'Unknown ' + identifier.name + buf2hex(buf.buffer);
   }
   return {
     identifier,

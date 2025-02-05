@@ -2,7 +2,7 @@
 
 import { buf2hex } from '../crypto';
 
-export function buffer_ellipsis(buffer: ArrayBuffer, start?: number, end?: number) {
+export function buffer_ellipsis(buffer: ArrayBufferLike, start?: number, end?: number) {
   start = start || 0;
   end = end || buffer.byteLength;
   if (end - start < 40) {

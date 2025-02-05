@@ -2,17 +2,17 @@ import { Signature } from './common';
 import { assert } from '../assert';
 import { concatArrayBuffers } from '../basic-types/array';
 
-export function buf2base64(buffer: ArrayBuffer): string {
+export function buf2base64(buffer: ArrayBuffer | Uint8Array): string {
   return btoa(String.fromCharCode(...new Uint8Array(buffer)));
 }
 
-export function buf2base64url(buffer: ArrayBuffer) {
+export function buf2base64url(buffer: ArrayBuffer | Uint8Array) {
   let str = btoa(String.fromCharCode(...new Uint8Array(buffer)));
   str = unescape(encodeURIComponent(str));
   return str;
 }
 
-export function base64ToBuf(base64: string) {
+export function base64ToBuf(base64: string): Uint8Array {
   return Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
   /*
     const binary_string =  window.atob(base64);
@@ -25,7 +25,7 @@ export function base64ToBuf(base64: string) {
     */
 }
 
-export function buf2hex(buffer: ArrayBuffer) {
+export function buf2hex(buffer: ArrayBufferLike) {
   return Array.prototype.map
     .call(new Uint8Array(buffer), (x: number) => ('00' + x.toString(16)).slice(-2))
     .join('');

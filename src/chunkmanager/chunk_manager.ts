@@ -255,7 +255,7 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
    * @param buffer {Buffer}
    * @param length {Number}
    */
-  async write(buffer: ArrayBuffer, length?: number) {
+  async write(buffer: ArrayBufferLike, length?: number) {
     // --- lock the write until, and keep the requests in order ----
     const locked = this.writeLock.acquire();
     if (locked) {
