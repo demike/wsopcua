@@ -39,7 +39,7 @@ export function coerceByteString(
     return new Uint8Array(value.buffer, value.byteOffset, value.byteLength);
   }
   if (typeof value === 'string') {
-    const str = window.btoa(value);
+    const str = window.atob(value);
     const buf = new Uint8Array(str.length);
     for (let i = 0, j = str.length; i < j; ++i) {
       buf[i] = str.charCodeAt(i);
