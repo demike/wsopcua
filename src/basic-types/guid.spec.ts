@@ -1,4 +1,4 @@
-import { isValidGuid } from './guid';
+import { isValidGuid, normalizeGuid } from './guid';
 
 import { emptyGuid } from './guid';
 
@@ -27,5 +27,12 @@ describe('GUID', function () {
 
   it('should not detect ns=0;g=1E14849E-3744-470d-8C7B-5F9110C2FA32 as a GUID', function () {
     expect(isValidGuid('ns=0;g=1E14849E-3744-470d-8C7B-5F9110C2FA32')).toBeFalsy();
+  });
+
+  it('should normalize a GUID', () => {
+    const guid = '72962b91-fa75-4ae6-8d28-b404dc7daf63';
+    expect(normalizeGuid(guid)).toEqual(guid.toUpperCase());
+    expect(normalizeGuid(undefined)).toEqual(emptyGuid);
+    expect(normalizeGuid(null)).toEqual(emptyGuid);
   });
 });

@@ -113,14 +113,20 @@ describe('testing coerceNodeId', function () {
   it('should coerce a GUID node id (without namespace)', function () {
     const nodeId = coerceNodeId('g=1E14849E-3744-470d-8C7B-5F9110C2FA32');
     expect(nodeId.identifierType).toBe(NodeIdType.Guid);
-    expect(nodeId.toString()).toBe('ns=0;g=1E14849E-3744-470d-8C7B-5F9110C2FA32');
-    expect(nodeId.value).toBe('1E14849E-3744-470d-8C7B-5F9110C2FA32');
+    expect(nodeId.toString()).toBe('ns=0;g=1E14849E-3744-470D-8C7B-5F9110C2FA32');
+    expect(nodeId.value).toBe('1E14849E-3744-470D-8C7B-5F9110C2FA32');
   });
   it('should coerce a GUID node id (with namespace)', function () {
     const nodeId = coerceNodeId('ns=0;g=1E14849E-3744-470d-8C7B-5F9110C2FA32');
     expect(nodeId.identifierType).toBe(NodeIdType.Guid);
-    expect(nodeId.toString()).toBe('ns=0;g=1E14849E-3744-470d-8C7B-5F9110C2FA32');
-    expect(nodeId.value).toBe('1E14849E-3744-470d-8C7B-5F9110C2FA32');
+    expect(nodeId.toString()).toBe('ns=0;g=1E14849E-3744-470D-8C7B-5F9110C2FA32');
+    expect(nodeId.value).toBe('1E14849E-3744-470D-8C7B-5F9110C2FA32');
+  });
+  it('should coerce a GUID node id (with lower case)', function () {
+    const nodeId = coerceNodeId('ns=0;g=1e14849e-3744-470d-8c7b-5f9110c2fa32');
+    expect(nodeId.identifierType).toBe(NodeIdType.Guid);
+    expect(nodeId.toString()).toBe('ns=0;g=1E14849E-3744-470D-8C7B-5F9110C2FA32');
+    expect(nodeId.value).toBe('1E14849E-3744-470D-8C7B-5F9110C2FA32');
   });
 
   it('should not coerce a malformed string to a nodeid', function () {
@@ -187,6 +193,12 @@ describe('testing coerceNodeId', function () {
   it('should coerce a string nodeid containing special characters', function () {
     // see issue#
     const nodeId = coerceNodeId('ns=3;s={360273AA-F2B9-4A7F-A5E3-37B7074E2529}.MechanicalDomain');
+  });
+
+  it('should return the same NodeId if a NodeId is provided', () => {
+    const originalNodeId = coerceNodeId('ns=1;s=SomeString');
+    const nodeId = coerceNodeId(originalNodeId);
+    expect(nodeId).toBe(originalNodeId);
   });
 });
 
