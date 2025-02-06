@@ -106,7 +106,7 @@ export class NodeId {
         str = namespaceStr + 's=' + this.value;
         break;
       case NodeIdType.Guid:
-        str = namespaceStr + +'g=' + normalizeGuid(this.value as string);
+        str = namespaceStr + 'g=' + normalizeGuid(this.value as string);
         break;
       default:
         assert(
@@ -214,11 +214,10 @@ export function makeNodeId(value: Uint8Array | string | number, namespace?: numb
 
   let identifierType = NodeIdType.Numeric;
   if (typeof value === 'string') {
-    /*
-        if (value.match(/^(s|g|b|i)=/)) {
-            throw new Error("please use coerce NodeId instead");
-        }
-        */
+    if (value.match(/^(s|g|b|i|ns)=/)) {
+      throw new Error('please use coerce NodeId instead');
+    }
+
     //            1         2         3
     //  012345678901234567890123456789012345
     // "72962B91-FA75-4AE6-8D28-B404DC7DAF63"
