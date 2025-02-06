@@ -9,7 +9,7 @@ describe('ByteString', () => {
     expect(coerceByteString([1, 2, 3])).toEqual(data);
   });
   it('coerceByteString with base64 string', () => {
-    expect(coerceByteString(buf2base64(data))).toEqual(data);
+    expect(coerceByteString(buf2base64(data.buffer))).toEqual(data);
   });
   it('coerceByteString with a ArrayBuffer', () => {
     expect(coerceByteString(data.buffer)).toEqual(data);
@@ -125,30 +125,30 @@ describe('check coerce various types', () => {
 
   types.forEach(function (type) {
     it('should have a coerce method for ' + type, () => {
-      const coerceFunc: any = ec['coerce' + type];
-      const randomFunc: any = ec['random' + type];
+      const coerceFunc = (ec as any)['coerce' + type];
+      const randomFunc = (ec as any)['random' + type];
 
-      expect(ec['coerce' + type]).toBeDefined();
-      expect(ec['random' + type]).toBeDefined();
-      expect(ec['isValid' + type]).toBeDefined();
+      expect((ec as any)['coerce' + type]).toBeDefined();
+      expect((ec as any)['random' + type]).toBeDefined();
+      expect((ec as any)['isValid' + type]).toBeDefined();
 
       const random_value = randomFunc();
 
       const value1 = coerceFunc(random_value);
-      value1.should.eql(random_value);
+      expect(value1).toEqual(random_value);
 
       const value2 = coerceFunc(random_value.toString());
-      value2.should.eql(random_value);
+      expect(value2).toEqual(random_value);
     });
   });
 
-  function w(str, l) {
+  function w(str: string, l: number) {
     return (str + '                        ').substring(0, l);
   }
 
   types.forEach((type) => {
     it('coerce' + w(type, 8) + ' should preserves null or undefined values ', () => {
-      const coerceFunc = ec['coerce' + type];
+      const coerceFunc = (ec as any)['coerce' + type];
 
       expect(coerceFunc).toBeDefined();
 

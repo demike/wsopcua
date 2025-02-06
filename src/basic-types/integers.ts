@@ -288,13 +288,13 @@ export function coerceInt32(value: null | Int64 | UInt64 | number | string): num
   return parseInt(value, 10);
 }
 
-const signMask = 1n << 31n;
-const shiftHigh = 1n << 32n;
+const signMask = BigInt(1) << BigInt(31);
+const shiftHigh = BigInt(1) << BigInt(32);
 export function Int64ToBigInt(value: Int64): bigint {
   const h = BigInt(value[0]);
   const l = BigInt(value[1]);
   if ((h & signMask) === signMask) {
-    const v = (h & ~signMask) * shiftHigh + l - 0x8000000000000000n;
+    const v = (h & ~signMask) * shiftHigh + l - BigInt('0x8000000000000000');
     return v;
   } else {
     const v = h * shiftHigh + l;
