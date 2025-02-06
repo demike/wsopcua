@@ -26,10 +26,10 @@ export class LocalizedText {
 
 
  encode( out: DataStream) {
-  let encodingByte = 0;
-  if (this.locale != null) { encodingByte |= 1 << 0;}
-  if (this.text != null) { encodingByte |= 1 << 1;}
-  out.setUint8(encodingByte);
+  let encodingMask = 0;
+  if (this.locale != null) { encodingMask |= 1 << 0;}
+  if (this.text != null) { encodingMask |= 1 << 1;}
+  out.setUint8(encodingMask);
   if(this.locale != null) { ec.encodeString(this.locale, out); }
   if(this.text != null) { ec.encodeString(this.text, out); }
 
@@ -37,10 +37,10 @@ export class LocalizedText {
 
 
  decode( inp: DataStream) {
-  let encodingByte = inp.getUint8();
-  let localeSpecified = (encodingByte & 1) != 0;
-  let textSpecified = (encodingByte & 2) != 0;
-  let reserved1 = (encodingByte & 4) != 0;
+  let encodingMask = inp.getUint8();
+  let localeSpecified = (encodingMask & 1) != 0;
+  let textSpecified = (encodingMask & 2) != 0;
+  let reserved1 = (encodingMask & 4) != 0;
   if(localeSpecified) {
    this.locale = ec.decodeString(inp);
   }

@@ -12,6 +12,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
   //    public static STR_SKIP_EXT_DECODING = "skipExtDecoding";
 
   protected encodingMaskMap?: { [key: string]: ClassMember };
+  protected encodingMaskBitCnt = 0; // 8 or 32 bit
   /**
    *
    * @returns element found
@@ -69,6 +70,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
         this.encodingMaskMap = {};
       }
       this.encodingMaskMap[mem.Name] = mem;
+      this.encodingMaskBitCnt += bitLength;
     } else {
       if (this.encodingMaskMap && this.encodingMaskMap[mem.Name + 'Specified']) {
         // this is an optional field, because we found a specified flag
@@ -273,7 +275,12 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
     if (!this.encodingMaskMap) {
       return '';
     }
-    let str = '  let encodingMask = inp.getUint8();\n';
+    let str: string;
+    if (this.encodingMaskBitCnt <= 8) {
+      str = '  let encodingMask = inp.getUint8();\n';
+    } else {
+      str = '  let encodingMask = inp.getUint32();\n';
+    }
     for (const name in this.encodingMaskMap) {
       if (name.indexOf('Reserved') !== 0) {
         str +=
@@ -308,7 +315,13 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
           ';}\n';
       }
     }
-    str += '  out.setUint8(encodingMask);\n';
+
+    if (this.encodingMaskBitCnt <= 8) {
+      str += '  out.setUint8(encodingMask);\n';
+    } else {
+      str += '  out.setUint32(encodingMask);\n';
+    }
+
     return str;
   }
 
