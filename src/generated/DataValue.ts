@@ -61,7 +61,6 @@ export class DataValue {
   let serverTimestampSpecified = (encodingMask & 8) != 0;
   let sourcePicosecondsSpecified = (encodingMask & 16) != 0;
   let serverPicosecondsSpecified = (encodingMask & 32) != 0;
-  let reserved1 = (encodingMask & 64) != 0;
   if(valueSpecified) {
    this.value= new Variant();
    this.value.decode(inp);

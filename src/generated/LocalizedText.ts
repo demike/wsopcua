@@ -40,7 +40,6 @@ export class LocalizedText {
   let encodingMask = inp.getUint8();
   let localeSpecified = (encodingMask & 1) != 0;
   let textSpecified = (encodingMask & 2) != 0;
-  let reserved1 = (encodingMask & 4) != 0;
   if(localeSpecified) {
    this.locale = ec.decodeString(inp);
   }

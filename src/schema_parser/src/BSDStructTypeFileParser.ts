@@ -69,8 +69,11 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
       if (!this.encodingMaskMap) {
         this.encodingMaskMap = {};
       }
-      this.encodingMaskMap[mem.Name] = mem;
+
       this.encodingMaskBitCnt += bitLength;
+      if (mem.Name !== 'reserved1') {
+        this.encodingMaskMap[mem.Name] = mem;
+      }
     } else {
       if (this.encodingMaskMap && this.encodingMaskMap[mem.Name + 'Specified']) {
         // this is an optional field, because we found a specified flag

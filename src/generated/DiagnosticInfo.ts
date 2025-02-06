@@ -65,7 +65,6 @@ export class DiagnosticInfo {
   let additionalInfoSpecified = (encodingMask & 16) != 0;
   let innerStatusCodeSpecified = (encodingMask & 32) != 0;
   let innerDiagnosticInfoSpecified = (encodingMask & 64) != 0;
-  let reserved1 = (encodingMask & 128) != 0;
   if(symbolicIdSpecified) {
    this.symbolicId = ec.decodeInt32(inp);
   }
