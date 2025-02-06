@@ -35,14 +35,14 @@ export class DataValue {
 
 
  encode( out: DataStream) {
-  let encodingByte = 0;
-  if (this.value != null) { encodingByte |= 1 << 0;}
-  if (this.statusCode != null) { encodingByte |= 1 << 1;}
-  if (this.sourceTimestamp != null) { encodingByte |= 1 << 2;}
-  if (this.serverTimestamp != null) { encodingByte |= 1 << 3;}
-  if (this.sourcePicoseconds != null) { encodingByte |= 1 << 4;}
-  if (this.serverPicoseconds != null) { encodingByte |= 1 << 5;}
-  out.setUint8(encodingByte);
+  let encodingMask = 0;
+  if (this.value != null) { encodingMask |= 1 << 0;}
+  if (this.statusCode != null) { encodingMask |= 1 << 1;}
+  if (this.sourceTimestamp != null) { encodingMask |= 1 << 2;}
+  if (this.serverTimestamp != null) { encodingMask |= 1 << 3;}
+  if (this.sourcePicoseconds != null) { encodingMask |= 1 << 4;}
+  if (this.serverPicoseconds != null) { encodingMask |= 1 << 5;}
+  out.setUint8(encodingMask);
   if(this.value != null) { this.value.encode(out); }
   if(this.statusCode != null) { ec.encodeStatusCode(this.statusCode, out); }
   if(this.sourceTimestamp != null) { ec.encodeDateTime(this.sourceTimestamp, out); }
@@ -54,14 +54,13 @@ export class DataValue {
 
 
  decode( inp: DataStream) {
-  let encodingByte = inp.getUint8();
-  let valueSpecified = (encodingByte & 1) != 0;
-  let statusCodeSpecified = (encodingByte & 2) != 0;
-  let sourceTimestampSpecified = (encodingByte & 4) != 0;
-  let serverTimestampSpecified = (encodingByte & 8) != 0;
-  let sourcePicosecondsSpecified = (encodingByte & 16) != 0;
-  let serverPicosecondsSpecified = (encodingByte & 32) != 0;
-  let reserved1 = (encodingByte & 64) != 0;
+  let encodingMask = inp.getUint8();
+  let valueSpecified = (encodingMask & 1) != 0;
+  let statusCodeSpecified = (encodingMask & 2) != 0;
+  let sourceTimestampSpecified = (encodingMask & 4) != 0;
+  let serverTimestampSpecified = (encodingMask & 8) != 0;
+  let sourcePicosecondsSpecified = (encodingMask & 16) != 0;
+  let serverPicosecondsSpecified = (encodingMask & 32) != 0;
   if(valueSpecified) {
    this.value= new Variant();
    this.value.decode(inp);

@@ -36,15 +36,15 @@ export class DiagnosticInfo {
 
 
  encode( out: DataStream) {
-  let encodingByte = 0;
-  if (this.symbolicId != null) { encodingByte |= 1 << 0;}
-  if (this.namespaceURI != null) { encodingByte |= 1 << 1;}
-  if (this.localizedText != null) { encodingByte |= 1 << 2;}
-  if (this.locale != null) { encodingByte |= 1 << 3;}
-  if (this.additionalInfo != null) { encodingByte |= 1 << 4;}
-  if (this.innerStatusCode != null) { encodingByte |= 1 << 5;}
-  if (this.innerDiagnosticInfo != null) { encodingByte |= 1 << 6;}
-  out.setUint8(encodingByte);
+  let encodingMask = 0;
+  if (this.symbolicId != null) { encodingMask |= 1 << 0;}
+  if (this.namespaceURI != null) { encodingMask |= 1 << 1;}
+  if (this.localizedText != null) { encodingMask |= 1 << 2;}
+  if (this.locale != null) { encodingMask |= 1 << 3;}
+  if (this.additionalInfo != null) { encodingMask |= 1 << 4;}
+  if (this.innerStatusCode != null) { encodingMask |= 1 << 5;}
+  if (this.innerDiagnosticInfo != null) { encodingMask |= 1 << 6;}
+  out.setUint8(encodingMask);
   if(this.symbolicId != null) { ec.encodeInt32(this.symbolicId, out); }
   if(this.namespaceURI != null) { ec.encodeInt32(this.namespaceURI, out); }
   if(this.locale != null) { ec.encodeInt32(this.locale, out); }
@@ -57,15 +57,14 @@ export class DiagnosticInfo {
 
 
  decode( inp: DataStream) {
-  let encodingByte = inp.getUint8();
-  let symbolicIdSpecified = (encodingByte & 1) != 0;
-  let namespaceURISpecified = (encodingByte & 2) != 0;
-  let localizedTextSpecified = (encodingByte & 4) != 0;
-  let localeSpecified = (encodingByte & 8) != 0;
-  let additionalInfoSpecified = (encodingByte & 16) != 0;
-  let innerStatusCodeSpecified = (encodingByte & 32) != 0;
-  let innerDiagnosticInfoSpecified = (encodingByte & 64) != 0;
-  let reserved1 = (encodingByte & 128) != 0;
+  let encodingMask = inp.getUint8();
+  let symbolicIdSpecified = (encodingMask & 1) != 0;
+  let namespaceURISpecified = (encodingMask & 2) != 0;
+  let localizedTextSpecified = (encodingMask & 4) != 0;
+  let localeSpecified = (encodingMask & 8) != 0;
+  let additionalInfoSpecified = (encodingMask & 16) != 0;
+  let innerStatusCodeSpecified = (encodingMask & 32) != 0;
+  let innerDiagnosticInfoSpecified = (encodingMask & 64) != 0;
   if(symbolicIdSpecified) {
    this.symbolicId = ec.decodeInt32(inp);
   }
