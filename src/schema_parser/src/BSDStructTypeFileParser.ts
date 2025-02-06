@@ -11,7 +11,7 @@ import {
 export class BSDStructTypeFileParser extends BSDClassFileParser {
   //    public static STR_SKIP_EXT_DECODING = "skipExtDecoding";
 
-  protected encodingByteMap?: { [key: string]: ClassMember };
+  protected encodingMaskMap?: { [key: string]: ClassMember };
   /**
    *
    * @returns element found
@@ -65,12 +65,12 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
     }
 
     if (mem.Type.Name === 'Bit') {
-      if (!this.encodingByteMap) {
-        this.encodingByteMap = {};
+      if (!this.encodingMaskMap) {
+        this.encodingMaskMap = {};
       }
-      this.encodingByteMap[mem.Name] = mem;
+      this.encodingMaskMap[mem.Name] = mem;
     } else {
-      if (this.encodingByteMap && this.encodingByteMap[mem.Name + 'Specified']) {
+      if (this.encodingMaskMap && this.encodingMaskMap[mem.Name + 'Specified']) {
         // this is an optional field, because we found a specified flag
         mem.Required = false;
       }
@@ -101,7 +101,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
     for (const mem of this.cls.Members) {
       if (mem.Type.Name !== 'Bit') {
         let alternativeCode: string | undefined;
-        if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
+        if (this.encodingMaskMap && this.encodingMaskMap.hasOwnProperty(mem.Name + 'Specified')) {
           alternativeCode = 'undefined'; // availability is specified in encoding byte
         } else if (mem.IsArray) {
           alternativeCode = '[]';
@@ -148,13 +148,13 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
     if (this.cls.BaseClass && this.cls.BaseClass.hasAnyMembers()) {
       body += '  super.encode(out);\n';
     } else {
-      body += this.createEncodeEncodingByteCode();
+      body += this.createEncodeEncodingMaskCode();
     }
 
     for (const mem of this.cls.Members) {
       body += '  ';
       const checkUndefined =
-        this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified');
+        this.encodingMaskMap && this.encodingMaskMap.hasOwnProperty(mem.Name + 'Specified');
       if (checkUndefined) {
         body += 'if(this.' + mem.Name + ' != null) { ';
       }
@@ -206,11 +206,11 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
       body += '  super.decode(inp);\n';
     }
 
-    body += this.createDecodeEncodingByteCode();
+    body += this.createDecodeEncodingMaskCode();
 
     for (const mem of this.cls.Members) {
       let addIf = false;
-      if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
+      if (this.encodingMaskMap && this.encodingMaskMap.hasOwnProperty(mem.Name + 'Specified')) {
         addIf = true;
         body += '  if(' + mem.Name + 'Specified) {\n ';
         if (mem.Type instanceof StructTypeFile) {
@@ -269,18 +269,18 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
     this.cls.addUtilityFunction(fnDec);
   }
 
-  protected createDecodeEncodingByteCode() {
-    if (!this.encodingByteMap) {
+  protected createDecodeEncodingMaskCode() {
+    if (!this.encodingMaskMap) {
       return '';
     }
-    let str = '  let encodingByte = inp.getUint8();\n';
-    for (const name in this.encodingByteMap) {
+    let str = '  let encodingMask = inp.getUint8();\n';
+    for (const name in this.encodingMaskMap) {
       if (name.indexOf('Reserved') !== 0) {
         str +=
           '  let ' +
           name +
-          ' = (encodingByte & ' +
-          (1 << this.encodingByteMap[name].BitPos) +
+          ' = (encodingMask & ' +
+          (1 << this.encodingMaskMap[name].BitPos) +
           ') != 0;\n';
       }
     }
@@ -288,12 +288,12 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
     return str;
   }
 
-  protected createEncodeEncodingByteCode() {
-    if (!this.encodingByteMap) {
+  protected createEncodeEncodingMaskCode() {
+    if (!this.encodingMaskMap) {
       return '';
     }
-    let str = '  let encodingByte = 0;\n';
-    for (const name in this.encodingByteMap) {
+    let str = '  let encodingMask = 0;\n';
+    for (const name in this.encodingMaskMap) {
       if (name.indexOf('Reserved') === 0) {
         continue;
       }
@@ -303,12 +303,12 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
         str +=
           '  if (this.' +
           memName +
-          ' != null) { encodingByte |= 1 << ' +
-          this.encodingByteMap[name].BitPos +
+          ' != null) { encodingMask |= 1 << ' +
+          this.encodingMaskMap[name].BitPos +
           ';}\n';
       }
     }
-    str += '  out.setUint8(encodingByte);\n';
+    str += '  out.setUint8(encodingMask);\n';
     return str;
   }
 
@@ -408,7 +408,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
       body += '  ';
       const prefix = mem.Type.ImportAs ? mem.Type.ImportAs + '.' : '';
       const checkUndefined =
-        this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified');
+        this.encodingMaskMap && this.encodingMaskMap.hasOwnProperty(mem.Name + 'Specified');
       if (checkUndefined) {
         body += 'if(this.' + mem.Name + ' != null) { ';
       }
@@ -460,7 +460,7 @@ export class BSDStructTypeFileParser extends BSDClassFileParser {
     for (const mem of this.cls.Members) {
       let addIf = false;
       const prefix = mem.Type.ImportAs ? mem.Type.ImportAs + '.' : '';
-      if (this.encodingByteMap && this.encodingByteMap.hasOwnProperty(mem.Name + 'Specified')) {
+      if (this.encodingMaskMap && this.encodingMaskMap.hasOwnProperty(mem.Name + 'Specified')) {
         addIf = true;
         body += '  if(inp.' + mem.OrigName + ') {\n ';
         if (mem.Type instanceof StructTypeFile) {

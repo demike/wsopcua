@@ -5,5 +5,5 @@ import { ClassMember, ClassMethod, ClassFile } from './SchemaParser.module';
 import { SimpleType } from './SimpleType';
 
 export class StructTypeFile extends ClassFile {
-  protected encodingByteMap?: { [key: string]: ClassMember };
+  protected encodingMaskMap?: { [key: string]: ClassMember };
 }

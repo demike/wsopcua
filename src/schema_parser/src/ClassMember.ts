@@ -177,13 +177,13 @@ export class ClassMember {
     return str;
   }
 
-  writeToEncodingByteSrc(value: number | boolean, encodingByteName: string): string {
+  writeToEncodingMaskSrc(value: number | boolean, encodingMaskName: string): string {
     if (length < 2) {
       const mask = 1 << this._bitPos;
       if (value) {
-        return encodingByteName + '|= 1 << ' + this._bitPos + ';';
+        return encodingMaskName + '|= 1 << ' + this._bitPos + ';';
       } else {
-        return encodingByteName + '&= ~(1 << ' + this._bitPos + ');';
+        return encodingMaskName + '&= ~(1 << ' + this._bitPos + ');';
       }
     } else {
     }
