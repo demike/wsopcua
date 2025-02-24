@@ -118,9 +118,9 @@ export function coerceExpandedNodeId(value: any): ExpandedNodeId {
   }
 
   const n = coerceNodeId(value);
-  if (namespaceUri) {
-    n.namespace = 0;
-  }
+  // if (namespaceUri) {
+  //   n.namespace = 0;
+  // }
   return new ExpandedNodeId(n.identifierType, n.value, n.namespace, namespaceUri, serverIndex);
 }
 

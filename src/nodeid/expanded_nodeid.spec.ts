@@ -76,6 +76,15 @@ describe('testing ExpandedNodeId', function () {
     const exNodeId = coerceExpandedNodeId('svr=2;nsu=testuri;i=10');
     expect(exNodeId.toString()).toBe('svr=2;nsu=testuri;ns=0;i=10');
   });
+  it('coerceExpandedNodeId should coerce a string with svr=2 and nsu="testuri" and ns=3', function () {
+    const exNodeId = coerceExpandedNodeId('svr=2;nsu=testuri;ns=3;i=10');
+    expect(exNodeId.namespace).toBe(3);
+    expect(exNodeId.namespaceUri).toBe('testuri');
+    expect(exNodeId.serverIndex).toBe(2);
+    expect(exNodeId.identifierType).toBe(NodeIdType.Numeric);
+    expect(exNodeId.value).toBe(10);
+    expect(exNodeId.toString()).toBe('svr=2;nsu=testuri;ns=3;i=10');
+  });
 
   [
     'ns=urn:engel:foo;s=myid',
