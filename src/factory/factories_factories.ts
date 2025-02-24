@@ -12,11 +12,11 @@ const constructorMap: { [key: string]: Function } = {};
 
 const _global_factories: { [key: string]: Function } = {};
 
-export function getFactory(type_name: string) {
+function getFactory(type_name: string) {
   return _global_factories[type_name];
 }
 
-export function registerFactory(type_name: string, constructor: Function) {
+function registerFactory(type_name: string, constructor: Function) {
   /* istanbul ignore next */
   if (getFactory(type_name)) {
     console.log(getFactory(type_name));
@@ -36,7 +36,7 @@ export function dump() {
   console.log(' done');
 }
 
-export function callConstructor(constructor: Function) {
+function callConstructor(constructor: Function) {
   assert('function' === typeof constructor);
 
   const FactoryFunction = constructor.bind.apply(constructor, arguments as any);

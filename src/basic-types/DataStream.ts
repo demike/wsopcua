@@ -57,8 +57,9 @@ export class DataStream {
   protected _view: DataView;
   protected _pos: number;
 
-  public static binaryStoreSize(obj: IEncodable): number {
+  public static binaryStoreSize(obj: IEncodable & { __namespaceArray?: string[] }): number {
     const stream = new BinaryStreamSizeCalculator();
+    (stream as { __namespaceArray?: string[] }).__namespaceArray = obj.__namespaceArray;
     obj.encode(stream);
     return stream.length;
   }
