@@ -90,7 +90,6 @@ export class NodeId {
    *
    */
   toString(namespaceArray?: string[]): string {
-    let str;
     const namespaceStr: string = namespaceArray
       ? this.namespace === 0
         ? ''
@@ -98,15 +97,17 @@ export class NodeId {
             namespaceArray[this.namespace] || `<unknown namespace with index ${this.namespace}>`
           };`
       : `ns=${this.namespace};`;
+
+    let valueStr;
     switch (this.identifierType) {
       case NodeIdType.Numeric:
-        str = namespaceStr + 'i=' + this.value;
+        valueStr = 'i=' + this.value;
         break;
       case NodeIdType.String:
-        str = namespaceStr + 's=' + this.value;
+        valueStr = 's=' + this.value;
         break;
       case NodeIdType.Guid:
-        str = namespaceStr + 'g=' + normalizeGuid(this.value as string);
+        valueStr = 'g=' + normalizeGuid(this.value as string);
         break;
       default:
         assert(
@@ -114,20 +115,18 @@ export class NodeId {
           'invalid identifierType in NodeId : ' + this.identifierType
         );
         if (this.value) {
-          str =
-            'ns=' +
-            this.namespace +
-            ';b=' +
+          valueStr =
+            'b=' +
             Array.prototype.map
               .call(new Uint8Array(this.value as Uint8Array), (x: any) => x.toString(16).slice(-2))
               .join('');
         } else {
-          str = 'ns=' + this.namespace + ';b=<null>';
+          valueStr = 'b=<null>';
         }
         break;
     }
 
-    return str;
+    return namespaceStr + valueStr;
   }
 
   /**
