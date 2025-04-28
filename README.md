@@ -12,6 +12,9 @@ wsopcua uses the OPC UA [websocket protocol mappings](https://reference.opcfound
 No Need for a proprietary itermediate protocol!
 
 <hr>
+ 
+ wsopcua is derived from the client code of [node-opcua](https://node-opcua.github.io/) which is a full featured OPC UA stack for Node.js.
+ It is modified to run in the browser over websockets.
 
 ## Documentation
 

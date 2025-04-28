@@ -33,3 +33,6 @@ You shall indemnify Provider, any of its companies as well as all of his success
 ## 6. Governing Law/Jurisdiction
 
 This License Agreement is governed by the substantive laws of Austria to exclusion of it conflict of law provisions. Any dispute arising out of or in connection with this Licensce Agreement shall be referred to the competent court in Linz, Austria.
+
+## 7. Includes other portions of software related under the MIT license:
+- node-opcua, Copyright (c) 2022-2024  Sterfive SAS - 833264583 RCS ORLEANS - France (https://www.sterfive.com). For licensing see [/license/license-node-opcua.md](license/license-node-opcua.md)
