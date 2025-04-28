@@ -35,6 +35,7 @@ fs.writeJSONSync(path.resolve(__dirname, `../dist/package.json`), pkgManifest, {
 copySync('../documentation', '../dist/documentation');
 copySync('../README.md', '../dist/README.md');
 copySync('../LICENSE.md', '../dist/LICENSE.md');
+copySync('../license', '../dist/license');
 
 /**
  * copy the schema generator
