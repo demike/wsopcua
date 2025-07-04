@@ -374,6 +374,42 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     return this.parent ? this.parent.getCertificateChain() : null;
   }
 
+  public getCertificate() {
+    return this.parent ? this.parent.getCertificate() : null;
+  }
+
+  public toString(): string {
+    let str = '';
+    str += '\n securityMode ............. : ' + MessageSecurityMode[this.securityMode];
+    str += '\n securityPolicy............ : ' + this.securityPolicy;
+    str +=
+      '\n securityToken ............ : ' +
+      (this._securityToken ? this._securityToken.toString() : 'null');
+    str += '\n timedOutRequestCount.....  : ' + this.timedOutRequestCount;
+    str += '\n transportTimeout ......... : ' + this.transportTimeout;
+    str += '\n is transaction in progress : ' + this.isTransactionInProgress();
+    str += '\n is connecting ............ : ' + this.isConnecting;
+    str += '\n is disconnecting ......... : ' + this._transport?.disconnecting;
+    str += '\n is opened ................ : ' + this.isOpened();
+    str += '\n is valid ................. : ' + this.isValid();
+    str += '\n channelId ................ : ' + this.channelId;
+    str += '\n transportParameters: ..... : ';
+    str +=
+      '\n   maxMessageSize (to send) : ' +
+      (this._transport?.parameters?.maxMessageSize || '<not set>');
+    str +=
+      '\n   maxChunkCount  (to send) : ' +
+      (this._transport?.parameters?.maxChunkCount || '<not set>');
+    str +=
+      '\n   receiveBufferSize(server): ' +
+      (this._transport?.parameters?.receiveBufferSize || '<not set>');
+    str +=
+      '\n   sendBufferSize (to send) : ' +
+      (this._transport?.parameters?.sendBufferSize || '<not set>');
+    str += '\n';
+    return str;
+  }
+
   protected process_request_callback(
     request_data: RequestData,
     err: Error | null,
@@ -528,6 +564,12 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
 
     const request_data = this._request_data.get(requestId);
     if (!request_data) {
+      if (this.__in_normal_close_operation) {
+        // may be some responses that are received from the server
+        // after the communication is closed. We can just ignore them
+        // ( this happens with Dotnet C# stack for instance)
+        return;
+      }
       console.log('xxxxx  <<<<<< _on_message_received ', requestId, response.constructor.name);
       throw new Error(' =>  invalid requestId =' + requestId);
     }
@@ -619,6 +661,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
 
     let timeout = this.tokenRenewalInterval || (lifeTime * 75) / 100;
     timeout = Math.min(timeout, (lifeTime * 75) / 100);
+    timeout = Math.max(timeout, 50);
     if (doDebug) {
       debugLog(
         ' time until next security token renewal = ' + timeout + '( lifefime = ' + lifeTime + ')'
@@ -1568,8 +1611,11 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
       this._cancel_security_token_watchdog();
 
       debugLog('Sending CloseSecureChannelRequest to server');
-      // xx console.log("xxxx Sending CloseSecureChannelRequest to server");
-      const request = new CloseSecureChannelRequest();
+      const request = new CloseSecureChannelRequest({
+        requestHeader: new RequestHeader({
+          timeoutHint: 1000,
+        }),
+      });
 
       this.__in_normal_close_operation = true;
 
@@ -1580,10 +1626,12 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
 
       assert((this._transport as any)._disconnecting !== undefined);
       (this._transport as any)._disconnecting = true; // avoid throwing a potential websocket 1006 error
-      this._performMessageTransaction('CLO', request, () => {
+      this._performMessageTransaction('CLO', request, (err) => {
+        if (err) {
+          console.warn('CLO transaction terminated with error: ', err.message);
+        }
         this.dispose();
         callback();
-        // xxx });
       });
     });
   }
