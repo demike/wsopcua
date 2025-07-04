@@ -15,6 +15,7 @@ import {
   ErrorCallback,
   ResponseCallback,
   OpcUaResponse,
+  OpcUaRequest,
 } from '../client/client_base';
 
 import * as log from 'loglevel';
@@ -58,7 +59,6 @@ const doTraceMessage = false;
 const doTraceStatistics = false;
 
 let g_channelId = 0;
-const defaultTransactionTimeout = 60 * 1000; // 1 minute
 
 interface ITransactionStats {
   request: any;
@@ -180,16 +180,25 @@ export interface ClientSecureChannelLayerEvents {
   abort: () => void;
   lifetime_75: (securityToken: ChannelSecurityToken) => void;
   backoff: (number: number, delay: number) => void;
-  security_token_renewed: () => void;
+  security_token_renewed: (token: ChannelSecurityToken) => void;
   receive_response: (response: OpcUaResponse) => void;
   timed_out_request: (requestMessage: IEncodable & { requestHeader: IRequestHeader }) => void;
   send_chunk: (messageChunk: ArrayBuffer) => void;
   send_request: (requestMessage: IEncodable & { requestHeader: IRequestHeader }) => void;
+  before_perform_transaction: (msgType: string, requestMessage: OpcUaRequest) => void;
 }
 
 export interface ClientSecureChannelLayerOptions {
   encoding?: 'opcua+uacp' | 'opcua+uajson'; // default: 'opcua+uacp'
+  /**
+   * default secure token life time , if not specified  30 seconds will be used as default value
+   */
   defaultSecureTokenLifeTime?: number;
+  /**
+   * defaultTransactionTimeout the default transaction timeout in unit of ms. Default value is 15 seconds.
+   * If not specified, the default Transaction timeout will be taken from the global static variable ClientSecureChannelLayer.defaultTransactionTimeout
+   */
+  defaultTransactionTimeout?: number;
   tokenRenewalInterval?: number;
   securityMode?: MessageSecurityMode;
   securityPolicy?: SecurityPolicy;
@@ -261,6 +270,9 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
 
   constructor(options: ClientSecureChannelLayerOptions) {
     super();
+
+    this.defaultTransactionTimeout =
+      options.defaultTransactionTimeout || ClientSecureChannelLayer.defaultTransactionTimeout;
 
     this._lastRequestId = 0;
     this.parent = options.parent;
@@ -997,7 +1009,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
            * notify the observers that the security has been renewed
            * @event security_token_renewed
            */
-          this.emit('security_token_renewed');
+          this.emit('security_token_renewed', this._securityToken!);
         } else {
           console.error("ClientSecureChannelLayer: Warning: securityToken hasn't been renewed");
         }
@@ -1103,22 +1115,48 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
    */
   protected _performMessageTransaction(
     msgType: string,
-    requestMessage: IEncodable & { requestHeader: RequestHeader },
+    requestMessage: OpcUaRequest,
     callback: ResponseCallback<any>
   ) {
-    /* jshint validthis: true */
-
-    assert('function' === typeof callback);
+    this.emit('before_perform_transaction', msgType, requestMessage);
 
     if (!this.isValid()) {
       return callback(new Error('ClientSecureChannelLayer => Socket is closed !'));
     }
 
-    let local_callback: ResponseCallback<any> | null = callback;
+    const timeout = this._adjustRequestTimeout(requestMessage);
 
-    let timeout = requestMessage.requestHeader.timeoutHint || defaultTransactionTimeout;
+    const modified_callback = this._make_timeout_callback(this.request, callback, timeout);
+
+    const transaction_data = {
+      msgType: msgType,
+      request: requestMessage,
+      callback: modified_callback,
+    };
+
+    this._internal_perform_transaction(transaction_data);
+  }
+
+  private _adjustRequestTimeout(request: IEncodable & { requestHeader: RequestHeader }) {
+    let timeout =
+      request.requestHeader.timeoutHint ||
+      this.defaultTransactionTimeout ||
+      ClientSecureChannelLayer.defaultTransactionTimeout;
     timeout = Math.max(ClientSecureChannelLayer.minTransactionTimeout, timeout);
+    /* istanbul ignore next */
+    if (request.requestHeader.timeoutHint !== timeout) {
+      debugLog('Adjusted timeout = ', request.requestHeader.timeoutHint);
+    }
+    request.requestHeader.timeoutHint = timeout;
+    return timeout;
+  }
 
+  private _make_timeout_callback(
+    requestMessage: OpcUaRequest,
+    callback: ResponseCallback<unknown>,
+    timeout: number
+  ): ResponseCallback<any> {
+    let local_callback: ResponseCallback<any> | null = callback;
     let timerId: number | null = null;
 
     let hasTimedOut = false;
@@ -1184,16 +1222,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
       this.emit('timed_out_request', requestMessage);
     }, timeout);
 
-    const transaction_data = {
-      timerId: timerId,
-      msgType: msgType,
-      request: requestMessage,
-      callback: modified_callback,
-    };
-
-    // xx    this._pending_callback = callback;
-
-    this._internal_perform_transaction(transaction_data);
+    return modified_callback;
   }
 
   /**
@@ -1580,6 +1609,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
   public readonly securityMode: MessageSecurityMode;
   protected securityPolicy: SecurityPolicy;
   protected defaultSecureTokenLifetime: number;
+  public defaultTransactionTimeout: number;
   protected tokenRenewalInterval: number;
   protected serverCertificate: DER;
   protected messageBuilder: MessageBuilder | JSONMessageBuilder;

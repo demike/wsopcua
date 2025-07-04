@@ -72,6 +72,10 @@ export interface OpcUaResponse extends IEncodable {
   responseHeader: ResponseHeader;
 }
 
+export interface OpcUaRequest extends IEncodable {
+  requestHeader: RequestHeader;
+}
+
 export type ResponseCallback<R1, R2 = undefined> = (
   err: Error | null,
   response?: R1,
@@ -102,7 +106,7 @@ export interface OPCUAClientEvents {
   receive_chunk: (message_chunk: DataView) => void;
   receive_response: (response: OpcUaResponse) => void;
   lifetime_75: (token: ChannelSecurityToken) => void;
-  security_token_renewed: () => void;
+  security_token_renewed: (channel: ClientSecureChannelLayer, token: ChannelSecurityToken) => void;
   connection_lost: () => void;
   connection_reestablished: () => void;
   timed_out_request: (requestMessage: IEncodable & { requestHeader: IRequestHeader }) => void;
@@ -1090,9 +1094,9 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
       client.emit('lifetime_75', token);
     });
 
-    secureChannel.on('security_token_renewed', () => {
+    secureChannel.on('security_token_renewed', (token: ChannelSecurityToken) => {
       // forward message to upper level
-      client.emit('security_token_renewed');
+      client.emit('security_token_renewed', secureChannel, token);
     });
 
     secureChannel.on('close', (err) => {
