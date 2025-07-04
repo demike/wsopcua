@@ -631,13 +631,27 @@ export class OPCUAClient extends OPCUAClientBase {
     assert('function' === typeof callback);
 
     this._createSession((err, session) => {
-      if (err || !session) {
+      if (err) {
         callback(err);
       } else {
+        if (!session) {
+          return callback(new Error('Internal Error'));
+        }
         this._addSession(session);
 
-        this._activateSession(session, options, function (err1) {
-          callback(err1, session);
+        this._activateSession(session, options, function (err1, session2) {
+          if (err1) {
+            session
+              .closeP(true)
+              .then(() => {
+                callback(err1);
+              })
+              .catch(() => {
+                callback(err1);
+              });
+          } else {
+            callback(null, session2);
+          }
         });
       }
     });
