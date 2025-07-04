@@ -1530,7 +1530,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
         );
       }
     }
-    window.setImmediate(callback);
+    callback();
   }
 
   /**
