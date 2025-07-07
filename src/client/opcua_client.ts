@@ -347,7 +347,7 @@ export class OPCUAClient extends OPCUAClientBase {
 
   public computeClientSignature(
     channel: ClientSecureChannelLayer,
-    serverCertificate: Uint8Array,
+    serverCertificate?: Uint8Array,
     serverNonce?: Uint8Array
   ) {
     return computeSignature(
@@ -428,7 +428,7 @@ export class OPCUAClient extends OPCUAClientBase {
     const serverCertificate = session.serverCertificate;
     // If the securityPolicyUri is NONE and none of the UserTokenPolicies requires encryption,
     // the Client shall ignore the ApplicationInstanceCertificate (serverCertificate)
-    assert(serverCertificate === null || serverCertificate instanceof Uint8Array);
+    assert(serverCertificate == null || serverCertificate instanceof Uint8Array);
 
     const serverNonce = session.serverNonce;
     assert(!serverNonce || serverNonce instanceof Uint8Array);
