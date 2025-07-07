@@ -347,7 +347,7 @@ export class OPCUAClient extends OPCUAClientBase {
 
   public computeClientSignature(
     channel: ClientSecureChannelLayer,
-    serverCertificate: Uint8Array,
+    serverCertificate?: Uint8Array,
     serverNonce?: Uint8Array
   ) {
     return computeSignature(
@@ -428,7 +428,7 @@ export class OPCUAClient extends OPCUAClientBase {
     const serverCertificate = session.serverCertificate;
     // If the securityPolicyUri is NONE and none of the UserTokenPolicies requires encryption,
     // the Client shall ignore the ApplicationInstanceCertificate (serverCertificate)
-    assert(serverCertificate === null || serverCertificate instanceof Uint8Array);
+    assert(serverCertificate == null || serverCertificate instanceof Uint8Array);
 
     const serverNonce = session.serverNonce;
     assert(!serverNonce || serverNonce instanceof Uint8Array);
@@ -631,13 +631,27 @@ export class OPCUAClient extends OPCUAClientBase {
     assert('function' === typeof callback);
 
     this._createSession((err, session) => {
-      if (err || !session) {
+      if (err) {
         callback(err);
       } else {
+        if (!session) {
+          return callback(new Error('Internal Error'));
+        }
         this._addSession(session);
 
-        this._activateSession(session, options, function (err1) {
-          callback(err1, session);
+        this._activateSession(session, options, function (err1, session2) {
+          if (err1) {
+            session
+              .closeP(true)
+              .then(() => {
+                callback(err1);
+              })
+              .catch(() => {
+                callback(err1);
+              });
+          } else {
+            callback(null, session2);
+          }
         });
       }
     });
