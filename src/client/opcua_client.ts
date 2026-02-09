@@ -133,6 +133,7 @@ export class OPCUAClient extends OPCUAClientBase {
   protected _nextSessionName(): string {
     if (!this.___sessionName_counter) {
       this.___sessionName_counter = 0;
+      return this._clientName;
     }
     this.___sessionName_counter += 1;
     return this._clientName + this.___sessionName_counter;
