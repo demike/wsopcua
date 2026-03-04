@@ -5,6 +5,7 @@
 Your test suite has been successfully migrated from Karma + Jasmine to Vitest!
 
 **Test Results:**
+
 - 29 test files passing
 - 10 files with minor issues (mostly related to specific test implementations)
 - From 0% to ~75% tests passing immediately after migration
@@ -12,12 +13,14 @@ Your test suite has been successfully migrated from Karma + Jasmine to Vitest!
 ## Files Created
 
 1. **vitest.config.ts** - Main Vitest configuration for unit tests
+
    - Configured to use jsdom environment
    - Includes all `*.spec.ts` files
    - Excludes e2e tests, schema_parser, and examples
    - Coverage configured with v8 provider
 
 2. **vitest.e2e.config.ts** - Separate configuration for E2E tests
+
    - Targets `*.e2e-spec.ts` files
    - Increased timeout to 30 seconds
 
@@ -27,6 +30,7 @@ Your test suite has been successfully migrated from Karma + Jasmine to Vitest!
 ## Files Modified
 
 1. **package.json**
+
    - Removed: All karma-related packages, jasmine packages
    - Added: vitest, @vitest/ui, jsdom, happy-dom, @types/node
    - Updated scripts:
@@ -38,6 +42,7 @@ Your test suite has been successfully migrated from Karma + Jasmine to Vitest!
      - `e2e:watch` → Run E2E tests in watch mode
 
 2. **tsconfig.json**
+
    - Changed `types: ["jasmine"]` to `types: ["vitest/globals"]`
 
 3. **All Test Files (39 files)**
@@ -67,6 +72,7 @@ npm install
 ### 2. Remove Old Karma Configuration (Optional)
 
 You can now delete the old Karma configuration files if you no longer need them:
+
 - `karma.conf.js`
 - `karma.e2e.conf.js`
 
@@ -94,7 +100,9 @@ npm run test-e2e
 ## Key Differences Between Jasmine and Vitest
 
 ### Timer Mocking
+
 **Jasmine:**
+
 ```typescript
 beforeEach(() => {
   jasmine.clock().install();
@@ -108,6 +116,7 @@ jasmine.clock().tick(1000);
 ```
 
 **Vitest:**
+
 ```typescript
 beforeEach(() => {
   vi.useFakeTimers();
@@ -120,7 +129,9 @@ vi.advanceTimersByTime(1000);
 ```
 
 ### Spies and Mocks
+
 **Jasmine:**
+
 ```typescript
 const spy = jasmine.createSpy();
 spyOn(obj, 'method').and.returnValue(42);
@@ -128,6 +139,7 @@ spyOnProperty(obj, 'prop', 'get').and.returnValue(100);
 ```
 
 **Vitest:**
+
 ```typescript
 const spy = vi.fn();
 vi.spyOn(obj, 'method').mockReturnValue(42);
@@ -135,12 +147,15 @@ vi.spyOn(obj, 'prop', 'get').mockReturnValue(100);
 ```
 
 ### Spy Call Counts
+
 **Jasmine:**
+
 ```typescript
 expect(spy.calls.count()).toBe(1);
 ```
 
 **Vitest:**
+
 ```typescript
 expect(spy.mock.calls.length).toBe(1);
 // Or use the built-in matcher:

@@ -17,9 +17,11 @@ g.jasmine = g.jasmine || {
   createSpy: (_name?: string) => vi.fn(),
 };
 
-g.fail = g.fail || ((message?: unknown) => {
-  throw message instanceof Error ? message : new Error(String(message ?? 'Test failed'));
-});
+g.fail =
+  g.fail ||
+  ((message?: unknown) => {
+    throw message instanceof Error ? message : new Error(String(message ?? 'Test failed'));
+  });
 
 g.xdescribe = g.xdescribe || describe.skip;
 
@@ -52,21 +54,23 @@ g.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
   throw new Error('fetch is not available in this environment');
 };
 
-g.spyOn = g.spyOn || ((target: object, methodName: string) => {
-  const spy = vi.spyOn(target as never, methodName as never);
-  return {
-    and: {
-      callThrough: () => spy,
-      returnValue: (value: unknown) => {
-        spy.mockReturnValue(value as never);
-        return spy;
+g.spyOn =
+  g.spyOn ||
+  ((target: object, methodName: string) => {
+    const spy = vi.spyOn(target as never, methodName as never);
+    return {
+      and: {
+        callThrough: () => spy,
+        returnValue: (value: unknown) => {
+          spy.mockReturnValue(value as never);
+          return spy;
+        },
       },
-    },
-    calls: {
-      count: () => spy.mock.calls.length,
-    },
-  };
-});
+      calls: {
+        count: () => spy.mock.calls.length,
+      },
+    };
+  });
 
 // In browser environment, fetch works natively with URLs
 // No need for special file:// handling

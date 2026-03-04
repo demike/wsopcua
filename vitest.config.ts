@@ -7,12 +7,7 @@ export default defineConfig({
     environment: 'happy-dom',
     setupFiles: ['./vitest.setup.ts'],
     include: ['src/**/*.spec.ts'],
-    exclude: [
-      'node_modules',
-      'src/schema_parser/**',
-      'src/examples/**',
-      '**/*.e2e-spec.ts',
-    ],
+    exclude: ['node_modules', 'src/schema_parser/**', 'src/examples/**', '**/*.e2e-spec.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['html', 'lcov', 'text'],

@@ -251,7 +251,10 @@ function perform_test(
 
     const buf = make_packet(packet_length);
 
-    chunkManager.write(buf.buffer).then(() => chunkManager.end()).catch(reject);
+    chunkManager
+      .write(buf.buffer)
+      .then(() => chunkManager.end())
+      .catch(reject);
   });
 }
 

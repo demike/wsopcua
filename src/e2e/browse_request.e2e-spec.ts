@@ -53,15 +53,15 @@ describe('Test Browse Request', function () {
       }),
       nodesToBrowse: [browseDesc],
     });
-      await new Promise<void>((resolve) => {
-        session.performMessageTransaction(browseRequest, function (err) {
-          expect(err?.message).toMatch(/BadViewIdUnknown/);
-          resolve();
-        });
+    await new Promise<void>((resolve) => {
+      session.performMessageTransaction(browseRequest, function (err) {
+        expect(err?.message).toMatch(/BadViewIdUnknown/);
+        resolve();
+      });
     });
   });
 
-    it('T3 - #Browse should return BadViewUnknown if object referenced by viewId is not a view', async function () {
+  it('T3 - #Browse should return BadViewUnknown if object referenced by viewId is not a view', async function () {
     const browseDesc = new BrowseDescription({
       nodeId: rootFolderId,
       referenceTypeId: undefined,

@@ -276,10 +276,10 @@ describe('encoding and decoding arrays', function () {
     // Encode then decode
     const encoded = json_encode_array_bytestring(data);
     const decoded = json_decode_array_bytestring(encoded);
-    
+
     // Manual comparison - happy-dom's addEqualityTesters doesn't work recursively in arrays
     expect(decoded).toHaveLength(data.length);
-    
+
     // Compare Uint8Arrays manually by converting to regular arrays
     for (let i = 0; i < data.length; i++) {
       if (data[i] === null) {

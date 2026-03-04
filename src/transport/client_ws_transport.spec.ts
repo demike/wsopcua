@@ -313,7 +313,7 @@ describe('testing ClientWS_transport', function () {
     let transport_confirms_that_close_event_has_been_processed = false;
 
     transport.timeout = 1000; // very short timeout;
-    
+
     await new Promise<void>((resolve) => {
       transport.on('close', function (err) {
         expect(transport_confirms_that_close_event_has_been_processed).toBe(

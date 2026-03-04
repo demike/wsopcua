@@ -163,7 +163,9 @@ describe('Browse-Read-Write Services', function () {
         try {
           expect(err).toBeFalsy();
           expect(data.nodeId.toString()).toEqual('ns=0;i=84');
-          expect(data.statusCode === undefined || data.statusCode === StatusCodes.Good).toBeTruthy();
+          expect(
+            data.statusCode === undefined || data.statusCode === StatusCodes.Good
+          ).toBeTruthy();
           expect(data.browseName.name.toString()).toEqual('Root');
           resolve();
         } catch (error) {

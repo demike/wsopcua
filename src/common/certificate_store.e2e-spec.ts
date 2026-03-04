@@ -31,9 +31,7 @@ describeForEnv('SelfSignedCertificateStore', () => {
     SecurityPolicy.Aes128_Sha256_RsaOaep,
     //  SecurityPolicy.Aes256_Sha256_RsaPss, // TODO enable this policy
   ].forEach((policy) =>
-    it(
-      `should do username password authentication with default certificate options: ${policy}`,
-      async () => {
+    it(`should do username password authentication with default certificate options: ${policy}`, async () => {
       const client = new OPCUAClient({
         ...DEFAULT_CLIENT_OPTIONS,
         securityMode: MessageSecurityMode.SignAndEncrypt,
@@ -58,8 +56,6 @@ describeForEnv('SelfSignedCertificateStore', () => {
         await session?.closeP();
         await client.disconnectP();
       }
-      },
-      120000
-    )
+    }, 120000)
   );
 });

@@ -17,8 +17,7 @@ describeForEnv('Testing ChannelSecurityToken lifetime', function () {
   afterEach(async () => {
     try {
       await client.disconnectP();
-    } catch {
-    }
+    } catch {}
   });
 
   it('A secure channel should raise a event to notify its client that its token is at 75% of its liidtime', async () => {

@@ -119,7 +119,10 @@ describe('Backoff', function () {
   it('reset should reset the backoff strategy', function () {
     const spy = vi.spyOn(backoffStrategy, 'reset');
     backoff.reset();
-    expect(spy.mock.calls.length).toBeGreaterThan(0, 'The backoff strategy should have been resetted.');
+    expect(spy.mock.calls.length).toBeGreaterThan(
+      0,
+      'The backoff strategy should have been resetted.'
+    );
   });
 
   it('backoff should be reset after fail', function () {
