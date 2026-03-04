@@ -203,51 +203,56 @@ describe('Chunk manager - no header - no signature - no encryption', function ()
 function perform_test(
   chunkManager: ChunkManager,
   packet_length: number,
-  expected_chunk_lengths: string[] | number[],
-  done: () => void
-) {
-  let expected_chunks: ArrayBuffer[] | undefined;
-  if (typeof expected_chunk_lengths[0] === 'string') {
-    expected_chunks = (expected_chunk_lengths as string[]).map(make_hex_block);
-    expected_chunk_lengths = expected_chunks.map(function (b: ArrayBuffer) {
-      return b.byteLength;
-    });
-  }
-  let chunk_counter = 0;
-
-  chunkManager.on('chunk', function (chunk, is_last) {
-    if (do_debug) {
-      console.log('chunk = ', make_hex_block(chunk.toString()));
+  expected_chunk_lengths: string[] | number[]
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    let expected_chunks: ArrayBuffer[] | undefined;
+    if (typeof expected_chunk_lengths[0] === 'string') {
+      expected_chunks = (expected_chunk_lengths as string[]).map(make_hex_block);
+      expected_chunk_lengths = expected_chunks.map(function (b: ArrayBuffer) {
+        return b.byteLength;
+      });
     }
-    expect(chunk).toBeDefined();
+    let chunk_counter = 0;
 
-    expect(chunk_counter).not.toBeGreaterThan(expected_chunk_lengths.length);
+    chunkManager.on('chunk', function (chunk, is_last) {
+      try {
+        if (do_debug) {
+          console.log('chunk = ', make_hex_block(chunk.toString()));
+        }
+        expect(chunk).toBeDefined();
 
-    expect(chunk.byteLength).toEqual(
-      expected_chunk_lengths[chunk_counter] as number,
-      ' testing chunk ' + chunk_counter
-    );
+        expect(chunk_counter).not.toBeGreaterThan(expected_chunk_lengths.length);
 
-    if (expected_chunks) {
-      if (do_debug) {
-        console.log(hexDump(chunk));
-        console.log(hexDump(expected_chunks[chunk_counter]));
+        expect(chunk.byteLength).toEqual(
+          expected_chunk_lengths[chunk_counter] as number,
+          ' testing chunk ' + chunk_counter
+        );
+
+        if (expected_chunks) {
+          if (do_debug) {
+            console.log(hexDump(chunk));
+            console.log(hexDump(expected_chunks[chunk_counter]));
+          }
+
+          expect(chunk).toEqual(new Uint8Array(expected_chunks[chunk_counter]));
+        }
+        chunk_counter += 1;
+        if (chunk_counter === expected_chunk_lengths.length) {
+          expect(is_last).toBe(true);
+          resolve();
+        } else {
+          expect(is_last).toBe(false);
+        }
+      } catch (error) {
+        reject(error);
       }
+    });
 
-      expect(chunk).toEqual(new Uint8Array(expected_chunks[chunk_counter]));
-    }
-    chunk_counter += 1;
-    if (chunk_counter === expected_chunk_lengths.length) {
-      expect(is_last).toBeTruthy();
-      done();
-    } else {
-      expect(is_last).toBeFalsy();
-    }
+    const buf = make_packet(packet_length);
+
+    chunkManager.write(buf.buffer).then(() => chunkManager.end()).catch(reject);
   });
-
-  const buf = make_packet(packet_length);
-
-  chunkManager.write(buf.buffer).then(() => chunkManager.end());
 }
 
 describe('Chunk Manager (chunk size 32 bytes, sequenceHeaderSize: 8 bytes)\n', function () {

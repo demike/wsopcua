@@ -20,7 +20,7 @@ describe('e2e test session localeId handling', function () {
     await controller.stopTestServer();
   });
 
-  xit('createSession and subsequent identity changes should set the localId array', async () => {
+  it.skip('createSession and subsequent identity changes should set the localId array', async () => {
     // const eps = await controller.testClient.getEndpointsP(null);
     const session = await controller.testClient.createSessionP({ localeIds: ['fr', 'en'] });
 
@@ -35,7 +35,7 @@ describe('e2e test session localeId handling', function () {
     expect(activationCnt).toBe(2);
   });
 
-  xit('TODO(fix in node-opcua): should read the right display name depending on the preferred localeId', async () => {
+  it.skip('TODO(fix in node-opcua): should read the right display name depending on the preferred localeId', async () => {
     // const eps = await controller.testClient.getEndpointsP(null);
     const session = await controller.testClient.createSessionP({ localeIds: ['fr', 'en'] });
     let response = await session.readP(nameToRead);
@@ -52,7 +52,7 @@ describe('e2e test session localeId handling', function () {
     await Promise.all([session.closeP(), session2.closeP()]);
   });
 
-  xit('TODO(fix in node-opcua): should read the right display when changing the preferred localeId (the language)', async () => {
+  it.skip('TODO(fix in node-opcua): should read the right display when changing the preferred localeId (the language)', async () => {
     // const eps = await controller.testClient.getEndpointsP(null);
 
     const session = await controller.testClient.createSessionP({ localeIds: ['fr', 'en'] });

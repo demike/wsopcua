@@ -119,7 +119,7 @@ export class PEMDERCertificateStore implements CertificateStore {
 }
 
 export class SelfSignedCertificateStore implements CertificateStore {
-  public readonly spkiModulusLength = 2048; // 4096;
+  public readonly spkiModulusLength: number;
   protected certificateChain?: Uint8Array;
   protected certificate?: Uint8Array;
   protected privateKey?: PrivateKey;
@@ -128,8 +128,10 @@ export class SelfSignedCertificateStore implements CertificateStore {
   constructor(options?: {
     tbsCertificate: Partial<TbsCertificate>;
     signatureAlgorithm?: AlgorithmIdentifier;
+    spkiModulusLength?: number;
   }) {
     this.options = coerceCertificateInfo(options);
+    this.spkiModulusLength = options?.spkiModulusLength ?? 2048;
   }
   public getCertificate(): Uint8Array | undefined {
     return this.certificate;

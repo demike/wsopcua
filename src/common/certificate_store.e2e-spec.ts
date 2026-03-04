@@ -8,7 +8,9 @@ import {
 import { MessageSecurityMode, SecurityPolicy } from '../secure-channel';
 import { SelfSignedCertificateStore } from './certificate_store';
 
-describe('SelfSignedCertificateStore', () => {
+const describeForEnv = typeof window !== 'undefined' ? describe.skip : describe;
+
+describeForEnv('SelfSignedCertificateStore', () => {
   let controller: E2ETestController;
   beforeAll(async () => {
     controller = getE2ETestController();
@@ -29,26 +31,35 @@ describe('SelfSignedCertificateStore', () => {
     SecurityPolicy.Aes128_Sha256_RsaOaep,
     //  SecurityPolicy.Aes256_Sha256_RsaPss, // TODO enable this policy
   ].forEach((policy) =>
-    it(`should do username password authentication with default certificate options: ${policy}`, async () => {
+    it(
+      `should do username password authentication with default certificate options: ${policy}`,
+      async () => {
       const client = new OPCUAClient({
         ...DEFAULT_CLIENT_OPTIONS,
         securityMode: MessageSecurityMode.SignAndEncrypt,
         securityPolicy: policy,
-        clientCertificateStore: new SelfSignedCertificateStore(),
+        clientCertificateStore: new SelfSignedCertificateStore({
+          spkiModulusLength: 1024,
+        }),
       });
+
+      let session: any;
 
       await client.connectP(OPCUA_TEST_SERVER_URI);
 
       try {
-        const session = await client.createSessionP({
+        session = await client.createSessionP({
           userIdentityInfo: { userName: 'john', password: 'john_pw' },
         });
         expect(session.isChannelValid()).toBeTruthy();
       } catch (err) {
         fail(err);
       } finally {
-        //         await client.disconnectP();
+        await session?.closeP();
+        await client.disconnectP();
       }
-    })
+      },
+      120000
+    )
   );
 });

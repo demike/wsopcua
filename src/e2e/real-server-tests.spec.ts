@@ -74,7 +74,7 @@ xdescribe('real server example', () => {
     }
   });
 
-  xit('should activate session with issued JWT (token)', async () => {
+  it.skip('should activate session with issued JWT (token)', async () => {
     try {
       await cli.createSessionP({
         userIdentityInfo: { userName: 'Franz', password: 'Sepp' },

@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { AssertionError } from '../assert';
 import { makeApplicationUrn } from './applicationurn';
 
@@ -31,7 +32,7 @@ describe('makeApplicationUrn', function () {
   it('should create an urn from a long host name without crypto.subtle (http)', async () => {
     const hostname = 'https://some.really.really.really.long.name.here.test.com/opcua/test/';
     const appname = 'theapp';
-    spyOnProperty(window, 'crypto', 'get').and.returnValue(undefined);
+    vi.spyOn(window, 'crypto', 'get').mockReturnValue(undefined);
 
     const urn = await makeApplicationUrn(hostname, appname);
     expect(urn).toEqual('urn:39eeb0c7:theapp');

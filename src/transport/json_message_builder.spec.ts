@@ -3,20 +3,23 @@ import { CreateSessionRequest, CreateSessionResponse, StatusCodes } from '../';
 import { IEncodable } from '../factory/factories_baseobject';
 
 describe('JSONMessageBuilder', function () {
-  it('should raise an error if the embedded object id is not known', function (done) {
+  it('should raise an error if the embedded object id is not known', async function () {
     const bad_packet = JSON.stringify({});
     const messageBuilder = new JSONMessageBuilder();
     let on_message_received = false;
     messageBuilder.on('message', () => {
       on_message_received = true;
     });
-    messageBuilder.on('error', function (err) {
-      expect(err instanceof Error).toBeTruthy();
-      expect(on_message_received).toBe(false);
-      expect(bad_packet).toBeTruthy(true);
-      done();
+
+    await new Promise<void>((resolve, reject) => {
+      messageBuilder.on('error', function (err) {
+        expect(err instanceof Error).toBeTruthy();
+        expect(on_message_received).toBe(false);
+        expect(bad_packet).toBeTruthy(true);
+        resolve();
+      });
+      messageBuilder.decodeResponse(bad_packet);
     });
-    messageBuilder.decodeResponse(bad_packet);
   });
 
   it('should decode a valid object', () => {

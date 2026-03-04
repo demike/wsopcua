@@ -1,3 +1,4 @@
+import { vi, Mock } from 'vitest';
 import { assert } from '../../assert';
 
 const origWS = window.WebSocket;
@@ -8,22 +9,22 @@ export interface WebSocketMock {
   _error(code?: number): void;
   _close(code?: number): void;
   addEventListener(type: string, listener: () => void): void;
-  send: jasmine.Spy;
-  close: jasmine.Spy;
+  send: Mock;
+  close: Mock;
   [key: string]: any;
 }
 
 export function installMockWebSocket() {
-  const wsSpy = jasmine.createSpy();
-  wsSpy.and.callFake(function (url) {
+  const wsSpy = vi.fn();
+  wsSpy.mockImplementation(function (url) {
     const socketMock: WebSocketMock & {
       listeners: { [key: string]: ((...args: any) => void)[] };
     } = {
       url: url,
       readyState: WebSocket.CONNECTING,
       listeners: {},
-      send: jasmine.createSpy(),
-      close: jasmine.createSpy().and.callFake(function () {
+      send: vi.fn(),
+      close: vi.fn().mockImplementation(function () {
         socketMock.readyState = 2; // WebSocket.CLOSING;
         socketMock._close();
       }),

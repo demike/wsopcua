@@ -1,5 +1,6 @@
 'use strict';
 
+import { vi, Mock } from 'vitest';
 import { AcknowledgeMessage } from './AcknowledgeMessage';
 import { assert } from '../assert';
 import { packTcpMessage } from './tools';
@@ -19,33 +20,33 @@ import 'setimmediate';
 
 describe('testing ClientWS_transport', function () {
   let transport: ClientWSTransport;
-  let spyOnClose: jasmine.Spy, spyOnConnect: jasmine.Spy, spyOnConnectionBreak: jasmine.Spy;
+  let spyOnClose: Mock, spyOnConnect: Mock, spyOnConnectionBreak: Mock;
 
   let fakeWS: WebSocketMock;
   const url = 'ws://localhost:3456';
 
-  beforeEach(function (done) {
+  beforeEach(async function () {
     transport = new ClientWSTransport('opcua+uacp');
     installMockWebSocket();
     setFakeTransport(new WebSocket(url));
     fakeWS = getFakeTransport();
 
-    spyOnClose = jasmine.createSpy();
+    spyOnClose = vi.fn();
     transport.on('close', spyOnClose);
 
-    spyOnConnect = jasmine.createSpy();
+    spyOnConnect = vi.fn();
     transport.on('connect', spyOnConnect);
 
-    spyOnConnectionBreak = jasmine.createSpy();
+    spyOnConnectionBreak = vi.fn();
     transport.on('connection_break', spyOnConnectionBreak);
-
-    done();
   });
 
-  afterEach(function (done) {
+  afterEach(async function () {
     uninstallMockWebSocket();
-    transport.disconnect(function () {
-      done();
+    await new Promise<void>((resolve) => {
+      transport.disconnect(function () {
+        resolve();
+      });
     });
   });
 
@@ -57,24 +58,26 @@ describe('testing ClientWS_transport', function () {
     maxChunkCount: 600000,
   });
 
-  it('should create and connect to a client TCP', function (done) {
-    transport.connect(url, function (err) {
-      expect(spyOnConnect.calls.count()).toBe(1);
-      expect(spyOnClose.calls.count()).toBe(0);
-      expect(spyOnConnectionBreak.calls.count()).toBe(0);
+  it('should create and connect to a client TCP', async function () {
+    await new Promise<void>((resolve) => {
+      transport.connect(url, function (err) {
+        expect(spyOnConnect.mock.calls.length).toBe(1);
+        expect(spyOnClose.mock.calls.length).toBe(0);
+        expect(spyOnConnectionBreak.mock.calls.length).toBe(0);
 
-      transport.disconnect(function () {
-        expect(spyOnConnect.calls.count()).toBe(1);
-        expect(spyOnClose.calls.count()).toBe(1);
-        expect(spyOnConnectionBreak.calls.count()).toBe(0);
-        done();
+        transport.disconnect(function () {
+          expect(spyOnConnect.mock.calls.length).toBe(1);
+          expect(spyOnClose.mock.calls.length).toBe(1);
+          expect(spyOnConnectionBreak.mock.calls.length).toBe(0);
+          resolve();
+        });
       });
-    });
 
-    const sock: WebSocketMock = (transport as any)._socket;
-    sock._open();
-    // send Fake ACK response
-    sock._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
+      const sock: WebSocketMock = (transport as any)._socket;
+      sock._open();
+      // send Fake ACK response
+      sock._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
+    });
   });
 
   it('should throw an exception when specifying an invalid protocol', function () {
@@ -95,78 +98,84 @@ describe('testing ClientWS_transport', function () {
     expect(exc).not.toBeNull();
   });
 
-  it('should report a time out error if trying to connect to a non responding server', function (done) {
+  it('should report a time out error if trying to connect to a non responding server', async function () {
     transport.timeout = 10; // very short timeout;
 
-    transport.connect(url, function (err) {
-      if (err) {
-        expect(err.message).toContain('Timeout');
+    await new Promise<void>((resolve) => {
+      transport.connect(url, function (err) {
+        if (err) {
+          expect(err.message).toContain('Timeout');
 
-        expect(spyOnConnect.calls.count()).toBe(0);
-        expect(spyOnClose.calls.count()).toBe(0);
-        expect(spyOnConnectionBreak.calls.count()).toBe(0);
-        done();
-      } else {
-        throw new Error('Should have raised a timeout error');
-        // done();
-      }
+          expect(spyOnConnect.mock.calls.length).toBe(0);
+          expect(spyOnClose.mock.calls.length).toBe(0);
+          expect(spyOnConnectionBreak.mock.calls.length).toBe(0);
+          resolve();
+        } else {
+          throw new Error('Should have raised a timeout error');
+          // done();
+        }
+      });
+
+      (transport as any)._socket._open();
+      // DO NOTHING !!
     });
-
-    (transport as any)._socket._open();
-    // DO NOTHING !!
   });
 
-  it('should report an error if the server close the socket unexpectedly after the websocket connection was established', function (done) {
+  it('should report an error if the server close the socket unexpectedly after the websocket connection was established', async function () {
     transport.timeout = 1000; // short timeout;
 
-    transport.connect(url, function (err) {
-      if (err) {
-        expect(err.message).toMatch(/Connection aborted/);
+    await new Promise<void>((resolve) => {
+      transport.connect(url, function (err) {
+        if (err) {
+          expect(err.message).toMatch(/Connection aborted/);
 
-        expect(spyOnConnect.calls.count()).toBe(0);
-        expect(spyOnClose.calls.count()).toBe(0);
-        expect(spyOnConnectionBreak.calls.count()).toBe(0);
+          expect(spyOnConnect.mock.calls.length).toBe(0);
+          expect(spyOnClose.mock.calls.length).toBe(0);
+          expect(spyOnConnectionBreak.mock.calls.length).toBe(0);
 
-        done();
-      } else {
-        throw new Error('Should have raised a connection error');
-        // done();
-      }
+          resolve();
+        } else {
+          throw new Error('Should have raised a connection error');
+          // done();
+        }
+      });
+
+      const mockSocket: WebSocketMock = (transport as any)._socket;
+      mockSocket._open();
+      // received Fake HEL Message
+      // Pretend the message is malformed or that the server crashed for some reason : abort now !
+      mockSocket._error(1000);
+      // the close event immediately follows the error event
+      mockSocket._close(1000);
     });
-
-    const mockSocket: WebSocketMock = (transport as any)._socket;
-    mockSocket._open();
-    // received Fake HEL Message
-    // Pretend the message is malformed or that the server crashed for some reason : abort now !
-    mockSocket._error(1000);
-    // the close event immediately follows the error event
-    mockSocket._close(1000);
   });
 
-  it('should report an error if the server close the socket unexpectedly', function (done) {
+  it('should report an error if the server close the socket unexpectedly', async function () {
     transport.timeout = 100; // very short timeout;
 
-    transport.connect(url, function (err) {
-      if (err) {
-        expect(err.message).toContain('failed to connect');
+    await new Promise<void>((resolve) => {
+      transport.connect(url, function (err) {
+        if (err) {
+          expect(err.message).toContain('failed to connect');
 
-        expect(spyOnConnect.calls.count()).toBe(0);
-        expect(spyOnClose.calls.count()).toBe(0);
-        expect(spyOnConnectionBreak.calls.count()).toBe(0);
+          expect(spyOnConnect.mock.calls.length).toBe(0);
+          expect(spyOnClose.mock.calls.length).toBe(0);
+          expect(spyOnConnectionBreak.mock.calls.length).toBe(0);
 
-        done();
-      } else {
-        throw new Error('Should have raised a connection error');
-        // done();
-      }
+          resolve();
+        } else {
+          throw new Error('Should have raised a connection error');
+          // done();
+        }
+      });
+
+      // received Fake HEL Message
+      // Pretend the message is malformed or that the server crashed for some reason : abort now !
+      const mockSocket: WebSocketMock = (transport as any)._socket;
+      mockSocket._error(1006);
+      // the close event fires immediately after the error event
+      mockSocket._close(1006);
     });
-
-    // received Fake HEL Message
-    // Pretend the message is malformed or that the server crashed for some reason : abort now !
-    const mockSocket: WebSocketMock = (transport as any)._socket;
-    mockSocket._error(1006);
-    // the close event fires immediately after the error event
-    mockSocket._close(1006);
   });
 
   function makeError(statusCode: StatusCode) {
@@ -174,33 +183,35 @@ describe('testing ClientWS_transport', function () {
     return new TCPErrorMessage({ statusCode: statusCode, reason: statusCode.description });
   }
 
-  it('should report an error if the server reports a protocol version mismatch', function (done) {
+  it('should report an error if the server reports a protocol version mismatch', async function () {
     transport.timeout = 1000; // very short timeout;
 
-    transport.connect(url, function (err) {
-      if (err) {
-        expect(err.message).toMatch(/The applications do not have compatible protocol versions/);
+    await new Promise<void>((resolve) => {
+      transport.connect(url, function (err) {
+        if (err) {
+          expect(err.message).toMatch(/The applications do not have compatible protocol versions/);
 
-        expect(spyOnConnect.calls.count()).toBe(0);
-        expect(spyOnClose.calls.count()).toBe(0);
-        expect(spyOnConnectionBreak.calls.count()).toBe(0);
+          expect(spyOnConnect.mock.calls.length).toBe(0);
+          expect(spyOnClose.mock.calls.length).toBe(0);
+          expect(spyOnConnectionBreak.mock.calls.length).toBe(0);
 
-        done();
-      } else {
-        throw new Error('transport.connect should have raised a connection error');
-        // done();
-      }
+          resolve();
+        } else {
+          throw new Error('transport.connect should have raised a connection error');
+          // done();
+        }
+      });
+
+      const sock: WebSocketMock = (transport as any)._socket;
+      sock._open();
+      // Pretend the protocol version is wrong.
+      const errorResponse = makeError(StatusCodes.BadProtocolVersionUnsupported);
+      const messageChunk = packTcpMessage('ERR', errorResponse);
+      sock._message(messageChunk);
     });
-
-    const sock: WebSocketMock = (transport as any)._socket;
-    sock._open();
-    // Pretend the protocol version is wrong.
-    const errorResponse = makeError(StatusCodes.BadProtocolVersionUnsupported);
-    const messageChunk = packTcpMessage('ERR', errorResponse);
-    sock._message(messageChunk);
   });
 
-  it('should connect and forward subsequent message chunks after a valid HEL/ACK transaction', function (done) {
+  it('should connect and forward subsequent message chunks after a valid HEL/ACK transaction', async function () {
     // lets build the subsequent message
     const message1 = new DataView(new ArrayBuffer(10));
     message1.setUint32(0, 0xdeadbeef, false);
@@ -209,65 +220,48 @@ describe('testing ClientWS_transport', function () {
 
     transport.timeout = 1000; // very short timeout;
 
-    transport.on('message', function (message_chunk) {
-      assert(message_chunk instanceof DataView);
-      debugLog(hexDump(message_chunk));
-      expect(new DataView(message_chunk.buffer, 8)).toEqual(message1);
+    await new Promise<void>((resolve) => {
+      transport.on('message', function (message_chunk) {
+        assert(message_chunk instanceof DataView);
+        debugLog(hexDump(message_chunk));
+        expect(new DataView(message_chunk.buffer, 8)).toEqual(message1);
 
-      expect(spyOnConnect.calls.count()).toBe(1);
-      expect(spyOnClose.calls.count()).toBe(0);
-      expect(spyOnConnectionBreak.calls.count()).toBe(0);
+        expect(spyOnConnect.mock.calls.length).toBe(1);
+        expect(spyOnClose.mock.calls.length).toBe(0);
+        expect(spyOnConnectionBreak.mock.calls.length).toBe(0);
 
-      done();
+        resolve();
+      });
+
+      transport.connect(url, function (err) {
+        if (err) {
+          console.log(' err = ', err.message);
+        }
+        assert(!err);
+        const buffer = transport.createChunk('MSG', 'F', message1.byteLength);
+        new Uint8Array(buffer).set(new Uint8Array(message1.buffer), transport.headerSize);
+        transport.write(buffer);
+      });
+
+      const sock: WebSocketMock = (transport as any)._socket;
+      sock._open();
+
+      // send Fake ACK response
+      sock._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
+
+      // let's receife a message1
+      const buf = transport.createChunk('MSG', 'F', message1.byteLength);
+      new Uint8Array(buf).set(new Uint8Array(message1.buffer), transport.headerSize);
+      sock._message(buf);
     });
-
-    transport.connect(url, function (err) {
-      if (err) {
-        console.log(' err = ', err.message);
-      }
-      assert(!err);
-      const buffer = transport.createChunk('MSG', 'F', message1.byteLength);
-      new Uint8Array(buffer).set(new Uint8Array(message1.buffer), transport.headerSize);
-      transport.write(buffer);
-    });
-
-    const sock: WebSocketMock = (transport as any)._socket;
-    sock._open();
-
-    // send Fake ACK response
-    sock._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
-
-    // let's receife a message1
-    const buf = transport.createChunk('MSG', 'F', message1.byteLength);
-    new Uint8Array(buf).set(new Uint8Array(message1.buffer), transport.headerSize);
-    sock._message(buf);
   });
 
-  it('should close the socket and emit a close event when disconnect() is called', function (done) {
+  it('should close the socket and emit a close event when disconnect() is called', async function () {
     const counter = 1;
 
     let server_confirms_that_server_socket_has_been_closed = false;
     let transport_confirms_that_close_event_has_been_processed = false;
-    /*
-        const spyOnServerWrite = sinon.spy(function (socket, data) {
-            debugLog('\ncounter = ', counter);
-            debugLog(hexDump(data));
-            if (counter === 1) {
-                // HEL/ACK transaction
-                const messageChunk = packTcpMessage('ACK', fakeAcknowledgeMessage);
-                counter += 1;
-                socket.write(messageChunk);
-                return;
-            }
-            assert(false, 'unexpected data received');
-        });
-        fakeServer.pushResponse(spyOnServerWrite);
-        fakeServer.pushResponse(spyOnServerWrite);
 
-        fakeServer.on('end', function () {
-            server_confirms_that_server_socket_has_been_closed = true;
-        });
-*/
     transport.timeout = 1000; // very short timeout;
 
     transport.on('close', function (err) {
@@ -282,105 +276,81 @@ describe('testing ClientWS_transport', function () {
       );
     });
 
-    transport.connect(url, function (err) {
-      if (err) {
-        console.log(' err = ', err.message);
-      }
-      assert(!err);
-      expect(server_confirms_that_server_socket_has_been_closed).toBe(false);
-      expect(transport_confirms_that_close_event_has_been_processed).toBe(false);
-      transport.disconnect(function () {
-        window.setImmediate(function () {
-          expect(server_confirms_that_server_socket_has_been_closed).toBe(true);
-          expect(transport_confirms_that_close_event_has_been_processed).toBe(true);
-          done();
+    await new Promise<void>((resolve) => {
+      transport.connect(url, function (err) {
+        if (err) {
+          console.log(' err = ', err.message);
+        }
+        assert(!err);
+        expect(server_confirms_that_server_socket_has_been_closed).toBe(false);
+        expect(transport_confirms_that_close_event_has_been_processed).toBe(false);
+        transport.disconnect(function () {
+          window.setImmediate(function () {
+            expect(server_confirms_that_server_socket_has_been_closed).toBe(true);
+            expect(transport_confirms_that_close_event_has_been_processed).toBe(true);
+            resolve();
+          });
         });
       });
+
+      const sock: WebSocketMock = (transport as any)._socket;
+
+      sock.addEventListener('close', () => {
+        server_confirms_that_server_socket_has_been_closed = true;
+      });
+
+      sock._open();
+
+      // send Fake ACK response
+      sock._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
     });
-
-    const sock: WebSocketMock = (transport as any)._socket;
-
-    sock.addEventListener('close', () => {
-      server_confirms_that_server_socket_has_been_closed = true;
-    });
-
-    sock._open();
-
-    // send Fake ACK response
-    sock._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
   });
 
-  it('should dispose the socket and emit a close event when socket is closed by the other end', function (done) {
+  it('should dispose the socket and emit a close event when socket is closed by the other end', async function () {
     const counter = 1;
 
     let server_confirms_that_server_socket_has_been_closed = false;
     let transport_confirms_that_close_event_has_been_processed = false;
 
-    /*
-        const spyOnServerWrite = sinon.spy(function (socket, data) {
-
-            debugLog('\ncounter = ', counter);
-            debugLog(hexDump(data));
-            if (counter === 1) {
-                // HEL/ACK transaction
-                const messageChunk = packTcpMessage('ACK', fakeAcknowledgeMessage);
-                counter += 1;
-                socket.write(messageChunk);
-
-                setTimeout(function () {
-                    debugLog(' Aborting server ');
-                    socket.end(); // close after 10 ms
-                }, 10);
-
-            } else if (counter === 2) {
-                //
-            } else {
-                assert(false, 'unexpected data received');
-            }
-        });
-        fakeServer.pushResponse(spyOnServerWrite);
-
-        fakeServer.on('end', function () {
-            server_confirms_that_server_socket_has_been_closed = true;
-        });
-*/
-
     transport.timeout = 1000; // very short timeout;
-    transport.on('close', function (err) {
-      expect(transport_confirms_that_close_event_has_been_processed).toBe(
-        false,
-        'close event shall only be received once'
-      );
+    
+    await new Promise<void>((resolve) => {
+      transport.on('close', function (err) {
+        expect(transport_confirms_that_close_event_has_been_processed).toBe(
+          false,
+          'close event shall only be received once'
+        );
 
-      transport_confirms_that_close_event_has_been_processed = true;
+        transport_confirms_that_close_event_has_been_processed = true;
 
-      expect(err instanceof Error).toBe(
-        true,
-        'the close event should pass a valid Error object because disconnection is caused by external event'
-      );
+        expect(err instanceof Error).toBe(
+          true,
+          'the close event should pass a valid Error object because disconnection is caused by external event'
+        );
 
-      done();
+        resolve();
+      });
+
+      transport.connect(url, function (err) {
+        assert(!err);
+      });
+
+      const sock: WebSocketMock = (transport as any)._socket;
+
+      sock.addEventListener('close', () => {
+        server_confirms_that_server_socket_has_been_closed = true;
+      });
+
+      sock._open();
+
+      // send Fake ACK response
+      sock._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
+
+      // server closing
+      sock._error();
+      // websocket: close event is always emitted directly after error
+      sock._close();
     });
-
-    transport.connect(url, function (err) {
-      assert(!err);
-    });
-
-    const sock: WebSocketMock = (transport as any)._socket;
-
-    sock.addEventListener('close', () => {
-      server_confirms_that_server_socket_has_been_closed = true;
-    });
-
-    sock._open();
-
-    // send Fake ACK response
-    sock._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
-
-    // server closing
-    sock._error();
-    // websocket: close event is always emitted directly after error
-    sock._close();
   });
   /*
 

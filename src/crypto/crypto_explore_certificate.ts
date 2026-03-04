@@ -302,7 +302,9 @@ function _readGeneralNames(buffer: Uint8Array, block: BlockInfo) {
     // istanbul ignore next
     if (!type) {
       //  throw new Error(' INVALID TYPE => ' + t + '0x' + t.toString(16));
-      console.warn(' INVALID TYPE => ' + t + '0x' + t.toString(16));
+      if (typeof window === 'undefined') {
+        console.warn(' INVALID TYPE => ' + t + '0x' + t.toString(16));
+      }
     } else {
       n[type.name] = n[type.name] || [];
       n[type.name].push(_readFromType(buffer, block, type.type));

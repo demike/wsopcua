@@ -32,9 +32,37 @@ function hexString(str: string): string {
 }
 
 export function makebuffer_from_trace(strFilePath: string): Promise<Uint8Array> {
-  return fetch(strFilePath)
-    .then((value) => value.text())
-    .then((strContent) => makeBuffer(hexString(inlineText(strContent))));
+  const normalizeFixturePath = (inputPath: string): string => {
+    let fixturePath = inputPath.replace(/\\/g, '/');
+    if (!fixturePath.endsWith('.fixture') && !fixturePath.includes('/')) {
+      fixturePath = `src/test-util/${fixturePath}.fixture`;
+    }
+    if (fixturePath.startsWith('/')) {
+      fixturePath = fixturePath.slice(1);
+    }
+    return fixturePath;
+  };
+
+  const readWithFs = async () => {
+    const [{ readFile }, pathModule] = await Promise.all([
+      import('node:fs/promises'),
+      import('node:path'),
+    ]);
+    const filePath = normalizeFixturePath(strFilePath);
+    const absolutePath = pathModule.isAbsolute(filePath)
+      ? filePath
+      : pathModule.resolve(process.cwd(), filePath);
+    const strContent = await readFile(absolutePath, 'utf8');
+    return makeBuffer(hexString(inlineText(strContent)));
+  };
+
+  const readWithFetch = async () => {
+    const response = await fetch(strFilePath);
+    const strContent = await response.text();
+    return makeBuffer(hexString(inlineText(strContent)));
+  };
+
+  return readWithFs().catch(() => readWithFetch());
 }
 
 export function makeBuffer(listOfBytes: string): Uint8Array {

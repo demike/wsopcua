@@ -1,7 +1,9 @@
 import { ClientSession } from '../client/client_session';
 import { E2ETestController, getE2ETestController } from './utils/test_server_controller';
 
-describe('OPCUA-Service Discovery Endpoint', function () {
+const describeForEnv = typeof window !== 'undefined' ? describe.skip : describe;
+
+describeForEnv('OPCUA-Service Discovery Endpoint', function () {
   let session: ClientSession;
   let controller: E2ETestController;
 

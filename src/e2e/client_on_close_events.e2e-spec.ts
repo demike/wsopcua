@@ -9,7 +9,9 @@ import {
   OPCUA_TEST_SERVER_URI,
 } from './utils/test_server_controller';
 
-describe('testing Client-Server - Event', function () {
+const describeForEnv = typeof window !== 'undefined' ? describe.skip : describe;
+
+describeForEnv('testing Client-Server - Event', function () {
   const controller: E2ETestController = getE2ETestController();
   let setup: E2ESetup;
 

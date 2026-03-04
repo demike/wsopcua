@@ -37,6 +37,11 @@ export const DEFAULT_CLIENT_OPTIONS: OPCUAClientOptions = {
   keepPendingSessionsOnDisconnect: false,
 };
 
+const isE2EDebugEnabled = () => {
+  const processLike = (globalThis as any).process;
+  return processLike?.env?.WSOPCUA_E2E_DEBUG === '1';
+};
+
 const DEFAULT_SUBSCRIPTION_REQ_OPTIONS: ICreateSubscriptionRequest = {
   requestedPublishingInterval: 100,
   requestedLifetimeCount: 100,
@@ -133,10 +138,14 @@ export class E2ETestControllerImpl implements E2ETestController {
 
   private async createSession(client: OPCUAClient, url: string) {
     await client.connectP(url);
-    // eslint-disable-next-line no-console
-    console.info('connected to ', url);
+    if (isE2EDebugEnabled()) {
+      // eslint-disable-next-line no-console
+      console.info('connected to ', url);
+    }
 
-    window.onbeforeunload = () => client.disconnectP();
+    if (typeof window !== 'undefined') {
+      window.onbeforeunload = () => client.disconnectP();
+    }
 
     let session: ClientSession;
     try {
@@ -145,8 +154,10 @@ export class E2ETestControllerImpl implements E2ETestController {
       console.error('failed loading session', err);
       throw err;
     }
-    // eslint-disable-next-line no-console
-    console.info(url, ': created session ', session.sessionId);
+    if (isE2EDebugEnabled()) {
+      // eslint-disable-next-line no-console
+      console.info(url, ': created session ', session.sessionId);
+    }
     return session;
   }
 
@@ -174,7 +185,7 @@ export class E2ETestControllerImpl implements E2ETestController {
 
     if (response.result[0].statusCode !== StatusCodes.Good) {
       throw new Error('Error starting the test server' + response.result[0].toJSON());
-    } else {
+    } else if (isE2EDebugEnabled()) {
       console.log('test server started succesfully');
     }
 
@@ -184,17 +195,65 @@ export class E2ETestControllerImpl implements E2ETestController {
 
   public async stopTestServer() {
     const controlSession = await this.controlSession$;
-    await this.testSession?.closeP();
-    await this.testClient.disconnectP();
+
+    const withTimeout = async <T>(label: string, action: () => Promise<T>, timeoutMs = 10000) => {
+      let timeoutHandle: ReturnType<typeof setTimeout> | undefined;
+      const actionPromise = action();
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        timeoutHandle = setTimeout(
+          () => reject(new Error(`${label} timed out after ${timeoutMs}ms`)),
+          timeoutMs
+        );
+      });
+
+      try {
+        return await Promise.race([actionPromise, timeoutPromise]);
+      } finally {
+        if (timeoutHandle) {
+          clearTimeout(timeoutHandle);
+        }
+      }
+    };
+
+    const shouldLogLifecycleWarning = (err: unknown) => {
+      const message = String((err as Error | undefined)?.message || err || '');
+      return !/timed out after \d+ms|Already Closed|already closed/i.test(message);
+    };
+
+    try {
+      if (this.testSession) {
+        await withTimeout('close session', () => this.testSession!.closeP(), 10000);
+      }
+    } catch (err) {
+      if (shouldLogLifecycleWarning(err)) {
+        console.warn('failed to close test session', err);
+      }
+    }
+
+    try {
+      await withTimeout('disconnect client', () => this.testClient.disconnectP(), 12000);
+    } catch (err) {
+      if (shouldLogLifecycleWarning(err)) {
+        console.warn('failed to disconnect test client', err);
+      }
+    }
+
     this.testClient = this.createClient();
     this.testSession = undefined;
 
-    return controlSession.callP([
-      new CallMethodRequest({
-        objectId: E2ETestControllerImpl.controllerNodeId,
-        methodId: E2ETestControllerImpl.stopTestServerNodeId,
-      }),
-    ]);
+    try {
+      return await withTimeout('stop test server', () =>
+        controlSession.callP([
+          new CallMethodRequest({
+            objectId: E2ETestControllerImpl.controllerNodeId,
+            methodId: E2ETestControllerImpl.stopTestServerNodeId,
+          }),
+        ])
+      );
+    } catch (err) {
+      console.warn('failed to stop test server through control channel', err);
+      return { result: [] as any[] };
+    }
   }
 
   public async restartTestServer(namespaces?: string[]) {

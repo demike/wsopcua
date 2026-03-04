@@ -1,5 +1,6 @@
 'use strict';
 
+import { vi } from 'vitest';
 import * as subscription_service from '../../service-subscription';
 import { ClientSidePublishEngine } from '../client_publish_engine';
 import { SubscriptionAcknowledgement } from '../../service-subscription';
@@ -34,25 +35,25 @@ function makeSubscription(
 describe('Testing the client publish engine', function () {
   beforeEach(function () {
     // mock the setImmedate polyfill
-    spyOn(<any>window, 'setImmediate').and.callFake((callback: () => void) => {
+    vi.spyOn(<any>window, 'setImmediate').mockImplementation((callback: () => void) => {
       window.setTimeout(callback, 0);
     });
 
-    jasmine.clock().install();
+    vi.useFakeTimers();
   });
 
   afterEach(function () {
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 
   it('a client should send a publish request to the server for every new subscription', function () {
     const fakeSession = new ClientSession(null as any);
-    const publish_spy = spyOn<ClientSession>(fakeSession, 'publish');
+    const publish_spy = vi.spyOn<ClientSession>(fakeSession, 'publish');
     let publish_args: IArguments = [] as any;
-    publish_spy.and.callFake(function () {
+    publish_spy.mockImplementation(function () {
       publish_args = arguments;
     });
-    spyOn(fakeSession, 'isChannelValid').and.returnValue(true);
+    vi.spyOn(fakeSession, 'isChannelValid').mockReturnValue(true);
     const clientPublishEngine = new ClientSidePublishEngine(fakeSession);
 
     // start a first new subscription
@@ -62,10 +63,10 @@ describe('Testing the client publish engine', function () {
     clientPublishEngine.registerSubscription(makeSubscription(fakeSession, 2, 10000));
 
     // now advance the time artificially by 4.5 seconds
-    jasmine.clock().tick(500 + 4 * 1000);
+    vi.advanceTimersByTime(500 + 4 * 1000);
 
     // publish should have been called 10 times only ( since no Response have been received from server)
-    expect(publish_spy.calls.count()).toEqual(10);
+    expect(publish_spy.mock.calls.length).toEqual(10);
 
     // args[0] shall be a Publish Request
     expect(publish_args[0] instanceof subscription_service.PublishRequest).toBeTruthy();
@@ -76,8 +77,8 @@ describe('Testing the client publish engine', function () {
 
   it('a client should keep sending a new publish request to the server after receiving a notification, when a subscription is active', function () {
     const fakeSession = new ClientSession(null as any);
-    const publish_spy = spyOn<ClientSession>(fakeSession, 'publish');
-    publish_spy.and.callFake(
+    const publish_spy = vi.spyOn<ClientSession>(fakeSession, 'publish');
+    publish_spy.mockImplementation(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
         expect(typeof callback === 'function').toBeTruthy();
@@ -89,7 +90,7 @@ describe('Testing the client publish engine', function () {
         }, 100);
       }
     );
-    spyOn(fakeSession, 'isChannelValid').and.returnValue(true);
+    vi.spyOn(fakeSession, 'isChannelValid').mockReturnValue(true);
 
     const clientPublishEngine = new ClientSidePublishEngine(fakeSession);
 
@@ -105,18 +106,18 @@ describe('Testing the client publish engine', function () {
     clientPublishEngine.registerSubscription(makeSubscription(fakeSession, 2, 10000));
 
     // now advance the time artificially by 3 seconds ( 20*150ms)
-    jasmine.clock().tick(3000);
+    vi.advanceTimersByTime(3000);
 
     // publish should have been called more than 20 times
-    expect(publish_spy.calls.count()).toBeGreaterThan(20);
+    expect(publish_spy.mock.calls.length).toBeGreaterThan(20);
 
     //        publish_spy.and.callThrough();
   });
 
   it('a client should stop sending publish request to the server after receiving a notification, when there is no more registered subscription ', function () {
     const fakeSession = new ClientSession(null as any);
-    const publish_spy = spyOn<ClientSession>(fakeSession, 'publish');
-    publish_spy.and.callFake(
+    const publish_spy = vi.spyOn<ClientSession>(fakeSession, 'publish');
+    publish_spy.mockImplementation(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
         expect(typeof callback === 'function').toBeTruthy();
@@ -128,7 +129,7 @@ describe('Testing the client publish engine', function () {
         }, 100);
       }
     );
-    spyOn(fakeSession, 'isChannelValid').and.returnValue(true);
+    vi.spyOn(fakeSession, 'isChannelValid').mockReturnValue(true);
     // fakeSession.publish(null, null);
 
     //        ClientSidePublishEngine.publishRequestCountInPipeline = 0;
@@ -138,19 +139,19 @@ describe('Testing the client publish engine', function () {
     clientPublishEngine.registerSubscription(makeSubscription(fakeSession, 1, 10000));
 
     // now advance the time artificially by 3 seconds ( 20*150ms)
-    jasmine.clock().tick(3000);
+    vi.advanceTimersByTime(3000);
     // publish should have been called more than 20 times
-    const callcount_after_3sec = publish_spy.calls.count();
+    const callcount_after_3sec = publish_spy.mock.calls.length;
     expect(callcount_after_3sec).toBeGreaterThan(20);
 
     // now, un-register the subscription
     clientPublishEngine.unregisterSubscription(1);
 
     // now advance the time artificially again by 3 seconds ( 20*150ms)
-    jasmine.clock().tick(3000);
+    vi.advanceTimersByTime(3000);
 
     // publish should be called no more
-    expect(publish_spy.calls.count()).toEqual(callcount_after_3sec);
+    expect(publish_spy.mock.calls.length).toEqual(callcount_after_3sec);
 
     // publish_spy.and.callThrough();
   });
@@ -192,8 +193,8 @@ describe('Testing the client publish engine', function () {
 
     let count = 0;
     const fakeSession = new ClientSession(null as any);
-    const publish_spy = spyOn<ClientSession>(fakeSession, 'publish');
-    publish_spy.and.callFake(
+    const publish_spy = vi.spyOn<ClientSession>(fakeSession, 'publish');
+    publish_spy.mockImplementation(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
         expect(typeof callback === 'function').toBeTruthy();
@@ -205,7 +206,7 @@ describe('Testing the client publish engine', function () {
         }
       }
     );
-    spyOn(fakeSession, 'isChannelValid').and.returnValue(true);
+    vi.spyOn(fakeSession, 'isChannelValid').mockReturnValue(true);
 
     const clientPublishEngine = new ClientSidePublishEngine(fakeSession);
 
@@ -213,16 +214,16 @@ describe('Testing the client publish engine', function () {
 
     clientPublishEngine.registerSubscription(makeSubscription(fakeSession, 1, 10000));
 
-    jasmine.clock().tick(4500);
+    vi.advanceTimersByTime(4500);
 
-    expect(publish_spy.calls.count()).toBeGreaterThan(1);
+    expect(publish_spy.mock.calls.length).toBeGreaterThan(1);
 
     const publishRequest1 = requests[0];
     expect(publishRequest1 instanceof subscription_service.PublishRequest).toBeTruthy();
     if (publishRequest1) {
       expect(publishRequest1.subscriptionAcknowledgements).toEqual([]);
     }
-    jasmine.clock().tick(50);
+    vi.advanceTimersByTime(50);
 
     const publishRequest2 = requests[1];
     expect(publishRequest2 instanceof subscription_service.PublishRequest).toBeTruthy();
@@ -265,8 +266,8 @@ describe('Testing the client publish engine', function () {
     }
 
     const fakeSession = new ClientSession(null as any);
-    const publish_spy = spyOn<ClientSession>(fakeSession, 'publish');
-    publish_spy.and.callFake(
+    const publish_spy = vi.spyOn<ClientSession>(fakeSession, 'publish');
+    publish_spy.mockImplementation(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
         expect(typeof callback === 'function').toBeTruthy();
@@ -277,7 +278,7 @@ describe('Testing the client publish engine', function () {
         // xx console.log("nbPendingPublishRequests",clientPublishEngine.nbPendingPublishRequests);
       }
     );
-    spyOn(fakeSession, 'isChannelValid').and.returnValue(true);
+    vi.spyOn(fakeSession, 'isChannelValid').mockReturnValue(true);
 
     const clientPublishEngine = new ClientSidePublishEngine(fakeSession);
 
@@ -286,10 +287,10 @@ describe('Testing the client publish engine', function () {
     // start a first new subscription
     clientPublishEngine.registerSubscription(makeSubscription(fakeSession, 1, 20000));
 
-    jasmine.clock().tick(100); // wait a little bit as PendingRequests are send asynchronously
+    vi.advanceTimersByTime(100); // wait a little bit as PendingRequests are send asynchronously
     expect((<any>clientPublishEngine).nbPendingPublishRequests).toBe(5);
 
-    jasmine.clock().tick(20000);
+    vi.advanceTimersByTime(20000);
     clientPublishEngine.unregisterSubscription(1);
 
     stop();
@@ -306,7 +307,7 @@ describe('Testing the client publish engine', function () {
     expect(requests[7].requestHeader.timeoutHint).toBe(20000 * 5);
   });
 
-  it('#390 should not send publish request if channel is not properly opened', function (done) {
+  it('#390 should not send publish request if channel is not properly opened', async function () {
     let timerId: number;
 
     const publishQueue: PublishRequestCallback[] = [];
@@ -330,8 +331,8 @@ describe('Testing the client publish engine', function () {
     }
 
     const fakeSession = new ClientSession(null as any);
-    const publish_spy = spyOn<ClientSession>(fakeSession, 'publish');
-    publish_spy.and.callFake(
+    const publish_spy = vi.spyOn<ClientSession>(fakeSession, 'publish');
+    publish_spy.mockImplementation(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
         expect(typeof callback === 'function').toBeTruthy();
@@ -342,7 +343,7 @@ describe('Testing the client publish engine', function () {
         // xx console.log("nbPendingPublishRequests",clientPublishEngine.nbPendingPublishRequests);
       }
     );
-    spyOn(fakeSession, 'isChannelValid').and.callFake(() => isChannelValid);
+    vi.spyOn(fakeSession, 'isChannelValid').mockImplementation(() => isChannelValid);
 
     const clientPublishEngine = new ClientSidePublishEngine(fakeSession);
 
@@ -355,25 +356,23 @@ describe('Testing the client publish engine', function () {
 
     expect(clientPublishEngine.subscriptionCount).toBe(1);
 
-    jasmine.clock().tick(100); // wait a little bit as PendingRequests are send asynchronously
+    vi.advanceTimersByTime(100); // wait a little bit as PendingRequests are send asynchronously
     expect((clientPublishEngine as any).nbPendingPublishRequests).toBe(0);
     expect(publishCount).toBe(0);
 
-    jasmine.clock().tick(20000);
+    vi.advanceTimersByTime(20000);
     expect(publishCount).toBe(0);
 
     isChannelValid = true;
-    jasmine.clock().tick(1000); // wait a little bit as PendingRequests are send asynchronously
+    vi.advanceTimersByTime(1000); // wait a little bit as PendingRequests are send asynchronously
     // xx clientPublishEngine.nbPendingPublishRequests.should.eql(0);
 
-    jasmine.clock().tick(20000);
+    vi.advanceTimersByTime(20000);
     expect(publishCount).toBe(19);
 
     clientPublishEngine.unregisterSubscription(1);
     expect(clientPublishEngine.subscriptionCount).toBe(0);
 
     stop();
-
-    done(); // new Error("implement me for #390 - "));
   });
 });

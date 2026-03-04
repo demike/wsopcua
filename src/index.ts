@@ -14,7 +14,8 @@ export { StatusCodes } from './constants/raw_status_codes';
 import './generated';
 
 export { DataType } from './variant/DataTypeEnum';
-export { Variant, IVariant } from './variant/variant';
+export { Variant } from './variant/variant';
+export type { IVariant } from './variant/variant';
 export { VariantArrayType } from './variant/VariantArrayTypeEnum';
 export { buildVariantArray } from './variant';
 
@@ -82,7 +83,8 @@ export * from './service-translate-browse-path'; // TODO: export as service-tran
 // generated module.exports.ServerState = require("node-opcua-common").ServerState;
 // generated as ServiceCounterDataType  module.exports.ServiceCounter = require("node-opcua-common").ServiceCounter;
 
-export { SecurityPolicy, ConnectionStrategy } from './secure-channel';
+export { SecurityPolicy } from './secure-channel';
+export type { ConnectionStrategy } from './secure-channel';
 
 // generated module.exports.MessageSecurityMode = require("node-opcua-service-secure-channel").MessageSecurityMode;
 

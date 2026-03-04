@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { BackoffStrategy } from './strategy/strategy';
 import { Backoff, fibonacci, exponential, call } from '.';
 import { FibonacciBackoffStrategy } from './strategy/fibonacci';
@@ -11,17 +12,16 @@ describe('Backoff', function () {
     backoffStrategy = toggle ? new FibonacciBackoffStrategy() : new ExponentialBackoffStrategy({});
     toggle = !toggle;
     backoff = new Backoff(backoffStrategy);
-    jasmine.clock().install();
-    jasmine.clock().mockDate();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 
   it('the backoff event should be emitted when backoff starts', function () {
     let called = false;
-    spyOn<BackoffStrategy>(backoffStrategy, 'next').and.returnValue(10);
+    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
     backoff.on('backoff', () => {
       called = true;
     });
@@ -32,18 +32,18 @@ describe('Backoff', function () {
 
   it('the ready event should be emitted on backoff completion', function () {
     let called = false;
-    spyOn<BackoffStrategy>(backoffStrategy, 'next').and.returnValue(10);
+    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
     backoff.on('backoff', () => {
       called = true;
     });
     backoff.backoff();
-    jasmine.clock().tick(10);
+    vi.advanceTimersByTime(10);
 
     expect(called).toBeTruthy('Ready event should be emitted when backoff ends.');
   });
 
   it('the backoff event should be passed the backoff delay', function () {
-    spyOn<BackoffStrategy>(backoffStrategy, 'next').and.returnValue(989);
+    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(989);
     backoff.on('backoff', (arg0, arg1) => {
       expect(arg1).toBe(
         989,
@@ -54,7 +54,7 @@ describe('Backoff', function () {
   });
 
   it('the ready event should be passed the backoff delay', function () {
-    spyOn<BackoffStrategy>(backoffStrategy, 'next').and.returnValue(989);
+    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(989);
     backoff.on('ready', (arg0, arg1) => {
       expect(arg1).toBe(
         989,
@@ -62,14 +62,14 @@ describe('Backoff', function () {
       );
     });
     backoff.backoff();
-    jasmine.clock().tick(989);
+    vi.advanceTimersByTime(989);
   });
 
   it('the fail event should be emitted when backoff limit is reached', function () {
     let called = false;
     const err = new Error('Fail');
 
-    spyOn<BackoffStrategy>(backoffStrategy, 'next').and.returnValue(10);
+    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
 
     backoff.on('fail', (e) => {
       called = true;
@@ -81,7 +81,7 @@ describe('Backoff', function () {
     // Consume first 2 backoffs.
     for (let i = 0; i < 2; i++) {
       backoff.backoff();
-      jasmine.clock().tick(10);
+      vi.advanceTimersByTime(10);
     }
 
     // Failure should occur on the third call, and not before.
@@ -91,7 +91,7 @@ describe('Backoff', function () {
   });
 
   it('calling backoff while a backoff is in progress should throw an error', function () {
-    spyOn<BackoffStrategy>(backoffStrategy, 'next').and.returnValue(10);
+    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
     backoff.backoff();
 
     // in progress
@@ -104,39 +104,39 @@ describe('Backoff', function () {
   });
 
   it('reset should cancel any backoff in progress', function () {
-    spyOn<BackoffStrategy>(backoffStrategy, 'next').and.returnValue(10);
+    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
     let called = false;
     backoff.on('ready', () => (called = true));
 
     backoff.backoff();
 
     backoff.reset();
-    jasmine.clock().tick(100); // 'ready' should not be emitted.
+    vi.advanceTimersByTime(100); // 'ready' should not be emitted.
 
     expect(called).toBe(false, 'Reset should have aborted the backoff.');
   });
 
   it('reset should reset the backoff strategy', function () {
-    const spy = spyOn(backoffStrategy, 'reset');
+    const spy = vi.spyOn(backoffStrategy, 'reset');
     backoff.reset();
-    expect(spy.calls.count()).toBeGreaterThan(0, 'The backoff strategy should have been resetted.');
+    expect(spy.mock.calls.length).toBeGreaterThan(0, 'The backoff strategy should have been resetted.');
   });
 
   it('backoff should be reset after fail', function () {
-    spyOn<BackoffStrategy>(backoffStrategy, 'next').and.returnValue(10);
-    const backoffReset = spyOn<BackoffStrategy>(backoffStrategy, 'reset');
+    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
+    const backoffReset = vi.spyOn<BackoffStrategy>(backoffStrategy, 'reset');
 
     backoff.failAfter(1);
 
     backoff.backoff();
-    jasmine.clock().tick(10);
+    vi.advanceTimersByTime(10);
     backoff.backoff();
 
     expect(backoffReset).toHaveBeenCalled();
   });
 
   it('the backoff number should increase from 0 to N - 1', function () {
-    spyOn<BackoffStrategy>(backoffStrategy, 'next').and.returnValue(10);
+    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
     const actualNumbers: number[] = [];
 
     backoff.on('backoff', (arg0) => {
@@ -147,7 +147,7 @@ describe('Backoff', function () {
 
     for (let i = 0; i < expectedNumbers.length; i++) {
       backoff.backoff();
-      jasmine.clock().tick(10);
+      vi.advanceTimersByTime(10);
     }
 
     expect(expectedNumbers).toEqual(
@@ -281,12 +281,11 @@ describe('BackoffStrategy', function () {
 
 describe('call', () => {
   beforeEach(function () {
-    jasmine.clock().install();
-    jasmine.clock().mockDate();
+    vi.useFakeTimers();
   });
 
   afterEach(function () {
-    jasmine.clock().uninstall();
+    vi.useRealTimers();
   });
 
   it('should call the a function with the right parameters', () => {
@@ -303,7 +302,7 @@ describe('call', () => {
     c.setStrategy(new ExponentialBackoffStrategy({ initialDelay: 100, maxDelay: 10000 }));
     c.start();
 
-    jasmine.clock().tick(10000);
+    vi.advanceTimersByTime(10000);
     expect(c.isRunning()).toBe(true);
     expect(callCnt).toBeGreaterThan(0);
   });
@@ -320,7 +319,7 @@ describe('call', () => {
     c.setStrategy(new ExponentialBackoffStrategy({ initialDelay: 100, maxDelay: 10000 }));
     c.start();
 
-    jasmine.clock().tick(1000);
+    vi.advanceTimersByTime(1000);
     expect(c.isRunning()).toBe(true);
     expect(callCnt).toBe(4);
   });
@@ -345,7 +344,7 @@ describe('call', () => {
     c.setStrategy(new ExponentialBackoffStrategy({ initialDelay: 100, maxDelay: 1000 }));
     c.start();
 
-    jasmine.clock().tick(100000);
+    vi.advanceTimersByTime(100000);
     expect(c.isAborted()).toBeTruthy();
     expect(callCnt).toBe(7); // why 7?
   });
