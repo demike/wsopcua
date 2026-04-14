@@ -1,5 +1,8 @@
 import { AlgorithmIdentifier, readTag } from '../crypto/asn1';
-import { coerceCertificateInfo } from '../crypto/crypto_coerce_certificate';
+import {
+  CertificateCoercionOptions,
+  coerceCertificateInfo,
+} from '../crypto/crypto_coerce_certificate';
 import {
   CertificateInternals,
   convertPEMtoDER,
@@ -39,7 +42,31 @@ export interface CertificateStore {
    * optional initialization method
    * if present will be called during client initialization
    */
-  init?(): Promise<void>;
+  init?(options?: CertificateStoreInitOptions): Promise<void>;
+}
+
+export interface CertificateStoreInitOptions {
+  applicationUri?: string;
+  applicationName?: string;
+  organizationName?: string;
+}
+
+export interface SelfSignedCertificateStoreOptions extends CertificateStoreInitOptions {
+  tbsCertificate?: Partial<TbsCertificate>;
+  signatureAlgorithm?: AlgorithmIdentifier;
+  spkiModulusLength?: number;
+}
+
+function cloneSelfSignedCertificateStoreOptions(
+  options?: SelfSignedCertificateStoreOptions
+): SelfSignedCertificateStoreOptions {
+  return {
+    ...options,
+    signatureAlgorithm: options?.signatureAlgorithm
+      ? { ...options.signatureAlgorithm }
+      : options?.signatureAlgorithm,
+    tbsCertificate: options?.tbsCertificate ? { ...options.tbsCertificate } : undefined,
+  };
 }
 
 export class NullCertificateStore implements CertificateStore {
@@ -123,14 +150,10 @@ export class SelfSignedCertificateStore implements CertificateStore {
   protected certificateChain?: Uint8Array;
   protected certificate?: Uint8Array;
   protected privateKey?: PrivateKey;
-  protected options: CertificateInternals;
+  protected options: SelfSignedCertificateStoreOptions;
 
-  constructor(options?: {
-    tbsCertificate: Partial<TbsCertificate>;
-    signatureAlgorithm?: AlgorithmIdentifier;
-    spkiModulusLength?: number;
-  }) {
-    this.options = coerceCertificateInfo(options);
+  constructor(options?: SelfSignedCertificateStoreOptions) {
+    this.options = cloneSelfSignedCertificateStoreOptions(options);
     this.spkiModulusLength = options?.spkiModulusLength ?? 2048;
   }
   public getCertificate(): Uint8Array | undefined {
@@ -143,12 +166,22 @@ export class SelfSignedCertificateStore implements CertificateStore {
     return this.privateKey;
   }
 
-  public async init(): Promise<void> {
-    const keyPair = await this.generateKeyPair(this.options.tbsCertificate.subjectPublicKeyInfo);
+  public async init(options?: CertificateStoreInitOptions): Promise<void> {
+    const coercionOptions: CertificateCoercionOptions = {
+      applicationName: options?.applicationName ?? this.options.applicationName,
+      applicationUri: options?.applicationUri ?? this.options.applicationUri,
+      organizationName: options?.organizationName ?? this.options.organizationName,
+    };
+    const certificateInfo = coerceCertificateInfo(
+      cloneSelfSignedCertificateStoreOptions(this.options),
+      coercionOptions
+    );
+
+    const keyPair = await this.generateKeyPair(certificateInfo.tbsCertificate.subjectPublicKeyInfo);
 
     const signingKeyDER = await this.generatePrivateKey(keyPair);
-    await this.insertPublicKeyIntoCertificate(keyPair);
-    this.certificateChain = await writeCertificate(this.options, signingKeyDER);
+    await this.insertPublicKeyIntoCertificate(keyPair, certificateInfo);
+    this.certificateChain = await writeCertificate(certificateInfo, signingKeyDER);
     this.certificate = split_der(this.certificateChain)[0];
 
     // for testing
@@ -178,11 +211,14 @@ export class SelfSignedCertificateStore implements CertificateStore {
     return keyPair;
   }
 
-  private async insertPublicKeyIntoCertificate(keyPair: CryptoKeyPair) {
+  private async insertPublicKeyIntoCertificate(
+    keyPair: CryptoKeyPair,
+    certificateInfo: CertificateInternals
+  ) {
     const spki = new Uint8Array(await crypto.subtle.exportKey('spki', keyPair.publicKey));
 
     const tag = readTag(spki, 0);
-    this.options.tbsCertificate.subjectPublicKeyInfo = readSubjectPublicKeyInfo(spki, tag);
+    certificateInfo.tbsCertificate.subjectPublicKeyInfo = readSubjectPublicKeyInfo(spki, tag);
   }
 
   private async generatePrivateKey(keyPair: CryptoKeyPair): Promise<DER> {
