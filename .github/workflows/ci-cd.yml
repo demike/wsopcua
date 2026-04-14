@@ -28,7 +28,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run build --if-present
       - run: npm run e2e:ci
-      - run: npm run test -- --single-run --browsers ChromeHeadless
+      - run: npm run test:ci
   add-doc-files:
     needs: build
     runs-on: ubuntu-latest
