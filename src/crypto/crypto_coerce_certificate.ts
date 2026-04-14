@@ -8,15 +8,24 @@ import {
   Validity,
 } from './crypto_explore_certificate';
 
-export function coerceCertificateInfo(info?: {
-  tbsCertificate?: Partial<TbsCertificate>;
-  signatureAlgorithm?: AlgorithmIdentifier;
-}): CertificateInternals {
+export interface CertificateCoercionOptions {
+  applicationName?: string;
+  applicationUri?: string;
+  organizationName?: string;
+}
+
+export function coerceCertificateInfo(
+  info?: {
+    tbsCertificate?: Partial<TbsCertificate>;
+    signatureAlgorithm?: AlgorithmIdentifier;
+  },
+  options?: CertificateCoercionOptions
+): CertificateInternals {
   info = info ?? {};
   info.signatureAlgorithm = coerceSignatureAlgorithm(info?.signatureAlgorithm);
   (info as CertificateInternals).signatureValue =
     (info as CertificateInternals)?.signatureValue ?? '';
-  info.tbsCertificate = coerceTbsCertificate(info?.tbsCertificate);
+  info.tbsCertificate = coerceTbsCertificate(info?.tbsCertificate, options);
   return info as CertificateInternals;
 }
 
@@ -24,9 +33,12 @@ function coerceSignatureAlgorithm(identifier?: AlgorithmIdentifier): AlgorithmId
   return identifier ?? { identifier: 'sha256WithRSAEncryption' };
 }
 
-function coerceTbsCertificate(cert?: Partial<TbsCertificate>): TbsCertificate {
-  let subject = coerceTbsCertificateSubject(cert?.subject);
-  let issuer = coerceTbsCertificateSubject(cert?.subject);
+function coerceTbsCertificate(
+  cert?: Partial<TbsCertificate>,
+  options?: CertificateCoercionOptions
+): TbsCertificate {
+  let subject = coerceTbsCertificateSubject(cert?.subject, options);
+  let issuer = coerceTbsCertificateSubject(cert?.issuer, options);
 
   if (!cert?.subject) {
     subject = issuer;
@@ -44,13 +56,19 @@ function coerceTbsCertificate(cert?: Partial<TbsCertificate>): TbsCertificate {
     subjectFingerPrint: cert?.subjectFingerPrint ?? '',
     subjectPublicKeyInfo: coerceSPKI(cert?.subjectPublicKeyInfo),
     validity: coerceValidity(cert?.validity),
-    extensions: coerceTbsCertificateExtensions(cert?.extensions),
+    extensions: coerceTbsCertificateExtensions(cert?.extensions, options),
   };
 }
 
 function coerceTbsCertificateExtensions(
-  extensions?: CertificateExtension | null
+  extensions?: CertificateExtension | null,
+  options?: CertificateCoercionOptions
 ): CertificateExtension | null {
+  const uniformResourceIdentifier = coerceSubjectAltNameUris(
+    extensions?.subjectAltName?.uniformResourceIdentifier,
+    options?.applicationUri
+  );
+
   return {
     ...extensions,
     keyUsage: {
@@ -58,7 +76,7 @@ function coerceTbsCertificateExtensions(
       keyEncipherment: true,
       digitalSignature: true,
       nonRepudiation: true,
-      keyCertSign: false,
+      keyCertSign: true,
       cRLSign: false,
       decipherOnly: false,
       encipherOnly: false,
@@ -66,7 +84,7 @@ function coerceTbsCertificateExtensions(
       ...extensions?.keyUsage,
     },
     extKeyUsage: {
-      serverAuth: true,
+      serverAuth: false,
       clientAuth: true,
       codeSigning: false,
       emailProtection: false,
@@ -78,14 +96,13 @@ function coerceTbsCertificateExtensions(
       ...extensions?.extKeyUsage,
     },
     subjectAltName: {
-      uniformResourceIdentifier: ['www.wsopcua.com'],
-      dNSName: ['www.wsopcua.com'],
       /*
       iPAddress: ['c0a8650a'],
       rfc822Name: ['testemail'],
       registeredID: ['1.2.3.4.5.5'],
       */
       ...extensions?.subjectAltName,
+      uniformResourceIdentifier,
     },
     subjectKeyIdentifier: '3F:B1:C3:54:00:9F:D4:4F:F8:3C:9D:91:35:03:98:20:34:9E:EA:97',
     authorityKeyIdentifier: {
@@ -98,16 +115,38 @@ function coerceTbsCertificateExtensions(
   };
 }
 
-function coerceTbsCertificateSubject(subject?: DirectoryName): DirectoryName {
-  return {
-    commonName: 'www.wsopcua.com',
+function coerceSubjectAltNameUris(existingUris?: string[], applicationUri?: string): string[] {
+  const uniqueUris = new Set((existingUris ?? []).filter((uri) => !!uri));
+
+  if (applicationUri) {
+    uniqueUris.delete(applicationUri);
+    return [applicationUri, ...uniqueUris];
+  }
+  if (uniqueUris.size > 0) {
+    return [...uniqueUris];
+  }
+  return ['urn:wsopcua:application'];
+}
+
+function coerceTbsCertificateSubject(
+  subject?: DirectoryName,
+  options?: CertificateCoercionOptions
+): DirectoryName {
+  return omitUndefinedDirectoryNameFields({
+    commonName: options?.applicationName ?? 'NodeOPCUA-Client',
     countryName: '--',
     localityName: '--',
-    organizationName: 'wsopcua',
+    organizationName: options?.organizationName,
     organizationalUnitName: 'wsopcua',
     stateOrProvinceName: '--',
     ...subject,
-  };
+  });
+}
+
+function omitUndefinedDirectoryNameFields(subject: DirectoryName): DirectoryName {
+  return Object.fromEntries(
+    Object.entries(subject).filter(([, value]) => value !== undefined)
+  ) as DirectoryName;
 }
 
 function coerceSPKI(spki?: SubjectPublicKeyInfo) {
@@ -130,10 +169,15 @@ function coerceValidity(validity?: Validity) {
 }
 
 function coerceBasicConstraints(constraints?: BasicConstraints): BasicConstraints {
-  return {
+  const basicConstraints: BasicConstraints = {
     critical: true,
-    cA: true,
-    pathLengthConstraint: 0,
+    cA: false,
     ...constraints,
   };
+
+  if (basicConstraints.cA && basicConstraints.pathLengthConstraint === undefined) {
+    basicConstraints.pathLengthConstraint = 0;
+  }
+
+  return basicConstraints;
 }

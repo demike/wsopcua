@@ -58,6 +58,7 @@ import {
 import { IEncodable } from '../factory/factories_baseobject';
 import { OPCUAClientOptions } from '../common/client_options';
 import { CertificateStore, NullCertificateStore } from '../common/certificate_store';
+import { makeApplicationUrn } from '../common/applicationurn';
 
 const defaultConnectionStrategy: ConnectionStrategyOptions = {
   maxRetry: 10000000, // almost infinite
@@ -965,10 +966,17 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         (_inner_callback: ErrorCallback) => {
           if (!this.clientCertificateStore.getCertificate() && this.clientCertificateStore.init) {
             // initialize the certificates (i.e.: create self signed certificate )
-            this.clientCertificateStore.init().then(
-              () => _inner_callback(),
-              (err) => _inner_callback(err)
-            );
+            makeApplicationUrn(window.location.hostname, this.applicationName)
+              .then((applicationUri) =>
+                this.clientCertificateStore.init?.({
+                  applicationName: this.applicationName,
+                  applicationUri,
+                })
+              )
+              .then(
+                () => _inner_callback(),
+                (err) => _inner_callback(err)
+              );
           } else {
             _inner_callback();
           }
