@@ -13,7 +13,7 @@ import {
 } from './utils/test_server_controller';
 import { computeDerivedKeys } from '../secure-channel/security_policy';
 
-const describeBrowserSensitive = typeof window !== 'undefined' ? describe.skip : describe;
+const describeBrowserOnly = typeof window !== 'undefined' ? describe : describe.skip;
 
 describe('OPCUA-Session Activation', function () {
   describe('securitynone', () => {
@@ -61,7 +61,7 @@ describe('OPCUA-Session Activation', function () {
       }
     });
   });
-  describeBrowserSensitive('security: sign', () => {
+  describeBrowserOnly('security: sign', () => {
     let controller: E2ETestController;
     beforeAll(async () => {
       controller = getE2ETestController();
@@ -102,7 +102,7 @@ describe('OPCUA-Session Activation', function () {
           session = await client.createSessionP({
             userIdentityInfo: { userName: 'john', password: 'john_pw' },
           });
-          expect(session.isChannelValid()).toBeTrue();
+          expect(session.isChannelValid()).toBeTruthy();
         } catch (err) {
           fail(err);
         } finally {
@@ -112,7 +112,7 @@ describe('OPCUA-Session Activation', function () {
       })
     );
   });
-  describeBrowserSensitive('security: sign and encrypt', () => {
+  describeBrowserOnly('security: sign and encrypt', () => {
     let controller: E2ETestController;
     beforeAll(async () => {
       controller = getE2ETestController();
@@ -171,7 +171,7 @@ describe('OPCUA-Session Activation', function () {
   SecurityPolicy.Aes128_Sha256_RsaOaep,
   SecurityPolicy.Aes256_Sha256_RsaPss,
 ].forEach((policy) =>
-  describeBrowserSensitive(`asymmetric encrypt decrypt sing verify: ${policy}`, () => {
+  describeBrowserOnly(`asymmetric encrypt decrypt sing verify: ${policy}`, () => {
     it('should encrypt decrypt with a PEM certificate and private key', async () => {
       const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
       const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
@@ -226,7 +226,7 @@ describe('OPCUA-Session Activation', function () {
         store.getCertificate()
       );
 
-      expect(isVerified).toBeTrue();
+      expect(isVerified).toBeTruthy();
     });
   })
 );
