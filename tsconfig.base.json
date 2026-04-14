@@ -4,21 +4,22 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
+    "skipLibCheck": true,
     "strict": true,
     "moduleResolution": "node",
     "strictNullChecks": true,
     "noImplicitAny": true,
     "lib": ["esnext", "es2017.object", "dom"],
     "target": "esnext",
-    "baseUrl": ".",
-    "types": ["vitest/globals"]
+    "baseUrl": "."
   },
   "exclude": [
     "node_modules/",
     "**/*.spec.ts",
     "**/*.e2e-spec.ts",
     "src/schema_parser/**/*",
-    "src/examples/**/*"
+    "src/examples/**/*",
+    "src/**/test_helpers/**/*"
   ],
   "include": ["src/**/*.ts"]
 }
