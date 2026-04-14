@@ -18,6 +18,9 @@ jobs:
   release:
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
 
     strategy:
       matrix:
@@ -58,8 +61,6 @@ jobs:
           draft: false
           prerelease: false
 
-      # publish to npm
+      # publish to npm via trusted publishing (OIDC)
       - name: publish to npm
-        run: cd ./dist && npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+        run: cd ./dist && npm publish --provenance --access public
