@@ -165,6 +165,14 @@ export class E2ETestControllerImpl implements E2ETestController {
    * @async
    */
   public async startTestServer(namespaces?: string[]) {
+    try {
+      await this.stopTestServer();
+    } catch (err) {
+      if (isE2EDebugEnabled()) {
+        console.warn('cleanup before startTestServer failed', err);
+      }
+    }
+
     const session = await this.controlSession$;
 
     const inputArguments = [
