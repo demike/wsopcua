@@ -42,7 +42,7 @@ describe('OPCUA Client', function () {
           throw err;
         }
       }
-      await expectAsync(test()).toBeRejected(); // With(/The connection has been rejected/);
+      await expect(test()).rejects.toThrow(); // With(/The connection has been rejected/);
       console.log(
         `setIntervalCalls ${setIntervalCalls} vs. clearIntervalCalls ${clearIntervalCalls}`
       );
@@ -54,50 +54,50 @@ describe('OPCUA Client', function () {
 
 describe('isAnonymous', () => {
   it('should return false if username and/or password are set', () => {
-    expect(isAnonymous({ userName: 'name', password: 'pw' })).toBeFalse();
+    expect(isAnonymous({ userName: 'name', password: 'pw' })).toBe(false);
   });
 
   it("should return false if 'tokenData' is set", () => {
-    expect(isAnonymous({ userName: 'name', password: 'pw' })).toBeFalse();
+    expect(isAnonymous({ userName: 'name', password: 'pw' })).toBe(false);
   });
 
   it("should return false if 'tokenData' is set", () => {
-    expect(isAnonymous({ tokenData: new Uint8Array() })).toBeFalse();
+    expect(isAnonymous({ tokenData: new Uint8Array() })).toBe(false);
   });
 
   it('should return true if username, password and tokenData are not set', () => {
-    expect(isAnonymous({ some: 'thing' })).toBeTrue();
+    expect(isAnonymous({ some: 'thing' })).toBe(true);
   });
 
   it('should return false if username is set', () => {
-    expect(isAnonymous({ userName: 'name' })).toBeFalse();
+    expect(isAnonymous({ userName: 'name' })).toBe(false);
   });
 });
 
 describe('isUsernamePassword', () => {
   it('should return true if username and password are set', () => {
-    expect(isUserNamePassword({ userName: 'name', password: 'pw' })).toBeTrue();
+    expect(isUserNamePassword({ userName: 'name', password: 'pw' })).toBe(true);
   });
 
   it('should return false if just password is set', () => {
-    expect(isUserNamePassword({ password: 'pw' })).toBeFalse();
+    expect(isUserNamePassword({ password: 'pw' })).toBe(false);
   });
 
   it("should return false if just 'username' is set", () => {
-    expect(isUserNamePassword({ userName: 'name' })).toBeFalse();
+    expect(isUserNamePassword({ userName: 'name' })).toBe(false);
   });
 
   it('should return false if username and password are not set', () => {
-    expect(isUserNamePassword({ some: 'thing' })).toBeFalse();
+    expect(isUserNamePassword({ some: 'thing' })).toBe(false);
   });
 });
 
 describe('isIssued', () => {
   it('should return true if tokenData is set', () => {
-    expect(isIssued({ tokenData: new Uint8Array() })).toBeTrue();
+    expect(isIssued({ tokenData: new Uint8Array() })).toBe(true);
   });
 
   it('should return true username and password are not set', () => {
-    expect(isIssued({ some: 'thing' })).toBeFalse();
+    expect(isIssued({ some: 'thing' })).toBe(false);
   });
 });

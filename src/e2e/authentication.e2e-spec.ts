@@ -13,6 +13,8 @@ import {
 } from './utils/test_server_controller';
 import { computeDerivedKeys } from '../secure-channel/security_policy';
 
+const describeBrowserOnly = typeof window !== 'undefined' ? describe : describe.skip;
+
 describe('OPCUA-Session Activation', function () {
   describe('securitynone', () => {
     let controller: E2ETestController;
@@ -30,28 +32,36 @@ describe('OPCUA-Session Activation', function () {
     });
     it('should do username password authentication', async () => {
       const client = new OPCUAClient(DEFAULT_CLIENT_OPTIONS);
+      let session: ClientSession | undefined;
+
       await client.connectP(OPCUA_TEST_SERVER_URI /* 'ws://sjuticd.engel.int:4444' */);
-      const session = await client.createSessionP({
-        userIdentityInfo: { userName: 'john', password: 'john_pw' },
-      });
-      expect(session).toBeTruthy();
-      //    await client.disconnectP();
+      try {
+        session = await client.createSessionP({
+          userIdentityInfo: { userName: 'john', password: 'john_pw' },
+        });
+        expect(session).toBeTruthy();
+      } finally {
+        await session?.closeP();
+        await client.disconnectP();
+      }
     });
 
     it('should fail authentication with wrong username / password', async () => {
       const client = new OPCUAClient(DEFAULT_CLIENT_OPTIONS);
       await client.connectP(OPCUA_TEST_SERVER_URI);
       try {
-        const sesssion = await client.createSessionP({
+        await client.createSessionP({
           userIdentityInfo: { userName: 'wrong_user', password: 'wrong_pw' },
         });
         fail('authentication with wrong username/password should have failed');
       } catch (err) {
         expect(err).toBeDefined();
+      } finally {
+        await client.disconnectP();
       }
     });
   });
-  describe('security: sign', () => {
+  describeBrowserOnly('security: sign', () => {
     let controller: E2ETestController;
     beforeAll(async () => {
       controller = getE2ETestController();
@@ -85,22 +95,24 @@ describe('OPCUA-Session Activation', function () {
           clientCertificateStore: new PEMDERCertificateStore(clientCertPEM, privateKeyPEM),
         });
 
+        let session: ClientSession | undefined;
         await client.connectP(OPCUA_TEST_SERVER_URI);
 
         try {
-          const session = await client.createSessionP({
+          session = await client.createSessionP({
             userIdentityInfo: { userName: 'john', password: 'john_pw' },
           });
-          expect(session.isChannelValid()).toBeTrue();
+          expect(session.isChannelValid()).toBeTruthy();
         } catch (err) {
           fail(err);
         } finally {
-          //        await client.disconnectP();
+          await session?.closeP();
+          await client.disconnectP();
         }
       })
     );
   });
-  describe('security: sign and encrypt', () => {
+  describeBrowserOnly('security: sign and encrypt', () => {
     let controller: E2ETestController;
     beforeAll(async () => {
       controller = getE2ETestController();
@@ -134,17 +146,19 @@ describe('OPCUA-Session Activation', function () {
           clientCertificateStore: new PEMDERCertificateStore(clientCertPEM, privateKeyPEM),
         });
 
+        let session: ClientSession | undefined;
         await client.connectP(OPCUA_TEST_SERVER_URI);
 
         try {
-          const session = await client.createSessionP({
+          session = await client.createSessionP({
             userIdentityInfo: { userName: 'john', password: 'john_pw' },
           });
           expect(session.isChannelValid()).toBeTruthy();
         } catch (err) {
           fail(err);
         } finally {
-          //         await client.disconnectP();
+          await session?.closeP();
+          await client.disconnectP();
         }
       })
     );
@@ -157,7 +171,7 @@ describe('OPCUA-Session Activation', function () {
   SecurityPolicy.Aes128_Sha256_RsaOaep,
   SecurityPolicy.Aes256_Sha256_RsaPss,
 ].forEach((policy) =>
-  describe(`asymmetric encrypt decrypt sing verify: ${policy}`, () => {
+  describeBrowserOnly(`asymmetric encrypt decrypt sing verify: ${policy}`, () => {
     it('should encrypt decrypt with a PEM certificate and private key', async () => {
       const clientCertPEM = await fetch('base/src/test-util/test_cert.pem').then((r) => r.text());
       const privateKeyPEM = await fetch('base/src/test-util/test_privatekey.pem').then((r) =>
@@ -212,7 +226,7 @@ describe('OPCUA-Session Activation', function () {
         store.getCertificate()
       );
 
-      expect(isVerified).toBeTrue();
+      expect(isVerified).toBeTruthy();
     });
   })
 );

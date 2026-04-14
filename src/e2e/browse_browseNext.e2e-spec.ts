@@ -12,6 +12,7 @@ import {
   NodeIdType,
 } from '../';
 import { NodeClass } from '../generated/NodeClass';
+import { vi } from 'vitest';
 
 const ObjectsFolderId = new NodeId(NodeIdType.Numeric, 85, 0);
 
@@ -79,15 +80,15 @@ describe('testing browse & browseNext', () => {
       nodeClassMask: NodeClass.Object,
       nodeId: groupNodeId,
     });
-    const browseSpy = spyOn(session, 'browse').and.callThrough();
-    const browseNextSpy = spyOn(session, 'browseNext').and.callThrough();
+    const browseSpy = vi.spyOn(session, 'browse');
+    const browseNextSpy = vi.spyOn(session, 'browseNext');
 
     const result = await browseAll(session, nodeToBrowse);
     expect(result[0].references.length).toBe(27);
 
     expect(result[0].continuationPoint).toBeUndefined();
 
-    expect(browseSpy.calls.count()).toBe(1);
-    expect(browseNextSpy.calls.count()).toBe(2);
+    expect(browseSpy).toHaveBeenCalledTimes(1);
+    expect(browseNextSpy).toHaveBeenCalledTimes(2);
   });
 });

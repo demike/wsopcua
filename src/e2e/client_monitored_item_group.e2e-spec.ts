@@ -37,7 +37,7 @@ describe('Testing ClientMonitoredItemGroup', function () {
     await subscription.terminateP();
   });
 
-  it('AA11 should create a ClientMonitoredItem and get notified', function (done) {
+  it('AA11 should create a ClientMonitoredItem and get notified', async function () {
     const itemToMonitor = {
       nodeId: resolveNodeId('ns=0;i=2258'), // Server_ServerStatus_CurrentTime
       attributeId: AttributeIds.Value,
@@ -54,33 +54,38 @@ describe('Testing ClientMonitoredItemGroup', function () {
       console.log(monitoredItem.result);
     });
 
-    let count = 0;
-    monitoredItem.on('changed', (dataValue: DataValue) => {
-      if (doDebug) {
-        console.log(' Count +++');
-      }
-
-      expect(dataValue.value?.value instanceof Date).toBeTruthy();
-
-      count++;
-      if (count === 3) {
-        monitoredItem.terminate(function () {
+    await new Promise<void>((resolve, reject) => {
+      let count = 0;
+      monitoredItem.on('changed', (dataValue: DataValue) => {
+        try {
           if (doDebug) {
-            console.log(' terminated !');
+            console.log(' Count +++');
           }
-          done();
-        });
-      }
-    });
 
-    // subscription.on("item_added",function(monitoredItem){
-    monitoredItem.on('initialized', function () {
-      if (doDebug) {
-        console.log(' Initialized !');
-      }
+          expect(dataValue.value?.value instanceof Date).toBeTruthy();
+
+          count++;
+          if (count === 3) {
+            monitoredItem.terminate(function () {
+              if (doDebug) {
+                console.log(' terminated !');
+              }
+              resolve();
+            });
+          }
+        } catch (err) {
+          reject(err);
+        }
+      });
+
+      monitoredItem.on('initialized', function () {
+        if (doDebug) {
+          console.log(' Initialized !');
+        }
+      });
     });
   });
-  it('AA12 should create a ClientMonitoredItemGroup ', function (done) {
+  it('AA12 should create a ClientMonitoredItemGroup ', async function () {
     const itemsToMonitor = [
       {
         nodeId: resolveNodeId('ns=0;i=2258'),
@@ -106,23 +111,28 @@ describe('Testing ClientMonitoredItemGroup', function () {
     );
     monitoredItemGroup._monitor(() => {});
 
-    // subscription.on("item_added",function(monitoredItem){
-    monitoredItemGroup.on('initialized', function () {
-      if (doDebug) {
-        console.log(' Initialized !');
-      }
+    await new Promise<void>((resolve, reject) => {
+      monitoredItemGroup.on('initialized', function () {
+        try {
+          if (doDebug) {
+            console.log(' Initialized !');
+          }
 
-      expect(monitoredItemGroup.monitoredItems.length).toEqual(2);
+          expect(monitoredItemGroup.monitoredItems.length).toEqual(2);
 
-      monitoredItemGroup.terminate(function () {
-        if (doDebug) {
-          console.log(' terminated !');
+          monitoredItemGroup.terminate(function () {
+            if (doDebug) {
+              console.log(' terminated !');
+            }
+            resolve();
+          });
+        } catch (err) {
+          reject(err);
         }
-        done();
       });
     });
   });
-  it('AA13 should create a ClientMonitoredItemGroup and get notified when one monitored item out of many is changing', function (done) {
+  it('AA13 should create a ClientMonitoredItemGroup and get notified when one monitored item out of many is changing', async function () {
     const itemsToMonitor = [
       {
         nodeId: resolveNodeId('ns=0;i=2258'), // Server_ServerStatus_CurrentTime
@@ -148,41 +158,93 @@ describe('Testing ClientMonitoredItemGroup', function () {
     );
     monitoredItemGroup._monitor(() => {});
 
-    let count = 0;
-    monitoredItemGroup.on(
-      'changed',
-      function (item: MonitoredItemBase, dataValue: DataValue, index: number) {
-        count++;
-        if (doDebug) {
-          console.log(
-            ' Count +++',
-            item.itemToMonitor.nodeId.toString(),
-            (dataValue as Variant).value.toString(),
-            index
-          );
-        }
-        expect(dataValue.value?.value instanceof Date).toBeTruthy();
+    await new Promise<void>((resolve, reject) => {
+      let count = 0;
+      monitoredItemGroup.on(
+        'changed',
+        function (item: MonitoredItemBase, dataValue: DataValue, index: number) {
+          try {
+            count++;
+            if (doDebug) {
+              console.log(
+                ' Count +++',
+                item.itemToMonitor.nodeId.toString(),
+                (dataValue as Variant).value.toString(),
+                index
+              );
+            }
+            expect(dataValue.value?.value instanceof Date).toBeTruthy();
 
-        if (count === 5) {
+            if (count === 5) {
+              monitoredItemGroup.terminate(function () {
+                if (doDebug) {
+                  console.log(' terminated !');
+                }
+                resolve();
+              });
+            }
+          } catch (err) {
+            reject(err);
+          }
+        }
+      );
+
+      monitoredItemGroup.on('initialized', function () {
+        if (doDebug) {
+          console.log(' Initialized !');
+        }
+        expect(monitoredItemGroup.monitoredItems.length).toEqual(2);
+      });
+    });
+  });
+  it('AA14 should create a ClientMonitoredItemGroup ', async function () {
+    const itemsToMonitor = [
+      {
+        nodeId: resolveNodeId('ns=0;i=2258'),
+        attributeId: AttributeIds.Value,
+      },
+
+      {
+        nodeId: resolveNodeId('ns=0;i=2258'),
+        attributeId: AttributeIds.Value,
+      },
+    ];
+    const options = {
+      samplingInterval: 10,
+      discardOldest: true,
+      queueSize: 1,
+    };
+
+    const monitoredItemGroup = new MonitoredItemGroup(
+      subscription,
+      itemsToMonitor,
+      options,
+      TimestampsToReturn.Both
+    );
+    monitoredItemGroup._monitor(() => {});
+
+    await new Promise<void>((resolve, reject) => {
+      monitoredItemGroup.on('initialized', function () {
+        try {
+          if (doDebug) {
+            console.log(' Initialized !');
+          }
+          console.log(monitoredItemGroup.toString());
+          expect(monitoredItemGroup.monitoredItems.length).toEqual(2);
+
           monitoredItemGroup.terminate(function () {
             if (doDebug) {
               console.log(' terminated !');
             }
-            done();
+            resolve();
           });
+        } catch (err) {
+          reject(err);
         }
-      }
-    );
-
-    // subscription.on("item_added",function(monitoredItem){
-    monitoredItemGroup.on('initialized', function () {
-      if (doDebug) {
-        console.log(' Initialized !');
-      }
-      expect(monitoredItemGroup.monitoredItems.length).toEqual(2);
+      });
     });
   });
-  it('AA14 should create a ClientMonitoredItemGroup ', function (done) {
+  it('AA15 should call toString function of ClientMonitoredItemGroup ', async function () {
     const itemsToMonitor = [
       {
         nodeId: resolveNodeId('ns=0;i=2258'),
@@ -208,67 +270,31 @@ describe('Testing ClientMonitoredItemGroup', function () {
     );
     monitoredItemGroup._monitor(() => {});
 
-    // subscription.on("item_added",function(monitoredItem){
-    monitoredItemGroup.on('initialized', function () {
-      if (doDebug) {
-        console.log(' Initialized !');
-      }
-      console.log(monitoredItemGroup.toString());
-      expect(monitoredItemGroup.monitoredItems.length).toEqual(2);
+    await new Promise<void>((resolve, reject) => {
+      monitoredItemGroup.on('initialized', function () {
+        try {
+          if (doDebug) {
+            console.log(' Initialized !');
+          }
 
-      monitoredItemGroup.terminate(function () {
-        if (doDebug) {
-          console.log(' terminated !');
+          const str = monitoredItemGroup.toString();
+          expect(str).toBeDefined();
+
+          console.log('monitoredItemGroup = ', str);
+
+          monitoredItemGroup.terminate(function () {
+            if (doDebug) {
+              console.log(' terminated !');
+            }
+            resolve();
+          });
+        } catch (err) {
+          reject(err);
         }
-        done();
       });
     });
   });
-  it('AA15 should call toString function of ClientMonitoredItemGroup ', function (done) {
-    const itemsToMonitor = [
-      {
-        nodeId: resolveNodeId('ns=0;i=2258'),
-        attributeId: AttributeIds.Value,
-      },
-
-      {
-        nodeId: resolveNodeId('ns=0;i=2258'),
-        attributeId: AttributeIds.Value,
-      },
-    ];
-    const options = {
-      samplingInterval: 10,
-      discardOldest: true,
-      queueSize: 1,
-    };
-
-    const monitoredItemGroup = new MonitoredItemGroup(
-      subscription,
-      itemsToMonitor,
-      options,
-      TimestampsToReturn.Both
-    );
-    monitoredItemGroup._monitor(() => {});
-
-    monitoredItemGroup.on('initialized', function () {
-      if (doDebug) {
-        console.log(' Initialized !');
-      }
-
-      const str = monitoredItemGroup.toString();
-      expect(str).toBeDefined();
-
-      console.log('monitoredItemGroup = ', str);
-
-      monitoredItemGroup.terminate(function () {
-        if (doDebug) {
-          console.log(' terminated !');
-        }
-        done();
-      });
-    });
-  });
-  it('AA16 should create a clientMonitoredItemGroup with invalid node #534', function (done) {
+  it('AA16 should create a clientMonitoredItemGroup with invalid node #534', async function () {
     const itemsToMonitor = [
       {
         nodeId: resolveNodeId('ns=0;i=2258'),
@@ -298,19 +324,24 @@ describe('Testing ClientMonitoredItemGroup', function () {
     );
     monitoredItemGroup._monitor(() => {});
 
-    // subscription.on("item_added",function(monitoredItem){
-    monitoredItemGroup.on('initialized', function () {
-      if (doDebug) {
-        console.log(' Initialized !');
-      }
+    await new Promise<void>((resolve, reject) => {
+      monitoredItemGroup.on('initialized', function () {
+        try {
+          if (doDebug) {
+            console.log(' Initialized !');
+          }
 
-      expect(monitoredItemGroup.monitoredItems.length).toEqual(3);
+          expect(monitoredItemGroup.monitoredItems.length).toEqual(3);
 
-      monitoredItemGroup.terminate(function () {
-        if (doDebug) {
-          console.log(' terminated !');
+          monitoredItemGroup.terminate(function () {
+            if (doDebug) {
+              console.log(' terminated !');
+            }
+            resolve();
+          });
+        } catch (err) {
+          reject(err);
         }
-        done();
       });
     });
   });

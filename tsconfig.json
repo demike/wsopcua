@@ -1,26 +1,9 @@
 {
-  "compilerOptions": {
-    "incremental": true,
-    "removeComments": true,
-    "preserveConstEnums": true,
-    "sourceMap": true,
-    // "declaration": true,
-    "strict": true,
-    // "noImplicitReturns": true,
-    "moduleResolution": "node",
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "lib": ["esnext", "es2017.object", "dom"],
-    "target": "esnext",
-    "baseUrl": ".",
-    "types": ["jasmine"]
-  },
-  "exclude": [
-    "node_modules/",
-    "**/*.spec.ts",
-    "**/*.e2e-spec.ts",
-    "src/schema_parser/**/*",
-    "src/examples/**/*"
-  ],
-  "include": ["src/**/*.ts"]
+  "files": [],
+  "references": [
+    { "path": "./src/tsconfig.cjs.json" },
+    { "path": "./src/tsconfig.esm.json" },
+    { "path": "./src/tsconfig.types.json" },
+    { "path": "./tsconfig.spec.json" }
+  ]
 }

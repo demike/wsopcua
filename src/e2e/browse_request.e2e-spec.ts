@@ -28,17 +28,19 @@ describe('Test Browse Request', function () {
     await controller.stopTestServer();
   });
 
-  it('T1 - #Browse should return BadNothingToDo if nodesToBrowse is empty ', function (done) {
+  it('T1 - #Browse should return BadNothingToDo if nodesToBrowse is empty ', async function () {
     const browseRequest = new BrowseRequest({
       nodesToBrowse: [],
     });
-    session.performMessageTransaction(browseRequest, function (err, result) {
-      expect(err?.message).toMatch(/BadNothingToDo/);
-      done();
+    await new Promise<void>((resolve) => {
+      session.performMessageTransaction(browseRequest, function (err) {
+        expect(err?.message).toMatch(/BadNothingToDo/);
+        resolve();
+      });
     });
   });
 
-  it('T2 - #Browse should return BadViewIdInvalid if viewId is invalid', function (done) {
+  it('T2 - #Browse should return BadViewIdInvalid if viewId is invalid', async function () {
     const browseDesc = new BrowseDescription({
       nodeId: rootFolderId,
       referenceTypeId: undefined,
@@ -51,13 +53,15 @@ describe('Test Browse Request', function () {
       }),
       nodesToBrowse: [browseDesc],
     });
-    session.performMessageTransaction(browseRequest, function (err, result) {
-      expect(err?.message).toMatch(/BadViewIdUnknown/);
-      done();
+    await new Promise<void>((resolve) => {
+      session.performMessageTransaction(browseRequest, function (err) {
+        expect(err?.message).toMatch(/BadViewIdUnknown/);
+        resolve();
+      });
     });
   });
 
-  it('T3 - #Browse should return BadViewUnknown if object referenced by viewId is not a view', function (done) {
+  it('T3 - #Browse should return BadViewUnknown if object referenced by viewId is not a view', async function () {
     const browseDesc = new BrowseDescription({
       nodeId: rootFolderId,
       referenceTypeId: undefined,
@@ -70,10 +74,11 @@ describe('Test Browse Request', function () {
       }),
       nodesToBrowse: [browseDesc],
     });
-    session.performMessageTransaction(browseRequest, function (err, result) {
-      // todo
-      expect(err?.message).toMatch(/BadViewIdUnknown/);
-      done();
+    await new Promise<void>((resolve) => {
+      session.performMessageTransaction(browseRequest, function (err) {
+        expect(err?.message).toMatch(/BadViewIdUnknown/);
+        resolve();
+      });
     });
   });
 

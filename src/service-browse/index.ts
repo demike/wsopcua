@@ -46,6 +46,6 @@ export { BrowseNextResponse } from '../generated/BrowseNextResponse';
 
 // export {ViewDescription} from "../generated/ViewDescription";
 
-export { BrowseServiceSet } from './browse_service_set';
+export type { BrowseServiceSet } from './browse_service_set';
 
 export { browseAll } from './browse_all';

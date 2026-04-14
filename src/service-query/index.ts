@@ -6,24 +6,32 @@
 /**
  * @class QueryFirstRequest
  */
-export { QueryFirstRequest, IQueryFirstRequest } from '../generated/QueryFirstRequest';
+export { QueryFirstRequest } from '../generated/QueryFirstRequest';
+export type { IQueryFirstRequest } from '../generated/QueryFirstRequest';
 /**
  * @class QueryFirstResponse
  */
-export { QueryFirstResponse, IQueryFirstResponse } from '../generated/QueryFirstResponse';
+export { QueryFirstResponse } from '../generated/QueryFirstResponse';
+export type { IQueryFirstResponse } from '../generated/QueryFirstResponse';
 /**
  * @class QueryNextRequest
  */
-export { QueryNextRequest, IQueryNextRequest } from '../generated/QueryNextRequest';
+export { QueryNextRequest } from '../generated/QueryNextRequest';
+export type { IQueryNextRequest } from '../generated/QueryNextRequest';
 /**
  * @class QueryNextResponse
  */
-export { QueryNextResponse, IQueryNextResponse } from '../generated/QueryNextResponse';
+export { QueryNextResponse } from '../generated/QueryNextResponse';
+export type { IQueryNextResponse } from '../generated/QueryNextResponse';
 
-export { QueryDataDescription, IQueryDataDescription } from '../generated/QueryDataDescription';
+export { QueryDataDescription } from '../generated/QueryDataDescription';
+export type { IQueryDataDescription } from '../generated/QueryDataDescription';
 
-export { QueryDataSet, IQueryDataSet } from '../generated/QueryDataSet';
+export { QueryDataSet } from '../generated/QueryDataSet';
+export type { IQueryDataSet } from '../generated/QueryDataSet';
 
-export { ParsingResult, IParsingResult } from '../generated/ParsingResult';
+export { ParsingResult } from '../generated/ParsingResult';
+export type { IParsingResult } from '../generated/ParsingResult';
 
-export { NodeTypeDescription, INodeTypeDescription } from '../generated/NodeTypeDescription';
+export { NodeTypeDescription } from '../generated/NodeTypeDescription';
+export type { INodeTypeDescription } from '../generated/NodeTypeDescription';

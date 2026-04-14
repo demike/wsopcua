@@ -8,63 +8,79 @@ function installTestFor(Transport: new () => DirectTransport) {
     function () {
       let transport: DirectTransport;
 
-      beforeEach(function (done) {
+      beforeEach(async function () {
         transport = new Transport();
-        transport.initialize(() => {
-          assert(transport.client);
-          assert(transport.server);
-          done();
+        await new Promise<void>((resolve) => {
+          transport.initialize(() => {
+            assert(transport.client);
+            assert(transport.server);
+            resolve();
+          });
         });
       });
-      afterEach(function (done) {
-        transport.shutdown(done);
+      afterEach(async function () {
+        await new Promise<void>((resolve) => {
+          transport.shutdown(resolve);
+        });
       });
 
-      it('server side should receive data send by the client only', function (done) {
-        transport.client.on('data', function (data: ArrayBuffer) {
-          expect(buf2string(data)).toBe('Some Data');
-          done();
+      it('server side should receive data send by the client only', async function () {
+        await new Promise<void>((resolve) => {
+          transport.client.on('data', function (data: ArrayBuffer) {
+            expect(buf2string(data)).toBe('Some Data');
+            resolve();
+          });
+          transport.server.write('Some Data');
         });
-        transport.server.write('Some Data');
       });
 
-      it('client side should receive data send by the server only', function (done) {
-        transport.server.on('data', function (data: ArrayBuffer) {
-          expect(buf2string(data)).toBe('Some Data');
-          done();
+      it('client side should receive data send by the server only', async function () {
+        await new Promise<void>((resolve) => {
+          transport.server.on('data', function (data: ArrayBuffer) {
+            expect(buf2string(data)).toBe('Some Data');
+            resolve();
+          });
+          transport.client.write('Some Data');
         });
-        transport.client.write('Some Data');
       });
 
-      it("server side should receive 'end' event when connection ends  on the client side", function (done) {
-        transport.server.on('end', function (err?: Error) {
-          expect(err).toBe(undefined);
-          done();
+      it("server side should receive 'end' event when connection ends  on the client side", async function () {
+        await new Promise<void>((resolve) => {
+          transport.server.on('end', function (err?: Error) {
+            expect(err).toBe(undefined);
+            resolve();
+          });
+          transport.client.end();
         });
-        transport.client.end();
       });
-      it("client side should receive 'end' event when connection ends  on the server side", function (done) {
-        transport.client.on('end', function (err?: Error) {
-          expect(err).toBe(undefined);
-          done();
+      it("client side should receive 'end' event when connection ends  on the server side", async function () {
+        await new Promise<void>((resolve) => {
+          transport.client.on('end', function (err?: Error) {
+            expect(err).toBe(undefined);
+            resolve();
+          });
+          transport.server.end();
         });
-        transport.server.end();
-      });
-
-      it("client side should receive 'end' event when connection ends  on the client side", function (done) {
-        transport.client.on('end', function (err?: Error) {
-          expect(err).toBe(undefined);
-          done();
-        });
-        transport.client.end();
       });
 
-      it("server side should receive 'end' event when connection ends  on the server side", function (done) {
-        transport.server.on('end', function (err?: Error) {
-          expect(err).toBe(undefined);
-          done();
+      it("client side should receive 'end' event when connection ends  on the client side", async function () {
+        await new Promise<void>((resolve) => {
+          transport.client.on('end', function (err?: Error) {
+            expect(err).toBe(undefined);
+            resolve();
+          });
+          transport.client.end();
         });
-        transport.server.end();
+      });
+
+      it("server side should receive 'end' event when connection ends  on the server side", async function () {
+        await new Promise<void>((resolve) => {
+          transport.server.on('end', function (err?: Error) {
+            expect(err).toBe(undefined);
+            resolve();
+          });
+          transport.server.end();
+        });
       });
     }
   );

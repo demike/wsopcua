@@ -22,7 +22,6 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
   let namespace: number;
 
   beforeAll(async () => {
-    console.log('jasmine timeout', jasmine.DEFAULT_TIMEOUT_INTERVAL);
     controller = getE2ETestController();
     const setup = await controller.startTestServer();
 
@@ -209,7 +208,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
     );
   });
 
-  xit('#read test maxAge', function (done) {
+  it.skip('#read test maxAge', function (done) {
     done();
   });
 

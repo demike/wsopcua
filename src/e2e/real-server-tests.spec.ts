@@ -48,7 +48,7 @@ async function connect(cli: OPCUAClient, uri: string) {
   }
 }
 
-xdescribe('real server example', () => {
+describe.skip('real server example', () => {
   let cli: OPCUAClient;
 
   beforeEach(async () => {
@@ -74,7 +74,7 @@ xdescribe('real server example', () => {
     }
   });
 
-  xit('should activate session with issued JWT (token)', async () => {
+  it.skip('should activate session with issued JWT (token)', async () => {
     try {
       await cli.createSessionP({
         userIdentityInfo: { userName: 'Franz', password: 'Sepp' },

@@ -1,5 +1,5 @@
 import { BrowseDescription, BrowseResult, ReferenceDescription } from '../generated';
-import { BrowseServiceSet } from './browse_service_set';
+import type { BrowseServiceSet } from './browse_service_set';
 
 export async function browseAll(
   session: BrowseServiceSet,

@@ -278,7 +278,7 @@ describe('Variant', function () {
     expect(var1.isValid()).toEqual(false);
   });
 
-  xit('should detect invalid Array<Int32> Variant', function () {
+  it.skip('should detect invalid Array<Int32> Variant', function () {
     const var1 = new Variant({
       dataType: DataType.UInt32,
       arrayType: VariantArrayType.Array,
@@ -1183,8 +1183,10 @@ xdescribe("benchmarking variant encode", function () {
             .run({max_time: 0.1});
     }
 
-    it("should verify that current Variant.encode method is better than old implementation", function (done) {
-        perform_benchmark(done);
+    it("should verify that current Variant.encode method is better than old implementation", async function () {
+        await new Promise<void>((resolve) => {
+            perform_benchmark(resolve);
+        });
     });
 });
 
@@ -1306,8 +1308,10 @@ describe("benchmarking float Array encode/decode", function () {
             .run({max_time: 0.1});
     }
 
-    it("should check which is the faster way to encode decode a float", function (done) {
-        perform_benchmark(done);
+    it("should check which is the faster way to encode decode a float", async function () {
+        await new Promise<void>((resolve) => {
+            perform_benchmark(resolve);
+        });
     });
 });
 */
@@ -1430,7 +1434,7 @@ describe('Variant with enumeration', function () {
     expect(v.value).toEqual(SomeEnum.DiagnosticInfo);
   });
 
-  xit('should not be necessary to specify the dataType for  a variant containing  enumeration item', function () {
+  it.skip('should not be necessary to specify the dataType for  a variant containing  enumeration item', function () {
     const v = new Variant({
       value: SomeEnum.DiagnosticInfo,
     });
@@ -1471,7 +1475,7 @@ describe('Variant with enumeration', function () {
     });
 
     v1.value[1] += 1;
-    expect(v1.value[1] === v2.value[1]).toBeTrue();
+    expect(v1.value[1] === v2.value[1]).toBe(true);
     v1.value[1] -= 1;
 
     const v3 = new Variant({

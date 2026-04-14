@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { OPCUAClientOptions } from '../common/client_options';
 import { debugLog } from '../common/debug';
 
@@ -9,13 +10,15 @@ import {
   OPCUA_TEST_SERVER_URI,
 } from './utils/test_server_controller';
 
-describe('testing Client-Server - Event', function () {
+const describeForEnv = typeof window !== 'undefined' ? describe.skip : describe;
+
+describeForEnv('testing Client-Server - Event', function () {
   const controller: E2ETestController = getE2ETestController();
   let setup: E2ESetup;
 
   beforeEach(async () => {
     setup = await controller.startTestServer();
-    setup.client.disconnectP();
+    await setup.client.disconnectP();
   });
 
   afterEach(async () => controller.stopTestServer());
@@ -51,13 +54,13 @@ describe('testing Client-Server - Event', function () {
     };
     const client = new OPCUAClient(options);
 
-    const _client_received_close_event = jasmine.createSpy();
+    const _client_received_close_event = vi.fn();
     client.on('close', _client_received_close_event);
 
     debugLog(' --> Connecting Client');
     await client.connectP(OPCUA_TEST_SERVER_URI);
 
-    expect(_client_received_close_event.calls.count()).toBe(0);
+    expect(_client_received_close_event.mock.calls.length).toBe(0);
 
     debugLog(' --> Stopping server');
     await controller.stopTestServer();
@@ -67,10 +70,8 @@ describe('testing Client-Server - Event', function () {
       setTimeout(resolve, 100);
     });
 
-    expect(_client_received_close_event.calls.count()).toBe(1);
-    expect(_client_received_close_event.calls.first().args[0].message).toMatch(
-      /Connection aborted/
-    );
+    expect(_client_received_close_event.mock.calls.length).toBe(1);
+    expect(_client_received_close_event.mock.calls[0][0].message).toMatch(/Connection aborted/);
 
     await client.disconnectP();
   });
@@ -87,10 +88,10 @@ describe('testing Client-Server - Event', function () {
     };
     const client = new OPCUAClient(options);
 
-    const _client_received_close_event = jasmine.createSpy();
+    const _client_received_close_event = vi.fn();
     client.on('close', _client_received_close_event);
 
-    const _client_backoff_event = jasmine.createSpy();
+    const _client_backoff_event = vi.fn();
     client.on('backoff', _client_backoff_event);
     client.on('backoff', () => {
       debugLog('client attempt to connect');
@@ -99,7 +100,7 @@ describe('testing Client-Server - Event', function () {
     debugLog(' 2--> Connecting Client');
     await client.connectP(OPCUA_TEST_SERVER_URI);
 
-    expect(_client_received_close_event.calls.count()).toBe(0);
+    expect(_client_received_close_event.mock.calls.length).toBe(0);
 
     client.on('close', function (err) {
       debugLog(' 8 --> client has sent "close" event', err ? err.message : null);
@@ -124,8 +125,8 @@ describe('testing Client-Server - Event', function () {
       controller.stopTestServer();
     });
 
-    expect(_client_backoff_event.calls.count()).toBeGreaterThan(0);
-    expect(_client_received_close_event.calls.count()).toEqual(1);
-    expect(_client_received_close_event.calls.first().args[0]).toBeUndefined();
+    expect(_client_backoff_event.mock.calls.length).toBeGreaterThan(0);
+    expect(_client_received_close_event.mock.calls.length).toEqual(1);
+    expect(_client_received_close_event.mock.calls[0][0]).toBeUndefined();
   }, 10000);
 });

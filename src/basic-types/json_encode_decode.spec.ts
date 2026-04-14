@@ -13,14 +13,6 @@ const crypto: Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
 
 const littleEndian = true;
 
-beforeEach(() => {
-  jasmine.addCustomEqualityTester((first, second) => {
-    if (first instanceof NodeId && second instanceof NodeId) {
-      return NodeId.sameNodeId(first, second);
-    }
-  });
-});
-
 /**
  * @method test_encode_decode
  *
@@ -275,15 +267,28 @@ describe('encoding and decoding arrays', function () {
       return ec.jsonDecodeArray(arr, ec.jsonDecodeByteString);
     }
 
-    let data = [
+    let data: (Uint8Array | null)[] = [
       new TextEncoder().encode('ABCD'),
       null,
-      new TextEncoder().encode('EFGH').buffer /* new ArrayBuffer(0), [] */,
+      new TextEncoder().encode('EFGH'),
     ];
-    data = data.map(ec.coerceByteString);
-    data[1] = null;
 
-    test_encode_decode(data, json_encode_array_bytestring, json_decode_array_bytestring);
+    // Encode then decode
+    const encoded = json_encode_array_bytestring(data);
+    const decoded = json_decode_array_bytestring(encoded);
+
+    // Manual comparison - happy-dom's addEqualityTesters doesn't work recursively in arrays
+    expect(decoded).toHaveLength(data.length);
+
+    // Compare Uint8Arrays manually by converting to regular arrays
+    for (let i = 0; i < data.length; i++) {
+      if (data[i] === null) {
+        expect(decoded[i]).toBe(null);
+      } else {
+        expect(decoded[i]).toBeInstanceOf(Uint8Array);
+        expect(Array.from(decoded[i] as Uint8Array)).toEqual(Array.from(data[i] as Uint8Array));
+      }
+    }
   });
 });
 

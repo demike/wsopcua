@@ -2,7 +2,9 @@ import { OPCUAClient } from '../client/opcua_client';
 import { debugLog } from '../common/debug';
 import { OPCUA_CONTROL_SERVER_URI } from './utils/test_server_controller';
 
-describe('Testing ChannelSecurityToken lifetime', function () {
+const describeForEnv = typeof window !== 'undefined' ? describe.skip : describe;
+
+describeForEnv('Testing ChannelSecurityToken lifetime', function () {
   let client: OPCUAClient;
   const endpointUrl = OPCUA_CONTROL_SERVER_URI;
 
@@ -12,30 +14,28 @@ describe('Testing ChannelSecurityToken lifetime', function () {
     });
   });
 
-  afterEach(function (done) {
-    client.disconnect(done);
+  afterEach(async () => {
+    try {
+      await client.disconnectP();
+    } catch {}
   });
 
-  it('A secure channel should raise a event to notify its client that its token is at 75% of its liidtime', function (done) {
-    client.connect(endpointUrl, function (err) {
-      expect(!!err).toBeFalsy();
-    });
-    (client as any)._secureChannel.once('lifetime_75', function () {
-      debugLog(' received lifetime_75');
-      client.disconnect(function () {
-        done();
+  it('A secure channel should raise a event to notify its client that its token is at 75% of its liidtime', async () => {
+    await client.connectP(endpointUrl);
+    await new Promise<void>((resolve) => {
+      (client as any)._secureChannel.once('lifetime_75', function () {
+        debugLog(' received lifetime_75');
+        resolve();
       });
     });
   });
 
-  it('A secure channel should raise a event to notify its client that a token about to expired has been renewed', (done) => {
-    client.connect(endpointUrl, function (err) {
-      expect(!!err).toBeFalsy();
-    });
-    (client as any)._secureChannel.on('security_token_renewed', function () {
-      debugLog(' received security_token_renewed');
-      client.disconnect(function () {
-        done();
+  it('A secure channel should raise a event to notify its client that a token about to expired has been renewed', async () => {
+    await client.connectP(endpointUrl);
+    await new Promise<void>((resolve) => {
+      (client as any)._secureChannel.once('security_token_renewed', function () {
+        debugLog(' received security_token_renewed');
+        resolve();
       });
     });
   });

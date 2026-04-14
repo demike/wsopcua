@@ -4,12 +4,12 @@ import { getRandomInt, Lock } from './utils';
 describe('isPromise', () => {
   it('should return true when a promise is passed', () => {
     const p = Promise.resolve();
-    expect(isPromise(p)).toBeTrue();
+    expect(isPromise(p)).toBe(true);
   });
 
   it('should return false if no promise is passed', () => {
     const num = 10;
-    expect(isPromise(num)).toBeFalse();
+    expect(isPromise(num)).toBe(false);
   });
 });
 
@@ -37,7 +37,7 @@ describe('Lock', () => {
 
     async function go(index: number) {
       const locked = lck.acquire();
-      expect(index === 0 ? locked === undefined : isPromise(locked)).toBeTrue();
+      expect(index === 0 ? locked === undefined : isPromise(locked)).toBe(true);
 
       await new Promise<void>((resolve) =>
         setTimeout(() => {

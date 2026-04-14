@@ -15,7 +15,7 @@ describe('testing basic Client Server dealing with subscription at low level', f
 
   afterAll(async () => controller.stopTestServer());
 
-  it('server should create a subscription (CreateSubscriptionRequest)', function (done) {
+  it('server should create a subscription (CreateSubscriptionRequest)', async function () {
     let subscriptionId: number | null = null;
 
     // CreateSubscriptionRequest
@@ -28,29 +28,33 @@ describe('testing basic Client Server dealing with subscription at low level', f
       priority: 6,
     });
 
-    session.createSubscription(request, function (err, response) {
-      if (err) {
-        throw err;
-      }
-      expect(response instanceof opcua.CreateSubscriptionResponse).toBeTruthy();
-      subscriptionId = response.subscriptionId;
+    await new Promise<void>((resolve, reject) => {
+      session.createSubscription(request, function (err, response) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        expect(response instanceof opcua.CreateSubscriptionResponse).toBeTruthy();
+        subscriptionId = response.subscriptionId;
 
-      window.setTimeout(function () {
-        assert(subscriptionId);
-        const requ = new opcua.DeleteSubscriptionsRequest({
-          subscriptionIds: [subscriptionId],
-        });
-        session.deleteSubscriptions(requ, function (error, result) {
-          if (error) {
-            throw error;
-          }
-          done();
+        window.setTimeout(function () {
+          assert(subscriptionId);
+          const requ = new opcua.DeleteSubscriptionsRequest({
+            subscriptionIds: [subscriptionId],
+          });
+          session.deleteSubscriptions(requ, function (error) {
+            if (error) {
+              reject(error);
+              return;
+            }
+            resolve();
+          });
         });
       });
     });
   });
 
-  it('server should create a monitored item  (CreateMonitoredItems)', function (done) {
+  it('server should create a monitored item  (CreateMonitoredItems)', async function () {
     let subscriptionId: number | null = null;
     // CreateSubscriptionRequest
     const request = new opcua.CreateSubscriptionRequest({
@@ -61,39 +65,42 @@ describe('testing basic Client Server dealing with subscription at low level', f
       publishingEnabled: true,
       priority: 6,
     });
-    session.createSubscription(request, function (err, response) {
-      if (err) {
-        throw err;
-      }
-      expect(response instanceof opcua.CreateSubscriptionResponse).toBeTruthy();
-      subscriptionId = response.subscriptionId;
-
-      // CreateMonitoredItemsRequest
-      const requ = new opcua.CreateMonitoredItemsRequest({
-        subscriptionId: subscriptionId,
-        timestampsToReturn: opcua.TimestampsToReturn.Both,
-        itemsToCreate: [
-          new MonitoredItemCreateRequest({
-            itemToMonitor: new opcua.ReadValueId({
-              nodeId: makeNodeId(/* VariableIds.Server_ServerStatus_CurrentTime */ 2258),
-            }),
-            monitoringMode: opcua.MonitoringMode.Sampling,
-            requestedParameters: new opcua.MonitoringParameters({
-              clientHandle: 26,
-              samplingInterval: 100,
-              queueSize: 100,
-              discardOldest: true,
-            }),
-          }),
-        ],
-      });
-      session.createMonitoredItems(requ, function (error, resp) {
-        if (!error) {
-          expect(resp instanceof opcua.CreateMonitoredItemsResponse).toBeTruthy();
-          done();
-        } else {
-          throw error;
+    await new Promise<void>((resolve, reject) => {
+      session.createSubscription(request, function (err, response) {
+        if (err) {
+          reject(err);
+          return;
         }
+        expect(response instanceof opcua.CreateSubscriptionResponse).toBeTruthy();
+        subscriptionId = response.subscriptionId;
+
+        // CreateMonitoredItemsRequest
+        const requ = new opcua.CreateMonitoredItemsRequest({
+          subscriptionId: subscriptionId,
+          timestampsToReturn: opcua.TimestampsToReturn.Both,
+          itemsToCreate: [
+            new MonitoredItemCreateRequest({
+              itemToMonitor: new opcua.ReadValueId({
+                nodeId: makeNodeId(/* VariableIds.Server_ServerStatus_CurrentTime */ 2258),
+              }),
+              monitoringMode: opcua.MonitoringMode.Sampling,
+              requestedParameters: new opcua.MonitoringParameters({
+                clientHandle: 26,
+                samplingInterval: 100,
+                queueSize: 100,
+                discardOldest: true,
+              }),
+            }),
+          ],
+        });
+        session.createMonitoredItems(requ, function (error, resp) {
+          if (error) {
+            reject(error);
+            return;
+          }
+          expect(resp instanceof opcua.CreateMonitoredItemsResponse).toBeTruthy();
+          resolve();
+        });
       });
     });
   });
@@ -153,36 +160,42 @@ describe('testing basic Client Server dealing with subscription at low level', f
     });
   });
 
-  it('server should handle DeleteMonitoredItems  request', function (done) {
+  it('server should handle DeleteMonitoredItems  request', async function () {
     const request = new opcua.DeleteMonitoredItemsRequest({});
-    session.deleteMonitoredItems(request, function (err) {
-      expect(err?.message).toMatch(/BadSubscriptionIdInvalid/);
-      done();
+    await new Promise<void>((resolve) => {
+      session.deleteMonitoredItems(request, function (err) {
+        expect(err?.message).toMatch(/BadSubscriptionIdInvalid/);
+        resolve();
+      });
     });
   });
 
-  it('server should handle SetPublishingMode request', function (done) {
-    session.setPublishingMode(true, [1], function (err, results) {
-      if (!err) {
+  it('server should handle SetPublishingMode request', async function () {
+    await new Promise<void>((resolve, reject) => {
+      session.setPublishingMode(true, [1], function (err, results) {
+        if (err) {
+          reject(err);
+          return;
+        }
         expect(results instanceof Array).toBeTruthy();
-      } else {
-        throw err;
-      }
-      done();
+        resolve();
+      });
     });
   });
 
-  it('server should handle DeleteSubscriptionsRequest', function (done) {
+  it('server should handle DeleteSubscriptionsRequest', async function () {
     const request = new opcua.DeleteSubscriptionsRequest({
       subscriptionIds: [1, 2],
     });
-    session.deleteSubscriptions(request, function (err, response) {
-      if (!err) {
+    await new Promise<void>((resolve, reject) => {
+      session.deleteSubscriptions(request, function (err, response) {
+        if (err) {
+          reject(err);
+          return;
+        }
         expect(response instanceof opcua.DeleteSubscriptionsResponse).toBeTruthy();
-      } else {
-        throw err;
-      }
-      done();
+        resolve();
+      });
     });
   });
 });

@@ -14,14 +14,6 @@ const crypto: Crypto = window.crypto || (<any>window).msCrypto; // for IE 11
 
 const littleEndian = true;
 
-beforeEach(() => {
-  jasmine.addCustomEqualityTester((first, second) => {
-    if (first instanceof NodeId && second instanceof NodeId) {
-      return NodeId.sameNodeId(first, second);
-    }
-  });
-});
-
 /**
  * @method test_encode_decode
  *
@@ -49,7 +41,7 @@ function test_encode_decode(
   expect(binaryStream.length).toBe(expectedLength);
 
   if (verify_buffer_func) {
-    verify_buffer_func(binaryStream.view.buffer);
+    verify_buffer_func(binaryStream.view.buffer as unknown as ArrayBuffer);
   }
   binaryStream.rewind();
 
@@ -483,8 +475,8 @@ describe('check isValid and random for various types', function () {
     expect(ec.isValidInt32(-10)).toBeTruthy();
   });
   it('should test isValid on UInt16', function () {
-    expect(ec.isValidUInt16(0)).toBeTruthy(true);
-    expect(ec.isValidUInt16(0xffffff)).toBeFalsy(false);
+    expect(ec.isValidUInt16(0)).toBeTruthy();
+    expect(ec.isValidUInt16(0xffffff)).toBeFalsy();
   });
 
   const types = [

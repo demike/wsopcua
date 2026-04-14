@@ -26,29 +26,32 @@ describe('AnalogItem', function () {
 
   afterAll(async () => controller.stopTestServer());
 
-  it('readUAAnalogItem should extract all properties of a UAAnalogItem ', function (done) {
+  it('readUAAnalogItem should extract all properties of a UAAnalogItem ', async () => {
     const nodeId = 'ns=2;s=DoubleAnalogDataItem';
-
-    readUAAnalogItem(session, coerceNodeId(nodeId), function (err, data) {
-      if (err) {
-        throw err;
-      }
-
-      expect((data as any).engineeringUnits).toBeDefined();
-      expect((data as any).engineeringUnitsRange).toBeDefined();
-      expect((data as any).instrumentRange).toBeDefined();
-      expect((data as any).valuePrecision).toBeDefined();
-      expect((data as any).definition).toBeDefined();
-      done();
+    const data = await new Promise<any>((resolve, reject) => {
+      readUAAnalogItem(session, coerceNodeId(nodeId), function (err, result) {
+        if (err) {
+          return reject(err);
+        }
+        resolve(result);
+      });
     });
+
+    expect((data as any).engineeringUnits).toBeDefined();
+    expect((data as any).engineeringUnitsRange).toBeDefined();
+    expect((data as any).instrumentRange).toBeDefined();
+    expect((data as any).valuePrecision).toBeDefined();
+    expect((data as any).definition).toBeDefined();
   });
 
-  it("readUAAnalogItem should return an error if it doesn't exist", function (done) {
+  it("readUAAnalogItem should return an error if it doesn't exist", async () => {
     const nodeId = coerceNodeId('ns=4;s=invalidnode');
-    readUAAnalogItem(session, nodeId, function (err, data) {
-      expect(err instanceof Error).toBeTruthy();
-      done();
+    const err = await new Promise<Error | null>((resolve) => {
+      readUAAnalogItem(session, nodeId, function (error) {
+        resolve((error as Error) ?? null);
+      });
     });
+    expect(err instanceof Error).toBeTruthy();
   });
 
   /**
@@ -90,33 +93,37 @@ describe('AnalogItem', function () {
     });
   }
 
-  it('should read the EURange property of an analog item', function (done) {
+  it('should read the EURange property of an analog item', async () => {
     const nodeId = coerceNodeId('ns=2;s=DoubleAnalogDataItem');
 
-    findProperty(session, nodeId, 'EURange', function (err, propertyId) {
-      if (err) {
-        throw err;
-      }
-
-      expect(propertyId).toBeDefined();
-
-      const nodeToRead = new ReadValueId({
-        nodeId: propertyId,
-        attributeId: AttributeIds.Value,
-      });
-
-      session.read(nodeToRead, 0, function (error, dataValue) {
-        if (error) {
-          throw error;
+    const propertyId = await new Promise<NodeId | undefined>((resolve, reject) => {
+      findProperty(session, nodeId, 'EURange', function (err, id) {
+        if (err) {
+          return reject(err);
         }
-        assert(dataValue && dataValue.value);
-        expect(dataValue.value.dataType).toBe(DataType.ExtensionObject);
-
-        expect(dataValue.value.value.low).toBe(-200);
-        expect(dataValue.value.value.high).toBe(200);
-
-        done();
+        resolve(id);
       });
     });
+
+    expect(propertyId).toBeDefined();
+
+    const nodeToRead = new ReadValueId({
+      nodeId: propertyId,
+      attributeId: AttributeIds.Value,
+    });
+
+    const dataValue = await new Promise<any>((resolve, reject) => {
+      session.read(nodeToRead, 0, function (error, value) {
+        if (error) {
+          return reject(error);
+        }
+        resolve(value);
+      });
+    });
+
+    assert(dataValue && dataValue.value);
+    expect(dataValue.value.dataType).toBe(DataType.ExtensionObject);
+    expect(dataValue.value.value.low).toBe(-200);
+    expect(dataValue.value.value.high).toBe(200);
   });
 });
