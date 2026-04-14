@@ -32,11 +32,18 @@ describe('OPCUA-Session Activation', function () {
     });
     it('should do username password authentication', async () => {
       const client = new OPCUAClient(DEFAULT_CLIENT_OPTIONS);
+      let session: ClientSession | undefined;
+
       await client.connectP(OPCUA_TEST_SERVER_URI /* 'ws://sjuticd.engel.int:4444' */);
-      const session = await client.createSessionP({
-        userIdentityInfo: { userName: 'john', password: 'john_pw' },
-      });
-      expect(session).toBeTruthy();
+      try {
+        session = await client.createSessionP({
+          userIdentityInfo: { userName: 'john', password: 'john_pw' },
+        });
+        expect(session).toBeTruthy();
+      } finally {
+        await session?.closeP();
+        await client.disconnectP();
+      }
     });
 
     it('should fail authentication with wrong username / password', async () => {
@@ -49,6 +56,8 @@ describe('OPCUA-Session Activation', function () {
         fail('authentication with wrong username/password should have failed');
       } catch (err) {
         expect(err).toBeDefined();
+      } finally {
+        await client.disconnectP();
       }
     });
   });
