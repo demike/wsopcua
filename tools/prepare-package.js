@@ -1,7 +1,7 @@
 /**
  * create the package.json in dist
  */
-const fs = require('fs-extra');
+const fs = require('fs');
 const path = require('path');
 
 const packageJson = require('../package.json');
@@ -26,7 +26,7 @@ const pkgManifest = {
   exports: generatAlias.createExports(),
 };
 
-fs.writeJSONSync(path.resolve(__dirname, `../dist/package.json`), pkgManifest, { spaces: 2 });
+writeJSONSync(path.resolve(__dirname, `../dist/package.json`), pkgManifest);
 
 /**
  * copy docs to dist
@@ -45,15 +45,18 @@ copySync('../src/schema_parser/dist/wsopcua-schema-gen.js', '../dist/bin/wsopcua
 copySync('../src/schema_parser/schemas', '../dist/schemas');
 
 function copySync(src, dst) {
-  fs.copySync(
-    path.resolve(__dirname, src),
-    path.resolve(__dirname, dst),
-    { overwrite: true },
-    function (err) {
-      if (err) {
-        console.error(err);
-        process.exit(-1);
-      }
-    }
-  );
+  try {
+    fs.cpSync(path.resolve(__dirname, src), path.resolve(__dirname, dst), {
+      force: true,
+      recursive: true,
+    });
+  } catch (err) {
+    console.error(err);
+    process.exit(-1);
+  }
+}
+
+function writeJSONSync(filePath, value) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, JSON.stringify(value, null, 2) + '\n');
 }

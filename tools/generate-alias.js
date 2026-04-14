@@ -1,7 +1,7 @@
 /**
  * Alias subpath import (`dist/_cjs/*`, `dist/_esm/*`) to top-level path mapping (`wsopcua/*`)
  */
-const fs = require('fs-extra');
+const fs = require('fs');
 const path = require('path');
 const packageJson = require('../package.json');
 
@@ -9,7 +9,7 @@ const DIST_PATH = path.resolve(__dirname, `../dist`);
 const TYPES_PATH = path.resolve(__dirname, `../dist/`);
 
 const insertPackageJsonRecursively = function (dirPath) {
-  files = fs.readdirSync(dirPath);
+  const files = fs.readdirSync(dirPath);
 
   files.forEach(function (file) {
     if (fs.statSync(dirPath + '/' + file).isDirectory()) {
@@ -35,7 +35,7 @@ exports.createExports = () => {
 };
 
 function createExportsRecursive(dirPath, exp) {
-  files = fs.readdirSync(dirPath);
+  const files = fs.readdirSync(dirPath);
 
   files.forEach(function (file) {
     if (fs.statSync(dirPath + '/' + file).isDirectory()) {
@@ -44,7 +44,7 @@ function createExportsRecursive(dirPath, exp) {
       if (file === 'index.d.ts') {
         // create exports entry
         let relPath = toUnixPath(path.relative(TYPES_PATH, dirPath));
-        key = relPath !== '' ? `./${relPath}` : '.';
+        const key = relPath !== '' ? `./${relPath}` : '.';
 
         if (relPath) {
           relPath = relPath + '/';
@@ -80,15 +80,18 @@ function createPackageManifest(barrelPath) {
   const packageJsonPath = path.resolve(DIST_PATH, `${relPath}/package.json`);
   console.log(packageJsonPath);
 
-  fs.outputJSONSync(path.resolve(DIST_PATH, packageJsonPath), pkgManifest, {
-    spaces: 2,
-  });
+  writeJSONSync(packageJsonPath, pkgManifest);
 
   return pkgManifest;
 }
 
 function toUnixPath(p) {
   return p.split(path.sep).join(path.posix.sep);
+}
+
+function writeJSONSync(filePath, value) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, JSON.stringify(value, null, 2) + '\n');
 }
 
 insertPackageJsonRecursively(TYPES_PATH);
