@@ -2,6 +2,10 @@ import { vi, Mock } from 'vitest';
 import { assert } from '../../assert';
 
 const origWS = window.WebSocket;
+const WS_CONNECTING = 0;
+const WS_OPEN = 1;
+const WS_CLOSING = 2;
+const WS_CLOSED = 3;
 
 export interface WebSocketMock {
   _open(): void;
@@ -21,17 +25,17 @@ export function installMockWebSocket() {
       listeners: { [key: string]: ((...args: any) => void)[] };
     } = {
       url: url,
-      readyState: WebSocket.CONNECTING,
+      readyState: WS_CONNECTING,
       listeners: {},
       send: vi.fn(),
       close: vi.fn().mockImplementation(function () {
-        socketMock.readyState = 2; // WebSocket.CLOSING;
+        socketMock.readyState = WS_CLOSING;
         socketMock._close();
       }),
 
       // methods to mock the internal behaviour of the real WebSocket
       _open: function () {
-        socketMock.readyState = WebSocket.OPEN;
+        socketMock.readyState = WS_OPEN;
         if (socketMock.onopen) {
           socketMock.onopen();
         }
@@ -51,7 +55,7 @@ export function installMockWebSocket() {
         }
       },
       _error: function (code?: number) {
-        socketMock.readyState = WebSocket.CLOSED;
+        socketMock.readyState = WS_CLOSED;
         socketMock.onerror?.();
         if (socketMock.listeners['error']) {
           socketMock.listeners['error'].forEach((listener) => {
@@ -60,7 +64,7 @@ export function installMockWebSocket() {
         }
       },
       _close: function (code = 1000) {
-        socketMock.readyState = WebSocket.CLOSED;
+        socketMock.readyState = WS_CLOSED;
         socketMock.onclose?.({ code });
         if (socketMock.listeners['close']) {
           socketMock.listeners['close'].forEach((listener) => {
@@ -91,10 +95,10 @@ export function installMockWebSocket() {
     return socketMock;
   });
 
-  (wsSpy as any).CONNECTING = 0;
-  (wsSpy as any).OPEN = 1;
-  (wsSpy as any).CLOSING = 2;
-  (wsSpy as any).CLOSED = 3;
+  (wsSpy as any).CONNECTING = WS_CONNECTING;
+  (wsSpy as any).OPEN = WS_OPEN;
+  (wsSpy as any).CLOSING = WS_CLOSING;
+  (wsSpy as any).CLOSED = WS_CLOSED;
 
   window.WebSocket = wsSpy as any;
 }

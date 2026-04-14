@@ -48,7 +48,7 @@ async function connect(cli: OPCUAClient, uri: string) {
   }
 }
 
-xdescribe('real server example', () => {
+describe.skip('real server example', () => {
   let cli: OPCUAClient;
 
   beforeEach(async () => {
