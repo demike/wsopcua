@@ -961,7 +961,8 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     if (certificate) {
       const exploredCertificate = await exploreCertificate(certificate);
       const uri =
-        exploredCertificate.tbsCertificate.extensions?.subjectAltName?.uniformResourceIdentifier?.[0];
+        exploredCertificate.tbsCertificate.extensions?.subjectAltName
+          ?.uniformResourceIdentifier?.[0];
       if (uri) {
         return uri;
       }
