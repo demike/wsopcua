@@ -59,6 +59,7 @@ import { IEncodable } from '../factory/factories_baseobject';
 import { OPCUAClientOptions } from '../common/client_options';
 import { CertificateStore, NullCertificateStore } from '../common/certificate_store';
 import { makeApplicationUrn } from '../common/applicationurn';
+import { exploreCertificate } from '../crypto';
 
 const defaultConnectionStrategy: ConnectionStrategyOptions = {
   maxRetry: 10000000, // almost infinite
@@ -955,6 +956,20 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
     });
   }
 
+  protected async _getApplicationUri(): Promise<string> {
+    const certificate = this.getCertificate();
+    if (certificate) {
+      const exploredCertificate = await exploreCertificate(certificate);
+      const uri =
+        exploredCertificate.tbsCertificate.extensions?.subjectAltName?.uniformResourceIdentifier?.[0];
+      if (uri) {
+        return uri;
+      }
+      console.log(' Warning: client certificate is invalid : subjectAltName is missing');
+    }
+    return makeApplicationUrn(window.location.hostname, this.applicationName);
+  }
+
   protected _internal_create_secure_channel(callback: ResponseCallback<ClientSecureChannelLayer>) {
     let secureChannel: ClientSecureChannelLayer;
     assert(this._secureChannel === null);
@@ -966,7 +981,7 @@ export class OPCUAClientBase extends EventEmitter<OPCUAClientEvents> {
         (_inner_callback: ErrorCallback) => {
           if (!this.clientCertificateStore.getCertificate() && this.clientCertificateStore.init) {
             // initialize the certificates (i.e.: create self signed certificate )
-            makeApplicationUrn(window.location.hostname, this.applicationName)
+            this._getApplicationUri()
               .then((applicationUri) =>
                 this.clientCertificateStore.init?.({
                   applicationName: this.applicationName,

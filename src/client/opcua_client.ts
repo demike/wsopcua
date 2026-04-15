@@ -47,7 +47,6 @@ import { doDebug, debugLog } from '../common/debug';
 import { OPCUAClientBase, ErrorCallback, ResponseCallback } from './client_base';
 import { isNullOrUndefined } from '../utils';
 
-import { makeApplicationUrn } from '../common/applicationurn';
 import { UserIdentityToken } from '../generated/UserIdentityToken';
 import { stringToUint8Array } from '../basic-types/DataStream';
 import { repair_client_sessions } from './reconnection';
@@ -58,7 +57,6 @@ import {
   IssuedIdentityToken,
 } from '../generated';
 import { ClientSecureChannelLayer } from '../secure-channel/client_secure_channel_layer';
-import { exploreCertificate } from '../crypto';
 import { concatArrayBuffers } from '../basic-types/array';
 import { OPCUAClientOptions } from '../common/client_options';
 
@@ -137,26 +135,6 @@ export class OPCUAClient extends OPCUAClientBase {
     }
     this.___sessionName_counter += 1;
     return this._clientName + this.___sessionName_counter;
-  }
-
-  // get applicationURI from certificate
-  protected async _getApplicationUri(): Promise<string> {
-    /** msgcrypt**/
-    const certificate = this.getCertificate();
-    let applicationUri;
-    if (certificate) {
-      const e = await exploreCertificate(certificate);
-      if (!e.tbsCertificate.extensions || !e.tbsCertificate.extensions.subjectAltName) {
-        console.log(' Warning: client certificate is invalid : subjectAltName is missing');
-        applicationUri = makeApplicationUrn(window.location.hostname, this.applicationName);
-      } else {
-        applicationUri = e.tbsCertificate.extensions.subjectAltName.uniformResourceIdentifier[0];
-        return Promise.resolve(applicationUri);
-      }
-    } else {
-      applicationUri = makeApplicationUrn(window.location.hostname, this.applicationName);
-    }
-    return applicationUri;
   }
 
   protected __resolveEndPoint(): boolean {
