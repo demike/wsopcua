@@ -1,12 +1,42 @@
 'use strict';
 import { isAnonymous, isIssued, isUserNamePassword, OPCUAClient } from '../opcua_client';
 import { ClientSecureChannelLayer } from '../../secure-channel/client_secure_channel_layer';
+import { SelfSignedCertificateStore } from '../../common/certificate_store';
+import { makeApplicationUrn } from '../../common/applicationurn';
 
 describe('OPCUA Client', function () {
   it('it should create a client', function () {
     const client = new OPCUAClient({});
     expect(client).toBeDefined();
   });
+
+  it('should use the fallback applicationUri when no certificate exists', async () => {
+    const client = new OPCUAClient({ applicationName: 'UnifiedUriClient' });
+
+    const applicationUri = await (client as any)._getApplicationUri();
+
+    expect(applicationUri).toBe(
+      await makeApplicationUrn(window.location.hostname, 'UnifiedUriClient')
+    );
+  });
+
+  it('should use the certificate SAN URI when a client certificate exists', async () => {
+    const applicationUri = 'urn:client:test:unified';
+    const clientCertificateStore = new SelfSignedCertificateStore({
+      applicationName: 'UnifiedUriClient',
+      applicationUri,
+      spkiModulusLength: 1024,
+    });
+    await clientCertificateStore.init();
+
+    const client = new OPCUAClient({
+      applicationName: 'UnifiedUriClient',
+      clientCertificateStore,
+    });
+
+    await expect((client as any)._getApplicationUri()).resolves.toBe(applicationUri);
+  }, 20000);
+
   it('should create a ClientSecureChannerLayer', function () {
     const secLayer = new ClientSecureChannelLayer({});
     expect(secLayer).toBeDefined();
