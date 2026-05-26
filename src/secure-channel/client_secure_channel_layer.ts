@@ -1169,7 +1169,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
 
     const timeout = this._adjustRequestTimeout(requestMessage);
 
-    const modified_callback = this._make_timeout_callback(this.request, callback, timeout);
+    const modified_callback = this._make_timeout_callback(requestMessage, callback, timeout);
 
     const transaction_data = {
       msgType: msgType,
