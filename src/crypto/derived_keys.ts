@@ -8,7 +8,9 @@ import { assert } from '../assert';
 
 const crypto: SubtleCrypto = window.crypto.subtle;
 
-async function HMAC_KEY(sha1or256: 'SHA-1' | 'SHA-256', secret: BufferSource) {
+type BinaryLike = ArrayBufferLike | ArrayBufferView;
+
+async function HMAC_KEY(sha1or256: 'SHA-1' | 'SHA-256', secret: BinaryLike) {
   return await crypto.importKey(
     'raw', // raw format of the key - should be Uint8Array
     secret as any,
@@ -22,15 +24,23 @@ async function HMAC_KEY(sha1or256: 'SHA-1' | 'SHA-256', secret: BufferSource) {
   );
 }
 
-function HMAC_HASH(hmacKey: CryptoKey, message: BufferSource) {
+function HMAC_HASH(hmacKey: CryptoKey, message: BinaryLike) {
   return crypto.sign('HMAC', hmacKey, message as any);
 }
 
-function plus(buf1: ArrayBuffer, buf2: ArrayBuffer): ArrayBuffer {
-  const tmp = new Uint8Array(buf1.byteLength + buf2.byteLength);
-  tmp.set(new Uint8Array(buf1), 0);
-  tmp.set(new Uint8Array(buf2), buf1.byteLength);
-  return tmp;
+function toUint8Array(buffer: BinaryLike): Uint8Array<ArrayBufferLike> {
+  return ArrayBuffer.isView(buffer)
+    ? new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength)
+    : new Uint8Array(buffer);
+}
+
+function plus(buf1: BinaryLike, buf2: BinaryLike): ArrayBuffer {
+  const view1 = toUint8Array(buf1);
+  const view2 = toUint8Array(buf2);
+  const tmp = new Uint8Array(view1.byteLength + view2.byteLength);
+  tmp.set(view1, 0);
+  tmp.set(view2, view1.byteLength);
+  return tmp.buffer;
 }
 
 // OPC-UA Spec 1.02 part 6 - 6.7.5  Deriving Keys page 42
@@ -124,8 +134,8 @@ export interface DerivedKeys extends ComputeDerivedKeysOptions {
   algorithm: string;
   sha1or256: 'SHA-1' | 'SHA-256';
 
-  signingKey: BufferSource;
-  encryptingKey: BufferSource;
+  signingKey: ArrayBuffer;
+  encryptingKey: ArrayBuffer;
   initializationVector: ArrayBuffer;
 }
 
@@ -168,8 +178,8 @@ export async function computeDerivedKeys(
  * @param byteToRemove
  * @return buffer
  */
-export function reduceLength(buffer: ArrayBuffer, byteToRemove: number): ArrayBuffer {
-  return buffer.slice(0, buffer.byteLength - byteToRemove);
+export function reduceLength(buffer: ArrayBufferLike, byteToRemove: number): ArrayBuffer {
+  return new Uint8Array(buffer, 0, buffer.byteLength - byteToRemove).slice().buffer;
 }
 
 /**
@@ -177,7 +187,7 @@ export function reduceLength(buffer: ArrayBuffer, byteToRemove: number): ArrayBu
  * @param buffer
  * @return buffer with padding removed
  */
-export function removePadding(buffer: ArrayBuffer): ArrayBuffer {
+export function removePadding(buffer: ArrayBufferLike): ArrayBuffer {
   const buf8 = new Uint8Array(buffer);
   const nbPaddingBytes = buf8[buffer.byteLength - 1] + 1;
   return reduceLength(buffer, nbPaddingBytes);
@@ -282,7 +292,7 @@ export async function encryptBufferWithDerivedKeys(
     iv: derivedKeys.initializationVector,
   };
 
-  const resultBuffer = await crypto.encrypt(opts, key, buffer);
+  const resultBuffer = await crypto.encrypt(opts, key, buffer as any);
   // virtually cut away the automatically added padding, by limiting the uint8array length to data length
   return new Uint8Array(resultBuffer, 0, buffer.byteLength);
 
@@ -323,7 +333,7 @@ export async function decryptBufferWithDerivedKeys(
   prolongedBuffer.set(encryptedPadding, buffer.length);
 
   // TODO fix the auto padding of aes cbc
-  return new Uint8Array(await crypto.decrypt(opts, key, prolongedBuffer));
+  return new Uint8Array(await crypto.decrypt(opts, key, prolongedBuffer as any));
 
   /*
     const cypher = crypto.createDecipheriv(algorithm, key, initVector);
@@ -371,7 +381,7 @@ async function recreatePKCS7PaddingBlock(encryptedData: Uint8Array, key: CryptoK
  * @return
  */
 export async function makeMessageChunkSignatureWithDerivedKeys(
-  message: BufferSource,
+  message: BinaryLike,
   derivedKeys: DerivedKeys
 ): Promise<ArrayBuffer> {
   // assert(message instanceof ArrayBuffer);
@@ -396,11 +406,12 @@ export async function makeMessageChunkSignatureWithDerivedKeys(
  * @return
  */
 export async function verifyChunkSignatureWithDerivedKeys(
-  chunk: ArrayBuffer,
+  chunk: BinaryLike,
   derivedKeys: DerivedKeys
 ): Promise<boolean> {
-  const message = chunk.slice(0, chunk.byteLength - derivedKeys.signatureLength);
-  const signature = new Uint8Array(chunk.slice(chunk.byteLength - derivedKeys.signatureLength));
+  const chunkBytes = toUint8Array(chunk);
+  const message = chunkBytes.subarray(0, chunkBytes.byteLength - derivedKeys.signatureLength);
+  const signature = chunkBytes.subarray(chunkBytes.byteLength - derivedKeys.signatureLength);
   const verif = new Uint8Array(
     await makeMessageChunkSignatureWithDerivedKeys(message, derivedKeys)
   );

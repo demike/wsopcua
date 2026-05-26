@@ -33,6 +33,10 @@ export function getFakeTransport() {
 
 let counter = 0;
 
+function getMessageChunkBuffer(message_chunk: ArrayBufferLike | ArrayBufferView): ArrayBufferLike {
+  return ArrayBuffer.isView(message_chunk) ? message_chunk.buffer : message_chunk;
+}
+
 interface WSTransportEvents {
   connect: () => void;
   message: (message_chunk: DataView | string) => void;
@@ -166,13 +170,14 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
    *  - once a message chunk has been written, it is possible to call ```createChunk``` again.
    *
    */
-  public write(message_chunk: ArrayBuffer | string) {
+  public write(message_chunk: ArrayBufferLike | ArrayBufferView | string) {
     if (typeof message_chunk === 'string') {
       return this._write_json(message_chunk);
     }
 
+    const chunkBuffer = getMessageChunkBuffer(message_chunk);
     assert(
-      this._pending_buffer === undefined || this._pending_buffer === message_chunk,
+      this._pending_buffer === undefined || this._pending_buffer === chunkBuffer,
       ' write should be used with buffer created by createChunk'
     );
 
@@ -221,11 +226,13 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     return this._socket && this._socket.readyState === this._socket.OPEN && !this._disconnecting;
   }
 
-  protected _write_chunk(message_chunk: ArrayBuffer) {
+  protected _write_chunk(message_chunk: ArrayBufferLike | ArrayBufferView) {
     if (this._socket) {
       this.bytesWritten += message_chunk.byteLength;
       this.chunkWrittenCount++;
-      this._socket.send(message_chunk);
+      this._socket.send(
+        (ArrayBuffer.isView(message_chunk) ? message_chunk : new Uint8Array(message_chunk)) as any
+      );
     }
   }
 

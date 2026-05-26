@@ -183,7 +183,7 @@ export interface ClientSecureChannelLayerEvents {
   security_token_renewed: (token: ChannelSecurityToken) => void;
   receive_response: (response: OpcUaResponse) => void;
   timed_out_request: (requestMessage: IEncodable & { requestHeader: IRequestHeader }) => void;
-  send_chunk: (messageChunk: ArrayBuffer) => void;
+  send_chunk: (messageChunk: ArrayBufferLike | ArrayBufferView) => void;
   send_request: (requestMessage: IEncodable & { requestHeader: IRequestHeader }) => void;
   before_perform_transaction: (msgType: string, requestMessage: OpcUaRequest) => void;
 }
@@ -196,7 +196,8 @@ export interface ClientSecureChannelLayerOptions {
   defaultSecureTokenLifeTime?: number;
   /**
    * defaultTransactionTimeout the default transaction timeout in unit of ms. Default value is 15 seconds.
-   * If not specified, the default Transaction timeout will be taken from the global static variable ClientSecureChannelLayer.defaultTransactionTimeout
+   * If not specified, the default Transaction timeout will be taken from the
+   * global static variable ClientSecureChannelLayer.defaultTransactionTimeout
    */
   defaultTransactionTimeout?: number;
   tokenRenewalInterval?: number;
@@ -1332,7 +1333,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     this._sendSecureOpcUARequest(msgType, requestMessage, requestId);
   }
 
-  protected _send_chunk(requestId: number, messageChunk: ArrayBuffer | null) {
+  protected _send_chunk(requestId: number, messageChunk: ArrayBufferLike | ArrayBufferView | null) {
     const request_data = this._request_data.get(requestId);
 
     if (messageChunk) {
@@ -1450,7 +1451,8 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
         cryptoFactory.asymmetricSignatureAlgorithm
       )
     );
-    options.signBufferFunc = (chunk) => cryptoFactory.asymmetricSign(chunk, senderPrivateKey);
+    options.signBufferFunc = (chunk) =>
+      cryptoFactory.asymmetricSign(chunk as BufferSource, senderPrivateKey);
 
     if (!this._receiverPublicKey) {
       throw new Error(' invalid receiverPublicKey');

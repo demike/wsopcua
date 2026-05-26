@@ -2,48 +2,29 @@ import { Signature } from './common';
 import { assert } from '../assert';
 import { concatArrayBuffers } from '../basic-types/array';
 
-export function buf2base64(buffer: ArrayBuffer): string {
-  return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+type BinaryLike = ArrayBufferLike | ArrayBufferView;
+
+function asUint8Array(buffer: BinaryLike): Uint8Array<ArrayBufferLike> {
+  return ArrayBuffer.isView(buffer)
+    ? new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength)
+    : new Uint8Array(buffer);
 }
 
-export function buf2base64url(buffer: ArrayBuffer) {
-  let str = btoa(String.fromCharCode(...new Uint8Array(buffer)));
-  str = unescape(encodeURIComponent(str));
-  return str;
+export function buf2base64url(buffer: BinaryLike) {
+  return asUint8Array(buffer).toBase64({ alphabet: 'base64url' });
 }
 
 export function base64ToBuf(base64: string) {
-  return Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
-  /*
-    const binary_string =  window.atob(base64);
-    const len = binary_string.length;
-    const bytes = new Uint8Array( len );
-    for (let i = 0; i < len; i++)        {
-        bytes[i] = binary_string.charCodeAt(i);
-    }
-    return bytes.buffer;
-    */
-}
-
-export function buf2hex(buffer: ArrayBuffer) {
-  return Array.prototype.map
-    .call(new Uint8Array(buffer), (x: number) => ('00' + x.toString(16)).slice(-2))
-    .join('');
+  return Uint8Array.fromBase64(base64);
 }
 
 export function hex2buf(hex: string) {
-  const buf = new Uint8Array(hex.length / 2);
-  for (let i = 0; i < hex.length; i += 2) {
-    const byteValue = parseInt(hex.substring(i, i + 2), 16);
-    buf[i / 2] = byteValue;
-  }
-
-  return buf;
+  return Uint8Array.fromHex(hex);
 }
 
-export function buf2string(buffer: BufferSource) {
+export function buf2string(buffer: BinaryLike) {
   const dec = new TextDecoder('utf-8');
-  return dec.decode(buffer);
+  return dec.decode(buffer as any);
 }
 
 export function string2buf(str: string) {
@@ -78,7 +59,7 @@ interface MakeMessageChunkSignatureOptions {
  * @return - the signature
  */
 export async function makeMessageChunkSignature(
-  chunk: BufferSource,
+  chunk: BinaryLike,
   options: MakeMessageChunkSignatureOptions
 ): Promise<ArrayBuffer> {
   return crypto.subtle.sign(options.algorithm, options.privateKey, chunk as any);
@@ -106,8 +87,8 @@ export interface VerifyMessageChunkSignatureOptions {
  * @return {Boolean} - true if the signature is valid
  */
 export function verifyMessageChunkSignature(
-  blockToVerify: BufferSource,
-  signature: BufferSource,
+  blockToVerify: BinaryLike,
+  signature: BinaryLike,
   options: VerifyMessageChunkSignatureOptions
 ): PromiseLike<boolean> {
   return crypto.subtle.verify(
@@ -118,7 +99,7 @@ export function verifyMessageChunkSignature(
   );
 }
 
-export function makeSHA1Thumbprint(buffer: BufferSource): PromiseLike<Signature> {
+export function makeSHA1Thumbprint(buffer: BinaryLike): PromiseLike<Signature> {
   return crypto.subtle.digest('SHA-1', buffer as any);
 }
 
@@ -157,7 +138,7 @@ export async function publicEncrypt_long(
   if (nbBlocks <= 1) {
     // short cut: just one block avoid copying
     return crypto.subtle
-      .encrypt({ name: 'RSA-OAEP' }, publicKey, buffer)
+      .encrypt({ name: 'RSA-OAEP' }, publicKey, buffer as any)
       .then((encrypted) => new Uint8Array(encrypted));
   }
 
@@ -168,7 +149,7 @@ export async function publicEncrypt_long(
     const encrypted_chunk: ArrayBuffer = await crypto.subtle.encrypt(
       { name: 'RSA-OAEP' },
       publicKey,
-      currentBlock
+      currentBlock as any
     );
     assert(encrypted_chunk.byteLength === blockSize);
     outputBuffer.set(new Uint8Array(encrypted_chunk), i * blockSize);
@@ -191,7 +172,7 @@ export async function privateDecrypt_long(
   if (nbBlocks <= 1) {
     // short cut: just one block avoid copying
     return crypto.subtle
-      .decrypt('RSA-OAEP', privateKey, buffer)
+      .decrypt('RSA-OAEP', privateKey, buffer as any)
       .then((decrypted) => new Uint8Array(decrypted));
   }
 
@@ -202,7 +183,7 @@ export async function privateDecrypt_long(
     const decrypted_chunk: ArrayBuffer = await crypto.subtle.decrypt(
       { name: 'RSA-OAEP' },
       privateKey,
-      inputBuffer
+      inputBuffer as any
     );
 
     outputBuffers.push(decrypted_chunk);
