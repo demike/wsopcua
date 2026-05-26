@@ -24,7 +24,8 @@ export function hex2buf(hex: string) {
 
 export function buf2string(buffer: BinaryLike) {
   const dec = new TextDecoder('utf-8');
-  return dec.decode(buffer as any);
+  const input = ArrayBuffer.isView(buffer) ? buffer : new Uint8Array(buffer);
+  return dec.decode(input);
 }
 
 export function string2buf(str: string) {

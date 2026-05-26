@@ -79,6 +79,10 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     return this._disconnecting;
   }
 
+  public markDisconnecting() {
+    this._disconnecting = true;
+  }
+
   constructor() {
     super();
     this.name = this.constructor.name + counter;
