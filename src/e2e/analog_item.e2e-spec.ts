@@ -37,11 +37,11 @@ describe('AnalogItem', function () {
       });
     });
 
-    expect((data as any).engineeringUnits).toBeDefined();
-    expect((data as any).engineeringUnitsRange).toBeDefined();
-    expect((data as any).instrumentRange).toBeDefined();
-    expect((data as any).valuePrecision).toBeDefined();
-    expect((data as any).definition).toBeDefined();
+    expect(data.engineeringUnits).toBeDefined();
+    expect(data.engineeringUnitsRange).toBeDefined();
+    expect(data.instrumentRange).toBeDefined();
+    expect(data.valuePrecision).toBeDefined();
+    expect(data.definition).toBeDefined();
   });
 
   it("readUAAnalogItem should return an error if it doesn't exist", async () => {
