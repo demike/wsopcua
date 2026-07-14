@@ -24,9 +24,9 @@
     "@types/node": "^20.19.43",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
-    "@vitest/browser-playwright": "^4.1.4",
-    "@vitest/ui": "^4.1.4",
-    "@vitest/utils": "^4.1.4",
+    "@vitest/browser-playwright": "^4.1.10",
+    "@vitest/ui": "^4.1.10",
+    "@vitest/utils": "^4.1.10",
     "chalk": "^4.1.2",
     "eslint": "^8.57.1",
     "eslint-plugin-import": "^2.32.0",
@@ -37,7 +37,7 @@
     "start-server-and-test": "^1.15.4",
     "ts-loader": "^9.6.2",
     "typescript": "~5.6.3",
-    "vitest": "^4.1.4",
+    "vitest": "^4.1.10",
     "wsopcua-test-server": "^1.7.0"
   },
   "scripts": {
