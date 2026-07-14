@@ -250,7 +250,7 @@ function writeSignatureValue(writer: Asn1Writer, signature: SignatureValue | Uin
 }
 
 async function signCertificate(signingKey: CryptoKey, tbsCert: Uint8Array): Promise<Uint8Array> {
-  const signed = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', signingKey, tbsCert);
+  const signed = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', signingKey, tbsCert as any);
   return new Uint8Array(signed);
 }
 
@@ -283,7 +283,7 @@ async function createSigningKey(
 
   const signingKey = await crypto.subtle.importKey(
     'pkcs8',
-    signingKeyDer,
+    signingKeyDer as any,
     {
       name: 'RSASSA-PKCS1-v1_5',
       hash,

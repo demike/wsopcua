@@ -68,7 +68,6 @@ import {
   NodeIdType,
   BrowseDirection,
 } from '../generated';
-import { buf2base64, buf2hex } from '../crypto';
 import { IEncodable } from '../factory/factories_baseobject';
 import { findBasicDataType } from './find_basic_datatype';
 
@@ -2343,11 +2342,10 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     str += '\n sessionId................ ' + this.sessionId.toString();
     str += '\n authenticationToken...... ' + this.authenticationToken?.toString();
     str += '\n timeout.................. ' + this.timeout + 'ms';
-    str +=
-      '\n serverNonce.............. ' + (this.serverNonce ? buf2hex(this.serverNonce?.buffer) : '');
+    str += '\n serverNonce.............. ' + (this.serverNonce ? this.serverNonce.toHex() : '');
     str +=
       '\n serverCertificate........ ' +
-      (this.serverCertificate ? buf2base64(this.serverCertificate.buffer) : '');
+      (this.serverCertificate ? this.serverCertificate.toBase64() : '');
     str += '\n serverSignature.......... ' + this.serverSignature;
     str +=
       '\n lastRequestSentTime...... ' +

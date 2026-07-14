@@ -22,7 +22,7 @@ import {
 } from '../chunkmanager/chunk_manager';
 
 export interface SecureMessageChunkManagerEvents {
-  chunk: (chunk: ArrayBuffer, is_last: boolean) => void;
+  chunk: (chunk: Uint8Array, is_last: boolean) => void;
   finished: () => void;
 }
 
@@ -139,7 +139,7 @@ export class SecureMessageChunkManager extends EventEmitter<SecureMessageChunkMa
 
     this._chunkManager = new ChunkManager(params);
 
-    this._chunkManager.on('chunk', (chunk: ArrayBuffer, is_last) => {
+    this._chunkManager.on('chunk', (chunk: Uint8Array, is_last) => {
       /**
        * @event chunk
        * @param chunk {Buffer}
@@ -196,7 +196,7 @@ export class SecureMessageChunkManager extends EventEmitter<SecureMessageChunkMa
    * @param buffer {Buffer}
    * @param length {Integer} - optional if not provided  buffer.length is used instead.
    */
-  public write(buffer: ArrayBuffer, length: number): Promise<void> {
+  public write(buffer: ArrayBufferLike, length: number): Promise<void> {
     length = length || buffer.byteLength;
     return this._chunkManager.write(buffer, length);
   }

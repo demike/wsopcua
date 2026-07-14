@@ -1,5 +1,4 @@
 import { coerceByteString } from './byte_string';
-import { buf2base64 } from '../crypto/crypto_utils';
 import { coerceInt32, coerceUInt32, coerceUInt64, Int64 } from './integers';
 import { coerceBoolean, coerceInt64 } from '.';
 import * as ec from '.';
@@ -9,7 +8,7 @@ describe('ByteString', () => {
     expect(coerceByteString([1, 2, 3])).toEqual(data);
   });
   it('coerceByteString with base64 string', () => {
-    expect(coerceByteString(buf2base64(data.buffer))).toEqual(data);
+    expect(coerceByteString(data.toBase64())).toEqual(data);
   });
   it('coerceByteString with a ArrayBuffer', () => {
     expect(coerceByteString(data.buffer)).toEqual(data);

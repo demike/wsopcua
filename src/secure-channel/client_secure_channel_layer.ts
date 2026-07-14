@@ -183,7 +183,7 @@ export interface ClientSecureChannelLayerEvents {
   security_token_renewed: (token: ChannelSecurityToken) => void;
   receive_response: (response: OpcUaResponse) => void;
   timed_out_request: (requestMessage: IEncodable & { requestHeader: IRequestHeader }) => void;
-  send_chunk: (messageChunk: ArrayBuffer) => void;
+  send_chunk: (messageChunk: ArrayBufferLike | ArrayBufferView) => void;
   send_request: (requestMessage: IEncodable & { requestHeader: IRequestHeader }) => void;
   before_perform_transaction: (msgType: string, requestMessage: OpcUaRequest) => void;
 }
@@ -196,7 +196,8 @@ export interface ClientSecureChannelLayerOptions {
   defaultSecureTokenLifeTime?: number;
   /**
    * defaultTransactionTimeout the default transaction timeout in unit of ms. Default value is 15 seconds.
-   * If not specified, the default Transaction timeout will be taken from the global static variable ClientSecureChannelLayer.defaultTransactionTimeout
+   * If not specified, the default Transaction timeout will be taken from the
+   * global static variable ClientSecureChannelLayer.defaultTransactionTimeout
    */
   defaultTransactionTimeout?: number;
   tokenRenewalInterval?: number;
@@ -427,16 +428,20 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     if (response && response instanceof ServiceFault) {
       response.responseHeader.stringTable = response.responseHeader.stringTable || [];
       response.responseHeader.stringTable = [response.responseHeader.stringTable.join('\n')];
-      err = new Error(
-        ' serviceResult = ' +
-          response.responseHeader.serviceResult?.toString() +
-          '  returned by server \n response:' +
-          response.toString() +
-          '\n  request: ' +
-          request_data.request.toString()
+      err = Object.assign(
+        new Error(
+          ' serviceResult = ' +
+            response.responseHeader.serviceResult?.toString() +
+            '  returned by server \n response:' +
+            response.toString() +
+            '\n  request: ' +
+            request_data.request.toString()
+        ),
+        {
+          response,
+          request: request_data.request,
+        }
       );
-      (err as any).response = response;
-      (err as any).request = request_data.request;
       response = null;
     }
 
@@ -915,7 +920,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
       let last_err: Error;
 
       const _connect = (_i_callback: ErrorCallback) => {
-        if (this.__call && (this.__call as any)._cancelBackoff) {
+        if (this.__call?._cancelBackoff) {
           return;
         }
 
@@ -1029,7 +1034,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
         setTimeout(callback, 20);
       });
       // xx console.log("_cancelBackoff !!!");
-      (this.__call as any)._cancelBackoff = true;
+      this.__call._cancelBackoff = true;
       this.__call.abort();
     } else {
       callback();
@@ -1332,7 +1337,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     this._sendSecureOpcUARequest(msgType, requestMessage, requestId);
   }
 
-  protected _send_chunk(requestId: number, messageChunk: ArrayBuffer | null) {
+  protected _send_chunk(requestId: number, messageChunk: ArrayBufferLike | ArrayBufferView | null) {
     const request_data = this._request_data.get(requestId);
 
     if (messageChunk) {
@@ -1624,8 +1629,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
         return callback(new Error('Transport disconnected'));
       }
 
-      assert((this._transport as any)._disconnecting !== undefined);
-      (this._transport as any)._disconnecting = true; // avoid throwing a potential websocket 1006 error
+      this._transport.markDisconnecting(); // avoid throwing a potential websocket 1006 error
       this._performMessageTransaction('CLO', request, (err) => {
         if (err) {
           console.warn('CLO transaction terminated with error: ', err.message);
@@ -1673,7 +1677,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
   protected channelId: number;
   protected connectionStrategy: any;
 
-  protected __call: backoff.FunctionCall | null = null;
+  protected __call: (backoff.FunctionCall & { _cancelBackoff?: boolean }) | null = null;
 
   // transaction stats
   request: any;

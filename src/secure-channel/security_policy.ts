@@ -16,6 +16,8 @@ import {
 } from '../crypto';
 import { debugLog } from '../common/debug';
 
+type BinaryLike = ArrayBufferLike | ArrayBufferView;
+
 /**
  * @class SecurityPolicy
  * @static
@@ -105,7 +107,7 @@ export function toUri(value: SecurityPolicy | string): string {
     const a: string[] = value.split('#');
     // istanbul ignore next
     if (a.length < 2) {
-      return (SecurityPolicy as any)[value as any];
+      return SecurityPolicy[value as keyof typeof SecurityPolicy];
     }
     return value;
   }
@@ -131,7 +133,7 @@ export function coerceSecurityPolicy(value?: any): SecurityPolicy {
     value === 'Aes256_Sha256_RsaPss' ||
     value === 'Basic256Rsa15'
   ) {
-    return (SecurityPolicy as any)[value as string] as SecurityPolicy;
+    return SecurityPolicy[value as keyof typeof SecurityPolicy];
   }
   if (
     !(
@@ -235,7 +237,7 @@ function RSAPSSSHA256_Verify(
     .then((opts) => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
 }
 
-function RSAPKCS1V15SHA1_Sign(buffer: BufferSource, privateKey: PrivateKey): Promise<ArrayBuffer> {
+function RSAPKCS1V15SHA1_Sign(buffer: BinaryLike, privateKey: PrivateKey): Promise<ArrayBuffer> {
   return privateKey.getSignKey('SHA-1').then((signKey) =>
     crypto_utils.makeMessageChunkSignature(buffer, {
       algorithm: 'RSASSA-PKCS1-v1_5', // 'RSA-SHA256',
@@ -244,10 +246,7 @@ function RSAPKCS1V15SHA1_Sign(buffer: BufferSource, privateKey: PrivateKey): Pro
   );
 }
 
-function RSAPKCS1V15SHA256_Sign(
-  buffer: BufferSource,
-  privateKey: PrivateKey
-): Promise<ArrayBuffer> {
+function RSAPKCS1V15SHA256_Sign(buffer: BinaryLike, privateKey: PrivateKey): Promise<ArrayBuffer> {
   return privateKey.getSignKey('SHA-256').then((signKey) =>
     crypto_utils.makeMessageChunkSignature(buffer, {
       algorithm: 'RSASSA-PKCS1-v1_5', // 'RSA-SHA256',
@@ -256,7 +255,7 @@ function RSAPKCS1V15SHA256_Sign(
   );
 }
 
-function RSAPSSSHA256_Sign(buffer: BufferSource, privateKey: PrivateKey): Promise<ArrayBuffer> {
+function RSAPSSSHA256_Sign(buffer: BinaryLike, privateKey: PrivateKey): Promise<ArrayBuffer> {
   return privateKey
     .getSignKey('SHA-256', 'http://www.w3.org/2000/09/xmldsig#rsa-pss')
     .then((signKey) =>
@@ -312,7 +311,7 @@ export async function computeDerivedKeys(
     };
 
     const derived = {
-      algorithm: null as any,
+      algorithm: null,
       derivedClientKeys: await crypto_utils.computeDerivedKeys(serverNonce, clientNonce, options),
       derivedServerKeys: await crypto_utils.computeDerivedKeys(clientNonce, serverNonce, options),
     };
@@ -339,7 +338,7 @@ export interface ICryptoFactory {
 
   /* asymmetric signature algorithm */
   asymmetricVerifyChunk: (chunk: Uint8Array, certificate: Uint8Array) => PromiseLike<boolean>;
-  asymmetricSign: (chunk: BufferSource, key: PrivateKey) => Promise<ArrayBuffer>;
+  asymmetricSign: (chunk: BinaryLike, key: PrivateKey) => Promise<ArrayBuffer>;
   asymmetricVerify: (
     block_to_verify: Uint8Array,
     signature: Uint8Array,

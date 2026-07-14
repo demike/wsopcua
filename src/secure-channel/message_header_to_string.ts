@@ -15,7 +15,9 @@ import { SequenceHeader } from '../service-secure-channel';
  * @param messageChunk {DataStream}
  * @return {string}
  */
-export function messageHeaderToString(messageChunk: DataView | ArrayBuffer): string {
+export function messageHeaderToString(
+  messageChunk: DataView | ArrayBufferLike | ArrayBufferView
+): string {
   const stream = new DataStream(messageChunk);
 
   const messageHeader = readMessageHeader(stream);
@@ -34,12 +36,9 @@ export function messageHeaderToString(messageChunk: DataView | ArrayBuffer): str
   securityHeader.decode(stream);
   sequenceHeader.decode(stream);
 
-  let slice: ArrayBuffer;
-  if (ArrayBuffer.isView(messageChunk)) {
-    slice = messageChunk.buffer.slice(0, stream.length);
-  } else {
-    slice = messageChunk.slice(0, stream.length);
-  }
+  const slice = ArrayBuffer.isView(messageChunk)
+    ? new Uint8Array(messageChunk.buffer, messageChunk.byteOffset, stream.length)
+    : new Uint8Array(messageChunk, 0, stream.length);
 
   return (
     messageHeader.msgType +

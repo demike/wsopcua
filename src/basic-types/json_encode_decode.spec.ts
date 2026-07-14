@@ -267,7 +267,7 @@ describe('encoding and decoding arrays', function () {
       return ec.jsonDecodeArray(arr, ec.jsonDecodeByteString);
     }
 
-    let data: (Uint8Array | null)[] = [
+    const data: (Uint8Array | null)[] = [
       new TextEncoder().encode('ABCD'),
       null,
       new TextEncoder().encode('EFGH'),

@@ -124,9 +124,10 @@ export function concatDataViews(views: DataView[]) {
   return new DataView(buf.buffer);
 }
 
-export function concatArrayBuffers(arrays: ArrayBuffer[]): ArrayBuffer {
+export function concatArrayBuffers(arrays: ArrayBufferLike[]): ArrayBuffer {
   if (arrays.length === 1) {
-    return arrays[0];
+    const array = arrays[0];
+    return array instanceof ArrayBuffer ? array : new Uint8Array(array).slice().buffer;
   }
   let len = 0;
   for (const ar of arrays) {
