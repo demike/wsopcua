@@ -34,6 +34,7 @@ const variant = require(`${DIST}/variant/index.js`);
 const { ReadRequest } = require(`${DIST}/generated/ReadRequest.js`);
 const { ReadValueId } = require(`${DIST}/generated/ReadValueId.js`);
 const { TimestampsToReturn } = require(`${DIST}/generated/TimestampsToReturn.js`);
+const { ChunkManager } = require(`${DIST}/chunkmanager/chunk_manager.js`);
 
 const { Variant, DataType, VariantArrayType } = variant;
 
@@ -46,6 +47,20 @@ function run(label, iter, fn) {
   const start = process.hrtime.bigint();
   for (let i = 0; i < iter; i++) {
     fn(i);
+  }
+  const ns = Number(process.hrtime.bigint() - start);
+  const opsPerSec = (iter / ns) * 1e9;
+  console.log(
+    `${label.padEnd(34)} ${iter.toLocaleString().padStart(12)} iters  ` +
+      `${(ns / 1e6).toFixed(1).padStart(8)} ms  ` +
+      `${Math.round(opsPerSec).toLocaleString().padStart(14)} ops/s`
+  );
+}
+
+async function runAsync(label, iter, fn) {
+  const start = process.hrtime.bigint();
+  for (let i = 0; i < iter; i++) {
+    await fn(i);
   }
   const ns = Number(process.hrtime.bigint() - start);
   const opsPerSec = (iter / ns) * 1e9;
@@ -126,4 +141,40 @@ run('ReadRequest[50] round-trip', Math.max(1, Math.floor(ITER / 200)), () => {
   new ReadRequest().decode(new DataStream(BUF));
 });
 
-console.log('\nDone. CPU profile written to profiles/ (when run with --cpu-prof).\n');
+// --- chunk-manager framing (async) ---------------------------------------
+function writeFakeHeader(block) {
+  for (let i = 0; i < this.headerSize; i++) block.setUint8(i, 0xaa);
+}
+function writeFakeSequenceHeader(block) {
+  for (let i = 0; i < this.sequenceHeaderSize; i++) block.setUint8(i, 0xbb);
+}
+function fakeSignature() {
+  return Promise.resolve(new Uint8Array(4).fill(0xcc).buffer);
+}
+const payload64k = new Uint8Array(64 * 1024).map((_, i) => i & 0xff).buffer;
+async function chunkOnce(options) {
+  const cm = new ChunkManager(options);
+  cm.on('chunk', () => {});
+  await cm.write(payload64k);
+  await cm.end();
+}
+
+(async () => {
+  const chunkIter = Math.max(1, Math.floor(ITER / 500));
+  await runAsync('chunk plain 64 KiB', chunkIter, () =>
+    chunkOnce({ chunkSize: 8192, sequenceHeaderSize: 0 })
+  );
+  await runAsync('chunk signed 64 KiB', chunkIter, () =>
+    chunkOnce({
+      chunkSize: 8192,
+      headerSize: 12,
+      writeHeaderFunc: writeFakeHeader,
+      sequenceHeaderSize: 8,
+      writeSequenceHeaderFunc: writeFakeSequenceHeader,
+      signatureLength: 4,
+      signBufferFunc: fakeSignature,
+    })
+  );
+
+  console.log('\nDone. CPU profile written to profiles/ (when run with --cpu-prof).\n');
+})();

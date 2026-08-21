@@ -26,6 +26,7 @@ Current bench files:
 | `src/basic-types/encode_decode.bench.ts` | UInt32, Double, String, ByteString, Guid, DateTime, NodeId |
 | `src/variant/variant.bench.ts` | Scalar & array `Variant`, full `DataValue` |
 | `src/service-read/read_request.bench.ts` | Full `ReadRequest` size/encode/decode round-trip (1 / 50 / 500 nodes) |
+| `src/chunkmanager/chunk_manager.bench.ts` | `ChunkManager` framing throughput (plain & signed, 64 KiB payload) |
 
 Each bench pre-allocates its buffer and resets the stream position between
 iterations so it measures the codec, not allocation.
@@ -94,6 +95,7 @@ deltas.
 | `variant decode Double[1000]` | ~100,000 |
 | `ReadRequest[50] encode` | ~12,500 |
 | `ReadRequest[50] round-trip` | ~5,500 |
+| `ChunkManager` 64 KiB (plain / signed) | ~15,000–21,000 |
 
 ### Hot spots (from the CPU profile)
 
