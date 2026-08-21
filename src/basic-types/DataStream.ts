@@ -330,14 +330,32 @@ export class DataStream {
   }
 
   readString() {
-    const buff = this.readByteStream();
-    //        const encodedString = String.fromCharCode.apply(null, buff),
-    //        decodedString = decodeURIComponent(encodedString);
-    //        return decodedString;
-    if (buff == null) {
+    const bufLen = this.getInt32();
+    if (bufLen === -1) {
       return;
     }
-    return txtDecoder.decode(buff);
+    if (bufLen === 0) {
+      return '';
+    }
+
+    const remaining_bytes = this._view.byteLength - this._pos;
+    /* istanbul ignore next */
+    if (remaining_bytes < bufLen) {
+      throw new Error(
+        'BinaryStream.readString error : not enough bytes left in buffer :  bufferLength is ' +
+          bufLen +
+          ' but only ' +
+          remaining_bytes +
+          ' left'
+      );
+    }
+
+    // Decode directly from a subarray view. Unlike readByteStream() there is no
+    // need for a defensive clone: TextDecoder copies the data internally and we
+    // never expose the underlying buffer here.
+    const view = new Uint8Array(this._view.buffer, this._view.byteOffset + this._pos, bufLen);
+    this._pos += bufLen;
+    return txtDecoder.decode(view);
   }
 
   writeString(str?: string | null): void {
@@ -345,7 +363,16 @@ export class DataStream {
       this.setInt32(-1);
       return;
     }
-    return this.writeByteStream(txtEncoder.encode(str));
+    // Encode straight into the destination buffer to avoid the intermediate
+    // Uint8Array allocation + copy that `txtEncoder.encode()` + writeByteStream
+    // would incur. The 4-byte length prefix is reserved first and back-filled
+    // with the real byte count returned by encodeInto().
+    const lengthPos = this._pos;
+    this._pos += 4;
+    const bytebuf = new Uint8Array(this._view.buffer, this._view.byteOffset);
+    const { written } = txtEncoder.encodeInto(str, bytebuf.subarray(this._pos));
+    this._view.setInt32(lengthPos, written, true);
+    this._pos += written;
   }
 
   /**

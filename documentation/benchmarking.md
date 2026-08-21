@@ -88,14 +88,19 @@ deltas.
 | --- | ---: |
 | `encodeUInt32` | ~5,000,000 |
 | `encodeDouble` | ~4,900,000 |
-| `encodeString` | ~770,000 |
-| `encodeNodeId` (numeric) | ~3,400,000 |
-| `encodeNodeId` (string) | ~730,000 |
-| `variant encode Double[1000]` | ~900,000 |
-| `variant decode Double[1000]` | ~100,000 |
-| `ReadRequest[50] encode` | ~12,500 |
-| `ReadRequest[50] round-trip` | ~5,500 |
-| `ChunkManager` 64 KiB (plain / signed) | ~15,000–21,000 |
+| `encodeString` | ~2,000,000 |
+| `encodeNodeId` (numeric) | ~3,600,000 |
+| `encodeNodeId` (string) | ~1,800,000 |
+| `variant encode Double[1000]` | ~1,000,000 |
+| `variant decode Double[1000]` | ~115,000 |
+| `ReadRequest[50] encode` | ~28,000 |
+| `ReadRequest[50] round-trip` | ~14,000 |
+| `ChunkManager` 64 KiB (plain / signed) | ~18,000–36,000 |
+
+> The string/NodeId/message figures reflect the `DataStream.writeString` /
+> `readString` optimisation (see below): encoding strings directly into the
+> destination buffer with `TextEncoder.encodeInto` instead of allocating an
+> intermediate array roughly **2–2.7× improved** the string-heavy paths.
 
 ### Hot spots (from the CPU profile)
 
@@ -110,3 +115,13 @@ The heaviest self-time frames in the encode/decode path were:
 These are the first places to look when optimising: `DataStream` allocation and
 the byte-stream length-prefixed string/bytestring paths dominate, and string
 NodeIds are ~4–5× slower than numeric ones.
+
+### Applied optimisations
+
+- **`DataStream.writeString` / `readString`** — encode UTF-8 directly into the
+  destination buffer via `TextEncoder.encodeInto` (reserving the 4-byte length
+  prefix and back-filling the real byte count) and decode from a subarray view
+  instead of a defensive clone. Removes an intermediate `Uint8Array` allocation
+  plus a copy per string. Result: `encodeString` ~2.7×, string `NodeId` ~2.4×,
+  and `ReadRequest[50]` encode/round-trip ~2× faster, with no behavioural
+  change (full unit suite still green).
