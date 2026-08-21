@@ -23,7 +23,7 @@ import { getRandomInt } from './utils';
 export { NodeId } from '../nodeid/nodeid';
 export { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 
-import { set_flag, check_flag } from '../utils';
+import { check_flag } from '../utils';
 import { NodeIdType } from '../generated/NodeIdType';
 
 enum EnumNodeIdEncoding {
@@ -48,7 +48,10 @@ function nodeID_encodingByte(nodeId: NodeId | ExpandedNodeId): number {
   if (!nodeId) {
     return 0;
   }
-  assert(nodeId.hasOwnProperty('identifierType'));
+  // equivalent to asserting the object is a NodeId (identifierType is 0..5 for
+  // valid ids, so `!== undefined` rejects non-NodeId objects) but avoids the
+  // per-call hasOwnProperty method invocation on this hot encode path.
+  assert(nodeId.identifierType !== undefined);
 
   let encodingByte = 0;
 
@@ -59,23 +62,23 @@ function nodeID_encodingByte(nodeId: NodeId | ExpandedNodeId): number {
       !(<ExpandedNodeId>nodeId).namespaceUri &&
       !(<ExpandedNodeId>nodeId).serverIndex
     ) {
-      encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.TwoBytes);
+      encodingByte = EnumNodeIdEncoding.TwoBytes;
     } else if (
       is_uint16(<number>nodeId.value) &&
       is_uint8(nodeId.namespace) &&
       !(<ExpandedNodeId>nodeId).namespaceUri &&
       !(<ExpandedNodeId>nodeId).serverIndex
     ) {
-      encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.FourBytes);
+      encodingByte = EnumNodeIdEncoding.FourBytes;
     } else {
-      encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.Numeric);
+      encodingByte = EnumNodeIdEncoding.Numeric;
     }
   } else if (nodeId.identifierType === NodeIdType.String) {
-    encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.String);
+    encodingByte = EnumNodeIdEncoding.String;
   } else if (nodeId.identifierType === NodeIdType.ByteString) {
-    encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.ByteString);
+    encodingByte = EnumNodeIdEncoding.ByteString;
   } else if (nodeId.identifierType === NodeIdType.Guid) {
-    encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.Guid);
+    encodingByte = EnumNodeIdEncoding.Guid;
   }
 
   if (nodeId instanceof ExpandedNodeId) {
@@ -84,11 +87,13 @@ function nodeID_encodingByte(nodeId: NodeId | ExpandedNodeId): number {
       !nodeId.namespace &&
       nodeId.namespaceUri !== 'http://opcfoundation.org/UA/'
     ) {
-      encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.NamespaceUriFlag);
+      // eslint-disable-next-line no-bitwise
+      encodingByte |= EnumNodeIdEncoding.NamespaceUriFlag;
     }
 
     if (nodeId.serverIndex) {
-      encodingByte = set_flag(encodingByte, EnumNodeIdEncoding.ServerIndexFlag);
+      // eslint-disable-next-line no-bitwise
+      encodingByte |= EnumNodeIdEncoding.ServerIndexFlag;
     }
   }
 
@@ -142,11 +147,16 @@ function _encodeNodeId(encoding_byte: number, nodeId: NodeId, stream: DataStream
 }
 
 export function encodeNodeId(nodeId: NodeId, stream: DataStream & { __namespaceArray?: string[] }) {
-  // automatically resolve namespaceUri to namespace index if possible (and necessary)
-  try {
-    nodeId = resolveExpandedNodeId(nodeId, stream.__namespaceArray);
-  } catch (e) {
-    console.warn('failed to resolve expanded nodeid', nodeId);
+  // automatically resolve namespaceUri to namespace index if possible (and necessary).
+  // resolveExpandedNodeId only changes the id when it carries a namespaceUri and a
+  // namespaceArray is available, so skip the call (and its try/catch) otherwise -
+  // this is the common case (plain NodeId) and avoids per-encode overhead.
+  if ((nodeId as ExpandedNodeId)?.namespaceUri && stream.__namespaceArray) {
+    try {
+      nodeId = resolveExpandedNodeId(nodeId, stream.__namespaceArray);
+    } catch (e) {
+      console.warn('failed to resolve expanded nodeid', nodeId);
+    }
   }
 
   let encoding_byte = nodeID_encodingByte(nodeId);
