@@ -8,7 +8,10 @@ import { encodeByteString, decodeByteString } from './byte_string';
 import { encodeGuid, decodeGuid } from './guid';
 import { encodeDateTime, decodeDateTime } from './date_time';
 import { encodeNodeId, decodeNodeId } from './nodeid';
+import { encodeExpandedNodeId, decodeExpandedNodeId } from './nodeid';
 import { makeNodeId } from '../nodeid/nodeid';
+import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
+import { NodeIdType } from '../generated/NodeIdType';
 
 // Micro-benchmarks for the primitive encode/decode functions.
 // These sit on the hottest path of the binary protocol: every message is
@@ -136,5 +139,24 @@ describe('basic-types: NodeId', () => {
   bench('decodeNodeId (string)', () => {
     const s = preparedReadStream((w) => encodeNodeId(stringNodeId, w));
     decodeNodeId(s);
+  });
+});
+
+describe('basic-types: ExpandedNodeId', () => {
+  // plain ExpandedNodeId (no namespaceUri / serverIndex) — the common browse case
+  const eni = new ExpandedNodeId(NodeIdType.Numeric, 2258, 2);
+  // ExpandedNodeId carrying a namespaceUri + serverIndex
+  const eniUri = new ExpandedNodeId(NodeIdType.Numeric, 2258, 0, 'urn:my:namespace', 5);
+  bench('encodeExpandedNodeId', () => {
+    const s = freshWriteStream();
+    encodeExpandedNodeId(eni, s);
+  });
+  bench('decodeExpandedNodeId', () => {
+    const s = preparedReadStream((w) => encodeExpandedNodeId(eni, w));
+    decodeExpandedNodeId(s);
+  });
+  bench('decodeExpandedNodeId (namespaceUri)', () => {
+    const s = preparedReadStream((w) => encodeExpandedNodeId(eniUri, w));
+    decodeExpandedNodeId(s);
   });
 });
