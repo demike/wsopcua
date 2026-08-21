@@ -77,8 +77,24 @@ export function encodeExtensionObject(
 
     encodeNodeId(encodingDefaultBinary, stream);
     stream.setUint8(0x01); // 0x01 The body is encoded as a ByteString.
-    stream.setUint32(DataStream.binaryStoreSize(object as IEncodable));
-    (object as IEncodable).encode(stream);
+
+    if (stream instanceof DataStream) {
+      // Reserve 4 bytes for the ByteString length prefix, encode the body in a
+      // single pass, then back-patch the real byte count. This avoids a full
+      // extra `binaryStoreSize` traversal of the object just to obtain the
+      // length up front.
+      const lengthPos = stream.pos;
+      stream.setUint32(0);
+      const bodyStart = stream.pos;
+      (object as IEncodable).encode(stream);
+      stream.view.setUint32(lengthPos, stream.pos - bodyStart, true);
+    } else {
+      // Size-calculation pass: the length prefix value is irrelevant (setUint32
+      // only accounts for 4 bytes), so skip the redundant `binaryStoreSize`
+      // call and let the single encode traversal below measure the body.
+      (stream as { setUint32(v: number): void }).setUint32(0);
+      (object as IEncodable).encode(stream);
+    }
   }
 }
 
