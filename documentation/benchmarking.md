@@ -227,3 +227,19 @@ NodeIds are ~4–5× slower than numeric ones.
   (`nodeId` + `typeDefinition`), so a `ReferenceDescription` decode is ~1.10×
   faster and a full `BrowseResponse` of hundreds of references benefits per
   entry. No behavioural change; full unit suite (862 tests) passes.
+- **size-pass string length without a second UTF-8 encode** — encoding a message
+  is two-pass: `DataStream.binaryStoreSize()` walks the object to compute the
+  buffer size, then `encode()` writes the bytes. The size pass' `writeString`
+  called `txtEncoder.encode(str)` and read `.length` — i.e. it fully UTF-8
+  encoded (and allocated a `Uint8Array` for) *every* string just to measure it,
+  after which the encode pass encoded the same string a second time via
+  `encodeInto`. `writeString` now computes the UTF-8 byte length with a direct
+  char-code scan (`utf8ByteLength`, no allocation), which matches
+  `TextEncoder.encode(str).length` byte-for-byte including the U+FFFD (3-byte)
+  replacement emitted for unpaired surrogates. Result: the size pass of a
+  string-heavy message (e.g. a `BrowseResponse` of `ReferenceDescription`s with
+  string NodeIds, browse names and display names) is ~5× faster (~210K → ~1.14M
+  refs/s for `binaryStoreSize`), and the manual length itself is ~10–20× faster
+  than `TextEncoder` for the short strings that dominate the protocol. Every
+  encoded/sent message with strings benefits (requests as well as responses). No
+  behavioural change; full unit suite (865 tests) passes.
