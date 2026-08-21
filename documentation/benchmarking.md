@@ -182,3 +182,17 @@ NodeIds are ~4–5× slower than numeric ones.
   large payloads (≥256 KiB) where the copy is memory-bandwidth bound — see the
   `ByteString[64KiB]` bench. No behavioural change; full unit suite (861 tests)
   passes.
+- **`Variant` scalar codec dispatch cache** — every scalar `Variant` encode/decode
+  resolved its per-type codec via `findBuiltInType(DataType[dataType])`, i.e. a
+  `DataType` enum reverse lookup (number → string), a `_defaultTypeMap` object
+  lookup and a subtype-recursion check, on *every* call. Since that resolution is
+  stable for the built-in types a Variant can carry, `get_encoder`/`get_decoder`
+  now memoise the resolved function in a small array keyed by the numeric
+  `DataType` and reuse it thereafter. Result (both directions benefit, since
+  encode uses the same dispatch): scalar `Double` decode ~1.18× (~707K → ~837K
+  ops/s) and encode ~1.25× (~1.47M → ~1.84M ops/s), scalar `UInt32` decode ~1.23×
+  (~693K → ~853K ops/s); full `DataValue` decode ~1.06× (the remainder is
+  dominated by object allocation, status-code and two DateTime decodes). Variants
+  wrap every read/monitored-item value on the wire, so this is a core
+  subscription/read hot path. No behavioural change; full unit suite (861 tests)
+  passes.

@@ -409,20 +409,36 @@ function isValidMatrixVariant(dataType: DataType, value: any, dimensions?: numbe
   return true;
 }
 
+// Memoised lookup of the built-in encode/decode function per DataType. The
+// resolution (DataType enum reverse lookup -> findBuiltInType map lookup ->
+// subtype recursion) is stable for the built-in types a Variant can hold, so we
+// cache the resolved function keyed by the numeric DataType and reuse it on
+// every subsequent (de)serialisation - this sits on the hot scalar codec path.
+const _encoderCache: Array<((value: any, out: DataStream) => void) | undefined> = [];
+const _decoderCache: Array<((inp: DataStream) => any) | undefined> = [];
+
 function get_encoder(dataType: DataType) {
-  const encode = findBuiltInType(DataType[dataType]).encode;
-  /* istanbul ignore next */
-  if (!encode) {
-    throw new Error('Cannot find encode function for dataType ' + dataType);
+  let encode = _encoderCache[dataType];
+  if (encode === undefined) {
+    encode = findBuiltInType(DataType[dataType]).encode;
+    /* istanbul ignore next */
+    if (!encode) {
+      throw new Error('Cannot find encode function for dataType ' + dataType);
+    }
+    _encoderCache[dataType] = encode;
   }
   return encode;
 }
 
 function get_decoder(dataType: DataType) {
-  const decode = findBuiltInType(DataType[dataType]).decode;
-  /* istanbul ignore next */
-  if (!decode) {
-    throw new Error('Variant.decode : cannot find decoder for type ' + dataType);
+  let decode = _decoderCache[dataType];
+  if (decode === undefined) {
+    decode = findBuiltInType(DataType[dataType]).decode;
+    /* istanbul ignore next */
+    if (!decode) {
+      throw new Error('Variant.decode : cannot find decoder for type ' + dataType);
+    }
+    _decoderCache[dataType] = decode;
   }
   return decode;
 }
