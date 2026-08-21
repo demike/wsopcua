@@ -141,6 +141,42 @@ run('ReadRequest[50] round-trip', Math.max(1, Math.floor(ITER / 200)), () => {
   new ReadRequest().decode(new DataStream(BUF));
 });
 
+// --- ReadResponse decode (realistic subscription/read payload) ------------
+// An array of DataValues, each wrapping a mixed-type scalar Variant plus a
+// status code and source/server timestamps. This is the payload that dominates
+// real client decode throughput (PublishResponse notifications look the same).
+const { ReadResponse } = require(`${DIST}/generated/ReadResponse.js`);
+const { ResponseHeader } = require(`${DIST}/generated/ResponseHeader.js`);
+const { DataValue } = require(`${DIST}/generated/DataValue.js`);
+const { StatusCodes } = require(`${DIST}/constants/raw_status_codes.js`);
+
+function makeReadResponse(n) {
+  const results = [];
+  for (let i = 0; i < n; i++) {
+    const sourceTimestamp = new Date(Date.UTC(2024, 0, 1, 0, 0, i % 60, i % 1000));
+    const serverTimestamp = new Date(sourceTimestamp.getTime() + 1);
+    let value;
+    switch (i % 5) {
+      case 0: value = new Variant({ dataType: DataType.Double, value: i * 1.5 }); break;
+      case 1: value = new Variant({ dataType: DataType.UInt32, value: i * 7 }); break;
+      case 2: value = new Variant({ dataType: DataType.String, value: 'Sensor.Channel.' + i }); break;
+      case 3: value = new Variant({ dataType: DataType.Boolean, value: (i & 1) === 0 }); break;
+      default: value = new Variant({ dataType: DataType.Int16, value: (i % 100) - 50 });
+    }
+    results.push(new DataValue({ value, statusCode: StatusCodes.Good, sourceTimestamp, serverTimestamp }));
+  }
+  return new ReadResponse({ responseHeader: new ResponseHeader(), results, diagnosticInfos: [] });
+}
+const readResponse = makeReadResponse(100);
+{
+  const w = new DataStream(BUF);
+  w.length = 0;
+  readResponse.encode(w);
+}
+run('ReadResponse[100] decode', Math.max(1, Math.floor(ITER / 200)), () => {
+  new ReadResponse().decode(new DataStream(BUF));
+});
+
 // --- chunk-manager framing (async) ---------------------------------------
 function writeFakeHeader(block) {
   for (let i = 0; i < this.headerSize; i++) block.setUint8(i, 0xaa);
