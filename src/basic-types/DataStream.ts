@@ -322,9 +322,11 @@ export class DataStream {
 
     // explicitely clone the array data here, to avoid references to huge memory blocks
     // ( and avoid potential problems when using the underlying ArrayBuffer directly)
-    const buf = new Uint8Array(
-      this._view.buffer.slice(this._view.byteOffset + this._pos, this._pos + bufLen)
-    );
+    // Allocate + set() from a subarray view is dramatically faster than
+    // `new Uint8Array(buffer.slice(...))` (ArrayBuffer.prototype.slice is slow in
+    // V8) and correctly accounts for the view's byteOffset.
+    const buf = new Uint8Array(bufLen);
+    buf.set(new Uint8Array(this._view.buffer, this._view.byteOffset + this._pos, bufLen));
     this._pos += bufLen;
     return buf;
   }
