@@ -2,15 +2,17 @@ import { DataStream } from './DataStream';
 
 export type Guid = string;
 
-function toHex(i: number, nb: number) {
-  return ('000000000000000' + i.toString(16)).substr(-nb);
-}
-
 function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 const regexGUID = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/;
+
+// precomputed byte -> two-char uppercase hex string lookup used by decodeGuid
+const HEX_BYTE = new Array<string>(256);
+for (let i = 0; i < 256; i++) {
+  HEX_BYTE[i] = (i < 16 ? '0' : '') + i.toString(16).toUpperCase();
+}
 
 /**
  * checks if provided string is a valid Guid
@@ -89,38 +91,32 @@ export function encodeGuid(guid: string, stream: DataStream): void {
 }
 
 export function decodeGuid(stream: DataStream): string {
-  function read_UInt32() {
-    return toHex(stream.getUint32(), 8);
-  }
-
-  function read_UInt16() {
-    return toHex(stream.getUint16(), 4);
-  }
-
-  function read_UInt8() {
-    return toHex(stream.getUint8(), 2);
-  }
-
-  function read_many(func: () => string, nb: number) {
-    let result = '';
-    let i: number;
-    for (i = 0; i < nb; i++) {
-      result += func();
-    }
-    return result;
-  }
-
-  const data1 = read_UInt32();
-
-  const data2 = read_UInt16();
-
-  const data3 = read_UInt16();
-
-  const data4_5 = read_many(read_UInt8, 2);
-
-  const data6_B = read_many(read_UInt8, 6);
-
-  const guid = data1 + '-' + data2 + '-' + data3 + '-' + data4_5 + '-' + data6_B;
-
-  return guid.toUpperCase();
+  // The GUID is 16 bytes: Data1 (UInt32 LE), Data2/Data3 (UInt16 LE) and
+  // Data4 (8 bytes, big-endian). Read them as a raw byte view and assemble the
+  // canonical textual form directly from a byte->hex lookup table - this avoids
+  // the per-field closures, toString(16)/substr work and the trailing
+  // toUpperCase() over the whole string used by the previous implementation.
+  const b = stream.readByteArray(16);
+  return (
+    HEX_BYTE[b[3]] +
+    HEX_BYTE[b[2]] +
+    HEX_BYTE[b[1]] +
+    HEX_BYTE[b[0]] +
+    '-' +
+    HEX_BYTE[b[5]] +
+    HEX_BYTE[b[4]] +
+    '-' +
+    HEX_BYTE[b[7]] +
+    HEX_BYTE[b[6]] +
+    '-' +
+    HEX_BYTE[b[8]] +
+    HEX_BYTE[b[9]] +
+    '-' +
+    HEX_BYTE[b[10]] +
+    HEX_BYTE[b[11]] +
+    HEX_BYTE[b[12]] +
+    HEX_BYTE[b[13]] +
+    HEX_BYTE[b[14]] +
+    HEX_BYTE[b[15]]
+  );
 }
