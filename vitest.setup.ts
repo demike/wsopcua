@@ -1,6 +1,7 @@
 // Vitest setup file
 import { expect, vi } from 'vitest';
 import { NodeId } from './src/nodeid/nodeid';
+import { StatusCode } from './src/basic-types/status_code';
 
 function bytesToBase64(bytes: Uint8Array) {
   const chunkSize = 0x8000;
@@ -104,6 +105,14 @@ if (typeof expect.addEqualityTesters === 'function') {
       // NodeId comparison
       if (a instanceof NodeId && b instanceof NodeId) {
         return NodeId.sameNodeId(a, b);
+      }
+      // StatusCode comparison: two status codes are equal iff they encode the
+      // same numeric value. Comparing the objects structurally is fragile
+      // because a decoded code may be a ConstantStatusCode (from the singleton
+      // table) or a ModifiableStatusCode (when info bits are present), which
+      // have different internal shapes for the same logical value.
+      if (a instanceof StatusCode && b instanceof StatusCode) {
+        return a.value === b.value;
       }
       // Uint8Array comparison
       if (a instanceof Uint8Array && b instanceof Uint8Array) {
