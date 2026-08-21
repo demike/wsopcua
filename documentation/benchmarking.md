@@ -125,3 +125,9 @@ NodeIds are ~4–5× slower than numeric ones.
   plus a copy per string. Result: `encodeString` ~2.7×, string `NodeId` ~2.4×,
   and `ReadRequest[50]` encode/round-trip ~2× faster, with no behavioural
   change (full unit suite still green).
+- **`decodeArray` / variant general-array decode** — pre-size the result with
+  `new Array(length)` and assign by index instead of `push()`, so V8 keeps a
+  single packed backing store. ~1.4–1.6× faster for the array-building step
+  (50–1000 elements), improving decode of structure/value arrays (browse & read
+  results, monitored-item notifications). No behavioural change; full unit suite
+  (861 tests) passes.

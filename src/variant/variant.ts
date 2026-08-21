@@ -462,9 +462,9 @@ function decodeGeneralArray(dataType: DataType, stream: DataStream, length: numb
 
   const decode = get_decoder(dataType);
 
-  const arr = [];
+  const arr = new Array(length);
   for (let i = 0; i < length; i++) {
-    arr.push(decode(stream));
+    arr[i] = decode(stream);
   }
   return arr;
 }
