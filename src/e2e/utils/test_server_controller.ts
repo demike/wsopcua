@@ -42,6 +42,8 @@ const isE2EDebugEnabled = () => {
   return processLike?.env?.WSOPCUA_E2E_DEBUG === '1';
 };
 
+const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
 const DEFAULT_SUBSCRIPTION_REQ_OPTIONS: ICreateSubscriptionRequest = {
   requestedPublishingInterval: 100,
   requestedLifetimeCount: 100,
@@ -393,7 +395,49 @@ export class E2ETestControllerImpl implements E2ETestController {
       throw new Error('Error adding compliance test namespace ' + response.result[0].toJSON());
     }
 
-    return response.result[0].outputArguments[0].value;
+    const namespace = response.result[0].outputArguments[0].value;
+
+    // The conformance address space is built on the control side while the test
+    // session connects independently. The shared test server is torn down and
+    // rebuilt between test files, so under load the start/stop handover can race
+    // and the conformance nodes may not be resolvable on the test session for a
+    // brief moment. Poll a well-known conformance node until it resolves so
+    // callers get a populated namespace (or a clear error) instead of an
+    // intermittent BadNodeIdUnknown from later requests.
+    await this.waitForComplianceNamespace(namespace);
+
+    return namespace;
+  }
+
+  private async waitForComplianceNamespace(
+    namespace: number,
+    attempts = 15,
+    delayMs = 200
+  ): Promise<void> {
+    const probeNodeId = coerceNodeId('s=ObjectWithMethods', namespace);
+    let lastStatus: unknown;
+    for (let attempt = 0; attempt < attempts; attempt++) {
+      if (this.testSession) {
+        try {
+          const { results } = await this.testSession.browseP(probeNodeId);
+          lastStatus = results?.[0]?.statusCode;
+          if (lastStatus === StatusCodes.Good) {
+            return;
+          }
+        } catch (err) {
+          lastStatus = err;
+          if (isE2EDebugEnabled()) {
+            console.warn('compliance namespace probe failed', err);
+          }
+        }
+      }
+      await delay(delayMs);
+    }
+    throw new Error(
+      `compliance test namespace ${namespace} did not become resolvable (last status: ${String(
+        lastStatus
+      )})`
+    );
   }
 
   /**
