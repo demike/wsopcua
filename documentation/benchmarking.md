@@ -26,6 +26,7 @@ Current bench files:
 | `src/basic-types/encode_decode.bench.ts` | UInt32, Double, String, ByteString, Guid, DateTime, NodeId |
 | `src/variant/variant.bench.ts` | Scalar & array `Variant`, full `DataValue` |
 | `src/service-read/read_request.bench.ts` | Full `ReadRequest` size/encode/decode round-trip (1 / 50 / 500 nodes) |
+| `src/service-read/read_response.bench.ts` | Full `ReadResponse` decode: array of `DataValue`s wrapping mixed-type `Variant`s + timestamps (10 / 100 / 1000 values) — the realistic subscription/read decode payload |
 | `src/chunkmanager/chunk_manager.bench.ts` | `ChunkManager` framing throughput (plain & signed, 64 KiB payload) |
 
 Each bench pre-allocates its buffer and resets the stream position between
@@ -73,6 +74,25 @@ You can pass an iteration count (default `2000000`):
 ```bash
 node --cpu-prof --cpu-prof-dir=profiles tools/profile.cjs 1000000
 ```
+
+### ⚠️ Caveat: CommonJS re-export getters
+
+The harness profiles the **CommonJS** build (`dist/_cjs`) because Node's
+`--cpu-prof` needs to load the modules with `require()`. TypeScript emits every
+barrel re-export (`export * from …`) as a lazy accessor via a `__createBinding`
+helper — a `get: () => m[k]` indirection — so calls made through a namespace
+import such as `import * as ec from '../basic-types'` (used pervasively in the
+generated codecs, e.g. `ec.decodeDateTime`) go through that getter on **every
+access**. In an end-to-end `ReadResponse` decode this getter shows up as ~7 % of
+self time.
+
+The **shipped browser build is ESM** (`dist/_esm`, the `module`/`es2015` entry
+points), where `export *` / `import * as` are native live bindings with **no
+getter indirection**. So the CJS profile *overstates* barrel-import overhead
+relative to what real (browser) consumers pay. Treat that portion of the profile
+as an artifact, and prefer the Vitest `bench` numbers (esbuild-compiled, no
+`__createBinding`) — e.g. `read_response.bench.ts` — when judging real decode
+throughput.
 
 ## Baseline snapshot
 
