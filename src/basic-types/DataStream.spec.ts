@@ -1,6 +1,6 @@
 'use strict';
 
-import { DataStream, BinaryStreamSizeCalculator } from './DataStream';
+import { DataStream, BinaryStreamSizeCalculator, utf8ByteLength } from './DataStream';
 
 describe('Testing DataStream', function () {
   it('should create a binary stream', function () {
@@ -87,6 +87,47 @@ describe('Testing BinaryStreamSizeCalculator', function () {
     stream.setDouble(100000.0);
     stream.writeByteStream(new TextEncoder().encode('Hello'));
     expect(stream.length).toEqual(4 + 4 + 8 + 4 + 5);
+  });
+
+  const encoder = new TextEncoder();
+  const stringSamples = [
+    '',
+    'plain ascii',
+    'Temperature.Sensor.001',
+    'Ünïcödé température °C ☃',
+    '😀 astral 𝔘𝔫ïcödé 中文',
+    'x\uD83Dy', // unpaired high surrogate
+    'a\uDC00b', // unpaired low surrogate
+    '\uD83D\uDE00', // valid surrogate pair
+    'A'.repeat(300),
+  ];
+
+  it('utf8ByteLength should match TextEncoder byte-for-byte (incl. surrogates)', function () {
+    for (const s of stringSamples) {
+      expect(utf8ByteLength(s)).toEqual(encoder.encode(s).length);
+    }
+  });
+
+  it('writeString size must equal the length actually encoded by DataStream', function () {
+    for (const s of stringSamples) {
+      const sizeCalc = new BinaryStreamSizeCalculator();
+      sizeCalc.writeString(s);
+
+      const stream = new DataStream(new ArrayBuffer(4 + encoder.encode(s).length + 16));
+      stream.writeString(s);
+
+      // the size pass must predict exactly what the encode pass writes
+      expect(sizeCalc.length).toEqual(stream.length);
+      // sanity: 4-byte length prefix + utf-8 byte length
+      expect(sizeCalc.length).toEqual(4 + encoder.encode(s).length);
+    }
+  });
+
+  it('writeString size for null/undefined is the -1 length prefix', function () {
+    const sizeCalc = new BinaryStreamSizeCalculator();
+    sizeCalc.writeString(null as unknown as string);
+    sizeCalc.writeString(undefined as unknown as string);
+    expect(sizeCalc.length).toEqual(4 + 4);
   });
 });
 

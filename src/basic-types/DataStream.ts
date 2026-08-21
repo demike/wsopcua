@@ -5,6 +5,40 @@ import { Int8, UInt8, Int16, UInt32, UInt16 } from './integers';
 
 const txtEncoder = new TextEncoder();
 const txtDecoder = new TextDecoder();
+
+/**
+ * Compute the number of bytes `str` occupies once UTF-8 encoded, without
+ * allocating an intermediate buffer. Matches `TextEncoder.encode(str).length`
+ * byte-for-byte, including the U+FFFD (3-byte) replacement `TextEncoder` emits
+ * for unpaired surrogates. Used by the size-calculation pass so a string is not
+ * fully UTF-8 encoded twice (once to measure, once to write).
+ */
+export function utf8ByteLength(str: string): number {
+  let len = 0;
+  for (let i = 0; i < str.length; i++) {
+    const c = str.charCodeAt(i);
+    if (c < 0x80) {
+      len += 1;
+    } else if (c < 0x800) {
+      len += 2;
+    } else if (c >= 0xd800 && c <= 0xdbff) {
+      // high surrogate: a valid low surrogate follows -> 4-byte code point
+      const next = str.charCodeAt(i + 1);
+      if (next >= 0xdc00 && next <= 0xdfff) {
+        len += 4;
+        i++;
+      } else {
+        // unpaired high surrogate -> U+FFFD (3 bytes)
+        len += 3;
+      }
+    } else {
+      // BMP >= 0x800, including unpaired low surrogates (-> U+FFFD, 3 bytes)
+      len += 3;
+    }
+  }
+  return len;
+}
+
 export class DataStream {
   constructor(data: DataView | ArrayBufferLike | ArrayBufferView | number) {
     this._pos = 0;
@@ -534,7 +568,12 @@ export class BinaryStreamSizeCalculator {
       this.setInt32(-1);
       return;
     }
-    return this.writeByteStream(txtEncoder.encode(str));
+    // Measure the UTF-8 byte length directly instead of allocating and encoding
+    // the whole string via `txtEncoder.encode(str)` just to read its length; the
+    // encode pass will produce the actual bytes.
+    const byteLength = utf8ByteLength(str);
+    this.setInt32(byteLength);
+    this.length += byteLength;
   }
 }
 
