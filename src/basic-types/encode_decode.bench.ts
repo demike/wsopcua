@@ -76,6 +76,24 @@ describe('basic-types: ByteString', () => {
   });
 });
 
+describe('basic-types: ByteString[64KiB]', () => {
+  // Larger payload (certificates, encrypted/opaque blobs). Uses a dedicated
+  // buffer since the shared BUF is only 1 KiB.
+  const BIG_BUF = new ArrayBuffer(64 * 1024 + 16);
+  const bigBytes = new Uint8Array(64 * 1024).map((_, i) => i & 0xff);
+  bench('encodeByteString (64KiB)', () => {
+    const s = new DataStream(BIG_BUF);
+    s.length = 0;
+    encodeByteString(bigBytes, s);
+  });
+  bench('decodeByteString (64KiB)', () => {
+    const w = new DataStream(BIG_BUF);
+    w.length = 0;
+    encodeByteString(bigBytes, w);
+    decodeByteString(new DataStream(BIG_BUF));
+  });
+});
+
 describe('basic-types: Guid', () => {
   const guid = '72962B91-FA75-4AE6-8D28-B404DC7DAF63';
   bench('encodeGuid', () => {
