@@ -38,7 +38,7 @@
     "ts-loader": "^9.6.2",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10",
-    "wsopcua-test-server": "^1.6.4"
+    "wsopcua-test-server": "^1.7.0"
   },
   "scripts": {
     "postinstall": "cd src/schema_parser && npm install",
