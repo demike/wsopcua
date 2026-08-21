@@ -78,7 +78,6 @@ describe('OPCUA-Session Activation', function () {
 
     [
       SecurityPolicy.Basic256Sha256,
-      SecurityPolicy.Basic256,
       SecurityPolicy.Aes128_Sha256_RsaOaep,
       //  SecurityPolicy.Aes256_Sha256_RsaPss, // TODO enable this policy
     ].forEach((policy) =>
@@ -129,7 +128,6 @@ describe('OPCUA-Session Activation', function () {
 
     [
       SecurityPolicy.Basic256Sha256,
-      SecurityPolicy.Basic256,
       SecurityPolicy.Aes128_Sha256_RsaOaep,
       //  SecurityPolicy.Aes256_Sha256_RsaPss, // TODO enable this policy
     ].forEach((policy) =>

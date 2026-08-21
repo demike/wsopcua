@@ -132,9 +132,13 @@ describe('Test Browse Request', function () {
     const browseNextRequest = new BrowseNextRequest({});
     await new Promise<void>((resolve) =>
       session.performMessageTransaction(browseNextRequest, function (err, response) {
+        // node-opcua answers an empty BrowseNext with a service-level ServiceFault
+        // (not a full BrowseNextResponse), so the serviceResult is carried by the error.
+        expect(response).toBeUndefined();
         expect(err?.message).toMatch(/BadNothingToDo/);
-        // console.log(response.toString());
-        expect(response.responseHeader.serviceResult).toEqual(StatusCodes.BadNothingToDo);
+        expect(
+          (err as { response?: BrowseNextResponse })?.response?.responseHeader.serviceResult
+        ).toEqual(StatusCodes.BadNothingToDo);
         resolve();
       })
     );
