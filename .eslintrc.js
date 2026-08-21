@@ -26,19 +26,10 @@ module.exports = {
         accessibility: 'explicit',
       },
     ],
-    '@typescript-eslint/member-delimiter-style': [
-      'error',
-      {
-        multiline: {
-          delimiter: 'semi',
-          requireLast: true,
-        },
-        singleline: {
-          delimiter: 'semi',
-          requireLast: false,
-        },
-      },
-    ],
+    // NOTE: formatting rules (member-delimiter-style, quotes, semi,
+    // type-annotation-spacing) were removed from @typescript-eslint in v7/v8.
+    // Formatting is enforced by Prettier (.prettierrc: singleQuote, semi), so
+    // these rules are intentionally not configured here.
     //'@typescript-eslint/member-ordering': 'error',
     /*
     '@typescript-eslint/naming-convention': [
@@ -69,15 +60,6 @@ module.exports = {
     '@typescript-eslint/no-unused-expressions': 'error',
     // '@typescript-eslint/no-use-before-define': 'error',
     '@typescript-eslint/prefer-function-type': 'error',
-    '@typescript-eslint/quotes': [
-      'error',
-      'single',
-      {
-        avoidEscape: true,
-      },
-    ],
-    '@typescript-eslint/semi': ['error', 'always'],
-    '@typescript-eslint/type-annotation-spacing': 'error',
     '@typescript-eslint/unbound-method': ['error', { ignoreStatic: true }],
     '@typescript-eslint/unified-signatures': 'error',
     'arrow-body-style': 'error',

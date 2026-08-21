@@ -146,7 +146,7 @@ function coerceTbsCertificateSubject(
 function omitUndefinedDirectoryNameFields(subject: DirectoryName): DirectoryName {
   return Object.fromEntries(
     Object.entries(subject).filter(([, value]) => value !== undefined)
-  ) as DirectoryName;
+  );
 }
 
 function coerceSPKI(spki?: SubjectPublicKeyInfo) {

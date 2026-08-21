@@ -331,7 +331,7 @@ export class BSDSchemaParser {
       const el3 = el.querySelector<HTMLElement>('[Name="ServerTimestampSpecified"]');
       if (el3 && el2 && el) {
         el3.remove();
-        el.insertBefore(<Node>el3, <Node>el2);
+        el.insertBefore(el3, el2);
       }
     }
   }

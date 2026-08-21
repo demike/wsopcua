@@ -48,7 +48,7 @@ describe('AnalogItem', function () {
     const nodeId = coerceNodeId('ns=4;s=invalidnode');
     const err = await new Promise<Error | null>((resolve) => {
       readUAAnalogItem(session, nodeId, function (error) {
-        resolve((error as Error) ?? null);
+        resolve((error) ?? null);
       });
     });
     expect(err instanceof Error).toBeTruthy();

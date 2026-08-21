@@ -189,7 +189,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   ): BrowseDescription {
     if (typeof data === 'string' || data instanceof NodeId) {
       return ClientSession.coerceBrowseDescription({
-        nodeId: coerceNodeId(data as string),
+        nodeId: coerceNodeId(data),
         includeSubtypes: true,
         browseDirection: BrowseDirection.Forward,
         nodeClassMask: 0,
@@ -783,7 +783,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             historizing_service.HistoryReadRawResult[],
             DiagnosticInfo[] | undefined
           >
-        )(error as null, value as historizing_service.HistoryReadRawResult[], diagnosticInfos);
+        )(error, value, diagnosticInfos);
       } else {
         (
           callback as ResponseCallback<
@@ -791,8 +791,8 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             DiagnosticInfo | undefined
           >
         )(
-          error as null,
-          value?.[0] as historizing_service.HistoryReadRawResult,
+          error,
+          value?.[0],
           diagnosticInfos?.[0]
         );
       }
@@ -1783,7 +1783,8 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     const has_single_element = !Array.isArray(browsePath);
     browsePath = has_single_element
       ? [<translate_service.BrowsePath>browsePath]
-      : <translate_service.BrowsePath[]>browsePath;
+      : // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- required by build tsconfig
+        <translate_service.BrowsePath[]>browsePath;
 
     const request = new translate_service.TranslateBrowsePathsToNodeIdsRequest({
       browsePaths: browsePath,

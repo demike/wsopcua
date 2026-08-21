@@ -100,7 +100,7 @@ export class WatchDog extends EventEmitter<IWatchDogEvents> {
       subscriber,
       timeout,
       visitCount: 0,
-    } as IWatchdogData2;
+    };
 
     self._watchdogDataMap[key] = subscriber._watchDogData;
 
