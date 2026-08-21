@@ -39,9 +39,7 @@ export function dump() {
 function callConstructor(constructor: Function) {
   assert('function' === typeof constructor);
 
-  const FactoryFunction = constructor.bind.apply(constructor, arguments as any);
-
-  return new FactoryFunction();
+  return new (constructor as new () => any)();
 }
 
 export function getConstructor(expandedId: NodeId) {

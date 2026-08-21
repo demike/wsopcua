@@ -12,6 +12,9 @@ import { encodeExpandedNodeId, decodeExpandedNodeId } from './nodeid';
 import { makeNodeId } from '../nodeid/nodeid';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 import { NodeIdType } from '../generated/NodeIdType';
+import { encodeExtensionObject, decodeExtensionObject } from './extension_object';
+import { Argument } from '../generated/Argument';
+import { LocalizedText } from '../generated/LocalizedText';
 
 // Micro-benchmarks for the primitive encode/decode functions.
 // These sit on the hottest path of the binary protocol: every message is
@@ -158,5 +161,49 @@ describe('basic-types: ExpandedNodeId', () => {
   bench('decodeExpandedNodeId (namespaceUri)', () => {
     const s = preparedReadStream((w) => encodeExpandedNodeId(eniUri, w));
     decodeExpandedNodeId(s);
+  });
+});
+
+describe('basic-types: ExtensionObject (Argument body)', () => {
+  const args: Argument[] = [];
+  for (let i = 0; i < 50; i++) {
+    args.push(
+      new Argument({
+        name: 'argument_' + i,
+        dataType: makeNodeId(63),
+        valueRank: -1,
+        arrayDimensions: [],
+        description: new LocalizedText({ text: 'the description of argument ' + i, locale: 'en' }),
+      })
+    );
+  }
+  const BIG = new ArrayBuffer(64 * 1024);
+
+  bench('binaryStoreSize 50x Argument (size pass)', () => {
+    for (const a of args) {
+      DataStream.binaryStoreSize({
+        encode: (s: DataStream) => encodeExtensionObject(a, s),
+      } as any);
+    }
+  });
+
+  bench('encodeExtensionObject 50x Argument (encode pass)', () => {
+    const s = new DataStream(BIG);
+    s.length = 0;
+    for (const a of args) {
+      encodeExtensionObject(a, s);
+    }
+  });
+
+  bench('decodeExtensionObject 50x Argument', () => {
+    const w = new DataStream(BIG);
+    w.length = 0;
+    for (const a of args) {
+      encodeExtensionObject(a, w);
+    }
+    const r = new DataStream(BIG);
+    for (let i = 0; i < args.length; i++) {
+      decodeExtensionObject(r);
+    }
   });
 });

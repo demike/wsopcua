@@ -243,3 +243,28 @@ NodeIds are ~4–5× slower than numeric ones.
   than `TextEncoder` for the short strings that dominate the protocol. Every
   encoded/sent message with strings benefits (requests as well as responses). No
   behavioural change; full unit suite (865 tests) passes.
+- **`ExtensionObject` encode single-pass length back-patch + `constructObject`
+  dispatch** — two independent wins on the ExtensionObject path, which wraps
+  every structured value on the wire (method arguments, notification data,
+  structured `DataValue`s, config structures):
+  - *Encode.* `encodeExtensionObject` needs a 4-byte body-length prefix ahead of
+    the body. It previously obtained that length by calling
+    `DataStream.binaryStoreSize(object)` — a **full extra traversal** of the
+    object — and then encoded the body a second time. On the real encode pass the
+    length is now back-patched: 4 bytes are reserved, the body is encoded once,
+    and the true byte count is written back into the reserved slot via
+    `stream.view.setUint32(pos, len)`. On the size-calculation pass the length
+    value is irrelevant (the calculator only accounts 4 bytes regardless), so the
+    redundant `binaryStoreSize` call is dropped entirely. This cuts the number of
+    object traversals per ExtensionObject from **4 → 2** per sent message.
+    Result: `encodeExtensionObject` (50× `Argument`) ~2.85× (~3.0K → ~8.7K
+    ops/s) and the size pass (`binaryStoreSize`) ~2.0× (~2.9K → ~5.9K ops/s).
+  - *Decode.* `constructObject` built each extension-object instance through
+    `constructor.bind.apply(constructor, arguments)` followed by `new` — an
+    allocation-heavy, deoptimised pattern that binds `this` (irrelevant under
+    `new`) and materialises the `arguments` object on every call. It is now a
+    plain `new constructor()`. Result: `decodeExtensionObject` (50× `Argument`)
+    ~1.64× faster (~2.4K → ~4.0K ops/s).
+
+  No behavioural change (size pass and encode pass still emit identical byte
+  counts, so chunk framing is unaffected); full unit suite (862 tests) passes.
