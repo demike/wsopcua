@@ -25,6 +25,7 @@
     "target": "ES6",
     "module": "commonjs",
     "outDir": "dist-es2015",
+    "rootDir": "./src",
     "declaration": true,
     "strict": true,
     "sourceMap": true,
