@@ -156,3 +156,15 @@ NodeIds are ~4–5× slower than numeric ones.
   ops/s). NodeIds are encoded for every request/response field, so this is a
   pervasive framing hot path. No behavioural change; full unit suite (861 tests)
   passes.
+- **`decodeGuid` byte→hex lookup table** — the previous decoder assembled the
+  canonical GUID string via per-field closures (`read_UInt32/16/8`,
+  `read_many`), `Number.toString(16)` + `substr` padding for every field, and a
+  final `toUpperCase()` over the whole string. It now reads the 16 GUID bytes as
+  a single raw view (`readByteArray`) and concatenates two-char hex strings from
+  a precomputed 256-entry `HEX_BYTE` table in the correct little-/big-endian
+  order — no closures, no per-field number formatting, no trailing uppercase
+  pass. Result: `decodeGuid` ~2.2× faster (~221K → ~490K ops/s), so it is no
+  longer the slowest scalar decode. GUIDs are decoded for every GUID NodeId /
+  ExpandedNodeId identifier. No behavioural change (verified byte-for-byte
+  against the previous implementation over 100k random GUIDs); full unit suite
+  (861 tests) passes.
