@@ -51,6 +51,10 @@
     "test:run": "vitest run",
     "test:ci": "vitest run --config vitest.config.ts",
     "test:coverage": "vitest run --coverage",
+    "bench": "vitest bench --config vitest.bench.config.ts",
+    "bench:run": "vitest bench --run --config vitest.bench.config.ts",
+    "profile": "node --cpu-prof --cpu-prof-dir=profiles tools/profile.cjs",
+    "profile:build": "npm run compile && npm run profile",
     "test-server": "wsopcua-test-server",
     "e2e:run": "start-server-and-test test-server tcp:4444 \"vitest run --browser --config vitest.e2e.config.ts\"",
     "e2e:watch": "start-server-and-test test-server tcp:4444 \"vitest --browser --config vitest.e2e.config.ts\"",
@@ -63,6 +67,7 @@
     "dist/**/*",
     "!dist/**/*.spec.*",
     "!dist/**/*.e2e-spec.*",
+    "!dist/**/*.bench.*",
     "src/schema_parser/dist/wsopcua-schema-gen.js",
     "src/schema_parser/schemas/**/*",
     "!src/examples/**/*"
