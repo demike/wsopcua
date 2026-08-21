@@ -244,6 +244,24 @@ describe('Variant', function () {
     });
   });
 
+  it('should create a Array UInt16 Variant and round-trip it (regression: over-read)', function () {
+    const var1 = new Variant({
+      dataType: DataType.UInt16,
+      arrayType: VariantArrayType.Array,
+      value: new Uint16Array([1, 2, 3, 65535]),
+    });
+
+    expect(var1.dataType).toEqual(DataType.UInt16);
+    expect(var1.arrayType).toEqual(VariantArrayType.Array);
+
+    const reloaded = encode_decode_round_trip_test(var1, function (stream: ArrayBuffer) {
+      // 1 (encodingByte) + 4 (array length) + 4 elements * 2 bytes
+      expect(stream.byteLength).toEqual(1 + 4 + 4 * 2);
+    });
+    expect(reloaded.value instanceof Uint16Array).toBeTruthy();
+    expect(Array.from(reloaded.value)).toEqual([1, 2, 3, 65535]);
+  });
+
   it('should create a Array of GUID Variant', function () {
     const var1 = new Variant({
       dataType: DataType.Guid,
@@ -463,6 +481,16 @@ describe('Variant - Analyser', function () {
       dataType: DataType.UInt32,
       arrayType: VariantArrayType.Array,
       value: new Uint32Array([2, 3, 4, 5]),
+    }),
+    new Variant({
+      dataType: DataType.UInt16,
+      arrayType: VariantArrayType.Array,
+      value: new Uint16Array([2, 3, 4, 5]),
+    }),
+    new Variant({
+      dataType: DataType.Int16,
+      arrayType: VariantArrayType.Array,
+      value: new Int16Array([-1, 2, -3, 4]),
     }),
     new Variant({
       dataType: DataType.Float,

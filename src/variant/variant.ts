@@ -504,7 +504,7 @@ function decodeVariantArray(dataType: DataType, stream: DataStream) {
     case DataType.Int32:
       return new Int32Array(stream.readArrayBuffer(length * Int32Array.BYTES_PER_ELEMENT));
     case DataType.UInt16:
-      return new Uint16Array(stream.readArrayBuffer(length * Uint32Array.BYTES_PER_ELEMENT));
+      return new Uint16Array(stream.readArrayBuffer(length * Uint16Array.BYTES_PER_ELEMENT));
     case DataType.UInt32:
       return new Uint32Array(stream.readArrayBuffer(length * Uint32Array.BYTES_PER_ELEMENT));
     // () case DataType.UInt64: ?
