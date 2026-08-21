@@ -196,3 +196,14 @@ NodeIds are ~4–5× slower than numeric ones.
   wrap every read/monitored-item value on the wire, so this is a core
   subscription/read hot path. No behavioural change; full unit suite (861 tests)
   passes.
+- **`decodeExpandedNodeId` double allocation removed** — the decoder asked the
+  shared `_decodeNodeId` helper to build an `ExpandedNodeId`, mutated its
+  `namespaceUri`/`serverIndex`, and then **discarded it and allocated a second**
+  `ExpandedNodeId` with the very same field values before returning. The
+  constructor is a plain field-assignment (no derived/cached state), so the
+  rebuild was pure waste — the first instance is now returned directly. Result:
+  `decodeExpandedNodeId` ~1.22× faster (~2.68M → ~3.28M ops/s); this is on the
+  browse hot path — every `ReferenceDescription` decodes two ExpandedNodeIds
+  (`nodeId` + `typeDefinition`), so a `ReferenceDescription` decode is ~1.10×
+  faster and a full `BrowseResponse` of hundreds of references benefits per
+  entry. No behavioural change; full unit suite (862 tests) passes.

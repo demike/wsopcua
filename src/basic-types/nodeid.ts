@@ -260,8 +260,7 @@ export function decodeExpandedNodeId(stream: DataStream) {
   if (check_flag(encoding_byte, EnumNodeIdEncoding.ServerIndexFlag)) {
     expandedNodeId.serverIndex = decodeUInt32(stream);
   }
-  const e = expandedNodeId;
-  return new ExpandedNodeId(e.identifierType, e.value, e.namespace, e.namespaceUri, e.serverIndex);
+  return expandedNodeId;
 }
 
 export function jsonEncodeNodeId(id: NodeId, namespaceArray?: string[]) {
