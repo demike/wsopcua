@@ -165,9 +165,10 @@ export class TCP_transport extends EventEmitter<TcpTransportEvents> {
    *  - once a message chunk has been written, it is possible to call ```createChunk``` again.
    *
    */
-  public write(message_chunk: ArrayBuffer) {
+  public write(message_chunk: ArrayBufferLike | ArrayBufferView) {
+    const chunkBuffer = ArrayBuffer.isView(message_chunk) ? message_chunk.buffer : message_chunk;
     assert(
-      this._pending_buffer === undefined || this._pending_buffer === message_chunk,
+      this._pending_buffer === undefined || this._pending_buffer === chunkBuffer,
       ' write should be used with buffer created by createChunk'
     );
 

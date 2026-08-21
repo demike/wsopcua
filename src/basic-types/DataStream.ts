@@ -6,14 +6,14 @@ import { Int8, UInt8, Int16, UInt32, UInt16 } from './integers';
 const txtEncoder = new TextEncoder();
 const txtDecoder = new TextDecoder();
 export class DataStream {
-  constructor(data: DataView | ArrayBuffer | ArrayBufferView | number) {
+  constructor(data: DataView | ArrayBufferLike | ArrayBufferView | number) {
     this._pos = 0;
     if (data instanceof DataView) {
       this._view = data;
-    } else if (data instanceof ArrayBuffer) {
-      this._view = new DataView(data);
     } else if (ArrayBuffer.isView(data)) {
       this._view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+    } else if (typeof data !== 'number') {
+      this._view = new DataView(data);
     } else {
       this._view = new DataView(new ArrayBuffer(data));
     }
@@ -391,10 +391,11 @@ export class DataStream {
    * @param constructorFn
    */
   public readArrayBuffer(lengthInBytes: number): ArrayBuffer {
-    const arr = this._view.buffer.slice(
+    const arr = new Uint8Array(
+      this._view.buffer,
       this._pos + this._view.byteOffset,
-      this._pos + this._view.byteOffset + lengthInBytes
-    );
+      lengthInBytes
+    ).slice().buffer;
     this._pos += lengthInBytes;
     return arr;
   }

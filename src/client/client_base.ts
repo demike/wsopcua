@@ -102,7 +102,7 @@ export interface OPCUAClientEvents {
   backoff: (number: number, delay: number) => void;
   abort: () => void;
   start_reconnection: () => void;
-  send_chunk: (messageChunk: ArrayBuffer) => void;
+  send_chunk: (messageChunk: ArrayBufferLike | ArrayBufferView) => void;
   after_reconnection: ErrorCallback;
   send_request: (requestMessage: IEncodable & { requestHeader: IRequestHeader }) => void;
   receive_chunk: (message_chunk: DataView) => void;

@@ -54,7 +54,7 @@
 //  $ openssl asn1parse -in cert.pem
 import { Certificate, PEM, DER } from './common';
 import { PublicKeyLength } from './explore_certificate';
-import { buf2hex, buf2string, base64ToBuf, makeSHA1Thumbprint } from './crypto_utils';
+import { buf2string, base64ToBuf, makeSHA1Thumbprint } from './crypto_utils';
 import { assert } from '../assert';
 import { concatTypedArrays } from '../basic-types/array';
 
@@ -289,7 +289,7 @@ function _readGeneralNames(buffer: Uint8Array, block: BlockInfo) {
         return parseOID(buffer, block.position, block.position + block.length);
       // return buf2string(_getBlock(buffer, block));
       default:
-        return buf2hex(buffer.subarray(block.position, block.position + block.length));
+        return buffer.subarray(block.position, block.position + block.length).toHex();
     }
   }
 
@@ -495,7 +495,7 @@ function _readExtension(buffer: Uint8Array, block: BlockInfo) {
       // "basicConstraints ( not implemented yet) " + buf.toString("hex");
       break;
     case 'certExtension': // Netscape
-      value = 'basicConstraints ( not implemented yet) ' + buf2hex(buf);
+      value = 'basicConstraints ( not implemented yet) ' + buf.toHex();
       break;
     case 'extKeyUsage':
       value = readExtKeyUsage(identifier.oid, buf);
@@ -504,7 +504,7 @@ function _readExtension(buffer: Uint8Array, block: BlockInfo) {
       value = readKeyUsage(identifier.oid, buf);
       break;
     default:
-      value = 'Unknown ' + identifier.name + buf2hex(buf);
+      value = 'Unknown ' + identifier.name + buf.toHex();
   }
   return {
     identifier,
@@ -831,7 +831,7 @@ export function convertPEMtoDER(raw_key: PEM): DER {
   return combine_der(parts);
 }
 
-function convertPKCS1ToPKCS8(pkcs1: Uint8Array): Uint8Array {
+function convertPKCS1ToPKCS8(pkcs1: Uint8Array): Uint8Array<ArrayBuffer> {
   const totalLength = pkcs1.length + 22;
 
   // prettier-ignore
@@ -841,7 +841,7 @@ function convertPKCS1ToPKCS8(pkcs1: Uint8Array): Uint8Array {
           TagType.SEQUENCE, 0xD, 0x6, 0x9, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0xD, 0x1, 0x1, 0x1, TagType.NULL, 0x0, // Sequence: 1.2.840.113549.1.1.1, NULL
           TagType.OCTET_STRING, 0x82,  ((pkcs1.length >> 8) & 0xff), (pkcs1.length & 0xff) // Octet string + length
         ]);
-  return concatTypedArrays([pkcs8Header, pkcs1]);
+  return concatTypedArrays([pkcs8Header, pkcs1]) as Uint8Array<ArrayBuffer>;
 }
 
 export function generatePublicKeyFromDER(
@@ -856,7 +856,7 @@ export function generatePublicKeyFromDER(
   const spki = getSPKIFromCertificate(der_certificate);
 
   return crypto.subtle
-    .importKey('spki', spki, { name: 'RSA-OAEP', hash }, true, ['encrypt'])
+    .importKey('spki', spki as any, { name: 'RSA-OAEP', hash }, true, ['encrypt'])
     .then((key) => {
       (der_certificate as any)[cachingKey] = key;
       return key;
@@ -876,7 +876,7 @@ export function generateVerifyKeyFromDER(
   const spki = getSPKIFromCertificate(der_certificate);
 
   return crypto.subtle
-    .importKey('spki', spki, { name: algorithm, hash }, true, ['verify'])
+    .importKey('spki', spki as any, { name: algorithm, hash }, true, ['verify'])
     .then((key) => {
       (der_certificate as any)[cachingKey] = key;
       return key;
@@ -898,7 +898,7 @@ export function generatePrivateKeyFromDER(
   return window.crypto.subtle
     .importKey(
       'pkcs8',
-      der_certificate,
+      der_certificate as any,
       {
         name: 'RSA-OAEP',
         hash,
@@ -928,7 +928,7 @@ export function generateSignKeyFromDER(
   return window.crypto.subtle
     .importKey(
       'pkcs8',
-      der_certificate,
+      der_certificate as any,
       {
         name: algorithm,
         hash,

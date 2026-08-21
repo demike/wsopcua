@@ -4,3 +4,4 @@ dist/
 dist-es2015/
 out/chrome/
 coverage/
+*.tsbuildinfo

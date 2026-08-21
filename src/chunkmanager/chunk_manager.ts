@@ -12,7 +12,7 @@ import { Lock } from '../basic-types/utils';
 
 const do_debug = false;
 
-export function verify_message_chunk(message_chunk: DataView | ArrayBuffer) {
+export function verify_message_chunk(message_chunk: DataView | ArrayBufferLike | ArrayBufferView) {
   assert(message_chunk);
   const header = readMessageHeader(new DataStream(message_chunk));
   if (message_chunk.byteLength !== header.length) {
@@ -59,7 +59,9 @@ export type WriteHeaderFunc = (
   expectedLength: number
 ) => void;
 export type WriteSequenceHeaderFunc = (chunk: DataView) => void;
-export type SignBufferFunc = (buffer: ArrayBuffer) => PromiseLike<ArrayBuffer>;
+export type SignBufferFunc = (
+  buffer: ArrayBufferLike | ArrayBufferView
+) => PromiseLike<ArrayBuffer>;
 export type EncryptBufferFunc = (buffer: Uint8Array) => PromiseLike<Uint8Array>;
 
 export interface IChunkManagerOptions {
@@ -255,7 +257,7 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
    * @param buffer {Buffer}
    * @param length {Number}
    */
-  async write(buffer: ArrayBuffer, length?: number) {
+  async write(buffer: ArrayBufferLike, length?: number) {
     // --- lock the write until, and keep the requests in order ----
     const locked = this.writeLock.acquire();
     if (locked) {
@@ -264,7 +266,7 @@ export class ChunkManager extends EventEmitter<ChunkManagerEvents> {
     // ---------------------------------------------------------------
 
     length = length || buffer.byteLength;
-    assert(buffer instanceof ArrayBuffer || buffer === null);
+    assert(buffer !== null);
     assert(length > 0);
     let l = length;
     let input_cursor = 0;

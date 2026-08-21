@@ -9,7 +9,6 @@ import { buffer_ellipsis } from '../utils';
 import * as ec from '../basic-types';
 import { decodeExpandedNodeId } from '../basic-types';
 import { constructObject } from '../factory/factories_factories';
-import { buf2hex } from '../crypto';
 import { IEncodable } from '../factory/factories_baseobject';
 
 const spaces =
@@ -37,7 +36,7 @@ function display_encoding_mask(padding: string, encoding_mask: any, encoding_inf
   // DataValueEncodingByte
 }
 
-function hex_block(start: number, end: number, buffer: ArrayBuffer) {
+function hex_block(start: number, end: number, buffer: ArrayBufferLike) {
   const n = end - start;
   const strBuf = buffer_ellipsis(buffer);
   return 's:' + f(start, 4) + ' e:' + f(end, 4) + ' n:' + f(n, 4) + ' ' + strBuf;
@@ -192,7 +191,7 @@ export function analyzePacket(
 }
 
 export function analyseExtensionObject(
-  buffer: ArrayBuffer,
+  buffer: ArrayBufferLike,
   padding: number,
   offset: number,
   customOptions?: AnalyzePacketOptions
@@ -206,7 +205,10 @@ export function analyseExtensionObject(
   } catch (err) {
     console.log(id);
     console.log(err);
-    console.log('Cannot read decodeExpandedNodeId  on stream ' + buf2hex(stream.view.buffer));
+    console.log(
+      'Cannot read decodeExpandedNodeId  on stream ' +
+        new Uint8Array(stream.view.buffer, stream.view.byteOffset, stream.view.byteLength).toHex()
+    );
   }
   _internalAnalyzePacket(buffer, stream, objMessage, padding, customOptions, offset);
 }

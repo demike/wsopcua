@@ -5,10 +5,12 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "skipLibCheck": true,
+    "ignoreDeprecations": "6.0",
     "strict": true,
     "moduleResolution": "node",
     "strictNullChecks": true,
     "noImplicitAny": true,
+    "types": ["node"],
     "lib": ["esnext", "es2017.object", "dom"],
     "target": "esnext",
     "baseUrl": "."

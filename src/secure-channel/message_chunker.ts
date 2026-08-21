@@ -97,7 +97,7 @@ export class MessageChunker {
     msgType: string,
     options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader,
     message: IEncodable & { __namespaceArray?: string[] },
-    messageChunkCallback: (chunk: ArrayBuffer | null) => void
+    messageChunkCallback: (chunk: ArrayBufferLike | ArrayBufferView | null) => void
   ) {
     options = <any>options || {};
     assert('function' === typeof messageChunkCallback);
@@ -128,7 +128,7 @@ export class MessageChunker {
       securityHeader || null,
       this._sequenceNumberGenerator
     )
-      .on('chunk', function (messageChunk: ArrayBuffer) {
+      .on('chunk', function (messageChunk: Uint8Array) {
         messageChunkCallback(messageChunk);
       })
       .on('finished', function () {

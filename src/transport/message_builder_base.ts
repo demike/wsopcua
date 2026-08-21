@@ -15,7 +15,9 @@ import { OpcUaResponse } from '../client';
 
 const doPerfMonitoring = false;
 
-export function readRawMessageHeader(data: DataView | ArrayBuffer): PacketInfo {
+export function readRawMessageHeader(
+  data: DataView | ArrayBufferLike | ArrayBufferView
+): PacketInfo {
   const messageHeader = readMessageHeader(new DataStream(data));
   return {
     extra: '',

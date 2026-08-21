@@ -22,11 +22,11 @@ describeForEnv('OPCUA-Service Discovery Endpoint', function () {
     // accessed as an ordinary OPC UA  Server.
 
     const servers = await new Promise<any[]>((resolve, reject) => {
-      controller.testClient.findServers({}, function (err, servers) {
-        if (err || !servers) {
+      controller.testClient.findServers({}, function (err, foundServers) {
+        if (err || !foundServers) {
           reject(err || new Error('Expected servers response'));
         } else {
-          resolve(servers);
+          resolve(foundServers);
         }
       });
     });
@@ -40,11 +40,11 @@ describeForEnv('OPCUA-Service Discovery Endpoint', function () {
     };
 
     const servers = await new Promise<any[]>((resolve, reject) => {
-      controller.testClient.findServers(filters, function (err, servers) {
-        if (err || !servers) {
+      controller.testClient.findServers(filters, function (err, foundServers) {
+        if (err || !foundServers) {
           reject(err || new Error('Expected servers response'));
         } else {
-          resolve(servers);
+          resolve(foundServers);
         }
       });
     });

@@ -1,12 +1,18 @@
 'use strict';
 
-import { buf2hex } from '../crypto';
+function getBufferView(buffer: ArrayBufferLike, start: number, end: number) {
+  return new Uint8Array(buffer, start, end - start);
+}
 
-export function buffer_ellipsis(buffer: ArrayBuffer, start?: number, end?: number) {
+export function buffer_ellipsis(buffer: ArrayBufferLike, start?: number, end?: number) {
   start = start || 0;
   end = end || buffer.byteLength;
   if (end - start < 40) {
-    return buf2hex(buffer);
+    return getBufferView(buffer, start, end).toHex();
   }
-  return buf2hex(buffer.slice(start, start + 10)) + ' ... ' + buf2hex(buffer.slice(end - 10, end));
+  return (
+    getBufferView(buffer, start, start + 10).toHex() +
+    ' ... ' +
+    getBufferView(buffer, end - 10, end).toHex()
+  );
 }
