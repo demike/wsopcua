@@ -29,6 +29,7 @@ Get started with wsopcua, learn the fundamentals and explore advanced examples.
 - [Data Type Generation](./documentation/code_gen.md)
 - [Debugging with Wireshark](./documentation/wireshark.md)
 - [Client Architecture](./documentation/architecture.md)
+- [Benchmarking & Profiling](./documentation/benchmarking.md)
 
 ## Client Setup
 

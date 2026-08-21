@@ -19,6 +19,7 @@
     "node_modules/",
     "**/*.spec.ts",
     "**/*.e2e-spec.ts",
+    "**/*.bench.ts",
     "src/schema_parser/**/*",
     "src/examples/**/*",
     "src/**/test_helpers/**/*"
