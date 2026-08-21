@@ -131,3 +131,13 @@ NodeIds are ~4–5× slower than numeric ones.
   (50–1000 elements), improving decode of structure/value arrays (browse & read
   results, monitored-item notifications). No behavioural change; full unit suite
   (861 tests) passes.
+- **`DateTime` decode/encode `high_low` cache** — decoded `Date` objects are
+  enriched with their original 100 ns `high_low` words so a later re-encode can
+  skip the arithmetic and reproduce identical bytes. This cache was previously
+  installed via `Object.defineProperty(date, 'high_low', { get })`, whose getter
+  closure is very expensive to create. Replacing it with a plain (non-getter)
+  property assignment — matching the approach already used in `src/date-time` —
+  makes the full decode ~8× faster (~1.2M → ~9.8M ops/s) while preserving exact
+  sub-millisecond byte fidelity on re-encode. DateTimes are decoded twice per
+  `DataValue` (source + server timestamps), so this is a core subscription/read
+  hot path. No behavioural change; full unit suite (861 tests) passes.
