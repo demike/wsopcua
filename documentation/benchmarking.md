@@ -141,3 +141,18 @@ NodeIds are ~4–5× slower than numeric ones.
   sub-millisecond byte fidelity on re-encode. DateTimes are decoded twice per
   `DataValue` (source + server timestamps), so this is a core subscription/read
   hot path. No behavioural change; full unit suite (861 tests) passes.
+- **`encodeNodeId` numeric fast path** — three per-encode overheads were removed
+  from the common (plain, numeric) NodeId case: (1) the automatic
+  `resolveExpandedNodeId` call plus its `try/catch` is now skipped unless the id
+  actually carries a `namespaceUri` and a namespace array is present (its own
+  early-return already made it a no-op otherwise); (2) `nodeID_encodingByte`
+  replaced the `set_flag(...)`/`check_flag` bitwise helpers — each of which runs
+  an internal `assert` — with direct assignments / `|=`; and (3) the NodeId
+  guard `assert(nodeId.hasOwnProperty('identifierType'))` was replaced by the
+  equivalent-but-cheaper `assert(nodeId.identifierType !== undefined)` (valid
+  ids have `identifierType` 0..5, so `!== undefined` still rejects non-NodeId
+  objects) which avoids a method call on every encode. Result: numeric NodeId
+  encode ~1.9–2.2× faster (2-byte ~16.9M → ~32.6M ops/s, 4-byte ~13.8M → ~30.4M
+  ops/s). NodeIds are encoded for every request/response field, so this is a
+  pervasive framing hot path. No behavioural change; full unit suite (861 tests)
+  passes.
