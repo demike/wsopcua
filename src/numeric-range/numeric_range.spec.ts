@@ -34,9 +34,9 @@ describe('Testing numerical range', function () {
     expect(nr.isValid()).toBe(false);
   });
 
-  it.skip('should be an ArrayRange if low bound === high bound', function () {
+  it('should be a SingleValue if low bound === high bound', function () {
     const nr = new NumericRange(15, 15);
-    expect(nr.type).toBe(NumericRangeType.ArrayRange);
+    expect(nr.type).toBe(NumericRangeType.SingleValue);
     expect(nr.isValid()).toBe(true);
     expect(nr.toString()).toBe('15');
   });

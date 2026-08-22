@@ -296,7 +296,7 @@ describe('Variant', function () {
     expect(var1.isValid()).toEqual(false);
   });
 
-  it.skip('should detect invalid Array<Int32> Variant', function () {
+  it('should detect invalid Array<Int32> Variant', function () {
     const var1 = new Variant({
       dataType: DataType.UInt32,
       arrayType: VariantArrayType.Array,
@@ -1462,6 +1462,9 @@ describe('Variant with enumeration', function () {
     expect(v.value).toEqual(SomeEnum.DiagnosticInfo);
   });
 
+  // Skipped: auto-inferring the dataType from a raw JS value is intentionally not
+  // implemented (a plain number is ambiguous across Int32/UInt32/Double/enum, so it
+  // cannot be resolved reliably). node-opcua keeps this as `xit` for the same reason.
   it.skip('should not be necessary to specify the dataType for  a variant containing  enumeration item', function () {
     const v = new Variant({
       value: SomeEnum.DiagnosticInfo,

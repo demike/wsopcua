@@ -21,6 +21,29 @@ export const VARIANT_ARRAY_MASK = 0x80;
 export const VARIANT_ARRAY_DIMENSIONS_MASK = 0x40;
 export const VARIANT_TYPE_MASK = 0x3f;
 
+function coerceVariantArrayToTypedArray(dataType: DataType, value: any[]): any {
+  switch (dataType) {
+    case DataType.Float:
+      return new Float32Array(value);
+    case DataType.Double:
+      return new Float64Array(value);
+    case DataType.SByte:
+      return new Int8Array(value);
+    case DataType.Byte:
+      return new Uint8Array(value);
+    case DataType.Int16:
+      return new Int16Array(value);
+    case DataType.Int32:
+      return new Int32Array(value);
+    case DataType.UInt16:
+      return new Uint16Array(value);
+    case DataType.UInt32:
+      return new Uint32Array(value);
+    default:
+      return value;
+  }
+}
+
 export interface IVariant {
   dataType?: DataType;
   arrayType?: VariantArrayType;
@@ -87,7 +110,11 @@ export class Variant extends BaseUAObject {
      * @default  null
      */
     if (options.value !== undefined) {
-      this.value = options.value;
+      if (this.arrayType === VariantArrayType.Array && Array.isArray(options.value)) {
+        this.value = coerceVariantArrayToTypedArray(this.dataType, options.value);
+      } else {
+        this.value = options.value;
+      }
     }
 
     /**
