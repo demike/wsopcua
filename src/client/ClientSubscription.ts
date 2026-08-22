@@ -384,7 +384,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
       return callback(new Error('Already Terminated'));
     }
 
-    if (Number.isFinite(<any>this._subscriptionId)) {
+    if (Number.isFinite(this._subscriptionId)) {
       this._publishEngine.unregisterSubscription(this._subscriptionId);
 
       if (!this.session) {
@@ -488,7 +488,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
  * @param requestedParameters.filter           {ExtensionObject|null} EventFilter/DataChangeFilter
  * @param requestedParameters.queueSize        {Counter}
  * @param requestedParameters.discardOldest    {Boolean}
- * @param timestampsToReturn                   {TimestampsToReturn} //{TimestampsToReturnId}
+ * @param timestampsToReturn                   {TimestampsToReturn} // {TimestampsToReturnId}
  * @param  [done]                              {(err: Error|null, mItem?: MonitoredItem) => void} optional done callback
  * @return {ClientMonitoredItem}
  *

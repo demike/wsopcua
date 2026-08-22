@@ -280,7 +280,7 @@ export async function encryptBufferWithDerivedKeys(
   if (!key) {
     key = (derivedKeys.encryptingKey as any)._AES_CBC_KEY = await crypto.importKey(
       'raw',
-      derivedKeys.encryptingKey as any,
+      derivedKeys.encryptingKey,
       'AES-CBC',
       true,
       ['encrypt', 'decrypt']
@@ -314,7 +314,7 @@ export async function decryptBufferWithDerivedKeys(
   if (!key) {
     key = (derivedKeys.encryptingKey as any)._AES_CBC_KEY = await crypto.importKey(
       'raw',
-      derivedKeys.encryptingKey as any,
+      derivedKeys.encryptingKey,
       'AES-CBC',
       true,
       ['encrypt', 'decrypt']
@@ -333,7 +333,7 @@ export async function decryptBufferWithDerivedKeys(
   prolongedBuffer.set(encryptedPadding, buffer.length);
 
   // TODO fix the auto padding of aes cbc
-  return new Uint8Array(await crypto.decrypt(opts, key, prolongedBuffer as any));
+  return new Uint8Array(await crypto.decrypt(opts, key, prolongedBuffer));
 
   /*
     const cypher = crypto.createDecipheriv(algorithm, key, initVector);

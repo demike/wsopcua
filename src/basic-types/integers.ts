@@ -173,7 +173,7 @@ export function coerceUInt64(value: number | UInt64 | Int32 | string | null): UI
   if (value instanceof Array) {
     assert('number' === typeof value[0]);
     assert('number' === typeof value[1]);
-    return value as [number, number];
+    return value;
   }
   if (typeof value === 'string') {
     v = value.split(',');

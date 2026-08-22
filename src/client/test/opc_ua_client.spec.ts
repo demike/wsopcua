@@ -44,9 +44,9 @@ describe('OPCUA Client', function () {
 
   describe('issue 696: https://github.com/node-opcua/node-opcua/issues/696', function () {
     let setIntervalCalls = 0;
-    const realSetInterval = window.setInterval;
+    const realSetInterval = window.setInterval.bind(window);
     let clearIntervalCalls = 0;
-    const realClearInterval = window.clearInterval;
+    const realClearInterval = window.clearInterval.bind(window);
 
     beforeEach(() => {
       window.setInterval = (...args: any[]) => {

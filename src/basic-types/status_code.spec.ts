@@ -29,7 +29,7 @@ describe('testing status code manipulation', function () {
   it('should encode and decode a status code', function () {
     const stream = new DataStream(8);
     const statusCode = StatusCodes.BadNodeIdExists;
-    encodeStatusCode(statusCode as StatusCode, stream);
+    encodeStatusCode(statusCode, stream);
     stream.rewind();
     const statusCode2 = decodeStatusCode(stream);
     expect(statusCode2).toEqual(statusCode);

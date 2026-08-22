@@ -31,7 +31,7 @@ export function makeAccessLevel(str: string): AccessLevelFlag {
     if (value === 0) {
       return AccessLevelFlag.NONE;
     }
-    return value as AccessLevelFlag;
+    return value;
   }
 
   let accessFlag: AccessLevelFlag;

@@ -55,7 +55,7 @@ describe('testing message encoding and decoding', function () {
   it('should encode and decode TCPErrorMessage ', function () {
     const errMessage1 = new TCPErrorMessage({
       reason: 'a test error',
-      statusCode: StatusCodes.BadNoSubscription as StatusCode,
+      statusCode: StatusCodes.BadNoSubscription,
     });
 
     const message = packTcpMessage('ERR', errMessage1);

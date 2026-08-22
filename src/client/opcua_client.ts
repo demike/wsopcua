@@ -669,7 +669,7 @@ export class OPCUAClient extends OPCUAClientBase {
   /**
    * @method changeSessionIdentity
    * @param session
-   * @param userIdentityInfo //set to null to go back to anonymous user
+   * @param userIdentityInfo // set to null to go back to anonymous user
    * @param callback
    * @async
    */

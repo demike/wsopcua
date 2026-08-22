@@ -79,7 +79,7 @@ describe('DataValue', function () {
   it('should create a DataValue with string variant and all dates and encode/decode it nicely', function () {
     const dataValue = new DataValue({
       value: new Variant({ dataType: DataType.String, value: 'Hello' }),
-      statusCode: StatusCodes.BadCertificateHostNameInvalid as StatusCode,
+      statusCode: StatusCodes.BadCertificateHostNameInvalid,
       serverTimestamp: new Date(Date.UTC(2018, 1, 23, 12, 34, 56, 789)),
       serverPicoseconds: 12345, // 987654320,
       sourceTimestamp: new Date(Date.UTC(2018, 1, 23, 18, 54, 12, 345)),
@@ -160,7 +160,7 @@ describe('DataValue', function () {
 
   it('DataValue - extractRange on a String with StatusCode != Good - issue #635', function () {
     const dataValue = new DataValue({
-      statusCode: StatusCodes.BadEntryExists as StatusCode,
+      statusCode: StatusCodes.BadEntryExists,
       value: new Variant({
         dataType: DataType.String,
         arrayType: VariantArrayType.Scalar,
@@ -178,7 +178,7 @@ describe('DataValue', function () {
   });
   it('DataValue - extractRange on a String with StatusCode != Good and invalid range - issue #635', function () {
     const dataValue = new DataValue({
-      statusCode: StatusCodes.BadEntryExists as StatusCode,
+      statusCode: StatusCodes.BadEntryExists,
       value: new Variant({
         dataType: DataType.String,
         arrayType: VariantArrayType.Scalar,

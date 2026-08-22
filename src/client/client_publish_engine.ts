@@ -287,7 +287,7 @@ export class ClientSidePublishEngine {
     debugLog('ClientSidePublishEngine#registerSubscription ' + subscription.subscriptionId);
 
     assert(arguments.length === 1);
-    assert(Number.isFinite(<any>subscription.subscriptionId));
+    assert(Number.isFinite(subscription.subscriptionId));
     assert(!this.subscriptionMap.hasOwnProperty(subscription.subscriptionId)); // already registered ?
     assert('function' === typeof subscription.onNotificationMessage);
     assert(Number.isFinite(subscription.timeoutHint));

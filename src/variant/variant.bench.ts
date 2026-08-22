@@ -76,7 +76,7 @@ describe('variant: Double[1000] array', () => {
 
 const dataValue = new DataValue({
   value: new Variant({ dataType: DataType.Double, value: 123.456 }),
-  statusCode: StatusCodes.Good as StatusCode,
+  statusCode: StatusCodes.Good,
   sourceTimestamp: new Date('2024-01-01T00:00:00.000Z'),
   serverTimestamp: new Date('2024-01-01T00:00:00.001Z'),
 });

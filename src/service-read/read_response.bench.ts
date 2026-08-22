@@ -45,7 +45,7 @@ function makeDataValue(i: number): DataValue {
 
   return new DataValue({
     value,
-    statusCode: StatusCodes.Good as StatusCode,
+    statusCode: StatusCodes.Good,
     sourceTimestamp,
     serverTimestamp,
   });

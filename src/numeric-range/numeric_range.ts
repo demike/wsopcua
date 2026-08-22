@@ -651,7 +651,7 @@ function extract_single_value<U, T extends ArrayLike<U>>(
     if (typeof array === 'string') {
       return { array: '' as any as T, statusCode: StatusCodes.BadIndexRangeNoData };
     }
-    return { array: null as any as T, statusCode: StatusCodes.BadIndexRangeNoData };
+    return { array: null, statusCode: StatusCodes.BadIndexRangeNoData };
   }
   return {
     array: slice(array, index, index + 1),
@@ -674,7 +674,7 @@ function extract_array_range<U, T extends ArrayLike<U> | ArrayBuffer>(
     if (typeof array === 'string') {
       return { array: '' as any as T, statusCode: StatusCodes.BadIndexRangeNoData };
     }
-    return { array: null as any as T, statusCode: StatusCodes.BadIndexRangeNoData };
+    return { array: null, statusCode: StatusCodes.BadIndexRangeNoData };
   }
   // clamp high index
   high_index = Math.min(high_index, arrayLength - 1);

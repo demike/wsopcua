@@ -187,7 +187,7 @@ export class MonitoredItemBase extends EventEmitter<MonitoredItemEvents> {
   }
 
   protected _after_create(monitoredItemResult: MonitoredItemCreateResult) {
-    this._statusCode = monitoredItemResult.statusCode || (StatusCodes.Good as StatusCode);
+    this._statusCode = monitoredItemResult.statusCode || (StatusCodes.Good);
     /* istanbul ignore else */
     if (monitoredItemResult.statusCode === StatusCodes.Good) {
       this.result = monitoredItemResult;
