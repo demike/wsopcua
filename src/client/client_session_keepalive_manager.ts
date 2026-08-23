@@ -4,6 +4,7 @@ import { assert } from '../assert';
 import { coerceNodeId } from '../nodeid/nodeid';
 // import {VariableIds} from '../constants';
 import { StatusCodes } from '../constants';
+import { StatusCode } from '../basic-types/status_code';
 import { ServerState } from '../generated/ServerState';
 import { debugLog } from '../common/debug';
 
@@ -64,6 +65,14 @@ export class ClientSessionKeepAliveManager extends EventEmitter<ClientSessionKee
     // Server_ServerStatus_State
     the_session.readVariableValue(serverStatus_State_Id, (err, dataValue) => {
       if (err || !dataValue) {
+        // A BadInvalidTimestamp means the session is perfectly alive: the server merely
+        // rejected the timestamp of our RequestHeader (see OPC UA Part 4). Treating it as a
+        // keepalive failure would trigger a spurious disconnect/reconnect loop against servers
+        // (notably some industrial PLCs) that are picky about request timestamps.
+        if (err && ClientSessionKeepAliveManager.isSessionStillAlive(err)) {
+          this.emit('keepalive', this.lastKnownState ?? ServerState.Unknown);
+          return callback();
+        }
         console.log(' warning : ClientSessionKeepAliveManager#ping_server ', err?.message);
         this.stop();
 
@@ -103,5 +112,22 @@ export class ClientSessionKeepAliveManager extends EventEmitter<ClientSessionKee
       clearInterval(this.timerId);
       this.timerId = 0;
     }
+  }
+
+  /**
+   * Returns true when a keepalive read error indicates that the session is still alive on the
+   * server and should NOT trigger a reconnection.
+   *
+   * Currently this covers `BadInvalidTimestamp`, which is a session-level rejection of the
+   * request timestamp rather than a sign that the session (or transport) is gone.
+   */
+  public static isSessionStillAlive(err: Error): boolean {
+    const serviceResult = (
+      err as { response?: { responseHeader?: { serviceResult?: StatusCode } } }
+    ).response?.responseHeader?.serviceResult;
+    if (serviceResult && serviceResult.equals(StatusCodes.BadInvalidTimestamp)) {
+      return true;
+    }
+    return !!err.message && err.message.indexOf('BadInvalidTimestamp') >= 0;
   }
 }

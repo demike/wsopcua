@@ -1,6 +1,7 @@
-import { isValidGuid, normalizeGuid } from './guid';
+import { isValidGuid, normalizeGuid, randomGuid } from './guid';
 
 import { emptyGuid } from './guid';
+import { vi } from 'vitest';
 
 describe('GUID', function () {
   it('emptyGuid should be a valid GUID', function () {
@@ -27,6 +28,33 @@ describe('GUID', function () {
 
   it('should not detect ns=0;g=1E14849E-3744-470d-8C7B-5F9110C2FA32 as a GUID', function () {
     expect(isValidGuid('ns=0;g=1E14849E-3744-470d-8C7B-5F9110C2FA32')).toBeFalsy();
+  });
+
+  describe('randomGuid', () => {
+    it('should produce a valid GUID', () => {
+      const guid = randomGuid();
+      expect(isValidGuid(guid)).toBeTruthy();
+    });
+
+    it('should not produce the empty GUID', () => {
+      // extremely unlikely with a real CSPRNG, guards against a broken source
+      expect(randomGuid()).not.toEqual(emptyGuid);
+    });
+
+    it('should produce different GUIDs on successive calls', () => {
+      const guids = new Set<string>();
+      for (let i = 0; i < 100; i++) {
+        guids.add(randomGuid());
+      }
+      expect(guids.size).toEqual(100);
+    });
+
+    it('should draw its entropy from a CSPRNG (crypto.getRandomValues)', () => {
+      const spy = vi.spyOn(globalThis.crypto, 'getRandomValues');
+      randomGuid();
+      expect(spy).toHaveBeenCalled();
+      spy.mockRestore();
+    });
   });
 
   it('should normalize a GUID', () => {

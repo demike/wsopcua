@@ -984,6 +984,18 @@ function createAnonymousIdentityToken(
   return new AnonymousIdentityToken({ policyId: userTokenPolicy.policyId });
 }
 
+/**
+ * Returns true when the server has provided a usable application instance certificate.
+ *
+ * An empty `Uint8Array` is truthy in JavaScript, so a plain `!cert` check would
+ * wrongly conclude that a certificate is present when the server sent a
+ * zero-length buffer. In that case the client must fall back to sending the
+ * credentials unencrypted instead of attempting to encrypt against an empty key.
+ */
+export function serverHasCertificate(cert?: Uint8Array | null): boolean {
+  return !!cert && cert.length > 0;
+}
+
 async function createUserNameIdentityToken(
   session: ClientSession,
   userName: string,
@@ -1021,7 +1033,7 @@ async function createUserNameIdentityToken(
 
   let identityToken: session_service.UserNameIdentityToken;
   // if server does not provide certificate use unencrypted password (no server certificate !!!)
-  if (!session.serverCertificate) {
+  if (!serverHasCertificate(session.serverCertificate)) {
     identityToken = new UserNameIdentityToken({
       userName: userName,
       password: stringToUint8Array(password), // Buffer.from(password, "utf-8"),
@@ -1153,7 +1165,7 @@ async function createIssuedIdentityToken(
   // note: this means that password is sent in clear text to the server
   // note: OPCUA specification discourages use of unencrypted password
   //       but in case of WSS this might be acceptable
-  if (!session.serverCertificate || securityPolicy === SecurityPolicy.None) {
+  if (!serverHasCertificate(session.serverCertificate) || securityPolicy === SecurityPolicy.None) {
     identityToken = new IssuedIdentityToken({
       tokenData,
       // encryptionAlgorithm: null,
