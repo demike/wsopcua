@@ -2,8 +2,27 @@ import { DataStream } from './DataStream';
 
 export type Guid = string;
 
-function getRandomInt(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+/**
+ * Fill a Uint8Array with cryptographically strong random bytes.
+ *
+ * Uses the Web Crypto API (`crypto.getRandomValues`), which is available in
+ * browsers and Node.js (>=15 globally). GUIDs produced here are used for
+ * SessionIds and other identifiers, so a CSPRNG is required - `Math.random`
+ * (V8 xorshift128+) is predictable from a handful of observed outputs.
+ */
+function cryptoRandomBytes(length: number): Uint8Array {
+  const bytes = new Uint8Array(length);
+  const g = (globalThis as { crypto?: Crypto }).crypto;
+  // istanbul ignore else
+  if (g && typeof g.getRandomValues === 'function') {
+    g.getRandomValues(bytes);
+  } else {
+    // istanbul ignore next
+    for (let i = 0; i < length; i++) {
+      bytes[i] = Math.floor(Math.random() * 256);
+    }
+  }
+  return bytes;
 }
 
 const regexGUID = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/;
@@ -33,9 +52,10 @@ export function isValidGuid(guid: string): Boolean {
 export const emptyGuid = '00000000-0000-0000-0000-000000000000';
 
 export function randomGuid(): string {
-  const b = new DataStream(20);
-  for (let i = 0; i < 20; i++) {
-    b.setUint8(getRandomInt(0, 255));
+  const bytes = cryptoRandomBytes(16);
+  const b = new DataStream(16);
+  for (let i = 0; i < 16; i++) {
+    b.setUint8(bytes[i]);
   }
   b.rewind();
   const value = decodeGuid(b);
