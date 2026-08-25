@@ -61,8 +61,8 @@ const doTraceStatistics = false;
 let g_channelId = 0;
 
 interface ITransactionStats {
-  request: any;
-  response: any;
+  request: OpcUaRequest;
+  response?: OpcUaResponse;
   bytesWritten: number;
   bytesRead: number;
   lap_sending_request: number;
@@ -103,11 +103,11 @@ function dump_transaction_statistics(stats: ITransactionStats) {
   console.log('--------------------------------------------------------------------->> Stats');
   console.log(
     '   request                   : ',
-    stats.request.constructor.name.toString(),
+    stats.request?.constructor.name ?? '<null>',
     ' / ',
-    stats.response.constructor.name.toString(),
+    stats.response?.constructor.name ?? '<null>',
     ' - ',
-    stats.response.responseHeader.serviceResult.toString()
+    stats.response?.responseHeader?.serviceResult?.toString() ?? '<null>'
   );
   console.log('   Bytes Read                : ', w(stats.bytesRead), ' bytes');
   console.log('   Bytes Written             : ', w(stats.bytesWritten), ' bytes');
@@ -351,16 +351,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     this.channelId = g_channelId;
     g_channelId += 1;
 
-    options.connectionStrategy = options.connectionStrategy || {};
-    this.connectionStrategy = {};
-    this.connectionStrategy.maxRetry = utils.isNullOrUndefined(options.connectionStrategy.maxRetry)
-      ? 10
-      : options.connectionStrategy.maxRetry;
-    this.connectionStrategy.initialDelay = options.connectionStrategy.initialDelay || 10;
-    this.connectionStrategy.maxDelay = options.connectionStrategy.maxDelay || 10000;
-
-    const r = options.connectionStrategy.randomisationFactor;
-    this.connectionStrategy.randomisationFactor = r === undefined ? 0 : r;
+    this.connectionStrategy = coerceConnectionStrategy(options.connectionStrategy ?? null);
   }
 
   /**
@@ -416,7 +407,10 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     err: Error | null,
     response: OpcUaResponse | null
   ) {
-    assert('function' === typeof request_data.callback);
+    // the callback may already have been consumed (timeout, cancellation, ...)
+    if ('function' !== typeof request_data.callback) {
+      return;
+    }
 
     if (!response && !err && request_data.msgType !== 'CLO') {
       // this case happens when CLO is called and when some pending transactions
@@ -447,10 +441,6 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
 
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const the_callback_func = request_data.callback;
-
-    if (!the_callback_func) {
-      throw new Error('Internal error');
-    }
 
     assert(request_data.msgType === 'CLO' || (err && !response) || (!err && response));
 
@@ -509,20 +499,23 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
       );
     }
 
-    if (this._request_data) {
-      for (const [key, request_data] of this._request_data) {
-        debugLog(
-          'xxxx Cancelling pending transaction ' +
-            key +
-            ' ' +
-            request_data.msgType +
-            request_data.request.constructor.name
-        );
-        this.process_request_callback(request_data, err || null, null);
-      }
-    }
-
+    // detach the pending transactions first, so that a callback cannot re-enter this method
+    const pending_request_data = this._request_data;
     this._request_data = new Map();
+
+    for (const [key, request_data] of pending_request_data) {
+      if (!request_data.callback) {
+        continue; // transaction has already been completed or cancelled
+      }
+      debugLog(
+        'xxxx Cancelling pending transaction ' +
+          key +
+          ' ' +
+          request_data.msgType +
+          request_data.request?.constructor.name
+      );
+      this.process_request_callback(request_data, err || null, null);
+    }
   }
 
   protected _on_transport_closed(err?: Error) {
@@ -555,7 +548,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
         'xxxxx  <<<<<< _on_message_received  ERROR',
         'requestId=',
         requestId,
-        this._request_data.get(requestId)?.constructor.name,
+        this._request_data.get(requestId)?.request?.constructor.name,
         'response.responseHeader.requestHandle=',
         response.responseHeader.requestHandle,
         response.constructor.name
@@ -583,15 +576,15 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
 
     /* istanbul ignore next */
     if (
-      response.responseHeader.requestHandle !== request_data.request.requestHeader.requestHandle
+      response.responseHeader.requestHandle !== request_data.request?.requestHeader.requestHandle
     ) {
-      const expected = request_data.request.requestHeader.requestHandle;
+      const expected = request_data.request?.requestHeader.requestHandle;
       const actual = response.responseHeader.requestHandle;
       const moreinfo = 'Class = ' + response.constructor.name;
       console.log(
         ' WARNING SERVER responseHeader.requestHandle is invalid' +
           ': expecting 0x' +
-          expected.toString(16) +
+          expected?.toString(16) +
           '  but got 0x' +
           actual.toString(16) +
           ' ',
@@ -1024,6 +1017,8 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     if (this.__call) {
       this.__call.abort();
     }
+    // make sure that no pending transaction timeout can fire after the channel has been disposed
+    this._cancel_pending_transactions(new Error('Secure channel has been disposed'));
   }
 
   public abortConnection(callback: () => void) {
@@ -1168,6 +1163,12 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
   ) {
     this.emit('before_perform_transaction', msgType, requestMessage);
 
+    if (!requestMessage || !requestMessage.requestHeader) {
+      return callback(
+        new Error('ClientSecureChannelLayer => invalid request message for ' + msgType)
+      );
+    }
+
     if (!this.isValid()) {
       return callback(new Error('ClientSecureChannelLayer => Socket is closed !'));
     }
@@ -1253,8 +1254,8 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
       timerId = null;
       console.log(
         ' Timeout .... waiting for response for ',
-        requestMessage.constructor.name,
-        requestMessage.requestHeader.toString()
+        requestMessage?.constructor.name ?? '<null>',
+        requestMessage?.requestHeader?.toString() ?? '<null>'
       );
 
       hasTimedOut = true;
@@ -1565,19 +1566,14 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
         ' PENDING TRANSACTION = ',
         this.getDisplayName(),
         Array.from(this._request_data.values())
-          .map((d) => d.request.constructor.name)
+          .map((d) => d.request?.constructor.name)
           .join('')
       );
     }
 
-    for (const transaction of this._request_data.values()) {
-      // kill timer id
-      if (transaction.callback) {
-        transaction.callback(
-          new Error('Transaction has been canceled because client channel  is beeing closed')
-        );
-      }
-    }
+    this._cancel_pending_transactions(
+      new Error('Transaction has been canceled because client channel  is beeing closed')
+    );
     callback();
   }
 
@@ -1675,7 +1671,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
   // protected _transport :
   protected transportTimeout: number;
   protected channelId: number;
-  protected connectionStrategy: any;
+  protected connectionStrategy: ConnectionStrategy;
 
   protected __call: (backoff.FunctionCall & { _cancelBackoff?: boolean }) | null = null;
 
