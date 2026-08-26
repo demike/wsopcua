@@ -81,7 +81,15 @@ export type UserIdentityInfo = Partial<
 >;
 
 export interface SessionActivationOptions {
-  userIdentityInfo?: UserIdentityInfo;
+  /**
+   * the user identity to activate the session with.
+   *
+   * When omitted (`undefined`) the identity the session was last activated
+   * with is replayed, which is what a re-activation on a new SecureChannel has
+   * to do: a Server refuses to change the UserTokenType of an existing
+   * session. Pass `null` to explicitly go (back) to an anonymous identity.
+   */
+  userIdentityInfo?: UserIdentityInfo | null;
   localeIds?: string[];
 }
 
@@ -416,9 +424,16 @@ export class OPCUAClient extends OPCUAClientBase {
     const _old_client = session.client;
     session.client = this;
 
+    // An unspecified identity means "keep the one the session already has":
+    // re-activating a session on a new SecureChannel with a different
+    // UserTokenType is rejected by the server. Only an explicit null resets
+    // the session to an anonymous identity.
+    const userIdentityInfo =
+      options.userIdentityInfo !== undefined ? options.userIdentityInfo : session.userIdentityInfo;
+
     this.createUserIdentityToken(
       session,
-      options.userIdentityInfo ?? null,
+      userIdentityInfo ?? null,
       async (err, userIdentityToken) => {
         assert(this._secureChannel);
         if (err) {
@@ -486,6 +501,10 @@ export class OPCUAClient extends OPCUAClientBase {
 
             session.serverNonce = response.serverNonce ?? undefined;
             // TODO: session.lastResponseReceivedTime = Date.now();
+
+            // remember the identity so that the session can be re-activated on
+            // a new SecureChannel without changing its UserTokenType
+            session.userIdentityInfo = userIdentityInfo ?? null;
 
             // 05.11.2019: Derfler added new session_activated
             session.emit('session_activated');

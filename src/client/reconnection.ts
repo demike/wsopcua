@@ -175,7 +175,9 @@ function repair_client_session_by_recreating_a_new_session(
         }
         debugLog('    => activating a new session ....');
 
-        (<any>client)._activateSession(new_session, function (err: Error) {
+        // options = null: replay the identity the session was activated with,
+        // see OPCUAClient#_activateSession
+        (<any>client)._activateSession(new_session, null, function (err: Error) {
           debugLog('    =>  activating a new session .... Done');
           /// xx self._addSession(new_session);
           callback(err);
@@ -326,7 +328,9 @@ export function repair_client_session(
     debugLog('TRYING TO REACTIVATE EXISTING SESSION ', session.sessionId.toString());
     debugLog('  SubscriptionIds :', session.getPublishEngine().getSubscriptionIds());
   }
-  (<any>client)._activateSession(session, function (err: Error) {
+  // options = null: replay the identity the session was activated with,
+  // see OPCUAClient#_activateSession
+  (<any>client)._activateSession(session, null, function (err: Error) {
     //
     // Note: current limitation :
     //  - The reconnection doesn't work yet, if connection break is caused by a server that crashes and restarts.
