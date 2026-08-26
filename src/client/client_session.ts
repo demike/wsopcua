@@ -6,6 +6,8 @@ import { EventEmitter } from '../eventemitter';
 import { assert } from '../assert';
 import { resolveNodeId, coerceNodeId, NodeId } from '../nodeid/nodeid';
 import { OPCUAClientBase, OpcUaResponse, ErrorCallback, ResponseCallback } from './client_base';
+// type-only: avoids a runtime cycle between client_session and opcua_client
+import type { UserIdentityInfo } from './opcua_client';
 import { StatusCodes } from '../constants/raw_status_codes';
 
 import { ICreateMonitoredItemsRequest } from '../generated/CreateMonitoredItemsRequest';
@@ -162,6 +164,18 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     (v) => Number.isInteger(v) && (v as number) !== read_service.AttributeIds.INVALID
   ) as read_service.AttributeIds[];
 
+  /**
+   * the user identity this session was last activated with.
+   *
+   * It has to be remembered: a Server rejects an ActivateSession that moves an
+   * existing Session to a new SecureChannel while changing the UserTokenType
+   * ("Activating a session on a new SecureChannel not allowed with different
+   * UserTokenType"), so every re-activation has to replay the identity the
+   * session was originally activated with.
+   *
+   * `undefined` means "never activated"; an anonymous session stores `null`.
+   */
+  userIdentityInfo?: UserIdentityInfo | null;
   serverCertificate?: Uint8Array;
   serverNonce?: Uint8Array;
   serverSignature?: SignatureData;
@@ -790,11 +804,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
             historizing_service.HistoryReadRawResult,
             DiagnosticInfo | undefined
           >
-        )(
-          error,
-          value?.[0],
-          diagnosticInfos?.[0]
-        );
+        )(error, value?.[0], diagnosticInfos?.[0]);
       }
     });
   }
