@@ -92,13 +92,17 @@ export class MessageChunker {
    *
    * @param message {Object}
    * @param messageChunkCallback   {Function}
+   * @return a promise that resolves once the last chunk has been handed to
+   *         messageChunkCallback. Callers must await it before chunking the
+   *         next message on the same channel, see
+   *         ClientSecureChannelLayer#_sendSecureOpcUARequest.
    */
   public chunkSecureMessage(
     msgType: string,
     options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader,
     message: IEncodable & { __namespaceArray?: string[] },
     messageChunkCallback: (chunk: ArrayBufferLike | ArrayBufferView | null) => void
-  ) {
+  ): Promise<void> {
     options = <any>options || {};
     assert('function' === typeof messageChunkCallback);
 
@@ -137,7 +141,9 @@ export class MessageChunker {
       });
 
     assert(stream.view.byteOffset === 0);
-    secure_chunker
+    // `end()` emits the 'finished' event (and therefore the final
+    // messageChunkCallback(null)) before the returned promise settles.
+    return secure_chunker
       .write(stream.view.buffer, stream.view.buffer.byteLength)
       .then(() => secure_chunker.end());
   }
