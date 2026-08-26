@@ -47,6 +47,7 @@ import { ISymmetricAlgortihmSecurityHeader } from '../service-secure-channel/Sym
 import { JSONMessageBuilder } from '../transport/json_message_builder';
 import { MessageBuilderEvents } from '../transport/message_builder_base';
 import { DER, makeSHA1Thumbprint, rsaKeyLength } from '../crypto';
+import { Lock } from '../basic-types/utils';
 
 const OpenSecureChannelRequest = secure_channel_service.OpenSecureChannelRequest;
 const CloseSecureChannelRequest = secure_channel_service.CloseSecureChannelRequest;
@@ -1335,7 +1336,21 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
       chunk_count: 0,
     });
 
-    this._sendSecureOpcUARequest(msgType, requestMessage, requestId);
+    // sending is asynchronous (chunking, signing and encrypting all are);
+    // a failure here has to fail the transaction rather than surface as an
+    // unhandled rejection.
+    this._sendSecureOpcUARequest(msgType, requestMessage, requestId).catch((err) => {
+      const request_data = this._request_data.get(requestId);
+      if (!request_data) {
+        return; // transaction has already been cancelled or completed
+      }
+      this._request_data.delete(requestId);
+      this.process_request_callback(
+        request_data,
+        err instanceof Error ? err : new Error(String(err)),
+        null
+      );
+    });
   }
 
   protected _send_chunk(requestId: number, messageChunk: ArrayBufferLike | ArrayBufferView | null) {
@@ -1493,6 +1508,39 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     requestMessage: IEncodable & { requestHeader: RequestHeader; __namespaceArray?: string[] },
     requestId: number
   ) {
+    // --- serialize the whole encode -> chunk -> write pipeline -------------
+    // OPC UA Part 6 6.7.2 requires all chunks of a Message to be sent
+    // contiguously on a SecureChannel; a server assembles a single input
+    // stream per channel and rejects a chunk carrying a foreign requestId.
+    // Signing and encrypting a chunk is asynchronous (WebCrypto), so without
+    // this lock a request started while another one is still being chunked
+    // would slip its own chunks into the middle of that message.
+    // The lock is taken before the security token is read so that a queued
+    // request cannot be signed with one token and framed with another.
+    const locked = this._sendLock.acquire();
+    if (locked) {
+      await locked;
+    }
+    try {
+      await this._sendSecureOpcUARequest_locked(msgType, requestMessage, requestId);
+    } finally {
+      this._sendLock.release();
+    }
+    // -----------------------------------------------------------------------
+  }
+
+  private async _sendSecureOpcUARequest_locked(
+    msgType: string,
+    requestMessage: IEncodable & { requestHeader: RequestHeader; __namespaceArray?: string[] },
+    requestId: number
+  ) {
+    // the channel may have been closed or the transaction cancelled while this
+    // request was waiting for the lock
+    if (!this._transport || !this._request_data.has(requestId)) {
+      debugLog('_sendSecureOpcUARequest: dropping cancelled request ' + requestId);
+      return;
+    }
+
     const options: SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader = {
       requestId,
       secureChannelId: this._securityToken
@@ -1537,7 +1585,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     this.emit('send_request', requestMessage);
 
     if (this.encoding === 'opcua+uacp') {
-      this.messageChunker.chunkSecureMessage(
+      await this.messageChunker.chunkSecureMessage(
         msgType,
         options,
         requestMessage,
@@ -1648,6 +1696,12 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
   _serverNonce: any;
   _transport?: ClientWSTransport;
   protected _isOpened = false;
+  /**
+   * serializes the chunking of outgoing messages, so that the chunks of one
+   * message are never interleaved with the chunks of another one.
+   * @see _sendSecureOpcUARequest
+   */
+  private _sendLock = new Lock();
   protected _securityToken?: ChannelSecurityToken;
   protected _lastRequestId: number;
   protected parent?: OPCUAClientBase;
