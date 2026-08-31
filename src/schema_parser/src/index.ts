@@ -5,7 +5,12 @@ import { generateNodeIds, metaTypeMap } from './generate_node_ids';
 import * as fs from 'fs';
 import { SchemaParserConfig, sanitizeProjectImportConfig } from './SchemaParserConfig';
 
-import * as program from 'commander';
+// commander exports a singleton Command instance via `module.exports = new Command()`.
+// Import it with import-require so the instance (incl. its prototype methods like
+// `description`, `option`, `parse`) is bound. A namespace import (`import * as`) would
+// be compiled to `__importStar(require('commander'))`, which wraps the instance in a
+// module-namespace object and drops the prototype methods, breaking the CLI at startup.
+import program = require('commander');
 import { PathGenUtil } from './PathGenUtil';
 import { generateAttributeIds } from './generate_attribute_ids';
 
