@@ -5,7 +5,7 @@ import { generateNodeIds, metaTypeMap } from './generate_node_ids';
 import * as fs from 'fs';
 import { SchemaParserConfig, sanitizeProjectImportConfig } from './SchemaParserConfig';
 
-import * as program from 'commander';
+import program = require('commander');
 import { PathGenUtil } from './PathGenUtil';
 import { generateAttributeIds } from './generate_attribute_ids';
 
