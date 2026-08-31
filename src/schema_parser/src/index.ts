@@ -36,7 +36,7 @@ if (program.genids) {
 
 // parse the default configuration file
 const importConfig: SchemaParserConfig = JSON.parse(
-  fs.readFileSync(defaultConfigFilePath).toString()
+  fs.readFileSync(defaultConfigFilePath).toString(),
 );
 importConfig.projects[0].projectName = PathGenUtil.PROJECT_NAME;
 for (const projectImport of importConfig.projects) {
