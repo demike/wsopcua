@@ -352,6 +352,78 @@ describe('testing ClientWS_transport', function () {
       sock._close();
     });
   });
+
+  // -------------------------------------------------------------------------
+  // interaction between markDisconnecting() and disconnect()
+  //
+  // The secure channel marks the transport as disconnecting once the
+  // CloseSecureChannelRequest has been written, so that the socket close which
+  // follows is not reported as a connection error. That must suppress the error
+  // reporting *without* preventing the socket from being closed.
+  // -------------------------------------------------------------------------
+
+  async function connectTransport(): Promise<WebSocketMock> {
+    const connected = new Promise<void>((resolve, reject) => {
+      transport.connect(url, (err) => (err ? reject(err) : resolve()));
+    });
+    const sock: WebSocketMock = (transport as any)._socket;
+    sock._open();
+    sock._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
+    await connected;
+    return sock;
+  }
+
+  const WS_CLOSED = 3;
+
+  it('should still close the socket when disconnect() follows markDisconnecting()', async function () {
+    const sock = await connectTransport();
+
+    transport.markDisconnecting();
+    expect(transport.isValid()).toBeFalsy();
+
+    await new Promise<void>((resolve) => transport.disconnect(resolve));
+
+    expect(sock.close).toHaveBeenCalledTimes(1);
+    expect(sock.close.mock.calls[0][0]).toBe(1000);
+    expect(sock.readyState).toBe(WS_CLOSED);
+  });
+
+  it('should close the socket only once when disconnect() is called twice', async function () {
+    const sock = await connectTransport();
+
+    await new Promise<void>((resolve) => transport.disconnect(resolve));
+    await new Promise<void>((resolve) => transport.disconnect(resolve));
+
+    expect(sock.close).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not report an error when the socket closes abnormally after markDisconnecting()', async function () {
+    const sock = await connectTransport();
+
+    const spyOnSocketError = vi.fn();
+    transport.on('socket_error', spyOnSocketError);
+
+    transport.markDisconnecting();
+    // the server drops the connection right after receiving the CLO: a browser
+    // reports that as 1006 (abnormal closure)
+    sock._close(1006);
+
+    expect(spyOnSocketError).not.toHaveBeenCalled();
+    expect(spyOnConnectionBreak).not.toHaveBeenCalled();
+    expect(spyOnClose).not.toHaveBeenCalled();
+  });
+
+  it('should report an abnormal close that was not initiated by the client', async function () {
+    const sock = await connectTransport();
+
+    const spyOnSocketError = vi.fn();
+    transport.on('socket_error', spyOnSocketError);
+
+    // same close, but this time the client did not ask for it
+    sock._close(1006);
+
+    expect(spyOnSocketError).toHaveBeenCalledTimes(1);
+  });
   /*
 
     it('should returns an error if url has invalid port', function (done) {

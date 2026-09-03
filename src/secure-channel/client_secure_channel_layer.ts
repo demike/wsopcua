@@ -1171,7 +1171,12 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     }
 
     if (!this.isValid()) {
-      return callback(new Error('ClientSecureChannelLayer => Socket is closed !'));
+      return callback(
+        new Error(
+          'ClientSecureChannelLayer => Socket is closed ! while processing ' +
+            requestMessage.constructor.name
+        )
+      );
     }
 
     const timeout = this._adjustRequestTimeout(requestMessage);
@@ -1387,8 +1392,39 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
         // record tick1: when request has been sent to server
         request_data._tick1 = get_clock_tick();
         request_data.bytesWritten_after = this.bytesWritten;
+        this._complete_CLO_transaction_after_send(request_data);
       }
     }
+  }
+
+  /**
+   * A server is not required to answer a CloseSecureChannelRequest: OPC UA
+   * Part 6 lets it release the channel and close the socket straight away.
+   * Waiting for a response would stall close() until the transaction times out,
+   * so the transaction is completed here, shortly after the request has been
+   * written, unless the server answers within that grace period.
+   *
+   * From that point on the socket is expected to go away, so the transport is
+   * marked as disconnecting to keep the socket close that follows (typically a
+   * websocket 1006) from being reported as a connection error.
+   */
+  private _complete_CLO_transaction_after_send(request_data: RequestData) {
+    if (request_data.msgType !== 'CLO') {
+      return;
+    }
+
+    this._transport?.markDisconnecting();
+
+    window.setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      const callback = request_data.callback;
+      if (!callback) {
+        // the server did answer after all, or the transaction has been cancelled
+        return;
+      }
+      request_data.callback = undefined;
+      callback(null, undefined);
+    }, ClientSecureChannelLayer.closeSecureChannelResponseGraceTime);
   }
 
   protected _send_json(requestId: number) {
@@ -1404,6 +1440,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
       // record tick1: when request has been sent to server
       request_data._tick1 = get_clock_tick();
       request_data.bytesWritten_after = this.bytesWritten;
+      this._complete_CLO_transaction_after_send(request_data);
     }
 
     if (doDebug) {
@@ -1673,13 +1710,22 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
         return callback(new Error('Transport disconnected'));
       }
 
-      this._transport.markDisconnecting(); // avoid throwing a potential websocket 1006 error
+      // note: the transport is *not* marked as disconnecting here. Doing so
+      // would make isValid() false and the CLO transaction below would be
+      // rejected before ever reaching the wire. It is marked once the request
+      // has been written, see _complete_CLO_transaction_after_send.
       this._performMessageTransaction('CLO', request, (err) => {
+        /* istanbul ignore next */
         if (err) {
           console.warn('CLO transaction terminated with error: ', err.message);
         }
+        const transport = this._transport;
         this.dispose();
-        callback();
+        if (transport) {
+          transport.disconnect(() => callback());
+        } else {
+          callback();
+        }
       });
     });
   }
@@ -1687,6 +1733,12 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
   public static defaultTransportTimeout: number = 10 * 1000;
   public static minTransactionTimeout = 30 * 1000; // 30 sec
   public static defaultTransactionTimeout = 60 * 1000; // 1 minute
+  /**
+   * how long a CloseSecureChannelRequest waits for the response most servers
+   * never send, before the transaction is completed locally
+   * @see _complete_CLO_transaction_after_send
+   */
+  public static closeSecureChannelResponseGraceTime = 100; // 100 ms
 
   public readonly encoding: 'opcua+uacp' | 'opcua+uajson';
 
