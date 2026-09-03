@@ -298,3 +298,137 @@ describe('ClientSecureChannelLayer - chunk serialization', function () {
     expect(requestIds).toHaveLength(1);
   });
 });
+
+// ---------------------------------------------------------------------------
+// close / CloseSecureChannelRequest
+// ---------------------------------------------------------------------------
+
+interface FakeTransport {
+  name: string;
+  parameters: { sendBufferSize: number };
+  disconnecting: boolean;
+  markDisconnecting(): void;
+  isValid(): boolean;
+  disconnect(callback: () => void): void;
+  write(chunk: ArrayBufferLike | ArrayBufferView): void;
+}
+
+/**
+ * a transport that reproduces the part of ClientWSTransport that matters here:
+ * isValid() turns false as soon as the transport is marked as disconnecting.
+ * The channel's real isValid() is therefore exercised - that is the guard which
+ * used to reject the CloseSecureChannelRequest before it reached the wire.
+ *
+ * Every write and the transport disconnect are appended to a single list, so
+ * that their relative order can be asserted.
+ */
+function attachFakeTransport(secureChannel: ClientSecureChannelLayer, sendBufferSize = 8192) {
+  const events: string[] = [];
+  const transport: FakeTransport = {
+    name: 'fake transport',
+    parameters: { sendBufferSize },
+    disconnecting: false,
+    markDisconnecting() {
+      this.disconnecting = true;
+    },
+    isValid() {
+      return !this.disconnecting;
+    },
+    disconnect(callback: () => void) {
+      events.push('disconnect');
+      this.disconnecting = true;
+      callback();
+    },
+    write(chunk: ArrayBufferLike | ArrayBufferView) {
+      events.push(parseChunk(chunk).msgType);
+    },
+  };
+  (secureChannel as any)._transport = transport;
+  return { transport, events };
+}
+
+const tick = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
+const GRACE = ClientSecureChannelLayer.closeSecureChannelResponseGraceTime;
+
+describe('ClientSecureChannelLayer - close', function () {
+  afterEach(function () {
+    vi.restoreAllMocks();
+  });
+
+  it('should send a CloseSecureChannelRequest before taking the transport down', async function () {
+    const secureChannel = new ClientSecureChannelLayer({ encoding: 'opcua+uacp' });
+    const { events } = attachFakeTransport(secureChannel);
+
+    const closed = vi.fn();
+    secureChannel.close(closed);
+    await tick(4 * GRACE);
+
+    // OPC UA Part 6 5.5.2: the client closes a SecureChannel by sending a
+    // CloseSecureChannelRequest and then closing the socket gracefully.
+    expect(events).toEqual(['CLO', 'disconnect']);
+    expect(closed).toHaveBeenCalledTimes(1);
+  });
+
+  it('should complete the close transaction without waiting for a response', async function () {
+    const secureChannel = new ClientSecureChannelLayer({ encoding: 'opcua+uacp' });
+    attachFakeTransport(secureChannel);
+
+    const closed = vi.fn();
+    secureChannel.close(closed);
+
+    // deliberately still pending: the server is given a grace period to answer
+    await tick(0);
+    expect(closed).not.toHaveBeenCalled();
+
+    // most servers never answer a CLO. Completing the transaction locally is
+    // what keeps close() from stalling for minTransactionTimeout (30s).
+    await tick(4 * GRACE);
+    expect(closed).toHaveBeenCalledTimes(1);
+    expect(secureChannel.isTransactionInProgress()).toBe(false);
+  });
+
+  it('should not warn when the channel closes normally', async function () {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const secureChannel = new ClientSecureChannelLayer({ encoding: 'opcua+uacp' });
+    attachFakeTransport(secureChannel);
+
+    await new Promise<void>((resolve) => secureChannel.close(() => resolve()));
+
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it('should invoke the close callback once when the server does answer the CLO', async function () {
+    const secureChannel = new ClientSecureChannelLayer({ encoding: 'opcua+uacp' });
+    attachFakeTransport(secureChannel);
+
+    const closed = vi.fn();
+    secureChannel.close(closed);
+
+    // some servers do send a CloseSecureChannelResponse, which completes the
+    // transaction before the grace period elapses
+    const request_data = [...(secureChannel as any)._request_data.values()][0];
+    expect(request_data.msgType).toBe('CLO');
+    (secureChannel as any).process_request_callback(request_data, null, null);
+
+    await tick(4 * GRACE);
+    expect(closed).toHaveBeenCalledTimes(1);
+  });
+
+  it('should report a disconnected transport instead of sending a CLO', async function () {
+    const secureChannel = new ClientSecureChannelLayer({ encoding: 'opcua+uacp' });
+    const { transport, events } = attachFakeTransport(secureChannel);
+    transport.markDisconnecting();
+
+    const closed = vi.fn();
+    await new Promise<void>((resolve) =>
+      secureChannel.close((err) => {
+        closed(err);
+        resolve();
+      })
+    );
+
+    expect(closed).toHaveBeenCalledTimes(1);
+    expect(closed.mock.calls[0][0]?.message).toContain('Transport disconnected');
+    expect(events).toEqual([]);
+  });
+});

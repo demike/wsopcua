@@ -203,12 +203,15 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
   public disconnect(callback: () => void) {
     assert('function' === typeof callback, 'expecting a callback function, but got ' + callback);
 
-    if (this._disconnecting || !this._socket) {
+    if (!this._socket) {
       callback();
       return;
     }
 
-    assert(!this._disconnecting, 'TCP Transport has already been disconnected');
+    // the transport may already be marked as disconnecting: the secure channel
+    // marks it as soon as the CloseSecureChannelRequest has been written, so
+    // that the socket close which follows is not reported as a connection
+    // error. That must not prevent the socket from actually being closed here.
     this._disconnecting = true;
 
     // xx assert(!this._the_callback, 'disconnect shall not be called while the \'one time message receiver\' is in operation');
