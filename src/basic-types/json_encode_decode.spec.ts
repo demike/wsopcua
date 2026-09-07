@@ -49,13 +49,13 @@ function test_encode_decode(
 
 describe('testing built-in type encoding', function () {
   it('should encode and decode a boolean as a json true/false', function () {
-    expect((ec as any).jsonEncodeBoolean).toBeUndefined('use the default conversion');
-    expect((ec as any).jsonDecodeBoolean).toBeUndefined('use the default conversion');
+    expect((ec as any).jsonEncodeBoolean, 'use the default conversion').toBeUndefined();
+    expect((ec as any).jsonDecodeBoolean, 'use the default conversion').toBeUndefined();
   });
 
   it('should encode and decode a string', function () {
-    expect((ec as any).jsonEncodeString).toBeUndefined('use the default conversion');
-    expect((ec as any).jsonDecodeString).toBeUndefined('use the default conversion');
+    expect((ec as any).jsonEncodeString, 'use the default conversion').toBeUndefined();
+    expect((ec as any).jsonDecodeString, 'use the default conversion').toBeUndefined();
   });
 
   // all integers except UInt64 and Int64 are encoded as a default json number --> no need for special treatment
@@ -91,8 +91,8 @@ describe('testing built-in type encoding', function () {
   });
 
   it('should encode and decode a GUID', function () {
-    expect((ec as any).jsonEncodeGuid).toBeUndefined('use the default conversion');
-    expect((ec as any).jsonDecodeGuid).toBeUndefined('use the default conversion');
+    expect((ec as any).jsonEncodeGuid, 'use the default conversion').toBeUndefined();
+    expect((ec as any).jsonDecodeGuid, 'use the default conversion').toBeUndefined();
   });
 
   it('should encode and decode a ByteString', function () {

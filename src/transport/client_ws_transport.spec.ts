@@ -265,15 +265,15 @@ describe('testing ClientWS_transport', function () {
     transport.timeout = 1000; // very short timeout;
 
     transport.on('close', function (err) {
-      expect(transport_confirms_that_close_event_has_been_processed).toBe(
-        false,
+      expect(
+        transport_confirms_that_close_event_has_been_processed,
         'close event shall only be received once'
-      );
+      ).toBe(false);
       transport_confirms_that_close_event_has_been_processed = true;
-      expect(err).toBe(
-        null,
+      expect(
+        err,
         'close event shall have err===null, when disconnection is initiated by the client itself'
-      );
+      ).toBe(null);
     });
 
     await new Promise<void>((resolve) => {
@@ -316,17 +316,17 @@ describe('testing ClientWS_transport', function () {
 
     await new Promise<void>((resolve) => {
       transport.on('close', function (err) {
-        expect(transport_confirms_that_close_event_has_been_processed).toBe(
-          false,
+        expect(
+          transport_confirms_that_close_event_has_been_processed,
           'close event shall only be received once'
-        );
+        ).toBe(false);
 
         transport_confirms_that_close_event_has_been_processed = true;
 
-        expect(err instanceof Error).toBe(
-          true,
+        expect(
+          err instanceof Error,
           'the close event should pass a valid Error object because disconnection is caused by external event'
-        );
+        ).toBe(true);
 
         resolve();
       });
@@ -439,7 +439,7 @@ describe('testing ClientWS_transport', function () {
                 const test2 = !!err.message.match(regexp_2);
                 const test3 = !!err.message.match(regexp_3);
                 const test4 = !!err.message.match(regexp_4);
-                expect(test1 || test2 || test3 || test4 ).toBe(true, 'expecting one of those error message. got: ' + err.message);
+                expect(test1 || test2 || test3 || test4, 'expecting one of those error message. got: ' + err.message).toBe(true);
                 done();
             } else {
                 throw new Error('Should have raised a connection error');

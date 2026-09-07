@@ -1689,10 +1689,10 @@ describe('testing sameVariant Performance', function () {
           _t(v1) + ' === ' + _t(variousVariants[i])
         );
       } else {
-        expect(sameVariantFN(v1, variousVariants[i])).toEqual(
-          false,
+        expect(
+          sameVariantFN(v1, variousVariants[i]),
           'i=' + i + ' ' + index + ' ' + _t(v1) + ' !== ' + _t(variousVariants[i])
-        );
+        ).toEqual(false);
       }
     }
     expect(sameVariantFN(v1, variousVariants_clone[index])).toEqual(true);

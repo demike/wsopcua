@@ -48,7 +48,7 @@ describe('Testing the client publish engine', function () {
 
   it('a client should send a publish request to the server for every new subscription', function () {
     const fakeSession = new ClientSession(null as any);
-    const publish_spy = vi.spyOn<ClientSession>(fakeSession, 'publish');
+    const publish_spy = vi.spyOn(fakeSession, 'publish');
     let publish_args: IArguments = [] as any;
     publish_spy.mockImplementation(function () {
       publish_args = arguments;
@@ -77,7 +77,7 @@ describe('Testing the client publish engine', function () {
 
   it('a client should keep sending a new publish request to the server after receiving a notification, when a subscription is active', function () {
     const fakeSession = new ClientSession(null as any);
-    const publish_spy = vi.spyOn<ClientSession>(fakeSession, 'publish');
+    const publish_spy = vi.spyOn(fakeSession, 'publish');
     publish_spy.mockImplementation(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
@@ -94,10 +94,10 @@ describe('Testing the client publish engine', function () {
 
     const clientPublishEngine = new ClientSidePublishEngine(fakeSession);
 
-    expect((<any>clientPublishEngine).timeoutHint).toEqual(
-      10000,
+    expect(
+      (<any>clientPublishEngine).timeoutHint,
       'expecting timeoutHint to be set to default value =10sec'
-    );
+    ).toEqual(10000);
 
     // start a first new subscription
     clientPublishEngine.registerSubscription(makeSubscription(fakeSession, 1, 10000));
@@ -116,7 +116,7 @@ describe('Testing the client publish engine', function () {
 
   it('a client should stop sending publish request to the server after receiving a notification, when there is no more registered subscription ', function () {
     const fakeSession = new ClientSession(null as any);
-    const publish_spy = vi.spyOn<ClientSession>(fakeSession, 'publish');
+    const publish_spy = vi.spyOn(fakeSession, 'publish');
     publish_spy.mockImplementation(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
@@ -193,7 +193,7 @@ describe('Testing the client publish engine', function () {
 
     let count = 0;
     const fakeSession = new ClientSession(null as any);
-    const publish_spy = vi.spyOn<ClientSession>(fakeSession, 'publish');
+    const publish_spy = vi.spyOn(fakeSession, 'publish');
     publish_spy.mockImplementation(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
@@ -266,7 +266,7 @@ describe('Testing the client publish engine', function () {
     }
 
     const fakeSession = new ClientSession(null as any);
-    const publish_spy = vi.spyOn<ClientSession>(fakeSession, 'publish');
+    const publish_spy = vi.spyOn(fakeSession, 'publish');
     publish_spy.mockImplementation(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
@@ -331,7 +331,7 @@ describe('Testing the client publish engine', function () {
     }
 
     const fakeSession = new ClientSession(null as any);
-    const publish_spy = vi.spyOn<ClientSession>(fakeSession, 'publish');
+    const publish_spy = vi.spyOn(fakeSession, 'publish');
     publish_spy.mockImplementation(
       (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();

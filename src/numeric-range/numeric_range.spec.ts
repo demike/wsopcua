@@ -396,7 +396,7 @@ describe('Testing numerical range', function () {
       expect(matrix).toEqual([11, 12, 13, 21, 22, 23, 31, 32, 33]);
     });
     afterEach(function () {
-      expect(matrix.length).toBe(9, 'original array should not be affected');
+      expect(matrix.length, 'original array should not be affected').toBe(9);
       expect(matrix).toEqual([11, 12, 13, 21, 22, 23, 31, 32, 33]);
     });
 
@@ -466,7 +466,7 @@ describe('Testing numerical range', function () {
       /*
             afterEach(function () {
                 length = array.length || array.byteLength;
-                expect(length ).toBe(6, ' original array should not be affected');
+                expect(length, ' original array should not be affected').toBe(6);
             });
             */
 

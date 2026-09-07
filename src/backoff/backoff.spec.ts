@@ -21,44 +21,43 @@ describe('Backoff', function () {
 
   it('the backoff event should be emitted when backoff starts', function () {
     let called = false;
-    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
+    vi.spyOn(backoffStrategy, 'next').mockReturnValue(10);
     backoff.on('backoff', () => {
       called = true;
     });
     backoff.backoff();
 
-    expect(called).toBeTruthy('Backoff event should be emitted when backoff starts.');
+    expect(called, 'Backoff event should be emitted when backoff starts.').toBeTruthy();
   });
 
   it('the ready event should be emitted on backoff completion', function () {
     let called = false;
-    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
+    vi.spyOn(backoffStrategy, 'next').mockReturnValue(10);
     backoff.on('backoff', () => {
       called = true;
     });
     backoff.backoff();
     vi.advanceTimersByTime(10);
 
-    expect(called).toBeTruthy('Ready event should be emitted when backoff ends.');
+    expect(called, 'Ready event should be emitted when backoff ends.').toBeTruthy();
   });
 
   it('the backoff event should be passed the backoff delay', function () {
-    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(989);
+    vi.spyOn(backoffStrategy, 'next').mockReturnValue(989);
     backoff.on('backoff', (arg0, arg1) => {
-      expect(arg1).toBe(
-        989,
+      expect(
+        arg1,
         'Backoff event should ' + 'carry the backoff delay as its second argument.'
-      );
+      ).toBe(989);
     });
     backoff.backoff();
   });
 
   it('the ready event should be passed the backoff delay', function () {
-    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(989);
+    vi.spyOn(backoffStrategy, 'next').mockReturnValue(989);
     backoff.on('ready', (arg0, arg1) => {
-      expect(arg1).toBe(
-        989,
-        'Ready event should ' + 'carry the backoff delay as its second argument.'
+      expect(arg1, 'Ready event should ' + 'carry the backoff delay as its second argument.').toBe(
+        989
       );
     });
     backoff.backoff();
@@ -69,11 +68,11 @@ describe('Backoff', function () {
     let called = false;
     const err = new Error('Fail');
 
-    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
+    vi.spyOn(backoffStrategy, 'next').mockReturnValue(10);
 
     backoff.on('fail', (e) => {
       called = true;
-      expect(e).toBeDefined('Error should be passed');
+      expect(e, 'Error should be passed').toBeDefined();
     });
 
     backoff.failAfter(2);
@@ -85,13 +84,13 @@ describe('Backoff', function () {
     }
 
     // Failure should occur on the third call, and not before.
-    expect(called).toBeFalsy("Fail event shouldn't have been emitted.");
+    expect(called, "Fail event shouldn't have been emitted.").toBeFalsy();
     backoff.backoff(err);
-    expect(called).toBeTruthy('Fail event should have been emitted.');
+    expect(called, 'Fail event should have been emitted.').toBeTruthy();
   });
 
   it('calling backoff while a backoff is in progress should throw an error', function () {
-    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
+    vi.spyOn(backoffStrategy, 'next').mockReturnValue(10);
     backoff.backoff();
 
     // in progress
@@ -104,7 +103,7 @@ describe('Backoff', function () {
   });
 
   it('reset should cancel any backoff in progress', function () {
-    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
+    vi.spyOn(backoffStrategy, 'next').mockReturnValue(10);
     let called = false;
     backoff.on('ready', () => (called = true));
 
@@ -113,21 +112,21 @@ describe('Backoff', function () {
     backoff.reset();
     vi.advanceTimersByTime(100); // 'ready' should not be emitted.
 
-    expect(called).toBe(false, 'Reset should have aborted the backoff.');
+    expect(called, 'Reset should have aborted the backoff.').toBe(false);
   });
 
   it('reset should reset the backoff strategy', function () {
     const spy = vi.spyOn(backoffStrategy, 'reset');
     backoff.reset();
-    expect(spy.mock.calls.length).toBeGreaterThan(
-      0,
+    expect(
+      spy.mock.calls.length,
       'The backoff strategy should have been resetted.'
-    );
+    ).toBeGreaterThan(0);
   });
 
   it('backoff should be reset after fail', function () {
-    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
-    const backoffReset = vi.spyOn<BackoffStrategy>(backoffStrategy, 'reset');
+    vi.spyOn(backoffStrategy, 'next').mockReturnValue(10);
+    const backoffReset = vi.spyOn(backoffStrategy, 'reset');
 
     backoff.failAfter(1);
 
@@ -139,7 +138,7 @@ describe('Backoff', function () {
   });
 
   it('the backoff number should increase from 0 to N - 1', function () {
-    vi.spyOn<BackoffStrategy>(backoffStrategy, 'next').mockReturnValue(10);
+    vi.spyOn(backoffStrategy, 'next').mockReturnValue(10);
     const actualNumbers: number[] = [];
 
     backoff.on('backoff', (arg0) => {
@@ -153,9 +152,8 @@ describe('Backoff', function () {
       vi.advanceTimersByTime(10);
     }
 
-    expect(expectedNumbers).toEqual(
-      actualNumbers,
-      'Backoff number should increase from 0 to N - 1.'
+    expect(expectedNumbers, 'Backoff number should increase from 0 to N - 1.').toEqual(
+      actualNumbers
     );
   });
 
