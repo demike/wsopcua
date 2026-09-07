@@ -6,7 +6,10 @@ https://github.com/typescript-eslint/tslint-to-eslint-config/blob/master/docs/FA
 Happy linting! 💖
 */
 module.exports = {
-  ignorePatterns: ['**/generated/**/*.ts', '**/*.d.ts', '**/*.js'],
+  // src/schema_parser is a separate package with its own tsconfig, build and
+  // eslintConfig. It is not part of tsconfig.spec.json, so the type-aware rules
+  // below cannot resolve it and every file reported a parsing error.
+  ignorePatterns: ['**/generated/**/*.ts', '**/*.d.ts', '**/*.js', 'src/schema_parser/**/*.ts'],
   env: {
     browser: true,
     es6: true,

@@ -15,7 +15,9 @@ function make_packet(packet_length: number) {
 
 const do_debug = false;
 
-function compute_fake_signature(section_to_sign: ArrayBuffer): Promise<ArrayBuffer> {
+function compute_fake_signature(
+  section_to_sign: ArrayBufferLike | ArrayBufferView
+): Promise<ArrayBuffer> {
   const signature = new Uint8Array(4);
   for (let i = 0; i < signature.length; i++) {
     signature[i] = 0xcc;
@@ -40,18 +42,18 @@ function write_fake_sequence_header(this: ChunkManager, block: DataView) {
   }
 }
 
-function fake_encrypt_block(this: ChunkManager, block: ArrayBuffer): ArrayBuffer {
+function fake_encrypt_block(this: ChunkManager, block: Uint8Array): Uint8Array {
   assert(this.plainBlockSize + 2 === this.cipherBlockSize);
   assert(this.plainBlockSize === block.byteLength);
 
   const encrypted_block = new Uint8Array(block.byteLength + 2);
   encrypted_block[0] = 0xde;
-  encrypted_block.set(new Uint8Array(block), 1);
+  encrypted_block.set(block, 1);
   encrypted_block[block.byteLength + 1] = 0xdf;
-  return encrypted_block.buffer;
+  return encrypted_block;
 }
 
-function fake_encrypt_buffer(this: ChunkManager, buffer: ArrayBuffer) {
+function fake_encrypt_buffer(this: ChunkManager, buffer: Uint8Array) {
   const nbBlocks = Math.ceil(buffer.byteLength / this.plainBlockSize);
 
   const outputBuffer = new Uint8Array(nbBlocks * this.cipherBlockSize);
@@ -59,11 +61,11 @@ function fake_encrypt_buffer(this: ChunkManager, buffer: ArrayBuffer) {
   for (let i = 0; i < nbBlocks; i++) {
     const currentBlock = buffer.slice(this.plainBlockSize * i, this.plainBlockSize * (i + 1));
 
-    const encrypted_chunk: ArrayBuffer = fake_encrypt_block.call(this, currentBlock);
+    const encrypted_chunk: Uint8Array = fake_encrypt_block.call(this, currentBlock);
 
     assert(encrypted_chunk.byteLength === this.cipherBlockSize);
 
-    outputBuffer.set(new Uint8Array(encrypted_chunk), i * this.cipherBlockSize);
+    outputBuffer.set(encrypted_chunk, i * this.cipherBlockSize);
   }
   return Promise.resolve(outputBuffer);
 }
@@ -104,7 +106,7 @@ describe('Chunk manager - no header - no signature - no encryption', function ()
     expect(chunkManager.maxBodySize).toEqual(48);
 
     let chunk_counter = 0;
-    chunkManager.on('chunk', function (chunk: ArrayBuffer) {
+    chunkManager.on('chunk', function (chunk: Uint8Array) {
       if (chunk_counter < 2) {
         // all packets shall be 48 byte long, except last
         expect(chunk.byteLength).toEqual(48);
@@ -136,7 +138,7 @@ describe('Chunk manager - no header - no signature - no encryption', function ()
     expect(chunkManager.maxBodySize).toEqual(48);
 
     let chunk_counter = 0;
-    chunkManager.on('chunk', (chunk: ArrayBuffer) => {
+    chunkManager.on('chunk', (chunk: Uint8Array) => {
       // console.log(" chunk "+ chunk_counter + " " + chunk.toString("hex"));
       if (chunk_counter < 2) {
         // all packets shall be 48 byte long, except last
@@ -174,7 +176,7 @@ describe('Chunk manager - no header - no signature - no encryption', function ()
     expect(chunkManager.maxBodySize).toEqual(48);
 
     let chunk_counter = 0;
-    chunkManager.on('chunk', (chunk: ArrayBuffer) => {
+    chunkManager.on('chunk', (chunk: Uint8Array) => {
       // console.log(" chunk "+ chunk_counter + " " + chunk.toString("hex"));
       if (chunk_counter < 2) {
         // all packets shall be 48 byte long, except last
@@ -271,19 +273,19 @@ describe('Chunk Manager (chunk size 32 bytes, sequenceHeaderSize: 8 bytes)\n', f
     expect(chunkManager.maxBodySize).toEqual(24);
   });
 
-  it('should transform a 32 bytes message into a chunk of 32 bytes and 16 bytes', function (done) {
+  it('should transform a 32 bytes message into a chunk of 32 bytes and 16 bytes', async function () {
     // block 1 : [ 0  +  8 +  24 ] = 32
     // block 2 : [ 0  +  8 +   8 ] = 16
     //                      ------
     //                        32
-    perform_test(chunkManager, 32, [32, 16], done);
+    await perform_test(chunkManager, 32, [32, 16]);
   });
-  it('should transform a 33 bytes message into a chunk of 32 bytes and 17 bytes', function (done) {
+  it('should transform a 33 bytes message into a chunk of 32 bytes and 17 bytes', async function () {
     // block 1 : [ 0  +  8 +  24 ] = 32
     // block 2 : [ 0  +  8 +   9 ] = 17
     //                      ------
     //                        33
-    perform_test(chunkManager, 33, [32, 17], done);
+    await perform_test(chunkManager, 33, [32, 17]);
   });
 });
 describe('Chunk Manager (chunk size 32 bytes, sequenceHeaderSize: 8 bytes ,signatureLength: 4 )\n', function () {
@@ -305,20 +307,20 @@ describe('Chunk Manager (chunk size 32 bytes, sequenceHeaderSize: 8 bytes ,signa
     expect(chunkManager.maxBodySize).toEqual(20);
   });
 
-  it('should transform a 32 bytes message into a chunk of 32 bytes and 24 bytes', function (done) {
+  it('should transform a 32 bytes message into a chunk of 32 bytes and 24 bytes', async function () {
     // C1 = [ 8 + 20 + 4] = 32
     // C2 = [ 8 + 12 + 4] = 24
     //           ----
     //            32
-    perform_test(chunkManager, 32, [32, 24], done);
+    await perform_test(chunkManager, 32, [32, 24]);
   });
 
-  it('should transform a 33 bytes message into a chunk of 32 bytes and 25 bytes', function (done) {
+  it('should transform a 33 bytes message into a chunk of 32 bytes and 25 bytes', async function () {
     // C1 = [ 8 + 20 + 4] = 32
     // C2 = [ 8 + 13 + 4] = 25
     //           ----
     //            33
-    perform_test(chunkManager, 33, [32, 25], done);
+    await perform_test(chunkManager, 33, [32, 25]);
   });
 });
 
@@ -347,36 +349,36 @@ describe('Chunk Manager Padding (chunk size 32 bytes, plainBlockSize 8 bytes ,ci
     expect(chunkManager.signBufferFunc).toEqual(compute_fake_signature);
   });
 
-  it('should transform a  1 bytes message into a single 12 bytes chunk', function (done) {
+  it('should transform a  1 bytes message into a single 12 bytes chunk', async function () {
     //
     // +-------+---------------+---------------+-------------+-------+
     // |Header |SequenceHeader | data          | paddingByte | sign  |
     // +-------+---------------+---------------+-------------+-------+
     // |   4   |   2           |  1            | 1 +  0      |  4    |=> 4 +  ( 2+ 1 + (1 + 0) + 4 ) = 4 + 8
     // +-------+---------------+---------------+-------------+-------+
-    perform_test(chunkManager, 1, [12], done);
+    await perform_test(chunkManager, 1, [12]);
   });
 
-  it('should transform a  2 bytes message into a single 20 bytes chunk', function (done) {
+  it('should transform a  2 bytes message into a single 20 bytes chunk', async function () {
     // +-------+---------------+---------------+-------------+-------+
     // |Header |SequenceHeader | data          | paddingByte | sign  |
     // +-------+---------------+---------------+-------------+-------+
     // |   4   |   2           |  2            | 1 + 7       |  4    | => 4 +  ( 2+ 2 + (1 + 7) + 4 ) = 4 + 16
     // +-------+---------------+---------------+-------------+-------+
-    perform_test(chunkManager, 2, [20], done);
+    await perform_test(chunkManager, 2, [20]);
   });
 
-  it('should transform a 10 bytes message into a single 28 bytes chunk', function (done) {
+  it('should transform a 10 bytes message into a single 28 bytes chunk', async function () {
     // +-------+---------------+---------------+-------------+-------+
     // |Header |SequenceHeader | data          | paddingByte | sign  |
     // +-------+---------------+---------------+-------------+-------+
     // |   4   |   2           |  10            | 1 + 7       |  4    |
     // +-------+---------------+---------------+-------------+-------+
     //           ( 2 + 4 + 2 + 1+[p=7] ) % 8 = 0 !
-    perform_test(chunkManager, 10, [28], done);
+    await perform_test(chunkManager, 10, [28]);
   });
 
-  it('should transform a 32 bytes message into two 28 bytes chunks', function (done) {
+  it('should transform a 32 bytes message into two 28 bytes chunks', async function () {
     //
     // 1234567890123456890123456789012
     //       12345678901234567
@@ -390,10 +392,10 @@ describe('Chunk Manager Padding (chunk size 32 bytes, plainBlockSize 8 bytes ,ci
     // |   4   |   2           |  15           | 1 + 2       |  4    | => 4 +  ( 2+ 15 + 1 + 2 + 4)  = 28
     // +-------+---------------+---------------+-------------+-------+
     //                            32
-    perform_test(chunkManager, 32, [28, 28], done);
+    await perform_test(chunkManager, 32, [28, 28]);
   });
 
-  it('should transform a 64 bytes message into four 28 bytes chunks ', function (done) {
+  it('should transform a 64 bytes message into four 28 bytes chunks ', async function () {
     // +-------+---------------+---------------+-------------+-------+
     // |Header |SequenceHeader | data          | paddingByte | sign  |
     // +-------+---------------+---------------+-------------+-------+
@@ -406,28 +408,28 @@ describe('Chunk Manager Padding (chunk size 32 bytes, plainBlockSize 8 bytes ,ci
     // |   4   |   2           |  13           | 1 + 0       |  4    | => 4 +  ( 2+ 15 + 1 + 2 + 4)  = 28
     // +-------+---------------+---------------+-------------+-------+
     //                            64
-    perform_test(chunkManager, 64, [28, 28, 28, 28], done);
+    await perform_test(chunkManager, 64, [28, 28, 28, 28]);
   });
 
-  it('should transform a 16 bytes message into a single chunk ', function (done) {
+  it('should transform a 16 bytes message into a single chunk ', async function () {
     // +-------+---------------+---------------+-------------+-------+
     // |Header |SequenceHeader | data          | paddingByte | sign  |
     // +-------+---------------+---------------+-------------+-------+
     // |   4   |   2           |  16           | 1 + 1       |  4    | => 4 +  ( 2+ 16 + 1 + 1 + 4 ) = 4 + 24 = 28
     // +-------+---------------+---------------+-------------+-------+                (%8=0!)
-    perform_test(chunkManager, 16, [28], done);
+    await perform_test(chunkManager, 16, [28]);
   });
 
-  it('should transform a 17 bytes message into a single chunk ', function (done) {
+  it('should transform a 17 bytes message into a single chunk ', async function () {
     // +-------+---------------+---------------+-------------+-------+
     // |Header |SequenceHeader | data          | paddingByte | sign  |
     // +-------+---------------+---------------+-------------+-------+
     // |   4   |   2           |  17           | 1 + 0       |  4    | => 4 +  ( 2+ 17 + 1 + 0 + 4 ) = 4 + 24 = 28
     // +-------+---------------+---------------+-------------+-------+                (%8=0!)
-    perform_test(chunkManager, 17, [28], done);
+    await perform_test(chunkManager, 17, [28]);
   });
 
-  it('should transform a 35 bytes message into a  chunk of 32 bytes followed by a chunk of 8 bytes', function (done) {
+  it('should transform a 35 bytes message into a  chunk of 32 bytes followed by a chunk of 8 bytes', async function () {
     // +-------+---------------+---------------+-------------+-------+
     // |Header |SequenceHeader | data          | paddingByte | sign  |
     // +-------+---------------+---------------+-------------+-------+
@@ -437,7 +439,7 @@ describe('Chunk Manager Padding (chunk size 32 bytes, plainBlockSize 8 bytes ,ci
     // +-------+---------------+---------------+-------------+-------+                (%8=0!)
     // |   4   |   2           |  1            | 1 +  0      |  4    |=> 4 +  ( 2+ 1 + (1 + 0) + 4 ) = 4 + 8  = 12
     // +-------+---------------+---------------+-------------+-------+
-    perform_test(chunkManager, 35, [28, 28, 12], done);
+    await perform_test(chunkManager, 35, [28, 28, 12]);
   });
 });
 
@@ -464,7 +466,7 @@ describe('Chunk Manager Padding (chunk size 32 bytes, plainBlockSize 6 bytes ,ci
     expect(chunkManager.chunkSize).toEqual(64);
     expect(chunkManager.maxBodySize).toEqual(29);
   });
-  it('should transform a 1 byte message into a single chunk', function (done) {
+  it('should transform a 1 byte message into a single chunk', async function () {
     // +-------+---------------+---------------+-------------+-------+
     // |Header |SequenceHeader | data          | paddingByte | sign  |
     // +-------+---------------+---------------+-------------+-------+
@@ -478,31 +480,31 @@ describe('Chunk Manager Padding (chunk size 32 bytes, plainBlockSize 6 bytes ,ci
       // 0102030405060708091011121314151617181920212223242526272829303132
       'aaaaaaaaaaaaaaaaDEbbbbbbbbbbbbDFDEbbbb00040404DFDE0404ccccccccDF',
     ];
-    perform_test(chunkManager, 1, expected, done);
+    await perform_test(chunkManager, 1, expected);
   });
-  it('should transform a 2 byte message into a single chunk', function (done) {
+  it('should transform a 2 byte message into a single chunk', async function () {
     const expected = ['aaaaaaaaaaaaaaaaDEbbbbbbbbbbbbDFDEbbbb00010303DFDE0303ccccccccDF'];
-    perform_test(chunkManager, 2, expected, done);
+    await perform_test(chunkManager, 2, expected);
   });
-  it('should transform a 3 byte message into a single chunk', function (done) {
+  it('should transform a 3 byte message into a single chunk', async function () {
     const expected = ['aaaaaaaaaaaaaaaaDEbbbbbbbbbbbbDFDEbbbb00010202DFDE0202ccccccccDF'];
-    perform_test(chunkManager, 3, expected, done);
+    await perform_test(chunkManager, 3, expected);
   });
-  it('should transform a 4 byte message into a single chunk', function (done) {
+  it('should transform a 4 byte message into a single chunk', async function () {
     const expected = ['aaaaaaaaaaaaaaaaDEbbbbbbbbbbbbDFDEbbbb00010203DFDE0101ccccccccDF'];
-    perform_test(chunkManager, 4, expected, done);
+    await perform_test(chunkManager, 4, expected);
   });
-  it('should transform a 5 byte message into a single chunk', function (done) {
+  it('should transform a 5 byte message into a single chunk', async function () {
     const expected = ['aaaaaaaaaaaaaaaaDEbbbbbbbbbbbbDFDEbbbb00010203DFDE0400ccccccccDF'];
-    perform_test(chunkManager, 5, expected, done);
+    await perform_test(chunkManager, 5, expected);
   });
-  it('should transform a 6 byte message into a single chunk', function (done) {
+  it('should transform a 6 byte message into a single chunk', async function () {
     const expected = [
       'aaaaaaaaaaaaaaaaDEbbbbbbbbbbbbDFDEbbbb00010203DFDE040505050505DFDE0505ccccccccDF',
     ];
-    perform_test(chunkManager, 6, expected, done);
+    await perform_test(chunkManager, 6, expected);
   });
-  it('should transform a 29 byte message into a single chunk', function (done) {
+  it('should transform a 29 byte message into a single chunk', async function () {
     const expected = [
       'aaaaaaaaaaaaaaaa' +
         'DEbbbbbbbbbbbbDF' +
@@ -513,10 +515,10 @@ describe('Chunk Manager Padding (chunk size 32 bytes, plainBlockSize 6 bytes ,ci
         'DE161718191A1BDF' +
         'DE1C00ccccccccDF',
     ];
-    perform_test(chunkManager, 29, expected, done);
+    await perform_test(chunkManager, 29, expected);
   });
 
-  it('should transform a 30 byte message into a single chunk', function (done) {
+  it('should transform a 30 byte message into a single chunk', async function () {
     const expected = [
       'aaaaaaaaaaaaaaaa' +
         'DEbbbbbbbbbbbbDF' +
@@ -528,6 +530,6 @@ describe('Chunk Manager Padding (chunk size 32 bytes, plainBlockSize 6 bytes ,ci
         'DE1C00ccccccccDF',
       'aaaaaaaaaaaaaaaa' + 'DEbbbbbbbbbbbbDF' + 'DEbbbb1d040404DF' + 'DE0404ccccccccDF',
     ];
-    perform_test(chunkManager, 30, expected, done);
+    await perform_test(chunkManager, 30, expected);
   });
 });

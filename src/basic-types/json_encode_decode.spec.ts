@@ -259,12 +259,14 @@ describe('encoding and decoding arrays', function () {
   });
 
   it('should encode and decode an array of ByteString', function () {
-    function json_encode_array_bytestring(arr: Uint8Array[]) {
-      return ec.jsonEncodeArray(arr, ec.jsonEncodeByteString);
+    // the casts document what this test is here to prove: the codec round-trips
+    // null/undefined entries, which its own signatures do not admit
+    function json_encode_array_bytestring(arr: (Uint8Array | null)[]) {
+      return ec.jsonEncodeArray(arr as Uint8Array[], ec.jsonEncodeByteString);
     }
 
-    function json_decode_array_bytestring(arr: string[]) {
-      return ec.jsonDecodeArray(arr, ec.jsonDecodeByteString);
+    function json_decode_array_bytestring(arr: (string | undefined)[] | undefined) {
+      return ec.jsonDecodeArray((arr ?? []) as string[], ec.jsonDecodeByteString);
     }
 
     const data: (Uint8Array | null)[] = [

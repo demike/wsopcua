@@ -27,7 +27,7 @@ function writeFakeSequenceHeader(this: ChunkManager, block: DataView) {
   }
 }
 
-function fakeSignature(_section: ArrayBuffer): Promise<ArrayBuffer> {
+function fakeSignature(_section: ArrayBufferLike | ArrayBufferView): Promise<ArrayBuffer> {
   return Promise.resolve(new Uint8Array(4).fill(0xcc).buffer);
 }
 
@@ -39,7 +39,10 @@ function makePayload(byteLength: number): ArrayBuffer {
   return buf.buffer;
 }
 
-async function chunkOnce(payload: ArrayBuffer, options: ConstructorParameters<typeof ChunkManager>[0]) {
+async function chunkOnce(
+  payload: ArrayBuffer,
+  options: ConstructorParameters<typeof ChunkManager>[0]
+) {
   const cm = new ChunkManager(options);
   // Drain emitted chunks so back-pressure/emit paths are exercised realistically.
   cm.on('chunk', () => {

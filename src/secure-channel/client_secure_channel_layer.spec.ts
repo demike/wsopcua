@@ -20,7 +20,7 @@ function fakeConnectedChannel(secureChannel: ClientSecureChannelLayer) {
   vi.spyOn(secureChannel, 'isValid').mockReturnValue(true);
   (secureChannel as any)._transport = { name: 'fake transport' };
   // _sendSecureOpcUARequest is async: the caller attaches a rejection handler
-  vi.spyOn(secureChannel as never, '_sendSecureOpcUARequest').mockImplementation(() =>
+  vi.spyOn(secureChannel as any, '_sendSecureOpcUARequest').mockImplementation(() =>
     Promise.resolve()
   );
 }
@@ -53,7 +53,7 @@ describe('ClientSecureChannelLayer', function () {
     secureChannel.on('timed_out_request', timedOutRequest);
 
     vi.spyOn(secureChannel, 'isValid').mockReturnValue(true);
-    vi.spyOn(secureChannel as never, '_internal_perform_transaction').mockImplementation(() => {});
+    vi.spyOn(secureChannel as any, '_internal_perform_transaction').mockImplementation(() => {});
 
     (secureChannel as any)._performMessageTransaction('MSG', requestMessage, callback);
 

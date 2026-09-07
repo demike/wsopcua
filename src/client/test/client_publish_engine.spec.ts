@@ -35,8 +35,8 @@ function makeSubscription(
 describe('Testing the client publish engine', function () {
   beforeEach(function () {
     // mock the setImmedate polyfill
-    vi.spyOn(<any>window, 'setImmediate').mockImplementation((callback: () => void) => {
-      window.setTimeout(callback, 0);
+    vi.spyOn(<any>window, 'setImmediate').mockImplementation((...args: unknown[]) => {
+      window.setTimeout(args[0] as () => void, 0);
     });
 
     vi.useFakeTimers();
@@ -79,7 +79,7 @@ describe('Testing the client publish engine', function () {
     const fakeSession = new ClientSession(null as any);
     const publish_spy = vi.spyOn(fakeSession, 'publish');
     publish_spy.mockImplementation(
-      (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
+      (request: Partial<subscription_service.PublishRequest>, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
         expect(typeof callback === 'function').toBeTruthy();
         // let simulate a server sending a PublishResponse for subscription:1
@@ -118,7 +118,7 @@ describe('Testing the client publish engine', function () {
     const fakeSession = new ClientSession(null as any);
     const publish_spy = vi.spyOn(fakeSession, 'publish');
     publish_spy.mockImplementation(
-      (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
+      (request: Partial<subscription_service.PublishRequest>, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
         expect(typeof callback === 'function').toBeTruthy();
         // let simulate a server sending a PublishResponse for subscription:1
@@ -195,12 +195,12 @@ describe('Testing the client publish engine', function () {
     const fakeSession = new ClientSession(null as any);
     const publish_spy = vi.spyOn(fakeSession, 'publish');
     publish_spy.mockImplementation(
-      (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
+      (request: Partial<subscription_service.PublishRequest>, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
         expect(typeof callback === 'function').toBeTruthy();
 
         if (count < 4) {
-          requests.push(request);
+          requests.push(request as subscription_service.PublishRequest);
           callback(null, responses[count]);
           count += 1;
         }
@@ -268,10 +268,10 @@ describe('Testing the client publish engine', function () {
     const fakeSession = new ClientSession(null as any);
     const publish_spy = vi.spyOn(fakeSession, 'publish');
     publish_spy.mockImplementation(
-      (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
+      (request: Partial<subscription_service.PublishRequest>, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
         expect(typeof callback === 'function').toBeTruthy();
-        requests.push(request);
+        requests.push(request as subscription_service.PublishRequest);
         // let simulate a server sending a PublishResponse for subscription:1
         // after a short delay of 150 milliseconds
         publishQueue.push(callback);
@@ -333,7 +333,7 @@ describe('Testing the client publish engine', function () {
     const fakeSession = new ClientSession(null as any);
     const publish_spy = vi.spyOn(fakeSession, 'publish');
     publish_spy.mockImplementation(
-      (request: subscription_service.PublishRequest, callback: PublishRequestCallback) => {
+      (request: Partial<subscription_service.PublishRequest>, callback: PublishRequestCallback) => {
         expect(request instanceof subscription_service.PublishRequest).toBeTruthy();
         expect(typeof callback === 'function').toBeTruthy();
         // let simulate a server sending a PublishResponse for subscription:1

@@ -31,7 +31,7 @@ function encode_decode_round_trip_test(
 
   if (callback_buffer) {
     assert(obj.encodingDefaultBinary);
-    callback_buffer(stream.view.buffer, obj.encodingDefaultBinary);
+    callback_buffer(stream.view.buffer as ArrayBuffer, obj.encodingDefaultBinary);
   }
 
   stream.rewind();
