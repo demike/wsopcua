@@ -12,6 +12,29 @@ import { generateAttributeIds } from './generate_attribute_ids';
 const pkg = require('../package.json');
 const appName = 'wsopcua-schema-gen'; // Object.keys(pkg.bin)[0];
 
+/**
+ * The version of the package the user actually installed.
+ *
+ * `pkg` above is inlined by webpack at build time, so it always carries this
+ * sub-package's own manifest (0.1.0-00) rather than the published
+ * @wsopcua/wsopcua version. In the published layout the bundle sits in bin/
+ * right next to the real manifest, so read that at runtime instead, and fall
+ * back to the inlined value when it is not there (a local dist build, say).
+ *
+ * The description deliberately stays on `pkg`: the generated dist manifest has
+ * no description field, and 'opcua schema parser' describes this tool anyway.
+ */
+function resolveInstalledVersion(): string {
+  try {
+    const manifest = JSON.parse(
+      fs.readFileSync(path.join(__dirname, '../package.json')).toString()
+    );
+    return manifest.version || pkg.version;
+  } catch {
+    return pkg.version;
+  }
+}
+
 const datafolder = path.join(__dirname, '../schemas');
 const defaultConfigFilePath = path.join(__dirname, '../schemas/schema_parser_config.json');
 
@@ -23,7 +46,7 @@ program
   .option('-c --config <path>', 'set path to configuration file')
   .option('--genids', 'generate node ids')
   .option('--gencodes', 'generate status codes')
-  .version(pkg.verison)
+  .version(resolveInstalledVersion())
   .parse(process.argv);
 
 if (program.gencodes) {
@@ -36,7 +59,7 @@ if (program.genids) {
 
 // parse the default configuration file
 const importConfig: SchemaParserConfig = JSON.parse(
-  fs.readFileSync(defaultConfigFilePath).toString(),
+  fs.readFileSync(defaultConfigFilePath).toString()
 );
 importConfig.projects[0].projectName = PathGenUtil.PROJECT_NAME;
 for (const projectImport of importConfig.projects) {
