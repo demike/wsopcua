@@ -49,7 +49,7 @@ function compare(objReloaded: any, obj: any) {
         //        Int32Array [0, 1, 2, 3] ends with [0, 1, 2, 3]
         const str1 = JSON.stringify(objReloaded[p]);
         const str2 = JSON.stringify(obj[p]);
-        expect(str1.endsWith(str2)).toBeTruthy(str1 + '  should be  ' + str2);
+        expect(str1.endsWith(str2), str1 + '  should be  ' + str2).toBeTruthy();
       }
     } catch (err) {
       displayError(p, obj[p], objReloaded[p]);
@@ -107,7 +107,7 @@ export function encode_decode_round_trip_test(
 
   obj.encode(stream);
 
-  callback_buffer(stream.view.buffer, (obj as any).encodingDefaultBinary, options);
+  callback_buffer(stream.view.buffer as ArrayBuffer, (obj as any).encodingDefaultBinary, options);
 
   stream.rewind();
 

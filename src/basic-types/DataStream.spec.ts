@@ -168,7 +168,12 @@ describe('Testing DataStream#writeArrayBuffer /  DataStream#readArrayBuffer', fu
     expect(largeArray.length).toEqual(n);
     expect(largeArray.byteLength).toEqual(n * 8);
 
-    binStream_writeArrayBuffer.call(binStream, largeArray.buffer, 0, largeArray.byteLength);
+    binStream_writeArrayBuffer.call(
+      binStream,
+      largeArray.buffer as ArrayBuffer,
+      0,
+      largeArray.byteLength
+    );
     // xx console.log(binStream._buffer.slice(0,100).toString("hex"));
 
     binStream.rewind();

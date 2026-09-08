@@ -15,7 +15,7 @@ function makeOptions(
     plainBlockSize: 0,
     sequenceHeaderSize: 0,
     signatureLength: 0,
-  } as SecureMessageChunkManagerOptions & ISymmetricAlgortihmSecurityHeader;
+  };
 }
 
 describe('MessageChunker', function () {
@@ -31,7 +31,7 @@ describe('MessageChunker', function () {
     await chunker.chunkSecureMessage(
       'MSG',
       makeOptions(1),
-      new GetEndpointsRequest({ endpointUrl: 'x'.repeat(2000) }) as any,
+      new GetEndpointsRequest({ endpointUrl: 'x'.repeat(2000) }),
       (chunk) => {
         events.push(chunk ? 'chunk' : 'end');
       }
@@ -61,7 +61,7 @@ describe('MessageChunker', function () {
       await chunker.chunkSecureMessage(
         'MSG',
         makeOptions(requestId),
-        new GetEndpointsRequest({ endpointUrl: 'x'.repeat(1000) }) as any,
+        new GetEndpointsRequest({ endpointUrl: 'x'.repeat(1000) }),
         (chunk) => {
           if (chunk) {
             readSequenceNumber(chunk);

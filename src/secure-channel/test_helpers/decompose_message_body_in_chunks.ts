@@ -20,7 +20,7 @@ export async function decompose_message_body_in_chunks(
 ) {
   assert(chunkSize > 24, 'expecting chunkSize');
   assert(msgType.length === 3, ' invalid msgType ' + msgType);
-  assert(messageBody instanceof Uint8Array && messageBody.length > 0, ' invalid buffer');
+  assert(messageBody.byteLength > 0, ' invalid buffer');
 
   const sequenceNumberGenerator = new SequenceNumberGenerator();
 
@@ -40,8 +40,8 @@ export async function decompose_message_body_in_chunks(
     null,
     sequenceNumberGenerator
   );
-  const chunks: ArrayBuffer[] = [];
-  msgChunkManager.on('chunk', (chunk: ArrayBuffer | null) => {
+  const chunks: Uint8Array[] = [];
+  msgChunkManager.on('chunk', (chunk: Uint8Array | null) => {
     if (chunk) {
       assert(chunk.byteLength > 0);
       chunks.push(chunk);

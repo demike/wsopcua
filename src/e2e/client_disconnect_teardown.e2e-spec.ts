@@ -38,12 +38,8 @@ function messageTypeOf(data: unknown): string {
     // the 'opcua+uajson' encoding has no binary message header
     return data.includes('CloseSecureChannelRequest') ? 'CLO' : 'JSON';
   }
-  const bytes = ArrayBuffer.isView(data as ArrayBufferView)
-    ? new Uint8Array(
-        (data as ArrayBufferView).buffer,
-        (data as ArrayBufferView).byteOffset,
-        (data as ArrayBufferView).byteLength
-      )
+  const bytes = ArrayBuffer.isView(data)
+    ? new Uint8Array(data.buffer, data.byteOffset, data.byteLength)
     : new Uint8Array(data as ArrayBuffer);
   return String.fromCharCode(bytes[0], bytes[1], bytes[2]);
 }

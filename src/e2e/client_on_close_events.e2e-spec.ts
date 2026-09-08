@@ -30,9 +30,10 @@ describeForEnv('testing Client-Server - Event', function () {
     await client.connectP(OPCUA_TEST_SERVER_URI);
 
     client.on('close', function (err) {
-      expect(err).toBeUndefined(
+      expect(
+        err,
         'No error shall be transmitted when client initiates the disconnection'
-      );
+      ).toBeUndefined();
       close_counter++;
     });
 

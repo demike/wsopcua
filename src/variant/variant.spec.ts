@@ -1684,15 +1684,15 @@ describe('testing sameVariant Performance', function () {
 
     for (let i = 0; i < variousVariants.length; i++) {
       if (i === index) {
-        expect(sameVariantFN(v1, variousVariants[i])).toEqual(
-          true,
+        expect(
+          sameVariantFN(v1, variousVariants[i]),
           _t(v1) + ' === ' + _t(variousVariants[i])
-        );
+        ).toEqual(true);
       } else {
-        expect(sameVariantFN(v1, variousVariants[i])).toEqual(
-          false,
+        expect(
+          sameVariantFN(v1, variousVariants[i]),
           'i=' + i + ' ' + index + ' ' + _t(v1) + ' !== ' + _t(variousVariants[i])
-        );
+        ).toEqual(false);
       }
     }
     expect(sameVariantFN(v1, variousVariants_clone[index])).toEqual(true);

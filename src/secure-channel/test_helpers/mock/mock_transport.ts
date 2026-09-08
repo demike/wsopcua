@@ -98,7 +98,8 @@ export class MockServerTransport extends EventEmitter<any> {
         console.log('%c ' + hexDump(data), 'color:blue;');
 
         // display_trace_from_this_projet_only();
-        analyseExtensionObject(data, 0, 0, {});
+        // slice() so the analysis is correct even for a view with a byteOffset
+        analyseExtensionObject(data.slice().buffer, 0, 0, {});
 
         this.emit('done');
       }

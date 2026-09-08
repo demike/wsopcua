@@ -208,9 +208,7 @@ describe('JHJ1 end-to-end testing of read and write operation on a Variable', fu
     );
   });
 
-  it.skip('#read test maxAge', function (done) {
-    done();
-  });
+  it.skip('#read test maxAge', function () {});
 
   describe('Performance of reading large array', function () {
     it('PERF - READ testing performance of large array', async () => {

@@ -1,4 +1,4 @@
-import { exploreCertificate } from '../crypto';
+import { CertificateExtension, exploreCertificate } from '../crypto';
 import { SelfSignedCertificateStore } from './certificate_store';
 
 describe('SelfSignedCertificateStore', () => {
@@ -8,11 +8,14 @@ describe('SelfSignedCertificateStore', () => {
     const store = new SelfSignedCertificateStore({
       spkiModulusLength: 1024,
       tbsCertificate: {
+        // Partial<TbsCertificate> is shallow, so `extensions` is typed as a
+        // complete CertificateExtension. Casting instead of supplying
+        // basicConstraints here keeps the store's own default under test.
         extensions: {
           subjectAltName: {
             uniformResourceIdentifier: ['urn:stale:value'],
           },
-        },
+        } as unknown as CertificateExtension,
       },
     });
 

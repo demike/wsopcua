@@ -15,7 +15,7 @@ describe('JSONMessageBuilder', function () {
       messageBuilder.on('error', function (err) {
         expect(err instanceof Error).toBeTruthy();
         expect(on_message_received).toBe(false);
-        expect(bad_packet).toBeTruthy(true);
+        expect(bad_packet).toBeTruthy();
         resolve();
       });
       messageBuilder.decodeResponse(bad_packet);
