@@ -35,7 +35,7 @@ Get started with wsopcua, learn the fundamentals and explore advanced examples.
 
 ### Prerequisites
 
-- Install [Node.js](www.nodejs.org) which includes [Node Package Manager](https://www.npmjs.com/)
+- Install [Node.js](https://nodejs.org/) which includes [Node Package Manager](https://www.npmjs.com/)
 
 - Install the wsopcua library
   ```
@@ -60,7 +60,7 @@ The following example is structured in multiple async steps
 8.  write a value [example 7](#writing-values)
 9.  close session [example 1](#connecting-to-a-server)
 10. disconnecting [example 1](#connecting-to-a-server)
-11. automatic disconnect on unload [example 8](#automatic-disconnection-on-client-unload)
+11. automatic disconnect on unload [example 8](#automatic-disconnect-on-client-unload)
 
 ### Connecting to a Server
 
@@ -508,15 +508,37 @@ by a web socket proxy ( tested with Unified Automation C++ SDK servers):
 
 ### Servers with WSS Support
 
-[Open62541]() supports the WSS transport.
+[Open62541](https://github.com/open62541/open62541) supports the WebSocket transport,
+but only in specific versions - check this before you pick a release:
 
-Take a look at this [Open62541 WS example](https://github.com/open62541/open62541/blob/master/examples/tutorial_server_variable.c)
-or [Open62541 WSS example](https://github.com/open62541/open62541/blob/master/examples/encryption/server_encryption.c) to enable the WebSocket transport.
+| open62541            | WebSocket support                                      |
+| -------------------- | ------------------------------------------------------ |
+| 1.3.x (up to 1.3.17) | yes - `UA_ENABLE_WEBSOCKET_SERVER`                     |
+| 1.4.0 - 1.5.x        | **no** - the transport was removed                     |
+| `master`             | yes again - `UA_ENABLE_LWS`, not yet part of a release |
 
-Hint:
+#### open62541 1.3.x
 
-> `UA_ENABLE_WEBSOCKET_SERVER` options has to be enabled in CMakeList.txt
-> It uses `libwebsockets`
+`UA_ENABLE_WEBSOCKET_SERVER` has to be enabled in `CMakeLists.txt`; it pulls in
+`libwebsockets`. There is no dedicated WebSocket example in 1.3.x, because the
+flag makes the ordinary server examples serve over WebSocket as well. So build
+any of them with the flag enabled, for instance
+[tutorial_server_variable.c](https://github.com/open62541/open62541/blob/v1.3.17/examples/tutorial_server_variable.c),
+or [server_encryption.c](https://github.com/open62541/open62541/blob/v1.3.17/examples/encryption/server_encryption.c)
+for WSS.
+
+The links are pinned to `v1.3.17` on purpose: on `master` the same paths show
+code from a version where `UA_ENABLE_WEBSOCKET_SERVER` no longer exists.
+
+#### open62541 master
+
+WebSocket has been reintroduced as a `libwebsockets` provider behind
+`UA_ENABLE_LWS`, with a dedicated example:
+[examples/lws/server_websocket.c](https://github.com/open62541/open62541/blob/master/examples/lws/server_websocket.c).
+At the time of writing this is not in any tagged release, so it means building
+from `master`.
+
+If you need a released server, use the WebSocket proxy described below instead.
 
 ### Using a WebSocket Proxy
 
