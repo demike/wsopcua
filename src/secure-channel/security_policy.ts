@@ -12,6 +12,7 @@ import {
   DerivedKeys,
   EccNistP256_Params,
   EccNistP384_Params,
+  computeEccChannelKeys,
   generateEccVerifyKeyFromDER,
   generatePublicKeyFromDER,
   generateVerifyKeyFromDER,
@@ -371,7 +372,8 @@ export async function computeDerivedKeys(
   // calculate derived keys
   if (cryptoFactory.eccCurve) {
     throw new Error(
-      `SecurityPolicy ${cryptoFactory.securityPolicy} is ECC: use computeEccChannelKeys() with the ECDH shared secret (Part 6 §6.8.1), not RSA P_SHA derivation`
+      `SecurityPolicy ${cryptoFactory.securityPolicy} is ECC: use computeEccChannelKeys() ` +
+        `with the ECDH shared secret (Part 6 §6.8.1), not RSA P_SHA derivation`
     );
   }
 
@@ -420,7 +422,12 @@ export async function computeEccDerivedKeys(
       `Invalid ECC nonce length for ${cryptoFactory.eccCurve}: expected ${params.nonceLength}`
     );
   }
-  const { computeEccChannelKeys } = await import('../crypto/ecc');
+  if (sharedSecret.byteLength !== params.coordLength) {
+    throw new Error(
+      `Invalid ECC shared secret length for ${cryptoFactory.eccCurve}: ` +
+        `expected ${params.coordLength} (x-coordinate), got ${sharedSecret.byteLength}`
+    );
+  }
   const { clientKeys, serverKeys } = await computeEccChannelKeys(
     clientNonce,
     serverNonce,
@@ -648,6 +655,10 @@ const _Aes256_Sha256_RsaPss: ICryptoFactory = {
  * - AsymmetricSignature ECDSA-SHA256, KeyDerivation HKDF-SHA256 (Part 6 §6.8.1)
  * - Ephemeral ECDH P-256, nonce = x||y (64 B), signature r||s (64 B)
  * - DerivedSignatureKey 32 B, EncryptionKey 16 B, IV 16 B
+ *
+ * SCOPE: crypto primitives only. OpenSecureChannel wiring (OPN encrypt/
+ * decrypt strategy, SecureChannel nonce handling) still assumes RSA and is a
+ * follow-up; see `computeEccChannelKeys()` / `computeEccDerivedKeys()`.
  */
 const _EccNistP256: ICryptoFactory = {
   securityPolicy: SecurityPolicy.EccNistP256,
@@ -658,7 +669,10 @@ const _EccNistP256: ICryptoFactory = {
   encryptingBlockSize: EccNistP256_Params.encryptingBlockSize,
   signatureLength: EccNistP256_Params.signatureLength,
 
-  // bits (matches Basic256Sha256 convention): fixed P-256 curve
+  // NOTE units are bits here (fixed P-256 curve), matching the
+  // Basic256Sha256/Aes* convention (2048/4096 bits). The legacy
+  // Basic128Rsa15/Basic256 factories use bytes (128/512) instead; no in-repo
+  // consumer compares across policies, but do not mix the two conventions.
   minimumAsymmetricKeyLength: 256,
   maximumAsymmetricKeyLength: 256,
 
@@ -687,6 +701,8 @@ const _EccNistP256: ICryptoFactory = {
  * - SymmetricSignature HMAC-SHA384, SymmetricEncryption AES-256-CBC
  * - AsymmetricSignature ECDSA-SHA384, KeyDerivation HKDF-SHA384
  * - Ephemeral ECDH P-384, nonce = x||y (96 B), signature r||s (96 B)
+ *
+ * SCOPE: crypto primitives only (see _EccNistP256 note).
  */
 const _EccNistP384: ICryptoFactory = {
   securityPolicy: SecurityPolicy.EccNistP384,
@@ -697,6 +713,7 @@ const _EccNistP384: ICryptoFactory = {
   encryptingBlockSize: EccNistP384_Params.encryptingBlockSize,
   signatureLength: EccNistP384_Params.signatureLength,
 
+  // NOTE units are bits (fixed P-384 curve); see _EccNistP256 note.
   minimumAsymmetricKeyLength: 384,
   maximumAsymmetricKeyLength: 384,
 

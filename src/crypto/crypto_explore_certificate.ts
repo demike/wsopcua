@@ -865,23 +865,15 @@ export function generatePublicKeyFromDER(
 
 export function generateVerifyKeyFromDER(
   der_certificate: Uint8Array,
-  hash: 'SHA-1' | 'SHA-256' | 'SHA-384',
-  algorithm: 'RSASSA-PKCS1-v1_5' | 'RSA-PSS' | 'ECDSA' = 'RSASSA-PKCS1-v1_5',
-  namedCurve?: 'P-256' | 'P-384'
+  hash: 'SHA-1' | 'SHA-256',
+  algorithm: 'RSASSA-PKCS1-v1_5' | 'RSA-PSS' = 'RSASSA-PKCS1-v1_5'
 ): PromiseLike<CryptoKey> {
-  const cachingKey = `_verifyKey_${algorithm}_${hash}_${namedCurve ?? ''}`;
+  const cachingKey = `_verifyKey_${algorithm}_${hash}`;
   if ((der_certificate as any)[cachingKey]) {
     return Promise.resolve((der_certificate as any)[cachingKey]);
   }
 
   const spki = getSPKIFromCertificate(der_certificate);
-
-  if (algorithm === 'ECDSA') {
-    return importEccVerifyKeyWithFallback(spki, hash, namedCurve).then((key) => {
-      (der_certificate as any)[cachingKey] = key;
-      return key;
-    });
-  }
 
   return crypto.subtle
     .importKey('spki', spki as any, { name: algorithm, hash }, true, ['verify'])
@@ -889,38 +881,6 @@ export function generateVerifyKeyFromDER(
       (der_certificate as any)[cachingKey] = key;
       return key;
     });
-}
-
-/**
- * Import an ECC (ECDSA) SPKI for verification. The certificate's named curve
- * is not parsed here; the caller policy curve is tried first, then the other
- * NIST curve, so a P-256 policy also accepts a P-384 cert gracefully only if
- * explicitly requested via fallback.
- */
-async function importEccVerifyKeyWithFallback(
-  spki: Uint8Array,
-  hash: 'SHA-1' | 'SHA-256' | 'SHA-384',
-  namedCurve?: 'P-256' | 'P-384'
-): Promise<CryptoKey> {
-  const curves: ('P-256' | 'P-384')[] =
-    namedCurve === 'P-384' ? ['P-384', 'P-256'] : ['P-256', 'P-384'];
-  let lastError: unknown = null;
-  for (const curve of curves) {
-    try {
-      return await crypto.subtle.importKey(
-        'spki',
-        spki as any,
-        { name: 'ECDSA', namedCurve: curve },
-        true,
-        ['verify']
-      );
-    } catch (err) {
-      lastError = err;
-    }
-  }
-  throw lastError instanceof Error
-    ? lastError
-    : new Error('Cannot import ECC SPKI as ECDSA P-256/P-384');
 }
 
 /**
@@ -988,8 +948,16 @@ export function generateSignKeyFromDER(
     return Promise.resolve((der_certificate as any)[cachingKey]);
   }
 
+  // NOTE: portable SubtleCrypto lookup (no `window`): this module also runs in
+  // pure Node where `window` is undefined. See `subtle()` in `./ecc`.
+  const subtle: SubtleCrypto =
+    (globalThis as any)?.crypto?.subtle ?? (typeof crypto !== 'undefined' ? crypto.subtle : undefined);
+  if (!subtle) {
+    return Promise.reject(new Error('WebCrypto SubtleCrypto is not available'));
+  }
+
   if (algorithm === 'ECDSA') {
-    return window.crypto.subtle
+    return subtle
       .importKey(
         'pkcs8',
         der_certificate as any,
@@ -1006,7 +974,7 @@ export function generateSignKeyFromDER(
       });
   }
 
-  return window.crypto.subtle
+  return subtle
     .importKey(
       'pkcs8',
       der_certificate as any,

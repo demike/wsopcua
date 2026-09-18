@@ -216,4 +216,43 @@ describe('SecurityPolicy ECC (1.05.07 EccNistP256 / EccNistP384)', () => {
       computeEccDerivedKeys(factory, new Uint8Array(10), new Uint8Array(64), new Uint8Array(32))
     ).rejects.toThrow(/Invalid ECC nonce length/);
   });
+
+  it('computeEccDerivedKeys validates shared secret length (x-coordinate)', async () => {
+    const p256 = getCryptoFactory(SecurityPolicy.EccNistP256)!;
+    await expect(
+      computeEccDerivedKeys(
+        p256,
+        new Uint8Array(64),
+        new Uint8Array(64),
+        new Uint8Array(48)
+      )
+    ).rejects.toThrow(/Invalid ECC shared secret length.*expected 32/);
+    const p384 = getCryptoFactory(SecurityPolicy.EccNistP384)!;
+    await expect(
+      computeEccDerivedKeys(
+        p384,
+        new Uint8Array(96),
+        new Uint8Array(96),
+        new Uint8Array(32)
+      )
+    ).rejects.toThrow(/Invalid ECC shared secret length.*expected 48/);
+  });
+
+  it.each([
+    { policy: SecurityPolicy.EccNistP256, certHex: P256_CERT_HEX, keyHex: P256_KEY_HEX, hash: 'SHA-256' as const },
+    { policy: SecurityPolicy.EccNistP384, certHex: P384_CERT_HEX, keyHex: P384_KEY_HEX, hash: 'SHA-384' as const },
+  ])('certificate store infers ECDSA signing key for $policy', async ({ certHex, keyHex, hash }) => {
+    // PrivateKeyImpl.getSignKey() without an explicit algorithm URI must detect
+    // the EC PKCS#8 AlgorithmIdentifier (not fall back to RSA import).
+    const { PEMDERCertificateStore } = await import('../common/certificate_store');
+    const certDer = hex(certHex);
+    const keyDer = hex(keyHex);
+    const store = new PEMDERCertificateStore(
+      certDer.buffer.slice(certDer.byteOffset, certDer.byteOffset + certDer.byteLength),
+      keyDer.buffer.slice(keyDer.byteOffset, keyDer.byteOffset + keyDer.byteLength)
+    );
+    const signKey = await store.getPrivateKey().getSignKey(hash);
+    expect(signKey).toBeInstanceOf(CryptoKey);
+    expect(signKey.algorithm.name).toBe('ECDSA');
+  });
 });

@@ -1,4 +1,4 @@
-import { AlgorithmIdentifier, readTag } from '../crypto/asn1';
+import { AlgorithmIdentifier, TagType, _readObjectIdentifier, _readStruct, readTag } from '../crypto/asn1';
 import {
   CertificateCoercionOptions,
   coerceCertificateInfo,
@@ -17,8 +17,36 @@ import {
   writeCertificate,
 } from '../crypto';
 
-/** Detect an EC (SEC1/PKCS#8) private key by its ecPublicKey OID encoding. */
+/**
+ * Detect an EC PKCS#8 private key via its AlgorithmIdentifier OID
+ * (1.2.840.10045.2.1 = ecPublicKey). Falls back to a raw OID byte-scan when
+ * the DER does not parse as PKCS#8 (e.g. SEC1), in which case it returns false
+ * unless the ecPublicKey OID bytes are present.
+ */
 function isEcPrivateKeyDER(der: Uint8Array): boolean {
+  try {
+    // PKCS#8 PrivateKeyInfo ::= SEQUENCE { version INTEGER, algorithm
+    // AlgorithmIdentifier, privateKey OCTET STRING [, attributes] }
+    const outer = readTag(der, 0);
+    if (outer.tag !== TagType.SEQUENCE) {
+      return hasEcPublicKeyOidBytes(der);
+    }
+    const parts = _readStruct(der, outer);
+    if (parts.length < 3 || parts[1].tag !== TagType.SEQUENCE) {
+      return hasEcPublicKeyOidBytes(der);
+    }
+    const algParts = _readStruct(der, parts[1]);
+    if (algParts.length < 1 || algParts[0].tag !== TagType.OBJECT_IDENTIFIER) {
+      return hasEcPublicKeyOidBytes(der);
+    }
+    const { oid, name } = _readObjectIdentifier(der, algParts[0]);
+    return oid === '1.2.840.10045.2.1' || name === 'ecPublicKey';
+  } catch {
+    return hasEcPublicKeyOidBytes(der);
+  }
+}
+
+function hasEcPublicKeyOidBytes(der: Uint8Array): boolean {
   // OID 1.2.840.10045.2.1 (ecPublicKey) DER encoding
   const marker = [0x06, 0x07, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x02, 0x01];
   outer: for (let i = 0; i + marker.length <= der.byteLength; i++) {

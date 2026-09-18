@@ -10,6 +10,11 @@
  * Curves intentionally limited to NIST P-256 / P-384: these are the only ECC
  * curves from the 1.05 policies that WebCrypto supports. Brainpool and
  * Curve25519/Curve448 throw UNSUPPORTED (see assertEccCurveSupported).
+ *
+ * SCOPE: channel crypto primitives only (ephemeral/ECDH/HKDF/ECDSA + symmetric
+ * key derivation). OpenSecureChannel message wiring (OPN encrypt/decrypt
+ * strategy, SecureChannel nonce handling in `message_builder` /
+ * `client_secure_channel_layer`) still assumes RSA and is a follow-up.
  */
 
 export type EccCurve = 'P-256' | 'P-384';
@@ -342,26 +347,16 @@ export async function ecdsaVerify(
   }
 }
 
+// JWK x/y coordinates are unpadded base64url. Reuses the same platform
+// primitives as `buf2base64url`/`base64ToBuf` in `./crypto_utils`
+// (`Uint8Array.toBase64` / `Uint8Array.fromBase64`), which already handle
+// chunking safely (no `btoa` spread-arg limits).
 function bytesToBase64Url(bytes: Uint8Array): string {
-  let s = '';
-  for (let i = 0; i < bytes.byteLength; i++) {
-    s += String.fromCharCode(bytes[i]);
-  }
-  const b64 = btoa(s);
-  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  return bytes.toBase64({ alphabet: 'base64url', omitPadding: true });
 }
 
 function base64UrlToBytes(b64url: string, expectedLength: number): Uint8Array {
-  let b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
-  const pad = b64.length % 4;
-  if (pad) {
-    b64 += '='.repeat(4 - pad);
-  }
-  const bin = atob(b64);
-  const out = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) {
-    out[i] = bin.charCodeAt(i);
-  }
+  const out = Uint8Array.fromBase64(b64url, { alphabet: 'base64url' });
   if (out.byteLength > expectedLength) {
     throw new Error('JWK coordinate longer than curve size');
   }
