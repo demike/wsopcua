@@ -17,6 +17,21 @@ import {
   writeCertificate,
 } from '../crypto';
 
+/** Detect an EC (SEC1/PKCS#8) private key by its ecPublicKey OID encoding. */
+function isEcPrivateKeyDER(der: Uint8Array): boolean {
+  // OID 1.2.840.10045.2.1 (ecPublicKey) DER encoding
+  const marker = [0x06, 0x07, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x02, 0x01];
+  outer: for (let i = 0; i + marker.length <= der.byteLength; i++) {
+    for (let j = 0; j < marker.length; j++) {
+      if (der[i + j] !== marker[j]) {
+        continue outer;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 /**
  * The certificate store holds the certificate and the private key
  * for a simple implementation take a look at @type {PEMDERCertificateStore}
@@ -94,11 +109,25 @@ class PrivateKeyImpl implements PrivateKey {
   }
   getSignKey(
     hashingAlgorithm: 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512',
-    algorithm:
+    algorithm?:
       | 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
       | 'http://www.w3.org/2000/09/xmldsig#rsa-sha256'
       | 'http://www.w3.org/2000/09/xmldsig#rsa-pss'
+      | 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256'
+      | 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384'
   ): Promise<CryptoKey> {
+    if (
+      algorithm === 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256' ||
+      (algorithm === undefined && hashingAlgorithm === 'SHA-256' && isEcPrivateKeyDER(this.privateKeyDER))
+    ) {
+      return generateSignKeyFromDER(this.privateKeyDER, 'SHA-256', 'ECDSA', 'P-256');
+    }
+    if (
+      algorithm === 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384' ||
+      (algorithm === undefined && hashingAlgorithm === 'SHA-384' && isEcPrivateKeyDER(this.privateKeyDER))
+    ) {
+      return generateSignKeyFromDER(this.privateKeyDER, 'SHA-384', 'ECDSA', 'P-384');
+    }
     const algorithmName =
       algorithm === 'http://www.w3.org/2000/09/xmldsig#rsa-pss' ? 'RSA-PSS' : 'RSASSA-PKCS1-v1_5';
     return generateSignKeyFromDER(this.privateKeyDER, hashingAlgorithm, algorithmName);

@@ -30,6 +30,10 @@ export const oid_map: { [key: string]: { d: string; c: string; w?: boolean } } =
   '1.2.840.10045.3.1.5': { d: 'prime239v2', c: 'ANSI X9.62 named elliptic curve' },
   '1.2.840.10045.3.1.6': { d: 'prime239v3', c: 'ANSI X9.62 named elliptic curve' },
   '1.2.840.10045.3.1.7': { d: 'prime256v1', c: 'ANSI X9.62 named elliptic curve' },
+  '1.2.840.10045.4.3.2': { d: 'ecdsaWithSHA256', c: 'ANSI X9.62 ECDSA with SHA-256' },
+  '1.2.840.10045.4.3.3': { d: 'ecdsaWithSHA384', c: 'ANSI X9.62 ECDSA with SHA-384' },
+  '1.2.840.10045.4.3.4': { d: 'ecdsaWithSHA512', c: 'ANSI X9.62 ECDSA with SHA-512' },
+  '1.3.132.0.34': { d: 'secp384r1', c: 'SECG NIST P-384 elliptic curve' },
 
   '1.2.840.113549.1.1': { d: 'pkcs-1', c: '', w: false },
   '1.2.840.113549.1.1.1': { d: 'rsaEncryption', c: 'PKCS #1', w: false },

@@ -9,7 +9,7 @@ import { convertPEMtoDER } from './crypto_explore_certificate';
 import { assert } from '../assert';
 import { DirectoryName } from './asn1';
 
-export type PublicKeyLength = 128 | 256 | 384 | 512;
+export type PublicKeyLength = 64 | 96 | 128 | 256 | 384 | 512;
 
 /**
  * A structure exposing useful information about a certificate
@@ -56,11 +56,14 @@ export async function exploreCertificateInfo(
       data.publicKeyLength === 512 ||
       data.publicKeyLength === 384 ||
       data.publicKeyLength === 256 ||
-      data.publicKeyLength === 128
+      data.publicKeyLength === 128 ||
+      // ECC (ECDSA/ECDH) raw key lengths: P-256 x||y = 64, P-384 x||y = 96
+      data.publicKeyLength === 64 ||
+      data.publicKeyLength === 96
     )
   ) {
     throw new Error(
-      'Invalid public key length (expecting 128,256,384 or 512)' + data.publicKeyLength
+      'Invalid public key length (expecting 64,96,128,256,384 or 512)' + data.publicKeyLength
     );
   }
   return data;

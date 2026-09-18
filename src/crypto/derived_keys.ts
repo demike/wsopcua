@@ -10,7 +10,9 @@ const crypto: SubtleCrypto = window.crypto.subtle;
 
 type BinaryLike = ArrayBufferLike | ArrayBufferView;
 
-async function HMAC_KEY(sha1or256: 'SHA-1' | 'SHA-256', secret: BinaryLike) {
+export type ShaHash = 'SHA-1' | 'SHA-256' | 'SHA-384';
+
+async function HMAC_KEY(sha1or256: ShaHash, secret: BinaryLike) {
   return await crypto.importKey(
     'raw', // raw format of the key - should be Uint8Array
     secret as any,
@@ -94,10 +96,10 @@ export async function makePseudoRandomBuffer(
   secret: Nonce,
   seed: Nonce,
   minLength: number,
-  sha1or256: 'SHA-1' | 'SHA-256'
+  sha1or256: ShaHash
 ) {
   assert(seed instanceof Uint8Array);
-  assert(sha1or256 === 'SHA-1' || sha1or256 === 'SHA-256');
+  assert(sha1or256 === 'SHA-1' || sha1or256 === 'SHA-256' || sha1or256 === 'SHA-384');
 
   const a = [];
   a[0] = seed;
@@ -122,7 +124,7 @@ export interface ComputeDerivedKeysOptions {
 
   encryptingBlockSize: number;
   algorithm: string;
-  sha1or256?: 'SHA-1' | 'SHA-256';
+  sha1or256?: ShaHash;
 }
 
 export interface DerivedKeys extends ComputeDerivedKeysOptions {
@@ -132,7 +134,7 @@ export interface DerivedKeys extends ComputeDerivedKeysOptions {
 
   encryptingBlockSize: number;
   algorithm: string;
-  sha1or256: 'SHA-1' | 'SHA-256';
+  sha1or256: ShaHash;
 
   signingKey: ArrayBuffer;
   encryptingKey: ArrayBuffer;
@@ -387,7 +389,11 @@ export async function makeMessageChunkSignatureWithDerivedKeys(
   // assert(message instanceof ArrayBuffer);
   // assert(derivedKeys.signingKey instanceof BufferSource);
   assert(typeof derivedKeys.sha1or256 === 'string');
-  assert(derivedKeys.sha1or256 === 'SHA-1' || derivedKeys.sha1or256 === 'SHA-256');
+  assert(
+    derivedKeys.sha1or256 === 'SHA-1' ||
+      derivedKeys.sha1or256 === 'SHA-256' ||
+      derivedKeys.sha1or256 === 'SHA-384'
+  );
   let hmacKey: CryptoKey | undefined = (derivedKeys.signingKey as any)._hmacCryptoKey;
   if (!hmacKey) {
     // cache hmac crypto key in signingKey
