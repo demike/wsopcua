@@ -722,7 +722,14 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
       ? SecurityTokenRequestType.Issue
       : SecurityTokenRequestType.Renew;
 
-    this._clientNonce = await this._build_client_nonce();
+    try {
+      this._clientNonce = await this._build_client_nonce();
+    } catch (err) {
+      // callers use callback style and ignore the returned promise: never let
+      // a nonce failure escape as an unhandled rejection.
+      callback(err instanceof Error ? err : new Error(String(err)));
+      return;
+    }
 
     this._isOpened = !is_initial;
 
@@ -791,27 +798,32 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
               if (!this._clientEphemeralPrivateKey || !this._clientNonce) {
                 return callback(new Error('Missing ECC ephemeral key for ECDH agreement'));
               }
-              const serverEphemeralPublic = await importEphemeralPublicKey(
-                this._serverNonce,
-                cryptoFactory.eccCurve
-              );
-              const freshIkm = await deriveSharedSecretIKM(
-                this._clientEphemeralPrivateKey,
-                serverEphemeralPublic,
-                cryptoFactory.eccCurve
-              );
-              // Renewal links to the previous secret: new IKM = old IKM XOR fresh IKM.
-              const ikm =
-                !is_initial && this._eccSharedSecret
-                  ? xorIkmsForRenewal(this._eccSharedSecret, freshIkm)
-                  : freshIkm;
-              this._eccSharedSecret = ikm;
-              this._derivedKeys = await computeEccDerivedKeys(
-                cryptoFactory,
-                this._clientNonce,
-                this._serverNonce,
-                ikm
-              );
+              try {
+                const serverEphemeralPublic = await importEphemeralPublicKey(
+                  this._serverNonce,
+                  cryptoFactory.eccCurve
+                );
+                const freshIkm = await deriveSharedSecretIKM(
+                  this._clientEphemeralPrivateKey,
+                  serverEphemeralPublic,
+                  cryptoFactory.eccCurve
+                );
+                // Renewal links to the previous secret: new IKM = old IKM XOR fresh IKM.
+                const ikm =
+                  !is_initial && this._eccSharedSecret
+                    ? xorIkmsForRenewal(this._eccSharedSecret, freshIkm)
+                    : freshIkm;
+                this._eccSharedSecret = ikm;
+                this._derivedKeys = await computeEccDerivedKeys(
+                  cryptoFactory,
+                  this._clientNonce,
+                  this._serverNonce,
+                  ikm
+                );
+              } catch (err) {
+                // e.g. malformed server nonce: report via callback, never reject
+                return callback(err instanceof Error ? err : new Error(String(err)));
+              }
             } else {
               this._derivedKeys = await computeDerivedKeys(
                 cryptoFactory,

@@ -3,6 +3,8 @@ import { vi } from 'vitest';
 import { MessageSecurityMode } from '../generated/MessageSecurityMode';
 import { ChannelSecurityToken } from '../generated/ChannelSecurityToken';
 import { OpenSecureChannelResponse } from '../generated/OpenSecureChannelResponse';
+import { AsymmetricAlgorithmSecurityHeader } from '../service-secure-channel';
+import { DataStream } from '../basic-types/DataStream';
 import {
   deriveSharedSecretIKM,
   exportEphemeralPublicKey,
@@ -11,7 +13,8 @@ import {
   xorIkmsForRenewal,
 } from '../crypto/ecc';
 import { ClientSecureChannelLayer } from './client_secure_channel_layer';
-import { SecurityPolicy, getCryptoFactory } from './security_policy';
+import { MessageBuilder } from './message_builder';
+import { SecurityPolicy, getCryptoFactory, toUri } from './security_policy';
 import {
   EccFixtureCurve,
   eccFixtureCertDer,
@@ -149,6 +152,13 @@ describe.each(['P-256', 'P-384'] as EccFixtureCurve[])(
         curve
       );
       expect(new Uint8Array((channel as any)._eccSharedSecret)).toEqual(expectedIkm1);
+      // ECDH symmetry: the server side agrees on the same secret
+      const serverSideIkm1 = await deriveSharedSecretIKM(
+        server1.privateKey,
+        await importEphemeralPublicKey(clientNonce1, curve),
+        curve
+      );
+      expect(serverSideIkm1).toEqual(expectedIkm1);
       (channel as any)._cancel_security_token_watchdog();
 
       // --- Renew with a fresh ephemeral pair on both sides ---
@@ -198,6 +208,76 @@ describe('ClientSecureChannelLayer nonce (RSA regression)', () => {
     const rsaNonce = await (channel as any)._build_client_nonce();
     expect(rsaNonce.byteLength).toBe(32);
     expect((channel as any)._clientEphemeralPrivateKey).toBeUndefined();
+    channel.dispose();
+  });
+});
+
+describe.each(['P-256', 'P-384'] as EccFixtureCurve[])(
+  'MessageBuilder ECC OPN decrypt (%s)',
+  (curve) => {
+    const policy =
+      curve === 'P-256' ? SecurityPolicy.EccNistP256 : SecurityPolicy.EccNistP384;
+
+    it('decrypts a sign-only chunk with thumbprint set (no RSA unwrap)', async () => {
+      // Part 6 §6.7.2.3: the thumbprint identifies the recipient; ECC OPN is
+      // sign-only, so it must NOT trigger asymmetricDecrypt / removePadding.
+      const factory = getCryptoFactory(policy)!;
+      const cert = eccFixtureCertDer(curve);
+      const body = new TextEncoder().encode('ecc opn signed body');
+      const sig = new Uint8Array(
+        await factory.asymmetricSign(body, eccFixturePrivateKey(curve))
+      );
+      const chunk = new Uint8Array([...body, ...sig]);
+
+      const builder = new MessageBuilder();
+      (builder as any)._securityPolicy = policy;
+      (builder as any).securityMode = MessageSecurityMode.SignAndEncrypt;
+      (builder as any)._securityHeader = new AsymmetricAlgorithmSecurityHeader({
+        securityPolicyUri: toUri(policy),
+        senderCertificate: cert,
+        receiverCertificateThumbprint: new Uint8Array(20).fill(7),
+      });
+      (builder as any)._cryptoFactory = factory;
+
+      const ok = await (builder as any)._decrypt_OPN(new DataStream(chunk));
+      expect(ok).toBe(true);
+    });
+  }
+);
+
+describe('ClientSecureChannelLayer ECC error paths', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('reports nonce failures via callback instead of rejecting', async () => {
+    const channel = makeEccChannel('P-256');
+    const callbacks = mockOpuTransaction(channel);
+    (channel as any)._build_client_nonce = async () => {
+      throw new Error('no entropy');
+    };
+    const done = new Promise<Error | null>((resolve) =>
+      (channel as any)._open_secure_channel_request(true, (err: Error | null) => resolve(err))
+    );
+    expect(await done).toMatchObject({ message: 'no entropy' });
+    expect(callbacks).toHaveLength(0);
+    channel.dispose();
+  });
+
+  it('reports a malformed server nonce via callback and derives nothing', async () => {
+    const channel = makeEccChannel('P-256');
+    const callbacks = mockOpuTransaction(channel);
+    const done = new Promise<Error | null>((resolve) =>
+      (channel as any)._open_secure_channel_request(true, (err: Error | null) => resolve(err))
+    );
+    await waitForOpuTransaction(callbacks, 1);
+    // right length (64) but almost surely off-curve: ECDH import must fail
+    const badNonce = new Uint8Array(64).map((_, i) => (i * 37 + 11) & 0xff);
+    await callbacks[0](null, makeServerNonceResponse(badNonce, 1));
+    const err = await done;
+    expect(err).toBeInstanceOf(Error);
+    expect((channel as any)._derivedKeys).toBeUndefined();
+    expect((channel as any)._eccSharedSecret).toBeUndefined();
     channel.dispose();
   });
 });

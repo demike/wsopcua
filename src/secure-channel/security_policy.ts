@@ -670,6 +670,9 @@ const _Aes256_Sha256_RsaPss: ICryptoFactory = {
 const _EccNistP256: ICryptoFactory = {
   securityPolicy: SecurityPolicy.EccNistP256,
 
+  // NOTE: for ECC this is the ephemeral-nonce length (x||y), not an RSA-style
+  // symmetric key size — it sizes `_build_client_nonce()` output. RSA policies
+  // use the symmetric encryption key size here instead.
   symmetricKeyLength: EccNistP256_Params.nonceLength,
   derivedEncryptionKeyLength: EccNistP256_Params.derivedEncryptionKeyLength,
   derivedSignatureKeyLength: EccNistP256_Params.derivedSignatureKeyLength,
@@ -717,6 +720,7 @@ const _EccNistP256: ICryptoFactory = {
 const _EccNistP384: ICryptoFactory = {
   securityPolicy: SecurityPolicy.EccNistP384,
 
+  // NOTE: ephemeral-nonce length, see _EccNistP256 note.
   symmetricKeyLength: EccNistP384_Params.nonceLength,
   derivedEncryptionKeyLength: EccNistP384_Params.derivedEncryptionKeyLength,
   derivedSignatureKeyLength: EccNistP384_Params.derivedSignatureKeyLength,

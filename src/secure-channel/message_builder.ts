@@ -178,9 +178,15 @@ export class MessageBuilder extends MessageBuilderBase {
 
     // The message has been signed  with sender private key and has been encrypted with receiver public key.
     // We shall decrypt it with the receiver private key.
+    // NOTE (ECC, Part 6 §6.7.2.3): ReceiverCertificateThumbprint only identifies
+    // the intended recipient — it does NOT imply encryption. ECC OPN messages
+    // are sign-only (ECDH replaces RSA wrapping), so there is nothing to
+    // decrypt and no block padding to strip, even with a thumbprint present.
     const buf = binaryStream.getUint8ArrayWithoutAdvancingPositionPointer();
 
-    if (asymmetricAlgorithmSecurityHeader.receiverCertificateThumbprint) {
+    const isEcc = !!this._cryptoFactory.eccCurve;
+
+    if (asymmetricAlgorithmSecurityHeader.receiverCertificateThumbprint && !isEcc) {
       // this mean that the message has been encrypted ....
 
       if (!this._privateKey) {
@@ -227,6 +233,14 @@ export class MessageBuilder extends MessageBuilderBase {
         signatureLength === 384 ||
         signatureLength === 512
     );
+    if (isEcc) {
+      // Send used the fixed per-curve ECDSA length; fail fast on mismatch
+      // instead of slicing the chunk at a cert-derived offset.
+      assert(
+        signatureLength === this._cryptoFactory.asymmetricSignatureLength,
+        'ECC OPN signature length mismatch'
+      );
+    }
 
     const chunk = binaryStream.getUint8ArrayWithoutAdvancingPositionPointer(0); // new Uint8Array(binaryStream.view.buffer, binaryStream.view.byteOffset);
 
@@ -246,8 +260,8 @@ export class MessageBuilder extends MessageBuilderBase {
       crypto_utils.reduceLength(binaryStream.view.buffer, signatureLength)
     );
 
-    // remove padding
-    if (asymmetricAlgorithmSecurityHeader.receiverCertificateThumbprint) {
+    // remove padding (RSA block encryption only; ECC OPN is sign-only)
+    if (asymmetricAlgorithmSecurityHeader.receiverCertificateThumbprint && !isEcc) {
       binaryStream.view = new DataView(crypto_utils.removePadding(binaryStream.view.buffer));
     }
 
