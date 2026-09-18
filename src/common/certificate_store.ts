@@ -1,4 +1,4 @@
-import { AlgorithmIdentifier, readTag } from '../crypto/asn1';
+import { AlgorithmIdentifier, TagType, _readObjectIdentifier, _readStruct, readTag } from '../crypto/asn1';
 import {
   CertificateCoercionOptions,
   coerceCertificateInfo,
@@ -16,6 +16,49 @@ import {
   TbsCertificate,
   writeCertificate,
 } from '../crypto';
+
+/**
+ * Detect an EC PKCS#8 private key via its AlgorithmIdentifier OID
+ * (1.2.840.10045.2.1 = ecPublicKey). Falls back to a raw OID byte-scan when
+ * the DER does not parse as PKCS#8 (e.g. SEC1), in which case it returns false
+ * unless the ecPublicKey OID bytes are present.
+ */
+function isEcPrivateKeyDER(der: Uint8Array): boolean {
+  try {
+    // PKCS#8 PrivateKeyInfo ::= SEQUENCE { version INTEGER, algorithm
+    // AlgorithmIdentifier, privateKey OCTET STRING [, attributes] }
+    const outer = readTag(der, 0);
+    if (outer.tag !== TagType.SEQUENCE) {
+      return hasEcPublicKeyOidBytes(der);
+    }
+    const parts = _readStruct(der, outer);
+    if (parts.length < 3 || parts[1].tag !== TagType.SEQUENCE) {
+      return hasEcPublicKeyOidBytes(der);
+    }
+    const algParts = _readStruct(der, parts[1]);
+    if (algParts.length < 1 || algParts[0].tag !== TagType.OBJECT_IDENTIFIER) {
+      return hasEcPublicKeyOidBytes(der);
+    }
+    const { oid, name } = _readObjectIdentifier(der, algParts[0]);
+    return oid === '1.2.840.10045.2.1' || name === 'ecPublicKey';
+  } catch {
+    return hasEcPublicKeyOidBytes(der);
+  }
+}
+
+function hasEcPublicKeyOidBytes(der: Uint8Array): boolean {
+  // OID 1.2.840.10045.2.1 (ecPublicKey) DER encoding
+  const marker = [0x06, 0x07, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x02, 0x01];
+  outer: for (let i = 0; i + marker.length <= der.byteLength; i++) {
+    for (let j = 0; j < marker.length; j++) {
+      if (der[i + j] !== marker[j]) {
+        continue outer;
+      }
+    }
+    return true;
+  }
+  return false;
+}
 
 /**
  * The certificate store holds the certificate and the private key
@@ -94,11 +137,25 @@ class PrivateKeyImpl implements PrivateKey {
   }
   getSignKey(
     hashingAlgorithm: 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512',
-    algorithm:
+    algorithm?:
       | 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
       | 'http://www.w3.org/2000/09/xmldsig#rsa-sha256'
       | 'http://www.w3.org/2000/09/xmldsig#rsa-pss'
+      | 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256'
+      | 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384'
   ): Promise<CryptoKey> {
+    if (
+      algorithm === 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256' ||
+      (algorithm === undefined && hashingAlgorithm === 'SHA-256' && isEcPrivateKeyDER(this.privateKeyDER))
+    ) {
+      return generateSignKeyFromDER(this.privateKeyDER, 'SHA-256', 'ECDSA', 'P-256');
+    }
+    if (
+      algorithm === 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384' ||
+      (algorithm === undefined && hashingAlgorithm === 'SHA-384' && isEcPrivateKeyDER(this.privateKeyDER))
+    ) {
+      return generateSignKeyFromDER(this.privateKeyDER, 'SHA-384', 'ECDSA', 'P-384');
+    }
     const algorithmName =
       algorithm === 'http://www.w3.org/2000/09/xmldsig#rsa-pss' ? 'RSA-PSS' : 'RSASSA-PKCS1-v1_5';
     return generateSignKeyFromDER(this.privateKeyDER, hashingAlgorithm, algorithmName);

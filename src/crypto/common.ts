@@ -13,6 +13,10 @@ export type Signature = ArrayBuffer;
 /**
  * holds the
  */
+export type EccSignatureAlgorithmUri =
+  | 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256'
+  | 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384';
+
 export interface PrivateKey {
   getDecryptKey(hashingAlgorithm: 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512'): Promise<CryptoKey>;
   getSignKey(
@@ -21,5 +25,6 @@ export interface PrivateKey {
     | 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
       | 'http://www.w3.org/2000/09/xmldsig#rsa-pss'
       | 'http://www.w3.org/2000/09/xmldsig#rsa-sha256'
+      | EccSignatureAlgorithmUri
   ): Promise<CryptoKey>;
 }

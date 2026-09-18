@@ -884,6 +884,28 @@ export function generateVerifyKeyFromDER(
 }
 
 /**
+ * Import an ECC SPKI when the curve is already known (e.g. from the
+ * SecurityPolicy). No fallback: fails fast on curve mismatch.
+ */
+export function generateEccVerifyKeyFromDER(
+  der_certificate: Uint8Array,
+  hash: 'SHA-256' | 'SHA-384',
+  namedCurve: 'P-256' | 'P-384'
+): PromiseLike<CryptoKey> {
+  const cachingKey = `_verifyKey_ECDSA_${hash}_${namedCurve}`;
+  if ((der_certificate as any)[cachingKey]) {
+    return Promise.resolve((der_certificate as any)[cachingKey]);
+  }
+  const spki = getSPKIFromCertificate(der_certificate);
+  return crypto.subtle
+    .importKey('spki', spki as any, { name: 'ECDSA', namedCurve }, true, ['verify'])
+    .then((key) => {
+      (der_certificate as any)[cachingKey] = key;
+      return key;
+    });
+}
+
+/**
  *  generate a RSA private key for decrypting
  */
 export function generatePrivateKeyFromDER(
@@ -918,14 +940,41 @@ export function generatePrivateKeyFromDER(
 export function generateSignKeyFromDER(
   der_certificate: Uint8Array,
   hash: 'SHA-1' | 'SHA-256' | 'SHA-384' | 'SHA-512',
-  algorithm: 'RSASSA-PKCS1-v1_5' | 'RSA-PSS' = 'RSASSA-PKCS1-v1_5'
+  algorithm: 'RSASSA-PKCS1-v1_5' | 'RSA-PSS' | 'ECDSA' = 'RSASSA-PKCS1-v1_5',
+  namedCurve?: 'P-256' | 'P-384'
 ) {
-  const cachingKey = '_signtKey_' + hash;
+  const cachingKey = `_signtKey_${algorithm}_${hash}_${namedCurve ?? ''}`;
   if ((der_certificate as any)[cachingKey]) {
     return Promise.resolve((der_certificate as any)[cachingKey]);
   }
 
-  return window.crypto.subtle
+  // NOTE: portable SubtleCrypto lookup (no `window`): this module also runs in
+  // pure Node where `window` is undefined. See `subtle()` in `./ecc`.
+  const subtle: SubtleCrypto =
+    (globalThis as any)?.crypto?.subtle ?? (typeof crypto !== 'undefined' ? crypto.subtle : undefined);
+  if (!subtle) {
+    return Promise.reject(new Error('WebCrypto SubtleCrypto is not available'));
+  }
+
+  if (algorithm === 'ECDSA') {
+    return subtle
+      .importKey(
+        'pkcs8',
+        der_certificate as any,
+        {
+          name: 'ECDSA',
+          namedCurve: namedCurve ?? 'P-256',
+        },
+        false,
+        ['sign']
+      )
+      .then((key) => {
+        (der_certificate as any)[cachingKey] = key;
+        return key;
+      });
+  }
+
+  return subtle
     .importKey(
       'pkcs8',
       der_certificate as any,

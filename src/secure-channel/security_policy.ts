@@ -10,6 +10,10 @@ import { SignatureData } from '../generated/SignatureData';
 import * as crypto_utils from '../crypto';
 import {
   DerivedKeys,
+  EccNistP256_Params,
+  EccNistP384_Params,
+  computeEccChannelKeys,
+  generateEccVerifyKeyFromDER,
   generatePublicKeyFromDER,
   generateVerifyKeyFromDER,
   PrivateKey,
@@ -86,6 +90,9 @@ export enum SecurityPolicy {
 
   Aes128_Sha256_RsaOaep = 'http://opcfoundation.org/UA/SecurityPolicy#Aes128_Sha256_RsaOaep',
   Aes256_Sha256_RsaPss = 'http://opcfoundation.org/UA/SecurityPolicy#Aes256_Sha256_RsaPss',
+
+  EccNistP256 = 'http://opcfoundation.org/UA/SecurityPolicy#EccNistP256',
+  EccNistP384 = 'http://opcfoundation.org/UA/SecurityPolicy#EccNistP384',
 }
 
 export function fromURI(uri?: string | null): SecurityPolicy {
@@ -131,7 +138,9 @@ export function coerceSecurityPolicy(value?: any): SecurityPolicy {
     value === 'Basic256Sha256' ||
     value === 'Aes128_Sha256_RsaOaep' ||
     value === 'Aes256_Sha256_RsaPss' ||
-    value === 'Basic256Rsa15'
+    value === 'Basic256Rsa15' ||
+    value === 'EccNistP256' ||
+    value === 'EccNistP384'
   ) {
     return SecurityPolicy[value as keyof typeof SecurityPolicy];
   }
@@ -144,6 +153,8 @@ export function coerceSecurityPolicy(value?: any): SecurityPolicy {
       value === SecurityPolicy.Basic256Sha256 ||
       value === SecurityPolicy.Aes128_Sha256_RsaOaep ||
       value === SecurityPolicy.Aes256_Sha256_RsaPss ||
+      value === SecurityPolicy.EccNistP256 ||
+      value === SecurityPolicy.EccNistP384 ||
       value === SecurityPolicy.None
     )
   ) {
@@ -271,6 +282,66 @@ function RSAPSSSHA256_Sign(buffer: BinaryLike, privateKey: PrivateKey): Promise<
 
 const RSAPKCS1OAEPSHA1_Sign = RSAPKCS1V15SHA1_Sign;
 
+function ECDSA_SHA256_Sign(buffer: BinaryLike, privateKey: PrivateKey): Promise<ArrayBuffer> {
+  return privateKey
+    .getSignKey('SHA-256', 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256')
+    .then((signKey) =>
+      crypto_utils.makeMessageChunkSignature(buffer, {
+        algorithm: { name: 'ECDSA', hash: 'SHA-256' },
+        privateKey: signKey,
+      })
+    );
+}
+
+function ECDSA_SHA384_Sign(buffer: BinaryLike, privateKey: PrivateKey): Promise<ArrayBuffer> {
+  return privateKey
+    .getSignKey('SHA-384', 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384')
+    .then((signKey) =>
+      crypto_utils.makeMessageChunkSignature(buffer, {
+        algorithm: { name: 'ECDSA', hash: 'SHA-384' },
+        privateKey: signKey,
+      })
+    );
+}
+
+function ECDSA_SHA256_Verify(
+  buffer: Uint8Array,
+  signature: Uint8Array,
+  certificate: Uint8Array
+): PromiseLike<boolean> {
+  return generateEccVerifyKeyFromDER(certificate, 'SHA-256', 'P-256')
+    .then((pubKey) => ({
+      algorithm: { name: 'ECDSA', hash: 'SHA-256' },
+      publicKey: pubKey,
+    }))
+    .then((opts) => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
+}
+
+function ECDSA_SHA384_Verify(
+  buffer: Uint8Array,
+  signature: Uint8Array,
+  certificate: Uint8Array
+): PromiseLike<boolean> {
+  return generateEccVerifyKeyFromDER(certificate, 'SHA-384', 'P-384')
+    .then((pubKey) => ({
+      algorithm: { name: 'ECDSA', hash: 'SHA-384' },
+      publicKey: pubKey,
+    }))
+    .then((opts) => crypto_utils.verifyMessageChunkSignature(buffer, signature, opts));
+}
+
+function ECC_NoEncrypt(): Promise<Uint8Array> {
+  return Promise.reject(
+    new Error('ECC SecurityPolicies use ECDH key agreement (Part 6 §6.8.1), not RSA asymmetric encryption')
+  );
+}
+
+function ECC_NoDecrypt(): Promise<Uint8Array> {
+  return Promise.reject(
+    new Error('ECC SecurityPolicies use ECDH key agreement (Part 6 §6.8.1), not RSA asymmetric decryption')
+  );
+}
+
 function RSAPKCS1V15_Encrypt(
   buffer: Uint8Array,
   publicKey: /* Uint8Array |*/ CryptoKey
@@ -299,6 +370,12 @@ export async function computeDerivedKeys(
   clientNonce?: Uint8Array
 ): Promise<DerivedKeys1> {
   // calculate derived keys
+  if (cryptoFactory.eccCurve) {
+    throw new Error(
+      `SecurityPolicy ${cryptoFactory.securityPolicy} is ECC: use computeEccChannelKeys() ` +
+        `with the ECDH shared secret (Part 6 §6.8.1), not RSA P_SHA derivation`
+    );
+  }
 
   if (clientNonce && serverNonce) {
     const options = {
@@ -321,6 +398,57 @@ export async function computeDerivedKeys(
     derivedClientKeys: null,
     derivedServerKeys: null,
     algorithm: null,
+  };
+}
+
+/**
+ * ECC channel key derivation (Part 6 §6.8.1).
+ * Unlike RSA policies, the caller must first agree the ECDH shared secret
+ * (IKM) from the ephemeral nonces, then call this to get symmetric keys that
+ * plug into the existing AES-CBC/HMAC DerivedKeys pipeline.
+ */
+export async function computeEccDerivedKeys(
+  cryptoFactory: ICryptoFactory,
+  clientNonce: Uint8Array,
+  serverNonce: Uint8Array,
+  sharedSecret: Uint8Array
+): Promise<DerivedKeys1> {
+  if (!cryptoFactory.eccCurve) {
+    throw new Error('computeEccDerivedKeys requires an ECC SecurityPolicy factory');
+  }
+  const params = cryptoFactory.eccCurve === 'P-384' ? EccNistP384_Params : EccNistP256_Params;
+  if (clientNonce.byteLength !== params.nonceLength || serverNonce.byteLength !== params.nonceLength) {
+    throw new Error(
+      `Invalid ECC nonce length for ${cryptoFactory.eccCurve}: expected ${params.nonceLength}`
+    );
+  }
+  if (sharedSecret.byteLength !== params.coordLength) {
+    throw new Error(
+      `Invalid ECC shared secret length for ${cryptoFactory.eccCurve}: ` +
+        `expected ${params.coordLength} (x-coordinate), got ${sharedSecret.byteLength}`
+    );
+  }
+  const { clientKeys, serverKeys } = await computeEccChannelKeys(
+    clientNonce,
+    serverNonce,
+    sharedSecret,
+    params
+  );
+  const toDerivedKeys = (m: { signingKey: Uint8Array; encryptingKey: Uint8Array; initializationVector: Uint8Array }): DerivedKeys => ({
+    signatureLength: cryptoFactory.signatureLength,
+    signingKeyLength: cryptoFactory.derivedSignatureKeyLength,
+    encryptingKeyLength: cryptoFactory.derivedEncryptionKeyLength,
+    encryptingBlockSize: cryptoFactory.encryptingBlockSize,
+    algorithm: cryptoFactory.symmetricEncryptionAlgorithm,
+    sha1or256: cryptoFactory.sha1or256,
+    signingKey: m.signingKey.slice().buffer,
+    encryptingKey: m.encryptingKey.slice().buffer,
+    initializationVector: m.initializationVector.slice().buffer,
+  });
+  return {
+    algorithm: null,
+    derivedClientKeys: toDerivedKeys(clientKeys),
+    derivedServerKeys: toDerivedKeys(serverKeys),
   };
 }
 
@@ -347,9 +475,11 @@ export interface ICryptoFactory {
   asymmetricSignatureAlgorithm:
     | 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
     | 'http://www.w3.org/2000/09/xmldsig#rsa-sha256'
-    | 'http://www.w3.org/2000/09/xmldsig#rsa-pss';
+    | 'http://www.w3.org/2000/09/xmldsig#rsa-pss'
+    | 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256'
+    | 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384';
 
-  /* asymmetric encryption algorithm */
+  /* asymmetric encryption algorithm (RSA only; ECC uses ECDH — see eccCurve) */
   generatePublicKeyFromDER: (der: Uint8Array) => PromiseLike<CryptoKey>;
   asymmetricEncrypt: (block: Uint8Array, publicKey: CryptoKey) => PromiseLike<Uint8Array>;
   asymmetricDecrypt: (block: Uint8Array, privateKey: PrivateKey) => Promise<Uint8Array>;
@@ -357,7 +487,15 @@ export interface ICryptoFactory {
   blockPaddingSize: number;
   symmetricEncryptionAlgorithm: string;
 
-  sha1or256: 'SHA-1' | 'SHA-256'; // string;
+  sha1or256: 'SHA-1' | 'SHA-256' | 'SHA-384'; // string;
+
+  /**
+   * Set for ECC policies only (Part 6 §6.8.1). When present, OpenSecureChannel
+   * nonces are ephemeral ECDH public keys and channel keys come from
+   * computeEccChannelKeys(), not RSA P_SHA derivation.
+   */
+  eccCurve?: 'P-256' | 'P-384';
+  eccNonceLength?: number;
 }
 
 const _Basic128Rsa15: ICryptoFactory = {
@@ -511,6 +649,93 @@ const _Aes256_Sha256_RsaPss: ICryptoFactory = {
   sha1or256: 'SHA-256',
 };
 
+/**
+ * EccNistP256 (OPC UA 1.05 Part 7):
+ * - SymmetricSignature HMAC-SHA256, SymmetricEncryption AES-128-CBC
+ * - AsymmetricSignature ECDSA-SHA256, KeyDerivation HKDF-SHA256 (Part 6 §6.8.1)
+ * - Ephemeral ECDH P-256, nonce = x||y (64 B), signature r||s (64 B)
+ * - DerivedSignatureKey 32 B, EncryptionKey 16 B, IV 16 B
+ *
+ * SCOPE: crypto primitives only. OpenSecureChannel wiring (OPN encrypt/
+ * decrypt strategy, SecureChannel nonce handling) still assumes RSA and is a
+ * follow-up; see `computeEccChannelKeys()` / `computeEccDerivedKeys()`.
+ */
+const _EccNistP256: ICryptoFactory = {
+  securityPolicy: SecurityPolicy.EccNistP256,
+
+  symmetricKeyLength: EccNistP256_Params.nonceLength,
+  derivedEncryptionKeyLength: EccNistP256_Params.derivedEncryptionKeyLength,
+  derivedSignatureKeyLength: EccNistP256_Params.derivedSignatureKeyLength,
+  encryptingBlockSize: EccNistP256_Params.encryptingBlockSize,
+  signatureLength: EccNistP256_Params.signatureLength,
+
+  // NOTE units are bits here (fixed P-256 curve), matching the
+  // Basic256Sha256/Aes* convention (2048/4096 bits). The legacy
+  // Basic128Rsa15/Basic256 factories use bytes (128/512) instead; no in-repo
+  // consumer compares across policies, but do not mix the two conventions.
+  minimumAsymmetricKeyLength: 256,
+  maximumAsymmetricKeyLength: 256,
+
+  asymmetricVerifyChunk,
+  asymmetricSign: ECDSA_SHA256_Sign,
+  asymmetricVerify: ECDSA_SHA256_Verify,
+  asymmetricSignatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256',
+
+  /* no RSA encryption for ECC — ECDH key agreement is used instead */
+  asymmetricEncrypt: () => ECC_NoEncrypt(),
+  asymmetricDecrypt: () => ECC_NoDecrypt(),
+  asymmetricEncryptionAlgorithm: 'http://www.w3.org/2001/04/xmlenc#ecdh-es',
+  generatePublicKeyFromDER: (der) => generateEccVerifyKeyFromDER(der, 'SHA-256', 'P-256'),
+  blockPaddingSize: 0,
+
+  symmetricEncryptionAlgorithm: 'AES-128-CBC',
+
+  sha1or256: 'SHA-256',
+
+  eccCurve: 'P-256',
+  eccNonceLength: EccNistP256_Params.nonceLength,
+};
+
+/**
+ * EccNistP384 (OPC UA 1.05 Part 7):
+ * - SymmetricSignature HMAC-SHA384, SymmetricEncryption AES-256-CBC
+ * - AsymmetricSignature ECDSA-SHA384, KeyDerivation HKDF-SHA384
+ * - Ephemeral ECDH P-384, nonce = x||y (96 B), signature r||s (96 B)
+ *
+ * SCOPE: crypto primitives only (see _EccNistP256 note).
+ */
+const _EccNistP384: ICryptoFactory = {
+  securityPolicy: SecurityPolicy.EccNistP384,
+
+  symmetricKeyLength: EccNistP384_Params.nonceLength,
+  derivedEncryptionKeyLength: EccNistP384_Params.derivedEncryptionKeyLength,
+  derivedSignatureKeyLength: EccNistP384_Params.derivedSignatureKeyLength,
+  encryptingBlockSize: EccNistP384_Params.encryptingBlockSize,
+  signatureLength: EccNistP384_Params.signatureLength,
+
+  // NOTE units are bits (fixed P-384 curve); see _EccNistP256 note.
+  minimumAsymmetricKeyLength: 384,
+  maximumAsymmetricKeyLength: 384,
+
+  asymmetricVerifyChunk,
+  asymmetricSign: ECDSA_SHA384_Sign,
+  asymmetricVerify: ECDSA_SHA384_Verify,
+  asymmetricSignatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384',
+
+  asymmetricEncrypt: () => ECC_NoEncrypt(),
+  asymmetricDecrypt: () => ECC_NoDecrypt(),
+  asymmetricEncryptionAlgorithm: 'http://www.w3.org/2001/04/xmlenc#ecdh-es',
+  generatePublicKeyFromDER: (der) => generateEccVerifyKeyFromDER(der, 'SHA-384', 'P-384'),
+  blockPaddingSize: 0,
+
+  symmetricEncryptionAlgorithm: 'AES-256-CBC',
+
+  sha1or256: 'SHA-384',
+
+  eccCurve: 'P-384',
+  eccNonceLength: EccNistP384_Params.nonceLength,
+};
+
 export function getCryptoFactory(securityPolicy: SecurityPolicy): ICryptoFactory | null {
   switch (securityPolicy) {
     case SecurityPolicy.None:
@@ -525,6 +750,10 @@ export function getCryptoFactory(securityPolicy: SecurityPolicy): ICryptoFactory
       return _Aes128_Sha256_RsaOaep;
     case SecurityPolicy.Aes256_Sha256_RsaPss:
       return _Aes256_Sha256_RsaPss;
+    case SecurityPolicy.EccNistP256:
+      return _EccNistP256;
+    case SecurityPolicy.EccNistP384:
+      return _EccNistP384;
     default:
       return null;
   }
