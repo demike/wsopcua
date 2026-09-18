@@ -490,6 +490,14 @@ export interface ICryptoFactory {
   sha1or256: 'SHA-1' | 'SHA-256' | 'SHA-384'; // string;
 
   /**
+   * Fixed asymmetric (OPN) signature length in bytes, when known. Set for ECC
+   * policies (ECDSA r||s: 64 P-256, 96 P-384). RSA policies leave this
+   * undefined: their OPN signature length depends on the sender's cert key
+   * and is derived per-message via `rsaKeyLength()`.
+   */
+  asymmetricSignatureLength?: number;
+
+  /**
    * Set for ECC policies only (Part 6 §6.8.1). When present, OpenSecureChannel
    * nonces are ephemeral ECDH public keys and channel keys come from
    * computeEccChannelKeys(), not RSA P_SHA derivation.
@@ -656,13 +664,15 @@ const _Aes256_Sha256_RsaPss: ICryptoFactory = {
  * - Ephemeral ECDH P-256, nonce = x||y (64 B), signature r||s (64 B)
  * - DerivedSignatureKey 32 B, EncryptionKey 16 B, IV 16 B
  *
- * SCOPE: crypto primitives only. OpenSecureChannel wiring (OPN encrypt/
- * decrypt strategy, SecureChannel nonce handling) still assumes RSA and is a
- * follow-up; see `computeEccChannelKeys()` / `computeEccDerivedKeys()`.
+ * OPN messages are signed with ECDSA but not asymmetrically encrypted: the
+ * ECDH shared secret is derived from the exchanged ephemeral nonces instead.
  */
 const _EccNistP256: ICryptoFactory = {
   securityPolicy: SecurityPolicy.EccNistP256,
 
+  // NOTE: for ECC this is the ephemeral-nonce length (x||y), not an RSA-style
+  // symmetric key size — it sizes `_build_client_nonce()` output. RSA policies
+  // use the symmetric encryption key size here instead.
   symmetricKeyLength: EccNistP256_Params.nonceLength,
   derivedEncryptionKeyLength: EccNistP256_Params.derivedEncryptionKeyLength,
   derivedSignatureKeyLength: EccNistP256_Params.derivedSignatureKeyLength,
@@ -692,6 +702,9 @@ const _EccNistP256: ICryptoFactory = {
 
   sha1or256: 'SHA-256',
 
+  // ECDSA r||s OPN signature length (fixed per curve)
+  asymmetricSignatureLength: EccNistP256_Params.asymmetricSignatureLength,
+
   eccCurve: 'P-256',
   eccNonceLength: EccNistP256_Params.nonceLength,
 };
@@ -702,11 +715,12 @@ const _EccNistP256: ICryptoFactory = {
  * - AsymmetricSignature ECDSA-SHA384, KeyDerivation HKDF-SHA384
  * - Ephemeral ECDH P-384, nonce = x||y (96 B), signature r||s (96 B)
  *
- * SCOPE: crypto primitives only (see _EccNistP256 note).
+ * OPN messages are signed with ECDSA but not asymmetrically encrypted (see _EccNistP256 note).
  */
 const _EccNistP384: ICryptoFactory = {
   securityPolicy: SecurityPolicy.EccNistP384,
 
+  // NOTE: ephemeral-nonce length, see _EccNistP256 note.
   symmetricKeyLength: EccNistP384_Params.nonceLength,
   derivedEncryptionKeyLength: EccNistP384_Params.derivedEncryptionKeyLength,
   derivedSignatureKeyLength: EccNistP384_Params.derivedSignatureKeyLength,
@@ -731,6 +745,9 @@ const _EccNistP384: ICryptoFactory = {
   symmetricEncryptionAlgorithm: 'AES-256-CBC',
 
   sha1or256: 'SHA-384',
+
+  // ECDSA r||s OPN signature length (fixed per curve)
+  asymmetricSignatureLength: EccNistP384_Params.asymmetricSignatureLength,
 
   eccCurve: 'P-384',
   eccNonceLength: EccNistP384_Params.nonceLength,
