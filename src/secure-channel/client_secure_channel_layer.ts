@@ -8,6 +8,7 @@ import {
   toUri,
   getOptionsForSymmetricSignAndEncrypt,
   computeDerivedKeys,
+  computeEccDerivedKeys,
 } from './security_policy';
 import { MessageBuilder } from './message_builder';
 import {
@@ -47,6 +48,13 @@ import { ISymmetricAlgortihmSecurityHeader } from '../service-secure-channel/Sym
 import { JSONMessageBuilder } from '../transport/json_message_builder';
 import { MessageBuilderEvents } from '../transport/message_builder_base';
 import { DER, makeSHA1Thumbprint, rsaKeyLength } from '../crypto';
+import {
+  deriveSharedSecretIKM,
+  exportEphemeralPublicKey,
+  generateEphemeralKeyPair,
+  importEphemeralPublicKey,
+  xorIkmsForRenewal,
+} from '../crypto/ecc';
 import { Lock } from '../basic-types/utils';
 
 const OpenSecureChannelRequest = secure_channel_service.OpenSecureChannelRequest;
@@ -674,7 +682,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     }, timeout);
   }
 
-  protected _build_client_nonce() {
+  protected async _build_client_nonce(): Promise<Uint8Array | undefined> {
     if (this.securityMode === MessageSecurityMode.None) {
       return;
     }
@@ -690,12 +698,19 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
       return;
     }
     assert(typeof cryptoFactory === 'object');
+    if (cryptoFactory.eccCurve) {
+      // Part 6 §6.8.1: the nonce is a fresh ephemeral ECDH public key (x||y).
+      // The private half is kept for the ECDH agreement once the serverNonce arrives.
+      const ephemeral = await generateEphemeralKeyPair(cryptoFactory.eccCurve);
+      this._clientEphemeralPrivateKey = ephemeral.privateKey;
+      return exportEphemeralPublicKey(ephemeral.publicKey, cryptoFactory.eccCurve);
+    }
     const arr = new Uint8Array(cryptoFactory.symmetricKeyLength);
     crypto.getRandomValues(arr);
     return arr;
   }
 
-  protected _open_secure_channel_request(is_initial: boolean, callback: ErrorCallback) {
+  protected async _open_secure_channel_request(is_initial: boolean, callback: ErrorCallback) {
     assert(this.securityMode !== MessageSecurityMode.Invalid, 'invalid security mode');
     // from the specs:
     // The OpenSecureChannel Messages are not signed or encrypted if the SecurityMode is None. The
@@ -707,7 +722,7 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
       ? SecurityTokenRequestType.Issue
       : SecurityTokenRequestType.Renew;
 
-    this._clientNonce = this._build_client_nonce();
+    this._clientNonce = await this._build_client_nonce();
 
     this._isOpened = !is_initial;
 
@@ -770,11 +785,40 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
           const cryptoFactory = (this.messageBuilder as MessageBuilder).cryptoFactory;
           if (cryptoFactory) {
             assert(this._serverNonce instanceof Uint8Array);
-            this._derivedKeys = await computeDerivedKeys(
-              cryptoFactory,
-              this._serverNonce,
-              this._clientNonce
-            );
+            if (cryptoFactory.eccCurve) {
+              // Part 6 §6.8.1: agree the ECDH shared secret (IKM) from the
+              // ephemeral nonces instead of RSA P_SHA derivation.
+              if (!this._clientEphemeralPrivateKey || !this._clientNonce) {
+                return callback(new Error('Missing ECC ephemeral key for ECDH agreement'));
+              }
+              const serverEphemeralPublic = await importEphemeralPublicKey(
+                this._serverNonce,
+                cryptoFactory.eccCurve
+              );
+              const freshIkm = await deriveSharedSecretIKM(
+                this._clientEphemeralPrivateKey,
+                serverEphemeralPublic,
+                cryptoFactory.eccCurve
+              );
+              // Renewal links to the previous secret: new IKM = old IKM XOR fresh IKM.
+              const ikm =
+                !is_initial && this._eccSharedSecret
+                  ? xorIkmsForRenewal(this._eccSharedSecret, freshIkm)
+                  : freshIkm;
+              this._eccSharedSecret = ikm;
+              this._derivedKeys = await computeEccDerivedKeys(
+                cryptoFactory,
+                this._clientNonce,
+                this._serverNonce,
+                ikm
+              );
+            } else {
+              this._derivedKeys = await computeDerivedKeys(
+                cryptoFactory,
+                this._serverNonce,
+                this._clientNonce
+              );
+            }
           }
 
           const derivedServerKeys = this._derivedKeys ? this._derivedKeys.derivedServerKeys : null;
@@ -1502,6 +1546,18 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
     assert('function' === typeof cryptoFactory.asymmetricSign);
 
     const options: Partial<SecureMessageChunkManagerOptions> = {};
+    if (cryptoFactory.eccCurve) {
+      // Part 6 §6.8.1: OPN messages are signed with ECDSA but NOT
+      // asymmetrically encrypted — the ECDH agreement replaces RSA wrapping.
+      // The ECDSA signature length is fixed per curve (r||s).
+      assert(cryptoFactory.asymmetricSignatureLength !== undefined);
+      options.signatureLength = cryptoFactory.asymmetricSignatureLength;
+      options.signBufferFunc = (chunk) => cryptoFactory.asymmetricSign(chunk, senderPrivateKey);
+      // sign-only: ChunkManager derives maxBodySize without block padding
+      options.plainBlockSize = 0;
+      options.cipherBlockSize = 0;
+      return options;
+    }
     options.signatureLength = rsaKeyLength(
       await senderPrivateKey.getSignKey(
         cryptoFactory.sha1or256,
@@ -1758,6 +1814,13 @@ export class ClientSecureChannelLayer extends EventEmitter<ClientSecureChannelLa
   protected _lastRequestId: number;
   protected parent?: OPCUAClientBase;
   protected _clientNonce?: Uint8Array; // will be created when needed
+  /**
+   * ECC only (Part 6 §6.8.1): the client's ephemeral ECDH private key for the
+   * current handshake, and the agreed shared secret (IKM) of the channel.
+   * The secret is retained so token renewals can XOR it with the fresh IKM.
+   */
+  protected _clientEphemeralPrivateKey?: CryptoKey;
+  protected _eccSharedSecret?: Uint8Array;
   public protocolVersion: number;
   protected messageChunker: MessageChunker;
   public readonly securityMode: MessageSecurityMode;

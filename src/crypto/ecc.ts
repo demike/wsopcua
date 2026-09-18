@@ -11,10 +11,10 @@
  * curves from the 1.05 policies that WebCrypto supports. Brainpool and
  * Curve25519/Curve448 throw UNSUPPORTED (see assertEccCurveSupported).
  *
- * SCOPE: channel crypto primitives only (ephemeral/ECDH/HKDF/ECDSA + symmetric
- * key derivation). OpenSecureChannel message wiring (OPN encrypt/decrypt
- * strategy, SecureChannel nonce handling in `message_builder` /
- * `client_secure_channel_layer`) still assumes RSA and is a follow-up.
+ * SCOPE: channel crypto primitives (ephemeral/ECDH/HKDF/ECDSA + symmetric
+ * key derivation) plus client OPN wiring in `client_secure_channel_layer`
+ * (sign-only OPN, ephemeral nonces, ECDH + renewal XOR). Server-side OPN
+ * emission and EccEncryptedSecret UserTokens remain follow-ups.
  */
 
 export type EccCurve = 'P-256' | 'P-384';

@@ -217,9 +217,12 @@ export class MessageBuilder extends MessageBuilderBase {
       asymmetricAlgorithmSecurityHeader.senderCertificate
     );
     // then verify the signature
-    const signatureLength = cert.publicKeyLength; // 1024 bits = 128Bytes or 2048=256Bytes
+    // RSA: 1024 bits = 128Bytes or 2048=256Bytes, ... ECC (ECDSA r||s): 64 P-256, 96 P-384
+    const signatureLength = cert.publicKeyLength;
     assert(
-      signatureLength === 128 ||
+      signatureLength === 64 ||
+        signatureLength === 96 ||
+        signatureLength === 128 ||
         signatureLength === 256 ||
         signatureLength === 384 ||
         signatureLength === 512
