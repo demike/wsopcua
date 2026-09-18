@@ -179,6 +179,12 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
   serverCertificate?: Uint8Array;
   serverNonce?: Uint8Array;
   serverSignature?: SignatureData;
+  /**
+   * ECC session ephemeral keys (Part 6 §6.8.2) by ECDHPolicyUri: the latest
+   * server EphemeralKey received via AdditionalHeader, plus whether it was
+   * already consumed by an EccEncryptedSecret (servers reject reuse).
+   */
+  serverEccEphemeralKeys?: Record<string, import('./ecc_session_handshake').SessionEphemeralKey>;
   authenticationToken?: NodeId /* | ExpandedNodeId*/;
   sessionId: any;
   name: any;

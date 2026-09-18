@@ -33,7 +33,11 @@ const ApplicationType = endpoints_service.ApplicationType;
 const EndpointDescription = endpoints_service.EndpointDescription;
 
 import { MessageSecurityMode, SignatureData } from '../service-secure-channel';
-import { SecurityPolicy, fromURI, getCryptoFactory } from '../secure-channel/security_policy';
+import {
+  SecurityPolicy,
+  fromURI,
+  getCryptoFactory,
+} from '../secure-channel/security_policy';
 import { LocalizedText } from '../generated/LocalizedText';
 
 const UserNameIdentityToken = session_service.UserNameIdentityToken;
@@ -59,6 +63,13 @@ import {
 import { ClientSecureChannelLayer } from '../secure-channel/client_secure_channel_layer';
 import { concatArrayBuffers } from '../basic-types/array';
 import { OPCUAClientOptions } from '../common/client_options';
+import {
+  buildEcdhPolicyUriHeader,
+  eccTokenContextFor,
+  parseEccSessionEphemeralKey,
+  protectEccUserTokenSecret,
+  storeSessionEphemeralKey,
+} from './ecc_session_handshake';
 
 export interface UserIdentityInfoUserName {
   userName: string;
@@ -95,6 +106,21 @@ export interface SessionActivationOptions {
 
 function validateServerNonce(serverNonce?: Uint8Array | null): serverNonce is Uint8Array {
   return serverNonce && serverNonce.length < 32 ? false : true;
+}
+
+/**
+ * ECC channel policy of a SecureChannel as a policy URI, if it is ECC.
+ * The SecurityPolicy enum values are the URIs themselves.
+ */
+function channelEccPolicyUri(securityPolicy: SecurityPolicy | undefined): string | undefined {
+  if (!securityPolicy) {
+    return undefined;
+  }
+  return getCryptoFactory(securityPolicy)?.eccCurve ? securityPolicy : undefined;
+}
+
+function secureChannelPolicyOf(session: ClientSession): SecurityPolicy | undefined {
+  return (<any>session)?._client?._secureChannel?.securityPolicy;
 }
 
 /**
@@ -274,6 +300,15 @@ export class OPCUAClient extends OPCUAClientBase {
       this._secureChannel.securityMode === MessageSecurityMode.None || request.clientNonce !== null
     );
 
+    // Part 6 §6.8.2: on ECC channels advertise the ECDHPolicyUri so the
+    // server returns a session EphemeralKey in the response AdditionalHeader.
+    const createEccPolicy = channelEccPolicyUri(
+      (this._secureChannel as unknown as { securityPolicy?: SecurityPolicy })?.securityPolicy
+    );
+    if (createEccPolicy) {
+      request.requestHeader.additionalHeader = buildEcdhPolicyUriHeader(createEccPolicy);
+    }
+
     this.performMessageTransaction(
       request,
       (err, response?: session_service.CreateSessionResponse) => {
@@ -302,6 +337,17 @@ export class OPCUAClient extends OPCUAClientBase {
             session.serverNonce = response.serverNonce;
             session.serverCertificate = response.serverCertificate ?? undefined;
             session.serverSignature = response.serverSignature;
+
+            // Part 6 §6.8.2: retain the server session EphemeralKey for later
+            // EccEncryptedSecret user tokens (fall back to the advertised URI
+            // when the server echoes no ECDHPolicyUri of its own).
+            const createEphemeral = parseEccSessionEphemeralKey(
+              response.responseHeader.additionalHeader,
+              createEccPolicy
+            );
+            if (createEphemeral) {
+              storeSessionEphemeralKey(session, createEphemeral);
+            }
 
             debugLog('revised session timeout = ' + session.timeout);
 
@@ -443,6 +489,12 @@ export class OPCUAClient extends OPCUAClientBase {
 
         // TODO. fill the ActivateSessionRequest
         // see 5.6.3.2 Parameters OPC Unified Architecture, Part 4 30 Release 1.02
+        // Part 6 §6.8.2: re-advertise the ECDHPolicyUri on ECC channels so the
+        // server returns a fresh session EphemeralKey (reused keys are rejected
+        // once an activation succeeds).
+        const activateEccPolicy = channelEccPolicyUri(
+          (this._secureChannel as unknown as { securityPolicy?: SecurityPolicy })?.securityPolicy
+        );
         const request = new ActivateSessionRequest({
           // This is a signature generated with the private key associated with the
           // clientCertificate. The SignatureAlgorithm shall be the AsymmetricSignatureAlgorithm
@@ -488,6 +540,9 @@ export class OPCUAClient extends OPCUAClientBase {
             // signature: null,
           }),
         });
+        if (activateEccPolicy) {
+          request.requestHeader.additionalHeader = buildEcdhPolicyUriHeader(activateEccPolicy);
+        }
 
         session.performMessageTransaction(request, (err1, response) => {
           if (!err1 && response.responseHeader.serviceResult === StatusCodes.Good) {
@@ -501,6 +556,16 @@ export class OPCUAClient extends OPCUAClientBase {
 
             session.serverNonce = response.serverNonce ?? undefined;
             // TODO: session.lastResponseReceivedTime = Date.now();
+
+            // Part 6 §6.8.2: a successful activation may carry a fresh server
+            // session EphemeralKey for the *next* user token.
+            const activateEphemeral = parseEccSessionEphemeralKey(
+              response.responseHeader.additionalHeader,
+              activateEccPolicy
+            );
+            if (activateEphemeral) {
+              storeSessionEphemeralKey(session, activateEphemeral);
+            }
 
             // remember the identity so that the session can be re-activated on
             // a new SecureChannel without changing its UserTokenType
@@ -1091,6 +1156,24 @@ async function createUserNameIdentityToken(
 
   const passwordArray = stringToUint8Array(password);
 
+  // ECC user tokens are protected as EccEncryptedSecret (Part 6 §6.8.3),
+  // not RSA-wrapped: fresh sender ephemeral key + session server key.
+  const eccCtx = eccTokenContextFor(session, userTokenPolicy.securityPolicyUri);
+  if (eccCtx) {
+    const { envelope, encryptionAlgorithm } = await protectEccUserTokenSecret(
+      session,
+      session.client ?? undefined,
+      eccCtx,
+      passwordArray
+    );
+    return new UserNameIdentityToken({
+      encryptionAlgorithm,
+      password: envelope,
+      policyId: userTokenPolicy.policyId,
+      userName: userName,
+    });
+  }
+
   identityToken = new UserNameIdentityToken({
     encryptionAlgorithm: cryptoFactory.asymmetricEncryptionAlgorithm,
     password: passwordArray,
@@ -1201,6 +1284,22 @@ async function createIssuedIdentityToken(
   // istanbul ignore next
   if (!cryptoFactory) {
     throw new Error(' Unsupported security Policy');
+  }
+
+  // ECC tokens use EccEncryptedSecret (Part 6 §6.8.3), like UserName tokens.
+  const eccCtx = eccTokenContextFor(session, userTokenPolicy.securityPolicyUri);
+  if (eccCtx) {
+    const { envelope, encryptionAlgorithm } = await protectEccUserTokenSecret(
+      session,
+      session.client ?? undefined,
+      eccCtx,
+      tokenData
+    );
+    return new IssuedIdentityToken({
+      encryptionAlgorithm,
+      tokenData: envelope,
+      policyId: userTokenPolicy.policyId,
+    });
   }
 
   identityToken = new IssuedIdentityToken({
