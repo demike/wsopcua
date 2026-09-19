@@ -12,7 +12,10 @@ verify) before printing.
 
 Regeneration (kept out of CI on purpose: needs the Python `cryptography`
 package, while the committed fixture in src/crypto/ecc_secret_kat.ts keeps
-`npm run test:ci` hermetic):
+`npm run test:ci` hermetic). Canonical entry point — regenerates the fixture
+AND runs the KAT spec against the fresh vectors:
+    npm run kat:regen
+Manual equivalent:
     pip install cryptography
     python3 tools/gen_ecc_secret_kat.py > /tmp/ecc_vectors.json
 then re-emit src/crypto/ecc_secret_kat.ts from the JSON fields (same keys as
