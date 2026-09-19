@@ -2,7 +2,22 @@
 
 Construction follows OPC 10000-6 §6.8.3 + OPC 10000-4 §7.40.2.5 as implemented
 in src/crypto/ecc_secret.ts (see that file for field-by-field documentation).
-All randomness is replaced with fixed scalars/bytes so the output is stable.
+All randomness is replaced with fixed scalars/bytes so the crypto vectors
+(IKM, salt, keys, payload, signing input) are byte-stable across runs. The
+self-signed signer certificate — and everything downstream of it (toSign,
+signature, envelopes) — varies per run because ECDSA signing is randomized;
+the committed fixture in src/crypto/ecc_secret_kat.ts pins one instance whose
+internal consistency the generator self-checks (ECDH symmetry + signature
+verify) before printing.
+
+Regeneration (kept out of CI on purpose: needs the Python `cryptography`
+package, while the committed fixture in src/crypto/ecc_secret_kat.ts keeps
+`npm run test:ci` hermetic):
+    pip install cryptography
+    python3 tools/gen_ecc_secret_kat.py > /tmp/ecc_vectors.json
+then re-emit src/crypto/ecc_secret_kat.ts from the JSON fields (same keys as
+EccSecretKat plus policyUri/signingTimeIso) and re-run the KAT spec. The
+generator self-checks ECDH symmetry and the ECDSA signature before printing.
 """
 import datetime
 import hashlib

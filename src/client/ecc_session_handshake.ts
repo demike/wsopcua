@@ -52,6 +52,28 @@ export function buildEcdhPolicyUriHeader(policyUri: string): AdditionalParameter
   });
 }
 
+/**
+ * Set (or refresh) the ECDHPolicyUri entry on a request header, preserving
+ * any unrelated AdditionalHeader entries instead of overwriting the header.
+ */
+export function setEcdhPolicyUriHeader(
+  requestHeader: { additionalHeader?: ExtensionObject | undefined },
+  policyUri: string
+): void {
+  const existing = requestHeader.additionalHeader;
+  if (existing instanceof AdditionalParametersType) {
+    existing.parameters = [
+      ...existing.parameters.filter((pair) => keyNameOf(pair) !== ECDH_POLICY_URI_KEY),
+      new KeyValuePair({
+        key: new QualifiedName({ name: ECDH_POLICY_URI_KEY }),
+        value: new Variant({ dataType: DataType.String, value: policyUri }),
+      }),
+    ];
+    return;
+  }
+  requestHeader.additionalHeader = buildEcdhPolicyUriHeader(policyUri);
+}
+
 function keyNameOf(pair: KeyValuePair): string | undefined {
   const key = (pair as { key?: { name?: unknown } })?.key;
   return typeof key?.name === 'string' ? key.name : undefined;
@@ -130,13 +152,14 @@ export function eccTokenContextFor(
   session: ClientSession,
   tokenPolicyUri: string | undefined
 ): EccTokenContext | undefined {
-  let securityPolicy = tokenPolicyUri ? fromURI(tokenPolicyUri) : SecurityPolicy.Invalid;
-  if (securityPolicy === SecurityPolicy.Invalid) {
-    const channelPolicy = secureChannelPolicyOf(session);
-    if (!channelPolicy) {
-      return undefined;
-    }
-    securityPolicy = channelPolicy;
+  const parsed = tokenPolicyUri ? fromURI(tokenPolicyUri) : SecurityPolicy.Invalid;
+  // A non-empty but unresolvable URI must not leak into policyUri: resolve the
+  // effective policy first (token policy, else channel policy) and derive
+  // everything from it.
+  const securityPolicy =
+    parsed !== SecurityPolicy.Invalid ? parsed : secureChannelPolicyOf(session);
+  if (!securityPolicy) {
+    return undefined;
   }
   const factory = getCryptoFactory(securityPolicy);
   if (!factory?.eccCurve) {
@@ -145,7 +168,7 @@ export function eccTokenContextFor(
   return {
     factory,
     params: factory.eccCurve === 'P-384' ? EccNistP384_Params : EccNistP256_Params,
-    policyUri: tokenPolicyUri || securityPolicy,
+    policyUri: securityPolicy,
   };
 }
 
@@ -173,6 +196,14 @@ export async function protectEccUserTokenSecret(
         `CreateSession/ActivateSession AdditionalHeader, but none was received`
     );
   }
+  if (receiver.used) {
+    // Servers reject an EphemeralKey once an activation succeeded with it
+    // (Part 6 §6.8.2); fail loudly instead of building a doomed secret.
+    throw new Error(
+      `Server EphemeralKey for ${ctx.policyUri} was already consumed by a previous ` +
+        `EccEncryptedSecret; activate again to obtain a fresh key first`
+    );
+  }
   if (receiver.publicKey.byteLength !== ctx.params.nonceLength) {
     throw new Error(
       `Server EphemeralKey length ${receiver.publicKey.byteLength} does not match ${ctx.params.curve}`
@@ -187,11 +218,17 @@ export async function protectEccUserTokenSecret(
       ? 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha384'
       : 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256';
   const sender = await generateEphemeralKeyPair(ctx.params.curve);
+  // The secret binds the last channel serverNonce (server checks it on
+  // receipt); an absent nonce means the handshake never completed.
+  const tokenNonce = session.serverNonce;
+  if (!tokenNonce || tokenNonce.byteLength === 0) {
+    throw new Error('ECC user token requires a channel serverNonce, but none was received');
+  }
   const envelope = await protectEccSecret({
     params: ctx.params,
     policyUri: ctx.policyUri,
     secret,
-    nonce: session.serverNonce || new Uint8Array(0),
+    nonce: tokenNonce,
     senderPrivateKey: sender.privateKey,
     senderPublicKey: await exportEphemeralPublicKey(sender.publicKey, ctx.params.curve),
     receiverPublicKey: receiver.publicKey,

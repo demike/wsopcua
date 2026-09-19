@@ -33,6 +33,7 @@ import {
   parseEccSessionEphemeralKey,
   protectEccUserTokenSecret,
   sessionEphemeralKeyFor,
+  setEcdhPolicyUriHeader,
   storeSessionEphemeralKey,
 } from './ecc_session_handshake';
 import {
@@ -130,6 +131,10 @@ describe('ECC session handshake headers (§6.8.2)', () => {
     // empty token policy URI falls back to the channel policy
     expect(eccTokenContextFor(session, undefined)?.policyUri).toBe(SecurityPolicy.EccNistP256);
     expect(eccTokenContextFor(session, '')?.policyUri).toBe(SecurityPolicy.EccNistP256);
+    // a non-empty but unresolvable URI must not leak into policyUri
+    expect(eccTokenContextFor(session, 'http://example/garbage')?.policyUri).toBe(
+      SecurityPolicy.EccNistP256
+    );
     // RSA token policy on an ECC channel is not ECC
     expect(
       eccTokenContextFor(
@@ -137,6 +142,39 @@ describe('ECC session handshake headers (§6.8.2)', () => {
         'http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256'
       )
     ).toBeUndefined();
+  });
+
+  it('merges ECDHPolicyUri into an existing header instead of overwriting', async () => {
+    const { RequestHeader } = await import('../generated/RequestHeader');
+    const header = new RequestHeader({
+      additionalHeader: new AdditionalParametersType({
+        parameters: [
+          new KeyValuePair({
+            key: new QualifiedName({ name: 'SomethingElse' }),
+            value: new Variant({ dataType: DataType.String, value: 'keep-me' }),
+          }),
+          new KeyValuePair({
+            key: new QualifiedName({ name: 'ECDHPolicyUri' }),
+            value: new Variant({ dataType: DataType.String, value: 'http://example/stale' }),
+          }),
+        ],
+      }),
+    });
+    setEcdhPolicyUriHeader(header, ECC_URI);
+    const params = header.additionalHeader as AdditionalParametersType;
+    expect(params).toBeInstanceOf(AdditionalParametersType);
+    expect(params.parameters.map((p) => p.key.name).sort()).toEqual([
+      'ECDHPolicyUri',
+      'SomethingElse',
+    ]);
+    const uri = params.parameters.find((p) => p.key.name === 'ECDHPolicyUri')!.value.value;
+    expect(uri).toBe(ECC_URI);
+    // and a bare header still works
+    const bare = new RequestHeader({});
+    setEcdhPolicyUriHeader(bare, ECC_URI);
+    expect(
+      (bare.additionalHeader as AdditionalParametersType).parameters[0].key.name
+    ).toBe('ECDHPolicyUri');
   });
 });
 
@@ -198,6 +236,52 @@ describe('ECC user token protection (§6.8.3)', () => {
       protectEccUserTokenSecret(session, client, ctx, new TextEncoder().encode('pw'))
     ).rejects.toThrow(/server EphemeralKey/);
   });
+
+  it('refuses to reuse a consumed server key and requires a server nonce', async () => {
+    const { session, client } = await makeSessionWithServerKey();
+    const ctx = eccTokenContextFor(
+      { ...session, _client: { _secureChannel: { securityPolicy: SecurityPolicy.EccNistP256 } } } as never,
+      ECC_URI
+    )!;
+    await protectEccUserTokenSecret(session, client, ctx, new TextEncoder().encode('first'));
+    await expect(
+      protectEccUserTokenSecret(session, client, ctx, new TextEncoder().encode('second'))
+    ).rejects.toThrow(/already consumed/);
+    // a missing channel nonce fails loudly instead of sending an empty one
+    session.serverEccEphemeralKeys![ECC_URI].used = false;
+    session.serverNonce = undefined;
+    await expect(
+      protectEccUserTokenSecret(session, client, ctx, new TextEncoder().encode('third'))
+    ).rejects.toThrow(/serverNonce/);
+  });
+
+  it('protects a secret on the P-384 policy', async () => {
+    const server = await generateEphemeralKeyPair('P-384');
+    const serverPub = await exportEphemeralPublicKey(server.publicKey, 'P-384');
+    const session = new ClientSession(null as never);
+    session.serverNonce = new Uint8Array(32).map((_, i) => 255 - i);
+    const P384_URI = 'http://opcfoundation.org/UA/SecurityPolicy#EccNistP384';
+    storeSessionEphemeralKey(session, { policyUri: P384_URI, publicKey: serverPub, used: false });
+    const client = {
+      getPrivateKey: () => eccFixturePrivateKey('P-384'),
+      getCertificateChain: () => eccFixtureCertDer('P-384'),
+      getCertificate: () => eccFixtureCertDer('P-384'),
+    };
+    const ctx = eccTokenContextFor(
+      { ...session, _client: { _secureChannel: { securityPolicy: SecurityPolicy.EccNistP384 } } } as never,
+      P384_URI
+    )!;
+    expect(ctx.params.curve).toBe('P-384');
+    const secret = new TextEncoder().encode('p384-secret');
+    const { envelope } = await protectEccUserTokenSecret(session, client, ctx, secret);
+    const { EccNistP384_Params } = await import('../crypto/ecc');
+    const out = await unprotectEccSecret(envelope, {
+      params: EccNistP384_Params,
+      receiverPrivateKey: server.privateKey,
+    });
+    expect(out.secret).toEqual(secret);
+    expect(out.policyUri).toBe(P384_URI);
+  });
 });
 
 describe('ECC session wiring in OPCUAClient', () => {
@@ -205,7 +289,7 @@ describe('ECC session wiring in OPCUAClient', () => {
     vi.restoreAllMocks();
   });
 
-  function makeEccClient() {
+  function makeEccClient(tokenType: (typeof UserTokenType)[keyof typeof UserTokenType] = UserTokenType.UserName) {
     const client = new OPCUAClient({});
     (client as any)._secureChannel = {
       messageBuilder: { _securityPolicy: SecurityPolicy.EccNistP256 },
@@ -217,12 +301,18 @@ describe('ECC session wiring in OPCUAClient', () => {
       securityMode: MessageSecurityMode.SignAndEncrypt,
       userIdentityTokens: [
         new UserTokenPolicy({
-          policyId: 'ecc-username',
-          tokenType: UserTokenType.UserName,
+          policyId: 'ecc-token',
+          tokenType,
           securityPolicyUri: ECC_URI,
         }),
       ],
     });
+    // _activateSession swaps session.client to this client: give it an ECC identity
+    (client as any).clientCertificateStore = {
+      getPrivateKey: () => eccFixturePrivateKey('P-256'),
+      getCertificateChain: () => eccFixtureCertDer('P-256'),
+      getCertificate: () => eccFixtureCertDer('P-256'),
+    };
     return client;
   }
 
@@ -248,12 +338,6 @@ describe('ECC session wiring in OPCUAClient', () => {
 
   it('sends ECDHPolicyUri, builds an EccEncryptedSecret token, stores the new key', async () => {
     const client = makeEccClient();
-    // _activateSession swaps session.client to this client: give it an ECC identity
-    (client as any).clientCertificateStore = {
-      getPrivateKey: () => eccFixturePrivateKey('P-256'),
-      getCertificateChain: () => eccFixtureCertDer('P-256'),
-      getCertificate: () => eccFixtureCertDer('P-256'),
-    };
     const session = new ClientSession(client);
     session.serverCertificate = eccFixtureCertDer('P-256');
     session.serverNonce = new Uint8Array(32).map((_, i) => i);
@@ -304,5 +388,62 @@ describe('ECC session wiring in OPCUAClient', () => {
       (session as any)._freshServerPub
     );
     expect(sessionEphemeralKeyFor(session, ECC_URI)?.used).toBe(false);
+  });
+
+  it('protects issued tokens through the same ECC branch', async () => {
+    const client = makeEccClient(UserTokenType.IssuedToken);
+    const session = new ClientSession(client);
+    session.serverCertificate = eccFixtureCertDer('P-256');
+    session.serverNonce = new Uint8Array(32).map((_, i) => i);
+    const seedServer = await generateEphemeralKeyPair('P-256');
+    storeSessionEphemeralKey(session, {
+      policyUri: ECC_URI,
+      publicKey: await exportEphemeralPublicKey(seedServer.publicKey, 'P-256'),
+      used: false,
+    });
+
+    const requests: any[] = [];
+    vi.spyOn(session, 'performMessageTransaction').mockImplementation(
+      (request: any, callback: any) => {
+        requests.push(request);
+        callback(null, respondWithEphemeralKey(new Uint8Array(64).fill(9)));
+      }
+    );
+
+    const tokenData = new TextEncoder().encode('issued-token-bytes');
+    const err: Error | null = await new Promise((resolve) =>
+      (client as any)._activateSession(
+        session,
+        { userIdentityInfo: { tokenData } },
+        (e: Error | null) => resolve(e)
+      )
+    );
+    expect(err).toBeNull();
+    expect(requests).toHaveLength(1);
+    const token = requests[0].userIdentityToken;
+    expect(token.tokenData).toBeInstanceOf(Uint8Array);
+    expect(token.encryptionAlgorithm).toBe('http://www.w3.org/2001/04/xmlenc#ecdh-es');
+    const opened = await unprotectEccSecret(token.tokenData, {
+      params: EccNistP256_Params,
+      receiverPrivateKey: seedServer.privateKey,
+    });
+    expect(opened.secret).toEqual(tokenData);
+  });
+
+  it('surfaces token protection failures through the activation callback', async () => {
+    const client = makeEccClient();
+    const session = new ClientSession(client);
+    session.serverCertificate = eccFixtureCertDer('P-256');
+    session.serverNonce = new Uint8Array(32);
+    // no session ephemeral key seeded -> ECC branch must reject via callback
+    const err: Error | null = await new Promise((resolve) =>
+      (client as any)._activateSession(
+        session,
+        { userIdentityInfo: { userName: 'alice', password: 'wonderland' } },
+        (e: Error | null) => resolve(e)
+      )
+    );
+    expect(err).toBeInstanceOf(Error);
+    expect(err?.message).toMatch(/EphemeralKey/);
   });
 });

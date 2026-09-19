@@ -64,7 +64,7 @@ import { ClientSecureChannelLayer } from '../secure-channel/client_secure_channe
 import { concatArrayBuffers } from '../basic-types/array';
 import { OPCUAClientOptions } from '../common/client_options';
 import {
-  buildEcdhPolicyUriHeader,
+  setEcdhPolicyUriHeader,
   eccTokenContextFor,
   parseEccSessionEphemeralKey,
   protectEccUserTokenSecret,
@@ -306,7 +306,7 @@ export class OPCUAClient extends OPCUAClientBase {
       (this._secureChannel as unknown as { securityPolicy?: SecurityPolicy })?.securityPolicy
     );
     if (createEccPolicy) {
-      request.requestHeader.additionalHeader = buildEcdhPolicyUriHeader(createEccPolicy);
+      setEcdhPolicyUriHeader(request.requestHeader, createEccPolicy);
     }
 
     this.performMessageTransaction(
@@ -425,9 +425,12 @@ export class OPCUAClient extends OPCUAClientBase {
       const password = (userIdentityInfo as UserIdentityInfoUserName).password;
 
       try {
-        createUserNameIdentityToken(session, userName, password).then((token) => {
-          callback(null, token);
-        });
+        createUserNameIdentityToken(session, userName, password).then(
+          (token) => callback(null, token),
+          // ECC branches reject (no ephemeral key, no private key, ...):
+          // report via callback, never an unhandled rejection.
+          (err) => callback(err instanceof Error ? err : new Error(String(err)))
+        );
         return;
       } catch (err) {
         // xx console.log(err.stack);
@@ -435,9 +438,12 @@ export class OPCUAClient extends OPCUAClientBase {
       }
     } else if (isIssued(userIdentityInfo)) {
       const tokenData = (userIdentityInfo as UserIdentityInfoIssued).tokenData;
-      createIssuedIdentityToken(session, tokenData).then((token) => {
-        callback(null, token);
-      });
+      createIssuedIdentityToken(session, tokenData).then(
+        (token) => {
+          callback(null, token);
+        },
+        (err) => callback(err instanceof Error ? err : new Error(String(err)))
+      );
     } else {
       console.log(' userIdentityToken = ', userIdentityInfo);
       return callback(new Error('CLIENT: Invalid userIdentityToken'));
@@ -541,7 +547,7 @@ export class OPCUAClient extends OPCUAClientBase {
           }),
         });
         if (activateEccPolicy) {
-          request.requestHeader.additionalHeader = buildEcdhPolicyUriHeader(activateEccPolicy);
+          setEcdhPolicyUriHeader(request.requestHeader, activateEccPolicy);
         }
 
         session.performMessageTransaction(request, (err1, response) => {

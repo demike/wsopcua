@@ -46,10 +46,9 @@ import { assert } from '../assert';
 export const ECC_ENCRYPTED_SECRET_TYPE_ID = 17546;
 
 export const ECC_SECRET_SALT_LABEL = 'opcua-secret';
-
-/** AdditionalHeader key names for the §6.8.2 session handshake (Table 70). */
-export const ECDH_POLICY_URI_KEY = 'ECDHPolicyUri';
-export const ECDH_KEY_KEY = 'ECDHKey';
+// NOTE: AdditionalHeader key names (ECDHPolicyUri / ECDHKey, Part 6 Table 70)
+// live canonically in `client/ecc_session_handshake.ts`, which owns the
+// session handshake; this module only handles the secret codec.
 
 function subtle(): SubtleCrypto {
   const c: SubtleCrypto | undefined =
@@ -369,7 +368,9 @@ export async function protectEccSecret(options: ProtectEccSecretOptions): Promis
   const ticks = dateToTicks(signingTime ?? new Date());
   const body = concat(
     uaString(policyUri),
-    uaByteString(signingCertificate ?? new Uint8Array(0)),
+    // omitted certificate encodes as null (-1); receivers fall back to a
+    // trusted certificate (e.g. the client app cert known over SecureChannel).
+    uaByteString(signingCertificate),
     i64le(ticks.lo, ticks.hi),
     u16le(keyData.byteLength),
     keyData,
