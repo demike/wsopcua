@@ -51,6 +51,7 @@
     "test:run": "vitest run",
     "test:ci": "vitest run --config vitest.config.ts",
     "test:coverage": "vitest run --coverage",
+    "kat:regen": "node tools/kat_regen.cjs",
     "bench": "vitest bench --config vitest.bench.config.ts",
     "bench:run": "vitest bench --run --config vitest.bench.config.ts",
     "profile": "node --cpu-prof --cpu-prof-dir=profiles tools/profile.cjs",
