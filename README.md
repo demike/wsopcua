@@ -26,6 +26,7 @@ Get started with wsopcua, learn the fundamentals and explore advanced examples.
 ### Advanced
 
 - [Using Client Certificates](./documentation/certificates.md)
+- [Security Policies (incl. ECC)](./documentation/security-policies.md)
 - [Data Type Generation](./documentation/code_gen.md)
 - [Debugging with Wireshark](./documentation/wireshark.md)
 - [Client Architecture](./documentation/architecture.md)
