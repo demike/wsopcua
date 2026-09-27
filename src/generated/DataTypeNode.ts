@@ -88,4 +88,4 @@ export function decodeDataTypeNode( inp: DataStream): DataTypeNode {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('DataTypeNode', DataTypeNode, new ExpandedNodeId(2 /*numeric id*/, 282, 0));
+register_class_definition('DataTypeNode', DataTypeNode, new ExpandedNodeId(2 /*numeric id*/, 284, 0));

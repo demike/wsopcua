@@ -163,4 +163,4 @@ export function decodeNode(inp: DataStream): Node {
 
 import { register_class_definition } from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('Node', Node, new ExpandedNodeId(2 /*numeric id*/, 258, 0));
+register_class_definition('Node', Node, new ExpandedNodeId(2 /*numeric id*/, 260, 0));

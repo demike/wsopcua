@@ -96,4 +96,4 @@ export function decodeReferenceTypeNode( inp: DataStream): ReferenceTypeNode {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReferenceTypeNode', ReferenceTypeNode, new ExpandedNodeId(2 /*numeric id*/, 273, 0));
+register_class_definition('ReferenceTypeNode', ReferenceTypeNode, new ExpandedNodeId(2 /*numeric id*/, 275, 0));

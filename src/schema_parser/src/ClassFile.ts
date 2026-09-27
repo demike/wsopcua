@@ -25,6 +25,9 @@ export enum ClassFileState {
   Written = 3,
 }
 
+// namespace uri of the standard OPC UA namespace (ns=0 types)
+const DEFAULT_NS_URI = 'http://opcfoundation.org/UA/';
+
 export class ClassFile {
   public set Name(n: string) {
     this.name = this.sanitizeName(n);
@@ -288,6 +291,18 @@ export class ClassFile {
       "';\n";
     const ns =
       typeof this.namespace === 'number' ? this.namespace : " undefined, '" + this.namespace + "'";
+    // Minimal diff: only emit the namespaceUri for non-zero namespaces (companion
+    // specs / custom models). The numeric namespace index is session-specific
+    // (OPC UA Part 3); the stable identifier is (namespaceUri, id), which the
+    // encoder resolves to the session's index via the NamespaceArray.
+    // ns=0 output stays byte-identical. See https://github.com/demike/wsopcua/issues/10
+    const nsUri =
+      typeof this.namespace === 'number' &&
+      this.namespace !== 0 &&
+      this.namespaceUri &&
+      this.namespaceUri !== DEFAULT_NS_URI
+        ? ", '" + this.namespaceUri.replace(/'/g, "\\'") + "'"
+        : '';
     str +=
       "register_class_definition('" +
       this.name +
@@ -297,6 +312,7 @@ export class ClassFile {
       value +
       ', ' +
       ns +
+      nsUri +
       '));\n';
     // str += 'register_class_definition(\'' + this.name + '\', ' + this.name + ', makeExpandedNodeId(' + this.id + ', ' + ns + '));\n';
     return str;
