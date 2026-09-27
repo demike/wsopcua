@@ -90,6 +90,9 @@ export class BSDSchemaParser {
   protected addTypeIdsFromNodeSet(doc: JSDOM) {
     const elements = doc.window.document.querySelectorAll('UADataType');
 
+    // map normalized datatype node id (e.g. "i=6522") -> browse name without prefix
+    const dataTypeNodeIdToName = new Map<string, string>();
+
     for (let i = 0; i < elements.length; i++) {
       const el = elements.item(i);
       const nodeId = this.getTypeId(el);
@@ -97,8 +100,70 @@ export class BSDSchemaParser {
       if (nodeId && browseName) {
         browseName = browseName.split(':')[1];
         this.metaTypeMap['DataType'][browseName] = [browseName, nodeId, 'DataType'];
+        const rawNodeId = el.getAttribute('NodeId');
+        if (rawNodeId) {
+          dataTypeNodeIdToName.set(BSDSchemaParser.normalizeNodeId(rawNodeId), browseName);
+        }
       }
     }
+
+    // Companion specs (e.g. DI) only carry *reverse* HasEncoding references:
+    // UAObject "Default Binary" --HasEncoding(IsForward=false)--> UADataType.
+    // Resolve those to "<Type>_Encoding_DefaultBinary" entries so writeFiles()
+    // registers the encoding id (used on the wire) instead of the datatype id.
+    // See https://github.com/demike/wsopcua/issues/10
+    if (!this.metaTypeMap['Object']) {
+      this.metaTypeMap['Object'] = {};
+    }
+    const objects = doc.window.document.querySelectorAll(
+      'UAObject[BrowseName$="Default Binary"], UAObject[SymbolicName="DefaultBinary"]'
+    );
+    for (let i = 0; i < objects.length; i++) {
+      const obj = objects.item(i);
+      const refs = obj.querySelectorAll('References > Reference[ReferenceType="HasEncoding"]');
+      for (let j = 0; j < refs.length; j++) {
+        const ref = refs.item(j);
+        if (ref.getAttribute('IsForward') !== 'false') {
+          continue;
+        }
+        const targetName = dataTypeNodeIdToName.get(
+          BSDSchemaParser.normalizeNodeId((ref.textContent ?? '').trim())
+        );
+        if (!targetName) {
+          continue;
+        }
+        const encodingId = BSDSchemaParser.extractNumericId(obj.getAttribute('NodeId'));
+        if (!encodingId) {
+          continue;
+        }
+        const key = targetName + '_Encoding_DefaultBinary';
+        if (!this.metaTypeMap['Object'][key]) {
+          this.metaTypeMap['Object'][key] = [key, encodingId, 'Object'];
+        }
+      }
+    }
+  }
+
+  /**
+   * normalizes a NodeId string for comparison, i.e. "ns=1;i=6522" -> "i=6522"
+   */
+  protected static normalizeNodeId(nodeId: string): string {
+    const split = nodeId.split(';');
+    return (split.length >= 2 ? split[split.length - 1] : nodeId).trim();
+  }
+
+  /**
+   * extracts the numeric identifier from a NodeId string, i.e. "ns=1;i=6522" -> "6522".
+   * Returns null for non-numeric identifiers.
+   */
+  protected static extractNumericId(nodeId: string | null): string | null {
+    if (!nodeId) {
+      return null;
+    }
+    const normalized = BSDSchemaParser.normalizeNodeId(nodeId);
+    const split = normalized.split('=');
+    const id = split.length >= 2 ? split[split.length - 1] : normalized;
+    return Number.isFinite(parseInt(id, 10)) ? id : null;
   }
 
   /**
@@ -300,18 +365,18 @@ export class BSDSchemaParser {
   }
 
   protected parseSecondPass() {
-    const ar: BSDClassFileParser[] = [];
-
     for (let iterations = 0; iterations < 10; iterations++) {
+      // NOTE: a fresh list per iteration is required: pushing into the list
+      // being iterated would grow it while iterating and loop forever.
+      const remaining: BSDClassFileParser[] = [];
       for (const t of this.clsIncompleteTypes) {
         t.parse();
         if (t.Cls.state < ClassFileState.Parsed) {
-          ar.push(t);
+          remaining.push(t);
         }
       }
-      this.clsIncompleteTypes = ar;
-
-      if (ar.length === 0) {
+      this.clsIncompleteTypes = remaining;
+      if (remaining.length === 0) {
         return;
       }
     }
@@ -345,9 +410,19 @@ export class BSDSchemaParser {
       if (file.state !== ClassFileState.Written) {
         if (!this.importConfig.readonly) {
           const arParams = this.metaTypeMap['DataType'][file.Name];
+          // Register the DefaultBinary *encoding* id: that is what is put on the
+          // wire as ExtensionObject TypeId (OPC UA Part 6, 5.2.2.15), not the
+          // datatype id itself. See https://github.com/demike/wsopcua/issues/10
           let arParamsEncodingBinary =
-            this.metaTypeMap[/* "DataType"*/ 'Object'][file.Name + '_Encoding_DefaultBinary'];
+            this.metaTypeMap['Object']?.[file.Name + '_Encoding_DefaultBinary'];
           if (!arParamsEncodingBinary) {
+            // No encoding object exists for this type (e.g. built-in types such as
+            // DataValue, which are identified by their DataType id). Fall back to
+            // the DataType id to preserve the long-standing registration that
+            // callers rely on for factory lookups and round-trip tests.
+            console.warn(
+              `no DefaultBinary encoding found for '${file.Name}', falling back to DataType id`
+            );
             arParamsEncodingBinary = arParams;
           }
           if (arParamsEncodingBinary) {

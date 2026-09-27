@@ -5,7 +5,8 @@
 // import {constructObject, is_internal_id, registerBuiltInType} from '../factory';
 
 import { makeNodeId, NodeId } from '../nodeid/nodeid';
-import { encodeNodeId, decodeNodeId, jsonEncodeNodeId, jsonDecodeNodeId } from './nodeid';
+import { getCurrentNamespaceArray } from '../nodeid/expanded_nodeid';
+import { encodeNodeId, decodeNodeId, jsonEncodeNodeId, jsonDecodeExpandedNodeId } from './nodeid';
 import { DataStream } from './DataStream';
 import { constructObject } from '../factory/factories_factories';
 import { is_internal_id } from '../factory/factories_id_generator';
@@ -14,8 +15,8 @@ import { IEncodable } from '../factory/factories_baseobject';
 
 export class ExtensionObject {}
 
-export function constructEmptyExtensionObject(nodeId: NodeId) {
-  return constructObject(nodeId);
+export function constructEmptyExtensionObject(nodeId: NodeId, namespaceArray?: string[]) {
+  return constructObject(nodeId, namespaceArray ?? getCurrentNamespaceArray());
 }
 
 // OPC-UA Part 6 - $5.2.2.15 ExtensionObject
@@ -192,7 +193,7 @@ export function jsonDecodeExtensionObject(jsonObj: any) {
     return jsonObj.Body;
   }
 
-  const nodeId = jsonDecodeNodeId(jsonObj.TypeId);
+  const nodeId = jsonDecodeExpandedNodeId(jsonObj.TypeId);
   if (jsonObj.Encoding !== undefined && jsonObj.Encoding > 0) {
     throw new Error('not supported');
   }

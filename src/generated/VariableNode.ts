@@ -138,5 +138,5 @@ import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
 register_class_definition(
   'VariableNode',
   VariableNode,
-  new ExpandedNodeId(2 /*numeric id*/, 267, 0)
+  new ExpandedNodeId(2 /*numeric id*/, 269, 0)
 );

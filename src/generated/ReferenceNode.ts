@@ -88,4 +88,4 @@ export function decodeReferenceNode( inp: DataStream): ReferenceNode {
 
 import {register_class_definition} from '../factory/factories_factories';
 import { ExpandedNodeId } from '../nodeid/expanded_nodeid';
-register_class_definition('ReferenceNode', ReferenceNode, new ExpandedNodeId(2 /*numeric id*/, 285, 0));
+register_class_definition('ReferenceNode', ReferenceNode, new ExpandedNodeId(2 /*numeric id*/, 287, 0));

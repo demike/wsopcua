@@ -87,4 +87,4 @@ export function decodeParameterResultDataType( inp: DataStream): ParameterResult
 
 import {register_class_definition} from '../../factory/factories_factories';
 import { ExpandedNodeId } from '../../nodeid/expanded_nodeid';
-register_class_definition('ParameterResultDataType', ParameterResultDataType, new ExpandedNodeId(2 /*numeric id*/, 6525, 2));
+register_class_definition('ParameterResultDataType', ParameterResultDataType, new ExpandedNodeId(2 /*numeric id*/, 6554, 2, 'http://opcfoundation.org/UA/DI/'));
