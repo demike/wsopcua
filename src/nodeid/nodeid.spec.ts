@@ -202,6 +202,62 @@ describe('testing coerceNodeId', function () {
   });
 });
 
+describe('resolveNodeId string cache', function () {
+  it('should return the same instance for repeated string resolution', () => {
+    const first = resolveNodeId('ns=2;s=Cached.Sensor.1');
+    const second = resolveNodeId('ns=2;s=Cached.Sensor.1');
+    expect(second).toBe(first);
+    expect(second.namespace).toBe(2);
+    expect(second.value).toBe('Cached.Sensor.1');
+  });
+
+  it('should cache numeric string forms too', () => {
+    const first = resolveNodeId('ns=3;i=4711');
+    const second = resolveNodeId('ns=3;i=4711');
+    expect(second).toBe(first);
+    expect(second.value).toBe(4711);
+  });
+
+  it('should not cache when options are provided', () => {
+    const withoutOptions = resolveNodeId('i=123456');
+    expect(withoutOptions.namespace).toBe(0);
+
+    // options change the resulting namespace, so that call must not be cached
+    // as the plain result
+    const withOptions = resolveNodeId('i=123456', 2);
+    expect(withOptions.namespace).toBe(2);
+    expect(withOptions.value).toBe(123456);
+
+    const withoutOptionsAgain = resolveNodeId('i=123456');
+    expect(withoutOptionsAgain).toBe(withoutOptions);
+    expect(withoutOptionsAgain.namespace).toBe(0);
+  });
+
+  it('should pass NodeId instances straight through', () => {
+    const nodeId = makeNodeId(42, 1);
+    expect(resolveNodeId(nodeId)).toBe(nodeId);
+  });
+
+  it('should still throw for invalid strings', () => {
+    expect(function () {
+      resolveNodeId('ThisIsNotANodeId');
+    }).toThrow();
+  });
+
+  it('should stay correct after many distinct ids (bounded cache)', () => {
+    const first = resolveNodeId('ns=2;s=Eviction.First');
+    for (let i = 0; i < 1200; i++) {
+      resolveNodeId('ns=2;s=Eviction.' + i);
+    }
+    // the first entry may have been evicted, but must still resolve correctly
+    const again = resolveNodeId('ns=2;s=Eviction.First');
+    expect(again.value).toBe('Eviction.First');
+    expect(again.namespace).toBe(2);
+    expect(resolveNodeId('ns=2;s=Eviction.First')).toBe(again);
+    expect(first).toBeDefined();
+  });
+});
+
 describe('#sameNodeId', function () {
   const nodeIds = [
     makeNodeId(2, 3),

@@ -177,6 +177,175 @@ run('ReadResponse[100] decode', Math.max(1, Math.floor(ITER / 200)), () => {
   new ReadResponse().decode(new DataStream(BUF));
 });
 
+// --- client: node id resolution (read/browse/monitor preparation) ---------
+// ClientSession#read resolves every node id before building the request; the
+// 'i='/'s=' string forms are re-parsed on every call (only well-known names
+// hit the name index), which matters for dashboards that poll many nodes.
+const { resolveNodeId } = require(`${DIST}/nodeid/nodeid.js`);
+run("resolveNodeId('ns=2;i=2258')", ITER, () => {
+  resolveNodeId('ns=2;i=2258');
+});
+run("resolveNodeId('ns=2;s=Sensor.Channel.42')", ITER, () => {
+  resolveNodeId('ns=2;s=Sensor.Channel.42');
+});
+run("resolveNodeId('HasComponent') name index", ITER, () => {
+  resolveNodeId('HasComponent');
+});
+// raw parse path (bypasses the resolveNodeId cache) and raw construction cost
+const { coerceNodeId, NodeId } = require(`${DIST}/nodeid/nodeid.js`);
+const { NodeIdType } = require(`${DIST}/generated/NodeIdType.js`);
+run("coerceNodeId('i=2258') raw parse", ITER, () => {
+  coerceNodeId('i=2258');
+});
+run("coerceNodeId('ns=2;s=Sensor.42') raw parse", ITER, () => {
+  coerceNodeId('ns=2;s=Sensor.42');
+});
+run('new NodeId(Numeric,1,0)', ITER, () => {
+  new NodeId(NodeIdType.Numeric, 1, 0);
+});
+
+// --- client: browse decode ------------------------------------------------
+// Browsing is decode-dominated: every reference is a ReferenceDescription
+// (node id + browse name + display name + type definition + node class).
+const { BrowseResponse } = require(`${DIST}/generated/BrowseResponse.js`);
+const { BrowseResult } = require(`${DIST}/generated/BrowseResult.js`);
+const { ReferenceDescription } = require(`${DIST}/generated/ReferenceDescription.js`);
+const { QualifiedName } = require(`${DIST}/generated/QualifiedName.js`);
+const { LocalizedText } = require(`${DIST}/generated/LocalizedText.js`);
+const { NodeClass } = require(`${DIST}/generated/NodeClass.js`);
+const { makeExpandedNodeId } = require(`${DIST}/nodeid/expanded_nodeid.js`);
+
+function makeReference(i) {
+  return new ReferenceDescription({
+    referenceTypeId: makeNodeId(47, 0), // HasComponent
+    isForward: true,
+    nodeId: makeExpandedNodeId(makeNodeId('Sensor.Channel.' + i, 2)),
+    browseName: new QualifiedName({ namespaceIndex: 2, name: 'Channel' + i }),
+    displayName: new LocalizedText({ text: 'Channel ' + i }),
+    nodeClass: NodeClass.Variable,
+    typeDefinition: makeExpandedNodeId(63, 0), // BaseDataVariableType
+  });
+}
+function makeBrowseResponse(n) {
+  const references = [];
+  for (let i = 0; i < n; i++) {
+    references.push(makeReference(i));
+  }
+  return new BrowseResponse({
+    responseHeader: new ResponseHeader(),
+    results: [new BrowseResult({ references })],
+    diagnosticInfos: [],
+  });
+}
+const browseResponse = makeBrowseResponse(200);
+{
+  const w = new DataStream(BUF);
+  w.length = 0;
+  browseResponse.encode(w);
+}
+run('BrowseResponse[200 refs] decode', Math.max(1, Math.floor(ITER / 500)), () => {
+  new BrowseResponse().decode(new DataStream(BUF));
+});
+run('BrowseResponse[200 refs] round-trip', Math.max(1, Math.floor(ITER / 1000)), () => {
+  const w = new DataStream(BUF);
+  w.length = 0;
+  browseResponse.encode(w);
+  new BrowseResponse().decode(new DataStream(BUF));
+});
+
+// --- client: monitoring (publish decode + notification fan-out) -----------
+// A PublishResponse carries DataChangeNotifications; after decoding, every
+// monitored item gets its value through an emitter call ('changed').
+const { PublishResponse } = require(`${DIST}/generated/PublishResponse.js`);
+const { NotificationMessage } = require(`${DIST}/generated/NotificationMessage.js`);
+const { DataChangeNotification } = require(`${DIST}/generated/DataChangeNotification.js`);
+const { MonitoredItemNotification } = require(`${DIST}/generated/MonitoredItemNotification.js`);
+const { ClientSubscription } = require(`${DIST}/client/ClientSubscription.js`);
+const { EventEmitter } = require(`${DIST}/eventemitter/index.js`);
+const { AttributeIds } = require(`${DIST}/constants/index.js`);
+
+function makeMonitoredDataValue(i) {
+  return new DataValue({
+    value: new Variant({ dataType: DataType.Double, value: i * 1.5 }),
+    statusCode: StatusCodes.Good,
+    sourceTimestamp: new Date(Date.UTC(2024, 0, 1, 0, 0, i % 60, i % 1000)),
+    serverTimestamp: new Date(Date.UTC(2024, 0, 1, 0, 0, i % 60, i % 1000)),
+  });
+}
+function makePublishResponse(n, sequenceNumber) {
+  const monitoredItems = [];
+  for (let i = 0; i < n; i++) {
+    monitoredItems.push(
+      new MonitoredItemNotification({ clientHandle: i + 1, value: makeMonitoredDataValue(i) })
+    );
+  }
+  return new PublishResponse({
+    responseHeader: new ResponseHeader(),
+    subscriptionId: 42,
+    availableSequenceNumbers: [sequenceNumber],
+    notificationMessage: new NotificationMessage({
+      sequenceNumber,
+      publishTime: new Date(Date.UTC(2024, 0, 1)),
+      notificationData: [new DataChangeNotification({ monitoredItems, diagnosticInfos: [] })],
+    }),
+  });
+}
+const publishResponse100 = makePublishResponse(100, 1);
+const publishResponse1000 = makePublishResponse(1000, 1);
+{
+  const w = new DataStream(BUF);
+  w.length = 0;
+  publishResponse100.encode(w);
+}
+run('PublishResponse[100 items] decode', Math.max(1, Math.floor(ITER / 200)), () => {
+  new PublishResponse().decode(new DataStream(BUF));
+});
+
+// stub that mirrors MonitoredItem#_notify_value_change (catch + emit)
+class StubMonitoredItem extends EventEmitter {
+  constructor() {
+    super();
+    this.itemToMonitor = { attributeId: AttributeIds.Value };
+  }
+  _notify_value_change(value) {
+    try {
+      this.emit('changed', value);
+    } catch {
+      /* mirrors the client's swallow-and-log behavior */
+    }
+  }
+}
+// ClientSubscription without running its constructor (which would create a
+// server-side subscription); dispatch only needs the emitter internals and
+// the monitored item map.
+function createBenchSubscription() {
+  const subscription = Object.create(ClientSubscription.prototype);
+  const freshEmitter = new EventEmitter();
+  subscription._events = freshEmitter._events;
+  subscription._eventsCount = 0;
+  subscription.monitoredItems = {};
+  subscription._lastSequenceNumber = -1;
+  subscription.lastRequestSentTime = 0;
+  return subscription;
+}
+function makeSubscriptionWithItems(n) {
+  const subscription = createBenchSubscription();
+  for (let i = 0; i < n; i++) {
+    const item = new StubMonitoredItem();
+    item.on('changed', () => {});
+    subscription.monitoredItems[i + 1] = item;
+  }
+  return subscription;
+}
+const subscription100 = makeSubscriptionWithItems(100);
+const subscription1000 = makeSubscriptionWithItems(1000);
+run('monitor fan-out[100 items]', Math.max(1, Math.floor(ITER / 200)), () => {
+  subscription100.onNotificationMessage(publishResponse100.notificationMessage);
+});
+run('monitor fan-out[1000 items]', Math.max(1, Math.floor(ITER / 2000)), () => {
+  subscription1000.onNotificationMessage(publishResponse1000.notificationMessage);
+});
+
 // --- chunk-manager framing (async) ---------------------------------------
 function writeFakeHeader(block) {
   for (let i = 0; i < this.headerSize; i++) block.setUint8(i, 0xaa);
