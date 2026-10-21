@@ -70,6 +70,30 @@ describe('basic-types: String', () => {
   });
 });
 
+describe('basic-types: String decoding paths', () => {
+  // readString() builds short ASCII strings directly from the bytes; longer or
+  // non-ASCII strings go through TextDecoder. Keep one case per path so the
+  // fast path (and its 32 byte limit) stays visible in the numbers.
+  bench('decodeString (12 ascii, fast path)', () => {
+    const s = preparedReadStream((w) => encodeString('Channel12345', w));
+    decodeString(s);
+  });
+  bench('decodeString (32 ascii, fast path limit)', () => {
+    const s = preparedReadStream((w) => encodeString('x'.repeat(32), w));
+    decodeString(s);
+  });
+  bench('decodeString (36 ascii, TextDecoder path)', () => {
+    const s = preparedReadStream((w) =>
+      encodeString('Temperature.Sensor.Value.Channel.001', w)
+    );
+    decodeString(s);
+  });
+  bench('decodeString (unicode, TextDecoder path)', () => {
+    const s = preparedReadStream((w) => encodeString('Température.Sensor.Ω', w));
+    decodeString(s);
+  });
+});
+
 describe('basic-types: ByteString', () => {
   const bytes = new Uint8Array(64).map((_, i) => i & 0xff);
   bench('encodeByteString', () => {
@@ -121,6 +145,12 @@ describe('basic-types: DateTime', () => {
   bench('decodeDateTime', () => {
     const s = preparedReadStream((w) => encodeDateTime(date, w));
     decodeDateTime(s);
+  });
+  bench('decodeDateTime + encodeDateTime (cache reuse)', () => {
+    const s = preparedReadStream((w) => encodeDateTime(date, w));
+    const decoded = decodeDateTime(s);
+    const out = freshWriteStream();
+    encodeDateTime(decoded, out);
   });
 });
 
