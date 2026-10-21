@@ -317,7 +317,7 @@ function reverse_map(nodeId: number) {
  * console.log(nodeId.toString());
  * ```
  * ```text
- * >ns=0;i=33
+ * >ns=0;i=47
  * ```
  *
  * ```javascript
@@ -336,6 +336,12 @@ export function resolveNodeId(
   if (typeof node_or_string === 'string') {
     const raw_id = _name_to_nodeid_index[node_or_string];
     if (raw_id !== undefined) {
+      // Well-known names map to their spec-defined, fully qualified ns=0 ids.
+      // Like an explicitly namespaced id ("ns=2;i=..."), such an id must not be
+      // re-namespaced by options: defaultNamespaceIndex only applies to
+      // unqualified ids. This fast path therefore intentionally precedes the
+      // options handling (same order as upstream node-opcua); the unit tests
+      // pin the precedence down.
       return raw_id;
     }
     // The 'i='/'ns=..'/'s=' string forms are re-parsed on every call. Clients

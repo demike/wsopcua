@@ -258,6 +258,31 @@ describe('resolveNodeId string cache', function () {
   });
 });
 
+describe('resolveNodeId options precedence', function () {
+  it('should resolve well-known names even when options are given', function () {
+    // well-known names are spec-defined, fully qualified ns=0 ids: like an
+    // explicitly namespaced id, they are not re-namespaced by options
+    // (defaultNamespaceIndex only applies to unqualified ids)
+    const withOptions = resolveNodeId('HasComponent', { defaultNamespaceIndex: 2 });
+    const withoutOptions = resolveNodeId('HasComponent');
+    expect(withOptions).toBe(withoutOptions);
+    expect(withOptions.namespace).toBe(0);
+    expect(withOptions.value).toBe(47);
+  });
+
+  it('should let an explicit namespace win over defaultNamespaceIndex', function () {
+    const nodeId = resolveNodeId('ns=2;i=1234', { defaultNamespaceIndex: 5 });
+    expect(nodeId.namespace).toBe(2);
+    expect(nodeId.value).toBe(1234);
+  });
+
+  it('should apply defaultNamespaceIndex to unqualified string ids', function () {
+    const nodeId = resolveNodeId('i=2258', { defaultNamespaceIndex: 3 });
+    expect(nodeId.namespace).toBe(3);
+    expect(nodeId.value).toBe(2258);
+  });
+});
+
 describe('#sameNodeId', function () {
   const nodeIds = [
     makeNodeId(2, 3),
