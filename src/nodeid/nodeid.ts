@@ -249,6 +249,13 @@ const ReferenceTypeIds = constants.ReferenceTypeIds;
 let _nodeid_to_name_index: { [name: number]: string } = {};
 let _name_to_nodeid_index: { [name: string]: NodeId } = {};
 
+/**
+ * bounded cache for resolveNodeId string forms (i=, s=, ns=..., b=, g=).
+ * Bounded to keep memory flat for applications resolving many distinct ids.
+ */
+const RESOLVED_NODEID_CACHE_MAX = 1000;
+const _resolved_nodeid_cache = new Map<string, NodeId>();
+
 function expand_map(direct_index: { [name: string]: number }) {
   for (const name in direct_index) {
     if (direct_index.hasOwnProperty(name)) {
@@ -310,7 +317,7 @@ function reverse_map(nodeId: number) {
  * console.log(nodeId.toString());
  * ```
  * ```text
- * >ns=0;i=33
+ * >ns=0;i=47
  * ```
  *
  * ```javascript
@@ -326,13 +333,39 @@ export function resolveNodeId(
   options?: ResolveNodeIdOptions
 ): NodeId {
   let nodeId: NodeId;
-  const raw_id =
-    typeof node_or_string === 'string' ? _name_to_nodeid_index[node_or_string] : undefined;
-  if (raw_id !== undefined) {
-    return raw_id;
-  } else {
-    nodeId = coerceNodeId(node_or_string, options);
+  if (typeof node_or_string === 'string') {
+    const raw_id = _name_to_nodeid_index[node_or_string];
+    if (raw_id !== undefined) {
+      // Well-known names map to their spec-defined, fully qualified ns=0 ids.
+      // Like an explicitly namespaced id ("ns=2;i=..."), such an id must not be
+      // re-namespaced by options: defaultNamespaceIndex only applies to
+      // unqualified ids. This fast path therefore intentionally precedes the
+      // options handling (same order as upstream node-opcua); the unit tests
+      // pin the precedence down.
+      return raw_id;
+    }
+    // The 'i='/'ns=..'/'s=' string forms are re-parsed on every call. Clients
+    // (dashboards, pollers) resolve the same node ids on every read/browse/
+    // monitor call, so a bounded cache avoids re-parsing them each time.
+    // Only option-free resolution is cached: options may change the namespace.
+    if (options === undefined) {
+      const cached = _resolved_nodeid_cache.get(node_or_string);
+      if (cached !== undefined) {
+        return cached;
+      }
+      nodeId = coerceNodeId(node_or_string);
+      if (_resolved_nodeid_cache.size >= RESOLVED_NODEID_CACHE_MAX) {
+        // Map preserves insertion order: drop the oldest entry
+        const oldest = _resolved_nodeid_cache.keys().next().value;
+        if (oldest !== undefined) {
+          _resolved_nodeid_cache.delete(oldest);
+        }
+      }
+      _resolved_nodeid_cache.set(node_or_string, nodeId);
+      return nodeId;
+    }
   }
+  nodeId = coerceNodeId(node_or_string, options);
   return nodeId;
 }
 

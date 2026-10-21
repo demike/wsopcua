@@ -344,7 +344,8 @@ export class ClientSidePublishEngine {
   }
 
   public getSubscriptionIds(): number[] {
-    return Object.keys(this.subscriptionMap).map(parseInt);
+    // note: not `map(parseInt)` - the map index would become the radix
+    return Object.keys(this.subscriptionMap).map((key) => Number(key));
   }
 
   /** *

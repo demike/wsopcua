@@ -227,7 +227,8 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
 
     const monitoredItems = notification.monitoredItems;
 
-    monitoredItems.forEach((monitoredItem) => {
+    for (let i = 0; i < monitoredItems.length; i++) {
+      const monitoredItem = monitoredItems[i];
       const monitorItemObj = this.monitoredItems[monitoredItem.clientHandle];
       if (monitorItemObj) {
         if (monitorItemObj.itemToMonitor.attributeId === AttributeIds.EventNotifier) {
@@ -241,7 +242,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
           monitorItemObj._notify_value_change(monitoredItem.value);
         }
       }
-    });
+    }
   }
 
   protected __on_publish_response_StatusChangeNotification(
@@ -330,9 +331,10 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
       // let publish a global event
 
       // now process all notifications
-      notificationData.forEach((notification) => {
+      for (let i = 0; i < notificationData.length; i++) {
+        const notification = notificationData[i];
         if (!notification) {
-          return;
+          continue;
         }
         // DataChangeNotification / StatusChangeNotification / EventNotification
         switch (notification.constructor) {
@@ -355,7 +357,7 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
           default:
             console.log(' Invalid notification :', notification);
         }
-      });
+      }
     }
   }
 

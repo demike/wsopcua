@@ -86,6 +86,16 @@ export interface BrowseDescription {
 }
 */
 
+/**
+ * default reference type used when browse descriptions are coerced from a
+ * plain node id: HierarchicalReferences. Hoisted so that browsing many nodes
+ * does not allocate a new NodeId for every call.
+ */
+const hierarchicalReferencesNodeId = new NodeId(
+  NodeIdType.Numeric,
+  ReferenceTypeIds.HierarchicalReferences
+);
+
 function coerceReadValueId(node: string | NodeId | IReadValueId) {
   if (typeof node === 'string' || node instanceof NodeId) {
     return new read_service.ReadValueId({
@@ -214,7 +224,7 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
         browseDirection: BrowseDirection.Forward,
         nodeClassMask: 0,
         resultMask: 63,
-        referenceTypeId: new NodeId(NodeIdType.Numeric, ReferenceTypeIds.HierarchicalReferences),
+        referenceTypeId: hierarchicalReferencesNodeId,
       });
     } else {
       data.nodeId = resolveNodeId(data.nodeId);

@@ -2,8 +2,10 @@
 
 This project ships micro-benchmarks and a CPU-profiling harness for the
 performance-critical binary encode/decode pipeline (`basic-types`, `DataStream`,
-`variant`, `data-value`, and generated message structures). Use them to measure
-before/after any performance work so improvements are backed by numbers.
+`variant`, `data-value`, and generated message structures), and for the client
+workflows that drive it (read preparation / node id resolution, browse, and
+subscription notification dispatch). Use them to measure before/after any
+performance work so improvements are backed by numbers.
 
 ## Benchmarks (Vitest `bench`)
 
@@ -28,6 +30,9 @@ Current bench files:
 | `src/service-read/read_request.bench.ts` | Full `ReadRequest` size/encode/decode round-trip (1 / 50 / 500 nodes) |
 | `src/service-read/read_response.bench.ts` | Full `ReadResponse` decode: array of `DataValue`s wrapping mixed-type `Variant`s + timestamps (10 / 100 / 1000 values) — the realistic subscription/read decode payload |
 | `src/chunkmanager/chunk_manager.bench.ts` | `ChunkManager` framing throughput (plain & signed, 64 KiB payload) |
+| `src/client/read_loop.bench.ts` | Client read preparation: `resolveNodeId` for `i=`/`s=`/name forms, building a 50-node `ReadRequest` from string ids, and the per-request `setTimeout`/`clearTimeout` timer pair |
+| `src/client/browse.bench.ts` | Browse preparation (`coerceBrowseDescription`) and `BrowseResponse` decode/round-trip (100 / 1000 `ReferenceDescription`s) |
+| `src/client/notification_dispatch.bench.ts` | Monitoring: `PublishResponse` decode (100 / 1000 items), isolated emitter `emit`, and the `ClientSubscription` fan-out to monitored items |
 
 Each bench pre-allocates its buffer and resets the stream position between
 iterations so it measures the codec, not allocation.
@@ -52,7 +57,11 @@ describe('my-thing', () => {
 Vitest runs benchmarks inside a `worker_thread`, and Node's `--cpu-prof` flag
 only profiles the main thread — so a dedicated harness (`tools/profile.cjs`)
 runs the codec loops directly in the main process to produce a reliable
-`.cpuprofile`.
+`.cpuprofile`. Besides the codec workloads it also covers the client-side
+workflows: node id resolution (`resolveNodeId`/`coerceNodeId`), `BrowseResponse`
+decode, `PublishResponse` decode, and the monitored-item notification fan-out
+(the harness installs a minimal `window` shim so the browser-oriented client
+modules load under Node).
 
 Because the harness runs under Node (not a browser), it loads the compiled
 CommonJS build from `dist/_cjs`. Build first, then profile:
@@ -115,6 +124,14 @@ deltas.
 | `variant decode Double[1000]` | ~115,000 |
 | `ReadRequest[50] encode` | ~28,000 |
 | `ReadRequest[50] round-trip` | ~14,000 |
+| `ReadResponse[100] decode` | ~12,000 |
+| `resolveNodeId('ns=2;i=…')` (string, cached) | ~26,000,000 |
+| `resolveNodeId('ns=2;s=…')` (string, cached) | ~18,000,000 |
+| `coerceNodeId('ns=2;s=…')` (raw parse, uncached) | ~2,900,000 |
+| `new NodeId(Numeric,1,0)` | ~82,000,000 |
+| `BrowseResponse[200 refs] decode` | ~3,000 |
+| `PublishResponse[100 items] decode` | ~12,000 |
+| `monitor fan-out[100 / 1000 items]` | ~178,000 / ~29,000 |
 | `ChunkManager` 64 KiB (plain / signed) | ~18,000–36,000 |
 
 > The string/NodeId/message figures reflect the `DataStream.writeString` /
@@ -268,3 +285,62 @@ NodeIds are ~4–5× slower than numeric ones.
 
   No behavioural change (size pass and encode pass still emit identical byte
   counts, so chunk framing is unaffected); full unit suite (862 tests) passes.
+- **`resolveNodeId` bounded cache for string forms** — every `read`/`browse`/
+  `monitor` call re-resolves its node ids, and the `'i='/'ns=…'/'s='` string
+  forms were re-parsed on every call (only well-known names hit the name
+  index). `resolveNodeId` now keeps a bounded (1000 entries, insertion-order
+  eviction) `Map` for option-free string resolution; calls with an options
+  argument bypass the cache since options can change the resulting namespace.
+  Result: repeated resolution ~9.7× faster in the CJS harness
+  (`ns=2;i=…` ~375 ns → ~38.8 ns; `ns=2;s=…` ~389 ns → ~54.9 ns; raw parsing
+  itself is unchanged at ~136 ns / ~347 ns), and building a 50-node
+  `ReadRequest` from string ids ~2.8× faster in the bench environment
+  (~49 µs → ~17.7 µs per request). Note: repeated `resolveNodeId('…')` calls
+  now return the *same* `NodeId` instance — the function already returned
+  shared instances for name-index hits and ids are treated as immutable
+  throughout the codebase; new unit tests cover cache hits, options handling,
+  eviction and error paths.
+- **Client workflow micro-optimisations (read / browse / monitor)** — three
+  small allocation removals in per-call paths:
+  - `ClientSession.coerceBrowseDescription` allocated a fresh `NodeId` for the
+    default `HierarchicalReferences` reference type on every call; it is now a
+    module-level constant. A/B in the bench environment: ~630K → ~1.0M
+    `coerceBrowseDescription('ns=2;s=…')` ops/s (the single `new NodeId` plus
+    its four constructor asserts measured ~580 ns there).
+  - `ClientSubscription` notification dispatch replaced two `forEach` closures
+    with indexed `for` loops (notification list and per-notification
+    monitored-item list). Bench environment: 100-item fan-out ~91K → ~114K
+    ops/s, 1000-item ~9.4K → ~11.7K ops/s (in the CJS/production-like harness
+    the change is within run-to-run noise; per-item fan-out costs ~33–49 ns
+    there).
+  - `ClientSidePublishEngine.getSubscriptionIds` used
+    `Object.keys(...).map(parseInt)`, which passes the array index as the radix
+    and turned every id after the first into `NaN` (the reconnection logic
+    consumes these ids); it now maps with `Number`. Regression tests added.
+
+### Considered and not applied (measurement-backed)
+
+These were evaluated during the read/browse/monitor performance work and
+rejected because the measurements did not justify the change or the risk:
+
+- **Emitter `emit` fast path** — a single-listener/one-argument `emit` costs
+  ~85 ns in the bench environment, and the whole monitored-item fan-out is
+  ~82–88 ns/item there (~33–49 ns/item in the CJS harness). Special-casing
+  0/1/2-argument emits would shave nanoseconds per notification (order 0.1 %
+  CPU in the most aggressive realistic subscription) while touching the shared
+  `EventEmitter` used everywhere in the library.
+- **Shared transaction-timeout scheduler** — `ClientSecureChannelLayer` arms one
+  `setTimeout`/`clearTimeout` pair per request. A pair measures ~0.8 µs in the
+  browser-like bench environment, while a round trip additionally involves
+  network, framing, crypto and message decode (orders of magnitude larger), so
+  replacing the per-request timers with a global deadline scheduler is not
+  justified by the numbers.
+- **Lazy debug logging** — a few `debugLog('…' + value)` call sites build their
+  string eagerly when debugging is off, but they run once per request or per
+  publish cycle (not per value), i.e. tens of nanoseconds against a full round
+  trip; the call sites were left unchanged.
+- **`NodeId` constructor asserts** — the four `assert()` calls in the
+  constructor looked expensive in the esbuild/vitest environment (~580 ns per
+  construction); the CJS/production-like harness shows ~12 ns per construction
+  (`new NodeId(Numeric,1,0)` ~82M ops/s, V8 inlines the asserts), so no change
+  was made.
