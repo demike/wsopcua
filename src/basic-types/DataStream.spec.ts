@@ -201,3 +201,67 @@ describe('Testing DataStream#writeArrayBuffer /  DataStream#readArrayBuffer', fu
     });
     */
 });
+
+describe('DataStream#readString decoding paths', function () {
+  function roundtrip(value?: string | null): string | undefined {
+    const sizeCalc = new BinaryStreamSizeCalculator();
+    sizeCalc.writeString(value);
+    const stream = new DataStream(new ArrayBuffer(sizeCalc.length));
+    stream.writeString(value);
+    stream.rewind();
+    return stream.readString();
+  }
+
+  it('should round-trip short ASCII strings (fast path)', function () {
+    for (const value of ['a', 'Hello', 'Channel12345', 'Temperature']) {
+      expect(roundtrip(value)).toBe(value);
+    }
+  });
+
+  it('should round-trip ASCII strings around the fast path limit', function () {
+    for (const len of [31, 32, 33, 64, 127, 1000]) {
+      const value = 'x'.repeat(len);
+      expect(roundtrip(value)).toBe(value);
+    }
+  });
+
+  it('should round-trip non-ASCII strings (TextDecoder path)', function () {
+    const values = [
+      'héllo',
+      'Temperäture.Sensor.Ω',
+      '日本語のセンサー',
+      '😀',
+      'ascii-prefix-é',
+      'x'.repeat(31) + 'é',
+      '\u2400\u0001\u007f',
+    ];
+    for (const value of values) {
+      expect(roundtrip(value)).toBe(value);
+    }
+  });
+
+  it('should keep null/empty semantics', function () {
+    expect(roundtrip(null)).toBeUndefined();
+    expect(roundtrip(undefined)).toBeUndefined();
+    expect(roundtrip('')).toBe('');
+  });
+
+  it('should decode an unpaired surrogate as U+FFFD like TextDecoder', function () {
+    expect(roundtrip('\uD800')).toBe('\uFFFD');
+  });
+
+  it('should not leak scratch content between strings of different lengths', function () {
+    const stream = new DataStream(new ArrayBuffer(256));
+    stream.writeString('abcdefghijklmnopqrstuvwxyz0123456789'); // 36 bytes: TextDecoder path
+    stream.writeString('x'.repeat(32)); // 32 bytes: longest fast path entry
+    stream.writeString('abc'); // 3 bytes: stale scratch entries must not leak
+    stream.writeString('ab'); // 2 bytes
+    stream.writeString('longer-ascii-string'); // 18 bytes
+    stream.rewind();
+    expect(stream.readString()).toBe('abcdefghijklmnopqrstuvwxyz0123456789');
+    expect(stream.readString()).toBe('x'.repeat(32));
+    expect(stream.readString()).toBe('abc');
+    expect(stream.readString()).toBe('ab');
+    expect(stream.readString()).toBe('longer-ascii-string');
+  });
+});

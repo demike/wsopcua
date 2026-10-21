@@ -635,6 +635,61 @@ describe('DateTime', function () {
     check_date(1491685621859);
     check_date(1491685621853);
   });
+
+  it('should re-encode a decoded DateTime byte-exactly (100ns precision)', function () {
+    for (const t of [1491685621859, 0, 1735689600000, 1451649600001]) {
+      const base = new Date(t);
+      const words = ec.bn_dateToHundredNanoSecondFrom1601(base);
+
+      for (const subMs of [0, 1, 5000, 9999]) {
+        // keep the millisecond part, change only the sub-millisecond 100ns part
+        const lo = words[1] - (words[1] % 10000) + subMs;
+
+        const expectedBytes = new Uint8Array(8);
+        const expected = new DataStream(expectedBytes.buffer);
+        expected.setUint32(lo);
+        expected.setUint32(words[0]);
+
+        const stream = new DataStream(new ArrayBuffer(8));
+        stream.setUint32(lo);
+        stream.setUint32(words[0]);
+        stream.rewind();
+
+        const decoded = ec.decodeDateTime(stream);
+        // A Date cannot represent sub-millisecond precision, and the crafted
+        // words floor to the exact 100ns instant, so the decoded value may sit
+        // one millisecond either side of t. What must hold exactly is the
+        // byte-for-byte re-encode below.
+        expect(Math.abs(decoded.getTime() - t)).toBeLessThanOrEqual(1);
+
+        const out = new DataStream(new ArrayBuffer(8));
+        ec.encodeDateTime(decoded, out);
+        expect(new Uint8Array(out.view.buffer)).toEqual(expectedBytes);
+      }
+    }
+  });
+
+  it('should produce identical bytes when encoding a date twice (cache reuse)', function () {
+    const date = new Date(1735689600123);
+    const first = new DataStream(new ArrayBuffer(8));
+    ec.encodeDateTime(date, first);
+    const second = new DataStream(new ArrayBuffer(8));
+    ec.encodeDateTime(date, second);
+    expect(new Uint8Array(first.view.buffer)).toEqual(new Uint8Array(second.view.buffer));
+  });
+
+  it('should still encode dates carrying the legacy high_low array cache', function () {
+    const date = new Date(1735689600000);
+    (date as any).high_low = [31079493, 1988739072];
+
+    const expected = new DataStream(new ArrayBuffer(8));
+    expected.setUint32(1988739072);
+    expected.setUint32(31079493);
+
+    const out = new DataStream(new ArrayBuffer(8));
+    ec.encodeDateTime(date, out);
+    expect(new Uint8Array(out.view.buffer)).toEqual(new Uint8Array(expected.view.buffer));
+  });
 });
 
 describe('Float', function () {

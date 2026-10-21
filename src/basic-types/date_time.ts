@@ -33,6 +33,17 @@ export function encodeDateTime(date: Date | undefined | null, stream: DataStream
     throw new Error('Expecting a Date : but got a ' + typeof date + ' ' + (<any>date).toString());
   }
   assert(date instanceof Date);
+
+  // Fast path: a Date decoded from the wire carries its exact 100ns words in
+  // the scalar cache set by bn_hundredNanoSecondFrom1601ToDate(), so re-encoding
+  // needs neither the arithmetic nor the legacy [high, low] array.
+  const cachedHigh = (<any>date).hl_h;
+  if (cachedHigh !== undefined) {
+    stream.setUint32((<any>date).hl_l);
+    stream.setUint32(cachedHigh);
+    return;
+  }
+
   const hl = bn_dateToHundredNanoSecondFrom1601(date);
   const hi = hl[0];
   const lo = hl[1];
@@ -128,8 +139,18 @@ const F_div_factor = F / factor;
 //
 export function bn_dateToHundredNanoSecondFrom1601(date: Date) {
   assert(date instanceof Date);
-  if ((<any>date).high_low) {
-    return (<any>date).high_low;
+  // scalar cache first (set by decodeDateTime and by the computation below)
+  const cachedHigh = (<any>date).hl_h;
+  if (cachedHigh !== undefined) {
+    return [cachedHigh, (<any>date).hl_l];
+  }
+  // legacy array cache: dates carrying high_low from older code paths (or from
+  // src/date-time) still encode byte-exactly; upgrade them to the scalar form
+  const legacy = (<any>date).high_low;
+  if (legacy) {
+    (<any>date).hl_h = legacy[0];
+    (<any>date).hl_l = legacy[1];
+    return legacy;
   }
 
   // note : The value returned by the getTime method is the number
@@ -163,8 +184,12 @@ export function bn_dateToHundredNanoSecondFrom1601(date: Date) {
   value_l = (value_l + F) % F;
   const high_low = [value_h, value_l];
   // Cache the computed high/low words on the Date so a subsequent re-encode can
-  // skip the arithmetic. A plain assignment is ~8x faster than defining a
-  // non-enumerable getter and is the same approach used in src/date-time.
+  // skip the arithmetic. Plain assignments are ~8x faster than defining a
+  // non-enumerable getter and are the same approach used in src/date-time.
+  // Both forms are written here so that legacy readers of `high_low` keep
+  // working; the hot decode path below only writes the scalar form.
+  (<any>date).hl_h = value_h;
+  (<any>date).hl_l = value_l;
   (<any>date).high_low = high_low;
   return high_low;
 }
@@ -184,10 +209,13 @@ export function bn_hundredNanoSecondFrom1601ToDate(high: number, low: number) {
     Math.floor((high % factor) * F_div_factor + low / factor) -
     ol;
   const date = new Date(value1);
-  // enrich the date with the original high/low words (exact 100ns precision) so
-  // a later re-encode reproduces identical bytes without recomputation. Plain
-  // assignment is ~8x faster than defining a non-enumerable getter.
-  (<any>date).high_low = [high, low];
+  // Enrich the date with the original high/low words (exact 100ns precision) so
+  // a later re-encode reproduces identical bytes without recomputation. The
+  // words are stored as two scalars: this path runs twice per DataValue, and
+  // the [high, low] array it used to allocate dominated the cost. Readers
+  // (encodeDateTime / bn_dateToHundredNanoSecondFrom1601) accept both forms.
+  (<any>date).hl_h = high;
+  (<any>date).hl_l = low;
   return date;
 }
 
