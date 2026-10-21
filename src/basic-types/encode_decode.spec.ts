@@ -656,7 +656,11 @@ describe('DateTime', function () {
         stream.rewind();
 
         const decoded = ec.decodeDateTime(stream);
-        expect(decoded.getTime()).toBe(t);
+        // A Date cannot represent sub-millisecond precision, and the crafted
+        // words floor to the exact 100ns instant, so the decoded value may sit
+        // one millisecond either side of t. What must hold exactly is the
+        // byte-for-byte re-encode below.
+        expect(Math.abs(decoded.getTime() - t)).toBeLessThanOrEqual(1);
 
         const out = new DataStream(new ArrayBuffer(8));
         ec.encodeDateTime(decoded, out);
