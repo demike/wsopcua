@@ -27,6 +27,8 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm run build --if-present
+      # the schema parser bundle is otherwise only built by the release workflow
+      - run: npm run build-min --prefix src/schema_parser
       - run: npm run e2e:ci
       - run: npm run test:ci
   add-doc-files:
