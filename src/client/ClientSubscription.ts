@@ -28,6 +28,7 @@ import { IMonitoringParameters } from '../generated/MonitoringParameters';
 import { ICreateSubscriptionRequest } from '../generated/CreateSubscriptionRequest';
 import { MonitoredItemBase } from './MonitoredItemBase';
 import { ErrorCallback } from './client_base';
+import { RequestHeader } from '../generated/RequestHeader';
 import { StatusCode } from '../basic-types';
 import { DiagnosticInfo } from '../data-model';
 
@@ -298,8 +299,10 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
     const events = notification.events || [];
     for (const event of events) {
       const monitorItemObj = this.monitoredItems[event.clientHandle];
-      assert(monitorItemObj, 'Expecting a monitored item');
-      monitorItemObj._notify_event(event.eventFields || []);
+      // the item may have been deleted while this notification was in flight
+      if (monitorItemObj) {
+        monitorItemObj._notify_event(event.eventFields || []);
+      }
     }
   }
 
@@ -721,28 +724,90 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
     delete this.monitoredItems[clientHandle];
   }
 
+  /**
+   * Deletes the monitored items with the given server-assigned ids: drops them client-side
+   * (map entry and listeners) and deletes them on the server.
+   *
+   * Ids that are not monitored through this subscription are still sent to the server.
+   *
+   * @param monitoredItemIds the server-assigned ids of the items to delete
+   * @param callback called with the server's error, if any
+   * @param requestHeader optional request header (e.g. a custom `timeoutHint`)
+   */
+  public deleteMonitoredItems(
+    monitoredItemIds: number[],
+    callback: ErrorCallback,
+    requestHeader?: RequestHeader
+  ): void {
+    assert(Array.isArray(monitoredItemIds));
+    assert(this.isActive());
+
+    if (monitoredItemIds.length > 0) {
+      const ids = new Set(monitoredItemIds);
+      // eslint-disable-next-line guard-for-in
+      for (const key in this.monitoredItems) {
+        const monitoredItem = this.monitoredItems[key];
+        if (monitoredItem.monitoredItemId !== undefined && ids.has(monitoredItem.monitoredItemId)) {
+          this._remove(monitoredItem);
+        }
+      }
+    }
+
+    this._send_delete_monitored_items(monitoredItemIds, callback, requestHeader);
+  }
+  public deleteMonitoredItemsP(
+    monitoredItemIds: number[],
+    requestHeader?: RequestHeader
+  ): Promise<void> {
+    return new Promise((res, rej) => {
+      this.deleteMonitoredItems(
+        monitoredItemIds,
+        (err) => {
+          if (err) {
+            rej(err);
+          } else {
+            res();
+          }
+        },
+        requestHeader
+      );
+    });
+  }
+
   public _delete_monitored_items(
     monitoredItems: MonitoredItemBase[],
     callback: ErrorCallback
   ): void {
     assert(Array.isArray(monitoredItems));
-
     assert(this.isActive());
 
+    // the items are known, no need to look them up by id
     monitoredItems.forEach((monitoredItem) => {
       this._remove(monitoredItem);
     });
 
-    this.session.deleteMonitoredItems(
+    this._send_delete_monitored_items(
+      monitoredItems.map((monitoredItem) => monitoredItem.monitoredItemId!),
+      callback
+    );
+  }
+
+  /**
+   * The single place that sends DeleteMonitoredItems for this subscription. Callers must have
+   * removed the items client-side already.
+   */
+  private _send_delete_monitored_items(
+    monitoredItemIds: number[],
+    callback: ErrorCallback,
+    requestHeader?: RequestHeader
+  ): void {
+    this.session._deleteMonitoredItemsOnServer(
       {
+        requestHeader,
         subscriptionId: <number>this.subscriptionId,
-        monitoredItemIds: monitoredItems.map(function (monitoredItem) {
-          return monitoredItem.monitoredItemId!;
-        }),
+        monitoredItemIds,
       },
-      function (err) {
-        callback(err);
-      }
+      (err) => callback(err)
     );
   }
 

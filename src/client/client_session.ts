@@ -25,6 +25,7 @@ import { IDeleteSubscriptionsRequest } from '../generated/DeleteSubscriptionsReq
 import { ITransferSubscriptionsRequest } from '../generated/TransferSubscriptionsRequest';
 
 import { ClientSidePublishEngine } from './client_publish_engine';
+import type { ClientSubscription } from './ClientSubscription';
 import { ClientSessionKeepAliveManager } from './client_session_keepalive_manager';
 
 import { UInt32, StatusCode } from '../basic-types';
@@ -1705,6 +1706,46 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
    * @param callback.err {Error|null}   - the Error if the async method has failed
    */
   public deleteMonitoredItems(
+    options: IDeleteMonitoredItemsRequest,
+    callback: (err: Error | null) => void
+  ) {
+    // Exactly one of the two branches sends the request.
+    const subscription = this._findSubscription(options.subscriptionId);
+    if (subscription) {
+      // A ClientSubscription tracks its monitored items client-side (by client handle, with
+      // their listeners). Let it own the delete - it drops the items and sends the request -
+      // otherwise items deleted through the session stay reachable forever (memory leak).
+      subscription.deleteMonitoredItems(
+        options.monitoredItemIds ?? [],
+        (err) => callback(err ?? null),
+        options.requestHeader
+      );
+    } else {
+      // no client-side state to clean up
+      this._deleteMonitoredItemsOnServer(options, callback);
+    }
+  }
+
+  /**
+   * Returns the active subscription of this session with the given id, if any.
+   */
+  protected _findSubscription(subscriptionId: number | undefined): ClientSubscription | undefined {
+    if (
+      !this._publishEngine ||
+      typeof subscriptionId !== 'number' ||
+      !(subscriptionId > 0) ||
+      !this._publishEngine.hasSubscription(subscriptionId)
+    ) {
+      return undefined;
+    }
+    return this._publishEngine.getSubscription(subscriptionId);
+  }
+
+  /**
+   * Sends the DeleteMonitoredItems request without touching any client-side state.
+   * @internal used by {@link ClientSubscription}, which owns the client-side cleanup.
+   */
+  public _deleteMonitoredItemsOnServer(
     options: IDeleteMonitoredItemsRequest,
     callback: (err: Error | null) => void
   ) {
