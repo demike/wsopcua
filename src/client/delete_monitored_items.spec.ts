@@ -142,6 +142,7 @@ describe('ClientSession#deleteMonitoredItems', function () {
     );
 
     expect(delegate).toHaveBeenCalledWith([101], expect.any(Function), requestHeader);
+    expect(f.sentRequests).toHaveLength(1); // sent by the subscription only, not again by the session
     expect(f.sentRequests[0].requestHeader.timeoutHint).toBe(1234);
     expect(callback).toHaveBeenCalledWith(null);
   });

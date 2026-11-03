@@ -1709,19 +1709,21 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     options: IDeleteMonitoredItemsRequest,
     callback: (err: Error | null) => void
   ) {
-    // A ClientSubscription tracks its monitored items client-side (by client handle, with their
-    // listeners). Let it own the delete, otherwise items deleted through the session stay
-    // reachable from the publish engine forever (memory leak).
+    // Exactly one of the two branches sends the request.
     const subscription = this._findSubscription(options.subscriptionId);
     if (subscription) {
+      // A ClientSubscription tracks its monitored items client-side (by client handle, with
+      // their listeners). Let it own the delete - it drops the items and sends the request -
+      // otherwise items deleted through the session stay reachable forever (memory leak).
       subscription.deleteMonitoredItems(
         options.monitoredItemIds ?? [],
         (err) => callback(err ?? null),
         options.requestHeader
       );
-      return;
+    } else {
+      // no client-side state to clean up
+      this._deleteMonitoredItemsOnServer(options, callback);
     }
-    this._deleteMonitoredItemsOnServer(options, callback);
   }
 
   /**
