@@ -298,8 +298,10 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
     const events = notification.events || [];
     for (const event of events) {
       const monitorItemObj = this.monitoredItems[event.clientHandle];
-      assert(monitorItemObj, 'Expecting a monitored item');
-      monitorItemObj._notify_event(event.eventFields || []);
+      // the item may have been deleted while this notification was in flight
+      if (monitorItemObj) {
+        monitorItemObj._notify_event(event.eventFields || []);
+      }
     }
   }
 
@@ -721,6 +723,25 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
     delete this.monitoredItems[clientHandle];
   }
 
+  /**
+   * Drops the client-side bookkeeping (map entry and listeners) of the monitored items with the
+   * given server-assigned ids. Does not contact the server.
+   * @internal called by {@link ClientSession#deleteMonitoredItems}
+   */
+  public _remove_monitored_items_by_id(monitoredItemIds: readonly number[]): void {
+    if (monitoredItemIds.length === 0) {
+      return;
+    }
+    const ids = new Set(monitoredItemIds);
+    // eslint-disable-next-line guard-for-in
+    for (const key in this.monitoredItems) {
+      const monitoredItem = this.monitoredItems[key];
+      if (monitoredItem.monitoredItemId !== undefined && ids.has(monitoredItem.monitoredItemId)) {
+        this._remove(monitoredItem);
+      }
+    }
+  }
+
   public _delete_monitored_items(
     monitoredItems: MonitoredItemBase[],
     callback: ErrorCallback
@@ -733,7 +754,8 @@ export class ClientSubscription extends EventEmitter<ClientSubscriptionEvents> {
       this._remove(monitoredItem);
     });
 
-    this.session.deleteMonitoredItems(
+    // the items were removed client-side above, only the server needs to be told
+    this.session._deleteMonitoredItemsOnServer(
       {
         subscriptionId: <number>this.subscriptionId,
         monitoredItemIds: monitoredItems.map(function (monitoredItem) {
