@@ -25,6 +25,7 @@ import { IDeleteSubscriptionsRequest } from '../generated/DeleteSubscriptionsReq
 import { ITransferSubscriptionsRequest } from '../generated/TransferSubscriptionsRequest';
 
 import { ClientSidePublishEngine } from './client_publish_engine';
+import type { ClientSubscription } from './ClientSubscription';
 import { ClientSessionKeepAliveManager } from './client_session_keepalive_manager';
 
 import { UInt32, StatusCode } from '../basic-types';
@@ -1708,39 +1709,39 @@ export class ClientSession extends EventEmitter<ClientSessionEvent> {
     options: IDeleteMonitoredItemsRequest,
     callback: (err: Error | null) => void
   ) {
-    // Monitored items created through a ClientSubscription (monitor / monitorItems) are also
-    // tracked client-side, by client handle, together with their listeners. Drop that
-    // bookkeeping as well: otherwise every item deleted through the session stays reachable
-    // from the publish engine forever (memory leak).
-    this._forgetMonitoredItems(options);
+    // A ClientSubscription tracks its monitored items client-side (by client handle, with their
+    // listeners). Let it own the delete, otherwise items deleted through the session stay
+    // reachable from the publish engine forever (memory leak).
+    const subscription = this._findSubscription(options.subscriptionId);
+    if (subscription) {
+      subscription.deleteMonitoredItems(
+        options.monitoredItemIds ?? [],
+        (err) => callback(err ?? null),
+        options.requestHeader
+      );
+      return;
+    }
     this._deleteMonitoredItemsOnServer(options, callback);
   }
 
   /**
-   * Removes the client-side bookkeeping of the given monitored items from the owning
-   * subscription, if that subscription is known to this session.
+   * Returns the active subscription of this session with the given id, if any.
    */
-  protected _forgetMonitoredItems(options: IDeleteMonitoredItemsRequest) {
-    const subscriptionId = options.subscriptionId;
-    const monitoredItemIds = options.monitoredItemIds;
+  protected _findSubscription(subscriptionId: number | undefined): ClientSubscription | undefined {
     if (
       !this._publishEngine ||
-      !monitoredItemIds ||
-      monitoredItemIds.length === 0 ||
       typeof subscriptionId !== 'number' ||
       !(subscriptionId > 0) ||
       !this._publishEngine.hasSubscription(subscriptionId)
     ) {
-      return;
+      return undefined;
     }
-    this._publishEngine
-      .getSubscription(subscriptionId)
-      ._remove_monitored_items_by_id(monitoredItemIds);
+    return this._publishEngine.getSubscription(subscriptionId);
   }
 
   /**
    * Sends the DeleteMonitoredItems request without touching any client-side state.
-   * @internal used by {@link ClientSubscription}, which already removed the items itself.
+   * @internal used by {@link ClientSubscription}, which owns the client-side cleanup.
    */
   public _deleteMonitoredItemsOnServer(
     options: IDeleteMonitoredItemsRequest,

@@ -7,6 +7,7 @@ import { AttributeIds } from '../constants';
 import { NodeId } from '../basic-types';
 import { NodeIdType } from '../generated/NodeIdType';
 import { EventFieldList, EventNotificationList } from '../service-subscription';
+import { RequestHeader } from '../generated/RequestHeader';
 
 /* global describe, it, expect, beforeEach, vi */
 
@@ -129,19 +130,60 @@ describe('ClientSession#deleteMonitoredItems', function () {
     ).not.toThrow();
     expect(f.sentRequests).toHaveLength(1);
   });
+
+  it('hands the delete to the owning subscription, passing the request header on', function () {
+    const delegate = vi.spyOn(f.subscription, 'deleteMonitoredItems');
+    const requestHeader = new RequestHeader({ timeoutHint: 1234 });
+    const callback = vi.fn();
+
+    f.session.deleteMonitoredItems(
+      { subscriptionId: SUBSCRIPTION_ID, monitoredItemIds: [101], requestHeader },
+      callback
+    );
+
+    expect(delegate).toHaveBeenCalledWith([101], expect.any(Function), requestHeader);
+    expect(f.sentRequests[0].requestHeader.timeoutHint).toBe(1234);
+    expect(callback).toHaveBeenCalledWith(null);
+  });
+});
+
+describe('ClientSubscription#deleteMonitoredItems', function () {
+  it('drops the items client-side and deletes them on the server', async function () {
+    const f = makeFixture(3);
+
+    await f.subscription.deleteMonitoredItemsP([102]);
+
+    expect(Object.keys(monitoredItemMap(f.subscription)).sort()).toEqual(['1', '3']);
+    expect(f.items[1].listenerCount('changed')).toBe(0);
+    expect(f.sentRequests).toHaveLength(1);
+    expect(f.sentRequests[0].subscriptionId).toBe(SUBSCRIPTION_ID);
+    expect(f.sentRequests[0].monitoredItemIds).toEqual([102]);
+  });
+
+  it('rejects when the server request fails', async function () {
+    const f = makeFixture(1);
+    (f.session as any)._defaultRequest = (
+      _req: unknown,
+      _res: unknown,
+      _options: unknown,
+      callback: (err: Error | null) => void
+    ) => callback(new Error('BadSubscriptionIdInvalid'));
+
+    await expect(f.subscription.deleteMonitoredItemsP([101])).rejects.toThrow(
+      'BadSubscriptionIdInvalid'
+    );
+  });
 });
 
 describe('ClientSubscription#_delete_monitored_items', function () {
-  it('removes the items and sends a single request without rescanning the subscription', function () {
+  it('removes the given items and sends a single request', function () {
     const f = makeFixture(3);
-    const rescan = vi.spyOn(f.subscription, '_remove_monitored_items_by_id');
 
     f.subscription._delete_monitored_items([f.items[1]], () => {});
 
     expect(Object.keys(monitoredItemMap(f.subscription)).sort()).toEqual(['1', '3']);
     expect(f.sentRequests).toHaveLength(1);
     expect(f.sentRequests[0].monitoredItemIds).toEqual([102]);
-    expect(rescan).not.toHaveBeenCalled();
   });
 });
 
