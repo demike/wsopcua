@@ -283,8 +283,14 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
 
     this._socket.onmessage = (evt: MessageEvent) => this._on_socket_data(evt);
     this._socket.onclose = (evt: CloseEvent) => {
-      this._on_socket_close(evt);
+      const err = this._on_socket_close(evt);
       this.dispose();
+      // settle after dispose(): a pending HEL/ACK transaction would never end otherwise,
+      // and the callback must not see (or re-close) the already closed socket
+      // undefined: closed locally, nothing to fail
+      if (err) {
+        this._fulfill_pending_promises(err);
+      }
     };
     /*
     this._socket.on("end", function (err) {
@@ -414,9 +420,14 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     this._on_message_received(evt.data);
   }
 
-  private _on_socket_close(evt: CloseEvent) {
+  /**
+   * @returns the error a pending HEL/ACK transaction has to be failed with, or `undefined`
+   * if the close was initiated locally (`_disconnecting`) and nothing has to be failed.
+   * Every other close, including a normal one from the remote side, yields an error.
+   */
+  private _on_socket_close(evt: CloseEvent): Error | undefined {
     if (this._disconnecting) {
-      return; // actively disconnecting --> do nothing
+      return undefined; // actively disconnecting --> do nothing
     }
 
     if (doDebug) {
@@ -439,13 +450,13 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
       err = new Error(
         'ERROR IN SOCKET: reason=' + evt.reason + ' code=' + evt.code + ' name=' + this.name
       );
-      // a pending HEL/ACK transaction would never end otherwise: dispose() stops its timeout
-      this._fulfill_pending_promises(err);
     } else {
       this._on_socket_ended_message(new Error('Connection aborted'));
     }
 
     this.on_socket_closed(err);
+    // `err` is unset for a normal close, which on_socket_closed() must keep seeing as no error
+    return err ?? new Error('Connection aborted');
   }
 
   protected _on_socket_ended_message(err?: Error) {
@@ -463,8 +474,5 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
 
     debugLog(' bytesRead    = ' + this.bytesRead);
     debugLog(' bytesWritten = ' + this.bytesWritten);
-    this._fulfill_pending_promises(
-      new Error('Connection aborted - ended by server : ' + (err ? err.message : ''))
-    );
   }
 }
