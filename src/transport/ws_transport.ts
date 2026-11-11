@@ -439,6 +439,8 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
       err = new Error(
         'ERROR IN SOCKET: reason=' + evt.reason + ' code=' + evt.code + ' name=' + this.name
       );
+      // a pending HEL/ACK transaction would never end otherwise: dispose() stops its timeout
+      this._fulfill_pending_promises(err);
     } else {
       this._on_socket_ended_message(new Error('Connection aborted'));
     }
