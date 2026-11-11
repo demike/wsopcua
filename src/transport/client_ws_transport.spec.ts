@@ -180,28 +180,39 @@ describe('testing ClientWS_transport', function () {
 
   it('should report an error if the server closes the socket abnormally during the HEL/ACK transaction', async function () {
     transport.timeout = 1000; // the HEL/ACK timeout must not be what ends the connect
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    const connectCallback = vi.fn();
 
-    await new Promise<void>((resolve) => {
-      transport.connect(url, function (err) {
-        if (err) {
-          expect(err.message).toMatch(/ERROR IN SOCKET/);
+    try {
+      await new Promise<void>((resolve, reject) => {
+        transport.connect(url, function (err) {
+          connectCallback(err);
+          try {
+            expect(err?.message).toMatch(/ERROR IN SOCKET/);
 
-          expect(spyOnConnect.mock.calls.length).toBe(0);
-          expect(spyOnClose.mock.calls.length).toBe(0);
-          expect(spyOnConnectionBreak.mock.calls.length).toBe(0);
+            expect(spyOnConnect.mock.calls.length).toBe(0);
+            expect(spyOnClose.mock.calls.length).toBe(0);
+            expect(spyOnConnectionBreak.mock.calls.length).toBe(0);
+            resolve();
+          } catch (e) {
+            reject(e);
+          }
+        });
 
-          resolve();
-        } else {
-          throw new Error('Should have raised a connection error');
-        }
+        const mockSocket: WebSocketMock = (transport as any)._socket;
+        // the websocket opens and the HEL is sent, e.g. a proxy accepts the connection ...
+        mockSocket._open();
+        // ... but drops it before an ACK arrives, as its upstream is down (1006: abnormal closure)
+        mockSocket._error(1006);
+        mockSocket._close(1006);
       });
 
-      const mockSocket: WebSocketMock = (transport as any)._socket;
-      // the websocket opens and the HEL is sent, e.g. a proxy accepts the connection ...
-      mockSocket._open();
-      // ... but drops it before an ACK arrives, as its upstream is down (1006: abnormal closure)
-      mockSocket._close(1006);
-    });
+      // the HEL/ACK timer must have been cancelled: it must not fail the connect a second time
+      vi.advanceTimersByTime(transport.timeout * 2);
+      expect(connectCallback).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   function makeError(statusCode: StatusCode) {
