@@ -127,7 +127,7 @@ describe('testing ClientWS_transport', function () {
     await new Promise<void>((resolve) => {
       transport.connect(url, function (err) {
         if (err) {
-          expect(err.message).toMatch(/Connection aborted/);
+          expect(err.message).toMatch(/Connection aborted - ended by server/);
 
           expect(spyOnConnect.mock.calls.length).toBe(0);
           expect(spyOnClose.mock.calls.length).toBe(0);

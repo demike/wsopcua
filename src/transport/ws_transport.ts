@@ -429,6 +429,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     }
 
     let err: Error | undefined;
+    let abortErr: Error | undefined;
     if (evt.code !== 1000 /* if not normal*/ && evt.code !== 1005 /* no status code set */) {
       /* TODO: what should we do now
         if (this._socket) {
@@ -440,11 +441,14 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
         'ERROR IN SOCKET: reason=' + evt.reason + ' code=' + evt.code + ' name=' + this.name
       );
     } else {
-      this._on_socket_ended_message(new Error('Connection aborted'));
+      abortErr = new Error(
+        'Connection aborted - ended by server : reason=' + evt.reason + ' code=' + evt.code
+      );
+      this._on_socket_ended_message(abortErr);
     }
 
     this.on_socket_closed(err);
-    return err;
+    return err ?? abortErr;
   }
 
   protected _on_socket_ended_message(err?: Error) {
