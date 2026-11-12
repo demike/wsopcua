@@ -505,6 +505,38 @@ describe('testing ClientWS_transport', function () {
     sock._close(1006);
     expect(spyOnConnectionBreak).toHaveBeenCalledTimes(1);
   });
+
+  it('should ignore a late close of the previous attempt socket', async function () {
+    transport.timeout = 100;
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    try {
+      // attempt 1: HEL times out, the client closes the socket ...
+      const firstAttempt = vi.fn();
+      transport.connect(url, firstAttempt);
+      const firstSocket: WebSocketMock = (transport as any)._socket;
+      firstSocket.close = vi.fn(); // ... but, like a browser, the close event comes later
+      firstSocket._open();
+      vi.advanceTimersByTime(transport.timeout);
+      expect(firstAttempt.mock.calls[0][0]?.message).toMatch(/Timeout/);
+
+      // attempt 2 (backoff retry on the same transport) is in its HEL/ACK ...
+      const secondAttempt = vi.fn();
+      transport.connect(url, secondAttempt);
+      const secondSocket: WebSocketMock = (transport as any)._socket;
+      secondSocket._open();
+
+      // ... when the close of the first socket arrives
+      firstSocket._close(1000);
+      expect(secondAttempt).not.toHaveBeenCalled();
+      expect((transport as any)._socket).toBe(secondSocket);
+
+      secondSocket._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
+      expect(secondAttempt).toHaveBeenCalledTimes(1);
+      expect(secondAttempt.mock.calls[0][0]).toBeFalsy();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
   /*
 
     it('should returns an error if url has invalid port', function (done) {

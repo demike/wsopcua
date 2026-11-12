@@ -170,6 +170,13 @@ export class ClientWSTransport extends WSTransport {
 
     debugLog('endpointUrl =', endpointUrl, 'ep', ep);
 
+    const previousSocket = this._socket;
+    if (previousSocket) {
+      // detach first: a late close of the previous attempt's socket must not tear down this attempt
+      this.dispose();
+      previousSocket.close(1000);
+    }
+
     try {
       this._socket = createClientSocket(endpointUrl, this.encoding);
     } catch (err) {
