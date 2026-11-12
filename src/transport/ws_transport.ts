@@ -121,7 +121,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     debugLog('Setting socket ' + this.name + ' timeout = ', value);
     this._timeout = value;
   }
-  protected dispose() {
+  protected dispose(err: Error = new Error('Connection aborted')) {
     this._cleanup_timers();
     assert(!this._timerId);
     if (this._socket) {
@@ -132,6 +132,8 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
       this._socket = null;
     }
     WSTransport.registry.unregister(this);
+    // last, so the callback neither sees nor re-closes the dead socket
+    this._fulfill_pending_promises(err);
   }
 
   /**
@@ -225,6 +227,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
 
       const sock = this._socket;
       this._socket = null;
+      this._fulfill_pending_promises(new Error('Transport disconnected'));
       sock.close(1000);
     }
   }
@@ -282,16 +285,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     });
 
     this._socket.onmessage = (evt: MessageEvent) => this._on_socket_data(evt);
-    this._socket.onclose = (evt: CloseEvent) => {
-      const err = this._on_socket_close(evt);
-      this.dispose();
-      // settle after dispose(): a pending HEL/ACK transaction would never end otherwise,
-      // and the callback must not see (or re-close) the already closed socket
-      // undefined: closed locally, nothing to fail
-      if (err) {
-        this._fulfill_pending_promises(err);
-      }
-    };
+    this._socket.onclose = (evt: CloseEvent) => this.dispose(this._on_socket_close(evt));
     /*
     this._socket.on("end", function (err) {
 
@@ -420,14 +414,9 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     this._on_message_received(evt.data);
   }
 
-  /**
-   * @returns the error a pending HEL/ACK transaction has to be failed with, or `undefined`
-   * if the close was initiated locally (`_disconnecting`) and nothing has to be failed.
-   * Every other close, including a normal one from the remote side, yields an error.
-   */
   private _on_socket_close(evt: CloseEvent): Error | undefined {
     if (this._disconnecting) {
-      return undefined; // actively disconnecting --> do nothing
+      return; // actively disconnecting --> do nothing
     }
 
     if (doDebug) {
@@ -455,8 +444,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     }
 
     this.on_socket_closed(err);
-    // `err` is unset for a normal close, which on_socket_closed() must keep seeing as no error
-    return err ?? new Error('Connection aborted');
+    return err;
   }
 
   protected _on_socket_ended_message(err?: Error) {

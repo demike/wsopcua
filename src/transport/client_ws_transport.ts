@@ -319,8 +319,8 @@ export class ClientWSTransport extends WSTransport {
     }
   };
 
-  protected dispose() {
-    super.dispose();
+  protected dispose(err?: Error) {
+    super.dispose(err);
     this.off('socket_error', this._on_socket_error_after_connection);
     // this._socket.removeEventListener('socket_error', this._on_socket_error_after_connection);
   }

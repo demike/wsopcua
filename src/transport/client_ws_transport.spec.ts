@@ -461,6 +461,32 @@ describe('testing ClientWS_transport', function () {
 
     expect(spyOnSocketError).toHaveBeenCalledTimes(1);
   });
+
+  it('should fail a pending HEL/ACK transaction when disconnect() is called', async function () {
+    const connectCallback = vi.fn();
+    transport.connect(url, connectCallback);
+    (transport as any)._socket._open();
+
+    await new Promise<void>((resolve) => transport.disconnect(resolve));
+
+    expect(connectCallback).toHaveBeenCalledTimes(1);
+    expect(connectCallback.mock.calls[0][0]).toBeInstanceOf(Error);
+    expect((transport as any)._timerId).toBeNull();
+  });
+
+  it('should fail a pending HEL/ACK transaction when the socket closes after markDisconnecting()', function () {
+    const connectCallback = vi.fn();
+    transport.connect(url, connectCallback);
+    const sock: WebSocketMock = (transport as any)._socket;
+    sock._open();
+
+    transport.markDisconnecting();
+    sock._close(1006);
+
+    expect(connectCallback).toHaveBeenCalledTimes(1);
+    expect(connectCallback.mock.calls[0][0]).toBeInstanceOf(Error);
+    expect((transport as any)._timerId).toBeNull();
+  });
   /*
 
     it('should returns an error if url has invalid port', function (done) {
