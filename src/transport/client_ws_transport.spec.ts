@@ -487,6 +487,24 @@ describe('testing ClientWS_transport', function () {
     expect(connectCallback.mock.calls[0][0]).toBeInstanceOf(Error);
     expect((transport as any)._timerId).toBeNull();
   });
+
+  it('should start a reconnect attempt on the same transport from a clean state', async function () {
+    // attempt 1: the server closes the socket normally during HEL/ACK
+    const firstAttempt = vi.fn();
+    transport.connect(url, firstAttempt);
+    const firstSocket: WebSocketMock = (transport as any)._socket;
+    firstSocket._open();
+    firstSocket._close(1000);
+    expect(firstAttempt.mock.calls[0][0]).toBeInstanceOf(Error);
+
+    // attempt 2 (the backoff retry reuses the transport) succeeds ...
+    const sock = await connectTransport();
+    expect(transport.disconnecting).toBe(false);
+
+    // ... so a later abnormal close must still be reported as a connection break
+    sock._close(1006);
+    expect(spyOnConnectionBreak).toHaveBeenCalledTimes(1);
+  });
   /*
 
     it('should returns an error if url has invalid port', function (done) {

@@ -150,6 +150,11 @@ export class ClientWSTransport extends WSTransport {
   ) {
     assert('function' === typeof callback);
 
+    // the backoff retry reuses this transport: a previous attempt must not leak into this one
+    this._disconnecting = false;
+    this._onSocketClosedHasBeenCalled = false;
+    this._onSocketEndedHasBeenCalled = false;
+
     options = options || {};
 
     this._protocolVersion =
