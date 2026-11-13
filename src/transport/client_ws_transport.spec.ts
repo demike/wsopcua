@@ -619,6 +619,27 @@ describe('testing ClientWS_transport', function () {
     expect(spyOnSocketClosed).toHaveBeenCalledTimes(2);
   });
 
+  it('should not report a close for a retry that was never connected', async function () {
+    // attempt 1 connects, then the server ends the connection
+    const firstSocket = await connectTransport();
+    firstSocket._close(1000);
+    expect(spyOnClose).toHaveBeenCalledTimes(1);
+
+    // attempt 2 (same transport): the server closes the socket during HEL/ACK
+    const secondAttempt = vi.fn();
+    transport.connect(url, secondAttempt);
+    expect(transport.connected).toBe(false);
+    expect(transport.parameters).toBeUndefined();
+    const secondSocket: WebSocketMock = (transport as any)._socket;
+    secondSocket._open();
+    secondSocket._close(1000);
+
+    // reported once, on the connect callback: no close event for a connection never established
+    expect(secondAttempt).toHaveBeenCalledTimes(1);
+    expect(secondAttempt.mock.calls[0][0]?.message).toMatch(/Connection aborted - ended by server/);
+    expect(spyOnClose).toHaveBeenCalledTimes(1);
+  });
+
   it('should ignore a late close of the previous attempt socket', async function () {
     transport.timeout = 100;
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });

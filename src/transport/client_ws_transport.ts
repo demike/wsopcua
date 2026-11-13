@@ -154,6 +154,8 @@ export class ClientWSTransport extends WSTransport {
     this._disconnecting = false;
     this._onSocketClosedHasBeenCalled = false;
     this._onSocketEndedHasBeenCalled = false;
+    this._connected = false;
+    this._parameters = undefined;
 
     options = options || {};
 
