@@ -133,6 +133,13 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     }
     WSTransport.registry.unregister(this);
     // last, so the callback neither sees nor re-closes the dead socket
+    this._fail_pending_callbacks(err);
+  }
+
+  /**
+   * fail whatever is still waiting on this socket: called once the socket is gone or going.
+   */
+  protected _fail_pending_callbacks(err?: Error) {
     if (this._the_callback) {
       this._fulfill_pending_promises(err ?? new Error('Connection aborted'));
     }
@@ -229,7 +236,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
 
       const sock = this._socket;
       this._socket = null;
-      this._fulfill_pending_promises(new Error('Transport disconnected'));
+      this._fail_pending_callbacks(new Error('Transport disconnected'));
       sock.close(1000);
     }
   }

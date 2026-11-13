@@ -107,6 +107,7 @@ export class ClientWSTransport extends WSTransport {
   serverUri = '';
   endpointUrl = '';
   _parameters: any;
+  private _pending_connect?: ErrorCallback;
 
   get protocolVersion() {
     return this._protocolVersion;
@@ -192,27 +193,18 @@ export class ClientWSTransport extends WSTransport {
     //    this._socket.name = "CLIENT";
     this._install_socket(this._socket);
 
-    /* listening to errors onling during connection */
-    // ----------------------------------------------------------------------------
-    const _on_socket_error_for_connect = (err: Event) => {
-      // this handler will catch attempt to connect to an inaccessible address.
-      //        this._socket.removeEventListener('error', _on_socket_error_for_connect);
-      this.off('socket_error', _on_socket_error_for_connect);
-      callback(new Error('failed to connect'));
-    };
-    // this._socket.addEventListener('error', _on_socket_error_for_connect); /* TODO think about listening on the close event, it has mor */
-    this.on('socket_error', _on_socket_error_for_connect);
-    // ---------------------------------------------------------------------------
+    // until the socket opens, a close or disconnect fails the connect via _fail_pending_callbacks()
+    this._pending_connect = callback;
 
     this._socket.onopen = () => {
-      /* remove the connect error listener  */
-      // this._socket.removeEventListener('error', _on_socket_error_for_connect);
-      this.off('socket_error', _on_socket_error_for_connect);
+      this._pending_connect = undefined;
 
       // HEL ACK transaction is used to determine the maximum size of the message chunk
       // this is only necessary for 'opcua+uacp' binary protocol not for 'opcua+uajson'
       // https://reference.opcfoundation.org/v104/Core/docs/Part6/7.5.2/
       if (this.encoding === 'opcua+uajson') {
+        // install error handler to detect connection break
+        this.on('socket_error', this._on_socket_error_after_connection);
         this._connected = true;
         this.emit('connect');
         callback();
@@ -352,5 +344,14 @@ export class ClientWSTransport extends WSTransport {
     // before super.dispose(), which runs the pending callback last
     this.off('socket_error', this._on_socket_error_after_connection);
     super.dispose(err);
+  }
+
+  protected _fail_pending_callbacks(err?: Error) {
+    super._fail_pending_callbacks(err);
+    const pendingConnect = this._pending_connect;
+    if (pendingConnect) {
+      this._pending_connect = undefined;
+      pendingConnect(new Error('failed to connect: ' + (err?.message ?? 'Connection aborted')));
+    }
   }
 }
