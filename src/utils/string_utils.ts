@@ -4,7 +4,7 @@ export function capitalizeFirstLetter(str?: string | null) {
   if (str == null) {
     return str;
   }
-  return str.substr(0, 1).toUpperCase() + str.substr(1);
+  return str.substring(0, 1).toUpperCase() + str.slice(1);
 }
 
 const ACode = 'A'.charCodeAt(0);
@@ -23,9 +23,9 @@ export function lowerFirstLetter(str: string | null): string | null {
   if (str == null) {
     return str;
   }
-  let result = str.substr(0, 1).toLowerCase() + str.substr(1);
+  let result = str.substring(0, 1).toLowerCase() + str.slice(1);
   if (result.length > 3 && isUpperCaseChar(str[1]) && isUpperCaseChar(str[2])) {
-    result = str.substr(0, 2).toLowerCase() + str.substr(2);
+    result = str.substring(0, 2).toLowerCase() + str.slice(2);
   }
   return result;
 }

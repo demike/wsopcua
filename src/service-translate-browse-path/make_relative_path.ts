@@ -166,7 +166,7 @@ export function makeRelativePath(str: string, addressSpace?: any): RelativePath 
       })
     );
 
-    str = str.substr(matches[0].length);
+    str = str.slice(matches[0].length);
   }
 
   return new RelativePath(r);

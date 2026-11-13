@@ -81,7 +81,7 @@ export function encodeGuid(guid: string, stream: DataStream): void {
     const n = starts.length;
     for (i = 0; i < n; i++) {
       start = starts[i];
-      stream.setUint32(parseInt(guid.substr(start, 8), 16));
+      stream.setUint32(parseInt(guid.substring(start, start + 8), 16));
     }
   }
 
@@ -91,7 +91,7 @@ export function encodeGuid(guid: string, stream: DataStream): void {
     const n = starts.length;
     for (i = 0; i < n; i++) {
       start = starts[i];
-      stream.setUint16(parseInt(guid.substr(start, 4), 16));
+      stream.setUint16(parseInt(guid.substring(start, start + 4), 16));
     }
   }
 
@@ -101,7 +101,7 @@ export function encodeGuid(guid: string, stream: DataStream): void {
     const n = starts.length;
     for (i = 0; i < n; i++) {
       start = starts[i];
-      stream.setUint8(parseInt(guid.substr(start, 2), 16));
+      stream.setUint8(parseInt(guid.substring(start, start + 2), 16));
     }
   }
 

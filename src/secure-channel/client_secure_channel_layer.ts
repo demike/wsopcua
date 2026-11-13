@@ -106,7 +106,7 @@ interface RequestData {
 
 function dump_transaction_statistics(stats: ITransactionStats) {
   function w(str: any) {
-    return ('                  ' + str).substr(-12);
+    return ('                  ' + str).slice(-12);
   }
 
   console.log('--------------------------------------------------------------------->> Stats');
