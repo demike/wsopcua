@@ -330,8 +330,15 @@ export function repair_client_session(
 ) {
   _repair_client_session(client, session, (err?: Error | null) => {
     if (!err && !session.hasBeenClosed()) {
-      debugLog('session has been restored', session.sessionId?.toString());
-      session.emit('session_restored');
+      if (doDebug) {
+        debugLog('session has been restored', session.sessionId?.toString());
+      }
+      try {
+        session.emit('session_restored');
+      } catch (listenerErr) {
+        // a throwing listener must not keep the reconnection from completing
+        console.error('session_restored listener has thrown', listenerErr);
+      }
     }
     callback(err);
   });
