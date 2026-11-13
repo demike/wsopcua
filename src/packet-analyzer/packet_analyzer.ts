@@ -16,7 +16,7 @@ const spaces =
   '                                                                                                                                                                             ';
 function f(n: number, width: number): string {
   const s = n.toString();
-  return (s + '      ').substr(0, Math.max(s.length, width));
+  return (s + '      ').substring(0, Math.max(s.length, width));
 }
 
 function display_encoding_mask(padding: string, encoding_mask: any, encoding_info: any) {
@@ -47,7 +47,7 @@ function make_tracer(buffer: DataView, padding: number, offset?: number): any {
   offset = offset || 0;
 
   const pad = function () {
-    return '                                                       '.substr(0, padding);
+    return '                                                       '.substring(0, padding);
   };
 
   function _display(str: string, hex_info?: string) {
@@ -61,7 +61,7 @@ function make_tracer(buffer: DataView, padding: number, offset?: number): any {
       }
     }
     const extra = nbColorAttributes * 5;
-    console.log((pad() + str + spaces).substr(0, 132 + extra) + '|' + hex_info);
+    console.log((pad() + str + spaces).substring(0, 132 + extra) + '|' + hex_info);
   }
   function display(str: string, hexInfo?: string) {
     const lines = str.split('\n');

@@ -1,0 +1,49 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "import"],
+  "categories": {
+    "correctness": "off"
+  },
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
+  "ignorePatterns": ["**/generated/**/*.ts", "**/*.d.ts", "**/*.js", "src/schema_parser/**"],
+  "rules": {
+    "typescript/consistent-type-definitions": "error",
+    "typescript/no-empty-interface": "error",
+    "typescript/no-inferrable-types": ["error", { "ignoreParameters": true }],
+    "typescript/no-misused-new": "error",
+    "eslint/no-shadow": ["error", { "ignoreTypeValueShadow": true }],
+    "typescript/no-unnecessary-type-assertion": "error",
+    "eslint/no-unused-expressions": "error",
+    "typescript/prefer-function-type": "error",
+    "typescript/unbound-method": ["error", { "ignoreStatic": true }],
+    "typescript/unified-signatures": "error",
+    "eslint/arrow-body-style": "error",
+    "eslint/constructor-super": "error",
+    "eslint/curly": "error",
+    "eslint/eqeqeq": ["error", "smart"],
+    "eslint/guard-for-in": "error",
+    "typescript/no-deprecated": "warn",
+    "eslint/no-caller": "error",
+    "eslint/no-console": [
+      "error",
+      {
+        "allow": [
+          "log", "warn", "dir", "timeLog", "assert", "clear", "count", "countReset", "group", "groupEnd",
+          "table", "dirxml", "error", "groupCollapsed", "Console", "profile", "profileEnd", "timeStamp", "context"
+        ]
+      }
+    ],
+    "eslint/no-debugger": "error",
+    "eslint/no-eval": "error",
+    "eslint/no-new-wrappers": "error",
+    "eslint/no-restricted-imports": ["error", "rxjs/Rx"],
+    "eslint/no-throw-literal": "error",
+    "eslint/no-unused-labels": "error",
+    "eslint/no-var": "error",
+    "eslint/prefer-const": "error",
+    "eslint/radix": "error"
+  }
+}

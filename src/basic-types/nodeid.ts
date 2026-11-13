@@ -225,7 +225,7 @@ const _decodeNodeId = function (
         console.log(
           ' encoding_byte = 0x' + encoding_byte.toString(16),
           ' bin=',
-          ('0000000000000000' + encoding_byte.toString(2)).substr(-16),
+          ('0000000000000000' + encoding_byte.toString(2)).slice(-16),
           encoding_byte,
           encoding_byte & 0x3f
         );

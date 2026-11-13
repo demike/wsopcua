@@ -44,7 +44,7 @@ describe('Testing numerical range', function () {
   it('should throw an exception if high bound is crap', function () {
     expect(function () {
       const a = new NumericRange(15, <any>'crappy stuff');
-    }).toThrowError();
+    }).toThrow();
   });
 
   it('should construct a NumericRange with a array containing low and high bound', function () {

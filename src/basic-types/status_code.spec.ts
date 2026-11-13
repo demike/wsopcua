@@ -258,7 +258,7 @@ describe('ModifiableStatusCode', () => {
       const statusCode = StatusCodes.Good;
 
       (<any>statusCode).set('Overflow'); // << set is not defined !!!
-    }).toThrowError();
+    }).toThrow();
   });
 
   /*

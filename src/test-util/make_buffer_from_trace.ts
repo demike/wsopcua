@@ -21,10 +21,10 @@ function hexString(str: string): string {
   for (let line of lines) {
     line = line.trim();
     if (line.length > 80) {
-      line = line.substr(10, 98).trim();
+      line = line.substring(10, 108).trim();
       hexline = hexline ? hexline + ' ' + line : line;
     } else if (line.length > 60) {
-      line = line.substr(7, 48).trim();
+      line = line.substring(7, 55).trim();
       hexline = hexline ? hexline + ' ' + line : line;
     }
   }

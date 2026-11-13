@@ -37,7 +37,7 @@ describe('testing NodeIds', function () {
   it('should raise an error for  NUMERIC nodeID with invalid  values', function () {
     expect(function () {
       const nodeId = new NodeId(NodeIdType.Numeric, -1, -1);
-    }).toThrowError();
+    }).toThrow();
   });
 
   it('should create a STRING nodeID', function () {
@@ -134,16 +134,16 @@ describe('testing coerceNodeId', function () {
 
     expect(function () {
       nodeId = coerceNodeId('ThisIsNotANodeId');
-    }).toThrowError();
+    }).toThrow();
 
     expect(function () {
       nodeId = coerceNodeId('HierarchicalReferences');
-    }).toThrowError();
+    }).toThrow();
 
     expect(function () {
       nodeId = coerceNodeId('ns=0;s=HierarchicalReferences');
       assert(nodeId !== null);
-    }).not.toThrowError();
+    }).not.toThrow();
   });
 
   it('should detect empty Numeric NodeIds', function () {

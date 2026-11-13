@@ -70,7 +70,7 @@ describe('watch dog', function () {
   it("should fail if the object subscribing to the WatchDog doesn't provide a 'watchdogReset' method", async function () {
     expect(function () {
       watchDog.addSubscriber({} as ISubscriber, 100);
-    }).toThrowError();
+    }).toThrow();
   });
 
   it("should install a 'keepAlive' method on  the subscribing object during addSubscriber and remove it during removeSubscriber", async () => {
