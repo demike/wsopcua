@@ -743,6 +743,128 @@ describe('testing ClientWS_transport', function () {
     secondSocket._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
     expect(secondAttempt).toHaveBeenCalledTimes(1);
     expect(secondAttempt.mock.calls[0][0]).toBeFalsy();
+    // the replaced attempt was failed once, not left pending
+    expect(firstAttempt).toHaveBeenCalledTimes(1);
+    expect(firstAttempt.mock.calls[0][0]?.message).toMatch(/failed to connect/);
+  });
+
+  // -------------------------------------------------------------------------
+  // a connect that is still waiting for the socket to open
+  // -------------------------------------------------------------------------
+
+  it('should fail a connect whose socket is still connecting when disconnect() is called', async function () {
+    const connectCallback = vi.fn();
+    transport.connect(url, connectCallback);
+
+    await new Promise<void>((resolve) => transport.disconnect(resolve));
+
+    expect(connectCallback).toHaveBeenCalledTimes(1);
+    expect(connectCallback.mock.calls[0][0]?.message).toMatch(
+      /failed to connect: Transport disconnected/
+    );
+  });
+
+  it('should fail a connect whose socket is still connecting when it closes after markDisconnecting()', function () {
+    const connectCallback = vi.fn();
+    transport.connect(url, connectCallback);
+    const sock: WebSocketMock = (transport as any)._socket;
+
+    transport.markDisconnecting();
+    sock._error(1006);
+    sock._close(1006);
+
+    expect(connectCallback).toHaveBeenCalledTimes(1);
+    expect(connectCallback.mock.calls[0][0]?.message).toMatch(/failed to connect/);
+  });
+
+  it('should fail a connect whose socket never opens after the socket is detached', function () {
+    const spyOnSocketClosed = vi.fn();
+    transport.on('socket_closed', spyOnSocketClosed);
+    let socketWhenCalledBack: WebSocketMock | null | undefined;
+    const connectCallback = vi.fn(() => {
+      socketWhenCalledBack = (transport as any)._socket;
+    });
+    transport.connect(url, connectCallback);
+    const sock: WebSocketMock = (transport as any)._socket;
+
+    sock._error(1006);
+    sock._close(1006);
+
+    expect(connectCallback).toHaveBeenCalledTimes(1);
+    expect(connectCallback.mock.calls[0][0]?.message).toMatch(
+      /failed to connect: ERROR IN SOCKET.*code=1006/
+    );
+    expect(spyOnSocketClosed.mock.invocationCallOrder[0]).toBeLessThan(
+      connectCallback.mock.invocationCallOrder[0]
+    );
+    expect(socketWhenCalledBack).toBeNull();
+  });
+
+  it('should not call a replaced connect back again when the next socket fails', function () {
+    const firstAttempt = vi.fn();
+    transport.connect(url, firstAttempt);
+    expect(firstAttempt).not.toHaveBeenCalled();
+
+    const secondAttempt = vi.fn();
+    transport.connect(url, secondAttempt);
+    expect(firstAttempt).toHaveBeenCalledTimes(1);
+
+    const secondSocket: WebSocketMock = (transport as any)._socket;
+    secondSocket._error(1006);
+    secondSocket._close(1006);
+
+    expect(firstAttempt).toHaveBeenCalledTimes(1);
+    expect(secondAttempt).toHaveBeenCalledTimes(1);
+    expect(secondAttempt.mock.calls[0][0]?.message).toMatch(/failed to connect/);
+  });
+
+  // -------------------------------------------------------------------------
+  // opcua+uajson: no HEL/ACK, but the same connection break detection
+  // -------------------------------------------------------------------------
+
+  describe('with opcua+uajson', function () {
+    let jsonTransport: ClientWSTransport;
+    let spyOnJsonClose: Mock, spyOnJsonConnectionBreak: Mock;
+
+    beforeEach(function () {
+      jsonTransport = new ClientWSTransport('opcua+uajson');
+      spyOnJsonClose = vi.fn();
+      jsonTransport.on('close', spyOnJsonClose);
+      spyOnJsonConnectionBreak = vi.fn();
+      jsonTransport.on('connection_break', spyOnJsonConnectionBreak);
+    });
+
+    afterEach(async function () {
+      await new Promise<void>((resolve) => jsonTransport.disconnect(resolve));
+    });
+
+    function connectJsonTransport(): WebSocketMock {
+      const connectCallback = vi.fn();
+      jsonTransport.connect(url, connectCallback);
+      const sock: WebSocketMock = (jsonTransport as any)._socket;
+      sock._open();
+      expect(connectCallback).toHaveBeenCalledTimes(1);
+      expect(connectCallback.mock.calls[0][0]).toBeFalsy();
+      return sock;
+    }
+
+    it('should emit connection_break when the connection drops', function () {
+      const sock = connectJsonTransport();
+
+      sock._error(1006);
+      sock._close(1006);
+
+      expect(spyOnJsonConnectionBreak).toHaveBeenCalledTimes(1);
+    });
+
+    it('should emit close, but no connection_break, when the server ends the connection', function () {
+      const sock = connectJsonTransport();
+
+      sock._close(1000);
+
+      expect(spyOnJsonClose).toHaveBeenCalledTimes(1);
+      expect(spyOnJsonConnectionBreak).not.toHaveBeenCalled();
+    });
   });
   /*
 
