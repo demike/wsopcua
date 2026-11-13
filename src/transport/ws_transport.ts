@@ -121,7 +121,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     debugLog('Setting socket ' + this.name + ' timeout = ', value);
     this._timeout = value;
   }
-  protected dispose() {
+  protected dispose(err?: Error) {
     this._cleanup_timers();
     assert(!this._timerId);
     if (this._socket) {
@@ -132,6 +132,10 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
       this._socket = null;
     }
     WSTransport.registry.unregister(this);
+    // last, so the callback neither sees nor re-closes the dead socket
+    if (this._the_callback) {
+      this._fulfill_pending_promises(err ?? new Error('Connection aborted'));
+    }
   }
 
   /**
@@ -225,6 +229,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
 
       const sock = this._socket;
       this._socket = null;
+      this._fulfill_pending_promises(new Error('Transport disconnected'));
       sock.close(1000);
     }
   }
@@ -270,6 +275,8 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
   protected _install_socket(socket: WebSocket) {
     assert(socket);
     this._socket = socket;
+    // dispose() unregisters when the previous socket goes away
+    WSTransport.registry.register(this);
 
     // install packet assembler ...
     this.packetAssembler = new PacketAssembler({
@@ -282,10 +289,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     });
 
     this._socket.onmessage = (evt: MessageEvent) => this._on_socket_data(evt);
-    this._socket.onclose = (evt: CloseEvent) => {
-      this._on_socket_close(evt);
-      this.dispose();
-    };
+    this._socket.onclose = (evt: CloseEvent) => this.dispose(this._on_socket_close(evt));
     /*
     this._socket.on("end", function (err) {
 
@@ -414,7 +418,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     this._on_message_received(evt.data);
   }
 
-  private _on_socket_close(evt: CloseEvent) {
+  private _on_socket_close(evt: CloseEvent): Error | undefined {
     if (this._disconnecting) {
       return; // actively disconnecting --> do nothing
     }
@@ -429,6 +433,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     }
 
     let err: Error | undefined;
+    let abortErr: Error | undefined;
     if (evt.code !== 1000 /* if not normal*/ && evt.code !== 1005 /* no status code set */) {
       /* TODO: what should we do now
         if (this._socket) {
@@ -440,10 +445,14 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
         'ERROR IN SOCKET: reason=' + evt.reason + ' code=' + evt.code + ' name=' + this.name
       );
     } else {
-      this._on_socket_ended_message(new Error('Connection aborted'));
+      abortErr = new Error(
+        'Connection aborted - ended by server : reason=' + evt.reason + ' code=' + evt.code
+      );
+      this._on_socket_ended_message(abortErr);
     }
 
     this.on_socket_closed(err);
+    return err ?? abortErr;
   }
 
   protected _on_socket_ended_message(err?: Error) {
@@ -461,8 +470,5 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
 
     debugLog(' bytesRead    = ' + this.bytesRead);
     debugLog(' bytesWritten = ' + this.bytesWritten);
-    this._fulfill_pending_promises(
-      new Error('Connection aborted - ended by server : ' + (err ? err.message : ''))
-    );
   }
 }

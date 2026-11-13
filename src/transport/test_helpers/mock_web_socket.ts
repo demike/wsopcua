@@ -26,9 +26,18 @@ export function installMockWebSocket() {
     } = {
       url: url,
       readyState: WS_CONNECTING,
+      // like a browser WebSocket instance
+      CONNECTING: WS_CONNECTING,
+      OPEN: WS_OPEN,
+      CLOSING: WS_CLOSING,
+      CLOSED: WS_CLOSED,
       listeners: {},
       send: vi.fn(),
       close: vi.fn().mockImplementation(function () {
+        // like a browser: closing an already closed socket does nothing
+        if (socketMock.readyState === WS_CLOSED) {
+          return;
+        }
         socketMock.readyState = WS_CLOSING;
         socketMock._close();
       }),

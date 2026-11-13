@@ -1,7 +1,12 @@
-import { vi } from 'vitest';
+import { vi, Mock } from 'vitest';
 
 import { ClientSecureChannelLayer } from './client_secure_channel_layer';
 import { GetEndpointsRequest } from '../generated/GetEndpointsRequest';
+import {
+  installMockWebSocket,
+  uninstallMockWebSocket,
+  WebSocketMock,
+} from '../transport/test_helpers/mock_web_socket';
 
 function makeRequestMessage() {
   return {
@@ -430,5 +435,57 @@ describe('ClientSecureChannelLayer - close', function () {
     expect(closed).toHaveBeenCalledTimes(1);
     expect(closed.mock.calls[0][0]?.message).toContain('Transport disconnected');
     expect(events).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// reconnect / backoff
+// ---------------------------------------------------------------------------
+
+describe('ClientSecureChannelLayer - reconnect', function () {
+  beforeEach(function () {
+    installMockWebSocket();
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+  });
+
+  afterEach(function () {
+    vi.useRealTimers();
+    uninstallMockWebSocket();
+    vi.restoreAllMocks();
+  });
+
+  const createdSockets = () =>
+    (window.WebSocket as unknown as Mock).mock.results.map((r) => r.value as WebSocketMock);
+
+  // a proxy (e.g. websockify) accepts the websocket, but drops it because its upstream server is down
+  function dropDuringHelAck(sock: WebSocketMock) {
+    sock._open();
+    sock._error(1006);
+    sock._close(1006);
+  }
+
+  it('should keep retrying when the socket closes abnormally during HEL/ACK', function () {
+    const maxDelay = 100;
+    const secureChannel = new ClientSecureChannelLayer({
+      encoding: 'opcua+uacp',
+      connectionStrategy: { maxRetry: 1, initialDelay: 10, maxDelay },
+    });
+    const onBackoff = vi.fn();
+    secureChannel.on('backoff', onBackoff);
+    const created = vi.fn();
+
+    secureChannel.create('ws://localhost:3456', created);
+    expect(createdSockets()).toHaveLength(1);
+
+    dropDuringHelAck(createdSockets()[0]);
+    expect(onBackoff).toHaveBeenCalledTimes(1);
+
+    vi.advanceTimersByTime(maxDelay);
+    expect(createdSockets()).toHaveLength(2);
+
+    // the last allowed attempt fails the same way: the backoff gives up and create() reports it
+    dropDuringHelAck(createdSockets()[1]);
+    expect(created).toHaveBeenCalledTimes(1);
+    expect(created.mock.calls[0][0]?.message).toMatch(/ERROR IN SOCKET/);
   });
 });

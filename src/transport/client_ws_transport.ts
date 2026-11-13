@@ -150,6 +150,18 @@ export class ClientWSTransport extends WSTransport {
   ) {
     assert('function' === typeof callback);
 
+    if (this._connected && this._socket) {
+      // its socket is replaced below without a close event: its listeners never hear of it
+      console.warn('ClientWSTransport: connect() called on a connected transport ' + this.name);
+    }
+
+    // the backoff retry reuses this transport: a previous attempt must not leak into this one
+    this._disconnecting = false;
+    this._onSocketClosedHasBeenCalled = false;
+    this._onSocketEndedHasBeenCalled = false;
+    this._connected = false;
+    this._parameters = undefined;
+
     options = options || {};
 
     this._protocolVersion =
@@ -164,6 +176,13 @@ export class ClientWSTransport extends WSTransport {
     this.serverUri = 'urn:' + hostname + ':Sample';
 
     debugLog('endpointUrl =', endpointUrl, 'ep', ep);
+
+    const previousSocket = this._socket;
+    if (previousSocket) {
+      // detach first: a late close of the previous attempt's socket must not tear down this attempt
+      this.dispose();
+      previousSocket.close(1000);
+    }
 
     try {
       this._socket = createClientSocket(endpointUrl, this.encoding);
@@ -284,17 +303,27 @@ export class ClientWSTransport extends WSTransport {
       counter += 1;
 
       if (err || !data) {
+        this._close_after_failed_HEL_ACK();
         callback(err);
-        if (this._socket) {
-          this._socket.close(1000, 'OPC-UA: HELLO - ACK failed');
-        }
       } else {
-        this._handle_ACK_response(data, function (inner_err) {
+        this._handle_ACK_response(data, (inner_err) => {
+          if (inner_err) {
+            this._close_after_failed_HEL_ACK();
+          }
           callback(inner_err);
         });
       }
     });
     this._send_HELLO_request();
+  }
+
+  protected _close_after_failed_HEL_ACK() {
+    const sock = this._socket;
+    if (sock) {
+      // detach first: a close the client starts itself must not run the remote-close path
+      this.dispose();
+      sock.close(1000, 'OPC-UA: HELLO - ACK failed');
+    }
   }
 
   protected _on_socket_error_after_connection = (evt: CloseEvent) => {
@@ -319,9 +348,9 @@ export class ClientWSTransport extends WSTransport {
     }
   };
 
-  protected dispose() {
-    super.dispose();
+  protected dispose(err?: Error) {
+    // before super.dispose(), which runs the pending callback last
     this.off('socket_error', this._on_socket_error_after_connection);
-    // this._socket.removeEventListener('socket_error', this._on_socket_error_after_connection);
+    super.dispose(err);
   }
 }

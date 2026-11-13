@@ -15,8 +15,8 @@ export class ObjectRegistry {
     if (!(obj as any)._____hash) {
       (obj as any)._____hash = ObjectRegistry.hashCounter;
       ObjectRegistry.hashCounter += 1;
-      this._cache[(obj as any)._____hash] = obj;
     }
+    this._cache[(obj as any)._____hash] = obj;
   }
 
   public unregister(obj: {}) {
