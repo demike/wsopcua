@@ -56,7 +56,9 @@ describe('list status codes for input arguments', () => {
         ],
       }),
     ]);
-    expect(response.result[0].statusCode).toEqual(StatusCodes.BadTypeMismatch);
+    // OPC 10000-4 §5.12.2 (Call): an invalid input argument makes the operation
+    // BadInvalidArgument; the per-argument reason goes into inputArgumentResults.
+    expect(response.result[0].statusCode).toEqual(StatusCodes.BadInvalidArgument);
     expect(response.result[0].inputArgumentResults[0]).toEqual(StatusCodes.BadTypeMismatch);
   });
 });
