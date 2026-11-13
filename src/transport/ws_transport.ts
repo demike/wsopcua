@@ -121,7 +121,7 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     debugLog('Setting socket ' + this.name + ' timeout = ', value);
     this._timeout = value;
   }
-  protected dispose(err: Error = new Error('Connection aborted')) {
+  protected dispose(err?: Error) {
     this._cleanup_timers();
     assert(!this._timerId);
     if (this._socket) {
@@ -133,7 +133,9 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
     }
     WSTransport.registry.unregister(this);
     // last, so the callback neither sees nor re-closes the dead socket
-    this._fulfill_pending_promises(err);
+    if (this._the_callback) {
+      this._fulfill_pending_promises(err ?? new Error('Connection aborted'));
+    }
   }
 
   /**

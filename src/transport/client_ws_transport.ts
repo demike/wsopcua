@@ -344,8 +344,8 @@ export class ClientWSTransport extends WSTransport {
   };
 
   protected dispose(err?: Error) {
-    super.dispose(err);
+    // before super.dispose(), which runs the pending callback last
     this.off('socket_error', this._on_socket_error_after_connection);
-    // this._socket.removeEventListener('socket_error', this._on_socket_error_after_connection);
+    super.dispose(err);
   }
 }

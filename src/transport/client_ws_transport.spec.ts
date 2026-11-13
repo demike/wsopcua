@@ -640,6 +640,22 @@ describe('testing ClientWS_transport', function () {
     expect(spyOnClose).toHaveBeenCalledTimes(1);
   });
 
+  it('should remove the connection_break listener before a pending callback is failed', async function () {
+    const sock = await connectTransport();
+    const afterConnectionListener = (transport as any)._on_socket_error_after_connection;
+    expect(transport.listeners('socket_error')).toContain(afterConnectionListener);
+
+    let listenersWhenCalledBack: unknown[] | undefined;
+    const pendingCallback = vi.fn(() => {
+      listenersWhenCalledBack = transport.listeners('socket_error');
+    });
+    (transport as any)._install_one_time_message_receiver(pendingCallback);
+    sock._close(1000);
+
+    expect(pendingCallback).toHaveBeenCalledTimes(1);
+    expect(listenersWhenCalledBack).not.toContain(afterConnectionListener);
+  });
+
   it('should ignore a late close of the previous attempt socket', async function () {
     transport.timeout = 100;
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
