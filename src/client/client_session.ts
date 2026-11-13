@@ -113,6 +113,19 @@ export interface ClientSessionEvent {
   session_closed: (status: StatusCode) => void;
   keepalive: (state: ServerState) => void;
   keepalive_failure: () => void;
+  /**
+   * raised when the session has been repaired after a reconnection: the secure
+   * channel has been re-established, the session re-activated or re-created, and
+   * its subscriptions transferred/republished.
+   *
+   * Notes:
+   * - raised per session, as soon as that session has been repaired: if another
+   *   session of the same client fails to be repaired afterwards, the client is
+   *   disconnected and this session closed.
+   * - subscriptions are repaired on a best-effort basis: a subscription that
+   *   could not be recreated or republished does not prevent this event.
+   */
+  session_restored: () => void;
 }
 
 /**

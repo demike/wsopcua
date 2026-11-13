@@ -381,7 +381,7 @@ describe('Variant', function () {
         dimensions: [2, 3],
         value: [0x000], // wrong size !
       });
-    }).toThrowError();
+    }).toThrow();
   });
 
   it('should create a Array of ByteString Variant ', function () {

@@ -319,7 +319,32 @@ function repair_client_session_by_recreating_a_new_session(
   );
 }
 
+/**
+ * repairs a single session after the secure channel has been re-established and,
+ * on success, emits `session_restored` on the session.
+ */
 export function repair_client_session(
+  client: OPCUAClient,
+  session: ClientSession,
+  callback: ErrorCallback
+) {
+  _repair_client_session(client, session, (err?: Error | null) => {
+    if (!err && !session.hasBeenClosed()) {
+      if (doDebug) {
+        debugLog('session has been restored', session.sessionId?.toString());
+      }
+      try {
+        session.emit('session_restored');
+      } catch (listenerErr) {
+        // a throwing listener must not keep the reconnection from completing
+        console.error('session_restored listener has thrown', listenerErr);
+      }
+    }
+    callback(err);
+  });
+}
+
+function _repair_client_session(
   client: OPCUAClient,
   session: ClientSession,
   callback: ErrorCallback

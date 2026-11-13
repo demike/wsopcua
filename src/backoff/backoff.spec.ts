@@ -94,12 +94,12 @@ describe('Backoff', function () {
     backoff.backoff();
 
     // in progress
-    expect(() => backoff.backoff()).toThrowError();
+    expect(() => backoff.backoff()).toThrow();
   });
 
   it('backoff limit should be greater than 0', function () {
     // greate than 0 but got 0
-    expect(() => backoff.failAfter(0)).toThrowError();
+    expect(() => backoff.failAfter(0)).toThrow();
   });
 
   it('reset should cancel any backoff in progress', function () {
@@ -172,22 +172,16 @@ describe('Backoff', function () {
 
 describe('BackoffStrategy', function () {
   it('should throw an error if one of the delay options is not bigger than 0', () => {
-    expect(
-      () => new ExponentialBackoffStrategy({ initialDelay: -1, maxDelay: 1000 })
-    ).toThrowError();
-    expect(() => new ExponentialBackoffStrategy({ initialDelay: 10, maxDelay: -2 })).toThrowError();
+    expect(() => new ExponentialBackoffStrategy({ initialDelay: -1, maxDelay: 1000 })).toThrow();
+    expect(() => new ExponentialBackoffStrategy({ initialDelay: 10, maxDelay: -2 })).toThrow();
 
-    expect(() => new FibonacciBackoffStrategy({ initialDelay: -1, maxDelay: 1000 })).toThrowError();
-    expect(() => new FibonacciBackoffStrategy({ initialDelay: 10, maxDelay: -2 })).toThrowError();
+    expect(() => new FibonacciBackoffStrategy({ initialDelay: -1, maxDelay: 1000 })).toThrow();
+    expect(() => new FibonacciBackoffStrategy({ initialDelay: 10, maxDelay: -2 })).toThrow();
   });
 
   it('should throw an error if max delay is smaller than initial delay', () => {
-    expect(
-      () => new ExponentialBackoffStrategy({ initialDelay: 1000, maxDelay: 500 })
-    ).toThrowError();
-    expect(
-      () => new FibonacciBackoffStrategy({ initialDelay: 1000, maxDelay: 500 })
-    ).toThrowError();
+    expect(() => new ExponentialBackoffStrategy({ initialDelay: 1000, maxDelay: 500 })).toThrow();
+    expect(() => new FibonacciBackoffStrategy({ initialDelay: 1000, maxDelay: 500 })).toThrow();
   });
 
   it('should return the next backoff delay, that should be bigger than the previous one', () => {
@@ -211,7 +205,7 @@ describe('BackoffStrategy', function () {
           maxDelay: 1000,
           randomisationFactor: 1.2,
         })
-    ).toThrowError();
+    ).toThrow();
     expect(
       () =>
         new ExponentialBackoffStrategy({
@@ -219,7 +213,7 @@ describe('BackoffStrategy', function () {
           maxDelay: 1000,
           randomisationFactor: -0.3,
         })
-    ).toThrowError();
+    ).toThrow();
     expect(
       () =>
         new ExponentialBackoffStrategy({
@@ -227,7 +221,7 @@ describe('BackoffStrategy', function () {
           maxDelay: 1000,
           randomisationFactor: 0.7,
         })
-    ).not.toThrowError();
+    ).not.toThrow();
 
     expect(
       () =>
@@ -236,7 +230,7 @@ describe('BackoffStrategy', function () {
           maxDelay: 1000,
           randomisationFactor: 1.2,
         })
-    ).toThrowError();
+    ).toThrow();
     expect(
       () =>
         new FibonacciBackoffStrategy({
@@ -244,7 +238,7 @@ describe('BackoffStrategy', function () {
           maxDelay: 1000,
           randomisationFactor: -0.3,
         })
-    ).toThrowError();
+    ).toThrow();
     expect(
       () =>
         new FibonacciBackoffStrategy({
@@ -252,7 +246,7 @@ describe('BackoffStrategy', function () {
           maxDelay: 1000,
           randomisationFactor: 0.7,
         })
-    ).not.toThrowError();
+    ).not.toThrow();
   });
 
   it('should respect the max delay', () => {

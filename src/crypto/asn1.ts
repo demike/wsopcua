@@ -124,7 +124,7 @@ export function _readBitString(buffer: Uint8Array, block: BlockInfo): BitString 
 export function formatBuffer2DigitHexWithColum(buffer: Uint8Array): string {
   const value: string[] = [];
   for (let i = 0; i < buffer.length; i++) {
-    value.push(('00' + buffer[i].toString(16)).substr(-2, 2));
+    value.push(('00' + buffer[i].toString(16)).slice(-2));
   }
   // remove leading 00
   return value

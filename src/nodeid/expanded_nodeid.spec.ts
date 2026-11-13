@@ -100,7 +100,7 @@ describe('testing ExpandedNodeId', function () {
     it(`must fail on invalid expanded node id string ${s}`, () => {
       expect(() => {
         coerceExpandedNodeId(s);
-      }).toThrowError();
+      }).toThrow();
     })
   );
 
