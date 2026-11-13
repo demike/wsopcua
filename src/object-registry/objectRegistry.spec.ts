@@ -19,4 +19,19 @@ describe('testing ObjectRegistry', function () {
 
     console.log(registry.toString());
   });
+
+  it('should register an object again after it has been unregistered', function () {
+    const myObj = { name: 'HelloWorld' };
+
+    registry.register(myObj);
+    registry.register(myObj);
+    expect(registry.count()).toBe(1);
+
+    registry.unregister(myObj);
+    registry.register(myObj);
+    expect(registry.count()).toBe(1);
+
+    registry.unregister(myObj);
+    expect(registry.count()).toBe(0);
+  });
 });

@@ -13,7 +13,7 @@ import {
   WebSocketMock,
 } from './test_helpers/mock_web_socket';
 import { ClientWSTransport } from './client_ws_transport';
-import { setFakeTransport, getFakeTransport } from './ws_transport';
+import { setFakeTransport, getFakeTransport, WSTransport } from './ws_transport';
 import { StatusCodes } from '../constants/raw_status_codes';
 
 import 'setimmediate';
@@ -654,6 +654,38 @@ describe('testing ClientWS_transport', function () {
 
     expect(pendingCallback).toHaveBeenCalledTimes(1);
     expect(listenersWhenCalledBack).not.toContain(afterConnectionListener);
+  });
+
+  function isRegistered() {
+    const registry = (WSTransport as any).registry;
+    return registry._cache[(transport as any)._____hash] === transport;
+  }
+
+  it('should register the transport again for a reconnect attempt', async function () {
+    const firstSocket = await connectTransport();
+    firstSocket._close(1006);
+    expect(isRegistered()).toBe(false);
+
+    await connectTransport();
+    expect(isRegistered()).toBe(true);
+  });
+
+  it('should warn only when connect() replaces the socket of a connected transport', async function () {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      // a reconnect after the server ended the connection is the normal case
+      const firstSocket = await connectTransport();
+      firstSocket._close(1000);
+      await connectTransport();
+      expect(warn).not.toHaveBeenCalled();
+
+      // the connection is still alive
+      await connectTransport();
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn.mock.calls[0][0]).toMatch(/connect\(\) called on a connected transport/);
+    } finally {
+      warn.mockRestore();
+    }
   });
 
   it('should ignore a late close of the previous attempt socket', async function () {

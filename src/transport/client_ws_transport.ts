@@ -150,6 +150,11 @@ export class ClientWSTransport extends WSTransport {
   ) {
     assert('function' === typeof callback);
 
+    if (this._connected && this._socket) {
+      // its socket is replaced below without a close event: its listeners never hear of it
+      console.warn('ClientWSTransport: connect() called on a connected transport ' + this.name);
+    }
+
     // the backoff retry reuses this transport: a previous attempt must not leak into this one
     this._disconnecting = false;
     this._onSocketClosedHasBeenCalled = false;

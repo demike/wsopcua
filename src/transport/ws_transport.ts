@@ -275,6 +275,8 @@ export abstract class WSTransport extends EventEmitter<WSTransportEvents> {
   protected _install_socket(socket: WebSocket) {
     assert(socket);
     this._socket = socket;
+    // dispose() unregisters when the previous socket goes away
+    WSTransport.registry.register(this);
 
     // install packet assembler ...
     this.packetAssembler = new PacketAssembler({
