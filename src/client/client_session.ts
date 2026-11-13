@@ -113,6 +113,12 @@ export interface ClientSessionEvent {
   session_closed: (status: StatusCode) => void;
   keepalive: (state: ServerState) => void;
   keepalive_failure: () => void;
+  /**
+   * raised when the session and its related subscriptions have been fully
+   * repaired after a reconnection (secure channel re-established, session
+   * re-activated or re-created, subscriptions transferred/republished).
+   */
+  session_restored: () => void;
 }
 
 /**
