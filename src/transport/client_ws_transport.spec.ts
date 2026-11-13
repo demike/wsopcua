@@ -818,6 +818,39 @@ describe('testing ClientWS_transport', function () {
     expect(secondAttempt.mock.calls[0][0]?.message).toMatch(/failed to connect/);
   });
 
+  it('should not call a replaced connect back when the next connection breaks', async function () {
+    const firstAttempt = vi.fn();
+    transport.connect(url, firstAttempt);
+    expect(firstAttempt).not.toHaveBeenCalled();
+
+    // the next attempt connects ...
+    const sock = await connectTransport();
+    expect(firstAttempt).toHaveBeenCalledTimes(1);
+    expect(firstAttempt.mock.calls[0][0]?.message).toMatch(/failed to connect: Connection aborted/);
+
+    // ... and its connection breaks later
+    sock._close(1006);
+    expect(spyOnConnectionBreak).toHaveBeenCalledTimes(1);
+    expect(firstAttempt).toHaveBeenCalledTimes(1);
+  });
+
+  it('should keep the new socket when a pre-open failure retries synchronously', function () {
+    let retrySocket: WebSocketMock | undefined;
+    const retryAttempt = vi.fn();
+    const firstAttempt = vi.fn(() => {
+      transport.connect(url, retryAttempt);
+      retrySocket = (transport as any)._socket;
+    });
+    transport.connect(url, firstAttempt);
+
+    (transport as any)._socket._close(1006);
+
+    expect(firstAttempt).toHaveBeenCalledTimes(1);
+    expect(retrySocket).toBeDefined();
+    expect((transport as any)._socket).toBe(retrySocket);
+    expect(retryAttempt).not.toHaveBeenCalled();
+  });
+
   // -------------------------------------------------------------------------
   // opcua+uajson: no HEL/ACK, but the same connection break detection
   // -------------------------------------------------------------------------
