@@ -122,6 +122,96 @@ describe('testing ClientWS_transport', function () {
     });
   });
 
+  function expectHelAckFailureToCloseDetachedSocket(
+    mockSocket: WebSocketMock,
+    connectCallback: Mock,
+    spyOnSocketClosed: Mock,
+    socketWhenCalledBack: WebSocketMock | null | undefined
+  ) {
+    expect(connectCallback).toHaveBeenCalledTimes(1);
+    expect(connectCallback.mock.calls[0][0]).toBeInstanceOf(Error);
+    // the client closes the socket itself ...
+    expect(mockSocket.close).toHaveBeenCalledTimes(1);
+    expect(mockSocket.close).toHaveBeenCalledWith(1000, 'OPC-UA: HELLO - ACK failed');
+    expect(mockSocket.close.mock.invocationCallOrder[0]).toBeLessThan(
+      connectCallback.mock.invocationCallOrder[0]
+    );
+    expect(socketWhenCalledBack).toBeNull();
+    // ... after detaching it, so that close is not handled like a close by the server
+    expect(spyOnSocketClosed).not.toHaveBeenCalled();
+    expect(transport.disconnecting).toBe(false);
+    expect(spyOnConnect).not.toHaveBeenCalled();
+    expect(spyOnClose).not.toHaveBeenCalled();
+    expect(spyOnConnectionBreak).not.toHaveBeenCalled();
+    expect(vi.getTimerCount()).toBe(0);
+  }
+
+  function startHelAckTransaction() {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    const spyOnSocketClosed = vi.fn();
+    transport.on('socket_closed', spyOnSocketClosed);
+    const result = {
+      spyOnSocketClosed,
+      socketWhenCalledBack: undefined as WebSocketMock | null | undefined,
+      connectCallback: vi.fn(() => {
+        result.socketWhenCalledBack = (transport as any)._socket;
+      }),
+      mockSocket: undefined as unknown as WebSocketMock,
+    };
+    transport.connect(url, result.connectCallback);
+    result.mockSocket = (transport as any)._socket;
+    result.mockSocket._open();
+    return result;
+  }
+
+  it('should detach the socket before closing it when the HEL/ACK transaction times out', function () {
+    transport.timeout = 100;
+    const hel = startHelAckTransaction();
+
+    vi.advanceTimersByTime(transport.timeout);
+
+    expect(hel.connectCallback.mock.calls[0]?.[0]?.message).toMatch(/Timeout/);
+    expectHelAckFailureToCloseDetachedSocket(
+      hel.mockSocket,
+      hel.connectCallback,
+      hel.spyOnSocketClosed,
+      hel.socketWhenCalledBack
+    );
+  });
+
+  it('should detach and close the socket when the server answers the HEL with an ERR', function () {
+    const hel = startHelAckTransaction();
+
+    hel.mockSocket._message(
+      packTcpMessage('ERR', makeError(StatusCodes.BadProtocolVersionUnsupported))
+    );
+
+    expect(hel.connectCallback.mock.calls[0]?.[0]?.message).toMatch(/ACK: ERR received/);
+    expectHelAckFailureToCloseDetachedSocket(
+      hel.mockSocket,
+      hel.connectCallback,
+      hel.spyOnSocketClosed,
+      hel.socketWhenCalledBack
+    );
+  });
+
+  it('should detach and close the socket when the server answers the HEL with an invalid ACK', function () {
+    const hel = startHelAckTransaction();
+
+    const ack = packTcpMessage('ACK', fakeAcknowledgeMessage);
+    // a non-final chunk is not a valid ACK
+    new Uint8Array(ack)[3] = 'C'.charCodeAt(0);
+    hel.mockSocket._message(ack);
+
+    expect(hel.connectCallback.mock.calls[0]?.[0]?.message).toMatch(/invalid ACK message/);
+    expectHelAckFailureToCloseDetachedSocket(
+      hel.mockSocket,
+      hel.connectCallback,
+      hel.spyOnSocketClosed,
+      hel.socketWhenCalledBack
+    );
+  });
+
   it('should report an error if the server close the socket unexpectedly after the websocket connection was established', function () {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
     const connectCallback = vi.fn();
@@ -533,7 +623,7 @@ describe('testing ClientWS_transport', function () {
     transport.timeout = 100;
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
 
-    // attempt 1: HEL times out, the client closes the socket ...
+    // attempt 1: HEL times out, the client detaches and closes the socket ...
     const firstAttempt = vi.fn();
     transport.connect(url, firstAttempt);
     const firstSocket: WebSocketMock = (transport as any)._socket;
@@ -542,7 +632,8 @@ describe('testing ClientWS_transport', function () {
     vi.advanceTimersByTime(transport.timeout);
     expect(firstAttempt).toHaveBeenCalledTimes(1);
     expect(firstAttempt.mock.calls[0][0]?.message).toMatch(/Timeout/);
-    firstSocket.close.mockClear();
+    expect(firstSocket.close).toHaveBeenCalledWith(1000, 'OPC-UA: HELLO - ACK failed');
+    expect((transport as any)._socket).toBeNull();
 
     // attempt 2 (backoff retry on the same transport) is in its HEL/ACK ...
     const secondAttempt = vi.fn();
@@ -550,18 +641,36 @@ describe('testing ClientWS_transport', function () {
     const secondSocket: WebSocketMock = (transport as any)._socket;
     secondSocket._open();
 
-    // the previous socket is closed before the new one is created
+    // ... when the close of the first socket arrives
+    firstSocket._close(1000);
+    expect(secondAttempt).not.toHaveBeenCalled();
+    expect((transport as any)._socket).toBe(secondSocket);
+
+    secondSocket._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
+    expect(secondAttempt).toHaveBeenCalledTimes(1);
+    expect(secondAttempt.mock.calls[0][0]).toBeFalsy();
+  });
+
+  it('should detach and close a still attached socket before connect() creates the next one', function () {
+    const firstAttempt = vi.fn();
+    transport.connect(url, firstAttempt);
+    const firstSocket: WebSocketMock = (transport as any)._socket;
+    firstSocket.close = vi.fn(); // like a browser, the close event comes later
+
+    const secondAttempt = vi.fn();
+    transport.connect(url, secondAttempt);
+    const secondSocket: WebSocketMock = (transport as any)._socket;
+
     const createSocket = window.WebSocket as unknown as Mock;
     expect(firstSocket.close).toHaveBeenCalledWith(1000);
     expect(firstSocket.close.mock.invocationCallOrder[0]).toBeLessThan(
       createSocket.mock.invocationCallOrder.at(-1)!
     );
 
-    // ... when the close of the first socket arrives
-    firstSocket._close(1000);
-    expect(secondAttempt).not.toHaveBeenCalled();
+    firstSocket._close(1006);
     expect((transport as any)._socket).toBe(secondSocket);
 
+    secondSocket._open();
     secondSocket._message(packTcpMessage('ACK', fakeAcknowledgeMessage));
     expect(secondAttempt).toHaveBeenCalledTimes(1);
     expect(secondAttempt.mock.calls[0][0]).toBeFalsy();

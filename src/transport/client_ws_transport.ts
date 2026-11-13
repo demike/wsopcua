@@ -296,17 +296,27 @@ export class ClientWSTransport extends WSTransport {
       counter += 1;
 
       if (err || !data) {
+        this._close_after_failed_HEL_ACK();
         callback(err);
-        if (this._socket) {
-          this._socket.close(1000, 'OPC-UA: HELLO - ACK failed');
-        }
       } else {
-        this._handle_ACK_response(data, function (inner_err) {
+        this._handle_ACK_response(data, (inner_err) => {
+          if (inner_err) {
+            this._close_after_failed_HEL_ACK();
+          }
           callback(inner_err);
         });
       }
     });
     this._send_HELLO_request();
+  }
+
+  protected _close_after_failed_HEL_ACK() {
+    const sock = this._socket;
+    if (sock) {
+      // detach first: a close the client starts itself must not run the remote-close path
+      this.dispose();
+      sock.close(1000, 'OPC-UA: HELLO - ACK failed');
+    }
   }
 
   protected _on_socket_error_after_connection = (evt: CloseEvent) => {
